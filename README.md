@@ -4,6 +4,8 @@
 
 # Horologium Romanam
 
+**Español** | [Latine](README.la.md)
+
 **Horologium Romanam** es una aplicación web inmersiva que recrea la experiencia de medir el tiempo tal y como lo hacían los antiguos romanos. A diferencia del tiempo moderno, el sistema romano se basaba en el ciclo solar, dividiendo el día y la noche en 12 horas de duración variable según la estación del año.
 
 ## ✨ Características Principales
