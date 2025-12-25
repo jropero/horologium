@@ -1,0 +1,7 @@
+{
+  "name": "Horologium Romanam",
+  "description": "A Roman timekeeping converter that calculates ancient temporal hours based on your latitude and the sun's position.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
