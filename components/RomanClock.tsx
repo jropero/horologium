@@ -150,7 +150,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
   return (
     <div className="relative w-full max-w-4xl mx-auto my-8 p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl">
       {/* --- INFO HEADER (Mobile Friendly) --- */}
-      <div className="flex flex-row h-full justify-between items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
+      <div className="flex flex-row flex-col lg:flex-row h-full justify-between items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
 
         {/* Weather (Center) */}
         {weather && (

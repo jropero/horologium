@@ -33,20 +33,34 @@ const WEATHER_CODES: Record<number, { condition: WeatherCondition, description: 
     99: { condition: 'storm', description: 'Tempestas Saeva' }  // Thunderstorm with heavy hail
 };
 
+const getLatinWindName = (degrees: number): string => {
+    if (degrees >= 337.5 || degrees < 22.5) return 'Septentrio (N)'; // Viento del Norte
+    if (degrees >= 22.5 && degrees < 67.5) return 'Aquilo (NE)';      // Viento del Noreste
+    if (degrees >= 67.5 && degrees < 112.5) return 'Subsolanus (E)';  // Viento del Este
+    if (degrees >= 112.5 && degrees < 157.5) return 'Vulturnus (SE)'; // Viento del Sureste
+    if (degrees >= 157.5 && degrees < 202.5) return 'Auster (S)';     // Viento del Sur
+    if (degrees >= 202.5 && degrees < 247.5) return 'Africus (SW)';   // Viento del Suroeste
+    if (degrees >= 247.5 && degrees < 292.5) return 'Favonius (W)';   // Viento del Oeste (Céfiro)
+    if (degrees >= 292.5 && degrees < 337.5) return 'Caurus (NW)';    // Viento del Noroeste
+    return 'Ventus';
+};
+
 export const fetchWeather = async (lat: number, lng: number): Promise<WeatherData | null> => {
     try {
         const response = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
         );
 
-        if (!response.ok) {
-            throw new Error('Weather fetch failed');
-        }
+        if (!response.ok) throw new Error('Weather fetch failed');
 
         const data = await response.json();
         const current = data.current_weather;
         const code = current.weathercode;
         const temp = current.temperature;
+
+        // ¡NUEVO! Datos del viento
+        const wSpeed = current.windspeed;
+        const wDir = current.winddirection;
 
         const info = WEATHER_CODES[code] || { condition: 'clear', description: 'Caelum Ignosum' };
 
@@ -54,7 +68,10 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
             temperature: temp,
             condition: info.condition,
             description: info.description,
-            code: code
+            code: code,
+            windSpeed: wSpeed,
+            windDirection: wDir,
+            latinWindName: getLatinWindName(wDir)
         };
     } catch (error) {
         console.error('Error fetching weather:', error);
