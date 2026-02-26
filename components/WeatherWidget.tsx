@@ -52,17 +52,34 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
                 return null;
         }
     };
-
+    // Dentro del return principal de WeatherWidget.tsx, modifícalo así:
     return (
         <div className={`flex items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg ${className}`}>
-            <div className="text-gold-leaf">
+            <div className="text-gold-leaf flex-shrink-0">
                 {renderIcon()}
             </div>
-            <div className="flex flex-col">
-                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1">Caelum</span>
-                <span className="text-parchment font-serif text-sm font-bold">{description}</span>
+            <div className="flex flex-col border-r border-gold-dim/30 pr-3">
+                <span className="text-gold-leaf font-serif text-[10px] uppercase tracking-widest leading-none mb-1">Caelum</span>
+                <span className="text-parchment font-serif text-sm font-bold leading-tight">{description}</span>
                 <span className="text-stone-400 font-serif text-xs">{Math.round(temperature)}°C</span>
             </div>
+
+            {/* ¡NUEVA SECCIÓN DE VIENTO! */}
+            {weather.latinWindName && (
+                <div className="flex flex-col pl-1 items-center justify-center min-w-[70px]">
+                    <span className="text-gold-leaf font-serif text-[10px] uppercase tracking-widest mb-1">Ventus</span>
+                    {/* Flecha rotatoria dinámica */}
+                    <div
+                        className="text-parchment text-sm mb-1 transition-transform duration-1000"
+                        style={{ transform: `rotate(${weather.windDirection}deg)` }}
+                    >
+                        ↓
+                    </div>
+                    <span className="text-stone-300 font-serif text-[9px] text-center leading-tight">
+                        {weather.latinWindName.split(' ')[0]} {/* Muestra solo "Favonius", "Auster", etc. */}
+                    </span>
+                </div>
+            )}
         </div>
     );
 };

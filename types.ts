@@ -38,4 +38,7 @@ export interface WeatherData {
   condition: WeatherCondition;
   description: string; // Latin description
   code: number; // WMO code
+  windSpeed?: number;
+  latinWindName?: string;
+  windDirection?: number;
 }

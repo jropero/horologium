@@ -117,6 +117,10 @@ export const getRomanDate = (date: Date): RomanDateResult => {
   const month = date.getMonth(); // 0-11
   const year = date.getFullYear();
 
+  // ¡NUEVO! Cálculo del año romano (A.U.C.)
+  // Roma se fundó en el 753 a.C. No hay año 0, así que Año AD + 753 = Año AUC.
+  const aucYear = year + 753;
+
   // Months with Nones on the 7th and Ides on the 15th (March, May, July, October)
   const isMarchMayJulyOct = [2, 4, 6, 9].includes(month);
   const nonesDate = isMarchMayJulyOct ? 7 : 5;
@@ -179,8 +183,8 @@ export const getRomanDate = (date: Date): RomanDateResult => {
 
   // Append Year if desired
   return {
-    short: `${romanString} ${toRoman(year)}`,
-    full: fullLatinString
+    short: `${romanString} anno ${toRoman(aucYear)} A.U.C.`,
+    full: `${fullLatinString} anno ab urbe condita ${toRoman(aucYear)}`
   };
 };
 
