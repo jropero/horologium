@@ -94,22 +94,22 @@ export const getIndiction = (year: number): number => {
   return indiction;
 };
 
-// NUEVO: Calcular el Signo Zodiacal en latín clásico
+// Calculado con declinación en caso Ablativo ("Sol in...")
 export const getZodiacSign = (date: Date): string => {
   const d = date.getDate();
   const m = date.getMonth(); // 0-11
-  if ((m === 2 && d >= 21) || (m === 3 && d <= 19)) return "Ariete"; // Aries
-  if ((m === 3 && d >= 20) || (m === 4 && d <= 20)) return "Tauro"; // Taurus
-  if ((m === 4 && d >= 21) || (m === 5 && d <= 20)) return "Geminis"; // Gemini
-  if ((m === 5 && d >= 21) || (m === 6 && d <= 22)) return "Cancro"; // Cancer
-  if ((m === 6 && d >= 23) || (m === 7 && d <= 22)) return "Leone"; // Leo
-  if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return "Virgine"; // Virgo
-  if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return "Libra"; // Libra
-  if ((m === 9 && d >= 23) || (m === 10 && d <= 21)) return "Scorpione"; // Scorpio
-  if ((m === 10 && d >= 22) || (m === 11 && d <= 21)) return "Sagittario"; // Sagittarius
+  if ((m === 2 && d >= 21) || (m === 3 && d <= 19)) return "Ariete";      // Aries
+  if ((m === 3 && d >= 20) || (m === 4 && d <= 20)) return "Tauro";       // Taurus
+  if ((m === 4 && d >= 21) || (m === 5 && d <= 20)) return "Geminis";     // Gemini (Abl. pl.)
+  if ((m === 5 && d >= 21) || (m === 6 && d <= 22)) return "Cancro";      // Cancer
+  if ((m === 6 && d >= 23) || (m === 7 && d <= 22)) return "Leone";       // Leo
+  if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return "Virgine";     // Virgo
+  if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return "Libra";       // Libra
+  if ((m === 9 && d >= 23) || (m === 10 && d <= 21)) return "Scorpione";  // Scorpio
+  if ((m === 10 && d >= 22) || (m === 11 && d <= 21)) return "Sagittario";// Sagittarius
   if ((m === 11 && d >= 22) || (m === 0 && d <= 19)) return "Capricorno"; // Capricornus
-  if ((m === 0 && d >= 20) || (m === 1 && d <= 18)) return "Aquario"; // Aquarius
-  return "Piscibus"; // Pisces
+  if ((m === 0 && d >= 20) || (m === 1 && d <= 18)) return "Aquario";     // Aquarius
+  return "Piscibus";                                                      // Pisces (Abl. pl.)
 };
 
 export interface RomanDateResult {
@@ -191,7 +191,7 @@ const getLatinMoonPhaseName = (phase: number): string => {
   if (phase < 0.28) return "Prima Quadra";
   if (phase < 0.47) return "Gibbosa crescens";
   if (phase < 0.53) return "Plenilunium"; 
-  if (phase < 0.72) return "Gibbosa menguans";
+  if (phase < 0.72) return "Gibbosa decrescens";
   if (phase < 0.78) return "Ultima Quadra";
   return "Luna Corniculata"; 
 };
@@ -215,10 +215,9 @@ const getCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
   if (isDay) {
     if (hourFloat < 1.5) return { name: "Mane", desc: "Mañana" };
     if (hourFloat < 5.5) return { name: "Antemeridianum tempus", desc: "Antes del mediodía" };
-    // El mediodía solar es exactamente a las 6.0, dándole una ventana fugaz
     if (hourFloat < 6.5) return { name: "Meridies", desc: "Mediodía" };
-    if (hourFloat < 10.5) return { name: "Tempus pomeridianum", desc: "Tarde" };
-    return { name: "Solis occasus", desc: "Puesta de sol" };
+    if (hourFloat < 11.5) return { name: "Tempus pomeridianum", desc: "Tarde" }; // Ampliado hasta casi el final
+    return { name: "Solis occasus", desc: "Puesta de sol" }; // Ahora es solo el final
   } else {
     if (hourFloat < 1.0) return { name: "Vespera", desc: "Anochecer" };
     if (hourFloat < 2.0) return { name: "Crepusculum", desc: "Crepúsculo" };
@@ -230,8 +229,8 @@ const getCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
     if (hourFloat < 6.1) return { name: "Media nox", desc: "Medianoche" };
     if (hourFloat < 7.5) return { name: "Mediae noctis inclinatio", desc: "Mitad de la noche" };
     if (hourFloat < 9.5) return { name: "Gallicinium", desc: "Canto del gallo" };
-    if (hourFloat < 11.0) return { name: "Conticinium", desc: "El gallo deja de cantar" };
-    return { name: "Diluculum", desc: "Amanecer" };
+    if (hourFloat < 11.5) return { name: "Conticinium", desc: "El gallo deja de cantar" }; // Ampliado
+    return { name: "Diluculum", desc: "Amanecer" }; // Solo la última media hora de oscuridad
   }
 };
 
