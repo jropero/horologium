@@ -1,7 +1,18 @@
+// --- START OF FILE horologium-main/types.ts ---
+export interface VigiliaData {
+  name: string;
+  desc: string;
+}
+
 export interface LocationData {
   latitude: number;
   longitude: number;
   name?: string;
+}
+
+export interface CivilDayPart {
+  name: string;
+  desc: string;
 }
 
 export interface RomanTimeData {
@@ -17,6 +28,12 @@ export interface RomanTimeData {
   moonPhase: number; // 0 to 1
   moonPhaseLabel: string; // e.g., "Plenilunium"
   planetaryRuler: string; // e.g., "Jupiter"
+  civilDayPart: CivilDayPart;
+  vigilia?: VigiliaData;
+  nundinalLetter: string;
+  indiction: number;
+  tutelaMensis: string;
+  zodiacSign: string;
 }
 
 export type TimePeriod = "Dies" | "Nox";
@@ -42,3 +59,4 @@ export interface WeatherData {
   latinWindName?: string;
   windDirection?: number;
 }
+// --- END OF FILE horologium-main/types.ts ---
