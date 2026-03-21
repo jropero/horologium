@@ -1,40 +1,41 @@
-import { getSunTimes, getMoonPhase } from './solar';
-import { RomanTimeData } from '../types';
+// --- START OF FILE horologium-main/utils/romanTimeUtils.ts ---
 
-export const LATIN_HOURS_DAY = [
+import { getSunTimes, getMoonPhase } from './solar';
+import { RomanTimeData, CivilDayPart } from '../types';
+
+export const LATIN_HOURS_DAY =[
   "Prima Hora", "Secunda Hora", "Tertia Hora", "Quarta Hora",
   "Quinta Hora", "Sexta Hora", "Septima Hora", "Octava Hora",
   "Nona Hora", "Decima Hora", "Undecima Hora", "Duodecima Hora"
 ];
 
-export const LATIN_HOURS_NIGHT_FULL = [
+export const LATIN_HOURS_NIGHT_FULL =[
   "Prima Hora Noctis", "Secunda Hora Noctis", "Tertia Hora Noctis", "Quarta Hora Noctis",
   "Quinta Hora Noctis", "Sexta Hora Noctis", "Septima Hora Noctis", "Octava Hora Noctis",
   "Nona Hora Noctis", "Decima Hora Noctis", "Undecima Hora Noctis", "Duodecima Hora Noctis"
 ];
 
-export const MONTH_NAMES_LATIN = [
+export const MONTH_NAMES_LATIN =[
   "Ianuarius", "Februarius", "Martius", "Aprilis", "Maius", "Iunius",
   "Iulius", "Augustus", "September", "October", "November", "December"
 ];
 
-// Abbreviations for the Roman date (Accusative/Ablative nuances handled by generic 'Kal/Non/Id')
-const MONTH_ABBREVS = [
+const MONTH_ABBREVS =[
   "Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-const MONTH_NAMES_ACCUSATIVE = [
+const MONTH_NAMES_ACCUSATIVE =[
   "Ianuarias", "Februarias", "Martias", "Apriles", "Maias", "Iunias",
   "Iulias", "Augustas", "Septembres", "Octobres", "Novembres", "Decembres"
 ];
 
-const MONTH_NAMES_ABLATIVE = [
+const MONTH_NAMES_ABLATIVE =[
   "Ianuariis", "Februariis", "Martiis", "Aprilibus", "Maiis", "Iuniis",
   "Iuliis", "Augustis", "Septembribus", "Octobribus", "Novembribus", "Decembribus"
 ];
 
 const LATIN_ORDINALS: { [key: number]: string } = {
-  2: "pridie", // Special case
+  2: "pridie", 
   3: "tertium",
   4: "quartum",
   5: "quintum",
@@ -54,43 +55,17 @@ const LATIN_ORDINALS: { [key: number]: string } = {
   19: "undevicesimum"
 };
 
-// Chaldean Order: Saturn (slowest) -> Moon (fastest)
-export const PLANETARY_HOURS_ORDER = [
-  "Saturnus",  // 0 - Saturday
-  "Iuppiter",  // 1 - Thursday
-  "Mars",      // 2 - Tuesday
-  "Sol",       // 3 - Sunday
-  "Venus",     // 4 - Friday
-  "Mercurius", // 5 - Wednesday
-  "Luna"       // 6 - Monday
+export const PLANETARY_HOURS_ORDER =[
+  "Saturnus", "Iuppiter", "Mars", "Sol", "Venus", "Mercurius", "Luna"
 ];
 
-// Starting index in the Chaldean order for each day of week (0=Sunday ... 6=Saturday)
-// JS Date.getDay(): 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
-// Map JS Day Index -> Index in PLANETARY_HOURS_ORDER
-const DAY_START_INDEX = [
-  3, // Sun -> Sol
-  6, // Mon -> Luna
-  2, // Tue -> Mars
-  5, // Wed -> Mercurius
-  1, // Thu -> Iuppiter
-  4, // Fri -> Venus
-  0  // Sat -> Saturnus
-];
+const DAY_START_INDEX =[3, 6, 2, 5, 1, 4, 0];
 
 export const getPlanetaryRuler = (currentRomanHour: number, isDay: boolean, date: Date): string => {
-  const dayOfWeek = date.getDay(); // 0-6
+  const dayOfWeek = date.getDay();
   const startIndex = DAY_START_INDEX[dayOfWeek];
-
-  // Total hours passed since sunrise
-  // Day hours: 1 to 12. Offset = hour - 1
-  // Night hours: 1 to 12 (follow day 12). Offset = 12 + (hour - 1)
-
   let hoursPassed = currentRomanHour - 1;
-  if (!isDay) {
-    hoursPassed += 12;
-  }
-
+  if (!isDay) hoursPassed += 12;
   const rulerIndex = (startIndex + hoursPassed) % 7;
   return PLANETARY_HOURS_ORDER[rulerIndex];
 };
@@ -107,6 +82,36 @@ export const toRoman = (num: number): string => {
   return roman;
 };
 
+const TUTELA_MENSIS =[
+  "Iuno", "Neptunus", "Minerva", "Venus", "Apollo", "Mercurius",
+  "Iuppiter", "Ceres", "Vulcanus", "Mars", "Diana", "Vesta"
+];
+
+// NUEVO: Calcular la Indicción (Ciclo de 15 años)
+export const getIndiction = (year: number): number => {
+  let indiction = (year + 3) % 15;
+  if (indiction === 0) indiction = 15;
+  return indiction;
+};
+
+// NUEVO: Calcular el Signo Zodiacal en latín clásico
+export const getZodiacSign = (date: Date): string => {
+  const d = date.getDate();
+  const m = date.getMonth(); // 0-11
+  if ((m === 2 && d >= 21) || (m === 3 && d <= 19)) return "Ariete"; // Aries
+  if ((m === 3 && d >= 20) || (m === 4 && d <= 20)) return "Tauro"; // Taurus
+  if ((m === 4 && d >= 21) || (m === 5 && d <= 20)) return "Geminis"; // Gemini
+  if ((m === 5 && d >= 21) || (m === 6 && d <= 22)) return "Cancro"; // Cancer
+  if ((m === 6 && d >= 23) || (m === 7 && d <= 22)) return "Leone"; // Leo
+  if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return "Virgine"; // Virgo
+  if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return "Libra"; // Libra
+  if ((m === 9 && d >= 23) || (m === 10 && d <= 21)) return "Scorpione"; // Scorpio
+  if ((m === 10 && d >= 22) || (m === 11 && d <= 21)) return "Sagittario"; // Sagittarius
+  if ((m === 11 && d >= 22) || (m === 0 && d <= 19)) return "Capricorno"; // Capricornus
+  if ((m === 0 && d >= 20) || (m === 1 && d <= 18)) return "Aquario"; // Aquarius
+  return "Piscibus"; // Pisces
+};
+
 export interface RomanDateResult {
   short: string;
   full: string;
@@ -114,29 +119,27 @@ export interface RomanDateResult {
 
 export const getRomanDate = (date: Date): RomanDateResult => {
   const day = date.getDate();
-  const month = date.getMonth(); // 0-11
+  const month = date.getMonth();
   const year = date.getFullYear();
-
-  // ¡NUEVO! Cálculo del año romano (A.U.C.)
-  // Roma se fundó en el 753 a.C. No hay año 0, así que Año AD + 753 = Año AUC.
   const aucYear = year + 753;
+  const currentYear = date.getFullYear();
+  const indiction = getIndiction(currentYear);
 
-  // Months with Nones on the 7th and Ides on the 15th (March, May, July, October)
   const isMarchMayJulyOct = [2, 4, 6, 9].includes(month);
   const nonesDate = isMarchMayJulyOct ? 7 : 5;
   const idesDate = isMarchMayJulyOct ? 15 : 13;
+
+  
 
   let romanString = "";
   let fullLatinString = "";
   let refName = "";
 
-  // Determine the reference point (Kalends, Nones, Ides)
   if (day === 1) {
     romanString = `Kalendis ${MONTH_ABBREVS[month]}`;
     fullLatinString = `Kalendis ${MONTH_NAMES_ABLATIVE[month]}`;
   } else if (day < nonesDate) {
-    // Before Nones
-    const daysBefore = nonesDate - day + 1; // Inclusive count
+    const daysBefore = nonesDate - day + 1;
     refName = `Non ${MONTH_ABBREVS[month]}`;
     if (daysBefore === 2) {
       romanString = `Pridie ${refName}`;
@@ -149,7 +152,6 @@ export const getRomanDate = (date: Date): RomanDateResult => {
     romanString = `Nonis ${MONTH_ABBREVS[month]}`;
     fullLatinString = `Nonis ${MONTH_NAMES_ABLATIVE[month]}`;
   } else if (day < idesDate) {
-    // Before Ides
     const daysBefore = idesDate - day + 1;
     refName = `Id ${MONTH_ABBREVS[month]}`;
     if (daysBefore === 2) {
@@ -163,12 +165,8 @@ export const getRomanDate = (date: Date): RomanDateResult => {
     romanString = `Idibus ${MONTH_ABBREVS[month]}`;
     fullLatinString = `Idibus ${MONTH_NAMES_ABLATIVE[month]}`;
   } else {
-    // Before Kalends of NEXT month
-    const nextMonth = new Date(year, month + 1, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
-    const daysBefore = (lastDayOfMonth - day) + 1 + 1; // Remaining days + 1 for next month start + 1 for inclusive count
-
-    // Handle Dec -> Jan year change logic implicitly by Date object, but for string we need correct month index
+    const daysBefore = (lastDayOfMonth - day) + 1 + 1;
     const nextMonthIdx = (month + 1) % 12;
     refName = `Kal ${MONTH_ABBREVS[nextMonthIdx]}`;
 
@@ -181,23 +179,60 @@ export const getRomanDate = (date: Date): RomanDateResult => {
     }
   }
 
-  // Append Year if desired
   return {
     short: `${romanString} anno ${toRoman(aucYear)} A.U.C.`,
-    full: `${fullLatinString} anno ab urbe condita ${toRoman(aucYear)}`
+    full: `${fullLatinString} anno ab urbe condita ${toRoman(aucYear)}, Indictione ${toRoman(indiction)}`
   };
 };
 
 const getLatinMoonPhaseName = (phase: number): string => {
-  // Approximate phase names
-  if (phase < 0.03 || phase > 0.97) return "Novilunium"; // New
-  if (phase < 0.22) return "Luna Corniculata"; // Waxing Crescent (Horned)
-  if (phase < 0.28) return "Prima Quadra"; // First Quarter
-  if (phase < 0.47) return "Gibbosa crescens"; // Waxing Gibbous
-  if (phase < 0.53) return "Plenilunium"; // Full
-  if (phase < 0.72) return "Gibbosa menguans"; // Waning Gibbous
-  if (phase < 0.78) return "Ultima Quadra"; // Last Quarter
-  return "Luna Corniculata"; // Waning Crescent
+  if (phase < 0.03 || phase > 0.97) return "Novilunium";
+  if (phase < 0.22) return "Luna Corniculata"; 
+  if (phase < 0.28) return "Prima Quadra";
+  if (phase < 0.47) return "Gibbosa crescens";
+  if (phase < 0.53) return "Plenilunium"; 
+  if (phase < 0.72) return "Gibbosa menguans";
+  if (phase < 0.78) return "Ultima Quadra";
+  return "Luna Corniculata"; 
+};
+
+const getVigilia = (romanHour: number): { name: string, desc: string } => {
+  if (romanHour <= 3) return { name: "Prima Vigilia", desc: "Primera Guardia" };
+  if (romanHour <= 6) return { name: "Secunda Vigilia", desc: "Segunda Guardia" };
+  if (romanHour <= 9) return { name: "Tertia Vigilia", desc: "Tercera Guardia" };
+  return { name: "Quarta Vigilia", desc: "Cuarta Guardia" };
+};
+
+export const getNundinalLetter = (date: Date): string => {
+  const daysSinceEpoch = Math.floor(date.getTime() / (1000 * 60 * 60 * 24));
+  // Usamos módulo 8 para ciclar entre 0 y 7. El (+ 8) asegura que no haya negativos.
+  const nundinalIndex = (daysSinceEpoch % 8 + 8) % 8;
+  const nundinalLetters =['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  return nundinalLetters[nundinalIndex];
+};
+
+const getCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
+  if (isDay) {
+    if (hourFloat < 1.5) return { name: "Mane", desc: "Mañana" };
+    if (hourFloat < 5.5) return { name: "Antemeridianum tempus", desc: "Antes del mediodía" };
+    // El mediodía solar es exactamente a las 6.0, dándole una ventana fugaz
+    if (hourFloat < 6.5) return { name: "Meridies", desc: "Mediodía" };
+    if (hourFloat < 10.5) return { name: "Tempus pomeridianum", desc: "Tarde" };
+    return { name: "Solis occasus", desc: "Puesta de sol" };
+  } else {
+    if (hourFloat < 1.0) return { name: "Vespera", desc: "Anochecer" };
+    if (hourFloat < 2.0) return { name: "Crepusculum", desc: "Crepúsculo" };
+    if (hourFloat < 3.0) return { name: "Prima fax", desc: "Encendido de velas" };
+    if (hourFloat < 4.5) return { name: "Concubia nox", desc: "Hora de dormir" };
+    if (hourFloat < 5.5) return { name: "Intempesta nox", desc: "Altas horas de la noche" };
+    if (hourFloat < 5.9) return { name: "Inclinatio ad mediam noctem", desc: "Aproximándose a la medianoche" };
+    // La medianoche solar es exactamente a las 6.0
+    if (hourFloat < 6.1) return { name: "Media nox", desc: "Medianoche" };
+    if (hourFloat < 7.5) return { name: "Mediae noctis inclinatio", desc: "Mitad de la noche" };
+    if (hourFloat < 9.5) return { name: "Gallicinium", desc: "Canto del gallo" };
+    if (hourFloat < 11.0) return { name: "Conticinium", desc: "El gallo deja de cantar" };
+    return { name: "Diluculum", desc: "Amanecer" };
+  }
 };
 
 interface SunEvent {
@@ -206,8 +241,7 @@ interface SunEvent {
 }
 
 export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTimeData => {
-  // Generate sun times for a range of days (T-2 to T+2)
-  const points: SunEvent[] = [];
+  const points: SunEvent[] =[];
 
   for (let i = -2; i <= 2; i++) {
     const d = new Date(now);
@@ -217,10 +251,8 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
     points.push({ time: sunset, type: 'sunset' });
   }
 
-  // Sort events chronologically
   points.sort((a, b) => a.time.getTime() - b.time.getTime());
 
-  // Find the interval containing 'now'
   let currentEvent = points[0];
   let nextEvent = points[1];
   let found = false;
@@ -248,7 +280,6 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
   const baseTime = currentEvent.time;
   const endTime = nextEvent.time;
 
-  // Next Sunrise logic
   let nextSunriseDisplay = endTime;
   if (isDay) {
     const nextSr = points.find((p, idx) => idx > points.indexOf(nextEvent) && p.type === 'sunrise');
@@ -270,10 +301,15 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
     ? LATIN_HOURS_DAY[romanHour - 1]
     : LATIN_HOURS_NIGHT_FULL[romanHour - 1];
 
-  // Moon Phase Calculation
+  // NEW: Calculate exactly where we are continuously from 0.0 to 12.0
+  const hourFloat = elapsedMinutes / hourLengthMinutes;
+  const civilDayPart = getCivilDayPart(isDay, hourFloat);
+
+  const vigilia = !isDay ? getVigilia(romanHour) : undefined;
+  const nundinalLetter = getNundinalLetter(now);
+
   const moonPhase = getMoonPhase(now);
   const moonPhaseLabel = getLatinMoonPhaseName(moonPhase);
-
   const dateInfo = getRomanDate(now);
 
   return {
@@ -288,6 +324,13 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
     romanDateFull: dateInfo.full,
     moonPhase,
     moonPhaseLabel,
-    planetaryRuler: getPlanetaryRuler(romanHour, isDay, now)
+    planetaryRuler: getPlanetaryRuler(romanHour, isDay, now),
+    civilDayPart,
+    vigilia,
+    nundinalLetter,
+    indiction: getIndiction(now.getFullYear()),
+    tutelaMensis: TUTELA_MENSIS[now.getMonth()],
+    zodiacSign: getZodiacSign(now)
   };
 };
+// --- END OF FILE horologium-main/utils/romanTimeUtils.ts ---
