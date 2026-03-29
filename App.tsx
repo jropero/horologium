@@ -70,7 +70,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 selection:bg-gold-leaf selection:text-ink">
-      <header className="text-center mb-4 relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2">
+      <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
           HOROLOGIUM <span className="text-gold-dim font-normal text-xl md:text-2xl">ROMANUM</span>
         </h1>

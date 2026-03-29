@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Horologium Romanum</string>
+    <string name="title_activity_main">Horologium Romanum</string>
+    <string name="package_name">com.horologium.app</string>
+    <string name="custom_url_scheme">com.horologium.app</string>
+</resources>
