@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, RefreshCw, Navigation } from 'lucide-react';
+import { Geolocation } from '@capacitor/geolocation';
 
 interface ControlsProps {
   latitude: number;
@@ -26,22 +27,19 @@ const Controls: React.FC<ControlsProps> = ({ latitude, longitude, onUpdateLocati
     }
   };
 
-  const handleGeolocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLatInput(position.coords.latitude.toFixed(4));
-          setLngInput(position.coords.longitude.toFixed(4));
-          onUpdateLocation(position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          alert("Locus deprehendi non potuit: " + error.message);
-        }
-      );
-    } else {
-      alert("Geolocatio ab hoc navigatro non sustinetur.");
+const handleGeolocation = async () => {
+    try {
+      // Pedimos la ubicación. Esto abrirá el pop-up de permisos nativo automáticamente.
+      const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: false });
+      
+      setLatInput(position.coords.latitude.toFixed(4));
+      setLngInput(position.coords.longitude.toFixed(4));
+      onUpdateLocation(position.coords.latitude, position.coords.longitude);
+    } catch (error: any) {
+      alert("Locus deprehendi non potuit: " + error.message);
     }
   };
+
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-12 p-1">
