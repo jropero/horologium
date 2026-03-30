@@ -1,11 +1,8 @@
-// --- START OF FILE horologium-main/components/RomanClock.tsx ---
-
+// --- START OF FILE components/RomanClock.tsx ---
 import React, { useMemo, useState } from 'react';
 import { RomanTimeData, WeatherData } from '../types';
-// import { toRoman } from '../utils/romanTimeUtils';
 import WeatherWidget from './WeatherWidget';
 import RomanCalendarModal from './RomanCalendarModal';
-
 
 interface RomanClockProps {
   modernTime: Date;
@@ -15,10 +12,7 @@ interface RomanClockProps {
 }
 
 const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading, weather }) => {
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-  };
+  const[isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const stars = useMemo(() => {
     const starData =[];
@@ -47,17 +41,14 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
     return Math.min(Math.max(percent, 0), 1);
   }, [romanTime, modernTime]);
 
-const renderMoon = (phase: number) => {
+  const renderMoon = (phase: number) => {
     const r = 16;
-    // Aseguramos que la fase esté estrictamente entre 0 y 1
     const normalizedPhase = Math.max(0, Math.min(1, phase));
     const isWaxing = normalizedPhase <= 0.5;
     
-    // Calculamos la curvatura de la sombra (terminador)
     const progress = isWaxing ? normalizedPhase * 2 : (normalizedPhase - 0.5) * 2;
     const x = r * (1 - 2 * progress);
 
-    // Generamos la máscara SVG matemática que recorta la fase exacta
     let d = "";
     if (isWaxing) {
       d = `M 0 -${r} A ${r} ${r} 0 0 1 0 ${r}`;
@@ -71,7 +62,6 @@ const renderMoon = (phase: number) => {
 
     const maskId = `moon-mask-${normalizedPhase.toFixed(3)}`;
 
-    // Nueva textura de cráteres más natural
     const MoonTexture = ({ color, opacity = 1 }: { color: string, opacity?: number }) => (
       <g fill={color} opacity={opacity}>
         <circle cx="4" cy="5" r="3" />
@@ -84,43 +74,37 @@ const renderMoon = (phase: number) => {
     );
 
     return (
-      <g transform="rotate(-15)"> {/* Inclinación natural en el cielo del hemisferio norte */}
+      <g transform="rotate(-15)">
         <defs>
           <clipPath id={maskId}>
             <path d={d} />
           </clipPath>
           
-          {/* Gradiente 3D esférico para la parte iluminada */}
           <radialGradient id="moon-light" cx="35%" cy="35%" r="65%">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="60%" stopColor="#f4e8c1" />
             <stop offset="100%" stopColor="#c2b28f" />
           </radialGradient>
 
-          {/* Gradiente 3D para la parte oscura (Luz Cenicienta o Earthshine) */}
           <radialGradient id="moon-dark" cx="35%" cy="35%" r="65%">
             <stop offset="0%" stopColor="#4a4a4a" />
             <stop offset="100%" stopColor="#121212" />
           </radialGradient>
 
-          {/* Filtro de resplandor (Glow) que emite la luna */}
           <filter id="moon-glow" x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="1.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
 
-        {/* Base de la luna: Representa la parte oscura sutilmente iluminada por la Tierra */}
         <circle cx="0" cy="0" r={r} fill="url(#moon-dark)" />
         <MoonTexture color="#000000" opacity={0.3} />
 
-        {/* Parte iluminada: Se recorta según la fase del día y se le aplica el brillo */}
         <g clipPath={`url(#${maskId})`} filter="url(#moon-glow)">
           <circle cx="0" cy="0" r={r} fill="url(#moon-light)" />
           <MoonTexture color="#968661" opacity={0.5} />
         </g>
 
-        {/* Borde exterior muy suave para definir la silueta completa del astro */}
         <circle cx="0" cy="0" r={r} fill="none" stroke="#e3d6b3" strokeWidth="0.5" opacity="0.3" />
       </g>
     );
@@ -184,6 +168,7 @@ const renderMoon = (phase: number) => {
 
           <div className="absolute inset-0 flex items-center justify-center">
             <svg viewBox="0 0 300 200" className="w-full h-full">
+              {/* CAPA 1: Estrellas y arco */}
               <g className={`transition-opacity duration-1000 ${romanTime.isDay ? 'opacity-0' : 'opacity-100'}`}>
                 {stars.map((star, i) => (
                   <path
@@ -204,32 +189,7 @@ const renderMoon = (phase: number) => {
 
               <path d="M 30 180 A 120 120 0 0 1 270 180" fill="none" stroke="#cfb53b" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
 
-{romanTime.isDay && (
-                <g>
-                  <defs>
-                    <filter id="shadow-blur">
-                      <feGaussianBlur stdDeviation="2" />
-                    </filter>
-                  </defs>
-                  
-                  {/* Sombra proyectada (matemáticamente opuesta al sol) */}
-                  <polygon 
-                    points={`
-                      148,180 
-                      152,180 
-                      ${150 - Math.cos(rad) * (30 + (1 - Math.sin(rad)) * 90)},${180 + Math.sin(rad) * 20}
-                    `} 
-                    fill="rgba(0,0,0,0.6)" 
-                    filter="url(#shadow-blur)"
-                    className="transition-all duration-1000"
-                  />
-
-                  {/* El Gnomon de bronce (palo físico en el centro) */}
-                  <path d="M 149 180 L 151 180 L 150 145 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
-                  <circle cx="150" cy="145" r="2" fill="#e3d6b3" />
-                </g>
-              )}
-
+              {/* CAPA 2: El Sol y la Luna (detrás de las montañas/suelo) */}
               <g transform={`translate(${objectX}, ${objectY})`}>
                 {romanTime.isDay ? (
                   <g className="animate-[spin_20s_linear_infinite]">
@@ -246,10 +206,35 @@ const renderMoon = (phase: number) => {
                 )}
               </g>
 
+              {/* CAPA 3: El suelo oscuro */}
               <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="#1a1a1a" />
               <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="#1a1a1a" stroke="#8a7826" strokeWidth="1" />
               <path d="M 220 180 V 165 L 230 155 L 240 165 V 180" fill="#1a1a1a" stroke="#8a7826" strokeWidth="0.5" />
               <path d="M 40 180 V 170 L 45 165 L 50 170 V 180" fill="#1a1a1a" stroke="#8a7826" strokeWidth="0.5" />
+
+             {/* CAPA 4: El Gnomon y la Sombra */}
+              {romanTime.isDay && (
+                <g>
+                  {/* Pedestal iluminado para que resalte la base */}
+                  <ellipse cx="150" cy="180" rx="70" ry="14" fill="#8a7826" opacity="0.2" />
+                  <ellipse cx="150" cy="180" rx="60" ry="10" fill="#e3d6b3" opacity="0.15" />
+
+                  {/* Sombra proyectada (Calculada matemáticamente opuesta al sol) 
+                      - Se alarga hasta X=50 o 250 al amanecer/ocaso.
+                      - Su altura (Y) máxima es 197, evitando que se salga del viewBox (200).
+                  */}
+                  <polygon 
+                    points={`149,180 151,180 ${150 - Math.cos(rad) * 100},${185 + (1 - Math.sin(rad)) * 12}`} 
+                    fill="#000000" 
+                    opacity="0.6"
+                    className="transition-all duration-1000"
+                  />
+
+                  {/* El Gnomon de bronce (palo físico en el centro) */}
+                  <path d="M 149 180 L 151 180 L 150 145 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
+                  <circle cx="150" cy="145" r="2" fill="#e3d6b3" />
+                </g>
+              )}
             </svg>
           </div>
         </div>
@@ -265,7 +250,6 @@ const renderMoon = (phase: number) => {
                 <span>{romanTime.isDay ? 'Dies' : 'Nox'}</span>
                 <span className="text-woodcut-green">☙</span>
               </div>
-              {/* Si es de noche, mostramos en qué guardia militar estamos */}
               {romanTime.vigilia && (
                 <div className="text-[10px] font-serif uppercase tracking-widest text-roman-red/80 font-bold">
                   ⚔ {romanTime.vigilia.name} ⚔
@@ -306,4 +290,4 @@ const renderMoon = (phase: number) => {
 };
 
 export default RomanClock;
-// --- END OF FILE horologium-main/components/RomanClock.tsx ---
+// --- END OF FILE components/RomanClock.tsx ---
