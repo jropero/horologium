@@ -1,9 +1,11 @@
 // --- START OF FILE horologium-main/components/RomanClock.tsx ---
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { RomanTimeData, WeatherData } from '../types';
-import { toRoman } from '../utils/romanTimeUtils';
+// import { toRoman } from '../utils/romanTimeUtils';
 import WeatherWidget from './WeatherWidget';
+import RomanCalendarModal from './RomanCalendarModal';
+
 
 interface RomanClockProps {
   modernTime: Date;
@@ -13,6 +15,7 @@ interface RomanClockProps {
 }
 
 const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading, weather }) => {
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
   };
@@ -44,58 +47,81 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
     return Math.min(Math.max(percent, 0), 1);
   }, [romanTime, modernTime]);
 
-  const renderMoon = (phase: number) => {
+const renderMoon = (phase: number) => {
     const r = 16;
-    const isWaxing = phase < 0.5;
-    const progress = isWaxing ? phase * 2 : (phase - 0.5) * 2; 
-
+    // Aseguramos que la fase esté estrictamente entre 0 y 1
+    const normalizedPhase = Math.max(0, Math.min(1, phase));
+    const isWaxing = normalizedPhase <= 0.5;
+    
+    // Calculamos la curvatura de la sombra (terminador)
+    const progress = isWaxing ? normalizedPhase * 2 : (normalizedPhase - 0.5) * 2;
     const x = r * (1 - 2 * progress);
 
+    // Generamos la máscara SVG matemática que recorta la fase exacta
     let d = "";
     if (isWaxing) {
       d = `M 0 -${r} A ${r} ${r} 0 0 1 0 ${r}`;
       const sweep = progress > 0.5 ? 1 : 0;
-      d += ` A ${Math.abs(x)} ${r} 0 0 ${sweep} 0 -${r}`;
+      d += ` A ${Math.abs(x)} ${r} 0 0 ${sweep} 0 -${r} Z`;
     } else {
       d = `M 0 -${r} A ${r} ${r} 0 0 0 0 ${r}`;
       const sweep = progress < 0.5 ? 1 : 0;
-      d += ` A ${Math.abs(x)} ${r} 0 0 ${sweep} 0 -${r}`;
+      d += ` A ${Math.abs(x)} ${r} 0 0 ${sweep} 0 -${r} Z`;
     }
 
-    const maskId = `moon-mask-${phase.toFixed(3)}`;
+    const maskId = `moon-mask-${normalizedPhase.toFixed(3)}`;
 
-    const MoonTexture = ({ color }: { color: string }) => (
-      <g fill={color}>
-        <circle cx="2" cy="8" r="2.5" />
-        <circle cx="-5" cy="2" r="2" />
-        <circle cx="-9" cy="4" r="1.5" />
-        <path d="M -4 -6 Q -8 -8 -10 -4 T -4 -2 T 0 -6 Z" />
-        <path d="M 2 -4 Q 6 -7 9 -3 T 5 2 T 1 -2 Z" />
-        <ellipse cx="10" cy="0" rx="2" ry="2.5" />
-        <circle cx="0" cy="12" r="0.8" />
-        <circle cx="6" cy="6" r="0.6" />
-        <circle cx="-6" cy="-9" r="0.7" />
-        <circle cx="5" cy="-10" r="0.9" />
+    // Nueva textura de cráteres más natural
+    const MoonTexture = ({ color, opacity = 1 }: { color: string, opacity?: number }) => (
+      <g fill={color} opacity={opacity}>
+        <circle cx="4" cy="5" r="3" />
+        <circle cx="-5" cy="2" r="2.5" />
+        <circle cx="-8" cy="-3" r="1.5" />
+        <circle cx="3" cy="-6" r="2" />
+        <ellipse cx="6" cy="-1" rx="2" ry="3" transform="rotate(30 6 -1)" />
+        <ellipse cx="-2" cy="-8" rx="1.5" ry="2" transform="rotate(-20 -2 -8)" />
       </g>
     );
 
     return (
-      <g>
+      <g transform="rotate(-15)"> {/* Inclinación natural en el cielo del hemisferio norte */}
         <defs>
           <clipPath id={maskId}>
             <path d={d} />
           </clipPath>
+          
+          {/* Gradiente 3D esférico para la parte iluminada */}
+          <radialGradient id="moon-light" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="60%" stopColor="#f4e8c1" />
+            <stop offset="100%" stopColor="#c2b28f" />
+          </radialGradient>
+
+          {/* Gradiente 3D para la parte oscura (Luz Cenicienta o Earthshine) */}
+          <radialGradient id="moon-dark" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#4a4a4a" />
+            <stop offset="100%" stopColor="#121212" />
+          </radialGradient>
+
+          {/* Filtro de resplandor (Glow) que emite la luna */}
+          <filter id="moon-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
         </defs>
 
-        <circle cx="0" cy="0" r={r} fill="#2a2a2a" stroke="none" />
-        <MoonTexture color="#1a1a1a" />
+        {/* Base de la luna: Representa la parte oscura sutilmente iluminada por la Tierra */}
+        <circle cx="0" cy="0" r={r} fill="url(#moon-dark)" />
+        <MoonTexture color="#000000" opacity={0.3} />
 
-        <g clipPath={`url(#${maskId})`}>
-          <circle cx="0" cy="0" r={r} fill="#e3d6b3" stroke="none" />
-          <MoonTexture color="#d4c5a3" />
+        {/* Parte iluminada: Se recorta según la fase del día y se le aplica el brillo */}
+        <g clipPath={`url(#${maskId})`} filter="url(#moon-glow)">
+          <circle cx="0" cy="0" r={r} fill="url(#moon-light)" />
+          <MoonTexture color="#968661" opacity={0.5} />
         </g>
 
-        <circle cx="0" cy="0" r={r} fill="none" stroke="#e3d6b3" strokeWidth="1" />
+        {/* Borde exterior muy suave para definir la silueta completa del astro */}
+        <circle cx="0" cy="0" r={r} fill="none" stroke="#e3d6b3" strokeWidth="0.5" opacity="0.3" />
       </g>
     );
   };
@@ -118,6 +144,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
   const objectY = cy - pathRadius * Math.sin(rad);
 
   return (
+    <>
     <div className="relative w-full max-w-4xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl">
       <div className="flex flex-col lg:flex-row h-full justify-between items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
 
@@ -125,7 +152,11 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
           <WeatherWidget weather={weather} />
         )}
 
-        <div className="bg-ink/80 border border-gold-dim p-2 rounded shadow-lg w-full md:w-auto text-center md:text-right">
+        <div 
+          onClick={() => setIsCalendarOpen(true)}
+          className="bg-ink/80 border border-gold-dim p-2 rounded shadow-lg w-full md:w-auto text-center md:text-right cursor-pointer hover:bg-white/5 hover:border-gold-leaf transition-all group"
+          title="Ver Fasti Romani (Calendario)"
+        >
           <div className="text-gold-leaf font-serif text-xs uppercase tracking-widest">{romanTime.romanDateString}</div>
           <div className="text-gold-dim font-serif text-[10px] italic mb-1 opacity-80">{romanTime.romanDateFull}</div>
           <div className="flex items-center gap-2 justify-center md:justify-end text-parchment font-serif text-[11px] italic mt-1">
@@ -173,6 +204,32 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
 
               <path d="M 30 180 A 120 120 0 0 1 270 180" fill="none" stroke="#cfb53b" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
 
+{romanTime.isDay && (
+                <g>
+                  <defs>
+                    <filter id="shadow-blur">
+                      <feGaussianBlur stdDeviation="2" />
+                    </filter>
+                  </defs>
+                  
+                  {/* Sombra proyectada (matemáticamente opuesta al sol) */}
+                  <polygon 
+                    points={`
+                      148,180 
+                      152,180 
+                      ${150 - Math.cos(rad) * (30 + (1 - Math.sin(rad)) * 90)},${180 + Math.sin(rad) * 20}
+                    `} 
+                    fill="rgba(0,0,0,0.6)" 
+                    filter="url(#shadow-blur)"
+                    className="transition-all duration-1000"
+                  />
+
+                  {/* El Gnomon de bronce (palo físico en el centro) */}
+                  <path d="M 149 180 L 151 180 L 150 145 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
+                  <circle cx="150" cy="145" r="2" fill="#e3d6b3" />
+                </g>
+              )}
+
               <g transform={`translate(${objectX}, ${objectY})`}>
                 {romanTime.isDay ? (
                   <g className="animate-[spin_20s_linear_infinite]">
@@ -202,8 +259,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
             {romanTime.hourName}
           </h2>
           <div className="flex flex-col gap-2 justify-center items-center">
-            
-<         div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center gap-1">
               <div className="flex items-center gap-4 text-roman-red font-serif font-bold tracking-[0.2em] text-sm">
                 <span className="text-woodcut-green">❧</span>
                 <span>{romanTime.isDay ? 'Dies' : 'Nox'}</span>
@@ -239,6 +295,13 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
         </div>
       </div>
     </div>
+
+    <RomanCalendarModal 
+        isOpen={isCalendarOpen} 
+        onClose={() => setIsCalendarOpen(false)} 
+        startDate={modernTime} 
+      />
+    </>
   );
 };
 
