@@ -8,6 +8,7 @@ import { calculateRomanTime } from './utils/romanTimeUtils';
 import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 // Default to Basilea
 const DEFAULT_LAT = 47.5632;
@@ -51,6 +52,8 @@ const App: React.FC = () => {
       setTodaysSunTimes(sunTimes);
 
       setLoading(false);
+      // Ocultar el Splash Screen suavemente cuando la app ya esté lista
+      SplashScreen.hide();
     };
 
     updateRomanTime();

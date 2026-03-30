@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, RefreshCw, Navigation } from 'lucide-react';
+import { MapPin, RefreshCw, Navigation, Bell } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 interface ControlsProps {
   latitude: number;
@@ -30,7 +31,12 @@ const Controls: React.FC<ControlsProps> = ({ latitude, longitude, onUpdateLocati
 const handleGeolocation = async () => {
     try {
       // Pedimos la ubicación. Esto abrirá el pop-up de permisos nativo automáticamente.
-      const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: false });
+      // Pedimos ubicación con caché y más tiempo de espera
+      const position = await Geolocation.getCurrentPosition({ 
+        enableHighAccuracy: false, 
+        timeout: 30000,       // Le damos 30 segundos máximo para pensar
+        maximumAge: 3600000   // Puede usar una ubicación de hace 1 hora (instantáneo)
+      });
       
       setLatInput(position.coords.latitude.toFixed(4));
       setLngInput(position.coords.longitude.toFixed(4));
@@ -40,6 +46,35 @@ const handleGeolocation = async () => {
     }
   };
 
+  const handleNotifications = async () => {
+    try {
+      // 1. Pedimos permiso al usuario (obligatorio en Android 13+)
+      let perm = await LocalNotifications.checkPermissions();
+      if (perm.display !== 'granted') {
+        perm = await LocalNotifications.requestPermissions();
+      }
+      
+      if (perm.display === 'granted') {
+        // 2. Programamos una notificación de prueba para dentro de 5 segundos
+        await LocalNotifications.schedule({
+          notifications:[
+            {
+              title: "🏛️ Tempus Fugit",
+              body: "¡Las notificaciones romanas han sido activadas con éxito!",
+              id: 1,
+              schedule: { at: new Date(Date.now() + 5000) }, // Suena en 5 segundos
+              smallIcon: "ic_stat_icon_config_sample", // Icono por defecto de Android
+            }
+          ]
+        });
+        alert("¡Permiso concedido! Cierra la app o minimízala; recibirás un aviso en 5 segundos.");
+      } else {
+        alert("Se denegaron los permisos de notificación.");
+      }
+    } catch (e: any) {
+      alert("Error al activar notificaciones: " + e.message);
+    }
+  };
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-12 p-1">
@@ -93,6 +128,16 @@ const handleGeolocation = async () => {
                 <div className="absolute inset-0 bg-ink transform -skew-x-12 border border-gold-leaf group-hover:bg-black transition-colors shadow-lg"></div>
                 <span className="relative flex items-center gap-2">
                     <Navigation className="w-4 h-4" /> Invenire Me
+                </span>
+            </button>
+
+            <button 
+                onClick={handleNotifications}
+                className="group relative px-6 py-2 font-serif font-bold text-sm uppercase tracking-widest text-parchment transition-transform active:scale-95 mt-4 sm:mt-0"
+            >
+                <div className="absolute inset-0 bg-ink transform -skew-x-12 border border-amber-600 group-hover:bg-amber-900/50 transition-colors shadow-lg"></div>
+                <span className="relative flex items-center gap-2">
+                    <Bell className="w-4 h-4 text-amber-500" /> Nuntii
                 </span>
             </button>
         </div>
