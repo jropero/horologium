@@ -219,20 +219,22 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                   <ellipse cx="150" cy="180" rx="70" ry="14" fill="#8a7826" opacity="0.2" />
                   <ellipse cx="150" cy="180" rx="60" ry="10" fill="#e3d6b3" opacity="0.15" />
 
-                  {/* Sombra proyectada (Calculada matemáticamente opuesta al sol) 
-                      - Se alarga hasta X=50 o 250 al amanecer/ocaso.
-                      - Su altura (Y) máxima es 197, evitando que se salga del viewBox (200).
-                  */}
-                  <polygon 
-                    points={`149,180 151,180 ${150 - Math.cos(rad) * 100},${185 + (1 - Math.sin(rad)) * 12}`} 
-                    fill="#000000" 
-                    opacity="0.6"
+                  {/* Sombra proyectada (Usando una LÍNEA GRUESA para que se vea siempre en móvil) */}
+                  <line 
+                    x1="150" 
+                    y1="180" 
+                    x2={150 - Math.cos(rad) * 90} 
+                    y2={185 + (1 - Math.sin(rad)) * 14} 
+                    stroke="#000000" 
+                    strokeWidth="6" 
+                    strokeLinecap="round"
+                    opacity="0.4"
                     className="transition-all duration-1000"
                   />
 
-                  {/* El Gnomon de bronce (palo físico en el centro) */}
-                  <path d="M 149 180 L 151 180 L 150 145 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
-                  <circle cx="150" cy="145" r="2" fill="#e3d6b3" />
+                  {/* El Gnomon de bronce (palo físico en el centro, base un poco más ancha) */}
+                  <path d="M 147 180 L 153 180 L 150 145 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
+                  <circle cx="150" cy="145" r="3" fill="#e3d6b3" />
                 </g>
               )}
             </svg>
