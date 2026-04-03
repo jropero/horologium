@@ -66,22 +66,23 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
 
   const renderMoon = (phase: number) => {
     const r = 16;
-    const normalizedPhase = Math.max(0, Math.min(1, phase));
+    const normalizedPhase = (phase % 1 + 1) % 1; // Seguridad 0-1
     const isWaxing = normalizedPhase <= 0.5;
     
-    const progress = isWaxing ? normalizedPhase * 2 : (normalizedPhase - 0.5) * 2;
-    const x = r * (1 - 2 * progress);
+    // 1 para Creciente (arco base a la derecha), 0 para Menguante (arco base a la izquierda)
+    const sweep1 = isWaxing ? 1 : 0;
+    
+    // Ancho de la elipse difuminadora (Terminator)
+    const rx = Math.max(0.1, r * Math.abs(Math.cos(normalizedPhase * Math.PI * 2)));
+    
+    // Sweep del terminador basado en el cuartil
+    let sweep2 = 0;
+    if (normalizedPhase <= 0.25) sweep2 = 0;
+    else if (normalizedPhase <= 0.5) sweep2 = 1;
+    else if (normalizedPhase <= 0.75) sweep2 = 0;
+    else sweep2 = 1;
 
-    let d = "";
-    if (isWaxing) {
-      d = `M 0 -${r} A ${r} ${r} 0 0 1 0 ${r}`;
-      const sweep = progress > 0.5 ? 1 : 0;
-      d += ` A ${Math.abs(x)} ${r} 0 0 ${sweep} 0 -${r} Z`;
-    } else {
-      d = `M 0 -${r} A ${r} ${r} 0 0 0 0 ${r}`;
-      const sweep = progress < 0.5 ? 1 : 0;
-      d += ` A ${Math.abs(x)} ${r} 0 0 ${sweep} 0 -${r} Z`;
-    }
+    const d = `M 0 -${r} A ${r} ${r} 0 0 ${sweep1} 0 ${r} A ${rx} ${r} 0 0 ${sweep2} 0 -${r} Z`;
 
     const maskId = `moon-mask-${normalizedPhase.toFixed(3)}`;
 
@@ -319,14 +320,27 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
               <path d="M 220 180 V 165 L 230 155 L 240 165 V 180" fill="#1a1a1a" stroke="#8a7826" strokeWidth="0.5" />
               <path d="M 40 180 V 170 L 45 165 L 50 170 V 180" fill="#1a1a1a" stroke="#8a7826" strokeWidth="0.5" />
 
-             {/* CAPA 4: El Gnomon y la Sombra */}
-              {romanTime.isDay && (
+             {/* CAPA 4: El Gnomon (Día) o La Clepsidra (Noche) */}
+              <defs>
+                 <clipPath id="upper-vessel-clip">
+                   <path d="M 136 135 L 146 155 L 154 155 L 164 135 Z" />
+                 </clipPath>
+                 <clipPath id="lower-vessel-clip">
+                   <path d="M 146 160 L 136 180 L 164 180 L 154 160 Z" />
+                 </clipPath>
+                 <linearGradient id="water-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#4a90e2" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.95" />
+                 </linearGradient>
+              </defs>
+
+              {romanTime.isDay ? (
                 <g>
                   {/* Pedestal iluminado para que resalte la base */}
                   <ellipse cx="150" cy="180" rx="70" ry="14" fill="#8a7826" opacity="0.2" />
                   <ellipse cx="150" cy="180" rx="60" ry="10" fill="#e3d6b3" opacity="0.15" />
 
-                  {/* Sombra proyectada (Usando una LÍNEA GRUESA para que se vea siempre en móvil) */}
+                  {/* Sombra proyectada */}
                   <line 
                     x1="150" 
                     y1="180" 
@@ -339,9 +353,82 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                     className="transition-all duration-1000"
                   />
 
-                  {/* El Gnomon de bronce (palo físico en el centro, base un poco más ancha) */}
+                  {/* El Gnomon de bronce */}
                   <path d="M 147 180 L 153 180 L 150 145 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
                   <circle cx="150" cy="145" r="3" fill="#e3d6b3" />
+                </g>
+              ) : (
+                <g className="transition-all duration-1000">
+                  {/* Pedestal atenuado para la clepsidra */}
+                  <ellipse cx="150" cy="180" rx="30" ry="6" fill="#8a7826" opacity="0.1" />
+
+                  {/* Estructura Metálica Central (Soportes) */}
+                  <path d="M 132 133 Q 120 155 132 181" stroke="#cfb53b" strokeWidth="1.5" fill="none" opacity="0.5" />
+                  <path d="M 168 133 Q 180 155 168 181" stroke="#cfb53b" strokeWidth="1.5" fill="none" opacity="0.5" />
+
+                  {/* Vaso Superior */}
+                  <ellipse cx="150" cy="135" rx="14" ry="3" fill="none" stroke="#cfb53b" strokeWidth="0.75" opacity="0.8"/>
+                  <path d="M 136 135 L 146 155 L 154 155 L 164 135" fill="#ffffff" opacity="0.05" stroke="#e3d6b3" strokeWidth="0.5"/>
+                  
+                  {/* Agua Vaso Superior (disminuye) */}
+                  <g clipPath="url(#upper-vessel-clip)">
+                     <rect x="130" y={135 + (20 * progressPercent)} width="40" height="20" fill="url(#water-grad)" />
+                     {progressPercent < 1 && (
+                       <ellipse 
+                         cx="150" 
+                         cy={135 + (20 * progressPercent)} 
+                         rx={14 - (10 * progressPercent)} 
+                         ry={1} 
+                         fill="#87ceeb" 
+                         opacity="0.6"
+                       />
+                     )}
+                  </g>
+
+                  {/* Hilo de goteo (Animado) */}
+                  {progressPercent < 0.99 && (
+                      <line x1="150" y1="155" x2="150" y2={180 - (20 * progressPercent)} stroke="#87ceeb" strokeWidth="1" strokeDasharray="3 3">
+                         <animate attributeName="stroke-dashoffset" values="6;0" dur="0.3s" repeatCount="indefinite" />
+                      </line>
+                  )}
+
+                  {/* Vaso Inferior */}
+                  <ellipse cx="150" cy="180" rx="14" ry="3" fill="none" stroke="#cfb53b" strokeWidth="0.75" opacity="0.8"/>
+                  <path d="M 146 160 L 136 180 L 164 180 L 154 160" fill="#ffffff" opacity="0.05" stroke="#e3d6b3" strokeWidth="0.5"/>
+                  
+                  {/* Agua Vaso Inferior (aumenta) */}
+                  <g clipPath="url(#lower-vessel-clip)">
+                     <rect x="130" y={180 - (20 * progressPercent)} width="40" height="30" fill="url(#water-grad)" />
+                     {progressPercent > 0 && (
+                       <ellipse 
+                         cx="150" 
+                         cy={180 - (20 * progressPercent)} 
+                         rx={14 - (10 * (1 - progressPercent))} 
+                         ry={1} 
+                         fill="#87ceeb" 
+                         opacity="0.6"
+                       />
+                     )}
+                  </g>
+
+                  {/* Base de los vasos (Conector central) */}
+                  <rect x="145" y="155" width="10" height="5" fill="#8a7826" />
+                  <path d="M 144 155 L 156 155" stroke="#cfb53b" strokeWidth="1" />
+                  <path d="M 144 160 L 156 160" stroke="#cfb53b" strokeWidth="1" />
+
+                  {/* Picos de la Escala Métrica (Marcas de horas) */}
+                  {[...Array(12)].map((_, i) => (
+                    <line 
+                      key={`clep-scale-${i}`} 
+                      x1="133" 
+                      y1={180 - (20 / 12) * i} 
+                      x2="135" 
+                      y2={180 - (20 / 12) * i} 
+                      stroke="#8a7826" 
+                      strokeWidth="0.5" 
+                      opacity="0.8" 
+                    />
+                  ))}
                 </g>
               )}
             </svg>
