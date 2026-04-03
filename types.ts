@@ -31,6 +31,8 @@ export interface RomanTimeData {
   civilDayPart: CivilDayPart;
   vigilia?: VigiliaData;
   nundinalLetter: string;
+  isMarketDay: boolean;
+  dayOfWeek: string;
   indiction: number;
   tutelaMensis: string;
   zodiacSign: string;
