@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { RomanTimeData, WeatherData } from '../types';
 import WeatherWidget from './WeatherWidget';
 import RomanCalendarModal from './RomanCalendarModal';
+import { generateSkyline } from '../utils/skylineGenerator';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -27,6 +28,13 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
     }
     return starData;
   },[]);
+
+  // Generar el skyline de forma procedural basándose en la fecha local
+  const skylineElements = useMemo(() => {
+    // Crear una semilla única para hoy (formato YYYYMMDD)
+    const seed = modernTime.getFullYear() * 10000 + (modernTime.getMonth() + 1) * 100 + modernTime.getDate();
+    return generateSkyline(seed);
+  }, [modernTime.getDate()]);
 
   // Efectos de clima pre-calculados para que la aleatoriedad sea estable entre re-renders
   const weatherParticles = useMemo(() => {
@@ -314,11 +322,21 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                 </g>
               )}
 
-              {/* CAPA 3: El suelo oscuro */}
+              {/* CAPA 3: El suelo oscuro y el Skyline Procedural */}
+              <g className="city-skyline">
+                {skylineElements.map(el => (
+                  <path 
+                    key={el.id} 
+                    d={el.path} 
+                    fill="#1a1a1a" 
+                    stroke="#8a7826" 
+                    strokeWidth="0.5" 
+                    opacity={el.opacity} 
+                  />
+                ))}
+              </g>
               <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="#1a1a1a" />
               <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="#1a1a1a" stroke="#8a7826" strokeWidth="1" />
-              <path d="M 220 180 V 165 L 230 155 L 240 165 V 180" fill="#1a1a1a" stroke="#8a7826" strokeWidth="0.5" />
-              <path d="M 40 180 V 170 L 45 165 L 50 170 V 180" fill="#1a1a1a" stroke="#8a7826" strokeWidth="0.5" />
 
              {/* CAPA 4: El Gnomon (Día) o La Clepsidra (Noche) */}
               <defs>
