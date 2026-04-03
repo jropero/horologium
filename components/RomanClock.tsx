@@ -28,6 +28,29 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
     return starData;
   },[]);
 
+  // Efectos de clima pre-calculados para que la aleatoriedad sea estable entre re-renders
+  const weatherParticles = useMemo(() => {
+    return {
+      rain: Array.from({ length: 40 }).map(() => ({
+        x: Math.random() * 300,
+        y: -30 - Math.random() * 50,
+        length: Math.random() * 15 + 10,
+        width: Math.random() * 0.5 + 0.5,
+        opacity: Math.random() * 0.5 + 0.2,
+        dur: 0.5 + Math.random() * 0.4,
+        drift: -5 - Math.random() * 10
+      })),
+      snow: Array.from({ length: 30 }).map(() => ({
+        x: Math.random() * 300,
+        y: -20 - Math.random() * 50,
+        r: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.6 + 0.4,
+        dur: 3 + Math.random() * 4,
+        drift: -20 + Math.random() * 40
+      }))
+    };
+  }, []);
+
   const progressPercent = useMemo(() => {
     if (!romanTime) return 0;
 
@@ -205,6 +228,90 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                   renderMoon(romanTime.moonPhase)
                 )}
               </g>
+
+              {/* CAPA 2.5: Efectos climáticos (Lluvia, Nieve, Nubes y Rayos) */}
+              {weather && weather.condition !== 'clear' && (
+                <g className="weather-effects pointer-events-none" style={{ mixBlendMode: 'screen' }}>
+                  
+                  {/* Nubes Ligeras o Niebla */}
+                  {(weather.condition === 'cloudy' || weather.condition === 'fog') && (
+                    <g opacity="0.4">
+                      <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8">
+                        <animateTransform attributeName="transform" type="translate" values="0 0; 20 0; 0 0" dur="20s" repeatCount="indefinite" />
+                      </path>
+                      <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6">
+                        <animateTransform attributeName="transform" type="translate" values="0 0; -15 0; 0 0" dur="25s" repeatCount="indefinite" />
+                      </path>
+                    </g>
+                  )}
+
+                  {/* Tormenta: Nubes oscuras espesas y Relámpagos */}
+                  {(weather.condition === 'storm' || weather.condition === 'rain') && (
+                    <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity="0.6">
+                      <path d="M -50 50 Q 30 20 80 40 T 180 30 T 280 50 T 350 30 L 350 -20 L -50 -20 Z" fill="#1e293b" />
+                      <path d="M -50 80 Q 70 50 160 80 T 350 60 L 350 -20 L -50 -20 Z" fill="#0f172a" opacity="0.8" />
+                    </g>
+                  )}
+
+                  {weather.condition === 'storm' && (
+                    <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0">
+                      <animate attributeName="opacity" values="0;0;0;0.8;0;0.3;0;0;0;0;0;0" dur="7s" repeatCount="indefinite" />
+                    </rect>
+                  )}
+
+                  {/* Lluvia */}
+                  {(weather.condition === 'rain' || weather.condition === 'storm') && (
+                    <g>
+                      {weatherParticles.rain.map((drop, i) => (
+                        <line 
+                          key={`rain-${i}`} 
+                          x1={drop.x} 
+                          y1={drop.y} 
+                          x2={drop.x + drop.drift} 
+                          y2={drop.y + drop.length} 
+                          stroke="#94a3b8" 
+                          strokeWidth={drop.width} 
+                          opacity={drop.opacity}
+                        >
+                          <animateTransform 
+                            attributeName="transform" 
+                            type="translate" 
+                            from="0 0" 
+                            to={`${drop.drift * 10} 250`} 
+                            dur={`${drop.dur}s`} 
+                            repeatCount="indefinite" 
+                          />
+                        </line>
+                      ))}
+                    </g>
+                  )}
+
+                  {/* Nieve */}
+                  {weather.condition === 'snow' && (
+                    <g>
+                      {weatherParticles.snow.map((flake, i) => (
+                        <circle 
+                          key={`snow-${i}`} 
+                          cx={flake.x} 
+                          cy={flake.y} 
+                          r={flake.r} 
+                          fill="#ffffff" 
+                          opacity={flake.opacity}
+                        >
+                          <animateTransform 
+                            attributeName="transform" 
+                            type="translate" 
+                            from="0 0" 
+                            to={`${flake.drift} 250`} 
+                            dur={`${flake.dur}s`} 
+                            repeatCount="indefinite" 
+                          />
+                        </circle>
+                      ))}
+                    </g>
+                  )}
+                </g>
+              )}
 
               {/* CAPA 3: El suelo oscuro */}
               <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="#1a1a1a" />

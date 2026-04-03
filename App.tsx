@@ -8,6 +8,7 @@ import { calculateRomanTime } from './utils/romanTimeUtils';
 import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
+import SententiaDiei from './components/SententiaDiei';
 import { SplashScreen } from '@capacitor/splash-screen';
 
 // Default to Basilea
@@ -98,6 +99,8 @@ const App: React.FC = () => {
           currentHourLength={romanTimeData.hourLengthMinutes}
         />
       )}
+
+      <SententiaDiei currentDate={modernTime} />
 
       <Controls
         latitude={latitude}
