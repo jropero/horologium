@@ -34,11 +34,12 @@ const App: React.FC = () => {
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
 
-  // Update modern time every second
+  // Update modern time every 15 seconds to prevent high CPU usage (SVG animations & recalculations)
   useEffect(() => {
+    // Check time every 15 seconds
     const timer = setInterval(() => {
       setModernTime(new Date());
-    }, 1000);
+    }, 15000);
     return () => clearInterval(timer);
   }, []);
 
