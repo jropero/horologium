@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Primero un fondo oscuro sólido de seguridad -->
+    <item>
+        <color android:color="#1a1a1a"/>
+    </item>
+    <!-- Luego el patrón de madera repetido (tiled) -->
+    <item>
+        <bitmap
+            android:src="@drawable/wood_pattern"
+            android:tileMode="repeat"
+            android:dither="true" />
+    </item>
+</layer-list>
