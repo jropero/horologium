@@ -14,7 +14,7 @@ export const ROMAN_HISTORY_DATA: Record<string, HistoricalEvent[]> = {
     "0-7": [{ latin: "Obitus Imperatoris Constantii II.", spanish: "Muerte del emperador Constancio II (361 d.C.)." }],
     "0-10": [{ latin: "C. Iulius Caesar Rubiconem transit.", spanish: "Julio César cruza el Rubicón (49 a.C.)." }],
     "0-16": [{ latin: "Octavianus titulo 'Augusti' a Senatu honoratur.", spanish: "Octavio recibe el título de 'Augusto' (27 a.C.)." }],
-    "0-17": [{ latin: "Nuptiae Neronis et Poppaeae Sabinae.", spanish: "Boda de Nerón y Popea Sabina (38 d.C.)." }],
+    "0-17": [{ latin: "Nuptiae Neronis et Poppaeae Sabinae.", spanish: "Boda de Nerón y Popea Sabina (62 d.C.)." }],
 
     // FEBRUARY
     "1-5": [{ latin: "Augustus 'Pater Patriae' appellatur.", spanish: "Augusto es nombrado 'Padre de la Patria' (2 a.C.)." }],

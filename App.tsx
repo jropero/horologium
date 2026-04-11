@@ -10,6 +10,8 @@ import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
+import ProvinciaInfo from './components/ProvinciaInfo';
+import SortesVergilianae from './components/SortesVergilianae';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 
@@ -123,6 +125,10 @@ const App: React.FC = () => {
         currentLat={latitude} 
         currentLng={longitude} 
       />
+
+      <ProvinciaInfo latitude={latitude} longitude={longitude} />
+
+      <SortesVergilianae />
 
       <Controls
         latitude={latitude}

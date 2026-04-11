@@ -255,12 +255,8 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                     {/* Nubes Ligeras o Niebla */}
                     {(weather.current.condition === 'cloudy' || weather.current.condition === 'fog') && (
                       <g opacity="0.4">
-                        <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8">
-                          <animateTransform attributeName="transform" type="translate" values="0 0; 20 0; 0 0" dur="20s" repeatCount="indefinite" />
-                        </path>
-                        <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6">
-                          <animateTransform attributeName="transform" type="translate" values="0 0; -15 0; 0 0" dur="25s" repeatCount="indefinite" />
-                        </path>
+                        <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
+                        <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
                       </g>
                     )}
 
@@ -273,9 +269,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                     )}
 
                     {weather.current.condition === 'storm' && (
-                      <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0">
-                        <animate attributeName="opacity" values="0;0;0;0.8;0;0.3;0;0;0;0;0;0" dur="7s" repeatCount="indefinite" />
-                      </rect>
+                      <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />
                     )}
 
                     {/* Lluvia */}
@@ -291,16 +285,9 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                             stroke="#94a3b8"
                             strokeWidth={drop.width}
                             opacity={drop.opacity}
-                          >
-                            <animateTransform
-                              attributeName="transform"
-                              type="translate"
-                              from="0 0"
-                              to={`${drop.drift * 10} 250`}
-                              dur={`${drop.dur}s`}
-                              repeatCount="indefinite"
-                            />
-                          </line>
+                            className="anim-fall"
+                            style={{ '--drift': `${drop.drift * 10}px`, '--dur': `${drop.dur}s` } as React.CSSProperties}
+                          />
                         ))}
                       </g>
                     )}
@@ -316,16 +303,9 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                             r={flake.r}
                             fill="#ffffff"
                             opacity={flake.opacity}
-                          >
-                            <animateTransform
-                              attributeName="transform"
-                              type="translate"
-                              from="0 0"
-                              to={`${flake.drift} 250`}
-                              dur={`${flake.dur}s`}
-                              repeatCount="indefinite"
-                            />
-                          </circle>
+                            className="anim-fall"
+                            style={{ '--drift': `${flake.drift}px`, '--dur': `${flake.dur}s` } as React.CSSProperties}
+                          />
                         ))}
                       </g>
                     )}

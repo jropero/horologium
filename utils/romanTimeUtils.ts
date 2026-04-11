@@ -216,25 +216,27 @@ export const getNundinalLetter = (date: Date): string => {
 };
 
 const getCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
+  // División civil del día romano según Varrón (De Lingua Latina VI) y Censorino (De Die Natali XXIV)
+  // hourFloat va de 0.0 (inicio del período) a 12.0 (final del período)
   if (isDay) {
-    if (hourFloat < 1.5) return { name: "Mane", desc: "Mañana" };
-    if (hourFloat < 5.5) return { name: "Antemeridianum tempus", desc: "Antes del mediodía" };
-    if (hourFloat < 6.5) return { name: "Meridies", desc: "Mediodía" };
-    if (hourFloat < 11.5) return { name: "Tempus pomeridianum", desc: "Tarde" }; // Ampliado hasta casi el final
-    return { name: "Solis occasus", desc: "Puesta de sol" }; // Ahora es solo el final
+    // DÍA: 12 horas solares desde el amanecer (ortus solis) hasta la puesta (solis occasus)
+    if (hourFloat < 2.5)  return { name: "Mane", desc: "Mañana temprana" };
+    if (hourFloat < 5.5)  return { name: "Ad Meridiem", desc: "Hacia el mediodía" };
+    if (hourFloat < 6.5)  return { name: "Meridies", desc: "Mediodía" };
+    if (hourFloat < 10.5) return { name: "De Meridie", desc: "Después del mediodía" };
+    return { name: "Suprema", desc: "Última hora de luz" };
   } else {
-    if (hourFloat < 1.0) return { name: "Vespera", desc: "Anochecer" };
-    if (hourFloat < 2.0) return { name: "Crepusculum", desc: "Crepúsculo" };
-    if (hourFloat < 3.0) return { name: "Prima fax", desc: "Encendido de velas" };
-    if (hourFloat < 4.5) return { name: "Concubia nox", desc: "Hora de dormir" };
-    if (hourFloat < 5.5) return { name: "Intempesta nox", desc: "Altas horas de la noche" };
-    if (hourFloat < 5.9) return { name: "Inclinatio ad mediam noctem", desc: "Aproximándose a la medianoche" };
-    // La medianoche solar es exactamente a las 6.0
-    if (hourFloat < 6.1) return { name: "Media nox", desc: "Medianoche" };
-    if (hourFloat < 7.5) return { name: "Mediae noctis inclinatio", desc: "Mitad de la noche" };
-    if (hourFloat < 9.5) return { name: "Gallicinium", desc: "Canto del gallo" };
-    if (hourFloat < 11.5) return { name: "Conticinium", desc: "El gallo deja de cantar" }; // Ampliado
-    return { name: "Diluculum", desc: "Amanecer" }; // Solo la última media hora de oscuridad
+    // NOCHE: 12 horas solares desde la puesta (solis occasus) hasta el amanecer (ortus solis)
+    if (hourFloat < 1.5)  return { name: "Vespera", desc: "Anochecer" };
+    if (hourFloat < 2.5)  return { name: "Crepusculum", desc: "Crepúsculo" };
+    if (hourFloat < 3.5)  return { name: "Prima fax", desc: "Encendido de antorchas" };
+    if (hourFloat < 5.0)  return { name: "Concubia nox", desc: "Hora de dormir" };
+    if (hourFloat < 5.8)  return { name: "Intempesta nox", desc: "Noche profunda y muerta" };
+    if (hourFloat < 6.2)  return { name: "Media nox", desc: "Medianoche" };
+    if (hourFloat < 8.0)  return { name: "De media nocte", desc: "Tras la medianoche" };
+    if (hourFloat < 9.5)  return { name: "Gallicinium", desc: "Canto del gallo" };
+    if (hourFloat < 11.0) return { name: "Conticinium", desc: "Silencio (el gallo calla)" };
+    return { name: "Diluculum", desc: "Primer resplandor del alba" };
   }
 };
 
