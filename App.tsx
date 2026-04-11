@@ -9,6 +9,7 @@ import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import SententiaDiei from './components/SententiaDiei';
+import LocationSelector from './components/LocationSelector';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 
@@ -116,6 +117,12 @@ const App: React.FC = () => {
       )}
 
       <SententiaDiei currentDate={modernTime} />
+
+      <LocationSelector 
+        onUpdateLocation={handleUpdateLocation} 
+        currentLat={latitude} 
+        currentLng={longitude} 
+      />
 
       <Controls
         latitude={latitude}
