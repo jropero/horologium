@@ -8,11 +8,10 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 2000,
       launchAutoHide: true,
-      backgroundColor: "#1a1a1a",
+      backgroundColor: "#1a1a1a", // El color oscuro de la madera
       showSpinner: false,
-      splashFullScreen: true,
-      splashImmersive: true,
-    },
+      androidScaleType: "CENTER_CROP"
+    }
   },
 };
 

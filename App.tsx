@@ -10,6 +10,7 @@ import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import SententiaDiei from './components/SententiaDiei';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar } from '@capacitor/status-bar';
 
 // Default to Basilea
 const DEFAULT_LAT = 47.5632;
@@ -35,9 +36,22 @@ const App: React.FC = () => {
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
 
-  // Update modern time every 15 seconds to prevent high CPU usage (SVG animations & recalculations)
+  // --- NUEVO: Configuración inicial de Android (Status Bar) ---
   useEffect(() => {
-    // Check time every 15 seconds
+    const setupNativeApp = async () => {
+      try {
+        // Ocultar la barra de estado superior de Android
+        await StatusBar.hide();
+        await StatusBar.setOverlaysWebView({ overlay: true });
+      } catch (e) {
+        console.warn("StatusBar no disponible en web", e);
+      }
+    };
+    setupNativeApp();
+  }, []);
+
+  // Update modern time every 15 seconds to prevent high CPU usage
+  useEffect(() => {
     const timer = setInterval(() => {
       setModernTime(new Date());
     }, 15000);
@@ -53,13 +67,15 @@ const App: React.FC = () => {
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
       setTodaysSunTimes(sunTimes);
 
-      setLoading(false);
-      // Ocultar el Splash Screen suavemente cuando la app ya esté lista
-      SplashScreen.hide();
+      if (loading) {
+        setLoading(false);
+        // Ocultar Splash solo en la primera carga
+        SplashScreen.hide();
+      }
     };
 
     updateRomanTime();
-  }, [modernTime, latitude, longitude]);
+  }, [modernTime, latitude, longitude, loading]); // Añadido loading a dependencias
 
   // Weather Data
   const { weather } = useWeather(latitude, longitude);
@@ -68,7 +84,6 @@ const App: React.FC = () => {
     setLoading(true);
     setLatitude(lat);
     setLongitude(lng);
-    // Persist to local storage
     localStorage.setItem('romanClockLat', lat.toString());
     localStorage.setItem('romanClockLng', lng.toString());
   };
