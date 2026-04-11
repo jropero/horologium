@@ -52,13 +52,19 @@ export type WeatherCondition =
   | 'storm'
   | 'fog';
 
+export interface WeatherSnapshot {
+    temperature: number;
+    condition: WeatherCondition;
+    description: string;
+    code: number;
+    windSpeed: number;
+    windDirection: number;
+    latinWindName: string;
+    yearLabel: string; // "MMIII", "MCMLXXIII", etc.
+}
+
 export interface WeatherData {
-  temperature: number;
-  condition: WeatherCondition;
-  description: string; // Latin description
-  code: number; // WMO code
-  windSpeed?: number;
-  latinWindName?: string;
-  windDirection?: number;
+    current: WeatherSnapshot;
+    historical: WeatherSnapshot[]; // Un array con los años pasados
 }
 // --- END OF FILE horologium-main/types.ts ---
