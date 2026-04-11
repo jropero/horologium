@@ -27,11 +27,11 @@ const SortesVergilianae: React.FC = () => {
         <div className="flex items-center justify-between p-3 border-b border-gold-dim/20">
           <div className="flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-gold-dim" />
-            <span className="font-serif text-[10px] uppercase tracking-[0.2em] text-gold-dim">
+            <span className="font-serif text-sm uppercase tracking-[0.2em] text-gold-dim">
               Sortes Vergilianae
             </span>
           </div>
-          <span className="font-body text-[10px] text-parchment/40 italic">Oraculum Poeticum</span>
+          <span className="font-body text-sm text-parchment/40 italic">Oraculum Poeticum</span>
         </div>
 
         {/* Oracle content */}
@@ -40,13 +40,13 @@ const SortesVergilianae: React.FC = () => {
           {/* Revealed verse */}
           {sors && !isRevealing && (
             <div className="text-center animate-[fadeIn_0.6s_ease-out]">
-              <blockquote className="font-body text-parchment text-base sm:text-lg italic leading-relaxed mb-2">
+              <blockquote className="font-body text-parchment text-xl sm:text-2xl italic leading-relaxed mb-2">
                 «{sors.latin}»
               </blockquote>
-              <p className="font-body text-parchment/60 text-sm italic mb-2">
+              <p className="font-body text-parchment/60 text-lg italic mb-2">
                 {sors.spanish}
               </p>
-              <cite className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60 not-italic">
+              <cite className="font-serif text-sm uppercase tracking-widest text-gold-dim/60 not-italic">
                 — {sors.source} —
               </cite>
             </div>
@@ -56,7 +56,7 @@ const SortesVergilianae: React.FC = () => {
           {isRevealing && (
             <div className="text-center">
               <Sparkles className="w-6 h-6 text-gold-leaf animate-spin mx-auto mb-2" />
-              <span className="font-serif text-xs uppercase tracking-widest text-gold-dim/80 animate-pulse">
+              <span className="font-serif text-sm uppercase tracking-widest text-gold-dim/80 animate-pulse">
                 Fata consuluntur...
               </span>
             </div>
@@ -64,7 +64,7 @@ const SortesVergilianae: React.FC = () => {
 
           {/* Initial state */}
           {!sors && !isRevealing && (
-            <p className="font-body text-[11px] text-parchment/40 italic text-center max-w-xs">
+            <p className="font-body text-base text-parchment/40 italic text-center max-w-xs">
               Abre el libro de Virgilio al azar y deja que los hados te guíen.
             </p>
           )}
@@ -74,7 +74,7 @@ const SortesVergilianae: React.FC = () => {
             onClick={handleConsult}
             disabled={isRevealing}
             className="
-              group relative px-6 py-2 mt-1 font-serif text-[11px] uppercase tracking-[0.2em]
+              group relative px-6 py-2 mt-1 font-serif text-base uppercase tracking-[0.2em]
               text-parchment border border-gold-dim/50 rounded
               bg-ink/60 hover:bg-gold-dim/15 hover:border-gold-leaf
               transition-all duration-300 active:scale-95

@@ -66,7 +66,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
                 {renderIcon()}
             </div>
             <div className="flex flex-col border-r border-gold-dim/30 pr-3">
-                <span className="text-gold-leaf font-serif text-[10px] uppercase tracking-widest leading-none mb-1">Caelum</span>
+                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1">Caelum</span>
                 <span className="text-parchment font-serif text-sm font-bold leading-tight">{description}</span>
                 <span className="text-stone-400 font-serif text-xs">{Math.round(temperature)}°C</span>
             </div>
@@ -74,7 +74,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
             {/* SECCIÓN DE VIENTO */}
             {latinWindName && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-                    <span className="text-gold-leaf font-serif text-[10px] uppercase tracking-widest mb-1">Ventus</span>
+                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1">Ventus</span>
                     
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
                         {/* Rosa de los vientos de fondo */}
@@ -102,12 +102,12 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
                         </svg>
                     </div>
 
-                    <span className="text-stone-300 font-serif text-[9px] text-center leading-tight">
+                    <span className="text-stone-300 font-serif text-[10px] text-center leading-tight">
                         {latinWindName.split(' ')[0]}
                     </span>
                     
                     {windSpeed !== undefined && (
-                        <span className="text-gold-dim font-serif text-[8px] mt-0.5 tracking-wider">
+                        <span className="text-gold-dim font-serif text-[10px] mt-0.5 tracking-wider">
                             {Math.round(windSpeed)} km/h
                         </span>
                     )}
