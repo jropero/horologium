@@ -1,4 +1,4 @@
-export type BuildingType = 'temple' | 'aqueduct' | 'dome' | 'cypress' | 'column';
+export type BuildingType = 'temple' | 'aqueduct' | 'dome' | 'cypress' | 'column' | 'amphitheatre' | 'obelisk' | 'villa';
 
 export interface SkylineElement {
   id: string;
@@ -29,34 +29,50 @@ export const generateSkyline = (seed: number): SkylineElement[] => {
   const rightZone = { start: 200, end: 295 };
 
   const generateElement = (xStart: number, zoneEnd: number): { el: SkylineElement, nextX: number } | null => {
-    const types: BuildingType[] = ['temple', 'aqueduct', 'dome', 'cypress', 'cypress', 'column'];
+    const types: BuildingType[] = ['temple', 'aqueduct', 'dome', 'cypress', 'cypress', 'column', 'amphitheatre', 'obelisk', 'villa'];
     const type = types[Math.floor(rand() * types.length)];
     
-    // Altura base (suelo) en el SVG del RomanClock es 180
-    const baseY = 180;
+    // Altura base (suelo) calculada dinámicamente según las colinas
     let width = 0;
     let height = 0;
-    let path = '';
     
     const scale = 0.5 + rand() * 0.7; // Factor de escala para variación
 
     switch (type) {
+      case 'temple': width = 25 * scale; height = 20 * scale; break;
+      case 'aqueduct': width = 40 * scale; height = 15 * scale; break;
+      case 'dome': width = 20 * scale; height = 15 * scale; break;
+      case 'cypress': width = 6 * scale; height = 25 * scale; break;
+      case 'column': width = 4 * scale; height = 28 * scale; break;
+      case 'amphitheatre': width = 45 * scale; height = 18 * scale; break;
+      case 'obelisk': width = 6 * scale; height = 38 * scale; break;
+      case 'villa': width = 30 * scale; height = 14 * scale; break;
+    }
+
+    if (xStart + width > zoneEnd) return null;
+
+    let path = '';
+    const cx = xStart + width / 2;
+    let baseY = 180;
+    
+    // Las colinas son curvas de Bezier que bajan desde y=180 hasta y=170 en los centros de las zonas
+    if (cx >= 0 && cx <= 100) {
+        const t = cx / 100;
+        baseY = 180 - 40 * t + 40 * t * t + 4; // +4 para que la base quede justo escondida tras la colina
+    } else if (cx >= 200 && cx <= 300) {
+        const t = (cx - 200) / 100;
+        baseY = 180 - 40 * t + 40 * t * t + 4;
+    }
+
+    switch (type) {
       case 'temple':
-        width = 25 * scale;
-        height = 20 * scale;
-        if (xStart + width > zoneEnd) return null;
         // Base rectangular
         path += `M ${xStart} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - height * 0.7} L ${xStart} ${baseY - height * 0.7} Z `;
         // Tejado (Frontón)
         path += `M ${xStart - 2} ${baseY - height * 0.7} L ${xStart + width / 2} ${baseY - height} L ${xStart + width + 2} ${baseY - height * 0.7} Z `;
-        // Huecos entre columnas (sustraer o pintar encima, mejor dibujamos las columnas y el espacio como sólido, así que en SVG normal pintamos el bloque y recortamos líneas, pero es más fácil dibujar el contorno entero)
-        // Alternativa simplificada: silueta maciza
         break;
 
       case 'aqueduct':
-        width = 40 * scale;
-        height = 15 * scale;
-        if (xStart + width > zoneEnd) return null;
         // Bloque principal
         path += `M ${xStart} ${baseY} L ${xStart} ${baseY - height} L ${xStart + width} ${baseY - height} L ${xStart + width} ${baseY} `;
         // Recortar 3 arcos
@@ -70,9 +86,6 @@ export const generateSkyline = (seed: number): SkylineElement[] => {
         break;
 
       case 'dome':
-        width = 20 * scale;
-        height = 15 * scale;
-        if (xStart + width > zoneEnd) return null;
         // Base cuadrangular
         const baseH = height * 0.5;
         path += `M ${xStart} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - baseH} L ${xStart} ${baseY - baseH} Z `;
@@ -81,20 +94,37 @@ export const generateSkyline = (seed: number): SkylineElement[] => {
         break;
 
       case 'cypress':
-        width = 6 * scale;
-        height = 25 * scale;
-        if (xStart + width > zoneEnd) return null;
         path += `M ${xStart + width / 2} ${baseY - height} Q ${xStart + width} ${baseY - height * 0.2} ${xStart + width} ${baseY} L ${xStart} ${baseY} Q ${xStart} ${baseY - height * 0.2} ${xStart + width / 2} ${baseY - height} Z`;
         break;
 
       case 'column':
-        width = 4 * scale;
-        height = 28 * scale;
-        if (xStart + width > zoneEnd) return null;
         // Columna cilíndrica
         path += `M ${xStart} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - height} L ${xStart} ${baseY - height} Z `;
         // Capitel
         path += `M ${xStart - 1} ${baseY - height} L ${xStart + width + 1} ${baseY - height} L ${xStart + width + 1} ${baseY - height - 2} L ${xStart - 1} ${baseY - height - 2} Z`;
+        break;
+
+      case 'amphitheatre':
+        path += `M ${xStart} ${baseY} L ${xStart} ${baseY - height * 0.7} L ${xStart + width * 0.1} ${baseY - height} L ${xStart + width * 0.9} ${baseY - height} L ${xStart + width} ${baseY - height * 0.7} L ${xStart + width} ${baseY} `;
+        const amphArchW = width / 4;
+        for (let i = 3; i >= 0; i--) {
+            const ax = xStart + i * amphArchW;
+            path += `L ${ax + amphArchW * 0.8} ${baseY} A ${amphArchW * 0.3} ${height * 0.4} 0 0 0 ${ax + amphArchW * 0.2} ${baseY} `;
+        }
+        path += 'Z';
+        break;
+
+      case 'obelisk':
+        path += `M ${xStart - 1} ${baseY} L ${xStart + width + 1} ${baseY} L ${xStart + width} ${baseY - 2} L ${xStart} ${baseY - 2} Z `;
+        path += `M ${xStart} ${baseY - 2} L ${xStart + width} ${baseY - 2} L ${xStart + width * 0.8} ${baseY - height + 3} L ${xStart + width * 0.2} ${baseY - height + 3} Z `;
+        path += `M ${xStart + width * 0.2} ${baseY - height + 3} L ${xStart + width * 0.8} ${baseY - height + 3} L ${xStart + width / 2} ${baseY - height} Z `;
+        break;
+
+      case 'villa':
+        path += `M ${xStart} ${baseY} L ${xStart} ${baseY - height} L ${xStart + width * 0.3} ${baseY - height} L ${xStart + width * 0.3} ${baseY} Z `;
+        path += `M ${xStart - 1} ${baseY - height} L ${xStart + width * 0.15} ${baseY - height - 4} L ${xStart + width * 0.3 + 1} ${baseY - height} Z `;
+        path += `M ${xStart + width * 0.3} ${baseY} L ${xStart + width * 0.3} ${baseY - height * 0.6} L ${xStart + width} ${baseY - height * 0.6} L ${xStart + width} ${baseY} Z `;
+        path += `M ${xStart + width * 0.3 - 1} ${baseY - height * 0.6} L ${xStart + width * 0.65} ${baseY - height * 0.9} L ${xStart + width + 2} ${baseY - height * 0.6} Z `;
         break;
     }
 
