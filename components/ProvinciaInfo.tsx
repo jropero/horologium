@@ -20,16 +20,16 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
         <div className="flex-1 flex items-start gap-2 sm:border-r sm:border-gold-dim/20 sm:pr-3">
           <MapPin className="w-4 h-4 text-gold-dim mt-0.5 shrink-0" />
           <div className="flex flex-col">
-            <span className="font-serif text-[9px] uppercase tracking-[0.2em] text-gold-dim/70">Provincia Romana</span>
+            <span className="font-serif text-sm uppercase tracking-[0.2em] text-gold-dim/70">Provincia Romana</span>
             {province ? (
               <>
-                <span className="font-serif text-sm text-parchment font-bold leading-tight">{province.name}</span>
-                <span className="font-body text-[11px] text-parchment/60 italic leading-tight mt-0.5">{province.desc}</span>
+                <span className="font-serif text-lg text-parchment font-bold leading-tight">{province.name}</span>
+                <span className="font-body text-base text-parchment/60 italic leading-tight mt-0.5">{province.desc}</span>
               </>
             ) : (
               <>
-                <span className="font-serif text-sm text-parchment/50 italic">Extra Fines Imperii</span>
-                <span className="font-body text-[11px] text-parchment/40 italic">Más allá de las fronteras del Imperio.</span>
+                <span className="font-serif text-lg text-parchment/50 italic">Extra Fines Imperii</span>
+                <span className="font-body text-base text-parchment/40 italic">Más allá de las fronteras del Imperio.</span>
               </>
             )}
           </div>
@@ -39,11 +39,11 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
         <div className="flex items-start gap-2 sm:pl-1 border-t sm:border-t-0 border-gold-dim/20 pt-2 sm:pt-0">
           <Milestone className="w-4 h-4 text-gold-dim mt-0.5 shrink-0" />
           <div className="flex flex-col">
-            <span className="font-serif text-[9px] uppercase tracking-[0.2em] text-gold-dim/70">Miliarium Aureum</span>
-            <span className="font-serif text-sm text-parchment font-bold leading-tight">
+            <span className="font-serif text-sm uppercase tracking-[0.2em] text-gold-dim/70">Miliarium Aureum</span>
+            <span className="font-serif text-lg text-parchment font-bold leading-tight">
               {toRoman(distance.romanMiles)} m.p.
             </span>
-            <span className="font-body text-[11px] text-parchment/60 italic leading-tight mt-0.5">
+            <span className="font-body text-base text-parchment/60 italic leading-tight mt-0.5">
               {distance.romanMiles.toLocaleString()} milia passuum ab Roma ({distance.km.toLocaleString()} km)
             </span>
           </div>

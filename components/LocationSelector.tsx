@@ -47,7 +47,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
 
   return (
     <div className="w-full max-w-xl mx-auto mt-6 px-2">
-      <div className="text-center font-serif text-gold-dim text-[10px] uppercase tracking-[0.3em] mb-3 opacity-70">
+      <div className="text-center font-serif text-gold-dim text-sm uppercase tracking-[0.3em] mb-3 opacity-70">
         — Selectio Loci —
       </div>
 
@@ -63,15 +63,15 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
               disabled={loading}
               className={`
                 relative flex items-center justify-center gap-2 p-2 rounded transition-all duration-300
-                font-serif text-[11px] uppercase tracking-widest border
+                font-serif text-sm uppercase tracking-widest border
                 ${active
                   ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_10px_rgba(207,181,59,0.3)]'
                   : 'bg-ink/70 text-parchment/60 border-gold-dim/30 hover:border-gold-leaf hover:text-parchment hover:bg-ink/80'}
                 ${loading && loc.id === 'gps' ? 'animate-pulse' : ''}
               `}
             >
-              <Icon className={`w-3 h-3 ${active ? 'text-roman-red' : 'text-gold-dim'}`} />
-              <span className="truncate">{loc.name}</span>
+              <Icon className={`w-4 h-4 ${active ? 'text-roman-red' : 'text-gold-dim'}`} />
+              <span className="truncate text-base">{loc.name}</span>
 
               {active && (
                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-roman-red rounded-full"></div>
