@@ -7,9 +7,16 @@ interface WeatherWidgetProps {
 }
 
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }) => {
-    const { condition, description, temperature } = weather;
+    // Extraemos los datos de 'current' para que el resto del código funcione
+    const { 
+        condition, 
+        description, 
+        temperature, 
+        latinWindName, 
+        windDirection, 
+        windSpeed 
+    } = weather.current;
 
-    // Woodcut icon paths
     const renderIcon = () => {
         switch (condition) {
             case 'clear':
@@ -52,7 +59,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
                 return null;
         }
     };
-    // Dentro del return principal de WeatherWidget.tsx, modifícalo así:
+
     return (
         <div className={`flex items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg ${className}`}>
             <div className="text-gold-leaf flex-shrink-0">
@@ -64,16 +71,13 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
                 <span className="text-stone-400 font-serif text-xs">{Math.round(temperature)}°C</span>
             </div>
 
-            {/* ¡NUEVA SECCIÓN DE VIENTO! */}
-{/* ¡NUEVA SECCIÓN DE VIENTO! */}
-            {weather.latinWindName && (
+            {/* SECCIÓN DE VIENTO */}
+            {latinWindName && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
                     <span className="text-gold-leaf font-serif text-[10px] uppercase tracking-widest mb-1">Ventus</span>
                     
-                    {/* Rosa de los vientos con aguja 3D */}
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
-                        
-                        {/* Fondo: Anillo de la brújula (fino y tenue) */}
+                        {/* Rosa de los vientos de fondo */}
                         <svg viewBox="0 0 24 24" className="absolute inset-0 w-full h-full text-gold-dim opacity-40">
                             <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
                             <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
@@ -82,35 +86,29 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
                             <line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="1" />
                         </svg>
 
-                        {/* Aguja dinámica 3D */}
+                        {/* Aguja 3D dinámica */}
                         <svg 
                             viewBox="0 0 24 24" 
                             className="absolute inset-0 w-full h-full transition-transform duration-1000 ease-out drop-shadow-md"
-                            style={{ transform: `rotate(${weather.windDirection}deg)` }}
+                            style={{ transform: `rotate(${windDirection}deg)` }}
                         >
                             <g transform="translate(12,12)">
-                                {/* Punta Norte (Iluminada y en sombra para dar volumen 3D) */}
                                 <path d="M0 -10 L3 2 L0 0 Z" fill="#e3d6b3" />
                                 <path d="M0 -10 L-3 2 L0 0 Z" fill="#c9b993" />
-                                
-                                {/* Cola Sur (Metálica oscura) */}
                                 <path d="M0 10 L2 2 L0 0 Z" fill="#8a7826" />
                                 <path d="M0 10 L-2 2 L0 0 Z" fill="#5c4f15" />
-                                
-                                {/* Eje central de bronce */}
                                 <circle cx="0" cy="0" r="1.5" fill="#1a1a1a" stroke="#e3d6b3" strokeWidth="0.5" />
                             </g>
                         </svg>
                     </div>
 
                     <span className="text-stone-300 font-serif text-[9px] text-center leading-tight">
-                        {weather.latinWindName.split(' ')[0]} {/* "Favonius", "Auster", etc. */}
+                        {latinWindName.split(' ')[0]}
                     </span>
                     
-                    {/* Velocidad del viento */}
-                    {weather.windSpeed !== undefined && (
+                    {windSpeed !== undefined && (
                         <span className="text-gold-dim font-serif text-[8px] mt-0.5 tracking-wider">
-                            {Math.round(weather.windSpeed)} km/h
+                            {Math.round(windSpeed)} km/h
                         </span>
                     )}
                 </div>

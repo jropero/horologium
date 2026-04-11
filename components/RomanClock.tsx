@@ -4,6 +4,7 @@ import { RomanTimeData, WeatherData } from '../types';
 import WeatherWidget from './WeatherWidget';
 import RomanCalendarModal from './RomanCalendarModal';
 import { generateSkyline } from '../utils/skylineGenerator';
+import ChronosWeatherWidget from './ChronosWeatherWidget';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -179,7 +180,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
               <span className="opacity-40 text-[8px]">|</span>
               <span>{romanTime.romanDateString}</span>
               {romanTime.isMarketDay && (
-                <span className="opacity-40 text-[8px]">| Nundinae</span>
+                <span className="text-[10px] opacity-90">Nundinae</span>
               )}
             </div>
             <div className="text-gold-dim font-serif text-[10px] italic mb-1 opacity-80">{romanTime.romanDateFull}</div>
@@ -248,11 +249,11 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                 </g>
 
                 {/* CAPA 2.5: Efectos climáticos (Lluvia, Nieve, Nubes y Rayos) */}
-                {weather && weather.condition !== 'clear' && (
+                {weather && weather.current.condition !== 'clear' && (
                   <g className="weather-effects pointer-events-none" style={{ mixBlendMode: 'screen' }}>
 
                     {/* Nubes Ligeras o Niebla */}
-                    {(weather.condition === 'cloudy' || weather.condition === 'fog') && (
+                    {(weather.current.condition === 'cloudy' || weather.current.condition === 'fog') && (
                       <g opacity="0.4">
                         <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8">
                           <animateTransform attributeName="transform" type="translate" values="0 0; 20 0; 0 0" dur="20s" repeatCount="indefinite" />
@@ -264,21 +265,21 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                     )}
 
                     {/* Tormenta: Nubes oscuras espesas y Relámpagos */}
-                    {(weather.condition === 'storm' || weather.condition === 'rain') && (
+                    {(weather.current.condition === 'storm' || weather.current.condition === 'rain') && (
                       <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity="0.6">
                         <path d="M -50 50 Q 30 20 80 40 T 180 30 T 280 50 T 350 30 L 350 -20 L -50 -20 Z" fill="#1e293b" />
                         <path d="M -50 80 Q 70 50 160 80 T 350 60 L 350 -20 L -50 -20 Z" fill="#0f172a" opacity="0.8" />
                       </g>
                     )}
 
-                    {weather.condition === 'storm' && (
+                    {weather.current.condition === 'storm' && (
                       <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0">
                         <animate attributeName="opacity" values="0;0;0;0.8;0;0.3;0;0;0;0;0;0" dur="7s" repeatCount="indefinite" />
                       </rect>
                     )}
 
                     {/* Lluvia */}
-                    {(weather.condition === 'rain' || weather.condition === 'storm') && (
+                    {(weather.current.condition === 'rain' || weather.current.condition === 'storm') && (
                       <g>
                         {weatherParticles.rain.map((drop, i) => (
                           <line
@@ -305,7 +306,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                     )}
 
                     {/* Nieve */}
-                    {weather.condition === 'snow' && (
+                    {weather.current.condition === 'snow' && (
                       <g>
                         {weatherParticles.snow.map((flake, i) => (
                           <circle
@@ -502,6 +503,10 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
           </div>
         </div>
       </div>
+
+      {weather && (
+  <ChronosWeatherWidget weather={weather} />
+)}
 
       <RomanCalendarModal
         isOpen={isCalendarOpen}

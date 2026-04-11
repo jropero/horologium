@@ -1,4 +1,4 @@
-import { WeatherData, WeatherCondition } from '../types';
+import { WeatherData, WeatherCondition, WeatherSnapshot } from '../types';
 
 // WMO Weather interpretation codes (WW)
 // https://open-meteo.com/en/docs
@@ -45,36 +45,77 @@ const getLatinWindName = (degrees: number): string => {
     return 'Ventus';
 };
 
+const HISTORICAL_YEARS = [2003, 1973, 1949];
+
+const getRomanYear = (year: number): string => {
+    if (year === 2003) return "MMIII";
+    if (year === 1973) return "MCMLXXIII";
+    if (year === 1949) return "MCMXLIX";
+    return year.toString();
+};
+
 export const fetchWeather = async (lat: number, lng: number): Promise<WeatherData | null> => {
     try {
-        const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
-        );
+        const today = new Date();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
 
-        if (!response.ok) throw new Error('Weather fetch failed');
+        // URL para Clima Actual
+        const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
 
-        const data = await response.json();
-        const current = data.current_weather;
-        const code = current.weathercode;
-        const temp = current.temperature;
+        // URLs para Clima Histórico
+        const historicalUrls = HISTORICAL_YEARS.map(year => {
+            const dateStr = `${year}-${month}-${day}`;
+            return `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}&start_date=${dateStr}&end_date=${dateStr}&daily=weather_code,temperature_2m_mean,wind_speed_10m_max,wind_direction_10m_dominant&timezone=auto`;
+        });
 
-        // ¡NUEVO! Datos del viento
-        const wSpeed = current.windspeed;
-        const wDir = current.winddirection;
+        const responses = await Promise.all([
+            fetch(currentUrl),
+            ...historicalUrls.map(url => fetch(url))
+        ]);
 
-        const info = WEATHER_CODES[code] || { condition: 'clear', description: 'Caelum Ignosum' };
-
-        return {
-            temperature: temp,
-            condition: info.condition,
-            description: info.description,
-            code: code,
-            windSpeed: wSpeed,
-            windDirection: wDir,
-            latinWindName: getLatinWindName(wDir)
+        // Procesar Actual
+        const currData = await responses[0].json();
+        const c = currData.current_weather;
+        const cInfo = WEATHER_CODES[c.weathercode] || { condition: 'clear', description: 'Caelum Ignosum' };
+        
+        const current: WeatherSnapshot = {
+            temperature: c.temperature,
+            condition: cInfo.condition,
+            description: cInfo.description,
+            code: c.weathercode,
+            windSpeed: c.windspeed,
+            windDirection: c.winddirection,
+            latinWindName: getLatinWindName(c.winddirection),
+            yearLabel: "Hodie"
         };
+
+        // Procesar Históricos
+        const historical: WeatherSnapshot[] = [];
+        for (let i = 1; i < responses.length; i++) {
+            if (!responses[i].ok) continue;
+            const data = await responses[i].json();
+            const year = HISTORICAL_YEARS[i - 1];
+            
+            if (data.daily) {
+                const code = data.daily.weather_code[0];
+                const info = WEATHER_CODES[code] || { condition: 'clear', description: 'Caelum' };
+                historical.push({
+                    temperature: data.daily.temperature_2m_mean[0],
+                    condition: info.condition,
+                    description: info.description,
+                    code: code,
+                    windSpeed: data.daily.wind_speed_10m_max[0],
+                    windDirection: data.daily.wind_direction_10m_dominant[0],
+                    latinWindName: getLatinWindName(data.daily.wind_direction_10m_dominant[0]),
+                    yearLabel: getRomanYear(year)
+                });
+            }
+        }
+
+        return { current, historical };
     } catch (error) {
-        console.error('Error fetching weather:', error);
+        console.error("Error al consultar Chronos:", error);
         return null;
     }
 };
