@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, RefreshCw, Navigation, Bell } from 'lucide-react';
+import { MapPin, RefreshCw, Navigation, Bell, Sun, Moon } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
@@ -8,9 +8,18 @@ interface ControlsProps {
   longitude: number;
   onUpdateLocation: (lat: number, lng: number) => void;
   onRefreshTime: () => void;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
 }
 
-const Controls: React.FC<ControlsProps> = ({ latitude, longitude, onUpdateLocation, onRefreshTime }) => {
+const Controls: React.FC<ControlsProps> = ({ 
+  latitude, 
+  longitude, 
+  onUpdateLocation, 
+  onRefreshTime,
+  theme,
+  onToggleTheme
+}) => {
   const [latInput, setLatInput] = useState(latitude.toString());
   const [lngInput, setLngInput] = useState(longitude.toString());
 
@@ -121,7 +130,7 @@ const handleGeolocation = async () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
              <button 
                 onClick={handleManualUpdate}
                 className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-ink bg-parchment rounded-lg transition-all hover:scale-[1.02] active:scale-95 shadow-lg border border-gold-leaf"
@@ -136,6 +145,18 @@ const handleGeolocation = async () => {
             >
                 <Navigation className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> 
                 Invenire Me
+            </button>
+
+          <button 
+                onClick={onToggleTheme}
+                className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest bg-gold-leaf/10 text-gold-leaf rounded-lg border border-gold-leaf/50 hover:bg-gold-leaf/20 transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
+            >
+                {theme === 'dark' ? (
+                  <Sun className="w-5 h-5 animate-spin-slow" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+                {theme === 'dark' ? 'Lux' : 'Nox'}
             </button>
 
             <button 

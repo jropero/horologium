@@ -114,7 +114,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({ isOpen, onClose, weather })
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-parchment/80 hover:text-roman-red hover:bg-white/10 transition-colors p-2 rounded-full"
+                        className="text-parchment/80 hover:text-roman-red hover:bg-gold-leaf/10 transition-colors p-2 rounded-full"
                     >
                         <X className="w-6 h-6" />
                     </button>
@@ -148,12 +148,12 @@ const WeatherModal: React.FC<WeatherModalProps> = ({ isOpen, onClose, weather })
 
                         {/* Detailed Metrics */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gold-dim/20">
-                            <div className="flex flex-col items-center p-3 bg-white/5 rounded-lg border border-gold-dim/10">
+                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
                                 <Wind className="w-5 h-5 text-gold-dim mb-2" />
                                 <span className="text-[10px] uppercase text-stone-500 tracking-widest">Velocitas</span>
                                 <span className="text-parchment font-bold">{Math.round(current.windSpeed)} km/h</span>
                             </div>
-                            <div className="flex flex-col items-center p-3 bg-white/5 rounded-lg border border-gold-dim/10 text-center">
+                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
                                 <div className="w-5 h-5 mb-2 relative" style={{ transform: `rotate(${current.windDirection}deg)` }}>
                                     <svg viewBox="0 0 24 24" className="w-full h-full text-gold-leaf fill-current">
                                         <path d="M12 2 L16 22 L12 18 L8 22 Z" />
@@ -162,15 +162,22 @@ const WeatherModal: React.FC<WeatherModalProps> = ({ isOpen, onClose, weather })
                                 <span className="text-[10px] uppercase text-stone-500 tracking-widest">Directio</span>
                                 <span className="text-parchment font-bold">{current.windDirection}°</span>
                             </div>
-                            <div className="flex flex-col items-center p-3 bg-white/5 rounded-lg border border-gold-dim/10">
+                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
                                 <Thermometer className="w-5 h-5 text-gold-dim mb-2" />
                                 <span className="text-[10px] uppercase text-stone-500 tracking-widest">Aestus</span>
                                 <span className="text-parchment font-bold">Variabilis</span>
                             </div>
-                            <div className="flex flex-col items-center p-3 bg-white/5 rounded-lg border border-gold-dim/10">
+                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
                                 <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
                                 <span className="text-[10px] uppercase text-stone-500 tracking-widest">Caelum</span>
-                                <span className="text-parchment font-bold uppercase text-[10px]">{current.condition}</span>
+                                <span className="text-parchment font-bold uppercase text-[10px]">
+                                    {current.condition === 'clear' && 'Serenum'}
+                                    {current.condition === 'cloudy' && 'Nubilum'}
+                                    {current.condition === 'rain' && 'Pluvia'}
+                                    {current.condition === 'snow' && 'Nix'}
+                                    {current.condition === 'storm' && 'Tempestas'}
+                                    {current.condition === 'fog' && 'Nebula'}
+                                </span>
                             </div>
                         </div>
                     </div>

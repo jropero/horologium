@@ -21,6 +21,16 @@ const DEFAULT_LNG = 7.5744;
 
 const App: React.FC = () => {
   const [modernTime, setModernTime] = useState<Date>(new Date());
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const saved = localStorage.getItem('romanClockTheme');
+    return (saved as 'dark' | 'light') || 'dark';
+  });
+
+  // Handle theme changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('romanClockTheme', theme);
+  }, [theme]);
 
   // Initialize location from localStorage if available, otherwise default
   const [latitude, setLatitude] = useState<number>(() => {
@@ -131,6 +141,8 @@ const App: React.FC = () => {
         longitude={longitude}
         onUpdateLocation={handleUpdateLocation}
         onRefreshTime={() => setModernTime(new Date())}
+        theme={theme}
+        onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
       />
 
       <LocationSelector
