@@ -1,67 +1,86 @@
 <div align="center">
 <img width="1200" height="475" alt="Horologium Romanam Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
 # Horologium Romanam
 
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
+[![PWA](https://img.shields.io/badge/PWA-Ready-009688?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+
 [Español](README.md) | **Latine**
 
-**Horologium Romanam** est applicatio retis immersiva quae modum metiendi temporis antiquorum Romanorum recreat. Dissimilis temporis moderni, systema Romanum cyclo solari nitebatur, diem noctemque in XII horas variae longitudinis secundum anni tempestatem dividens.
+</div>
 
-## ✨ Praecipuae Virtutes
+---
 
-- 🕰️ **Horologium Horarum Temporalium**: Vigilantia temporis Romani in tempore reali, cum divisione classica inter *Horas* (die) et *Vigilias* (nocte).
-- 📅 **Calendarium Romanum Dynamicum**: Ostendit diem praesentem secundum systema Kalendarum, Nonarum, et Iduum, una cum anno *Ab Urbe Condita* (A.U.C.).
-- 🪐 **Rector Horae (Dominus Planetarius)**: Calculus automaticus rectoris horae praesentis secundum ordinem Chaldaeorum (Saturnus, Iuppiter, Mars, Sol, Venus, Mercurius, Luna).
-- 📜 **Res Gestae (Ephemeris)**: Notitiae historicae de eventibus insignibus qui hoc die per historiam Romae acciderunt.
-- 🌓 **Phases Lunae**: Investigatio phasis lunae praesentis cum terminis Latinis (*Novilunium*, *Plenilunium*, etc.).
-- 🌦️ **Caelum Latine**: Integratio cum ministeriis meteorologicis localibus ad tempestatem praesentem ostendendam cum descriptionibus poëticis Latinis.
-- 🖋️ **Sententia Diei**: Dictum classicum cottidianum ad animum incitandum.
+**Horologium Romanam** est applicatio retis immersiva summae fidelitatis quae modum sentiendi temporis Antiquae Romae recreat. Algorithmis astronomicis accuratis utitur ad tempus modernum in systema **horarum temporalium** convertendum, ubi dies et nox in XII horas variae longitudinis secundum anni tempestatem et locum geographicum dividuntur.
+
+## 🏛️ Virtutes Praecipuae
+
+### 🎨 Experientia Visualis et Aesthetica
+- **Dualitas Thematis**: Sustentatio modi obscuri profundi et **Modi Membranei** (clari) qui antiqua manuscripta revocat.
+- **Skyline Proceduralis**: Scena dynamica quae aedificia Romana (templa, domus, obeliscos) modo procedurāli generat, cum cyclo solari mutans.
+- **Animationes Optimae**: Caelum dynamicum cum effectibus pluviae, nivis et fulgurum per hardware optimizatis.
+
+### 🕰️ Chronometria et Calendarium
+- **Temporis Exactio**: Calculus in tempore reali *Horarum* (die) et *Vigiliarum* (nocte) secundum latitudinem et longitudinem exactam.
+- **Fasti Romani**: Calendarium plenum cum Kalendis, Nonis et Idibus, una cum anno *Ab Urbe Condita* (A.U.C.).
+- **Nundinae & Mercatus**: Investigatio cycli dierum nundinarum et dierum hebdomadae Romanae.
+- **Rector Horae**: Identificatio domini planetarii uniuscuiusque horae secundum ordinem Chaldaeorum.
+
+### 🔮 Sapientia et Historia
+- **Sortes Vergilianae**: Instrumentum divinationis classicae integratum utens fragmentis Aeneidos.
+- **Provincia Contextus**: Nominatio provinciae Romanae quae loco tuo geographico praesenti respondet.
+- **Sententiae Selectae**: Dicta classica cottidiana auctorum Latinorum ad meditationem.
+- **Annales Coeli**: Registrum singillatim eventuum caelestium et meteorologiae in sermone Latino poëtico.
+
+### 📱 Technologia et Mobilitas
+- **PWA (Progressive Web App)**: In dēscriptōrio et mōbilibus sēparātim fīgī potest, cum plēnā sustentātiōne sine rēte (offline) grātiās "Service Workers".
+- **Capacitor Integratio**: Ad Android optimizatum cum integratione nativa (occultatio fasciae status, "splash screens").
+- **Geolocalizatio Intellegens**: Locus automaticus vel selectio manualis per investigatorem globalem urbium.
 
 ## 🛠️ Ratio Technica
 
-Hoc opus technologiis modernis exstructum est ut experientia levis et visu iucunda praebeatur:
-
-- **React 19 & TypeScript**: Logica applicationis robusta et typificatio tuta.
-- **Vite**: Instrumentum aedificationis celerrimum.
-- **Lucide React**: Iconographia elegans et minimalis.
-- **Algorithmis Solaris**: Calculi accurati ortus et occasus solis secundum locum geographicum ad definiendam longitudinem exactam horarum temporalium.
-- **Open-Meteo API**: Data tempestatis in tempore reali sine clavi API percomplexa.
+- **Cor**: React 19, TypeScript 5.8.
+- **Stilus**: Tailwind CSS 4 (utens novo machinamento compilationis).
+- **Instrumentum Aedificationis**: Vite 6 cum sustentatione PWA.
+- **Mobile**: Capacitor 8 ad pactionem nativam in Android.
+- **Geometria**: SVG dynamica ad horologium et scēnam (skyline).
+- **API**: Open-Meteo (tempestas) et Geolocation API (coordinatae).
 
 ## 🚀 Quomodo Agatur
 
-Hos gradus sequere ut applicationem in machina tua agas:
-
-### Requisita
-
-- [Node.js](https://nodejs.org/) (versio LTS commendata)
-
-### Gradus
-
-1. **Efodicere repositorium:**
+1. **Efodicere**:
    ```bash
    git clone https://github.com/tu-usuario/horologium-romanam.git
    cd horologium-romanam
    ```
 
-2. **Instruere dependentias:**
+2. **Dependentiae**:
    ```bash
    npm install
    ```
 
-3. **Configuratio (Libera):**
-   Crea archivum `.env.local` si vis variabiles ambitus additicias configurare.
-
-4. **Incipere servatorem evolutionis:**
+3. **Evolutio**:
    ```bash
    npm run dev
    ```
-   Applicatio praesto erit in `http://localhost:5173`.
 
-## 🏛️ Inspiratio et Philosophia
+4. **Aedificatio ad Productionem**:
+   ```bash
+   npm run build
+   ```
 
-Hoc instrumentum natum est ex desiderio redeundi ad sensum classicum temporis, ubi rhythmus vitae cum luce solari et cosmo arte coniunctus erat. "Ad astra per aspera".
+## 🏛️ Philosophia Operis
+
+> "Relinque temporis angustias, ad maiora natus es."
+
+Hoc opus non est modo horologium; est pons ad cogitandi rationem ubi tempus non erat mensura rigida tabernae, sed rhythmus organicus a sole, astris et historia Urbis Aeternae dictatūs.
 
 ---
 
-*Passione historiae et technologiae confectum.*
+*Cura historica et praestantia technica confectum.*
+

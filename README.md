@@ -1,67 +1,86 @@
 <div align="center">
 <img width="1200" height="475" alt="Horologium Romanam Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
 # Horologium Romanam
 
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
+[![PWA](https://img.shields.io/badge/PWA-Ready-009688?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+
 **Español** | [Latine](README.la.md)
 
-**Horologium Romanam** es una aplicación web inmersiva que recrea la experiencia de medir el tiempo tal y como lo hacían los antiguos romanos. A diferencia del tiempo moderno, el sistema romano se basaba en el ciclo solar, dividiendo el día y la noche en 12 horas de duración variable según la estación del año.
+</div>
 
-## ✨ Características Principales
+---
 
-- 🕰️ **Reloj de Horas Temporales**: Visualización del tiempo romano en tiempo real, con la división clásica entre *Horae* (día) y *Vigiliae* (noche).
-- 📅 **Calendario Romano Dinámico**: Muestra la fecha actual siguiendo el sistema de Calendas, Nonas e Idus, incluyendo el año *Ab Urbe Condita* (A.U.C.).
-- 🪐 **Rector Horae (Regente Planetario)**: Cálculo automático del regente de la hora actual basado en el orden de los caldeos (Saturno, Júpiter, Marte, Sol, Venus, Mercurio, Luna).
-- 📜 **Efemérides (Res Gestae)**: Información histórica sobre eventos significativos ocurridos en la fecha actual a lo largo de la historia de Roma.
-- 🌓 **Fases Lunares**: Seguimiento de la fase lunar actual con terminología latina (*Novilunium*, *Plenilunium*, etc.).
-- 🌦️ **Clima en Latín**: Integración con servicios meteorológicos locales para mostrar el tiempo actual con descripciones poéticas en latín.
-- 🖋️ **Sententia Diei**: Una cita clásica diaria para inspirar la jornada.
+**Horologium Romanam** es una aplicación web inmersiva de alta fidelidad que recrea la percepción del tiempo de la Antigua Roma. Utiliza algoritmos astronómicos precisos para transformar el tiempo moderno en el sistema de **horas temporales**, donde el día y la noche se dividen en 12 horas de duración variable según la estación y la ubicación geográfica.
 
-## 🛠️ Detalles Técnicos
+## 🏛️ Características Destacadas
 
-El proyecto está construido con tecnologías modernas para garantizar una experiencia fluida y visualmente atractiva:
+### 🎨 Experiencia Visual y Estética
+- **Dualitas Thematis**: Soporte para modo oscuro profundo y un **Modo Pergamino** (claro) que evoca manuscritos antiguos.
+- **Skyline Procedural**: Un fondo dinámico que genera edificios romanos (templos, domus, obeliscos) de forma procedimental, cambiando con el ciclo solar.
+- **Animaciones Premium**: Clima dinámico con efectos de lluvia, nieve y rayos optimizados por hardware.
 
-- **React 19 & TypeScript**: Lógica de aplicación robusta y tipado seguro.
-- **Vite**: Herramienta de construcción ultrarrápida.
-- **Lucide React**: Iconografía elegante y minimalista.
-- **Algoritmos Solares**: Cálculos precisos de salida y puesta de sol basados en coordenadas geográficas para determinar la duración exacta de las horas temporales.
-- **Open-Meteo API**: Datos climáticos en tiempo real sin necesidad de claves de API complejas.
+### 🕰️ Cronometría y Calendario
+- **Temporis Exactio**: Cálculo en tiempo real de *Horae* (día) y *Vigiliae* (noche) basado en la latitud/longitud exacta.
+- **Fasti Romani**: Calendario completo con Calendas, Nonas e Idus, incluyendo el año *Ab Urbe Condita* (A.U.C.).
+- **Nundinae & Mercatus**: Seguimiento del ciclo de los días de mercado y días de la semana romana.
+- **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo.
 
-## 🚀 Ejecución Local
+### 🔮 Sabiduría e Historia
+- **Sortes Vergilianae**: Herramienta de adivinación clásica integrada utilizando fragmentos de la Eneida.
+- **Provincia Contextus**: Identificación de la provincia romana correspondiente a tu ubicación geográfica actual.
+- **Sententiae Selectae**: Citas clásicas diarias de autores latinos para la reflexión.
+- **Annales Coeli**: Registro detallado de eventos celestiales y meteorología en latín poético.
 
-Sigue estos pasos para ejecutar el proyecto en tu máquina:
+### 📱 Tecnología y Movilidad
+- **PWA (Progressive Web App)**: Instalable en escritorio y móviles con soporte offline completo gracias a Service Workers.
+- **Capacitor Integration**: Optimizado para Android con integración nativa (ocultación de barra de estado, splash screens).
+- **Geolocalización Inteligente**: Localización automática o selección manual mediante un buscador global de ciudades.
 
-### Requisitos Previos
+## 🛠️ Stack Tecnológico
 
-- [Node.js](https://nodejs.org/) (versión LTS recomendada)
+- **Core**: React 19, TypeScript 5.8.
+- **Styling**: Tailwind CSS 4 (utilizando el nuevo motor de compilación).
+- **Build Tool**: Vite 6 con soporte PWA.
+- **Mobile**: Capacitor 8 para empaquetado nativo en Android.
+- **Geometría**: SVG dinámicos para el reloj y el skyline.
+- **API**: Open-Meteo (clima) y Geolocation API (coordenadas).
 
-### Pasos
+## 🚀 Instalación y Desarrollo
 
-1. **Clonar el repositorio:**
+1. **Clonación**:
    ```bash
    git clone https://github.com/tu-usuario/horologium-romanam.git
    cd horologium-romanam
    ```
 
-2. **Instalar dependencias:**
+2. **Dependencias**:
    ```bash
    npm install
    ```
 
-3. **Configuración (Opcional):**
-   Crea un archivo `.env.local` si deseas configurar variables de entorno adicionales, aunque el proyecto funciona por defecto con los valores predeterminados.
-
-4. **Iniciar servidor de desarrollo:**
+3. **Desarrollo**:
    ```bash
    npm run dev
    ```
-   La aplicación estará disponible en `http://localhost:5173`.
 
-## 🏛️ Inspiración y Filosofía
+4. **Construcción para Producción**:
+   ```bash
+   npm run build
+   ```
 
-Esta herramienta nace del deseo de reconectar con la percepción clásica del tiempo, donde el ritmo de la vida estaba intrínsecamente ligado a la luz solar y al cosmos. "Ad astra per aspera".
+## 🏛️ Filosofía del Proyecto
+
+> "Relinque temporis angustias, ad maiora natus es."
+
+Este proyecto no es solo un reloj; es un puente hacia una cosmovisión donde el tiempo no era una medida rígida de oficina, sino un ritmo orgánico dictado por el sol, las estrellas y la historia de la Ciudad Eterna.
 
 ---
 
-*Desarrollado con pasión por la historia y la tecnología.*
+*Desarrollado con dedicación histórica y excelencia técnica.*
+
