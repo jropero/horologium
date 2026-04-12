@@ -14,6 +14,7 @@ import ProvinciaInfo from './components/ProvinciaInfo';
 import SortesVergilianae from './components/SortesVergilianae';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
+import ChronosWeatherWidget from './components/ChronosWeatherWidget';
 
 // Default to Basilea
 const DEFAULT_LAT = 47.5632;
@@ -118,15 +119,10 @@ const App: React.FC = () => {
         />
       )}
 
+      <ProvinciaInfo latitude={latitude} longitude={longitude} />
+
       <SententiaDiei currentDate={modernTime} />
 
-      <LocationSelector 
-        onUpdateLocation={handleUpdateLocation} 
-        currentLat={latitude} 
-        currentLng={longitude} 
-      />
-
-      <ProvinciaInfo latitude={latitude} longitude={longitude} />
 
       <SortesVergilianae />
 
@@ -137,7 +133,22 @@ const App: React.FC = () => {
         onRefreshTime={() => setModernTime(new Date())}
       />
 
+
+      {weather && (
+        <ChronosWeatherWidget weather={weather} />
+      )}
+
+      <LocationSelector
+        onUpdateLocation={handleUpdateLocation}
+        currentLat={latitude}
+        currentLng={longitude}
+      />
+
+
       <InfoSection />
+
+
+
 
       {/* Background vignette effect */}
       <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>

@@ -484,9 +484,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
         </div>
       </div>
 
-      {weather && (
-  <ChronosWeatherWidget weather={weather} />
-)}
+
 
       <RomanCalendarModal
         isOpen={isCalendarOpen}
