@@ -60,6 +60,7 @@ export interface WeatherSnapshot {
     windSpeed: number;
     windDirection: number;
     latinWindName: string;
+    surfacePressure: number;
     yearLabel: string; // "MMIII", "MCMLXXIII", etc.
 }
 

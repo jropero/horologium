@@ -60,36 +60,37 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
 
-        // URL para Clima Actual
-        const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`;
-
+        // URL para Clima Actual - Usamos 'current' para obtener surface_pressure
+        const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure`;
+ 
         // URLs para Clima Histórico
         const historicalUrls = HISTORICAL_YEARS.map(year => {
             const dateStr = `${year}-${month}-${day}`;
             return `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}&start_date=${dateStr}&end_date=${dateStr}&daily=weather_code,temperature_2m_mean,wind_speed_10m_max,wind_direction_10m_dominant&timezone=auto`;
         });
-
+ 
         const responses = await Promise.all([
             fetch(currentUrl),
             ...historicalUrls.map(url => fetch(url))
         ]);
-
+ 
         // Procesar Actual
         const currData = await responses[0].json();
-        const c = currData.current_weather;
-        const cInfo = WEATHER_CODES[c.weathercode] || { condition: 'clear', description: 'Caelum Ignosum' };
+        const c = currData.current;
+        const cInfo = WEATHER_CODES[c.weather_code] || { condition: 'clear', description: 'Caelum Ignosum' };
         
         const current: WeatherSnapshot = {
-            temperature: c.temperature,
+            temperature: c.temperature_2m,
             condition: cInfo.condition,
             description: cInfo.description,
-            code: c.weathercode,
-            windSpeed: c.windspeed,
-            windDirection: c.winddirection,
-            latinWindName: getLatinWindName(c.winddirection),
+            code: c.weather_code,
+            windSpeed: c.wind_speed_10m,
+            windDirection: c.wind_direction_10m,
+            latinWindName: getLatinWindName(c.wind_direction_10m),
+            surfacePressure: c.surface_pressure,
             yearLabel: "Hodie"
         };
-
+ 
         // Procesar Históricos
         const historical: WeatherSnapshot[] = [];
         for (let i = 1; i < responses.length; i++) {
@@ -108,6 +109,7 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
                     windSpeed: data.daily.wind_speed_10m_max[0],
                     windDirection: data.daily.wind_direction_10m_dominant[0],
                     latinWindName: getLatinWindName(data.daily.wind_direction_10m_dominant[0]),
+                    surfacePressure: 1013, // Valor por defecto para históricos si no se pide explícitamente
                     yearLabel: getRomanYear(year)
                 });
             }
