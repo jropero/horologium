@@ -162,7 +162,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
 
   return (
     <>
-      <div className="relative w-full max-w-4xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl">
+    <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
         <div className="flex flex-col lg:flex-row h-full justify-between items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
 
           {weather && (
@@ -175,17 +175,17 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
             title="Ver Fasti Romani (Calendario)"
           >
 
-            <div className="text-gold-leaf font-serif text-xs uppercase tracking-widest flex items-center justify-center md:justify-end gap-2">
-              <span className="text-[10px] opacity-90">{romanTime.dayOfWeek}</span>
-              <span className="opacity-40 text-[8px]">|</span>
+            <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
+              <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
+              <span className="opacity-40 text-xs">|</span>
               <span>{romanTime.romanDateString}</span>
               {romanTime.isMarketDay && (
-                <span className="text-[10px] opacity-90">Nundinae</span>
+                <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
               )}
             </div>
-            <div className="text-gold-dim font-serif text-[10px] italic mb-1 opacity-80">{romanTime.romanDateFull}</div>
-            <div className="flex items-center gap-2 justify-center md:justify-end text-parchment font-serif text-[11px] italic mt-1">
-              <span className="text-[9px] px-1 border border-gold-dim/30 rounded-sm bg-gold-dim/5 uppercase font-bold text-gold-leaf">{romanTime.nundinalLetter}</span>
+            <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{romanTime.romanDateFull}</div>
+            <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
+              <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">{romanTime.nundinalLetter}</span>
               <span>{romanTime.moonPhaseLabel}</span>
               <span className="text-gold-dim">•</span>
               <span>Sol in {romanTime.zodiacSign}</span>
@@ -449,27 +449,27 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
             </h2>
             <div className="flex flex-col gap-2 justify-center items-center">
               <div className="flex flex-col items-center gap-1">
-                <div className="flex items-center gap-4 text-roman-red font-serif font-bold tracking-[0.2em] text-sm">
+                <div className="flex items-center gap-6 text-roman-red font-serif font-bold tracking-[0.3em] text-base">
                   <span className="text-woodcut-green">❧</span>
                   <span>{romanTime.isDay ? 'Dies' : 'Nox'}</span>
                   <span className="text-woodcut-green">☙</span>
                 </div>
                 {romanTime.vigilia && (
-                  <div className="text-[10px] font-serif uppercase tracking-widest text-roman-red/80 font-bold">
+                  <div className="text-xs font-serif uppercase tracking-[0.2em] text-roman-red drop-shadow-sm font-bold mt-1">
                     ⚔ {romanTime.vigilia.name} ⚔
                   </div>
                 )}
               </div>
 
-              <div className="text-sm font-serif text-ink mt-1 mb-2 bg-gold-dim/10 px-6 py-1.5 rounded-sm border border-gold-dim/30 shadow-sm flex flex-col items-center">
-                <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-0.5">Pars Diei Civilis</div>
+              <div className="text-base font-serif text-ink mt-3 mb-3 bg-gold-dim/10 px-8 py-2.5 rounded-lg border border-gold-dim/30 shadow-sm flex flex-col items-center">
+                <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">Pars Diei Civilis</div>
                 <div>
                   <span className="font-bold text-ink">{romanTime.civilDayPart.name}</span>
-                  <span className="text-xs italic text-ink/70 ml-1.5">({romanTime.civilDayPart.desc})</span>
+                  <span className="text-sm italic text-ink/70 ml-2">({romanTime.civilDayPart.desc})</span>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 mt-2 text-[10px] md:text-xs uppercase tracking-widest text-ink/60 font-serif">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8 mt-4 text-xs md:text-sm uppercase tracking-widest text-ink/60 font-serif font-bold">
                 <div>
                   Rector Horae: <span className="font-bold text-ink">{romanTime.planetaryRuler}</span>
                 </div>

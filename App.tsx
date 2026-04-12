@@ -101,12 +101,14 @@ const App: React.FC = () => {
       </header>
 
       {romanTimeData && (
-        <RomanClock
-          modernTime={modernTime}
-          romanTime={romanTimeData}
-          loading={loading}
-          weather={weather}
-        />
+        <div className="w-full max-w-2xl mx-auto">
+          <RomanClock
+            modernTime={modernTime}
+            romanTime={romanTimeData}
+            loading={loading}
+            weather={weather}
+          />
+        </div>
       )}
 
       <RomanCalendarInfo />
@@ -123,7 +125,6 @@ const App: React.FC = () => {
 
       <SententiaDiei currentDate={modernTime} />
 
-
       <SortesVergilianae />
 
       <Controls
@@ -132,7 +133,6 @@ const App: React.FC = () => {
         onUpdateLocation={handleUpdateLocation}
         onRefreshTime={() => setModernTime(new Date())}
       />
-
 
       {weather && (
         <ChronosWeatherWidget weather={weather} />
@@ -143,7 +143,6 @@ const App: React.FC = () => {
         currentLat={latitude}
         currentLng={longitude}
       />
-
 
       <InfoSection />
 

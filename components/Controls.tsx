@@ -77,69 +77,80 @@ const handleGeolocation = async () => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto mt-12 p-1">
-      <div className="bg-parchment p-6 border-4 border-double border-ink/40 shadow-xl relative">
-        {/* Decorative corners */}
-        <div className="absolute top-1 left-1 w-4 h-4 border-t-2 border-l-2 border-ink"></div>
-        <div className="absolute top-1 right-1 w-4 h-4 border-t-2 border-r-2 border-ink"></div>
-        <div className="absolute bottom-1 left-1 w-4 h-4 border-b-2 border-l-2 border-ink"></div>
-        <div className="absolute bottom-1 right-1 w-4 h-4 border-b-2 border-r-2 border-ink"></div>
+    <div className="w-full max-w-2xl mx-auto mt-8 mb-8 px-2 animate-fadeIn">
+      <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
         
-        <h3 className="text-center font-serif text-ink font-bold uppercase tracking-widest mb-6 text-sm flex items-center justify-center gap-4">
-            <span className="text-xl">❧</span> Locus Geographicus <span className="text-xl">☙</span>
-        </h3>
+        {/* Decorative background hatch */}
+        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
-          <div className="flex items-center gap-2">
-            <span className="font-body italic text-lg text-ink">Latitudo:</span>
-            <input 
-                type="text" 
-                value={latInput} 
-                onChange={(e) => setLatInput(e.target.value)}
-                className="w-32 bg-transparent border-b-2 border-ink font-serif text-center focus:outline-none focus:border-roman-red text-ink"
-            />
+        {/* Header decoration */}
+        <div className="flex flex-col items-center mb-8 relative z-10">
+          <div className="text-gold-leaf/40 mb-2">
+            <RefreshCw className="w-6 h-6" />
           </div>
-          <div className="flex items-center gap-2">
-             <span className="font-body italic text-lg text-ink">Longitudo:</span>
-             <input 
-                type="text" 
-                value={lngInput} 
-                onChange={(e) => setLngInput(e.target.value)}
-                className="w-32 bg-transparent border-b-2 border-ink font-serif text-center focus:outline-none focus:border-roman-red text-ink"
-            />
+          <h3 className="font-serif text-lg md:text-xl text-gold-leaf uppercase tracking-[0.4em] font-bold">
+            GUBERNACULA
+          </h3>
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold-dim to-transparent mt-2"></div>
+        </div>
+
+        <div className="flex flex-col gap-8 relative z-10 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
+                 <MapPin className="w-3 h-3" /> Latitudo
+              </label>
+              <input 
+                  type="text" 
+                  value={latInput} 
+                  onChange={(e) => setLatInput(e.target.value)}
+                  className="w-full bg-white/5 border border-gold-dim/30 rounded-lg py-3 px-4 font-serif text-lg text-parchment focus:outline-none focus:border-gold-leaf focus:bg-white/10 transition-all text-center"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
+                 <MapPin className="w-3 h-3" /> Longitudo
+              </label>
+              <input 
+                  type="text" 
+                  value={lngInput} 
+                  onChange={(e) => setLngInput(e.target.value)}
+                  className="w-full bg-white/5 border border-gold-dim/30 rounded-lg py-3 px-4 font-serif text-lg text-parchment focus:outline-none focus:border-gold-leaf focus:bg-white/10 transition-all text-center"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
              <button 
                 onClick={handleManualUpdate}
-                className="group relative px-6 py-2 font-serif font-bold text-sm uppercase tracking-widest text-ink transition-transform active:scale-95"
+                className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-ink bg-parchment rounded-lg transition-all hover:scale-[1.02] active:scale-95 shadow-lg border border-gold-leaf"
             >
-                <div className="absolute inset-0 border border-ink transform skew-x-12 bg-gold-dim/20 group-hover:bg-gold-dim/40 transition-colors"></div>
-                <span className="relative flex items-center gap-2">
-                    <RefreshCw className="w-4 h-4" /> Computare
-                </span>
+                <RefreshCw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700" /> 
+                Computare
             </button>
 
              <button 
                 onClick={handleGeolocation}
-                className="group relative px-6 py-2 font-serif font-bold text-sm uppercase tracking-widest text-parchment transition-transform active:scale-95"
+                className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-parchment bg-roman-red/80 rounded-lg border border-roman-red hover:bg-roman-red transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
             >
-                <div className="absolute inset-0 bg-ink transform -skew-x-12 border border-gold-leaf group-hover:bg-black transition-colors shadow-lg"></div>
-                <span className="relative flex items-center gap-2">
-                    <Navigation className="w-4 h-4" /> Invenire Me
-                </span>
+                <Navigation className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> 
+                Invenire Me
             </button>
 
             <button 
                 onClick={handleNotifications}
-                className="group relative px-6 py-2 font-serif font-bold text-sm uppercase tracking-widest text-parchment transition-transform active:scale-95 mt-4 sm:mt-0"
+                className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-parchment bg-white/10 rounded-lg border border-gold-dim/50 hover:bg-white/20 transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
             >
-                <div className="absolute inset-0 bg-ink transform -skew-x-12 border border-amber-600 group-hover:bg-amber-900/50 transition-colors shadow-lg"></div>
-                <span className="relative flex items-center gap-2">
-                    <Bell className="w-4 h-4 text-amber-500" /> Nuntii
-                </span>
+                <Bell className="w-5 h-5 text-amber-500 animate-pulse" /> 
+                Nuntii
             </button>
+        </div>
+
+        <div className="mt-8 text-center opacity-40">
+            <p className="font-body italic text-sm text-parchment">
+                "Tempus regit actum" — El tiempo rige el acto.
+            </p>
         </div>
       </div>
     </div>
