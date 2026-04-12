@@ -16,31 +16,33 @@ const WeatherIcon = ({ condition, size = "w-6 h-6" }: { condition: string, size?
 };
 
 const ChronosRow: React.FC<{ data: WeatherSnapshot, isCurrent?: boolean }> = ({ data, isCurrent }) => (
-    <div className={`grid grid-cols-[80px_1fr_45px_45px] md:grid-cols-[120px_1fr_60px_60px] items-center gap-2 md:gap-4 py-3 px-2 rounded transition-colors ${isCurrent ? 'bg-white/10' : 'opacity-60 hover:opacity-100 hover:bg-white/5'}`}>
+    <div className={`grid grid-cols-subgrid col-span-3 md:col-span-4 items-center py-3 px-2 rounded transition-colors ${isCurrent ? 'bg-white/10' : 'opacity-60 hover:opacity-100 hover:bg-white/5'}`}>
         {/* Año / Etiqueta */}
-        <span className={`font-serif text-sm md:text-lg font-bold tracking-tight ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim'}`}>
+        <span className={`font-serif  text-sm md:text-lg tracking-tight ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim'}`}>
             {data.yearLabel}
         </span>
 
-        {/* Descripción Latina */}
+        {/* Descripción Latina (Smaller & Wrapped on Mobile) */}
         <div className="flex items-center gap-2 md:gap-3 overflow-hidden">
             <WeatherIcon condition={data.condition} size="w-5 h-5 md:w-6 h-6" />
-            <span className="text-parchment font-serif text-base md:text-xl truncate italic drop-shadow-sm">{data.description}</span>
+            <span className="text-parchment font-serif text-sm md:text-xl italic drop-shadow-sm whitespace-normal leading-tight">
+                {data.description}
+            </span>
         </div>
 
         {/* Temperatura */}
-        <span className="text-parchment font-serif text-base md:text-xl font-bold text-right">
+        <span className="text-parchment font-serif text-base md:text-xl font-bold text-right pr-2">
             {Math.round(data.temperature)}°
         </span>
 
-        {/* Viento Mini */}
-        <div className="flex items-center gap-1 md:gap-2 justify-end">
-             <div className="w-3 h-3 md:w-4 h-4 relative" style={{ transform: `rotate(${data.windDirection}deg)` }}>
+        {/* Viento Mini (Hidden on Mobile) */}
+        <div className="hidden md:flex items-center gap-2 justify-end">
+            <div className="w-4 h-4 relative" style={{ transform: `rotate(${data.windDirection}deg)` }}>
                 <svg viewBox="0 0 4 4" className="w-full h-full text-gold-dim fill-current">
                     <path d="M2 0 L4 4 L0 4 Z" />
                 </svg>
-             </div>
-             <span className="text-xs md:text-base text-stone-500 font-body">{Math.round(data.windSpeed)}</span>
+            </div>
+            <span className="text-base text-stone-500 font-body">{Math.round(data.windSpeed)}</span>
         </div>
     </div>
 );
@@ -56,19 +58,19 @@ const ChronosWeatherWidget: React.FC<{ weather: WeatherData }> = ({ weather }) =
                 <span className="text-gold-dim font-serif text-sm italic">Memoria Mundi</span>
             </div>
 
-            <div className="flex flex-col gap-1 relative z-10">
+            <div className="grid grid-cols-[auto] md:grid-cols-[120px_1fr_60px_60px] gap-x-2 md:gap-x-4 relative z-10">
                 {/* Hoy */}
                 <ChronosRow data={weather.current} isCurrent={true} />
-                
+
                 {/* Divisor */}
-                <div className="h-px bg-gradient-to-r from-transparent via-gold-dim/30 to-transparent my-2" />
+                <div className="col-span-3 md:col-span-4 h-px bg-gradient-to-r from-transparent via-gold-dim/30 to-transparent my-2" />
 
                 {/* Pasado */}
                 {weather.historical.map((snap) => (
                     <ChronosRow key={snap.yearLabel} data={snap} />
                 ))}
             </div>
-            
+
             <div className="mt-6 text-center relative z-10">
                 <p className="text-xs md:text-sm font-serif text-stone-500 italic uppercase tracking-[0.2em]">
                     Comparatio temporis in eodem loco
