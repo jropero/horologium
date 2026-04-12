@@ -3,8 +3,8 @@ import React, { useMemo, useState } from 'react';
 import { RomanTimeData, WeatherData } from '../types';
 import WeatherWidget from './WeatherWidget';
 import RomanCalendarModal from './RomanCalendarModal';
+import WeatherModal from './WeatherModal';
 import { generateSkyline } from '../utils/skylineGenerator';
-import ChronosWeatherWidget from './ChronosWeatherWidget';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -15,6 +15,7 @@ interface RomanClockProps {
 
 const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading, weather }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isWeatherOpen, setIsWeatherOpen] = useState(false);
 
   const stars = useMemo(() => {
     const starData = [];
@@ -166,7 +167,11 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
         <div className="flex flex-col lg:flex-row h-full justify-between items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
 
           {weather && (
-            <WeatherWidget weather={weather} />
+            <WeatherWidget 
+              weather={weather} 
+              onClick={() => setIsWeatherOpen(true)}
+              className="cursor-pointer"
+            />
           )}
 
           <div
@@ -490,6 +495,12 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
         isOpen={isCalendarOpen}
         onClose={() => setIsCalendarOpen(false)}
         startDate={modernTime}
+      />
+
+      <WeatherModal
+        isOpen={isWeatherOpen}
+        onClose={() => setIsWeatherOpen(false)}
+        weather={weather}
       />
     </>
   );
