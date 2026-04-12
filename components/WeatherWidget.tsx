@@ -65,7 +65,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         <div 
             onClick={onClick}
             className={`flex items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
-            ${onClick ? 'cursor-pointer hover:bg-white/5 hover:border-gold-leaf group/weather' : ''} ${className}`}
+            ${onClick ? 'cursor-pointer hover:bg-gold-leaf/10 hover:border-gold-leaf group/weather' : ''} ${className}`}
         >
             <div className="text-gold-leaf flex-shrink-0">
                 {renderIcon()}

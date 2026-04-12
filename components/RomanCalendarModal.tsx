@@ -66,7 +66,7 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
         </div>
 
         {/* Lista de 7 días */}
-        <div className="overflow-y-auto p-3 sm:p-5 space-y-4 custom-scrollbar bg-white/5">
+        <div className="overflow-y-auto p-3 sm:p-5 space-y-4 custom-scrollbar bg-ink/5">
           <div className="text-center text-gold-dim font-serif text-xs uppercase tracking-[0.3em] mb-4">
             — Dies VII Sequentes —
           </div>
@@ -101,7 +101,7 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
                       {day.dayOfWeek}
                     </span>
                     <div className="flex items-center gap-3">
-                      <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-white/10 uppercase font-bold text-gold-leaf shadow-sm" title="Littera Nundinalis">
+                      <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-ink/10 uppercase font-bold text-gold-leaf shadow-sm" title="Littera Nundinalis">
                         {day.nundinalLetter}
                       </span>
                       {day.isMarketDay && (
@@ -116,22 +116,22 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
                     <h3 className="font-serif text-base sm:text-lg font-bold text-parchment leading-tight drop-shadow-sm">
                       {day.romanShort}
                     </h3>
-                    <span className={`font-serif text-xs font-bold px-2 py-1 rounded shrink-0 shadow-sm border ${['N', 'NP'].includes(day.info.status) 
-                        ? 'border-roman-red bg-roman-red/30 text-parchment' 
-                        : 'border-blue-500 bg-blue-900/50 text-blue-200'
+                    <span className={`font-serif text-xs font-bold px-2 py-1 rounded shrink-0 shadow-sm border ${['N', 'NP'].includes(day.info.status)
+                      ? 'border-roman-red bg-roman-red/30 text-parchment'
+                      : 'border-blue-500 bg-blue-900/50 text-blue-200'
                       }`}>
                       {day.info.status}
                     </span>
                   </div>
 
                   {hasFestival && (
-                    <div className="text-amber-400 font-serif text-sm sm:text-base uppercase tracking-[0.2em] mt-2 font-black flex items-center gap-2 drop-shadow-md">
+                    <div className="text-festival font-serif text-sm sm:text-base uppercase tracking-[0.2em] mt-2 font-black flex items-center gap-2 drop-shadow-md">
                       <span className="text-lg">✧</span> {day.info.festivalName} <span className="text-lg">✧</span>
                     </div>
                   )}
 
                   <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-2 italic flex items-center gap-2">
-                    <span className="text-gold-dim not-italic uppercase tracking-widest text-[10px] font-bold">Deus:</span> 
+                    <span className="text-gold-dim not-italic uppercase tracking-widest text-[10px] font-bold">Deus:</span>
                     <span className="text-parchment font-bold tracking-wide">{day.info.god}</span>
                   </div>
 

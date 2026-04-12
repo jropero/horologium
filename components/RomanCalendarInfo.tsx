@@ -63,8 +63,8 @@ const RomanCalendarInfo: React.FC = () => {
                     {/* BOTTOM: Festival / Event Name (If specific) */}
                     {info.festivalName && (
                         <div className="mt-1 w-full animate-fadeIn">
-                            <div className="text-amber-500/80 text-[10px] uppercase tracking-widest mb-1">✧ Festum ✧</div>
-                            <h2 className="font-serif text-xl font-bold text-amber-500 mb-1 tracking-wide">
+                            <div className="text-festival opacity-80 text-[10px] uppercase tracking-widest mb-1">✧ Festum ✧</div>
+                            <h2 className="font-serif text-xl font-bold text-festival mb-1 tracking-wide">
                                 {info.festivalName.toUpperCase()}
                             </h2>
                         </div>

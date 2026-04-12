@@ -207,8 +207,8 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
               className="absolute inset-0 transition-opacity duration-1000"
               style={{
                 background: romanTime.isDay
-                  ? 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, #e3d6b3 100%)'
-                  : 'linear-gradient(to bottom, #0f172a 0%, #1a1a1a 100%)',
+                  ? 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)'
+                  : 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)',
                 opacity: 1
               }}
             ></div>
@@ -323,15 +323,15 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                     <path
                       key={el.id}
                       d={el.path}
-                      fill="#1a1a1a"
-                      stroke="#8a7826"
+                      fill="var(--ink)"
+                      stroke="var(--gold-dim)"
                       strokeWidth="0.5"
                       opacity={el.opacity}
                     />
                   ))}
                 </g>
-                <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="#1a1a1a" />
-                <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="#1a1a1a" stroke="#8a7826" strokeWidth="1" />
+                <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="var(--ink)" />
+                <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="var(--ink)" stroke="var(--gold-dim)" strokeWidth="1" />
 
                 {/* CAPA 4: El Gnomon (Día) o La Clepsidra (Noche) */}
                 <defs>
@@ -359,7 +359,7 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
                       y1="180"
                       x2={150 - Math.cos(rad) * 90}
                       y2={185 + (1 - Math.sin(rad)) * 14}
-                      stroke="#000000"
+                      stroke="var(--hatch-color)"
                       strokeWidth="6"
                       strokeLinecap="round"
                       opacity="0.4"
