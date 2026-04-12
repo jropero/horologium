@@ -66,8 +66,8 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
         </div>
 
         {/* Lista de 7 días */}
-        <div className="overflow-y-auto p-3 sm:p-4 space-y-4 custom-scrollbar">
-          <div className="text-center text-parchment/60 font-serif text-[10px] sm:text-xs uppercase tracking-widest mb-2">
+        <div className="overflow-y-auto p-3 sm:p-5 space-y-4 custom-scrollbar bg-white/5">
+          <div className="text-center text-gold-dim font-serif text-xs uppercase tracking-[0.3em] mb-4">
             — Dies VII Sequentes —
           </div>
 
@@ -78,65 +78,68 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
             return (
               <div
                 key={idx}
-                className={`p-3 sm:p-4 rounded-lg border flex flex-col sm:flex-row gap-3 transition-colors ${isToday
-                  ? 'border-gold-leaf bg-gold-leaf/10'
+                className={`p-4 sm:p-5 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${isToday
+                  ? 'border-gold-leaf bg-gold-leaf/15 shadow-[0_0_15px_rgba(207,181,59,0.2)]'
                   : hasFestival
-                    ? 'border-amber-600/50 bg-amber-900/20'
-                    : 'border-gold-dim/20 bg-white/5'
+                    ? 'border-amber-600/60 bg-amber-900/30'
+                    : 'border-gold-dim/30 bg-ink/40'
                   }`}
               >
                 {/* Fecha Gregoriana (Izquierda) */}
-                <div className="flex sm:flex-col items-center sm:items-start sm:w-20 shrink-0 gap-2 sm:gap-0 border-b sm:border-b-0 sm:border-r border-gold-dim/30 pb-2 sm:pb-0 sm:pr-3">
-                  <span className="text-parchment/60 font-body text-sm uppercase">
+                <div className="flex sm:flex-col items-center sm:items-start sm:w-24 shrink-0 gap-2 sm:gap-1 border-b sm:border-b-0 sm:border-r border-gold-dim/40 pb-3 sm:pb-0 sm:pr-4">
+                  <span className="text-parchment font-body text-base font-bold uppercase tracking-tight">
                     {day.gregorianDate.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })}
                   </span>
-                  {isToday && <span className="text-gold-leaf text-[10px] uppercase tracking-widest font-bold">Hodie</span>}
+                  {isToday && <span className="text-gold-leaf text-xs uppercase tracking-[0.2em] font-black border border-gold-leaf/40 px-1.5 rounded-sm bg-gold-leaf/10">Hodie</span>}
                 </div>
 
                 {/* Info Romana (Derecha) */}
                 <div className="flex-1 flex flex-col">
                   {/* Fila del día de la semana y nundinae */}
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-gold-leaf/80 font-serif text-[10px] sm:text-xs uppercase tracking-widest">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
                       {day.dayOfWeek}
                     </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] px-1.5 py-0.5 border border-gold-dim/30 rounded-sm bg-gold-dim/5 uppercase font-bold text-gold-leaf" title="Littera Nundinalis">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-white/10 uppercase font-bold text-gold-leaf shadow-sm" title="Littera Nundinalis">
                         {day.nundinalLetter}
                       </span>
                       {day.isMarketDay && (
-                        <span className="text-[9px] px-1 border border-roman-red bg-roman-red text-white uppercase font-bold rounded-sm tracking-widest">
+                        <span className="text-[11px] px-2 py-0.5 border-2 border-roman-red bg-roman-red text-white uppercase font-black rounded-sm tracking-widest shadow-md">
                           Nundinae
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-serif text-sm font-bold text-parchment leading-tight">
+                  <div className="flex justify-between items-start gap-3">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-parchment leading-tight drop-shadow-sm">
                       {day.romanShort}
                     </h3>
-                    <span className={`font-serif text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded shrink-0 ${['N', 'NP'].includes(day.info.status) ? 'bg-roman-red/20 text-roman-red' : 'bg-blue-900/30 text-blue-400'
+                    <span className={`font-serif text-xs font-bold px-2 py-1 rounded shrink-0 shadow-sm border ${['N', 'NP'].includes(day.info.status) 
+                        ? 'border-roman-red bg-roman-red/30 text-parchment' 
+                        : 'border-blue-500 bg-blue-900/50 text-blue-200'
                       }`}>
                       {day.info.status}
                     </span>
                   </div>
 
                   {hasFestival && (
-                    <div className="text-amber-500 font-serif text-xs sm:text-sm uppercase tracking-widest mt-1.5 font-bold flex items-center gap-1">
-                      <span>✧</span> {day.info.festivalName} <span>✧</span>
+                    <div className="text-amber-400 font-serif text-sm sm:text-base uppercase tracking-[0.2em] mt-2 font-black flex items-center gap-2 drop-shadow-md">
+                      <span className="text-lg">✧</span> {day.info.festivalName} <span className="text-lg">✧</span>
                     </div>
                   )}
 
-                  <div className="text-parchment/70 font-serif text-[11px] mt-1 italic">
-                    Deus: <span className="text-parchment font-semibold">{day.info.god}</span>
+                  <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-2 italic flex items-center gap-2">
+                    <span className="text-gold-dim not-italic uppercase tracking-widest text-[10px] font-bold">Deus:</span> 
+                    <span className="text-parchment font-bold tracking-wide">{day.info.god}</span>
                   </div>
 
                   {/* Descripción de la fiesta */}
                   {hasFestival && day.info.description && (
-                    <div className="mt-2 pt-2 border-t border-gold-dim/30">
-                      <p className="font-serif text-[11px] sm:text-xs text-parchment/80 leading-relaxed text-justify">
-                        {day.info.description}
+                    <div className="mt-3 pt-3 border-t border-gold-dim/40">
+                      <p className="font-serif text-xs sm:text-sm text-parchment leading-relaxed text-justify opacity-90 italic">
+                        "{day.info.description}"
                       </p>
                     </div>
                   )}
