@@ -11,9 +11,20 @@ interface RomanClockProps {
   romanTime: RomanTimeData;
   loading: boolean;
   weather: WeatherData | null;
+  onUpdateLocation: (lat: number, lng: number) => void;
+  currentLat: number;
+  currentLng: number;
 }
 
-const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading, weather }) => {
+const RomanClock: React.FC<RomanClockProps> = ({ 
+  modernTime, 
+  romanTime, 
+  loading, 
+  weather,
+  onUpdateLocation,
+  currentLat,
+  currentLng
+}) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
 
@@ -501,6 +512,9 @@ const RomanClock: React.FC<RomanClockProps> = ({ modernTime, romanTime, loading,
         isOpen={isWeatherOpen}
         onClose={() => setIsWeatherOpen(false)}
         weather={weather}
+        onUpdateLocation={onUpdateLocation}
+        currentLat={currentLat}
+        currentLng={currentLng}
       />
     </>
   );

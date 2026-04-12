@@ -116,6 +116,9 @@ const App: React.FC = () => {
             romanTime={romanTimeData}
             loading={loading}
             weather={weather}
+            onUpdateLocation={handleUpdateLocation}
+            currentLat={latitude}
+            currentLng={longitude}
           />
         </div>
       )}

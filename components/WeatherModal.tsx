@@ -1,11 +1,16 @@
 import React from 'react';
-import { X, Wind, Thermometer, CloudSun, History } from 'lucide-react';
+import { X, Wind, Thermometer, CloudSun, History, Gauge, Navigation, MapPin, Map } from 'lucide-react';
 import { WeatherData, WeatherSnapshot } from '../types';
+import { LOCATIONS } from '../utils/locations';
+import { Geolocation } from '@capacitor/geolocation';
 
 interface WeatherModalProps {
     isOpen: boolean;
     onClose: () => void;
     weather: WeatherData | null;
+    onUpdateLocation: (lat: number, lng: number) => void;
+    currentLat: number;
+    currentLng: number;
 }
 
 const WeatherIcon = ({ condition, className = "w-12 h-12" }: { condition: string, className?: string }) => {
@@ -52,11 +57,10 @@ const WeatherIcon = ({ condition, className = "w-12 h-12" }: { condition: string
 };
 
 const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean }> = ({ data, isCurrent }) => (
-    <div className={`p-4 rounded-lg border-2 transition-all duration-300 ${
-        isCurrent 
-        ? 'border-gold-leaf bg-gold-leaf/10 shadow-[0_0_15px_rgba(207,181,59,0.1)]' 
+    <div className={`p-4 rounded-lg border-2 transition-all duration-300 ${isCurrent
+        ? 'border-gold-leaf bg-gold-leaf/10 shadow-[0_0_15px_rgba(207,181,59,0.1)]'
         : 'border-gold-dim/20 bg-ink/40 hover:border-gold-dim/50'
-    }`}>
+        }`}>
         <div className="flex justify-between items-start mb-3">
             <span className={`font-serif text-lg font-bold tracking-widest ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim'}`}>
                 {data.yearLabel}
@@ -65,7 +69,7 @@ const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean }> = ({
                 <span className="text-[10px] uppercase tracking-widest font-black px-1.5 py-0.5 border border-gold-leaf bg-gold-leaf/20 text-gold-leaf rounded">Hodie</span>
             )}
         </div>
-        
+
         <div className="flex items-center gap-4">
             <WeatherIcon condition={data.condition} className="w-10 h-10 shrink-0" />
             <div className="flex-1 min-w-0">
@@ -87,10 +91,44 @@ const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean }> = ({
     </div>
 );
 
-const WeatherModal: React.FC<WeatherModalProps> = ({ isOpen, onClose, weather }) => {
+const WeatherModal: React.FC<WeatherModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    weather,
+    onUpdateLocation,
+    currentLat,
+    currentLng
+}) => {
+    const [isLocLoading, setIsLocLoading] = React.useState(false);
+
     if (!isOpen || !weather) return null;
 
     const { current, historical } = weather;
+
+    const handleLocationSelect = async (loc: typeof LOCATIONS[0]) => {
+        if (loc.id === 'gps') {
+            setIsLocLoading(true);
+            try {
+                const position = await Geolocation.getCurrentPosition({
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                    maximumAge: 3600000
+                });
+                onUpdateLocation(position.coords.latitude, position.coords.longitude);
+            } catch (error: any) {
+                alert("Locus deprehendi non potuit: " + error.message);
+            } finally {
+                setIsLocLoading(false);
+            }
+        } else if (loc.lat !== null && loc.lng !== null) {
+            onUpdateLocation(loc.lat, loc.lng);
+        }
+    };
+
+    const isLocActive = (loc: typeof LOCATIONS[0]) => {
+        if (loc.id === 'gps') return false;
+        return Math.abs(currentLat - (loc.lat || 0)) < 0.001 && Math.abs(currentLng - (loc.lng || 0)) < 0.001;
+    };
 
     return (
         <div
@@ -123,6 +161,42 @@ const WeatherModal: React.FC<WeatherModalProps> = ({ isOpen, onClose, weather })
                 {/* Content */}
                 <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar relative z-10">
                     
+                    {/* Compact Location Selector */}
+                    <div className="mb-8">
+                        <div className="flex items-center gap-2 mb-3 text-gold-dim">
+                            <Map className="w-4 h-4" />
+                            <span className="font-serif text-[10px] uppercase tracking-[0.2em] font-bold">Mutare Locum:</span>
+                        </div>
+                        <div className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar-thin">
+                            {LOCATIONS.map((loc) => {
+                                const active = isLocActive(loc);
+                                const Icon = loc.icon;
+                                const isGps = loc.id === 'gps';
+
+                                return (
+                                    <button
+                                        key={loc.id}
+                                        onClick={() => handleLocationSelect(loc)}
+                                        disabled={isLocLoading}
+                                        className={`
+                                            flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300
+                                            font-serif text-xs uppercase tracking-widest
+                                            ${active
+                                                ? 'bg-gold-leaf text-ink border-gold-leaf shadow-lg'
+                                                : isGps
+                                                    ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20'
+                                                    : 'bg-gold-leaf/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:bg-gold-leaf/10'}
+                                            ${isLocLoading && isGps ? 'animate-pulse' : ''}
+                                        `}
+                                    >
+                                        <Icon className={`w-3 h-3 ${active ? 'text-ink' : 'text-gold-leaf'}`} />
+                                        <span>{loc.name}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
                     {/* Hero Section: Current Weather */}
                     <div className="bg-gradient-to-br from-gold-leaf/5 to-transparent border border-gold-leaf/30 rounded-2xl p-6 mb-8 shadow-inner">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -163,21 +237,20 @@ const WeatherModal: React.FC<WeatherModalProps> = ({ isOpen, onClose, weather })
                                 <span className="text-parchment font-bold">{current.windDirection}°</span>
                             </div>
                             <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
-                                <Thermometer className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">Aestus</span>
-                                <span className="text-parchment font-bold">Variabilis</span>
+                                <Gauge className="w-5 h-5 text-gold-dim mb-2" />
+                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">Pressio</span>
+                                <span className="text-parchment font-bold">{Math.round(current.surfacePressure)} hPa</span>
                             </div>
-                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
+                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
                                 <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
                                 <span className="text-[10px] uppercase text-stone-500 tracking-widest">Caelum</span>
-                                <span className="text-parchment font-bold uppercase text-[10px]">
+                                <span className="text-parchment font-bold">
                                     {current.condition === 'clear' && 'Serenum'}
                                     {current.condition === 'cloudy' && 'Nubilum'}
                                     {current.condition === 'rain' && 'Pluvia'}
                                     {current.condition === 'snow' && 'Nix'}
                                     {current.condition === 'storm' && 'Tempestas'}
-                                    {current.condition === 'fog' && 'Nebula'}
-                                </span>
+                                    {current.condition === 'fog' && 'Nebula'}</span>
                             </div>
                         </div>
                     </div>
