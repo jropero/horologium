@@ -14,7 +14,6 @@ import ProvinciaInfo from './components/ProvinciaInfo';
 import SortesVergilianae from './components/SortesVergilianae';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
-import ChronosWeatherWidget from './components/ChronosWeatherWidget';
 
 // Default to Basilea
 const DEFAULT_LAT = 47.5632;
@@ -133,10 +132,6 @@ const App: React.FC = () => {
         onUpdateLocation={handleUpdateLocation}
         onRefreshTime={() => setModernTime(new Date())}
       />
-
-      {weather && (
-        <ChronosWeatherWidget weather={weather} />
-      )}
 
       <LocationSelector
         onUpdateLocation={handleUpdateLocation}

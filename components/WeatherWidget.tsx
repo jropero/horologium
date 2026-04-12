@@ -4,9 +4,10 @@ import { WeatherData } from '../types';
 interface WeatherWidgetProps {
     weather: WeatherData;
     className?: string;
+    onClick?: () => void;
 }
 
-const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }) => {
+const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', onClick }) => {
     // Extraemos los datos de 'current' para que el resto del código funcione
     const { 
         condition, 
@@ -61,12 +62,16 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
     };
 
     return (
-        <div className={`flex items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg ${className}`}>
+        <div 
+            onClick={onClick}
+            className={`flex items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
+            ${onClick ? 'cursor-pointer hover:bg-white/5 hover:border-gold-leaf group/weather' : ''} ${className}`}
+        >
             <div className="text-gold-leaf flex-shrink-0">
                 {renderIcon()}
             </div>
             <div className="flex flex-col border-r border-gold-dim/30 pr-3">
-                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1">Caelum</span>
+                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">Caelum</span>
                 <span className="text-parchment font-serif text-sm font-bold leading-tight">{description}</span>
                 <span className="text-stone-400 font-serif text-xs">{Math.round(temperature)}°C</span>
             </div>
@@ -74,7 +79,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '' }
             {/* SECCIÓN DE VIENTO */}
             {latinWindName && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1">Ventus</span>
+                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">Ventus</span>
                     
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
                         {/* Rosa de los vientos de fondo */}
