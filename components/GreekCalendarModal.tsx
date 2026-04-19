@@ -4,6 +4,7 @@ import { getAtticDateForDisplay, ATTIC_MONTHS } from '../utils/atticCalendarUtil
 import { getAtticFestivalInfo, getDefaultAtticDeity } from '../utils/atticCalendarData';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
+import { translateGreekUI } from '../utils/greekTranslations';
 
 const LunarProgress: React.FC<{ dayOfMonth: number }> = ({ dayOfMonth }) => {
   const totalDays = 30; // standard approximation for Attic months
@@ -120,8 +121,11 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                       <span className="text-gold-dim font-serif text-[10px] uppercase tracking-widest mt-0.5">
                         {transliterateGreek(day.atticDate.monthName)}
                       </span>
+                      <span className="text-parchment/80 font-body text-[11px] italic mt-0.5">
+                        Mes de {translateGreekUI(day.atticDate.monthName)}
+                      </span>
                     </div>
-                    <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-ink/10 text-gold-leaf font-serif" title="Fase lunar">
+                    <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-ink/10 text-gold-leaf font-serif self-start mt-1" title="Fase lunar">
                       {day.moonPhase < 0.03 || day.moonPhase > 0.97 ? '🌑' :
                        day.moonPhase < 0.28 ? '🌒' :
                        day.moonPhase < 0.47 ? '🌓' :
@@ -138,6 +142,9 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                     <span className="text-gold-dim/80 font-serif text-xs tracking-widest uppercase mt-1">
                       {transliterateGreek(day.atticDate.short.replace(/[0-9]/g, '').trim())}
                     </span>
+                    <span className="text-gold-leaf/90 font-body text-sm italic mt-1 font-bold">
+                      {day.atticDate.spanishShort}
+                    </span>
                   </div>
 
                   {/* Festival */}
@@ -153,14 +160,19 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                   )}
 
                   {/* Deity */}
-                  <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex items-center gap-2 flex-wrap">
-                    <span className="text-gold-dim uppercase tracking-widest text-[10px] font-bold">Θεός:</span>
-                    <span className="text-parchment font-bold tracking-wide">
-                      {day.festival?.deity || day.defaultDeity.deity}
-                    </span>
-                    <span className="text-gold-dim/70 text-[10px] uppercase tracking-widest">
-                      ({transliterateGreek(day.festival?.deity || day.defaultDeity.deity)})
-                    </span>
+                  <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex flex-col gap-1">
+                    <div className="flex items-center gap-2 flex-wrap text-sm">
+                      <span className="text-gold-dim uppercase tracking-widest text-[10px] font-bold">Θεός:</span>
+                      <span className="text-parchment font-bold tracking-wide">
+                        {day.festival?.deity || day.defaultDeity.deity}
+                      </span>
+                      <span className="text-gold-dim/70 text-[10px] uppercase tracking-widest">
+                        ({transliterateGreek(day.festival?.deity || day.defaultDeity.deity)})
+                      </span>
+                    </div>
+                    <div className="text-roman-red font-bold font-body italic text-sm">
+                      {translateGreekUI(day.festival?.deity || day.defaultDeity.deity)}
+                    </div>
                   </div>
 
                   {/* Festival description */}

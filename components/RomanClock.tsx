@@ -8,6 +8,8 @@ import WeatherModal from './WeatherModal';
 import { generateSkyline } from '../utils/skylineGenerator';
 import { generateGreekSkyline } from '../utils/greekSkylineGenerator';
 import { useCivilization } from '../contexts/CivilizationContext';
+import { transliterateGreek } from '../utils/greekTransliteration';
+import { translateGreekUI } from '../utils/greekTranslations';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -179,7 +181,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
   return (
     <>
     <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
-        <div className="flex flex-col lg:flex-row h-full justify-between items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
+        <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
 
           {weather && (
             <WeatherWidget 
@@ -191,25 +193,66 @@ const RomanClock: React.FC<RomanClockProps> = ({
 
           <div
             onClick={() => setIsCalendarOpen(true)}
-            className="bg-ink/80 border border-gold-dim p-2 rounded shadow-lg w-full md:w-auto text-center md:text-right cursor-pointer hover:bg-white/5 hover:border-gold-leaf transition-all group relative"
-            title="Ver Fasti Romani (Calendario)"
+            className="bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-gold-leaf transition-all group relative"
+            title="Ver Calendario"
           >
+            {civilization === 'rome' ? (
+              <>
+                <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
+                  <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
+                  <span className="opacity-40 text-xs">|</span>
+                  <span>{romanTime.romanDateString}</span>
+                  {romanTime.isMarketDay && (
+                    <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
+                  )}
+                </div>
+                <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{romanTime.romanDateFull}</div>
+                <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
+                  <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">{romanTime.nundinalLetter}</span>
+                  <span>{romanTime.moonPhaseLabel}</span>
+                  <span className="text-gold-dim">•</span>
+                  <span>Sol in {romanTime.zodiacSign}</span>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col gap-3 w-full">
+                {/* 1. Day of week & Nundinal/Market equivalent */}
+                <div className="flex flex-col items-center md:items-end text-gold-leaf leading-tight">
+                  <div className="font-serif text-sm uppercase tracking-widest font-bold flex gap-2">
+                    {romanTime.dayOfWeek}
+                  </div>
+                  <div className="font-serif text-[10px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.dayOfWeek)}</div>
+                  <div className="font-body text-xs opacity-90 italic mt-0.5">{translateGreekUI(romanTime.dayOfWeek)}</div>
+                </div>
 
-            <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
-              <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
-              <span className="opacity-40 text-xs">|</span>
-              <span>{romanTime.romanDateString}</span>
-              {romanTime.isMarketDay && (
-                <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
-              )}
-            </div>
-            <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{romanTime.romanDateFull}</div>
-            <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
-              <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">{romanTime.nundinalLetter}</span>
-              <span>{romanTime.moonPhaseLabel}</span>
-              <span className="text-gold-dim">•</span>
-              <span>Sol in {romanTime.zodiacSign}</span>
-            </div>
+                <div className="w-full h-px bg-gold-dim/30"></div>
+
+                {/* 2. Date */}
+                <div className="flex flex-col items-center md:items-end text-parchment leading-tight">
+                  <div className="font-serif text-sm font-bold text-center md:text-right">{romanTime.romanDateString}</div>
+                  <div className="font-serif text-[10px] opacity-70 tracking-widest text-gold-dim uppercase mt-0.5 text-center md:text-right">{transliterateGreek(romanTime.romanDateString)}</div>
+                  {/* For greek full date, atticCalendarUtils gives greek only. Let's use it */}
+                  <div className="font-body text-xs opacity-80 italic mt-1 text-gold-leaf text-center md:text-right">{romanTime.romanDateFull}</div>
+                  <div className="font-serif text-[10px] opacity-70 tracking-widest uppercase mt-0.5 max-w-xs text-center md:text-right">{transliterateGreek(romanTime.romanDateFull)}</div>
+                </div>
+
+                <div className="w-full h-px bg-gold-dim/30"></div>
+
+                {/* 3. Astronomy */}
+                <div className="flex flex-row flex-wrap justify-center md:justify-end gap-x-6 gap-y-3">
+                  <div className="flex flex-col items-center md:items-end leading-tight text-parchment">
+                     <span className="font-serif text-sm italic">{romanTime.moonPhaseLabel}</span>
+                     <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.moonPhaseLabel)}</span>
+                     <span className="font-body text-xs opacity-90 text-gold-leaf mt-0.5">{translateGreekUI(romanTime.moonPhaseLabel)}</span>
+                  </div>
+                  <div className="flex flex-col items-center md:items-end leading-tight text-parchment">
+                     <span className="font-serif text-sm italic">Sol in {romanTime.zodiacSign}</span>
+                     <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">Sol in {transliterateGreek(romanTime.zodiacSign)}</span>
+                     <span className="font-body text-xs opacity-90 text-gold-leaf mt-0.5">Sol en {translateGreekUI(romanTime.zodiacSign)}</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -463,10 +506,16 @@ const RomanClock: React.FC<RomanClockProps> = ({
             </div>
           </div>
 
-          <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-ink mb-2 uppercase tracking-wide drop-shadow-sm">
+          <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
+            <h2 className="text-3xl md:text-5xl font-serif font-bold text-ink mb-1 uppercase tracking-wide drop-shadow-sm">
               {romanTime.hourName}
             </h2>
+            {civilization === 'hellas' && (
+              <div className="mb-4">
+                <div className="font-serif text-xs opacity-70 tracking-widest uppercase text-ink/80">{transliterateGreek(romanTime.hourName)}</div>
+                <div className="font-body text-sm font-bold opacity-90 italic text-roman-red mt-1">{translateGreekUI(romanTime.hourName)}</div>
+              </div>
+            )}
             <div className="flex flex-col gap-2 justify-center items-center">
               <div className="flex flex-col items-center gap-1">
                 <div className="flex items-center gap-6 text-roman-red font-serif font-bold tracking-[0.3em] text-base">
@@ -481,21 +530,50 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 )}
               </div>
 
-              <div className="text-base font-serif text-ink mt-3 mb-3 bg-gold-dim/10 px-8 py-2.5 rounded-lg border border-gold-dim/30 shadow-sm flex flex-col items-center">
+              <div className="text-base font-serif text-ink mt-3 mb-3 bg-gold-dim/10 px-8 py-2.5 rounded-lg border border-gold-dim/30 shadow-sm flex flex-col items-center min-w-[250px]">
                 <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.civilDayPartLabel}</div>
-                <div>
-                  <span className="font-bold text-ink">{romanTime.civilDayPart.name}</span>
-                  <span className="text-sm italic text-ink/70 ml-2">({romanTime.civilDayPart.desc})</span>
-                </div>
+                {civilization === 'rome' ? (
+                  <div>
+                    <span className="font-bold text-ink">{romanTime.civilDayPart.name}</span>
+                    <span className="text-sm italic text-ink/70 ml-2">({romanTime.civilDayPart.desc})</span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <span className="font-bold text-ink text-lg">{romanTime.civilDayPart.name}</span>
+                    <span className="font-serif text-[10px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.civilDayPart.name)}</span>
+                    <span className="text-sm font-bold italic text-roman-red mt-1">{romanTime.civilDayPart.desc}</span>
+                  </div>
+                )}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8 mt-4 text-xs md:text-sm uppercase tracking-widest text-ink/60 font-serif font-bold">
-                <div>
-                  {labels.planetaryRulerLabel}: <span className="font-bold text-ink">{romanTime.planetaryRuler}</span>
+              <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 mt-4 px-4 pb-2 border-b border-gold-dim/20 sm:border-none">
+                <div className="flex flex-col items-center text-ink/80 text-center">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.planetaryRulerLabel}</div>
+                  {civilization === 'rome' ? (
+                    <span className="font-bold text-ink text-sm uppercase">{romanTime.planetaryRuler}</span>
+                  ) : (
+                    <>
+                      <span className="font-bold text-ink text-lg">{romanTime.planetaryRuler}</span>
+                      <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.planetaryRuler)}</span>
+                      <span className="text-xs font-bold italic text-roman-red">{translateGreekUI(romanTime.planetaryRuler)}</span>
+                    </>
+                  )}
                 </div>
-                <div className="hidden sm:block text-ink/30">•</div>
-                <div>
-                  {labels.monthTutelaLabel}: <span className="font-bold text-ink">{romanTime.tutelaMensis}</span>
+                
+                <div className="hidden sm:block w-px h-10 bg-gold-dim/30"></div>
+                <div className="w-16 h-px sm:hidden bg-gold-dim/30"></div>
+                
+                <div className="flex flex-col items-center text-ink/80 text-center">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.monthTutelaLabel}</div>
+                  {civilization === 'rome' ? (
+                    <span className="font-bold text-ink text-sm uppercase">{romanTime.tutelaMensis}</span>
+                  ) : (
+                    <>
+                      <span className="font-bold text-ink text-lg">{romanTime.tutelaMensis}</span>
+                      <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.tutelaMensis)}</span>
+                      <span className="text-xs font-bold italic text-roman-red">{translateGreekUI(romanTime.tutelaMensis)}</span>
+                    </>
+                  )}
                 </div>
               </div>
 

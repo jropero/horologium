@@ -4,6 +4,7 @@ import { WeatherData, WeatherSnapshot } from '../types';
 import { LOCATIONS } from '../utils/locations';
 import { Geolocation } from '@capacitor/geolocation';
 import { useCivilization } from '../contexts/CivilizationContext';
+import { transliterateGreek } from '../utils/greekTransliteration';
 
 interface WeatherModalProps {
     isOpen: boolean;
@@ -57,7 +58,7 @@ const WeatherIcon = ({ condition, className = "w-12 h-12" }: { condition: string
     }
 };
 
-const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean }> = ({ data, isCurrent }) => (
+const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean; civilization: string }> = ({ data, isCurrent, civilization }) => (
     <div className={`p-4 rounded-lg border-2 transition-all duration-300 ${isCurrent
         ? 'border-gold-leaf bg-gold-leaf/10 shadow-[0_0_15px_rgba(207,181,59,0.1)]'
         : 'border-gold-dim/20 bg-ink/40 hover:border-gold-dim/50'
@@ -75,8 +76,14 @@ const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean }> = ({
             <WeatherIcon condition={data.condition} className="w-10 h-10 shrink-0" />
             <div className="flex-1 min-w-0">
                 <div className="text-parchment font-serif text-base italic leading-tight truncate">
-                    {data.description}
+                    {civilization === 'hellas' && data.greekDescription ? data.greekDescription : data.description}
                 </div>
+                {civilization === 'hellas' && data.greekDescription && (
+                    <div className="flex items-baseline gap-2 mt-0.5 truncate">
+                         <span className="font-serif text-[10px] opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(data.greekDescription)}</span>
+                         <span className="text-roman-red font-body italic text-[10px] font-bold uppercase">{data.description}</span>
+                    </div>
+                )}
                 <div className="flex items-center gap-4 mt-1">
                     <div className="flex items-center gap-1 text-gold-dim">
                         <Thermometer className="w-3 h-3" />
@@ -207,9 +214,23 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                                 <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
                                     {civilization === 'hellas' && current.greekDescription ? current.greekDescription : current.description}
                                 </h3>
+                                {civilization === 'hellas' && current.greekDescription && (
+                                    <div className="flex flex-col items-center md:items-start mb-2">
+                                        <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(current.greekDescription)}</span>
+                                        <span className="text-roman-red font-body italic text-sm font-bold uppercase">{current.description}</span>
+                                    </div>
+                                )}
                                 <div className="flex items-center gap-3 mt-2">
                                     <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">{labels.windLabel}:</span>
-                                    <span className="text-parchment font-serif italic text-lg">{civilization === 'hellas' && current.greekWindName ? current.greekWindName : current.latinWindName}</span>
+                                    <div className="flex flex-col items-start leading-tight">
+                                        <span className="text-parchment font-serif italic text-lg">{civilization === 'hellas' && current.greekWindName ? current.greekWindName : current.latinWindName}</span>
+                                        {civilization === 'hellas' && current.greekWindName && (
+                                            <>
+                                                <span className="font-serif text-[10px] opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(current.greekWindName)}</span>
+                                                <span className="text-roman-red font-body italic text-[11px] font-bold">{current.latinWindName}</span>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -265,7 +286,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
                         {historical.map((snap) => (
-                            <ChronosItem key={snap.yearLabel} data={snap} />
+                            <ChronosItem key={snap.yearLabel} data={snap} civilization={civilization} />
                         ))}
                     </div>
 

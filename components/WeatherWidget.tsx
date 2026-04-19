@@ -1,6 +1,7 @@
 import React from 'react';
 import { WeatherData } from '../types';
 import { useCivilization } from '../contexts/CivilizationContext';
+import { transliterateGreek } from '../utils/greekTransliteration';
 
 interface WeatherWidgetProps {
     weather: WeatherData;
@@ -77,10 +78,16 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
             <div className="text-gold-leaf flex-shrink-0">
                 {renderIcon()}
             </div>
-            <div className="flex flex-col border-r border-gold-dim/30 pr-3">
+            <div className="flex flex-col border-r border-gold-dim/30 pr-3 justify-center">
                 <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.skyLabel}</span>
                 <span className="text-parchment font-serif text-sm font-bold leading-tight">{displayDesc}</span>
-                <span className="text-stone-400 font-serif text-xs">{Math.round(temperature)}°C</span>
+                {civilization === 'hellas' && greekDescription && (
+                    <div className="flex flex-col mb-1">
+                        <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase text-gold-dim mt-0.5">{transliterateGreek(displayDesc)}</span>
+                        <span className="text-roman-red font-body italic text-[10px] font-bold uppercase mt-0.5 leading-none">{description}</span>
+                    </div>
+                )}
+                <span className="text-stone-400 font-serif text-xs mt-0.5">{Math.round(temperature)}°C</span>
             </div>
 
             {/* SECCIÓN DE VIENTO */}
@@ -117,6 +124,12 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                     <span className="text-stone-300 font-serif text-[10px] text-center leading-tight">
                         {displayWind.split(' ')[0]}
                     </span>
+                    {civilization === 'hellas' && greekWindName && (
+                        <div className="flex flex-col items-center">
+                            <span className="font-serif text-[8px] opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(displayWind.split(' ')[0])}</span>
+                            <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">{latinWindName.split(' ')[0]}</span>
+                        </div>
+                    )}
                     
                     {windSpeed !== undefined && (
                         <span className="text-gold-dim font-serif text-[10px] mt-0.5 tracking-wider">
