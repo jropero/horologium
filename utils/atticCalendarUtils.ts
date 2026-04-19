@@ -92,6 +92,14 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
 
   if (dayOfMonth <= 20) {
     // Μὴν μεσῶν (middle, days 11-20)
+    if (dayOfMonth === 20) {
+      return {
+        short: `εἰκάς`,
+        full: `εἰκάς`,
+        spanishShort: `Día 20 (Eikas)`,
+        spanishFull: `Día 20 (la vigésima)`
+      };
+    }
     const dayInDecade = dayOfMonth - 10;
     const ordinal = GREEK_DAY_ORDINALS[dayInDecade] || dayInDecade.toString();
     return {
@@ -103,16 +111,18 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
   }
 
   // Μὴν φθίνων (waning, days 21-29/30) — counted backwards!
-  const daysFromEnd = monthLength - dayOfMonth + 1;
-  if (daysFromEnd === 1) {
-    return { short: "ἕνη καὶ νέα", full: "Ἕνη καὶ Νέα", spanishShort: "Día " + dayOfMonth + " (último)", spanishFull: "Último día (vieja y nueva)" };
+  if (dayOfMonth === monthLength) {
+    return { short: "ἕνη καὶ νέα", full: "Ἕνη καὶ Νέα", spanishShort: "Mes viejo y nuevo", spanishFull: "Último día (vieja y nueva luna)" };
   }
-  const ordinal = GREEK_DAY_ORDINALS[daysFromEnd] || daysFromEnd.toString();
+  
+  // Count backwards from 30 regardless of month length (so day 21 is always 10th waning)
+  const theoreticalDaysFromEnd = 30 - dayOfMonth + 1;
+  const ordinal = GREEK_DAY_ORDINALS[theoreticalDaysFromEnd] || theoreticalDaysFromEnd.toString();
   return {
     short: `${ordinal} φθίνοντος`,
     full: `${ordinal} φθίνοντος`,
-    spanishShort: `Día ${daysFromEnd} desde el fin`,
-    spanishFull: `Día ${daysFromEnd} desde el fin del mes`
+    spanishShort: `Día ${theoreticalDaysFromEnd} desde el fin`,
+    spanishFull: `Día ${theoreticalDaysFromEnd} desde el fin del mes`
   };
 };
 
