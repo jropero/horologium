@@ -30,6 +30,7 @@
   --midnight: #0f172a;
   --hatch-color: #000000;
   --festival-text: #fbbf24; /* amber-400 */
+  --app-bg-pattern: url('/assets/textures/wood-pattern.png');
 }
 
 [data-theme="light"] {
@@ -41,6 +42,34 @@
   --midnight: #f0ebe0;
   --hatch-color: #8a7826;
   --festival-text: #b45309; /* amber-700 */
+  --app-bg-pattern: url('/assets/textures/aged-paper.png');
+}
+
+/* === HELLAS THEME === */
+/* Hellenic Dark Mode (Black-figure pottery style) */
+[data-civ="hellas"] {
+  --ink: #11151c; /* Deep sea black/blue */
+  --gold-leaf: #d35400; /* Terracotta orange */
+  --gold-dim: #a04000;
+  --parchment: #fdebd0; /* Light clay for text */
+  --parchment-dark: #f5cba7;
+  --midnight: #0a0c10;
+  --hatch-color: #000000;
+  --festival-text: #f39c12;
+  --app-bg-pattern: url('/assets/textures/stardust.png');
+}
+
+/* Hellenic Light Mode (Marble & Sea style) */
+[data-theme="light"][data-civ="hellas"] {
+  --ink: #f8f9f9; /* Marble white */
+  --gold-leaf: #2c3e50; /* Aegean deep blue */
+  --gold-dim: #1a252f;
+  --parchment: #11151c; /* Dark text */
+  --parchment-dark: #2c3e50;
+  --midnight: #e5e8e8;
+  --hatch-color: #2c3e50;
+  --festival-text: #c0392b; /* Pompeian red / Classical red */
+  --app-bg-pattern: url('/assets/textures/aged-paper.png');
 }
 
 @keyframes fadeIn {
@@ -54,7 +83,9 @@
   }
   
   body {
-    @apply bg-ink bg-wood-pattern;
+    @apply bg-ink;
+    background-image: var(--app-bg-pattern);
+    transition: background-color 0.5s ease;
   }
 }
 

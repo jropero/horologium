@@ -3,6 +3,7 @@ import { getSententiaOfTheDay, SENTENTIAE, Sententia } from '../utils/sententiae
 import { getApophthegmaOfTheDay, APOPHTHEGMATA, Apophthegma } from '../utils/apophthegmataData';
 import { Feather, RefreshCw } from 'lucide-react';
 import { useCivilization } from '../contexts/CivilizationContext';
+import { transliterateGreek } from '../utils/greekTransliteration';
 
 interface SententiaDieiProps {
   currentDate: Date;
@@ -32,6 +33,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   const quoteText = civilization === 'rome' ? sententia?.latin : apophthegma?.greek;
   const quoteAuthor = civilization === 'rome' ? sententia?.author : apophthegma?.author;
   const quoteTranslation = civilization === 'rome' ? sententia?.translation : apophthegma?.translation;
+  const quoteTransliteration = civilization === 'hellas' && quoteText ? transliterateGreek(quoteText) : null;
 
   if (!quoteText) return null;
 
@@ -61,10 +63,15 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         </div>
 
         {/* Cita (Texto Principal) */}
-        <div className="text-center px-4 mb-4">
+        <div className="text-center px-4 mb-4 flex flex-col gap-2">
           <p className="font-serif italic text-2xl md:text-4xl text-parchment leading-relaxed drop-shadow-glow">
             "{quoteText}"
           </p>
+          {quoteTransliteration && (
+            <p className="font-serif text-sm md:text-base text-gold-dim/80 tracking-widest uppercase">
+              {quoteTransliteration}
+            </p>
+          )}
         </div>
 
         {/* Autor */}

@@ -29,11 +29,12 @@ const AppContent: React.FC = () => {
     return (saved as 'dark' | 'light') || 'dark';
   });
 
-  // Handle theme changes
+  // Handle theme and civilization background changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-civ', civilization);
     localStorage.setItem('romanClockTheme', theme);
-  }, [theme]);
+  }, [theme, civilization]);
 
   // Initialize location from localStorage if available, otherwise default
   const [latitude, setLatitude] = useState<number>(() => {
