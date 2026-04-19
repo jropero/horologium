@@ -1,32 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { getSententiaOfTheDay, SENTENTIAE, Sententia } from '../utils/sententiaeData';
+import { getApophthegmaOfTheDay, APOPHTHEGMATA, Apophthegma } from '../utils/apophthegmataData';
 import { Feather, RefreshCw } from 'lucide-react';
+import { useCivilization } from '../contexts/CivilizationContext';
 
 interface SententiaDieiProps {
   currentDate: Date;
 }
 
 const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
+  const { civilization, labels } = useCivilization();
   const [sententia, setSententia] = useState<Sententia | null>(null);
+  const [apophthegma, setApophthegma] = useState<Apophthegma | null>(null);
 
   // Initialize with the quote of the day
   useEffect(() => {
     setSententia(getSententiaOfTheDay(currentDate));
+    setApophthegma(getApophthegmaOfTheDay(currentDate));
   }, [currentDate.toDateString()]);
 
   const handleRandomize = () => {
-    const randomIndex = Math.floor(Math.random() * SENTENTIAE.length);
-    setSententia(SENTENTIAE[randomIndex]);
+    if (civilization === 'rome') {
+      const randomIndex = Math.floor(Math.random() * SENTENTIAE.length);
+      setSententia(SENTENTIAE[randomIndex]);
+    } else {
+      const randomIndex = Math.floor(Math.random() * APOPHTHEGMATA.length);
+      setApophthegma(APOPHTHEGMATA[randomIndex]);
+    }
   };
 
-  if (!sententia) return null;
+  const quoteText = civilization === 'rome' ? sententia?.latin : apophthegma?.greek;
+  const quoteAuthor = civilization === 'rome' ? sententia?.author : apophthegma?.author;
+  const quoteTranslation = civilization === 'rome' ? sententia?.translation : apophthegma?.translation;
+
+  if (!quoteText) return null;
 
   return (
     <div className="w-full max-w-2xl mx-auto my-6 px-4">
       <div 
         onClick={handleRandomize}
         className="relative bg-ink/90 border border-gold-dim/40 rounded-lg p-8 shadow-2xl backdrop-blur-md group cursor-pointer hover:bg-ink/95 transition-all duration-300 active:scale-[0.98] overflow-hidden"
-        title="Click for a random Roman sententia"
+        title="Click for a random quote"
       >
         {/* Decorative background hatch */}
         <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
@@ -41,22 +55,22 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         <div className="flex flex-col items-center justify-center mb-6 opacity-70">
           <Feather className="text-gold-leaf/60 w-6 h-6 mb-2 group-hover:rotate-12 transition-transform" />
           <span className="font-serif text-xs md:text-sm uppercase tracking-[0.4em] text-gold-dim group-hover:text-gold-leaf transition-colors">
-            Sententia Diei
+            {labels.quoteTitle}
           </span>
           <div className="w-16 h-px bg-gold-dim/30 mt-2"></div>
         </div>
 
-        {/* Cita en Latín (Texto Principal) */}
+        {/* Cita (Texto Principal) */}
         <div className="text-center px-4 mb-4">
           <p className="font-serif italic text-2xl md:text-4xl text-parchment leading-relaxed drop-shadow-glow">
-            "{sententia.latin}"
+            "{quoteText}"
           </p>
         </div>
 
         {/* Autor */}
         <div className="text-center mb-6">
           <span className="font-body text-lg md:text-xl font-bold text-gold-leaf/80 uppercase tracking-[0.2em]">
-            — {sententia.author} —
+            — {quoteAuthor} —
           </span>
         </div>
 
@@ -65,7 +79,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         {/* Traducción al Español */}
         <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity duration-500">
           <p className="font-serif italic text-base md:text-lg text-parchment/70 max-w-lg mx-auto leading-relaxed">
-            {sententia.translation}
+            {quoteTranslation}
           </p>
         </div>
 

@@ -3,6 +3,7 @@ import { X, Wind, Thermometer, CloudSun, History, Gauge, Navigation, MapPin, Map
 import { WeatherData, WeatherSnapshot } from '../types';
 import { LOCATIONS } from '../utils/locations';
 import { Geolocation } from '@capacitor/geolocation';
+import { useCivilization } from '../contexts/CivilizationContext';
 
 interface WeatherModalProps {
     isOpen: boolean;
@@ -99,6 +100,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
     currentLat,
     currentLng
 }) => {
+    const { civilization, labels } = useCivilization();
     const [isLocLoading, setIsLocLoading] = React.useState(false);
 
     if (!isOpen || !weather) return null;
@@ -203,11 +205,11 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                             <div className="flex flex-col items-center md:items-start text-center md:text-left">
                                 <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">Status Praesens</span>
                                 <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
-                                    {current.description}
+                                    {civilization === 'hellas' && current.greekDescription ? current.greekDescription : current.description}
                                 </h3>
                                 <div className="flex items-center gap-3 mt-2">
-                                    <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">Ventus:</span>
-                                    <span className="text-parchment font-serif italic text-lg">{current.latinWindName}</span>
+                                    <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">{labels.windLabel}:</span>
+                                    <span className="text-parchment font-serif italic text-lg">{civilization === 'hellas' && current.greekWindName ? current.greekWindName : current.latinWindName}</span>
                                 </div>
                             </div>
 
@@ -243,7 +245,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                             </div>
                             <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
                                 <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">Caelum</span>
+                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">{labels.skyLabel}</span>
                                 <span className="text-parchment font-bold">
                                     {current.condition === 'clear' && 'Serenum'}
                                     {current.condition === 'cloudy' && 'Nubilum'}
