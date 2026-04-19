@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, RefreshCw, Navigation, Bell, Sun, Moon } from 'lucide-react';
+import { MapPin, RefreshCw, Navigation, Bell, Sun, Moon, Landmark } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { useCivilization } from '../contexts/CivilizationContext';
 
 interface ControlsProps {
   latitude: number;
@@ -20,6 +21,7 @@ const Controls: React.FC<ControlsProps> = ({
   theme,
   onToggleTheme
 }) => {
+  const { civilization, setCivilization, labels } = useCivilization();
   const [latInput, setLatInput] = useState(latitude.toString());
   const [lngInput, setLngInput] = useState(longitude.toString());
 
@@ -69,7 +71,7 @@ const handleGeolocation = async () => {
           notifications:[
             {
               title: "🏛️ Tempus Fugit",
-              body: "¡Las notificaciones romanas han sido activadas con éxito!",
+              body: "¡Las notificaciones han sido activadas con éxito!",
               id: 1,
               schedule: { at: new Date(Date.now() + 5000) }, // Suena en 5 segundos
               smallIcon: "ic_stat_icon_config_sample", // Icono por defecto de Android
@@ -85,6 +87,10 @@ const handleGeolocation = async () => {
     }
   };
 
+  const handleCivToggle = () => {
+    setCivilization(civilization === 'rome' ? 'hellas' : 'rome');
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 mb-8 px-2 animate-fadeIn">
       <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
@@ -98,7 +104,7 @@ const handleGeolocation = async () => {
             <RefreshCw className="w-6 h-6" />
           </div>
           <h3 className="font-serif text-lg md:text-xl text-gold-leaf uppercase tracking-[0.4em] font-bold">
-            GUBERNACULA
+            {labels.controlsTitle}
           </h3>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold-dim to-transparent mt-2"></div>
         </div>
@@ -130,13 +136,13 @@ const handleGeolocation = async () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
              <button 
                 onClick={handleManualUpdate}
                 className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-ink bg-parchment rounded-lg transition-all hover:scale-[1.02] active:scale-95 shadow-lg border border-gold-leaf"
             >
                 <RefreshCw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700" /> 
-                Computare
+                {labels.computeBtn}
             </button>
 
              <button 
@@ -144,7 +150,7 @@ const handleGeolocation = async () => {
                 className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-parchment bg-roman-red/80 rounded-lg border border-roman-red hover:bg-roman-red transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
             >
                 <Navigation className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> 
-                Invenire Me
+                {labels.findMeBtn}
             </button>
 
           <button 
@@ -156,7 +162,20 @@ const handleGeolocation = async () => {
                 ) : (
                   <Moon className="w-5 h-5" />
                 )}
-                {theme === 'dark' ? 'Lux' : 'Nox'}
+                {theme === 'dark' ? labels.lightLabel : labels.darkLabel}
+            </button>
+
+          {/* Civilization Toggle */}
+          <button 
+                onClick={handleCivToggle}
+                className={`group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest rounded-lg border transition-all hover:scale-[1.02] active:scale-95 shadow-lg ${
+                  civilization === 'rome' 
+                    ? 'text-roman-red bg-roman-red/10 border-roman-red/50 hover:bg-roman-red/20' 
+                    : 'text-sky-400 bg-sky-400/10 border-sky-400/50 hover:bg-sky-400/20'
+                }`}
+            >
+                <Landmark className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                {civilization === 'rome' ? labels.civToggleHellas : labels.civToggleRome}
             </button>
 
             <button 
@@ -164,13 +183,13 @@ const handleGeolocation = async () => {
                 className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-parchment bg-white/10 rounded-lg border border-gold-dim/50 hover:bg-white/20 transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
             >
                 <Bell className="w-5 h-5 text-amber-500 animate-pulse" /> 
-                Nuntii
+                {labels.notificationsBtn}
             </button>
         </div>
 
         <div className="mt-8 text-center opacity-40">
             <p className="font-body italic text-sm text-parchment">
-                "Tempus regit actum" — El tiempo rige el acto.
+                {labels.controlsFooter}
             </p>
         </div>
       </div>

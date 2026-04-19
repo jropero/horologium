@@ -45,6 +45,55 @@ const getLatinWindName = (degrees: number): string => {
     return 'Ventus';
 };
 
+// Greek Anemoi — Tower of the Winds (Horologion of Andronikos)
+export const getGreekWindName = (degrees: number): string => {
+    if (degrees >= 337.5 || degrees < 22.5) return 'Βορέας (N)';      // Boreas — Frío/Nieve
+    if (degrees >= 22.5 && degrees < 67.5) return 'Καικίας (NE)';     // Kaikias
+    if (degrees >= 67.5 && degrees < 112.5) return 'Ἀπηλιώτης (E)';   // Apeliotes — Lluvia suave
+    if (degrees >= 112.5 && degrees < 157.5) return 'Εὖρος (SE)';     // Euros
+    if (degrees >= 157.5 && degrees < 202.5) return 'Νότος (S)';      // Notos — Tormentas
+    if (degrees >= 202.5 && degrees < 247.5) return 'Λίψ (SW)';       // Lips
+    if (degrees >= 247.5 && degrees < 292.5) return 'Ζέφυρος (W)';    // Zephyros — Brisa cálida
+    if (degrees >= 292.5 && degrees < 337.5) return 'Σκίρων (NW)';    // Skiron
+    return 'Ἄνεμος';
+};
+
+// Greek weather descriptions
+const GREEK_WEATHER_CODES: Record<number, string> = {
+    0: 'Αἰθρία',           // Clear sky
+    1: 'Αἴθριον',           // Mainly clear
+    2: 'Νέφη σποράδην',     // Partly cloudy
+    3: 'Συννεφία',          // Overcast
+    45: 'Ὀμίχλη',           // Fog
+    48: 'Ὀμίχλη Παγετώδης', // Rime fog
+    51: 'Ψακάς',            // Light drizzle
+    53: 'Ψακάδες',          // Moderate drizzle
+    55: 'Ψακάδες Πυκναί',   // Dense drizzle
+    56: 'Ψακάδες Παγεταί',  // Freezing drizzle
+    57: 'Ψακάδες Παγεταὶ Πυκναί',
+    61: 'Ὑετός',            // Light rain
+    63: 'Ὑετὸς Μέτριος',    // Moderate rain
+    65: 'Ὄμβρος',           // Heavy rain
+    66: 'Ὑετὸς Παγετός',
+    67: 'Ὄμβρος Παγετός',
+    71: 'Χιὼν Λεπτή',       // Light snow
+    73: 'Χιὼν Μετρία',      // Moderate snow
+    75: 'Χιὼν Βαρεῖα',      // Heavy snow
+    77: 'Χιονόκοκκοι',      // Snow grains
+    80: 'Ὄμβριοι',          // Rain showers
+    81: 'Ὄμβριοι Βαρεῖς',
+    82: 'Ὄμβριοι Σφοδροί',
+    85: 'Νιφάδες',          // Snow showers
+    86: 'Νιφάδες Βαρεῖαι',
+    95: 'Κεραυνοβολία',     // Thunderstorm
+    96: 'Κεραυνοβολία μετὰ Χαλάζης',
+    99: 'Θύελλα Ἀγρία',     // Severe thunderstorm
+};
+
+export const getGreekWeatherDesc = (code: number): string => {
+    return GREEK_WEATHER_CODES[code] || 'Οὐρανός';
+};
+
 const HISTORICAL_YEARS = [2003, 1973, 1949];
 
 const getRomanYear = (year: number): string => {
@@ -83,10 +132,12 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
             temperature: c.temperature_2m,
             condition: cInfo.condition,
             description: cInfo.description,
+            greekDescription: getGreekWeatherDesc(c.weather_code),
             code: c.weather_code,
             windSpeed: c.wind_speed_10m,
             windDirection: c.wind_direction_10m,
             latinWindName: getLatinWindName(c.wind_direction_10m),
+            greekWindName: getGreekWindName(c.wind_direction_10m),
             surfacePressure: c.surface_pressure,
             yearLabel: "Hodie"
         };
@@ -105,10 +156,12 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
                     temperature: data.daily.temperature_2m_mean[0],
                     condition: info.condition,
                     description: info.description,
+                    greekDescription: getGreekWeatherDesc(code),
                     code: code,
                     windSpeed: data.daily.wind_speed_10m_max[0],
                     windDirection: data.daily.wind_direction_10m_dominant[0],
                     latinWindName: getLatinWindName(data.daily.wind_direction_10m_dominant[0]),
+                    greekWindName: getGreekWindName(data.daily.wind_direction_10m_dominant[0]),
                     surfacePressure: 1013, // Valor por defecto para históricos si no se pide explícitamente
                     yearLabel: getRomanYear(year)
                 });

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Scroll } from 'lucide-react';
+import { useCivilization } from '../contexts/CivilizationContext';
 
 const InfoSection: React.FC = () => {
+  const { labels } = useCivilization();
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -12,7 +14,7 @@ const InfoSection: React.FC = () => {
       >
         <div className="flex items-center gap-4">
             <Scroll className="text-gold-leaf w-6 h-6" />
-            <h3 className="font-serif text-base md:text-lg font-bold uppercase tracking-[0.3em] text-gold-leaf">De Temporibus Romanorum</h3>
+            <h3 className="font-serif text-base md:text-lg font-bold uppercase tracking-[0.3em] text-gold-leaf">{labels.infoTitle}</h3>
         </div>
         {isOpen ? <ChevronUp className="text-gold-dim" /> : <ChevronDown className="text-gold-dim" />}
       </div>
@@ -24,17 +26,17 @@ const InfoSection: React.FC = () => {
           
           <div className="font-body text-xl text-ink leading-relaxed space-y-6 text-justify relative z-10">
              <p>
-                <span className="float-left text-7xl font-serif font-bold text-roman-red mr-4 mt-[-8px] drop-shadow-sm leading-none">R</span>
-                omani antiqui diem non sicut nos metiebantur. Dies illorum ab ortu solis incipiebat et ad occasum finiebatur, semper in duodecim partes aequales, quas <span className="italic">horas</span> vocabant, divisus.
+                <span className="float-left text-7xl font-serif font-bold text-roman-red mr-4 mt-[-8px] drop-shadow-sm leading-none">{labels.infoFirstLetter}</span>
+                {labels.infoParagraph1}
              </p>
              <p>
-                Quare, ut solis iter per caelum cum anni temporibus variat, ita et horae longitudo. Hieme, hora quadraginta quinque minuta tantum esse potest; aestate, ad septuaginta quinque extenditur.
+                {labels.infoParagraph2}
              </p>
              <div className="flex justify-center my-8">
                 <span className="text-3xl text-woodcut-green opacity-60">❦</span>
              </div>
              <p className="text-center font-serif text-base uppercase tracking-[0.3em] text-ink/60 font-bold">
-                Tempus Fugit • Memento Mori
+                {labels.infoBottomMotto}
              </p>
           </div>
         </div>

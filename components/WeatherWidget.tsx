@@ -1,5 +1,6 @@
 import React from 'react';
 import { WeatherData } from '../types';
+import { useCivilization } from '../contexts/CivilizationContext';
 
 interface WeatherWidgetProps {
     weather: WeatherData;
@@ -8,15 +9,21 @@ interface WeatherWidgetProps {
 }
 
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', onClick }) => {
+    const { civilization, labels } = useCivilization();
     // Extraemos los datos de 'current' para que el resto del código funcione
     const { 
         condition, 
         description, 
+        greekDescription,
         temperature, 
-        latinWindName, 
+        latinWindName,
+        greekWindName,
         windDirection, 
         windSpeed 
     } = weather.current;
+
+    const displayDesc = civilization === 'hellas' && greekDescription ? greekDescription : description;
+    const displayWind = civilization === 'hellas' && greekWindName ? greekWindName : latinWindName;
 
     const renderIcon = () => {
         switch (condition) {
@@ -71,15 +78,15 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                 {renderIcon()}
             </div>
             <div className="flex flex-col border-r border-gold-dim/30 pr-3">
-                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">Caelum</span>
-                <span className="text-parchment font-serif text-sm font-bold leading-tight">{description}</span>
+                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.skyLabel}</span>
+                <span className="text-parchment font-serif text-sm font-bold leading-tight">{displayDesc}</span>
                 <span className="text-stone-400 font-serif text-xs">{Math.round(temperature)}°C</span>
             </div>
 
             {/* SECCIÓN DE VIENTO */}
-            {latinWindName && (
+            {displayWind && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">Ventus</span>
+                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.windLabel}</span>
                     
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
                         {/* Rosa de los vientos de fondo */}
@@ -108,7 +115,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                     </div>
 
                     <span className="text-stone-300 font-serif text-[10px] text-center leading-tight">
-                        {latinWindName.split(' ')[0]}
+                        {displayWind.split(' ')[0]}
                     </span>
                     
                     {windSpeed !== undefined && (

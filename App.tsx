@@ -5,6 +5,7 @@ import InfoSection from './components/InfoSection';
 import SolarTimes from './components/SolarTimes';
 import { RomanTimeData } from './types';
 import { calculateRomanTime } from './utils/romanTimeUtils';
+import { calculateHellenicTime } from './utils/hellenicTimeUtils';
 import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
@@ -14,12 +15,14 @@ import ProvinciaInfo from './components/ProvinciaInfo';
 import SortesVergilianae from './components/SortesVergilianae';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
+import { CivilizationProvider, useCivilization } from './contexts/CivilizationContext';
 
 // Default to Basilea
 const DEFAULT_LAT = 47.5632;
 const DEFAULT_LNG = 7.5744;
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { civilization, labels } = useCivilization();
   const [modernTime, setModernTime] = useState<Date>(new Date());
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     const saved = localStorage.getItem('romanClockTheme');
@@ -49,7 +52,7 @@ const App: React.FC = () => {
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
 
-  // --- NUEVO: Configuración inicial de Android (Status Bar) ---
+  // --- Configuración inicial de Android (Status Bar) ---
   useEffect(() => {
     const setupNativeApp = async () => {
       try {
@@ -71,10 +74,12 @@ const App: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Recalculate Roman Time when location or minute changes
+  // Recalculate time when location, minute, or civilization changes
   useEffect(() => {
-    const updateRomanTime = () => {
-      const data = calculateRomanTime(modernTime, latitude, longitude);
+    const updateTime = () => {
+      const data = civilization === 'rome'
+        ? calculateRomanTime(modernTime, latitude, longitude)
+        : calculateHellenicTime(modernTime, latitude, longitude);
       setRomanTimeData(data);
 
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
@@ -87,8 +92,8 @@ const App: React.FC = () => {
       }
     };
 
-    updateRomanTime();
-  }, [modernTime, latitude, longitude, loading]); // Añadido loading a dependencias
+    updateTime();
+  }, [modernTime, latitude, longitude, loading, civilization]);
 
   // Weather Data
   const { weather } = useWeather(latitude, longitude);
@@ -105,7 +110,7 @@ const App: React.FC = () => {
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 selection:bg-gold-leaf selection:text-ink">
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
-          HOROLOGIUM <span className="text-gold-dim font-normal text-xl md:text-2xl">ROMANUM</span>
+          {labels.appTitle} <span className="text-gold-dim font-normal text-xl md:text-2xl">{labels.appSubtitle}</span>
         </h1>
       </header>
 
@@ -163,9 +168,17 @@ const App: React.FC = () => {
       <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>
 
       <footer className="mt-auto relative z-10 text-stone-500 font-serif text-xs tracking-widest opacity-40 pb-4">
-        AD ASTRA PER ASPERA
+        {labels.footerMotto}
       </footer>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <CivilizationProvider>
+      <AppContent />
+    </CivilizationProvider>
   );
 };
 

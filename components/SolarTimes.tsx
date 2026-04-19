@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCivilization } from '../contexts/CivilizationContext';
 
 interface SolarTimesProps {
   sunrise: Date;
@@ -7,6 +8,7 @@ interface SolarTimesProps {
 }
 
 const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLength }) => {
+  const { labels } = useCivilization();
   const format = (d: Date) => d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
   return (
@@ -18,7 +20,7 @@ const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLen
         <div className="flex flex-col md:flex-row items-center gap-4 z-10 flex-1 justify-center">
            <div className="text-gold-leaf text-3xl filter drop-shadow-glow">☀</div>
            <div className="text-center md:text-left flex flex-col">
-              <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-1">Ortus Solis</div>
+              <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.sunriseLabel}</div>
               <div className="font-body text-2xl md:text-3xl font-bold text-parchment leading-none">{format(sunrise)}</div>
            </div>
         </div>
@@ -27,9 +29,9 @@ const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLen
         
         {/* Hour Length Section */}
         <div className="flex flex-col items-center z-10 min-w-32">
-           <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-2">Longitudo Horae</div>
+           <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-2">{labels.hourLengthLabel}</div>
            <div className="font-serif text-2xl text-gold-leaf font-bold drop-shadow-md">
-             {Math.round(currentHourLength)} <span className="text-sm font-normal text-parchment/60 font-body">minuta</span>
+             {Math.round(currentHourLength)} <span className="text-sm font-normal text-parchment/60 font-body">{labels.minuteUnit}</span>
            </div>
         </div>
 
@@ -38,7 +40,7 @@ const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLen
         <div className="flex flex-col md:flex-row-reverse items-center gap-4 z-10 flex-1 justify-center">
            <div className="text-roman-red text-3xl filter drop-shadow-glow">☾</div>
            <div className="text-center md:text-right flex flex-col">
-              <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-1">Occasus Solis</div>
+              <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.sunsetLabel}</div>
               <div className="font-body text-2xl md:text-3xl font-bold text-parchment leading-none">{format(sunset)}</div>
            </div>
         </div>
