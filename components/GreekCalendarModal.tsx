@@ -3,6 +3,26 @@ import { X, CalendarDays } from 'lucide-react';
 import { getAtticDateForDisplay, ATTIC_MONTHS } from '../utils/atticCalendarUtils';
 import { getAtticFestivalInfo, getDefaultAtticDeity } from '../utils/atticCalendarData';
 import { useCivilization } from '../contexts/CivilizationContext';
+import { transliterateGreek } from '../utils/greekTransliteration';
+
+const LunarProgress: React.FC<{ dayOfMonth: number }> = ({ dayOfMonth }) => {
+  const totalDays = 30; // standard approximation for Attic months
+  return (
+    <div className="w-full mt-3 pt-3 border-t border-gold-dim/20">
+      <div className="flex justify-between items-center text-[9px] sm:text-[10px] text-gold-dim uppercase tracking-widest mb-1 opacity-80">
+        <span>Νουμηνία (1)</span>
+        <span>Διχόμηνις (15)</span>
+        <span>Ἔνη καὶ νέα (30)</span>
+      </div>
+      <div className="w-full h-1.5 bg-ink/50 border border-gold-dim/30 rounded-full overflow-hidden flex">
+        <div 
+          className="h-full bg-gold-leaf/80 shadow-[0_0_8px_rgba(207,181,59,0.6)]" 
+          style={{ width: `${(dayOfMonth / totalDays) * 100}%` }}
+        />
+      </div>
+    </div>
+  );
+};
 
 interface GreekCalendarModalProps {
   isOpen: boolean;
@@ -93,9 +113,14 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                 <div className="flex-1 flex flex-col">
                   {/* Month name */}
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
-                      {day.atticDate.monthName}
-                    </span>
+                    <div className="flex flex-col">
+                      <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
+                        {day.atticDate.monthName}
+                      </span>
+                      <span className="text-gold-dim font-serif text-[10px] uppercase tracking-widest mt-0.5">
+                        {transliterateGreek(day.atticDate.monthName)}
+                      </span>
+                    </div>
                     <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-ink/10 text-gold-leaf font-serif" title="Fase lunar">
                       {day.moonPhase < 0.03 || day.moonPhase > 0.97 ? '🌑' :
                        day.moonPhase < 0.28 ? '🌒' :
@@ -106,33 +131,49 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                   </div>
 
                   {/* Attic day name */}
-                  <h3 className="font-serif text-base sm:text-lg font-bold text-parchment leading-tight drop-shadow-sm">
-                    {day.atticDate.short}
-                  </h3>
+                  <div className="flex flex-col mb-1">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-parchment leading-tight drop-shadow-sm">
+                      {day.atticDate.short}
+                    </h3>
+                    <span className="text-gold-dim/80 font-serif text-xs tracking-widest uppercase mt-1">
+                      {transliterateGreek(day.atticDate.short.replace(/[0-9]/g, '').trim())}
+                    </span>
+                  </div>
 
                   {/* Festival */}
                   {hasFestival && (
-                    <div className="text-festival font-serif text-sm sm:text-base uppercase tracking-[0.2em] mt-2 font-black flex items-center gap-2 drop-shadow-md">
-                      <span className="text-lg">✧</span> {day.festival!.festivalName} <span className="text-lg">✧</span>
+                    <div className="flex flex-col mt-2">
+                      <div className="text-festival font-serif text-sm sm:text-base uppercase tracking-[0.2em] font-black flex items-center gap-2 drop-shadow-md">
+                        <span className="text-lg">✧</span> {day.festival!.festivalName} <span className="text-lg">✧</span>
+                      </div>
+                      <span className="text-festival/70 font-serif text-[11px] uppercase tracking-widest mt-1 ml-6">
+                        {transliterateGreek(day.festival!.festivalName || '')}
+                      </span>
                     </div>
                   )}
 
                   {/* Deity */}
-                  <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-2 italic flex items-center gap-2">
-                    <span className="text-gold-dim not-italic uppercase tracking-widest text-[10px] font-bold">Θεός:</span>
+                  <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex items-center gap-2 flex-wrap">
+                    <span className="text-gold-dim uppercase tracking-widest text-[10px] font-bold">Θεός:</span>
                     <span className="text-parchment font-bold tracking-wide">
                       {day.festival?.deity || day.defaultDeity.deity}
+                    </span>
+                    <span className="text-gold-dim/70 text-[10px] uppercase tracking-widest">
+                      ({transliterateGreek(day.festival?.deity || day.defaultDeity.deity)})
                     </span>
                   </div>
 
                   {/* Festival description */}
                   {day.festival?.festivalDesc && (
-                    <div className="mt-3 pt-3 border-t border-gold-dim/40">
+                    <div className="mt-3 pt-3 border-t border-gold-dim/30">
                       <p className="font-serif text-xs sm:text-sm text-parchment leading-relaxed text-justify opacity-90 italic">
                         "{day.festival.festivalDesc}"
                       </p>
                     </div>
                   )}
+
+                  {/* Lunar Progress */}
+                  <LunarProgress dayOfMonth={day.atticDate.dayOfMonth} />
                 </div>
               </div>
             );

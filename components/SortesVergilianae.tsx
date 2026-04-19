@@ -3,6 +3,7 @@ import { BookOpen, Sparkles } from 'lucide-react';
 import { getRandomSors, SorsVergiliana } from '../utils/sortesVergilianae';
 import { getRandomSorsHomerica, SorsHomerica } from '../utils/sortesHomericae';
 import { useCivilization } from '../contexts/CivilizationContext';
+import { transliterateGreek } from '../utils/greekTransliteration';
 
 const SortesVergilianae: React.FC = () => {
   const { civilization, labels } = useCivilization();
@@ -71,10 +72,13 @@ const SortesVergilianae: React.FC = () => {
 
           {/* Revealed verse — Greek */}
           {currentHomerica && !isRevealing && (
-            <div className="text-center animate-fadeIn">
-              <blockquote className="font-body text-parchment text-2xl md:text-4xl italic leading-relaxed mb-4 drop-shadow-glow">
+            <div className="text-center animate-fadeIn flex flex-col gap-2 relative">
+              <blockquote className="font-body text-parchment text-2xl md:text-4xl italic leading-relaxed mb-2 drop-shadow-glow">
                 «{currentHomerica.greek}»
               </blockquote>
+              <p className="font-serif text-sm md:text-base text-gold-dim/80 tracking-widest uppercase mb-4">
+                {transliterateGreek(currentHomerica.greek)}
+              </p>
               <div className="w-1/4 h-px bg-gold-dim/30 mx-auto mb-4"></div>
               <p className="font-serif italic text-lg md:text-xl text-parchment/70 mb-4 leading-relaxed">
                 {currentHomerica.spanish}
