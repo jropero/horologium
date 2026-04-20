@@ -10,6 +10,7 @@ import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import HellenicCalendarInfo from './components/HellenicCalendarInfo';
+import GreekCalendarModal from './components/GreekCalendarModal';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
@@ -50,6 +51,7 @@ const AppContent: React.FC = () => {
 
   const [romanTimeData, setRomanTimeData] = useState<RomanTimeData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isGreekCalendarOpen, setIsGreekCalendarOpen] = useState<boolean>(false);
 
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
@@ -117,7 +119,10 @@ const AppContent: React.FC = () => {
       </header>
 
       {civilization === 'hellas' && (
-        <HellenicCalendarInfo />
+        <HellenicCalendarInfo 
+          atticDate={romanTimeData?.atticDate} 
+          onClick={() => setIsGreekCalendarOpen(true)} 
+        />
       )}
 
       {romanTimeData && (
@@ -168,6 +173,12 @@ const AppContent: React.FC = () => {
       />
 
       <InfoSection />
+
+      <GreekCalendarModal 
+        isOpen={isGreekCalendarOpen} 
+        onClose={() => setIsGreekCalendarOpen(false)} 
+        startDate={modernTime}
+      />
 
 
 

@@ -12,15 +12,15 @@ interface WeatherWidgetProps {
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', onClick }) => {
     const { civilization, labels } = useCivilization();
     // Extraemos los datos de 'current' para que el resto del código funcione
-    const { 
-        condition, 
-        description, 
+    const {
+        condition,
+        description,
         greekDescription,
-        temperature, 
+        temperature,
         latinWindName,
         greekWindName,
-        windDirection, 
-        windSpeed 
+        windDirection,
+        windSpeed
     } = weather.current;
 
     const displayDesc = civilization === 'hellas' && greekDescription ? greekDescription : description;
@@ -70,9 +70,9 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     };
 
     return (
-        <div 
+        <div
             onClick={onClick}
-            className={`flex items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
+            className={`flex w-full md:w-auto items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
             ${onClick ? 'cursor-pointer hover:bg-gold-leaf/10 hover:border-gold-leaf group/weather' : ''} ${className}`}
         >
             <div className="text-gold-leaf flex-shrink-0">
@@ -94,7 +94,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
             {displayWind && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
                     <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.windLabel}</span>
-                    
+
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
                         {/* Rosa de los vientos de fondo */}
                         <svg viewBox="0 0 24 24" className="absolute inset-0 w-full h-full text-gold-dim opacity-40">
@@ -106,8 +106,8 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                         </svg>
 
                         {/* Aguja 3D dinámica */}
-                        <svg 
-                            viewBox="0 0 24 24" 
+                        <svg
+                            viewBox="0 0 24 24"
                             className="absolute inset-0 w-full h-full transition-transform duration-1000 ease-out drop-shadow-md"
                             style={{ transform: `rotate(${windDirection}deg)` }}
                         >
@@ -130,7 +130,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                             <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">{latinWindName.split(' ')[0]}</span>
                         </div>
                     )}
-                    
+
                     {windSpeed !== undefined && (
                         <span className="text-gold-dim font-serif text-[10px] mt-0.5 tracking-wider">
                             {Math.round(windSpeed)} km/h
