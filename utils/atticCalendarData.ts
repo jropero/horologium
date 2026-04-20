@@ -96,3 +96,28 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
   };
   return monthDeities[monthIndex] || { deity: "Ζεύς", deityDesc: "Padre de los dioses.", isMajor: false };
 };
+
+// Daily deities for specific days of the month (excluding festivals)
+export const getDailyAtticDeity = (dayOfMonth: number, monthLength: number): AtticFestivalInfo | null => {
+  if (dayOfMonth === monthLength) {
+    return {
+      deity: "Ἑκάτη καὶ Νεκύσια",
+      deityDesc: "Hécate y los espíritus ancestrales. Día de ofrendas a los muertos.",
+      isMajor: false
+    };
+  }
+
+  const dailyDeities: Record<number, AtticFestivalInfo> = {
+    1: { deity: "Νουμηνία", deityDesc: "Día de la luna nueva visible. Ofrendas a los dioses del hogar.", isMajor: false },
+    2: { deity: "Ἀγαθὸς Δαίμων", deityDesc: "El Buen Espíritu. Día propicio.", isMajor: false },
+    3: { deity: "Ἀθηνᾶ Τριτογένεια", deityDesc: "Atenea, protectora de la ciudad.", isMajor: false },
+    4: { deity: "Ἡρακλῆς, Ἑρμῆς, Ἀφροδίτη, Ἔρως", deityDesc: "Día de Heracles, Hermes, Afrodita y Eros.", isMajor: false },
+    6: { deity: "Ἄρτεμις", deityDesc: "Cumpleaños de Artemisa.", isMajor: false },
+    7: { deity: "Ἀπόλλων", deityDesc: "Cumpleaños de Apolo.", isMajor: false },
+    8: { deity: "Ποσειδῶν καὶ Θησεύς", deityDesc: "Poseidón y Teseo.", isMajor: false },
+    9: { deity: "Ῥέα καὶ Μοῦσαι", deityDesc: "Rea y las Musas.", isMajor: false },
+    20: { deity: "Ἀπόλλων Εἰκάδιος καὶ Ἀθηνᾶ", deityDesc: "Apolo del día 20 y Atenea.", isMajor: false },
+  };
+
+  return dailyDeities[dayOfMonth] || null;
+};

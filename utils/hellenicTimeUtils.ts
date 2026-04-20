@@ -213,7 +213,11 @@ export const calculateHellenicTime = (now: Date, lat: number, lng: number): Roma
 
   const moonPhase = getMoonPhase(now);
   const moonPhaseLabel = getGreekMoonPhaseName(moonPhase);
-  const atticDate = getAtticDate(now);
+  
+  // The Attic day starts at sunset. 
+  // If we are in the evening (isDay is false and it is after noon), we are in the next Attic day.
+  const isAfterSunset = !isDay && now.getHours() >= 12;
+  const atticDate = getAtticDate(now, isAfterSunset);
 
   const olympiad = getOlympiadYear(now.getFullYear());
 
@@ -227,6 +231,7 @@ export const calculateHellenicTime = (now: Date, lat: number, lng: number): Roma
     nextSunrise: nextSunriseDisplay,
     romanDateString: `${atticDate.short} ${olympiad.label}`,
     romanDateFull: atticDate.full,
+    atticDate,
     moonPhase,
     moonPhaseLabel,
     planetaryRuler: getGreekPlanetaryRuler(romanHour, isDay, now),

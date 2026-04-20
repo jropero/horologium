@@ -25,6 +25,7 @@ export interface RomanTimeData {
   nextSunrise: Date;
   romanDateString: string;
   romanDateFull: string;
+  atticDate?: any; // Added for Hellenic mode
   moonPhase: number; // 0 to 1
   moonPhaseLabel: string; // e.g., "Plenilunium"
   planetaryRuler: string; // e.g., "Jupiter"
