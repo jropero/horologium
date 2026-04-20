@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { X, CalendarDays } from 'lucide-react';
 import { getAtticDateForDisplay, ATTIC_MONTHS } from '../utils/atticCalendarUtils';
-import { getAtticFestivalInfo, getDefaultAtticDeity } from '../utils/atticCalendarData';
+import { getAtticFestivalInfo, getDefaultAtticDeity, getDailyAtticDeity } from '../utils/atticCalendarData';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
@@ -43,13 +43,15 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
       // Look up festival info
       const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
       const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
-
+      const dailyDeity = getDailyAtticDeity(atticDate.dayOfMonth, atticDate.monthLength);
+      
       return {
         gregorianDate: d,
         atticDate,
         moonPhase,
         festival,
         defaultDeity,
+        dailyDeity,
       };
     });
   }, [startDate]);
@@ -164,15 +166,20 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                     <div className="flex items-center gap-2 flex-wrap text-sm">
                       <span className="text-gold-dim uppercase tracking-widest text-[10px] font-bold">Θεός:</span>
                       <span className="text-parchment font-bold tracking-wide">
-                        {day.festival?.deity || day.defaultDeity.deity}
+                        {day.festival?.deity || day.dailyDeity?.deity || day.defaultDeity.deity}
                       </span>
                       <span className="text-gold-dim/70 text-[10px] uppercase tracking-widest">
-                        ({transliterateGreek(day.festival?.deity || day.defaultDeity.deity)})
+                        ({transliterateGreek(day.festival?.deity || day.dailyDeity?.deity || day.defaultDeity.deity)})
                       </span>
                     </div>
                     <div className="text-roman-red font-bold font-body italic text-sm">
-                      {translateGreekUI(day.festival?.deity || day.defaultDeity.deity)}
+                      {translateGreekUI(day.festival?.deity || day.dailyDeity?.deity || day.defaultDeity.deity)}
                     </div>
+                    {day.dailyDeity?.deityDesc && !day.festival?.festivalDesc && (
+                      <div className="text-parchment/70 text-[10px] sm:text-xs italic mt-1 leading-relaxed">
+                        {day.dailyDeity.deityDesc}
+                      </div>
+                    )}
                   </div>
 
                   {/* Festival description */}

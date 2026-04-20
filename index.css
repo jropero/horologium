@@ -24,7 +24,7 @@
 :root {
   --ink: #1a1a1a;
   --gold-leaf: #cfb53b;
-  --gold-dim: #8a7826;
+  --gold-dim: #a09040;
   --parchment: #e3d6b3;
   --parchment-dark: #c9b993;
   --midnight: #0f172a;
@@ -50,12 +50,12 @@
 [data-civ="hellas"] {
   --ink: #11151c; /* Deep sea black/blue */
   --gold-leaf: #d35400; /* Terracotta orange */
-  --gold-dim: #a04000;
+  --gold-dim: #e1701a;
   --parchment: #fdebd0; /* Light clay for text */
   --parchment-dark: #f5cba7;
   --midnight: #0a0c10;
   --hatch-color: #000000;
-  --festival-text: #f39c12;
+  --festival-text: #f1c40f;
   --app-bg-pattern: url('/assets/textures/stardust.png');
 }
 

@@ -99,24 +99,61 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
 
 // Daily deities for specific days of the month (excluding festivals)
 export const getDailyAtticDeity = (dayOfMonth: number, monthLength: number): AtticFestivalInfo | null => {
+  // Last day of month (29th or 30th)
   if (dayOfMonth === monthLength) {
     return {
       deity: "Ἑκάτη καὶ Νεκύσια",
-      deityDesc: "Hécate y los espíritus ancestrales. Día de ofrendas a los muertos.",
+      deityDesc: "Hécate (Hekateia/Deipna) y los ancestros fallecidos (Nekysia). Día de purificación del hogar y ofrendas a los difuntos.",
       isMajor: false
     };
   }
 
   const dailyDeities: Record<number, AtticFestivalInfo> = {
-    1: { deity: "Νουμηνία", deityDesc: "Día de la luna nueva visible. Ofrendas a los dioses del hogar.", isMajor: false },
-    2: { deity: "Ἀγαθὸς Δαίμων", deityDesc: "El Buen Espíritu. Día propicio.", isMajor: false },
-    3: { deity: "Ἀθηνᾶ Τριτογένεια", deityDesc: "Atenea, protectora de la ciudad.", isMajor: false },
-    4: { deity: "Ἡρακλῆς, Ἑρμῆς, Ἀφροδίτη, Ἔρως", deityDesc: "Día de Heracles, Hermes, Afrodita y Eros.", isMajor: false },
-    6: { deity: "Ἄρτεμις", deityDesc: "Cumpleaños de Artemisa.", isMajor: false },
-    7: { deity: "Ἀπόλλων", deityDesc: "Cumpleaños de Apolo.", isMajor: false },
-    8: { deity: "Ποσειδῶν καὶ Θησεύς", deityDesc: "Poseidón y Teseo.", isMajor: false },
-    9: { deity: "Ῥέα καὶ Μοῦσαι", deityDesc: "Rea y las Musas.", isMajor: false },
-    20: { deity: "Ἀπόλλων Εἰκάδιος καὶ Ἀθηνᾶ", deityDesc: "Apolo del día 20 y Atenea.", isMajor: false },
+    1: { 
+      deity: "Νουμηνία", 
+      deityDesc: "El día en que la luna (creciente) es visible por primera vez tras la Luna Nueva. Sagrado para todos los dioses, especialmente Apolo Neomenios y Hestia.", 
+      isMajor: false 
+    },
+    2: { 
+      deity: "Ἀγαθὸς Δαίμων", 
+      deityDesc: "El 'Buen Espíritu'. Un día para honrar al protector personal y la prosperidad del hogar.", 
+      isMajor: false 
+    },
+    3: { 
+      deity: "Ἀθηνᾶ Τριτογένεια", 
+      deityDesc: "Cumpleaños de Atenea. Celebración de la diosa de la sabiduría y la guerra estratégica.", 
+      isMajor: false 
+    },
+    4: { 
+      deity: "Ἡρακλῆς, Ἑρμῆς, Ἀφροδίτη καὶ Ἔρως", 
+      deityDesc: "Una poderosa combinación de Heracles, Hermes, Afrodita y Eros. Día de la fuerza, los viajes y el amor.", 
+      isMajor: false 
+    },
+    6: { 
+      deity: "Ἄρτεμις", 
+      deityDesc: "Cumpleaños de Artemisa. Día sagrado para la diosa de la caza y la naturaleza salvaje.", 
+      isMajor: false 
+    },
+    7: { 
+      deity: "Ἀπόλλων", 
+      deityDesc: "Cumpleaños de Apolo. El día más sagrado de la primera década, dedicado al dios de la luz y la verdad.", 
+      isMajor: false 
+    },
+    8: { 
+      deity: "Ποσειδῶν καὶ Θησεύς", 
+      deityDesc: "Poseidón y Teseo. Día del mar y del heroico fundador de Atenas.", 
+      isMajor: false 
+    },
+    9: { 
+      deity: "Ῥέα καὶ Μοῦσαι", 
+      deityDesc: "Rea (Madre de los Dioses) y las Musas. Día de la maternidad cósmica y la inspiración de las artes.", 
+      isMajor: false 
+    },
+    20: { 
+      deity: "Ἀπόλλων Εἰκάδιος καὶ Ἀθηνᾶ", 
+      deityDesc: "Apolo Eikadios (del vigésimo día) y Atenea. Un día de sabiduría divina y claridad.", 
+      isMajor: false 
+    },
   };
 
   return dailyDeities[dayOfMonth] || null;
