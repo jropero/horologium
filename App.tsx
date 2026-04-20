@@ -9,6 +9,7 @@ import { calculateHellenicTime } from './utils/hellenicTimeUtils';
 import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
+import HellenicCalendarInfo from './components/HellenicCalendarInfo';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
@@ -115,6 +116,10 @@ const AppContent: React.FC = () => {
         </h1>
       </header>
 
+      {civilization === 'hellas' && (
+        <HellenicCalendarInfo />
+      )}
+
       {romanTimeData && (
         <div className="w-full max-w-2xl mx-auto">
           <RomanClock
@@ -129,7 +134,9 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      <RomanCalendarInfo />
+      {civilization === 'rome' ? (
+        <RomanCalendarInfo />
+      ) : null}
 
       {todaysSunTimes && romanTimeData && (
         <SolarTimes

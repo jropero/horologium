@@ -29,46 +29,33 @@ const GREEK_DAY_ORDINALS = [
 // Find the most recent New Moon before or on a given date
 const findNewMoon = (date: Date): Date => {
   const d = new Date(date);
-  // Walk backwards day by day to find the day with moon phase closest to 0
-  let bestDate = new Date(d);
-  let bestPhase = getMoonPhase(d);
-  // Make bestPhase wrap-around aware (phases near 1.0 are also near new moon)
-  let bestDist = Math.min(bestPhase, 1 - bestPhase);
+  // Walk backwards day by day to find where the phase wraps from ~0.99 back to ~0.01
+  let prevPhase = getMoonPhase(d);
 
   for (let i = 1; i <= 35; i++) {
     const check = new Date(d);
     check.setDate(check.getDate() - i);
     const phase = getMoonPhase(check);
-    const dist = Math.min(phase, 1 - phase);
-    if (dist < bestDist) {
-      bestDist = dist;
-      bestPhase = phase;
-      bestDate = new Date(check);
+    
+    // Going backwards, if phase jumps from < 0.2 to > 0.8, we crossed the new moon.
+    // The day closer to "now" (i-1) is the first day after the new moon.
+    if (phase > 0.8 && prevPhase < 0.2) {
+      const nmDate = new Date(d);
+      nmDate.setDate(d.getDate() - (i - 1));
+      nmDate.setHours(0, 0, 0, 0); // Normalize to midnight
+      return nmDate;
     }
+    prevPhase = phase;
   }
-  return bestDate;
+  return d; // fallback
 };
 
 // Determine which Attic month based on the Gregorian month of the New Moon
-// This is a simplified mapping
 const getAtticMonthIndex = (newMoonDate: Date): number => {
   const month = newMoonDate.getMonth(); // 0-11
-  // Mapping: The Attic year starts at Hekatombaion ≈ July
-  // July(6)=0, Aug(7)=1, Sep(8)=2, Oct(9)=3, Nov(10)=4, Dec(11)=5
-  // Jan(0)=6, Feb(1)=7, Mar(2)=8, Apr(3)=9, May(4)=10, Jun(5)=11
   const mapping: { [key: number]: number } = {
-    6: 0,  // Jul -> Hekatombaion
-    7: 1,  // Aug -> Metageitnion
-    8: 2,  // Sep -> Boedromion
-    9: 3,  // Oct -> Pyanepsion
-    10: 4, // Nov -> Maimakterion
-    11: 5, // Dec -> Poseideon
-    0: 6,  // Jan -> Gamelion
-    1: 7,  // Feb -> Anthesterion
-    2: 8,  // Mar -> Elaphebolion
-    3: 9,  // Apr -> Mounichion
-    4: 10, // May -> Thargelion
-    5: 11  // Jun -> Skirophorion
+    6: 0, 7: 1, 8: 2, 9: 3, 10: 4, 11: 5,
+    0: 6, 1: 7, 2: 8, 3: 9, 4: 10, 5: 11
   };
   return mapping[month] ?? 0;
 };
@@ -80,7 +67,6 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
   }
 
   if (dayOfMonth <= 10) {
-    // Μὴν ἱστάμενος (waxing, days 1-10)
     const ordinal = GREEK_DAY_ORDINALS[dayOfMonth] || dayOfMonth.toString();
     return {
       short: `${ordinal} ἱσταμένου`,
@@ -91,14 +77,8 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
   }
 
   if (dayOfMonth <= 20) {
-    // Μὴν μεσῶν (middle, days 11-20)
     if (dayOfMonth === 20) {
-      return {
-        short: `εἰκάς`,
-        full: `εἰκάς`,
-        spanishShort: `Día 20 (Eikas)`,
-        spanishFull: `Día 20 (la vigésima)`
-      };
+      return { short: `εἰκάς`, full: `εἰκάς`, spanishShort: `Día 20 (Eikas)`, spanishFull: `Día 20 (la vigésima)` };
     }
     const dayInDecade = dayOfMonth - 10;
     const ordinal = GREEK_DAY_ORDINALS[dayInDecade] || dayInDecade.toString();
@@ -110,12 +90,10 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
     };
   }
 
-  // Μὴν φθίνων (waning, days 21-29/30) — counted backwards!
   if (dayOfMonth === monthLength) {
     return { short: "ἕνη καὶ νέα", full: "Ἕνη καὶ Νέα", spanishShort: "Mes viejo y nuevo", spanishFull: "Último día (vieja y nueva luna)" };
   }
   
-  // Count backwards from 30 regardless of month length (so day 21 is always 10th waning)
   const theoreticalDaysFromEnd = 30 - dayOfMonth + 1;
   const ordinal = GREEK_DAY_ORDINALS[theoreticalDaysFromEnd] || theoreticalDaysFromEnd.toString();
   return {
@@ -134,21 +112,45 @@ export interface AtticDateResult {
   monthName: string;
   dayOfMonth: number;
   monthIndex: number;
+  decade: number;
+  monthLength: number;
 }
 
-export const getAtticDate = (date: Date): AtticDateResult => {
+export const getAtticDate = (date: Date, isAfterSunset: boolean = false): AtticDateResult => {
   const newMoon = findNewMoon(date);
 
-  // Day of month = days since the last new moon + 1 (Noumenia = day 1)
+  // Calculate days since the new moon midnight
   const diffMs = date.getTime() - newMoon.getTime();
-  const dayOfMonth = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  // The day transition happens at sunset.
+  // We align daytime directly with the Hellenion calendar grid (e.g., Apr 20 = Mounichion 2),
+  // and advance the explicit Attic date strictly after civil sunset.
+  let dayOfMonth = diffDays + (isAfterSunset ? 1 : 0);
 
   // Approximate month length (29 or 30 days — alternating hollow/full months)
-  const monthIndex = getAtticMonthIndex(newMoon);
-  const monthLength = monthIndex % 2 === 0 ? 30 : 29; // Full months (30) for even indices, hollow (29) for odd
+  let monthIndex = getAtticMonthIndex(newMoon);
+  let monthLength = monthIndex % 2 === 0 ? 30 : 29;
+
+  // Handle month boundary (going backwards before Day 1)
+  if (dayOfMonth <= 0) {
+    monthIndex = (monthIndex - 1 + 12) % 12;
+    monthLength = monthIndex % 2 === 0 ? 30 : 29;
+    dayOfMonth = monthLength + dayOfMonth; // if dayOfMonth is 0, goes to monthLength
+  }
+
+  // Handle month boundary (going forwards)
+  if (dayOfMonth > monthLength) {
+    dayOfMonth = monthLength; // Simplistic capping for now
+  }
 
   const monthData = ATTIC_MONTHS[monthIndex];
-  const dayFormatted = formatAtticDay(Math.min(dayOfMonth, monthLength), monthLength);
+  const boundedDay = Math.min(dayOfMonth, monthLength);
+  const dayFormatted = formatAtticDay(boundedDay, monthLength);
+  
+  let decade = 1;
+  if (boundedDay > 10 && boundedDay <= 20) decade = 2;
+  if (boundedDay > 20) decade = 3;
 
   return {
     short: `${dayFormatted.short}, ${monthData.name}`,
@@ -156,8 +158,10 @@ export const getAtticDate = (date: Date): AtticDateResult => {
     spanishShort: `${dayFormatted.spanishShort}, mes de ${monthData.name}`,
     spanishFull: `${dayFormatted.spanishFull}, mes de ${monthData.name} (${monthData.latin})`,
     monthName: monthData.name,
-    dayOfMonth: Math.min(dayOfMonth, monthLength),
-    monthIndex
+    dayOfMonth: boundedDay,
+    monthIndex,
+    decade,
+    monthLength
   };
 };
 
