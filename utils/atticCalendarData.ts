@@ -28,10 +28,11 @@ export const ATTIC_FESTIVALS: Record<string, AtticFestivalInfo> = {
   "2-20": { deity: "Δημήτηρ", deityDesc: "Diosa de la cosecha y la fertilidad. Culminación de los Misterios.", isMajor: false },
 
   // === PYANEPSION (3) — Oct/Nov ===
-  "3-7":  { festivalName: "Πυανέψια", deity: "Ἀπόλλων", deityDesc: "Dios de la luz y la música.", festivalDesc: "Fiesta de la cosecha. Se hervían legumbres en una olla (pyanos) y se portaba la rama de olivo (eiresione) de puerta en puerta.", isMajor: true },
+  "3-7":  { festivalName: "Πυανέψια / Ὀσχοφόρια", deity: "Ἀπόλλων & Διόνυσος", deityDesc: "Dioses de la luz y el vino.", festivalDesc: "Fiesta de la cosecha (hervido de legumbres) y procesión del vino con ramas de vid (oschoi) liderada por jóvenes.", isMajor: true },
   "3-8":  { festivalName: "Θησεῖα", deity: "Θησεύς", deityDesc: "Héroe fundador de Atenas.", festivalDesc: "Festividad en honor al héroe Teseo, legendario rey que unificó el Ática y venció al Minotauro.", isMajor: true },
   "3-9":  { festivalName: "Στήνια", deity: "Δημήτηρ", deityDesc: "Diosa de la tierra cultivada.", festivalDesc: "Vigilia nocturna de las mujeres con bromas rituales, preámbulo de las Tesmoforias.", isMajor: false },
   "3-11": { festivalName: "Θεσμοφόρια", deity: "Δημήτηρ Θεσμοφόρος", deityDesc: "Deméter legisladora.", festivalDesc: "El festival más importante de las mujeres atenienses. Tres días de ayuno, ritos secretos y ofrendas para asegurar la fertilidad de la tierra.", isMajor: true },
+  "3-19": { festivalName: "Ἀπατούρια", deity: "Ζεὺς Φράτριος & Ἀθηνᾶ", deityDesc: "Dioses de las fratrías.", festivalDesc: "Gran festival cívico de tres días donde los padres presentaban a sus hijos para ser registrados como ciudadanos atenienses.", isMajor: true },
   "3-30": { festivalName: "Χαλκεῖα", deity: "Ἀθηνᾶ Ἐργάνη & Ἥφαιστος", deityDesc: "Atenea de los oficios y Hefesto el herrero.", festivalDesc: "Fiesta de los artesanos y herreros. Se comenzaba a tejer el peplo para las próximas Panateneas.", isMajor: false },
 
   // === MAIMAKTERION (4) — Nov/Dec ===
@@ -42,6 +43,7 @@ export const ATTIC_FESTIVALS: Record<string, AtticFestivalInfo> = {
   "5-1":  { deity: "Ποσειδῶν", deityDesc: "Dios del mar, los terremotos y los caballos.", isMajor: false },
   "5-8":  { festivalName: "Ποσείδεια", deity: "Ποσειδῶν", deityDesc: "Poseidón, señor de los mares.", festivalDesc: "Gran festival marítimo en honor a Poseidón con sacrificios y regatas.", isMajor: true },
   "5-16": { festivalName: "Διονύσια τὰ κατ' ἀγρούς", deity: "Διόνυσος", deityDesc: "Dios del vino y el teatro.", festivalDesc: "Dionisias Rurales. Fiestas con procesiones fálicas, cantos y representaciones dramáticas en los demos del Ática.", isMajor: true },
+  "5-26": { festivalName: "Ἁλῶα", deity: "Δημήτηρ, Περσεφόνη & Διόνυσος", deityDesc: "Dioses de la fertilidad.", festivalDesc: "Festival agrario invernal reservado exclusivamente a las mujeres. Celebraba la fertilidad con banquetes secretos.", isMajor: true },
 
   // === GAMELION (6) — Jan/Feb ===
   "6-1":  { deity: "Ἥρα", deityDesc: "Diosa del matrimonio y la familia.", isMajor: false },
@@ -52,11 +54,13 @@ export const ATTIC_FESTIVALS: Record<string, AtticFestivalInfo> = {
   "7-11": { festivalName: "Ἀνθεστήρια — Πιθοιγία", deity: "Διόνυσος", deityDesc: "Dios del vino.", festivalDesc: "Primer día de las Antesterias: apertura de las tinajas de vino nuevo. Celebración del final del invierno.", isMajor: true },
   "7-12": { festivalName: "Ἀνθεστήρια — Χόες", deity: "Διόνυσος", deityDesc: "Dios del éxtasis.", festivalDesc: "Segundo día: concurso de bebedores con jarras (choes). Los niños de 3 años recibían su primera corona.", isMajor: true },
   "7-13": { festivalName: "Ἀνθεστήρια — Χύτροι", deity: "Ἑρμῆς Χθόνιος", deityDesc: "Hermes conductor de almas.", festivalDesc: "Tercer día: ofrendas a los muertos con ollas de legumbres. Los espíritus de los difuntos paseaban por la ciudad y al final se les despedía: '¡Fuera, Keres, las Antesterias han terminado!'", isMajor: true },
+  "7-20": { festivalName: "Μικρὰ Ἐλευσίνια", deity: "Δημήτηρ & Περσεφόνη", deityDesc: "Diosas de los misterios.", festivalDesc: "Los Pequeños Misterios en Agrae. Rito de purificación esencial y paso previo obligatorio antes de los Grandes Misterios de Eleusis.", isMajor: true },
   "7-23": { festivalName: "Διάσια", deity: "Ζεὺς Μειλίχιος", deityDesc: "Zeus apacible subterráneo.", festivalDesc: "Mayor festival de Zeus en Atenas. Sacrificios y ofrendas de pasteles con forma de animales.", isMajor: true },
 
   // === ELAPHEBOLION (8) — Mar/Apr ===
   "8-6":  { festivalName: "Ἐλαφηβόλια", deity: "Ἄρτεμις Ἐλαφηβόλος", deityDesc: "Artemisa cazadora de ciervos.", festivalDesc: "Caza ritual de ciervos jóvenes y ofrendas de pasteles con forma de ciervo.", isMajor: false },
   "8-10": { festivalName: "Μεγάλα Διονύσια", deity: "Διόνυσος Ἐλευθερεύς", deityDesc: "Dioniso libertador.", festivalDesc: "Las Grandes Dionisias: el mayor festival de teatro del mundo griego. Concursos de tragedias, comedias y ditirambos donde competían Esquilo, Sófocles y Eurípides. Miles de visitantes de toda Grecia.", isMajor: true },
+  "8-17": { festivalName: "Πάνδια", deity: "Ζεύς", deityDesc: "Rey de los dioses.", festivalDesc: "Fiesta cívica y política en honor a Zeus, celebrada inmediatamente después de las Grandes Dionisias.", isMajor: true },
 
   // === MOUNICHION (9) — Apr/May ===
   "9-6":  { festivalName: "Δέλφινια", deity: "Ἀπόλλων Δελφίνιος", deityDesc: "Apolo de los delfines y la navegación.", festivalDesc: "Apertura de la temporada de navegación. Los barcos se botaban y se pedía protección para los viajes marítimos.", isMajor: false },
@@ -65,6 +69,7 @@ export const ATTIC_FESTIVALS: Record<string, AtticFestivalInfo> = {
   // === THARGELION (10) — May/Jun ===
   "10-6": { festivalName: "Θαργήλια", deity: "Ἀπόλλων & Ἄρτεμις", deityDesc: "Los gemelos divinos.", festivalDesc: "Festival de purificación y cosecha. Se expulsaban dos pharmakoi (chivos expiatorios) de la ciudad para purificarla. Después, ofrenda de las primicias de la cosecha.", isMajor: true },
   "10-19": { festivalName: "Βενδίδεια", deity: "Βενδῖς", deityDesc: "Diosa tracia de la caza.", festivalDesc: "Festival nocturno en el Pireo con carrera de antorchas a caballo. Es la fiesta que abre la República de Platón.", isMajor: false },
+  "10-20": { festivalName: "Καλλυντήρια", deity: "Ἀθηνᾶ", deityDesc: "Atenea protectora.", festivalDesc: "Festival de limpieza sagrada del Erecteión y del templo de Atenea en la Acrópolis.", isMajor: true },
   "10-25": { festivalName: "Πλυντήρια", deity: "Ἀθηνᾶ", deityDesc: "Atenea protectora.", festivalDesc: "Día nefasto: se lavaba ritualmente la antigua estatua de Atenea (xoanon) y se cerraban los templos. Día de mala suerte.", isMajor: true },
 
   // === SKIROPHORION (11) — Jun/Jul ===

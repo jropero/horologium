@@ -224,11 +224,24 @@ const RomanClock: React.FC<RomanClockProps> = ({
             <div className="absolute inset-0 bg-stardust opacity-30 pointer-events-none"></div>
 
             <div
-              className="absolute inset-0 transition-opacity duration-1000"
+              className="absolute inset-0 transition-all duration-1000"
               style={{
-                background: romanTime.isDay
-                  ? 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)'
-                  : 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)',
+                background: (() => {
+                  if (romanTime.isDay) {
+                    if (progressPercent < 0.15) {
+                      // Amanecer
+                      return 'linear-gradient(to bottom, #2b4162 0%, #fa9c7a 60%, var(--parchment) 100%)';
+                    } else if (progressPercent > 0.85) {
+                      // Atardecer
+                      return 'linear-gradient(to bottom, #1e3b70 0%, #29539b 40%, #fd746c 80%, var(--parchment) 100%)';
+                    }
+                    // Día central
+                    return 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)';
+                  } else {
+                    // Noche
+                    return 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)';
+                  }
+                })(),
                 opacity: 1
               }}
             ></div>
