@@ -103,18 +103,18 @@ export const EGYPTIAN_SEASONS: EgyptianSeason[] = [
 // --- Datos de los 12 meses ---
 
 export const EGYPTIAN_MONTHS: EgyptianMonth[] = [
-  { name: 'Thoth',     greekName: 'Θώθ',       seasonIndex: 0, monthInSeason: 1 },
-  { name: 'Phaophi',   greekName: 'Φαῶφι',     seasonIndex: 0, monthInSeason: 2 },
-  { name: 'Athyr',     greekName: 'Ἁθύρ',      seasonIndex: 0, monthInSeason: 3 },
-  { name: 'Choiak',    greekName: 'Χοίακ',     seasonIndex: 0, monthInSeason: 4 },
-  { name: 'Tybi',      greekName: 'Τῦβι',      seasonIndex: 1, monthInSeason: 1 },
-  { name: 'Mechir',    greekName: 'Μεχίρ',     seasonIndex: 1, monthInSeason: 2 },
-  { name: 'Phamenoth', greekName: 'Φαμενώθ',   seasonIndex: 1, monthInSeason: 3 },
-  { name: 'Pharmuthi', greekName: 'Φαρμουθί',  seasonIndex: 1, monthInSeason: 4 },
-  { name: 'Pachon',    greekName: 'Παχών',      seasonIndex: 2, monthInSeason: 1 },
-  { name: 'Payni',     greekName: 'Παϋνί',     seasonIndex: 2, monthInSeason: 2 },
-  { name: 'Epiphi',    greekName: 'Ἐπιφί',     seasonIndex: 2, monthInSeason: 3 },
-  { name: 'Mesore',    greekName: 'Μεσορή',    seasonIndex: 2, monthInSeason: 4 },
+  { name: 'Thoth',     greekName: '𓅟𓏏𓏭𓀭𓏊𓇳',       seasonIndex: 0, monthInSeason: 1 },
+  { name: 'Phaophi',   greekName: '𓊪𓈖𓇋𓊪𓏏𓏤',     seasonIndex: 0, monthInSeason: 2 },
+  { name: 'Athyr',     greekName: '𓉗𓏏𓉐𓅃𓂋𓆗',      seasonIndex: 0, monthInSeason: 3 },
+  { name: 'Choiak',    greekName: '𓂓𓅃𓎡𓏤𓂓',     seasonIndex: 0, monthInSeason: 4 },
+  { name: 'Tybi',      greekName: '𓏏𓄿𓂝𓃀𓏏𓏴𓏊𓇳',      seasonIndex: 1, monthInSeason: 1 },
+  { name: 'Mechir',    greekName: '𓊪𓈖𓅯𓄿𓅓𓂝𓐍𓏭𓂋𓏤𓏤',     seasonIndex: 1, monthInSeason: 2 },
+  { name: 'Phamenoth', greekName: '𓊪𓈖𓇋𓏠𓈖𓀭𓊵𓏏𓊪𓀭',   seasonIndex: 1, monthInSeason: 3 },
+  { name: 'Pharmuthi', greekName: '𓊪𓈖𓂋𓈖𓈖𓅱𓏏𓏏',  seasonIndex: 1, monthInSeason: 4 },
+  { name: 'Pachon',    greekName: '𓊪𓈖𓐍𓈖𓋴𓅱',      seasonIndex: 2, monthInSeason: 1 },
+  { name: 'Payni',     greekName: '𓊪𓈖𓇋𓈖𓏏',     seasonIndex: 2, monthInSeason: 2 },
+  { name: 'Epiphi',    greekName: '𓇋𓊪𓇋𓇋𓊪𓇋',     seasonIndex: 2, monthInSeason: 3 },
+  { name: 'Mesore',    greekName: '𓄟𓋴𓅱𓏏𓂋𓇳𓀭',    seasonIndex: 2, monthInSeason: 4 },
 ];
 
 // --- Funciones auxiliares ---
@@ -214,7 +214,7 @@ export const getEgyptianDate = (gregorianDate: Date): EgyptianDateResult => {
       seasonHieroglyphic: '𓇳𓏤𓏤𓏤𓏤𓏤',
       seasonTranslation: 'Días sobre el año',
       monthName: 'Epagomenai',
-      monthGreekName: 'Ἐπαγόμεναι',
+      monthGreekName: '𓅃𓏤𓂋𓈖𓄿𓊪𓏏𓇳',
       dayOfMonth: epagomenalDay,
       dayOfYear,
       decade: 0, // No aplica para días epagómenos
