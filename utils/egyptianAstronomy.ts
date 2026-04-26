@@ -1,5 +1,6 @@
 // egyptianAstronomy.ts — Egyptian Archaeoastronomy
 // Based on PLOS ONE (2015): "Did the Ancient Egyptians Record the Period of the Eclipsing Binary Algol?"
+// Updated with precise modern ephemeris for accurate real-time prediction.
 
 export interface AlgolState {
   phase: number;
@@ -8,26 +9,38 @@ export interface AlgolState {
 }
 
 /**
- * Calculates the phase of Algol based on the historical cycle of 2.85 days
- * recorded in the Cairo Papyrus 86637.
+ * Calculates the phase of Algol based on the astronomical ephemeris.
+ * While the Egyptians recorded a period of 2.85 days, the true modern period
+ * is 2.867328 days. We use the real period and a known epoch (T0) to calculate 
+ * the exact position today.
  */
 export const getAlgolPhase = (date: Date): AlgolState => {
-  // Epoch: January 1, 2000
-  const epoch = new Date(2000, 0, 1);
-  const diffMs = date.getTime() - epoch.getTime();
-  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+  // Convert standard date to Julian Date
+  const DAY_MS = 1000 * 60 * 60 * 24;
+  const J1970 = 2440587.5;
+  const jd = date.getTime() / DAY_MS + J1970;
 
-  const cycleDays = 2.85;
-  const phase = (diffDays % cycleDays) / cycleDays;
-  const normalizedPhase = phase < 0 ? phase + 1 : phase;
+  // Astronomical Ephemeris for Algol (Beta Persei)
+  // T0: Known epoch of primary minimum in Julian Date (e.g., JD 2440953.4657)
+  const T0 = 2440953.4657; 
+  // P: Orbital period in days
+  const P = 2.867328;
 
-  // Algol's eclipse (minimum brightness) lasts about 10 hours.
-  // In a 2.85 day cycle, 10 hours is approx 14-15% of the cycle.
-  // We use the range [0.0 - 0.15] and [0.85 - 1.0] for the minimum.
-  const isEclipsed = normalizedPhase <= 0.15 || normalizedPhase >= 0.85;
+  // Calculate cycles elapsed since T0
+  const cycles = (jd - T0) / P;
+  
+  // The fractional part is the phase (0.0 to 1.0)
+  let phase = cycles % 1;
+  if (phase < 0) phase += 1;
+
+  // Algol's primary eclipse (minimum brightness) lasts about 9.6 hours.
+  // In a 2.867 day cycle, 9.6 hours is approximately 14% of the cycle.
+  // The minimum occurs precisely at phase 0.0. 
+  // We define the eclipse window as +/- 7% from phase 0.0.
+  const isEclipsed = phase >= 0.93 || phase <= 0.07;
 
   return {
-    phase: normalizedPhase,
+    phase,
     isEclipsed,
     stateText: isEclipsed 
       ? "El Ojo de Horus se oscurece (Mínimo estelar)" 
