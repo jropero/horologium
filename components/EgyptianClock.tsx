@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { Eye, Star, Info } from 'lucide-react';
 import { RomanTimeData, WeatherData } from '../types';
 import EgyptianCalendarModal from './EgyptianCalendarModal';
 import WeatherModal from './WeatherModal';
@@ -6,6 +7,8 @@ import { generateEgyptianSkyline } from '../utils/egyptianSkylineGenerator';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getEgyptianDate, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEgyptianMonthDeity } from '../utils/egyptianCalendarData';
+import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
+import { getAlgolPhase, AlgolState } from '../utils/egyptianAstronomy';
 
 interface EgyptianClockProps {
   modernTime: Date;
@@ -52,8 +55,32 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   const egyptianDateInfo = useMemo(() => {
     const eDate = getEgyptianDate(modernTime);
     const deity = getEgyptianMonthDeity(eDate.monthIndex);
-    return { eDate, deity };
-  }, [modernTime.getDate()]);
+    const hemerology = getHemerologyForDate(eDate.monthIndex, eDate.dayOfMonth);
+
+    // Determinar en qué tercio del día estamos para el chip
+    let currentPrognosis: Prognosis = 'none';
+    let partName = '';
+
+    if (!romanTime.isDay) {
+      currentPrognosis = hemerology.evening;
+      partName = 'Noche';
+    } else {
+      if (romanTime.romanHour <= 4) {
+        currentPrognosis = hemerology.morning;
+        partName = 'Mañana';
+      } else if (romanTime.romanHour <= 8) {
+        currentPrognosis = hemerology.midday;
+        partName = 'Mediodía';
+      } else {
+        currentPrognosis = hemerology.evening;
+        partName = 'Tarde';
+      }
+    }
+
+    return { eDate, deity, hemerology, currentPrognosis, partName };
+  }, [modernTime.getDate(), romanTime.romanHour, romanTime.isDay]);
+
+  const algol = useMemo(() => getAlgolPhase(modernTime), [modernTime.getTime()]);
 
   const weatherParticles = useMemo(() => {
     return {
@@ -181,8 +208,24 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
             <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{formatEgyptianDate(egyptianDateInfo.eDate)}</div>
             <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
               <span className="text-xs px-2 py-0.5 border border-emerald-500/40 rounded bg-emerald-500/10 uppercase font-bold text-emerald-400">{egyptianDateInfo.eDate.seasonName}</span>
-              <span>{romanTime.moonPhaseLabel}</span>
+              <span className="flex items-center gap-1.5 bg-ink/40 px-2 py-0.5 rounded border border-gold-dim/20">
+                <span className="text-gold-dim">☽</span>
+                <span>{romanTime.moonPhaseLabel}</span>
+              </span>
               <span className="text-gold-dim">•</span>
+              <span 
+                className={`flex items-center gap-1.5 px-2 py-0.5 rounded border transition-all duration-700 ${
+                  algol.isEclipsed 
+                    ? 'bg-roman-red/10 border-roman-red/30 text-roman-red opacity-70' 
+                    : 'bg-gold-leaf/10 border-gold-leaf/30 text-gold-leaf drop-shadow-[0_0_5px_rgba(207,181,59,0.4)]'
+                }`}
+                title={algol.stateText}
+              >
+                <Eye className={`w-3.5 h-3.5 ${algol.isEclipsed ? 'animate-pulse' : ''}`} />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Horus</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-2 justify-center md:justify-end text-gold-dim font-serif text-xs mt-2 opacity-60">
               <span>{egyptianDateInfo.deity.deity} {egyptianDateInfo.deity.deityHieroglyphic}</span>
             </div>
           </div>
@@ -393,8 +436,20 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
           </div>
 
           <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-ink mb-3 uppercase tracking-wide drop-shadow-sm">
-              Hora {romanTime.romanHour}
+            <h2 className="text-3xl md:text-5xl font-serif font-bold text-ink mb-3 uppercase tracking-wide drop-shadow-sm flex items-center justify-center gap-4">
+              <span>Hora {romanTime.romanHour}</span>
+              {egyptianDateInfo.currentPrognosis !== 'none' && (
+                <div className={`text-[10px] md:text-xs px-2 py-1 rounded-full border flex items-center gap-1.5 shadow-sm transition-all animate-fadeIn
+                  ${egyptianDateInfo.currentPrognosis === 'nefer' 
+                    ? 'bg-emerald-100 text-emerald-700 border-emerald-300' 
+                    : 'bg-red-100 text-roman-red border-roman-red/30'}`}
+                >
+                  <span className="text-sm">{egyptianDateInfo.currentPrognosis === 'nefer' ? '☀️' : '🦂'}</span>
+                  <span className="font-bold uppercase tracking-widest">
+                    {egyptianDateInfo.currentPrognosis === 'nefer' ? 'Nefer' : 'Aha'}
+                  </span>
+                </div>
+              )}
             </h2>
 
             {/* Visual Date Tracker */}

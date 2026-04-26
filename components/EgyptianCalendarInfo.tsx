@@ -4,6 +4,9 @@
 import React, { useState, useEffect } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEgyptianMonthDeity, getEpagomenalDayInfo, getEgyptianFestivalInfo } from '../utils/egyptianCalendarData';
+import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egyptianHemerologyData';
+import { getAlgolPhase } from '../utils/egyptianAstronomy';
+import { getMoonPhase } from '../utils/solar';
 import { useCivilization } from '../contexts/CivilizationContext';
 
 interface EgyptianCalendarInfoProps {
@@ -51,6 +54,39 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
       </div>
     </div>
   );
+
+  const hemerology = getHemerologyForDate(egyptianDate.monthIndex, egyptianDate.dayOfMonth);
+
+  const PrognosisBlock = ({ title, prognosis }: { title: string, prognosis: Prognosis }) => {
+    const isNefer = prognosis === 'nefer';
+    const isAha = prognosis === 'aha';
+    const isNone = prognosis === 'none';
+
+    return (
+      <div className={`flex-1 p-3 rounded border transition-all flex flex-col items-center gap-1
+        ${isNefer ? 'bg-emerald-900/30 text-emerald-400 border-emerald-500/50' : 
+          isAha ? 'bg-roman-red/30 text-roman-red border-roman-red/50' : 
+          'bg-ink/40 text-gold-dim/40 border-gold-dim/20 opacity-50'}`}
+      >
+        <span className="text-[10px] uppercase tracking-widest font-bold opacity-70">{title}</span>
+        <div className="text-xl">
+          {isNefer ? '☀️' : isAha ? '🦂' : '—'}
+        </div>
+        <span className="text-xs font-serif font-bold uppercase tracking-wider">
+          {isNefer ? 'Nefer' : isAha ? 'Aha' : 'None'}
+        </span>
+        <span className="text-[8px] opacity-60">
+          {isNefer ? '(Bueno)' : isAha ? '(Malo)' : '—'}
+        </span>
+      </div>
+    );
+  };
+
+  const algol = getAlgolPhase(new Date());
+  const moonPhase = getMoonPhase(new Date());
+
+  const isNewMoon = moonPhase < 0.03 || moonPhase > 0.97;
+  const isFullMoon = moonPhase > 0.47 && moonPhase < 0.53;
 
   return (
     <div
@@ -130,6 +166,44 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
               </div>
             </div>
           )}
+
+          {/* HEMEROLOGY SECTION */}
+          <div className="w-full flex flex-col gap-3">
+            <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim font-bold">Pronóstico del Día (Hemerología)</h3>
+            <div className="flex gap-2 w-full">
+              <PrognosisBlock title="Mañana" prognosis={hemerology.morning} />
+              <PrognosisBlock title="Mediodía" prognosis={hemerology.midday} />
+              <PrognosisBlock title="Tarde" prognosis={hemerology.evening} />
+            </div>
+            {hemerology.instruction && (
+              <div className="bg-roman-red/5 border border-roman-red/20 p-3 rounded-md flex items-center gap-3 animate-pulse">
+                <span className="text-xl">👁️</span>
+                <p className="text-xs italic text-roman-red font-serif leading-tight text-left">
+                  {hemerology.instruction}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* ASTRONOMICAL INFLUENCES */}
+          <div className="w-full flex flex-col gap-2 mt-2">
+            {algol.isEclipsed && (
+              <div className="bg-roman-red/10 border border-roman-red/30 p-3 rounded-md flex items-center gap-3 shadow-inner">
+                <span className="text-xl animate-pulse">✨</span>
+                <p className="text-[11px] font-serif font-bold text-roman-red leading-tight text-left">
+                  ¡Atención! Algol (El Ojo de Horus) está en eclipse hoy. Las fuerzas del Caos acechan.
+                </p>
+              </div>
+            )}
+            {(isNewMoon || isFullMoon) && (
+              <div className="bg-gold-leaf/5 border border-gold-leaf/20 p-3 rounded-md flex items-center gap-3 shadow-inner">
+                <span className="text-xl">🌙</span>
+                <p className="text-[11px] font-serif font-bold text-gold-dim leading-tight text-left italic">
+                  Fuerte influencia de Seth (Ciclo Lunar).
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* FESTIVAL */}
           {festival && (

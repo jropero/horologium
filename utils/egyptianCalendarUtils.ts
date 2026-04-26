@@ -18,11 +18,11 @@
 //
 // PUNTO DE ANCLAJE (Época):
 //   El día 1 del mes de Thoth (1er mes del año) cae normalmente
-//   el 29 de agosto gregoriano. Sin embargo, en el año gregoriano
-//   ANTERIOR a un año bisiesto gregoriano, Thoth 1 cae el 30 de agosto.
+//   el 11 de septiembre gregoriano. Sin embargo, en el año gregoriano
+//   ANTERIOR a un año bisiesto gregoriano, Thoth 1 cae el 12 de septiembre.
 //
 //   Regla del bisiesto alejandrino:
-//   El año alejandrino que comienza en agosto del año G es bisiesto
+//   El año alejandrino que comienza en septiembre del año G es bisiesto
 //   si (G + 1) es bisiesto en el calendario gregoriano.
 //   Es decir, el 6.º día epagómeno se añade cuando el próximo año
 //   gregoriano es bisiesto, lo que mantiene la sincronización.
@@ -82,7 +82,7 @@ export interface EgyptianDateResult {
 export const EGYPTIAN_SEASONS: EgyptianSeason[] = [
   {
     name: 'Akhet',
-    hieroglyphic: '𓐍𓏏𓇋𓈗',
+    hieroglyphic: '𓇗',
     translation: 'Inundación',
     months: [0, 1, 2, 3],
   },
@@ -94,7 +94,7 @@ export const EGYPTIAN_SEASONS: EgyptianSeason[] = [
   },
   {
     name: 'Shemu',
-    hieroglyphic: '𓈙𓈗𓅓𓅱',
+    hieroglyphic: '𓈙𓅓𓏱',
     translation: 'Cosecha',
     months: [8, 9, 10, 11],
   },
@@ -140,10 +140,11 @@ const isGregorianLeapYear = (year: number): boolean => {
  */
 const getThoth1 = (gregorianYear: number): Date => {
   const nextYearIsLeap = isGregorianLeapYear(gregorianYear + 1);
-  // Si el próximo año gregoriano es bisiesto, el año alejandrino que ACABA
-  // de terminar tuvo 6 epagómenos, lo que empuja Thoth 1 al 30 de agosto.
-  const day = nextYearIsLeap ? 30 : 29;
-  return new Date(gregorianYear, 7, day); // Mes 7 = Agosto (0-indexed)
+  // En el sistema gregoriano moderno (1900-2099), Thoth 1 cae el 11 de septiembre.
+  // Si el próximo año es bisiesto, el año alejandrino actual tiene 6 epagómenos,
+  // lo que empuja el siguiente Thoth 1 al 12 de septiembre.
+  const day = nextYearIsLeap ? 12 : 11;
+  return new Date(gregorianYear, 8, day); // Mes 8 = Septiembre (0-indexed)
 };
 
 /**
@@ -165,9 +166,9 @@ const isAlexandrianLeapYear = (gregorianStartYear: number): boolean => {
  *
  * Algoritmo:
  * 1. Determinar en qué año alejandrino cae la fecha gregoriana.
- *    El año alejandrino N comienza en agosto del año gregoriano N.
+ *    El año alejandrino N comienza en septiembre del año gregoriano N.
  *    Si la fecha es anterior a Thoth 1 del año actual, pertenece
- *    al año alejandrino anterior (que comenzó en agosto del año anterior).
+ *    al año alejandrino anterior (que comenzó en septiembre del año anterior).
  *
  * 2. Calcular el día del año alejandrino (1-indexed):
  *    dayOfYear = diferencia en días entre la fecha y Thoth 1 + 1
@@ -183,7 +184,7 @@ export const getEgyptianDate = (gregorianDate: Date): EgyptianDateResult => {
   const year = gregorianDate.getFullYear();
 
   // Paso 1: Determinar el año gregoriano en que comenzó el año alejandrino actual.
-  // El año alejandrino comienza en agosto. Si la fecha es anterior a Thoth 1
+  // El año alejandrino comienza en septiembre. Si la fecha es anterior a Thoth 1
   // de este año, entonces estamos en el año alejandrino que comenzó el año pasado.
   let startYear = year;
   let thoth1 = getThoth1(startYear);
@@ -214,7 +215,7 @@ export const getEgyptianDate = (gregorianDate: Date): EgyptianDateResult => {
       seasonHieroglyphic: '𓇳𓏤𓏤𓏤𓏤𓏤',
       seasonTranslation: 'Días sobre el año',
       monthName: 'Epagomenai',
-      monthGreekName: '𓅃𓏤𓂋𓈖𓄿𓊪𓏏𓇳',
+      monthGreekName: '𓁷𓏤𓂋𓈖𓄿𓊪𓏏𓇳',
       dayOfMonth: epagomenalDay,
       dayOfYear,
       decade: 0, // No aplica para días epagómenos
