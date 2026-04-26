@@ -1,4 +1,4 @@
-// civLabels.ts — All UI strings for both civilizations (Rome & Hellas)
+// civLabels.ts — All UI strings for all civilizations (Rome, Hellas & Aegyptus)
 
 export interface CivLabels {
   // App title & branding
@@ -70,6 +70,7 @@ export interface CivLabels {
   // Civilization toggle
   civToggleRome: string;   // Roma / Ρώμη
   civToggleHellas: string;  // Hellas / Ἑλλάς
+  civToggleAegyptus: string; // Aegyptus / Αἴγυπτος
 }
 
 export const getRomanLabels = (): CivLabels => ({
@@ -131,6 +132,7 @@ export const getRomanLabels = (): CivLabels => ({
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
+  civToggleAegyptus: 'Aegyptus',
 });
 
 export const getHellenicLabels = (): CivLabels => ({
@@ -192,4 +194,67 @@ export const getHellenicLabels = (): CivLabels => ({
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
+  civToggleAegyptus: 'Aegyptus',
+});
+
+export const getEgyptianLabels = (): CivLabels => ({
+  appTitle: 'HOROLOGIUM',
+  appSubtitle: 'AEGYPTIACUM',
+  footerMotto: 'MAAT HERU',
+  loadingText: 'Sha en Thoth...',
+
+  dayLabel: 'Heru',
+  nightLabel: 'Gereh',
+  civilDayPartLabel: 'Wnwt nt Hrw',
+  planetaryRulerLabel: 'Netjer n Wnwt',
+  monthTutelaLabel: 'Netjer n Abed',
+
+  sunriseLabel: 'Weben Ra',
+  sunsetLabel: 'Hotep Ra',
+  hourLengthLabel: 'Aw n Wnwt',
+  minuteUnit: 'at',
+
+  skyLabel: 'Pet',
+  windLabel: 'Tjaw',
+
+  calendarTitle: 'Calendario Alejandrino',
+  calendarSubtitle: '— Heru VII Tepyt —',
+  todayLabel: 'Min',
+  godOfDayTitle: '— Netjer n Heru —',
+  festivalLabel: '𓊹 Heb 𓊹',
+  calendarInfoTitle: 'Seshw n Hau',
+
+  quoteTitle: 'Sabiduría de Thoth',
+
+  oracleTitle: 'Sabiduría de Thoth',
+  oracleSubtitle: 'Medu Netjer',
+  oracleOpenBook: 'Wn Medjat',
+  oracleConsultAgain: 'Whm Senedj',
+  oracleConsulting: 'Thoth sedjem...',
+  oraclePrompt: 'Abre el rollo sagrado de Thoth y deja que la sabiduría milenaria te guíe.',
+
+  regionTitle: 'Sepat Kemet',
+  regionFallback: 'Her Tashet',
+  regionFallbackDesc: 'Más allá de las fronteras de la Tierra Negra.',
+  distanceTitle: 'Iwnw Heliopolis',
+  distanceUnit: 'iteru',
+  distanceFromLabel: 'iteru em Iwnw',
+
+  controlsTitle: 'SEKHERU',
+  computeBtn: 'Heseb',
+  findMeBtn: 'Gemi Wi',
+  lightLabel: 'Shu',
+  darkLabel: 'Keku',
+  notificationsBtn: 'Wehawy',
+  controlsFooter: '"Maat heru" — La verdad es la ley.',
+
+  infoTitle: 'Sha en Kemet',
+  infoFirstLetter: 'K',
+  infoParagraph1: 'emet, la Tierra Negra, medía el tiempo con la precisión de sus sacerdotes-astrónomos. El año egipcio constaba de 12 meses de 30 días, organizados en tres décadas de 10 días, más 5 días epagómenos al final.',
+  infoParagraph2: 'Las tres estaciones —Akhet (Inundación), Peret (Siembra) y Shemu (Cosecha)— marcaban el ritmo de la vida junto al Nilo. El día comenzaba al amanecer, dividido en 12 horas diurnas y 12 nocturnas de duración variable.',
+  infoBottomMotto: 'Ankh Udja Seneb • Maat Kheru',
+
+  civToggleRome: 'Roma',
+  civToggleHellas: 'Ἑλλάς',
+  civToggleAegyptus: 'Kemet',
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RomanClock from './components/RomanClock';
+import EgyptianClock from './components/EgyptianClock';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
 import SolarTimes from './components/SolarTimes';
@@ -10,6 +11,7 @@ import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import HellenicCalendarInfo from './components/HellenicCalendarInfo';
+import EgyptianCalendarInfo from './components/EgyptianCalendarInfo';
 import GreekCalendarModal from './components/GreekCalendarModal';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
@@ -124,18 +126,33 @@ const AppContent: React.FC = () => {
           onClick={() => setIsGreekCalendarOpen(true)} 
         />
       )}
+      {civilization === 'aegyptus' && (
+        <EgyptianCalendarInfo />
+      )}
 
       {romanTimeData && (
         <div className="w-full max-w-2xl mx-auto">
-          <RomanClock
-            modernTime={modernTime}
-            romanTime={romanTimeData}
-            loading={loading}
-            weather={weather}
-            onUpdateLocation={handleUpdateLocation}
-            currentLat={latitude}
-            currentLng={longitude}
-          />
+          {civilization === 'aegyptus' ? (
+            <EgyptianClock
+              modernTime={modernTime}
+              romanTime={romanTimeData}
+              loading={loading}
+              weather={weather}
+              onUpdateLocation={handleUpdateLocation}
+              currentLat={latitude}
+              currentLng={longitude}
+            />
+          ) : (
+            <RomanClock
+              modernTime={modernTime}
+              romanTime={romanTimeData}
+              loading={loading}
+              weather={weather}
+              onUpdateLocation={handleUpdateLocation}
+              currentLat={latitude}
+              currentLng={longitude}
+            />
+          )}
         </div>
       )}
 

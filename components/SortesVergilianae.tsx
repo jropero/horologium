@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { BookOpen, Sparkles } from 'lucide-react';
 import { getRandomSors, SorsVergiliana } from '../utils/sortesVergilianae';
 import { getRandomSorsHomerica, SorsHomerica } from '../utils/sortesHomericae';
+import { EGYPTIAN_WISDOM, EgyptianWisdom } from '../utils/egyptianWisdomData';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 
@@ -9,6 +10,7 @@ const SortesVergilianae: React.FC = () => {
   const { civilization, labels } = useCivilization();
   const [sors, setSors] = useState<SorsVergiliana | null>(null);
   const [sorsHomerica, setSorsHomerica] = useState<SorsHomerica | null>(null);
+  const [sorsAegyptiaca, setSorsAegyptiaca] = useState<EgyptianWisdom | null>(null);
   const [isRevealing, setIsRevealing] = useState(false);
   const [hasConsulted, setHasConsulted] = useState(false);
 
@@ -16,13 +18,17 @@ const SortesVergilianae: React.FC = () => {
     setIsRevealing(true);
     setSors(null);
     setSorsHomerica(null);
+    setSorsAegyptiaca(null);
 
     // Small delay for dramatic effect
     setTimeout(() => {
       if (civilization === 'rome') {
         setSors(getRandomSors());
-      } else {
+      } else if (civilization === 'hellas') {
         setSorsHomerica(getRandomSorsHomerica());
+      } else {
+        const randomIndex = Math.floor(Math.random() * EGYPTIAN_WISDOM.length);
+        setSorsAegyptiaca(EGYPTIAN_WISDOM[randomIndex]);
       }
       setIsRevealing(false);
       setHasConsulted(true);
@@ -31,7 +37,8 @@ const SortesVergilianae: React.FC = () => {
 
   const currentSors = civilization === 'rome' ? sors : null;
   const currentHomerica = civilization === 'hellas' ? sorsHomerica : null;
-  const hasSors = currentSors || currentHomerica;
+  const currentAegyptiaca = civilization === 'aegyptus' ? sorsAegyptiaca : null;
+  const hasSors = currentSors || currentHomerica || currentAegyptiaca;
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 px-4 animate-fadeIn">
@@ -86,6 +93,22 @@ const SortesVergilianae: React.FC = () => {
               <cite className="font-serif text-sm md:text-base uppercase tracking-[0.2em] text-gold-dim/80 not-italic font-bold">
                 — {currentHomerica.source} —
               </cite>
+            </div>
+          )}
+
+          {/* Revealed verse — Egyptian */}
+          {currentAegyptiaca && !isRevealing && (
+            <div className="text-center animate-fadeIn flex flex-col gap-2 relative">
+              <blockquote className="font-body text-parchment text-2xl md:text-4xl italic leading-relaxed mb-4 drop-shadow-glow">
+                «{currentAegyptiaca.text}»
+              </blockquote>
+              <div className="w-1/4 h-px bg-emerald-600/30 mx-auto mb-4"></div>
+              <cite className="font-serif text-sm md:text-base uppercase tracking-[0.2em] text-gold-dim/80 not-italic font-bold">
+                — {currentAegyptiaca.author} —
+              </cite>
+              <p className="font-serif italic text-sm md:text-base text-parchment/50 mt-1 leading-relaxed">
+                ({currentAegyptiaca.source})
+              </p>
             </div>
           )}
 
