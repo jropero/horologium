@@ -16,26 +16,29 @@
 
 ---
 
-**Horologium Romanam** es una aplicación web inmersiva de alta fidelidad que recrea la percepción del tiempo de la Antigua Roma. Utiliza algoritmos astronómicos precisos para transformar el tiempo moderno en el sistema de **horas temporales**, donde el día y la noche se dividen en 12 horas de duración variable según la estación y la ubicación geográfica.
+**Horologium Romanam** es una aplicación web inmersiva de alta fidelidad que recrea la percepción del tiempo de las grandes civilizaciones del Mediterráneo antiguo. Utiliza algoritmos astronómicos precisos para transformar el tiempo moderno en los sistemas de **horas temporales**, donde el día y la noche se rigen por ritmos solares y estelares orgánicos.
 
 ## 🏛️ Características Destacadas
 
+### 🌍 Civilizaciones (Multimodal)
+- **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus, ciclo de nundinas y año *Ab Urbe Condita*.
+- **Hellas (Chronos)**: Calendario Ático (Ateniense) completo con meses lunares, festivales históricos y sistema de tres décadas.
+- **Aegyptus (Horus)**: Calendario Alejandrino/Copto, con estaciones egipcias (Akhet, Peret, Shemu), días epagómenos y deidades del mes.
+
 ### 🎨 Experiencia Visual y Estética
 - **Dualitas Thematis**: Soporte para modo oscuro profundo y un **Modo Pergamino** (claro) que evoca manuscritos antiguos.
-- **Skyline Procedural**: Un fondo dinámico que genera edificios romanos (templos, domus, obeliscos) de forma procedimental, cambiando con el ciclo solar.
-- **Animaciones Premium**: Clima dinámico con efectos de lluvia, nieve y rayos optimizados por hardware.
+- **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas u obeliscos egipcios según la civilización activa.
+- **Accesibilidad WCAG AA**: Diseño optimizado para alta legibilidad con contrastes auditados y tipografía premium.
 
-### 🕰️ Cronometría y Calendario
+### 🕰️ Cronometría y Astronomía Avanzada
 - **Temporis Exactio**: Cálculo en tiempo real de *Horae* (día) y *Vigiliae* (noche) basado en la latitud/longitud exacta.
-- **Fasti Romani**: Calendario completo con Calendas, Nonas e Idus, incluyendo el año *Ab Urbe Condita* (A.U.C.).
-- **Nundinae & Mercatus**: Seguimiento del ciclo de los días de mercado y días de la semana romana.
+- **Ojo de Horus (Algol)**: Seguimiento en tiempo real de la estrella variable Algol (2.86 días), codificada como las acciones de Horus en el Papiro de El Cairo 86637.
 - **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo.
 
-### 🔮 Sabiduría e Historia
+### 🔮 Sabiduría y Adivinación Antigua
+- **Hemerología Egipcia**: Sistema de días "Buenos y Malos" (*Nefer* y *Aha*) basado en el Papiro de El Cairo 86637.
 - **Sortes Vergilianae**: Herramienta de adivinación clásica integrada utilizando fragmentos de la Eneida.
-- **Provincia Contextus**: Identificación de la provincia romana correspondiente a tu ubicación geográfica actual.
-- **Sententiae Selectae**: Citas clásicas diarias de autores latinos para la reflexión.
-- **Annales Coeli**: Registro detallado de eventos celestiales y meteorología en latín poético.
+- **Sententiae & Apophthegmata**: Sabiduría diaria en Latín, Griego y Egipcio Antiguo, con transliteraciones y traducciones.
 
 ### 📱 Tecnología y Movilidad
 - **PWA (Progressive Web App)**: Instalable en escritorio y móviles con soporte offline completo gracias a Service Workers.
@@ -45,18 +48,18 @@
 ## 🛠️ Stack Tecnológico
 
 - **Core**: React 19, TypeScript 5.8.
-- **Styling**: Tailwind CSS 4 (utilizando el nuevo motor de compilación).
+- **Styling**: Tailwind CSS 4 (motor de alto rendimiento).
 - **Build Tool**: Vite 6 con soporte PWA.
 - **Mobile**: Capacitor 8 para empaquetado nativo en Android.
-- **Geometría**: SVG dinámicos para el reloj y el skyline.
-- **API**: Open-Meteo (clima) y Geolocation API (coordenadas).
+- **Geometría**: SVG dinámicos para el reloj y el skyline procedimental.
+- **Cálculo**: Algoritmos astronómicos de precisión para fases lunares y ciclos estelares.
 
 ## 🚀 Instalación y Desarrollo
 
 1. **Clonación**:
    ```bash
-   git clone https://github.com/tu-usuario/horologium-romanam.git
-   cd horologium-romanam
+   git clone https://github.com/jropero/horologium.git
+   cd horologium
    ```
 
 2. **Dependencias**:
@@ -69,16 +72,11 @@
    npm run dev
    ```
 
-4. **Construcción para Producción**:
-   ```bash
-   npm run build
-   ```
-
 ## 🏛️ Filosofía del Proyecto
 
 > "Relinque temporis angustias, ad maiora natus es."
 
-Este proyecto no es solo un reloj; es un puente hacia una cosmovisión donde el tiempo no era una medida rígida de oficina, sino un ritmo orgánico dictado por el sol, las estrellas y la historia de la Ciudad Eterna.
+Este proyecto no es solo un reloj; es un puente hacia una cosmovisión donde el tiempo no era una medida rígida de oficina, sino un ritmo orgánico dictado por el sol, las estrellas y la herencia de las civilizaciones que forjaron el mundo.
 
 ---
 
