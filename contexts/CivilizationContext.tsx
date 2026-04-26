@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getRomanLabels, getHellenicLabels, CivLabels } from '../utils/civLabels';
+import { getRomanLabels, getHellenicLabels, getEgyptianLabels, CivLabels } from '../utils/civLabels';
 
-export type Civilization = 'rome' | 'hellas';
+export type Civilization = 'rome' | 'hellas' | 'aegyptus';
 
 interface CivilizationContextType {
   civilization: Civilization;
@@ -31,7 +31,11 @@ export const CivilizationProvider: React.FC<CivilizationProviderProps> = ({ chil
     localStorage.setItem('civilizationMode', civilization);
   }, [civilization]);
 
-  const labels = civilization === 'rome' ? getRomanLabels() : getHellenicLabels();
+  const labels = civilization === 'rome'
+    ? getRomanLabels()
+    : civilization === 'hellas'
+      ? getHellenicLabels()
+      : getEgyptianLabels();
 
   return (
     <CivilizationContext.Provider value={{ civilization, setCivilization, labels }}>

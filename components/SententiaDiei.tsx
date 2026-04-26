@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSententiaOfTheDay, SENTENTIAE, Sententia } from '../utils/sententiaeData';
 import { getApophthegmaOfTheDay, APOPHTHEGMATA, Apophthegma } from '../utils/apophthegmataData';
+import { getEgyptianWisdomOfTheDay, EGYPTIAN_WISDOM, EgyptianWisdom } from '../utils/egyptianWisdomData';
 import { Feather, RefreshCw } from 'lucide-react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
@@ -13,26 +14,32 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   const { civilization, labels } = useCivilization();
   const [sententia, setSententia] = useState<Sententia | null>(null);
   const [apophthegma, setApophthegma] = useState<Apophthegma | null>(null);
+  const [egyptianWisdom, setEgyptianWisdom] = useState<EgyptianWisdom | null>(null);
 
   // Initialize with the quote of the day
   useEffect(() => {
     setSententia(getSententiaOfTheDay(currentDate));
     setApophthegma(getApophthegmaOfTheDay(currentDate));
+    setEgyptianWisdom(getEgyptianWisdomOfTheDay(currentDate));
   }, [currentDate.toDateString()]);
 
   const handleRandomize = () => {
     if (civilization === 'rome') {
       const randomIndex = Math.floor(Math.random() * SENTENTIAE.length);
       setSententia(SENTENTIAE[randomIndex]);
-    } else {
+    } else if (civilization === 'hellas') {
       const randomIndex = Math.floor(Math.random() * APOPHTHEGMATA.length);
       setApophthegma(APOPHTHEGMATA[randomIndex]);
+    } else {
+      const randomIndex = Math.floor(Math.random() * EGYPTIAN_WISDOM.length);
+      setEgyptianWisdom(EGYPTIAN_WISDOM[randomIndex]);
     }
   };
 
-  const quoteText = civilization === 'rome' ? sententia?.latin : apophthegma?.greek;
-  const quoteAuthor = civilization === 'rome' ? sententia?.author : apophthegma?.author;
-  const quoteTranslation = civilization === 'rome' ? sententia?.translation : apophthegma?.translation;
+  const quoteText = civilization === 'rome' ? sententia?.latin : civilization === 'hellas' ? apophthegma?.greek : egyptianWisdom?.text;
+  const quoteAuthor = civilization === 'rome' ? sententia?.author : civilization === 'hellas' ? apophthegma?.author : egyptianWisdom?.author;
+  const quoteTranslation = civilization === 'rome' ? sententia?.translation : civilization === 'hellas' ? apophthegma?.translation : undefined;
+  const quoteSource = civilization === 'aegyptus' ? egyptianWisdom?.source : undefined;
   const quoteTransliteration = civilization === 'hellas' && quoteText ? transliterateGreek(quoteText) : null;
 
   if (!quoteText) return null;
@@ -83,11 +90,18 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
 
         <div className="w-1/3 h-px bg-gradient-to-r from-transparent via-gold-dim/40 to-transparent mx-auto mb-6"></div>
 
-        {/* Traducción al Español */}
+        {/* Traducción / Fuente */}
         <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity duration-500">
-          <p className="font-serif italic text-base md:text-lg text-parchment/70 max-w-lg mx-auto leading-relaxed">
-            {quoteTranslation}
-          </p>
+          {quoteTranslation && (
+            <p className="font-serif italic text-base md:text-lg text-parchment/70 max-w-lg mx-auto leading-relaxed">
+              {quoteTranslation}
+            </p>
+          )}
+          {quoteSource && (
+            <p className="font-serif italic text-sm text-gold-dim/60 mt-2">
+              — {quoteSource} —
+            </p>
+          )}
         </div>
 
         {/* Icono de refresco sutil */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, RefreshCw, Navigation, Bell, Sun, Moon, Landmark } from 'lucide-react';
+import { MapPin, RefreshCw, Navigation, Bell, Sun, Moon, Landmark, Pyramid } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { useCivilization } from '../contexts/CivilizationContext';
@@ -88,8 +88,19 @@ const handleGeolocation = async () => {
   };
 
   const handleCivToggle = () => {
-    setCivilization(civilization === 'rome' ? 'hellas' : 'rome');
+    // Cycle: rome -> hellas -> aegyptus -> rome
+    const next = civilization === 'rome' ? 'hellas' : civilization === 'hellas' ? 'aegyptus' : 'rome';
+    setCivilization(next);
   };
+
+  // Determine the next civilization label and styling for the toggle button
+  const nextCivLabel = civilization === 'rome' ? labels.civToggleHellas : civilization === 'hellas' ? labels.civToggleAegyptus : labels.civToggleRome;
+  const civButtonClass = civilization === 'rome'
+    ? 'text-roman-red bg-roman-red/10 border-roman-red/50 hover:bg-roman-red/20'
+    : civilization === 'hellas'
+      ? 'text-sky-400 bg-sky-400/10 border-sky-400/50 hover:bg-sky-400/20'
+      : 'text-emerald-500 bg-emerald-500/10 border-emerald-500/50 hover:bg-emerald-500/20';
+  const CivIcon = civilization === 'aegyptus' ? Pyramid : Landmark;
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 mb-8 px-2 animate-fadeIn">
@@ -168,14 +179,10 @@ const handleGeolocation = async () => {
           {/* Civilization Toggle */}
           <button 
                 onClick={handleCivToggle}
-                className={`group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest rounded-lg border transition-all hover:scale-[1.02] active:scale-95 shadow-lg ${
-                  civilization === 'rome' 
-                    ? 'text-roman-red bg-roman-red/10 border-roman-red/50 hover:bg-roman-red/20' 
-                    : 'text-sky-400 bg-sky-400/10 border-sky-400/50 hover:bg-sky-400/20'
-                }`}
+                className={`group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest rounded-lg border transition-all hover:scale-[1.02] active:scale-95 shadow-lg ${civButtonClass}`}
             >
-                <Landmark className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                {civilization === 'rome' ? labels.civToggleHellas : labels.civToggleRome}
+                <CivIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                {nextCivLabel}
             </button>
 
             <button 
