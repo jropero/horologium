@@ -203,7 +203,7 @@ const AppContent: React.FC = () => {
       {/* Background vignette effect */}
       <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>
 
-      <footer className="mt-auto relative z-10 text-stone-500 font-serif text-xs tracking-widest opacity-40 pb-4">
+      <footer className="mt-auto relative z-10 text-stone-400 font-serif text-xs tracking-widest pb-4">
         {labels.footerMotto}
       </footer>
     </div>

@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { X, CalendarDays } from 'lucide-react';
 import { getEgyptianDate, EgyptianDateResult, EGYPTIAN_SEASONS } from '../utils/egyptianCalendarUtils';
 import { getEgyptianMonthDeity, getEpagomenalDayInfo, getEgyptianFestivalInfo } from '../utils/egyptianCalendarData';
+import { getAlgolPhase } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 
 // Decade progress bar for each day card
@@ -10,14 +11,14 @@ const DecadeProgress: React.FC<{ dayOfMonth: number; isEpagomenal: boolean }> = 
   if (isEpagomenal) return null;
   return (
     <div className="w-full mt-3 pt-3 border-t border-gold-dim/20">
-      <div className="flex justify-between items-center text-[9px] sm:text-[10px] text-gold-dim uppercase tracking-widest mb-1 opacity-80">
+      <div className="flex justify-between items-center text-[9px] sm:text-[10px] text-gold-dim uppercase tracking-widest mb-1 font-bold">
         <span>Déc. I (1)</span>
         <span>Déc. II (11)</span>
         <span>Déc. III (21-30)</span>
       </div>
       <div className="w-full h-1.5 bg-ink/50 border border-gold-dim/30 rounded-full overflow-hidden flex">
         <div
-          className="h-full bg-emerald-500/80 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+          className="h-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
           style={{ width: `${(dayOfMonth / 30) * 100}%` }}
         />
       </div>
@@ -42,8 +43,9 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
       const deity = getEgyptianMonthDeity(egyptianDate.monthIndex);
       const epagomenalInfo = egyptianDate.isEpagomenal ? getEpagomenalDayInfo(egyptianDate.dayOfMonth) : null;
       const festival = !egyptianDate.isEpagomenal ? getEgyptianFestivalInfo(egyptianDate.monthIndex, egyptianDate.dayOfMonth) : null;
+      const algol = getAlgolPhase(d);
 
-      return { gregorianDate: d, egyptianDate, deity, epagomenalInfo, festival };
+      return { gregorianDate: d, egyptianDate, deity, epagomenalInfo, festival, algol };
     });
   }, [startDate]);
 
@@ -116,7 +118,7 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                       <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
                         {day.egyptianDate.isEpagomenal ? 'Epagomenai' : day.egyptianDate.monthName}
                       </span>
-                      <span className="text-gold-dim font-serif text-[10px] uppercase tracking-widest mt-0.5">
+                      <span className="text-gold-dim font-serif text-[10px] uppercase tracking-widest mt-0.5 font-bold">
                         {day.egyptianDate.monthGreekName}
                       </span>
                       {season && (
@@ -167,11 +169,11 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   {/* Deity */}
                   <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex flex-col gap-1">
                     <div className="flex items-center gap-2 flex-wrap text-sm">
-                      <span className="text-gold-dim uppercase tracking-widest text-[10px] font-bold">Netjer:</span>
+                      <span className="text-gold-dim uppercase tracking-widest text-[10px] font-black">Netjer:</span>
                       <span className="text-parchment font-bold tracking-wide">
                         {day.deity.deity}
                       </span>
-                      <span className="text-gold-dim/70 text-[10px]">{day.deity.deityHieroglyphic}</span>
+                      <span className="text-gold-dim text-[10px] font-bold">{day.deity.deityHieroglyphic}</span>
                     </div>
                     <div className="text-emerald-500 font-bold font-body italic text-sm">
                       {day.deity.domain}
@@ -184,6 +186,18 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                       <p className="font-serif text-xs sm:text-sm text-parchment leading-relaxed text-justify opacity-90 italic">
                         "{day.festival?.description || day.epagomenalInfo?.description}"
                       </p>
+                    </div>
+                  )}
+
+                  {/* Algol Warning */}
+                  {day.algol.isEclipsed && (
+                    <div className="mt-3 pt-3 border-t border-roman-red/30">
+                      <div className="bg-roman-red/10 border border-roman-red/20 p-2 rounded flex items-center gap-2 shadow-inner">
+                        <span className="text-sm animate-pulse">✨</span>
+                        <p className="text-[10px] font-serif font-bold text-roman-red leading-tight">
+                          Algol en eclipse. El Ojo de Horus se oscurece.
+                        </p>
+                      </div>
                     </div>
                   )}
 
