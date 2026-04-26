@@ -34,7 +34,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
   const isCurrentDecade = (dec: number) => egyptianDate.decade === dec;
 
   const renderDecade = (days: number[], decadeNumber: number, title: string) => (
-    <div className={`p-2 flex-1 rounded-md border-2 transition-all ${isCurrentDecade(decadeNumber) ? 'border-emerald-500/50 bg-emerald-500/5 shadow-sm' : 'border-gold-dim/20 bg-ink/20 opacity-70'}`}>
+    <div className={`p-2 flex-1 rounded-md border-2 transition-all ${isCurrentDecade(decadeNumber) ? 'border-emerald-500/50 bg-emerald-500/5 shadow-sm' : 'border-gold-dim/20 bg-ink/20'}`}>
       <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gold-dim mb-2 text-center">{title}</h4>
       <div className="flex flex-wrap gap-1 justify-center">
         {days.map(day => {
@@ -64,18 +64,18 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
     return (
       <div className={`flex-1 p-3 rounded border transition-all flex flex-col items-center gap-1
-        ${isNefer ? 'bg-emerald-900/30 text-emerald-400 border-emerald-500/50' : 
-          isAha ? 'bg-roman-red/30 text-roman-red border-roman-red/50' : 
-          'bg-ink/40 text-gold-dim/40 border-gold-dim/20 opacity-50'}`}
+        ${isNefer ? 'bg-emerald-900/30 text-emerald-400 border-emerald-500/50' :
+          isAha ? 'bg-roman-red/20 text-parchment border-roman-red/50' :
+            'bg-ink/40 text-gold-dim/40 border-gold-dim/20 opacity-50'}`}
       >
-        <span className="text-[10px] uppercase tracking-widest font-bold opacity-70">{title}</span>
+        <span className="text-[10px] uppercase tracking-widest font-bold">{title}</span>
         <div className="text-xl">
           {isNefer ? '☀️' : isAha ? '🦂' : '—'}
         </div>
         <span className="text-xs font-serif font-bold uppercase tracking-wider">
           {isNefer ? 'Nefer' : isAha ? 'Aha' : 'None'}
         </span>
-        <span className="text-[8px] opacity-60">
+        <span className="text-[8px] font-bold">
           {isNefer ? '(Bueno)' : isAha ? '(Malo)' : '—'}
         </span>
       </div>
@@ -117,7 +117,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             <h3 className="font-serif text-xl md:text-2xl uppercase tracking-[0.2em] font-bold text-gold-leaf">
               {egyptianDate.isEpagomenal ? 'Epagomenai' : egyptianDate.monthName}
             </h3>
-            <div className="font-serif text-xs opacity-70 tracking-widest text-gold-dim uppercase">
+            <div className="font-serif text-xs tracking-widest text-gold-dim uppercase">
               {egyptianDate.isEpagomenal ? egyptianDate.monthGreekName : egyptianDate.monthGreekName}
             </div>
             <div className="text-sm italic text-parchment font-body bg-emerald-500/10 px-4 py-1 rounded-full shadow-inner border border-emerald-500/20">
@@ -137,7 +137,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
               <p className="font-serif text-sm text-emerald-300/80 font-bold italic mt-2">
                 {epagomenalInfo.deity} — {epagomenalInfo.domain}
               </p>
-              <p className="font-serif text-sm text-parchment/70 italic mt-3 leading-relaxed">
+              <p className="font-serif text-sm text-parchment/90 italic mt-3 leading-relaxed">
                 "{epagomenalInfo.description}"
               </p>
             </div>
@@ -158,7 +158,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
           {/* THE THREE DECADES (only for regular months) */}
           {!egyptianDate.isEpagomenal && (
             <div className="w-full bg-ink/40 p-4 rounded-lg border border-gold-dim/30">
-              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim/60 mb-4">Las tres Décadas del mes</h3>
+              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4">Las tres Décadas del mes</h3>
               <div className="flex flex-col sm:flex-row gap-3">
                 {renderDecade(decade1, 1, "Década I (1–10)")}
                 {renderDecade(decade2, 2, "Década II (11–20)")}
@@ -222,11 +222,11 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             <div className="text-gold-leaf text-xs font-bold uppercase tracking-widest mb-1">
               {egyptianDate.isEpagomenal ? '— Madre Celeste —' : labels.godOfDayTitle}
             </div>
-            <div className="text-2xl mb-1">{deity.deityHieroglyphic}</div>
+            <div className="text-2xl mb-1 text-parchment ">{deity.deityHieroglyphic}</div>
             <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
               {deity.deity}
             </h2>
-            <div className="text-xs text-emerald-500/80 font-bold uppercase tracking-widest">
+            <div className="text-xs text-emerald-400 font-bold uppercase tracking-widest">
               {deity.domain}
             </div>
             <p className="font-serif text-sm text-parchment font-bold italic px-4 mt-2 leading-relaxed">

@@ -202,7 +202,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
           >
             <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
               <span className="text-lg">{egyptianDateInfo.eDate.seasonHieroglyphic}</span>
-              <span className="opacity-40 text-xs">|</span>
+              <span className="text-gold-dim/40 text-xs">|</span>
               <span>{egyptianDateInfo.eDate.monthName} {egyptianDateInfo.eDate.dayOfMonth}</span>
             </div>
             <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{formatEgyptianDate(egyptianDateInfo.eDate)}</div>
@@ -225,7 +225,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                 <span className="text-[10px] font-bold uppercase tracking-wider">Horus</span>
               </span>
             </div>
-            <div className="flex items-center gap-2 justify-center md:justify-end text-gold-dim font-serif text-xs mt-2 opacity-60">
+            <div className="flex items-center gap-2 justify-center md:justify-end text-gold-dim font-serif text-xs mt-2 font-bold">
               <span>{egyptianDateInfo.deity.deity} {egyptianDateInfo.deity.deityHieroglyphic}</span>
             </div>
           </div>
@@ -390,10 +390,10 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                     <g>
                       <path d="M 147.5 180 L 148.5 148 L 151.5 148 L 152.5 180 Z" fill="#cfb53b" stroke="#8a7826" strokeWidth="0.5" />
                       <path d="M 148 148 L 150 140 L 152 148 Z" fill="#e3d6b3" stroke="#8a7826" strokeWidth="0.5" />
-                      <line x1="150" y1="155" x2="150" y2="175" stroke="#8a7826" strokeWidth="0.3" opacity="0.6" />
-                      <line x1="149" y1="160" x2="151" y2="160" stroke="#8a7826" strokeWidth="0.3" opacity="0.4" />
-                      <line x1="149" y1="165" x2="151" y2="165" stroke="#8a7826" strokeWidth="0.3" opacity="0.4" />
-                      <line x1="149" y1="170" x2="151" y2="170" stroke="#8a7826" strokeWidth="0.3" opacity="0.4" />
+                      <line x1="150" y1="155" x2="150" y2="175" stroke="#8a7826" strokeWidth="0.5" />
+                      <line x1="149" y1="160" x2="151" y2="160" stroke="#8a7826" strokeWidth="0.5" />
+                      <line x1="149" y1="165" x2="151" y2="165" stroke="#8a7826" strokeWidth="0.5" />
+                      <line x1="149" y1="170" x2="151" y2="170" stroke="#8a7826" strokeWidth="0.5" />
                       <rect x="145" y="178" width="10" height="2" fill="#8a7826" rx="0.5" />
                     </g>
                   </g>
@@ -552,7 +552,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                 <div className="flex flex-col items-center text-ink/80 text-center">
                   <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.monthTutelaLabel}</div>
                   <span className="font-bold text-ink text-lg">{egyptianDateInfo.deity.deity}</span>
-                  <span className="text-xs opacity-70">{egyptianDateInfo.deity.deityHieroglyphic}</span>
+                  <span className="text-xs font-bold">{egyptianDateInfo.deity.deityHieroglyphic}</span>
                 </div>
               </div>
             </div>

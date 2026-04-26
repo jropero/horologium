@@ -58,7 +58,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
 
     // Helper to render a visual block for a decade
     const renderDecade = (days: number[], decadeNumber: number, title: string) => (
-        <div className={`p-2 flex-1 rounded-md border-2 transition-all ${isCurrentDecade(decadeNumber) ? 'border-gold-leaf/50 bg-gold-leaf/5 shadow-sm' : 'border-gold-dim/20 bg-ink/20 opacity-70'}`}>
+        <div className={`p-2 flex-1 rounded-md border-2 transition-all ${isCurrentDecade(decadeNumber) ? 'border-gold-leaf/50 bg-gold-leaf/5 shadow-sm' : 'border-gold-dim/20 bg-ink/20'}`}>
             <h4 className={`text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gold-dim mb-2 text-center`}>{title}</h4>
             <div className="flex flex-wrap gap-1 justify-center">
                 {days.map(day => {
@@ -106,7 +106,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                                 {atticDate.monthName}
                             </h3>
                         </div>
-                        <div className="font-serif text-xs opacity-70 tracking-widest text-gold-dim uppercase">{transliterateGreek(atticDate.monthName)}</div>
+                        <div className="font-serif text-xs tracking-widest text-gold-dim uppercase">{transliterateGreek(atticDate.monthName)}</div>
                         <div className="text-sm italic text-parchment font-body bg-gold-leaf/10 px-4 py-1 rounded-full shadow-inner border border-gold-leaf/20">Mes de {translateGreekUI(atticDate.monthName)}</div>
                     </div>
 
@@ -115,7 +115,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                         <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-sm leading-tight mb-1">
                             {atticDate.full}
                         </h2>
-                        <div className="font-serif text-xs opacity-70 tracking-widest text-gold-dim uppercase mb-1">
+                        <div className="font-serif text-xs tracking-widest text-gold-dim uppercase mb-1">
                             {transliterateGreek(atticDate.full)}
                         </div>
                         <p className="font-serif text-base text-gold-leaf font-bold italic px-2 mt-2">
@@ -125,7 +125,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
 
                     {/* THE THREE DECADES OF THE LUNAR MONTH */}
                     <div className="w-full bg-ink/40 p-4 rounded-lg border border-gold-dim/30">
-                        <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim/60 mb-4">Mēn: El Ciclo de tres Décadas</h3>
+                        <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4">Mēn: El Ciclo de tres Décadas</h3>
                         <div className="flex flex-col sm:flex-row gap-3">
                             {renderDecade(decade1, 1, "Ἱστάμενος (Creciente)")}
                             {renderDecade(decade2, 2, "Μεσῶν (Medio)")}
@@ -142,7 +142,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                             <h2 className={`text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight`}>
                                 {deityName}
                             </h2>
-                            <div className="font-serif text-[10px] opacity-70 text-gold-dim tracking-widest uppercase mb-1">
+                            <div className="font-serif text-[10px] text-gold-dim tracking-widest uppercase mb-1">
                                 {transliterateGreek(deityName)}
                             </div>
                             <p className="font-serif text-sm text-parchment font-bold italic px-4 mt-2 leading-relaxed">
@@ -154,9 +154,9 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                                 <div className="mt-4 pt-3 border-t border-gold-dim/20 w-full">
                                     <div className="text-gold-dim text-[10px] uppercase tracking-[0.2em] mb-1">Sacred Day of:</div>
                                     <div className="text-sm font-serif font-bold text-parchment">
-                                        {secondaryDeity.deity} <span className="opacity-60 text-xs">({transliterateGreek(secondaryDeity.deity)})</span>
+                                        {secondaryDeity.deity} <span className="text-xs font-bold">({transliterateGreek(secondaryDeity.deity)})</span>
                                     </div>
-                                    <p className="text-[11px] italic text-parchment/60 mt-1 line-clamp-2">
+                                    <p className="text-[11px] italic text-parchment/80 mt-1 line-clamp-2">
                                         {secondaryDeity.deityDesc}
                                     </p>
                                 </div>

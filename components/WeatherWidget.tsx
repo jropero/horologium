@@ -72,18 +72,18 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     return (
         <div
             onClick={onClick}
-            className={`flex w-full md:w-auto items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
+            className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
             ${onClick ? 'cursor-pointer hover:bg-gold-leaf/10 hover:border-gold-leaf group/weather' : ''} ${className}`}
         >
             <div className="text-gold-leaf flex-shrink-0">
                 {renderIcon()}
             </div>
-            <div className="flex flex-col border-r border-gold-dim/30 pr-3 justify-center">
+            <div className="flex  flex-col border-r border-gold-dim/30 pr-3 justify-center">
                 <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.skyLabel}</span>
                 <span className="text-parchment font-serif text-sm font-bold leading-tight">{displayDesc}</span>
                 {civilization === 'hellas' && greekDescription && (
                     <div className="flex flex-col mb-1">
-                        <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase text-gold-dim mt-0.5">{transliterateGreek(displayDesc)}</span>
+                        <span className="font-serif text-[9px] tracking-widest uppercase text-gold-dim mt-0.5">{transliterateGreek(displayDesc)}</span>
                         <span className="text-roman-red font-body italic text-[10px] font-bold uppercase mt-0.5 leading-none">{description}</span>
                     </div>
                 )}
@@ -126,7 +126,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                     </span>
                     {civilization === 'hellas' && greekWindName && (
                         <div className="flex flex-col items-center">
-                            <span className="font-serif text-[8px] opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(displayWind.split(' ')[0])}</span>
+                            <span className="font-serif text-[8px] tracking-widest uppercase text-gold-dim">{transliterateGreek(displayWind.split(' ')[0])}</span>
                             <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">{latinWindName.split(' ')[0]}</span>
                         </div>
                     )}

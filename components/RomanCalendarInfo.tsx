@@ -83,7 +83,7 @@ const RomanCalendarInfo: React.FC = () => {
                         {/* EPHEMERIDES */}
                         {getHistoricalEvents(new Date()).length > 0 && (
                             <div className="mt-4 pt-4 border-t border-gold-dim/30 w-full animate-fadeIn">
-                                <div className="text-parchment/60 text-[10px] uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
+                                <div className="text-parchment/90 text-[10px] uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
                                     <span>📜</span> {labels.calendarInfoTitle} <span>📜</span>
                                 </div>
                                 <ul className="space-y-3">

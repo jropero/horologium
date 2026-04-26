@@ -61,8 +61,8 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
         
         {/* Cabecera / Título */}
-        <div className="flex flex-col items-center justify-center mb-6 opacity-70">
-          <Feather className="text-gold-leaf/60 w-6 h-6 mb-2 group-hover:rotate-12 transition-transform" />
+        <div className="flex flex-col items-center justify-center mb-6">
+          <Feather className="text-gold-leaf/80 w-6 h-6 mb-2 group-hover:rotate-12 transition-transform" />
           <span className="font-serif text-xs md:text-sm uppercase tracking-[0.4em] text-gold-dim group-hover:text-gold-leaf transition-colors">
             {labels.quoteTitle}
           </span>
@@ -75,7 +75,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
             "{quoteText}"
           </p>
           {quoteTransliteration && (
-            <p className="font-serif text-sm md:text-base text-gold-dim/80 tracking-widest uppercase">
+            <p className="font-serif text-sm md:text-base text-gold-dim tracking-widest uppercase">
               {quoteTransliteration}
             </p>
           )}
@@ -91,14 +91,14 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         <div className="w-1/3 h-px bg-gradient-to-r from-transparent via-gold-dim/40 to-transparent mx-auto mb-6"></div>
 
         {/* Traducción / Fuente */}
-        <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="text-center group-hover:opacity-100 transition-opacity duration-500">
           {quoteTranslation && (
-            <p className="font-serif italic text-base md:text-lg text-parchment/70 max-w-lg mx-auto leading-relaxed">
+            <p className="font-serif italic text-base md:text-lg text-parchment/90 max-w-lg mx-auto leading-relaxed">
               {quoteTranslation}
             </p>
           )}
           {quoteSource && (
-            <p className="font-serif italic text-sm text-gold-dim/60 mt-2">
+            <p className="font-serif italic text-sm text-gold-dim/90 mt-2">
               — {quoteSource} —
             </p>
           )}

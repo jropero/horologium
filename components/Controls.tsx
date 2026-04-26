@@ -111,7 +111,7 @@ const handleGeolocation = async () => {
 
         {/* Header decoration */}
         <div className="flex flex-col items-center mb-8 relative z-10">
-          <div className="text-gold-leaf/40 mb-2">
+          <div className="text-gold-leaf/60 mb-2">
             <RefreshCw className="w-6 h-6" />
           </div>
           <h3 className="font-serif text-lg md:text-xl text-gold-leaf uppercase tracking-[0.4em] font-bold">
@@ -194,7 +194,7 @@ const handleGeolocation = async () => {
             </button>
         </div>
 
-        <div className="mt-8 text-center opacity-40">
+        <div className="mt-8 text-center">
             <p className="font-body italic text-sm text-parchment">
                 {labels.controlsFooter}
             </p>
