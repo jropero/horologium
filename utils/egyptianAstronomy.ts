@@ -47,3 +47,47 @@ export const getAlgolPhase = (date: Date): AlgolState => {
       : "El Ojo de Horus brilla con fuerza"
   };
 };
+
+export interface AlgolEclipse {
+  date: Date;
+  isPast: boolean;
+}
+
+/**
+ * Gets a list of past and future Algol eclipses relative to the given date.
+ */
+export const getAlgolEclipses = (currentDate: Date, pastCount: number, futureCount: number): AlgolEclipse[] => {
+  const DAY_MS = 1000 * 60 * 60 * 24;
+  const J1970 = 2440587.5;
+  const jdCurrent = currentDate.getTime() / DAY_MS + J1970;
+  
+  const T0 = 2440953.4657; 
+  const P = 2.867328;
+
+  const currentCycle = Math.floor((jdCurrent - T0) / P);
+  const eclipses: AlgolEclipse[] = [];
+
+  for (let i = currentCycle - pastCount + 1; i <= currentCycle + futureCount; i++) {
+    const eclipseJD = T0 + i * P;
+    const eclipseTime = (eclipseJD - J1970) * DAY_MS;
+    eclipses.push({
+      date: new Date(eclipseTime),
+      isPast: eclipseTime <= currentDate.getTime()
+    });
+  }
+
+  return eclipses;
+};
+
+export const isAlgolEclipsed = (date: Date): boolean => {
+  const DAY_MS = 1000 * 60 * 60 * 24;
+  const J1970 = 2440587.5;
+  const jd = date.getTime() / DAY_MS + J1970;
+  const T0 = 2440953.4657; 
+  const P = 2.867328;
+  const cycles = (jd - T0) / P;
+  let phase = cycles % 1;
+  if (phase < 0) phase += 1;
+  return phase >= 0.93 || phase <= 0.07;
+};
+

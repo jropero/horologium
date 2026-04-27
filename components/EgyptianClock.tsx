@@ -3,6 +3,7 @@ import { Eye, Star, Info } from 'lucide-react';
 import { RomanTimeData, WeatherData } from '../types';
 import EgyptianCalendarModal from './EgyptianCalendarModal';
 import WeatherModal from './WeatherModal';
+import HorusEclipseModal from './HorusEclipseModal';
 import { generateEgyptianSkyline } from '../utils/egyptianSkylineGenerator';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getEgyptianDate, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
@@ -32,6 +33,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   const { labels } = useCivilization();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
+  const [isHorusOpen, setIsHorusOpen] = useState(false);
 
   const stars = useMemo(() => {
     const starData = [];
@@ -197,7 +199,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
           <div
             onClick={() => setIsCalendarOpen(true)}
-            className="bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-emerald-500 transition-all group relative ml-auto"
+            className="calendar-header-widget bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-emerald-500 transition-all group relative ml-auto"
             title="Ver Calendario Egipcio"
           >
             <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
@@ -214,7 +216,11 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
               </span>
               <span className="text-gold-dim">•</span>
               <span 
-                className={`flex items-center gap-1.5 px-2 py-0.5 rounded border transition-all duration-700 ${
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsHorusOpen(true);
+                }}
+                className={`flex items-center gap-1.5 px-2 py-0.5 rounded border transition-all duration-700 cursor-pointer hover:scale-105 ${
                   algol.isEclipsed 
                     ? 'bg-roman-red/10 border-roman-red/30 text-roman-red opacity-70' 
                     : 'bg-gold-leaf/10 border-gold-leaf/30 text-gold-leaf drop-shadow-[0_0_5px_rgba(207,181,59,0.4)]'
@@ -436,15 +442,15 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
           </div>
 
           <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-ink mb-3 uppercase tracking-wide drop-shadow-sm flex items-center justify-center gap-4">
+            <h2 className="responsive-wrap text-2xl xs:text-3xl md:text-5xl font-serif font-bold text-ink mb-3 uppercase tracking-wide drop-shadow-sm items-center justify-center gap-2 xs:gap-4">
               <span>Hora {romanTime.romanHour}</span>
               {egyptianDateInfo.currentPrognosis !== 'none' && (
-                <div className={`text-[10px] md:text-xs px-2 py-1 rounded-full border flex items-center gap-1.5 shadow-sm transition-all animate-fadeIn
+                <div className={`text-[9px] xs:text-[10px] md:text-xs px-2 py-1 rounded-full border flex items-center gap-1.5 shadow-sm transition-all animate-fadeIn
                   ${egyptianDateInfo.currentPrognosis === 'nefer' 
                     ? 'bg-emerald-100 text-emerald-700 border-emerald-300' 
                     : 'bg-red-100 text-roman-red border-roman-red/30'}`}
                 >
-                  <span className="text-sm">{egyptianDateInfo.currentPrognosis === 'nefer' ? '☀️' : '🦂'}</span>
+                  <span className="text-xs xs:text-sm">{egyptianDateInfo.currentPrognosis === 'nefer' ? '☀️' : '🦂'}</span>
                   <span className="font-bold uppercase tracking-widest">
                     {egyptianDateInfo.currentPrognosis === 'nefer' ? 'Nefer' : 'Aha'}
                   </span>
@@ -463,7 +469,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
             ) : (
               <div className="flex flex-col gap-2 w-full max-w-sm mx-auto mb-6 px-2">
                 {/* Estación (3) */}
-                <div className="flex items-center gap-3">
+                <div className="responsive-wrap items-center gap-3">
                   <span className="text-[9px] uppercase tracking-widest text-emerald-700 font-bold w-14 text-right">Estación</span>
                   <div className="flex flex-1 gap-1">
                     {[0, 1, 2].map(s => {
@@ -481,7 +487,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                 </div>
 
                 {/* Mes (4) */}
-                <div className="flex items-center gap-3">
+                <div className="responsive-wrap items-center gap-3">
                   <span className="text-[9px] uppercase tracking-widest text-emerald-700 font-bold w-14 text-right">Mes</span>
                   <div className="flex flex-1 gap-1">
                     {[1, 2, 3, 4].map(m => {
@@ -499,7 +505,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                 </div>
 
                 {/* Década (3) */}
-                <div className="flex items-center gap-3">
+                <div className="responsive-wrap items-center gap-3">
                   <span className="text-[9px] uppercase tracking-widest text-emerald-700 font-bold w-14 text-right">Década</span>
                   <div className="flex flex-1 gap-1">
                     {[1, 2, 3].map(d => {
@@ -532,11 +538,11 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                 )}
               </div>
 
-              <div className="text-base font-serif text-ink mt-3 mb-3 bg-emerald-500/10 px-8 py-2.5 rounded-lg border border-emerald-500/30 shadow-sm flex flex-col items-center min-w-[250px]">
-                <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-1">{labels.civilDayPartLabel}</div>
-                <div className="flex flex-col items-center">
-                  <span className="font-bold text-ink text-lg">{romanTime.civilDayPart.name}</span>
-                  <span className="text-sm font-bold italic text-emerald-600 mt-1">{romanTime.civilDayPart.desc}</span>
+              <div className="text-sm md:text-base font-serif text-ink mt-3 mb-3 bg-emerald-500/10 px-3 md:px-8 py-2.5 rounded-lg border border-emerald-500/30 shadow-sm flex flex-col items-center w-full max-w-[260px] mx-auto">
+                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-1">{labels.civilDayPartLabel}</div>
+                <div className="flex flex-col items-center text-center px-1">
+                  <span className="font-bold text-ink text-base md:text-lg leading-tight">{romanTime.civilDayPart.name}</span>
+                  <span className="text-[11px] md:text-sm font-bold italic text-emerald-600 mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
                 </div>
               </div>
 
@@ -573,6 +579,12 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
         onUpdateLocation={onUpdateLocation}
         currentLat={currentLat}
         currentLng={currentLng}
+      />
+
+      <HorusEclipseModal
+        isOpen={isHorusOpen}
+        onClose={() => setIsHorusOpen(false)}
+        currentDate={modernTime}
       />
     </>
   );

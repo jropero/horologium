@@ -85,9 +85,8 @@ export const getHemerologyForDate = (monthIndex: number, dayOfMonth: number): Da
   const p3 = hash(seed + 2);
 
   const getPrognosis = (val: number): Prognosis => {
-    if (val > 0.6) return 'nefer';
-    if (val > 0.2) return 'aha';
-    return 'nefer'; // Mayoría Nefer para que no sea tan pesimista
+    if (val > 0.2) return 'nefer';
+    return 'aha'; // 20% de probabilidad de Aha
   };
 
   return {

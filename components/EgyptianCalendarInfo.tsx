@@ -63,7 +63,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
     const isNone = prognosis === 'none';
 
     return (
-      <div className={`flex-1 p-3 rounded border transition-all flex flex-col items-center gap-1
+      <div className={`flex-1 min-w-[100px] p-3 rounded border transition-all flex flex-col items-center gap-1
         ${isNefer ? 'bg-emerald-900/30 text-emerald-400 border-emerald-500/50' :
           isAha ? 'bg-roman-red/20 text-parchment border-roman-red/50' :
             'bg-ink/40 text-gold-dim/40 border-gold-dim/20 opacity-50'}`}
@@ -170,7 +170,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
           {/* HEMEROLOGY SECTION */}
           <div className="w-full flex flex-col gap-3">
             <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim font-bold">Pronóstico del Día (Hemerología)</h3>
-            <div className="flex gap-2 w-full">
+            <div className="responsive-wrap gap-2 w-full">
               <PrognosisBlock title="Mañana" prognosis={hemerology.morning} />
               <PrognosisBlock title="Mediodía" prognosis={hemerology.midday} />
               <PrognosisBlock title="Tarde" prognosis={hemerology.evening} />
