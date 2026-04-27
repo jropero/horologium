@@ -357,14 +357,14 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                       key={el.id}
                       d={el.path}
                       fill="var(--ink)"
-                      stroke="var(--emerald-500)"
+                      stroke="#10b981"
                       strokeWidth="0.5"
                       opacity={el.opacity}
                     />
                   ))}
                 </g>
                 <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="var(--ink)" />
-                <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="var(--ink)" stroke="var(--emerald-500)" strokeWidth="1" />
+                <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="var(--ink)" stroke="#10b981" strokeWidth="1" />
 
                 <defs>
                   <clipPath id="upper-vessel-clip"><path d="M 136 135 L 146 155 L 154 155 L 164 135 Z" /></clipPath>
