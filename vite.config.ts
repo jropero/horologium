@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        allowedHosts: true,
       },
       plugins: [
         react(),
@@ -26,7 +27,7 @@ export default defineConfig(({ mode }) => {
             display: 'standalone',
             icons: [
               {
-                src: '/assets/horologium-icon.png',
+                src: 'assets/horologium-icon.png',
                 sizes: '512x512',
                 type: 'image/png',
                 purpose: 'any maskable'
