@@ -193,7 +193,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
 
           <div
             onClick={() => setIsCalendarOpen(true)}
-            className="bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-gold-leaf transition-all group relative"
+            className="calendar-header-widget bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-gold-leaf transition-all group relative"
             title="Ver Calendario"
           >
             {civilization === 'rome' ? (
@@ -482,7 +482,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
           </div>
 
           <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-ink mb-1 uppercase tracking-wide drop-shadow-sm">
+            <h2 className="responsive-wrap text-2xl xs:text-3xl md:text-5xl font-serif font-bold text-ink mb-1 uppercase tracking-wide drop-shadow-sm items-center justify-center gap-2">
               {romanTime.hourName}
             </h2>
             {civilization === 'hellas' && (
@@ -505,18 +505,18 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 )}
               </div>
 
-              <div className="text-base font-serif text-ink mt-3 mb-3 bg-gold-dim/10 px-8 py-2.5 rounded-lg border border-gold-dim/30 shadow-sm flex flex-col items-center min-w-[250px]">
-                <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.civilDayPartLabel}</div>
+              <div className="text-sm md:text-base font-serif text-ink mt-3 mb-3 bg-gold-dim/10 px-3 md:px-8 py-2.5 rounded-lg border border-gold-dim/30 shadow-sm flex flex-col items-center w-full max-w-[260px] mx-auto">
+                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.civilDayPartLabel}</div>
                 {civilization === 'rome' ? (
-                  <div>
-                    <span className="font-bold text-ink">{romanTime.civilDayPart.name}</span>
-                    <span className="text-sm italic text-ink/70 ml-2">({romanTime.civilDayPart.desc})</span>
+                  <div className="flex flex-col items-center text-center px-1">
+                    <span className="font-bold text-ink leading-tight">{romanTime.civilDayPart.name}</span>
+                    <span className="text-[11px] md:text-sm italic text-ink/70 leading-snug">{romanTime.civilDayPart.desc}</span>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center">
-                    <span className="font-bold text-ink text-lg">{romanTime.civilDayPart.name}</span>
-                    <span className="font-serif text-[10px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.civilDayPart.name)}</span>
-                    <span className="text-sm font-bold italic text-roman-red mt-1">{romanTime.civilDayPart.desc}</span>
+                  <div className="flex flex-col items-center text-center px-1">
+                    <span className="font-bold text-ink text-base md:text-lg leading-tight">{romanTime.civilDayPart.name}</span>
+                    <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.civilDayPart.name)}</span>
+                    <span className="text-[11px] md:text-sm font-bold italic text-roman-red mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
                   </div>
                 )}
               </div>

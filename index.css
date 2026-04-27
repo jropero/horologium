@@ -199,3 +199,49 @@
   font-style: italic;
   font-display: swap;
 }
+
+/* Responsive Fixes for Small Screens */
+@media (max-width: 375px) {
+  .calendar-header-widget div {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.25rem !important;
+    text-align: center;
+  }
+  
+  .calendar-header-widget {
+    padding: 0.5rem !important;
+  }
+
+  .calendar-header-widget .flex {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+}
+
+.responsive-wrap {
+  display: flex;
+}
+
+@media (max-width: 375px) {
+  .responsive-wrap {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    text-align: center;
+    gap: 0.5rem !important;
+  }
+}
+
+.mobile-fit-content {
+  width: auto;
+}
+
+@media (max-width: 375px) {
+  .mobile-fit-content {
+    width: fit-content !important;
+    min-width: 0 !important;
+    white-space: nowrap;
+    font-size: 8px !important;
+  }
+}
+
