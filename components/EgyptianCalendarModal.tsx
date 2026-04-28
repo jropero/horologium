@@ -118,8 +118,8 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                       <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
                         {day.egyptianDate.isEpagomenal ? 'Epagomenai' : day.egyptianDate.monthName}
                       </span>
-                      <span className="text-gold-dim font-serif text-[10px] uppercase tracking-widest mt-0.5 font-bold">
-                        {day.egyptianDate.monthGreekName}
+                      <span className="text-gold-leaf/80 font-serif text-base uppercase tracking-widest mt-0.5 font-bold drop-shadow-sm">
+                        {day.egyptianDate.monthHieroglyphs}
                       </span>
                       {season && (
                         <span className="text-parchment/80 font-body text-[11px] italic mt-0.5">

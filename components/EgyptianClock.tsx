@@ -203,9 +203,9 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
             title="Ver Calendario Egipcio"
           >
             <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
-              <span className="text-lg">{egyptianDateInfo.eDate.seasonHieroglyphic}</span>
+              <span className="text-2xl drop-shadow-[0_0_3px_rgba(207,181,59,0.4)]">{egyptianDateInfo.eDate.seasonHieroglyphic}</span>
               <span className="text-gold-dim/40 text-xs">|</span>
-              <span>{egyptianDateInfo.eDate.monthName} {egyptianDateInfo.eDate.dayOfMonth}</span>
+              <span className="text-gold-leaf">{egyptianDateInfo.eDate.monthName} {egyptianDateInfo.eDate.dayOfMonth}</span>
             </div>
             <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{formatEgyptianDate(egyptianDateInfo.eDate)}</div>
             <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
@@ -231,8 +231,9 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                 <span className="text-[10px] font-bold uppercase tracking-wider">Horus</span>
               </span>
             </div>
-            <div className="flex items-center gap-2 justify-center md:justify-end text-gold-dim font-serif text-xs mt-2 font-bold">
-              <span>{egyptianDateInfo.deity.deity} {egyptianDateInfo.deity.deityHieroglyphic}</span>
+            <div className="flex items-center gap-2 justify-center md:justify-end text-gold-leaf font-serif text-xs mt-2 font-bold drop-shadow-sm">
+              <span>{egyptianDateInfo.deity.deity}</span>
+              <span className="text-lg drop-shadow-[0_0_2px_rgba(207,181,59,0.3)]">{egyptianDateInfo.deity.deityHieroglyphic}</span>
             </div>
           </div>
         </div>
