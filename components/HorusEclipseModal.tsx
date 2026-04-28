@@ -32,7 +32,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
       while (results.length < count && safety < 100) {
         safety++;
         const eDate = getEgyptianDate(checkDate);
-        const hem = getHemerologyForDate(eDate.monthIndex, eDate.dayOfMonth);
+        const hem = getHemerologyForDate(checkDate, eDate.monthIndex, eDate.dayOfMonth);
 
         if (hem.morning === 'nefer' && hem.midday === 'nefer' && hem.evening === 'nefer') {
           // Día excepcionalmente bueno
