@@ -57,13 +57,10 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
       return results;
     };
 
-    const pastBad = getAlgolEclipses(currentDate, 3, 0).map(e => ({ ...e, type: 'bad' as const }));
-    const futureBad = getAlgolEclipses(currentDate, 0, 3).filter(e => !e.isPast).map(e => ({ ...e, type: 'bad' as const }));
+    const futureBad = getAlgolEclipses(currentDate, 0, 5).filter(e => e.date.getTime() > currentDate.getTime()).map(e => ({ ...e, type: 'bad' as const }));
+    const futureGood = findGoodDays(currentDate, 5, 'forward');
 
-    const pastGood = findGoodDays(currentDate, 3, 'back');
-    const futureGood = findGoodDays(currentDate, 3, 'forward');
-
-    const all = [...pastBad, ...futureBad, ...pastGood, ...futureGood] as ExceptionalDay[];
+    const all = [...futureBad, ...futureGood] as ExceptionalDay[];
 
     return all.sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [currentDate, isOpen]);
@@ -84,7 +81,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
           <div className="flex items-center gap-3 text-gold-leaf">
             <Eye className="w-6 h-6" />
             <h2 className="font-serif text-xl font-bold uppercase tracking-widest">
-              Horus
+              Próximos Eventos de Horus
             </h2>
           </div>
           <button
@@ -108,8 +105,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${day.isPast ? 'opacity-60' : ''
-                    } ${isBad
+                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${isBad
                       ? 'border-roman-red/50 bg-roman-red/10 shadow-[0_0_10px_rgba(220,38,38,0.1)]'
                       : 'border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
                     }`}
@@ -131,9 +127,6 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
                           {isBad ? <Eye className="w-3 h-3" /> : <Sun className="w-3 h-3" />}
                           {isBad ? 'Eclipse Nefasto' : 'Suerte Suprema'}
                         </div>
-                        <span className="text-[9px] uppercase tracking-tighter text-gold-dim font-bold">
-                          {day.isPast ? 'Pasado' : 'Próximo'}
-                        </span>
                       </div>
                     </div>
 
