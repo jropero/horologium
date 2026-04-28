@@ -55,7 +55,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
     </div>
   );
 
-  const hemerology = getHemerologyForDate(egyptianDate.monthIndex, egyptianDate.dayOfMonth);
+  const hemerology = getHemerologyForDate(new Date(), egyptianDate.monthIndex, egyptianDate.dayOfMonth);
 
   const PrognosisBlock = ({ title, prognosis }: { title: string, prognosis: Prognosis }) => {
     const isNefer = prognosis === 'nefer';

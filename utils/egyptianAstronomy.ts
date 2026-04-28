@@ -1,6 +1,4 @@
-// egyptianAstronomy.ts — Egyptian Archaeoastronomy
-// Based on PLOS ONE (2015): "Did the Ancient Egyptians Record the Period of the Eclipsing Binary Algol?"
-// Updated with precise modern ephemeris for accurate real-time prediction.
+import { getMoonPhase } from './solar';
 
 export interface AlgolState {
   phase: number;
@@ -11,8 +9,8 @@ export interface AlgolState {
 /**
  * Calculates the phase of Algol based on the astronomical ephemeris.
  * While the Egyptians recorded a period of 2.85 days, the true modern period
- * is 2.867328 days. We use the real period and a known epoch (T0) to calculate 
- * the exact position today.
+ * is 2.867328 days. We use the real period and a known modern epoch (T0) 
+ * to calculate the exact position today.
  */
 export const getAlgolPhase = (date: Date): AlgolState => {
   // Convert standard date to Julian Date
@@ -20,9 +18,9 @@ export const getAlgolPhase = (date: Date): AlgolState => {
   const J1970 = 2440587.5;
   const jd = date.getTime() / DAY_MS + J1970;
 
-  // Astronomical Ephemeris for Algol (Beta Persei)
-  // T0: Known epoch of primary minimum in Julian Date (e.g., JD 2440953.4657)
-  const T0 = 2440953.4657; 
+  // Modern Astronomical Ephemeris for Algol (Beta Persei)
+  // T0: Known modern epoch of primary minimum (JD 2452253.567)
+  const T0 = 2452253.567; 
   // P: Orbital period in days
   const P = 2.867328;
 
@@ -33,11 +31,10 @@ export const getAlgolPhase = (date: Date): AlgolState => {
   let phase = cycles % 1;
   if (phase < 0) phase += 1;
 
-  // Algol's primary eclipse (minimum brightness) lasts about 9.6 hours.
-  // In a 2.867 day cycle, 9.6 hours is approximately 14% of the cycle.
-  // The minimum occurs precisely at phase 0.0. 
-  // We define the eclipse window as +/- 7% from phase 0.0.
-  const isEclipsed = phase >= 0.93 || phase <= 0.07;
+  // Algol's primary eclipse lasts approx. 9.6 hours.
+  // We use a 15% window for the "danger zone" (primary minimum).
+  // The minimum occurs at phase 0.0.
+  const isEclipsed = phase >= 0.925 || phase <= 0.075;
 
   return {
     phase,
@@ -46,6 +43,13 @@ export const getAlgolPhase = (date: Date): AlgolState => {
       ? "El Ojo de Horus se oscurece (Mínimo estelar)" 
       : "El Ojo de Horus brilla con fuerza"
   };
+};
+
+/**
+ * Wrapper for solar moon phase, exported for Egyptian context.
+ */
+export const getLunarPhase = (date: Date): number => {
+  return getMoonPhase(date);
 };
 
 export interface AlgolEclipse {
@@ -61,7 +65,7 @@ export const getAlgolEclipses = (currentDate: Date, pastCount: number, futureCou
   const J1970 = 2440587.5;
   const jdCurrent = currentDate.getTime() / DAY_MS + J1970;
   
-  const T0 = 2440953.4657; 
+  const T0 = 2452253.567; 
   const P = 2.867328;
 
   const currentCycle = Math.floor((jdCurrent - T0) / P);
@@ -83,11 +87,11 @@ export const isAlgolEclipsed = (date: Date): boolean => {
   const DAY_MS = 1000 * 60 * 60 * 24;
   const J1970 = 2440587.5;
   const jd = date.getTime() / DAY_MS + J1970;
-  const T0 = 2440953.4657; 
+  const T0 = 2452253.567; 
   const P = 2.867328;
   const cycles = (jd - T0) / P;
   let phase = cycles % 1;
   if (phase < 0) phase += 1;
-  return phase >= 0.93 || phase <= 0.07;
+  return phase >= 0.925 || phase <= 0.075;
 };
 

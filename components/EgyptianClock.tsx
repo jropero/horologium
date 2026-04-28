@@ -57,7 +57,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   const egyptianDateInfo = useMemo(() => {
     const eDate = getEgyptianDate(modernTime);
     const deity = getEgyptianMonthDeity(eDate.monthIndex);
-    const hemerology = getHemerologyForDate(eDate.monthIndex, eDate.dayOfMonth);
+    const hemerology = getHemerologyForDate(modernTime, eDate.monthIndex, eDate.dayOfMonth);
 
     // Determinar en qué tercio del día estamos para el chip
     let currentPrognosis: Prognosis = 'none';
