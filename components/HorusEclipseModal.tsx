@@ -24,7 +24,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
       const results: ExceptionalDay[] = [];
       const dayOffset = direction === 'back' ? -1 : 1;
       let checkDate = new Date(start);
-      
+
       // Ajustar para empezar desde el día anterior/siguiente si buscamos pasado/futuro
       checkDate.setDate(checkDate.getDate() + dayOffset);
 
@@ -33,12 +33,12 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
         safety++;
         const eDate = getEgyptianDate(checkDate);
         const hem = getHemerologyForDate(eDate.monthIndex, eDate.dayOfMonth);
-        
+
         if (hem.morning === 'nefer' && hem.midday === 'nefer' && hem.evening === 'nefer') {
           // Día excepcionalmente bueno
           // Solo si no hay eclipse de Algol en TODO el día
           const eclipsesNear = getAlgolEclipses(checkDate, 1, 1);
-          const hasEclipseThatDay = eclipsesNear.some(e => 
+          const hasEclipseThatDay = eclipsesNear.some(e =>
             e.date.getFullYear() === checkDate.getFullYear() &&
             e.date.getMonth() === checkDate.getMonth() &&
             e.date.getDate() === checkDate.getDate()
@@ -59,12 +59,12 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
 
     const pastBad = getAlgolEclipses(currentDate, 3, 0).map(e => ({ ...e, type: 'bad' as const }));
     const futureBad = getAlgolEclipses(currentDate, 0, 3).filter(e => !e.isPast).map(e => ({ ...e, type: 'bad' as const }));
-    
+
     const pastGood = findGoodDays(currentDate, 3, 'back');
     const futureGood = findGoodDays(currentDate, 3, 'forward');
 
     const all = [...pastBad, ...futureBad, ...pastGood, ...futureGood] as ExceptionalDay[];
-    
+
     return all.sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [currentDate, isOpen]);
 
@@ -84,7 +84,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
           <div className="flex items-center gap-3 text-gold-leaf">
             <Eye className="w-6 h-6" />
             <h2 className="font-serif text-xl font-bold uppercase tracking-widest">
-              Días Excepcionales de Horus
+              Horus
             </h2>
           </div>
           <button
@@ -96,12 +96,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
           </button>
         </div>
 
-        {/* Info */}
-        <div className="p-4 bg-ink border-b border-gold-dim/20 text-center">
-          <p className="font-serif text-sm text-parchment italic opacity-90">
-            Mostrando los momentos de infortunio máximo (eclipses de Algol) y de suerte suprema (días de triple sol Nefer) en torno a la fecha actual.
-          </p>
-        </div>
+
 
         {/* List */}
         <div className="overflow-y-auto p-4 space-y-3 custom-scrollbar bg-ink/5">
@@ -109,17 +104,15 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
             {exceptionalDays.map((day, idx) => {
               const eDate = getEgyptianDate(day.date);
               const isBad = day.type === 'bad';
-              
+
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${
-                    day.isPast ? 'opacity-60' : ''
-                  } ${
-                    isBad
+                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${day.isPast ? 'opacity-60' : ''
+                    } ${isBad
                       ? 'border-roman-red/50 bg-roman-red/10 shadow-[0_0_10px_rgba(220,38,38,0.1)]'
                       : 'border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
-                  }`}
+                    }`}
                 >
                   <div className="flex-1 flex flex-col">
                     <div className="flex justify-between items-start gap-2">
@@ -131,11 +124,10 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
                           {eDate.isEpagomenal ? `Epagomenai ${eDate.dayOfMonth}` : `${eDate.dayOfMonth} de ${eDate.monthName}`}
                         </span>
                       </div>
-                      
+
                       <div className="flex flex-col items-end gap-1">
-                        <div className={`mobile-fit-content flex items-center gap-1.5 px-2 py-0.5 rounded-sm border text-[10px] font-black uppercase tracking-widest ${
-                          isBad ? 'border-roman-red/50 text-roman-red bg-roman-red/20' : 'border-emerald-500/50 text-emerald-400 bg-emerald-500/20'
-                        }`}>
+                        <div className={`mobile-fit-content flex items-center gap-1.5 px-2 py-0.5 rounded-sm border text-[10px] font-black uppercase tracking-widest ${isBad ? 'border-roman-red/50 text-roman-red bg-roman-red/20' : 'border-emerald-500/50 text-emerald-400 bg-emerald-500/20'
+                          }`}>
                           {isBad ? <Eye className="w-3 h-3" /> : <Sun className="w-3 h-3" />}
                           {isBad ? 'Eclipse Nefasto' : 'Suerte Suprema'}
                         </div>
@@ -144,7 +136,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 mt-3 pt-2 border-t border-gold-dim/10">
                       <div className="text-[10px] text-parchment/60 font-serif uppercase tracking-widest">Pronóstico:</div>
                       <div className="flex gap-1">

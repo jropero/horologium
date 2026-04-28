@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
         react(),
         VitePWA({
           registerType: 'autoUpdate',
+          manifestFilename: 'manifest.json',
           includeAssets: ['assets/**', 'favicon.ico', 'apple-touch-icon.png', 'manifest.json'],
           manifest: {
             name: 'Horologium Romanum',
@@ -35,7 +36,9 @@ export default defineConfig(({ mode }) => {
             ]
           },
           workbox: {
-            globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,ttf,eot}'],
+            globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,ttf,eot,json}'],
+            navigateFallback: 'index.html',
+            navigateFallbackDenylist: [/^\/api/],
             runtimeCaching: [
               {
                 urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

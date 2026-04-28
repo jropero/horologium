@@ -3,7 +3,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
-import { getEgyptianMonthDeity, getEpagomenalDayInfo, getEgyptianFestivalInfo } from '../utils/egyptianCalendarData';
+import { getEgyptianMonthDeity, getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
+import { getFestivalsForDate, Festival } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egyptianHemerologyData';
 import { getAlgolPhase } from '../utils/egyptianAstronomy';
 import { getMoonPhase } from '../utils/solar';
@@ -25,7 +26,6 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
   const deity = getEgyptianMonthDeity(egyptianDate.monthIndex);
   const epagomenalInfo = egyptianDate.isEpagomenal ? getEpagomenalDayInfo(egyptianDate.dayOfMonth) : null;
-  const festival = !egyptianDate.isEpagomenal ? getEgyptianFestivalInfo(egyptianDate.monthIndex, egyptianDate.dayOfMonth) : null;
 
   // Decades visualization: 3 groups of 10 days
   const decade1 = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -84,6 +84,10 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
   const algol = getAlgolPhase(new Date());
   const moonPhase = getMoonPhase(new Date());
+  const lunarDay = Math.floor(moonPhase * 30) + 1;
+
+  // Get festivals from the new definitive database
+  const { civilFestivals, lunarFestivals } = getFestivalsForDate(egyptianDate.monthIndex, egyptianDate.dayOfMonth, lunarDay);
 
   const isNewMoon = moonPhase < 0.03 || moonPhase > 0.97;
   const isFullMoon = moonPhase > 0.47 && moonPhase < 0.53;
@@ -150,7 +154,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
                 {formatEgyptianDate(egyptianDate)}
               </h2>
               <p className="font-serif text-sm text-gold-leaf font-bold italic px-2 mt-2">
-                Día {egyptianDate.dayOfYear} del año alejandrino
+                Día {egyptianDate.dayOfYear} del año alejandrino • Día Lunar {lunarDay}
               </p>
             </div>
           )}
@@ -205,17 +209,39 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             )}
           </div>
 
-          {/* FESTIVAL */}
-          {festival && (
-            <div className="w-full bg-emerald-500/5 p-4 rounded-lg border-2 border-emerald-500/30">
-              <div className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-1">
-                𓊹 {festival.festivalName} 𓊹
+          {/* FESTIVALS LIST */}
+          {(civilFestivals.length > 0 || lunarFestivals.length > 0) && (
+            <div className="w-full flex flex-col gap-3">
+              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim font-bold">Festividades del Día</h3>
+              <div className="flex flex-col gap-3">
+                {civilFestivals.map((f, i) => (
+                  <div key={`civil-${i}`} className="w-full bg-emerald-500/5 p-4 rounded-lg border-2 border-emerald-500/30 text-left">
+                    <div className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1 flex justify-between items-center">
+                      <span>𓊹 Festival Civil 𓊹</span>
+                      <span className="text-gold-dim/60">Fijo</span>
+                    </div>
+                    <div className="text-parchment font-serif font-bold text-base mb-1">{f.name}</div>
+                    <p className="font-serif text-xs text-parchment/80 italic leading-relaxed">
+                      {f.description}
+                    </p>
+                  </div>
+                ))}
+                {lunarFestivals.map((f, i) => (
+                  <div key={`lunar-${i}`} className="w-full bg-gold-leaf/5 p-4 rounded-lg border-2 border-gold-leaf/30 text-left">
+                    <div className="text-gold-leaf text-[10px] font-bold uppercase tracking-widest mb-1 flex justify-between items-center">
+                      <span>𓊹 Festival Lunar 𓊹</span>
+                      <span className="text-gold-dim/60">Día {lunarDay}</span>
+                    </div>
+                    <div className="text-parchment font-serif font-bold text-base mb-1">{f.name}</div>
+                    <p className="font-serif text-xs text-parchment/80 italic leading-relaxed">
+                      {f.description}
+                    </p>
+                  </div>
+                ))}
               </div>
-              <p className="font-serif text-sm text-parchment/90 italic">
-                "{festival.description}"
-              </p>
             </div>
           )}
+
 
           {/* DEITY OF THE MONTH */}
           <div className="flex flex-col items-center gap-2 w-full bg-gold-leaf/5 p-5 rounded-lg border-2 border-gold-leaf/20 transition-all shadow-sm group-hover:bg-gold-leaf/10">
