@@ -197,3 +197,64 @@ export function getFestivalsForDate(monthIndex: number, dayOfMonth: number, luna
 
   return { civilFestivals, lunarFestivals };
 }
+
+/**
+ * Encuentra los próximos N festivales civiles fijos a partir de una fecha.
+ */
+export function getNextEgyptianFestivals(monthIndex: number, dayOfMonth: number, count: number = 3): (Festival & { date: string, daysRemaining: number })[] {
+  const results: (Festival & { date: string, daysRemaining: number })[] = [];
+  let currentMonth = monthIndex;
+  let currentDay = dayOfMonth + 1; // Empezamos a buscar desde mañana
+
+  // Iteramos hasta 365 días para cubrir todo el año
+  for (let i = 0; i < 365 && results.length < count; i++) {
+    const daysFromNow = i + 1;
+    if (currentMonth === -1) {
+      // Epagómenos
+      if (currentDay > 5) {
+        currentMonth = 0;
+        currentDay = 1;
+      }
+    } else {
+      if (currentDay > 30) {
+        currentMonth++;
+        currentDay = 1;
+        if (currentMonth > 11) {
+          currentMonth = -1; // Entramos en epagómenos
+        }
+      }
+    }
+
+    const key = currentMonth === -1 ? `e-${currentDay}` : `${currentMonth}-${currentDay}`;
+    if (CIVIL_FESTIVALS[key]) {
+      const monthName = currentMonth === -1 ? "Epagomenai" : ["Thoth", "Phaophi", "Athyr", "Choiak", "Tybi", "Mechir", "Phamenoth", "Pharmuthi", "Pachon", "Payni", "Epiphi", "Mesore"][currentMonth];
+      results.push({
+        ...CIVIL_FESTIVALS[key],
+        date: `${currentDay} de ${monthName}`,
+        daysRemaining: daysFromNow
+      });
+    }
+
+    // Casos especiales (Opet, Khoiak, etc.) - Solo el primer día del rango para no saturar
+    if (currentMonth === 1 && currentDay === 15) {
+      results.push({ 
+        name: "Festival de Opet", 
+        description: "La estatua de Amón viajaba en barca desde Karnak al templo de Lúxor para renovar la fuerza divina del Faraón.", 
+        date: "15 de Phaophi",
+        daysRemaining: daysFromNow
+      });
+    }
+    if (currentMonth === 3 && currentDay === 1) {
+      results.push({ 
+        name: "Festival de Khoiak (Ka-her-ka)", 
+        description: "Semana de misterios osiríacos. Se fabricaban figuras de limo y semillas ('Osiris germinantes') como símbolo de vida.", 
+        date: "1 de Choiak",
+        daysRemaining: daysFromNow
+      });
+    }
+
+    currentDay++;
+  }
+
+  return results.slice(0, count);
+}

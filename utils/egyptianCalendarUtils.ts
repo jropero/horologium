@@ -45,7 +45,7 @@ export interface EgyptianSeason {
 
 export interface EgyptianMonth {
   name: string;
-  greekName: string;
+  monthHieroglyphs: string;
   seasonIndex: number; // 0 = Akhet, 1 = Peret, 2 = Shemu
   monthInSeason: number; // 1-4 dentro de la estación
 }
@@ -59,8 +59,8 @@ export interface EgyptianDateResult {
   seasonTranslation: string;
   /** Nombre del mes (Thoth, Phaophi, etc.) o 'Epagomenai' */
   monthName: string;
-  /** Nombre griego del mes */
-  monthGreekName: string;
+  /** Jeroglíficos del mes */
+  monthHieroglyphs: string;
   /** Día del mes (1-30) o día epagómeno (1-5/6) */
   dayOfMonth: number;
   /** Día del año alejandrino (1-365 o 1-366) */
@@ -103,18 +103,18 @@ export const EGYPTIAN_SEASONS: EgyptianSeason[] = [
 // --- Datos de los 12 meses ---
 
 export const EGYPTIAN_MONTHS: EgyptianMonth[] = [
-  { name: 'Thoth',     greekName: '𓅟𓏏𓏭𓀭𓏊𓇳',       seasonIndex: 0, monthInSeason: 1 },
-  { name: 'Phaophi',   greekName: '𓊪𓈖𓇋𓊪𓏏𓏤',     seasonIndex: 0, monthInSeason: 2 },
-  { name: 'Athyr',     greekName: '𓉗𓏏𓉐𓅃𓂋𓆗',      seasonIndex: 0, monthInSeason: 3 },
-  { name: 'Choiak',    greekName: '𓂓𓅃𓎡𓏤𓂓',     seasonIndex: 0, monthInSeason: 4 },
-  { name: 'Tybi',      greekName: '𓏏𓄿𓂝𓃀𓏏𓏴𓏊𓇳',      seasonIndex: 1, monthInSeason: 1 },
-  { name: 'Mechir',    greekName: '𓊪𓈖𓅯𓄿𓅓𓂝𓐍𓏭𓂋𓏤𓏤',     seasonIndex: 1, monthInSeason: 2 },
-  { name: 'Phamenoth', greekName: '𓊪𓈖𓇋𓏠𓈖𓀭𓊵𓏏𓊪𓀭',   seasonIndex: 1, monthInSeason: 3 },
-  { name: 'Pharmuthi', greekName: '𓊪𓈖𓂋𓈖𓈖𓅱𓏏𓏏',  seasonIndex: 1, monthInSeason: 4 },
-  { name: 'Pachon',    greekName: '𓊪𓈖𓐍𓈖𓋴𓅱',      seasonIndex: 2, monthInSeason: 1 },
-  { name: 'Payni',     greekName: '𓊪𓈖𓇋𓈖𓏏',     seasonIndex: 2, monthInSeason: 2 },
-  { name: 'Epiphi',    greekName: '𓇋𓊪𓇋𓇋𓊪𓇋',     seasonIndex: 2, monthInSeason: 3 },
-  { name: 'Mesore',    greekName: '𓄟𓋴𓅱𓏏𓂋𓇳𓀭',    seasonIndex: 2, monthInSeason: 4 },
+  { name: 'Thoth',     monthHieroglyphs: '𓅟𓏏𓏭𓀭𓏊𓇳',       seasonIndex: 0, monthInSeason: 1 },
+  { name: 'Phaophi',   monthHieroglyphs: '𓊪𓈖𓇋𓊪𓏏𓏤',     seasonIndex: 0, monthInSeason: 2 },
+  { name: 'Athyr',     monthHieroglyphs: '𓉗𓏏𓉐𓅃𓂋𓆗',      seasonIndex: 0, monthInSeason: 3 },
+  { name: 'Choiak',    monthHieroglyphs: '𓂓𓅃𓎡𓏤𓂓',     seasonIndex: 0, monthInSeason: 4 },
+  { name: 'Tybi',      monthHieroglyphs: '𓏏𓄿𓂝𓃀𓏏𓏴𓏊𓇳',      seasonIndex: 1, monthInSeason: 1 },
+  { name: 'Mechir',    monthHieroglyphs: '𓊪𓈖𓅯𓄿𓅓𓂝𓐍𓏭𓂋𓏤𓏤',     seasonIndex: 1, monthInSeason: 2 },
+  { name: 'Phamenoth', monthHieroglyphs: '𓊪𓈖𓇋𓏠𓈖𓀭𓊵𓏏𓊪𓀭',   seasonIndex: 1, monthInSeason: 3 },
+  { name: 'Pharmuthi', monthHieroglyphs: '𓊪𓈖𓂋𓈖𓈖𓅱𓏏𓏏',  seasonIndex: 1, monthInSeason: 4 },
+  { name: 'Pachon',    monthHieroglyphs: '𓊪𓈖𓐍𓈖𓋴𓅱',      seasonIndex: 2, monthInSeason: 1 },
+  { name: 'Payni',     monthHieroglyphs: '𓊪𓈖𓇋𓈖𓏏',     seasonIndex: 2, monthInSeason: 2 },
+  { name: 'Epiphi',    monthHieroglyphs: '𓇋𓊪𓇋𓇋𓊪𓇋',     seasonIndex: 2, monthInSeason: 3 },
+  { name: 'Mesore',    monthHieroglyphs: '𓄟𓋴𓅱𓏏𓂋𓇳𓀭',    seasonIndex: 2, monthInSeason: 4 },
 ];
 
 // --- Funciones auxiliares ---
@@ -215,7 +215,7 @@ export const getEgyptianDate = (gregorianDate: Date): EgyptianDateResult => {
       seasonHieroglyphic: '𓇳𓏤𓏤𓏤𓏤𓏤',
       seasonTranslation: 'Días sobre el año',
       monthName: 'Epagomenai',
-      monthGreekName: '𓁷𓏤𓂋𓈖𓄿𓊪𓏏𓇳',
+      monthHieroglyphs: '𓁷𓏤𓂋𓈖𓄿𓊪𓏏𓇳',
       dayOfMonth: epagomenalDay,
       dayOfYear,
       decade: 0, // No aplica para días epagómenos
@@ -246,7 +246,7 @@ export const getEgyptianDate = (gregorianDate: Date): EgyptianDateResult => {
     seasonHieroglyphic: season.hieroglyphic,
     seasonTranslation: season.translation,
     monthName: month.name,
-    monthGreekName: month.greekName,
+    monthHieroglyphs: month.monthHieroglyphs,
     dayOfMonth,
     dayOfYear,
     decade,
@@ -267,5 +267,5 @@ export const formatEgyptianDate = (result: EgyptianDateResult): string => {
   if (result.isEpagomenal) {
     return `Día epagómeno ${result.dayOfMonth} — Epagomenai (${result.seasonTranslation})`;
   }
-  return `${result.dayOfMonth} de ${result.monthName} (${result.monthGreekName}), ${result.seasonName} ${result.seasonHieroglyphic} — Década ${result.decade}`;
+  return `${result.dayOfMonth} de ${result.monthName} (${result.monthHieroglyphs}), ${result.seasonName} ${result.seasonHieroglyphic} — Década ${result.decade}`;
 };

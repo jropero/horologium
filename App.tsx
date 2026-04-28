@@ -7,6 +7,7 @@ import SolarTimes from './components/SolarTimes';
 import { RomanTimeData } from './types';
 import { calculateRomanTime } from './utils/romanTimeUtils';
 import { calculateHellenicTime } from './utils/hellenicTimeUtils';
+import { calculateEgyptianTime } from './utils/egyptianTimeUtils';
 import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
@@ -85,7 +86,9 @@ const AppContent: React.FC = () => {
     const updateTime = () => {
       const data = civilization === 'rome'
         ? calculateRomanTime(modernTime, latitude, longitude)
-        : calculateHellenicTime(modernTime, latitude, longitude);
+        : civilization === 'hellas'
+          ? calculateHellenicTime(modernTime, latitude, longitude)
+          : calculateEgyptianTime(modernTime, latitude, longitude);
       setRomanTimeData(data);
 
       const sunTimes = getSunTimes(modernTime, latitude, longitude);

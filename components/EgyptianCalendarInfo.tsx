@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEgyptianMonthDeity, getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
-import { getFestivalsForDate, Festival } from '../utils/egyptianFestivalsData';
+import { getFestivalsForDate, getNextEgyptianFestivals, Festival } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egyptianHemerologyData';
 import { getAlgolPhase } from '../utils/egyptianAstronomy';
 import { getMoonPhase } from '../utils/solar';
@@ -17,6 +17,7 @@ interface EgyptianCalendarInfoProps {
 const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) => {
   const { civilization, labels } = useCivilization();
   const [egyptianDate, setEgyptianDate] = useState<EgyptianDateResult | null>(null);
+  const [showFestivals, setShowFestivals] = useState(false);
 
   useEffect(() => {
     setEgyptianDate(getEgyptianDate(new Date()));
@@ -117,12 +118,14 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
           {/* TOP: Season & Month */}
           <div className="border-b border-gold-dim/30 pb-4 w-full flex flex-col items-center justify-center gap-2">
             {/* Season hieroglyphic */}
-            <div className="text-2xl filter drop-shadow-sm tracking-widest">{egyptianDate.seasonHieroglyphic}</div>
+            <div className="text-4xl filter drop-shadow-[0_0_2px_rgba(207,181,59,0.5)] tracking-widest text-gold-leaf mb-2">
+              {egyptianDate.seasonHieroglyphic}
+            </div>
             <h3 className="font-serif text-xl md:text-2xl uppercase tracking-[0.2em] font-bold text-gold-leaf">
               {egyptianDate.isEpagomenal ? 'Epagomenai' : egyptianDate.monthName}
             </h3>
-            <div className="font-serif text-xs tracking-widest text-gold-dim uppercase">
-              {egyptianDate.isEpagomenal ? egyptianDate.monthGreekName : egyptianDate.monthGreekName}
+            <div className="font-serif text-sm tracking-widest text-gold-dim/80 uppercase font-bold flex flex-col items-center gap-1">
+              <span className="text-2xl drop-shadow-sm text-gold-leaf">{egyptianDate.monthHieroglyphs}</span>
             </div>
             <div className="text-sm italic text-parchment font-body bg-emerald-500/10 px-4 py-1 rounded-full shadow-inner border border-emerald-500/20">
               {egyptianDate.seasonName} — {egyptianDate.seasonTranslation}
@@ -161,8 +164,17 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
           {/* THE THREE DECADES (only for regular months) */}
           {!egyptianDate.isEpagomenal && (
-            <div className="w-full bg-ink/40 p-4 rounded-lg border border-gold-dim/30">
-              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4">Las tres Décadas del mes</h3>
+            <div 
+              className="w-full bg-ink/40 p-4 rounded-lg border border-gold-dim/30 cursor-help hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all group/decades"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowFestivals(true);
+              }}
+            >
+              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4 group-hover/decades:text-emerald-400 transition-colors flex justify-between items-center">
+                <span>Las tres Décadas del mes</span>
+                <span className="text-[10px] animate-pulse">✨ Ver Próximos Festivales</span>
+              </h3>
               <div className="flex flex-col sm:flex-row gap-3">
                 {renderDecade(decade1, 1, "Década I (1–10)")}
                 {renderDecade(decade2, 2, "Década II (11–20)")}
@@ -248,7 +260,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             <div className="text-gold-leaf text-xs font-bold uppercase tracking-widest mb-1">
               {egyptianDate.isEpagomenal ? '— Madre Celeste —' : labels.godOfDayTitle}
             </div>
-            <div className="text-2xl mb-1 text-parchment ">{deity.deityHieroglyphic}</div>
+            <div className="text-3xl mb-1 text-gold-leaf drop-shadow-md">{deity.deityHieroglyphic}</div>
             <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
               {deity.deity}
             </h2>
@@ -272,6 +284,69 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
           <rect x="0" y="0" width="100%" height="20" fill="url(#nile-waves)" />
         </svg>
       </div>
+
+      {/* NEXT FESTIVALS MODAL */}
+      {showFestivals && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn"
+          onClick={() => setShowFestivals(false)}
+        >
+          <div 
+            className="w-full max-w-lg bg-ink border-4 border-emerald-500/60 rounded-sm shadow-[0_0_50px_rgba(16,185,129,0.3)] overflow-hidden relative"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="p-6 border-b border-emerald-500/30 bg-emerald-950/20 text-center">
+              <div className="text-emerald-400 text-3xl mb-2">𓊹</div>
+              <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
+                Próximos Festivales
+              </h2>
+              <p className="text-[10px] text-emerald-400/60 uppercase tracking-[0.3em] font-bold mt-1">
+                Calendario Sagrado de Kemet
+              </p>
+            </div>
+
+            {/* List */}
+            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+              {getNextEgyptianFestivals(egyptianDate.monthIndex, egyptianDate.dayOfMonth, 3).map((f, i) => (
+                <div key={i} className="group/fest">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="flex flex-col gap-1">
+                      <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-emerald-400 transition-colors leading-tight">
+                        {f.name}
+                      </h4>
+                      <span className="text-[10px] text-gold-dim/60 font-bold uppercase tracking-widest">
+                        {f.date}
+                      </span>
+                    </div>
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded px-2 py-1 text-right">
+                      <div className="text-[14px] text-emerald-400 font-black leading-none">{f.daysRemaining}</div>
+                      <div className="text-[7px] text-emerald-500/60 uppercase font-bold tracking-tighter">días</div>
+                    </div>
+                  </div>
+                  <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-emerald-500/20 pl-4 py-1">
+                    {f.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <button 
+              className="w-full p-4 bg-emerald-500/10 border-t border-emerald-500/30 text-emerald-400 font-serif text-xs uppercase tracking-widest hover:bg-emerald-500/20 transition-all font-bold"
+              onClick={() => setShowFestivals(false)}
+            >
+              Cerrar Rollo Sagrado
+            </button>
+
+            {/* Decorative corners */}
+            <div className="absolute top-2 left-2 text-emerald-500/20 text-xl">𓋹</div>
+            <div className="absolute top-2 right-2 text-emerald-500/20 text-xl">𓋹</div>
+            <div className="absolute bottom-16 left-2 text-emerald-500/20 text-xl">𓋹</div>
+            <div className="absolute bottom-16 right-2 text-emerald-500/20 text-xl">𓋹</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
