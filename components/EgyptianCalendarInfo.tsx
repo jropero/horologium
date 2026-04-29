@@ -3,11 +3,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
-import { getEgyptianMonthDeity, getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
+import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
+import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
 import { getFestivalsForDate, getNextEgyptianFestivals, Festival } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egyptianHemerologyData';
-import { getAlgolPhase } from '../utils/egyptianAstronomy';
-import { getMoonPhase } from '../utils/solar';
+import { getAlgolPhase, getLunarPhase } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 
 interface EgyptianCalendarInfoProps {
@@ -84,7 +84,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
   };
 
   const algol = getAlgolPhase(new Date());
-  const moonPhase = getMoonPhase(new Date());
+  const moonPhase = getLunarPhase(new Date());
   const lunarDay = Math.floor(moonPhase * 30) + 1;
 
   // Get festivals from the new definitive database
@@ -94,6 +94,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
   const isFullMoon = moonPhase > 0.47 && moonPhase < 0.53;
 
   return (
+    <>
     <div
       className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2 cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
       onClick={onClick}
@@ -203,6 +204,14 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
           {/* ASTRONOMICAL INFLUENCES */}
           <div className="w-full flex flex-col gap-2 mt-2">
+            {moonPhase >= 0.45 && moonPhase <= 0.55 && (
+              <div className="bg-gold-leaf/20 text-gold-leaf border border-gold-leaf/50 p-3 rounded-md flex items-center gap-3 shadow-inner animate-pulse">
+                <span className="text-xl">🌕</span>
+                <p className="text-[11px] font-serif font-bold leading-tight text-left">
+                  Ventana de Plenilunio: Día propicio para la entronización del Toro Apis en Menfis
+                </p>
+              </div>
+            )}
             {algol.isEclipsed && (
               <div className="bg-roman-red/10 border border-roman-red/30 p-3 rounded-md flex items-center gap-3 shadow-inner">
                 <span className="text-xl animate-pulse">✨</span>
@@ -260,12 +269,12 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             <div className="text-gold-leaf text-xs font-bold uppercase tracking-widest mb-1">
               {egyptianDate.isEpagomenal ? '— Madre Celeste —' : labels.godOfDayTitle}
             </div>
-            <div className="text-3xl mb-1 text-gold-leaf drop-shadow-md">{deity.deityHieroglyphic}</div>
+            <div className="text-3xl mb-1 text-gold-leaf drop-shadow-md">𓊹</div>
             <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
-              {deity.deity}
+              {deity.name}
             </h2>
             <div className="text-xs text-emerald-400 font-bold uppercase tracking-widest">
-              {deity.domain}
+              {deity.title}
             </div>
             <p className="font-serif text-sm text-parchment font-bold italic px-4 mt-2 leading-relaxed">
               "{deity.description}"
@@ -284,17 +293,17 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
           <rect x="0" y="0" width="100%" height="20" fill="url(#nile-waves)" />
         </svg>
       </div>
+    </div>
 
-      {/* NEXT FESTIVALS MODAL */}
-      {showFestivals && (
+    {/* NEXT FESTIVALS MODAL */}
+    {showFestivals && (
+      <div 
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
+        onClick={() => setShowFestivals(false)}
+      >
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn"
-          onClick={() => setShowFestivals(false)}
+          className="w-full max-w-lg bg-ink border-4 border-emerald-500/60 rounded-sm shadow-[0_0_50px_rgba(16,185,129,0.3)] overflow-hidden relative cursor-pointer"
         >
-          <div 
-            className="w-full max-w-lg bg-ink border-4 border-emerald-500/60 rounded-sm shadow-[0_0_50px_rgba(16,185,129,0.3)] overflow-hidden relative"
-            onClick={e => e.stopPropagation()}
-          >
             {/* Header */}
             <div className="p-6 border-b border-emerald-500/30 bg-emerald-950/20 text-center">
               <div className="text-emerald-400 text-3xl mb-2">𓊹</div>
@@ -346,8 +355,8 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             <div className="absolute bottom-16 right-2 text-emerald-500/20 text-xl">𓋹</div>
           </div>
         </div>
-      )}
-    </div>
+    )}
+    </>
   );
 };
 
