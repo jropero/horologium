@@ -16,7 +16,7 @@
 
 ---
 
-**Horologium Romanam** es una aplicación web inmersiva de alta fidelidad que recrea la percepción del tiempo de las grandes civilizaciones del Mediterráneo antiguo. Utiliza algoritmos astronómicos precisos para transformar el tiempo moderno en los sistemas de **horas temporales**, donde el día y la noche se rigen por ritmos solares y estelares orgánicos.
+**Horologium Romanam** es una aplicación web inmersiva de alta fidelidad que recrea la percepción del tiempo de las grandes civilizaciones del Mediterráneo antiguo. Utiliza algoritmos astronómicos precisos para transformar el tiempo moderno en los sistemas de **horas temporales**,  donde el día y la noche se rigen por ritmos solares y estelares orgánicos.
 
 ## 🏛️ Características Destacadas
 
