@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RomanClock from './components/RomanClock';
 import EgyptianClock from './components/EgyptianClock';
+import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
 import SolarTimes from './components/SolarTimes';
@@ -116,7 +117,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 selection:bg-gold-leaf selection:text-ink">
+    <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
           {labels.appTitle} <span className="text-gold-dim font-normal text-xl md:text-2xl">{labels.appSubtitle}</span>
@@ -124,9 +125,9 @@ const AppContent: React.FC = () => {
       </header>
 
       {civilization === 'hellas' && (
-        <HellenicCalendarInfo 
-          atticDate={romanTimeData?.atticDate} 
-          onClick={() => setIsGreekCalendarOpen(true)} 
+        <HellenicCalendarInfo
+          atticDate={romanTimeData?.atticDate}
+          onClick={() => setIsGreekCalendarOpen(true)}
         />
       )}
       {civilization === 'aegyptus' && (
@@ -194,9 +195,9 @@ const AppContent: React.FC = () => {
 
       <InfoSection />
 
-      <GreekCalendarModal 
-        isOpen={isGreekCalendarOpen} 
-        onClose={() => setIsGreekCalendarOpen(false)} 
+      <GreekCalendarModal
+        isOpen={isGreekCalendarOpen}
+        onClose={() => setIsGreekCalendarOpen(false)}
         startDate={modernTime}
       />
 
@@ -209,6 +210,11 @@ const AppContent: React.FC = () => {
       <footer className="mt-auto relative z-10 text-stone-400 font-serif text-xs tracking-widest pb-4">
         {labels.footerMotto}
       </footer>
+
+      {/* Solo se muestra en pantallas pequeñas, oculto en lg */}
+      <div className="block lg:hidden">
+        <BottomNav />
+      </div>
     </div>
   );
 };
