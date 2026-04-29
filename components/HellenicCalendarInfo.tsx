@@ -56,28 +56,75 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
 
     const isCurrentDecade = (dec: number) => atticDate.decade === dec;
 
+    const getMoonSvg = (type: string, isActive: boolean) => {
+        const className = `w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1 transition-all ${isActive ? 'text-sky-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.6)]' : 'text-gold-dim/60'}`;
+        switch (type) {
+            case 'waxing':
+                return (
+                    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+                        <path d="M12 2 A 10 10 0 0 1 12 22 A 8 10 0 0 0 12 2 Z" />
+                    </svg>
+                );
+            case 'full':
+                return (
+                    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+                        <circle cx="12" cy="12" r="10" />
+                    </svg>
+                );
+            case 'waning':
+                return (
+                    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+                        <path d="M12 2 A 10 10 0 0 0 12 22 A 8 10 0 0 1 12 2 Z" />
+                    </svg>
+                );
+            default: return null;
+        }
+    };
+
     // Helper to render a visual block for a decade
-    const renderDecade = (days: number[], decadeNumber: number, title: string) => (
-        <div className={`p-2 flex-1 rounded-md border-2 transition-all ${isCurrentDecade(decadeNumber) ? 'border-gold-leaf/50 bg-gold-leaf/5 shadow-sm' : 'border-gold-dim/20 bg-ink/20'}`}>
-            <h4 className={`text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gold-dim mb-2 text-center`}>{title}</h4>
-            <div className="flex flex-wrap gap-1 justify-center">
+    const renderDecade = (days: number[], decadeNumber: number, title: string, subtitle: string, moonType: string) => {
+        const active = isCurrentDecade(decadeNumber);
+        return (
+        <div className={`p-3 flex-1 rounded-lg border transition-all duration-500 group relative overflow-hidden
+            ${active 
+                ? 'border-sky-400/50 bg-sky-900/10 shadow-[0_0_15px_rgba(56,189,248,0.1)] scale-[1.02] z-10' 
+                : 'border-gold-dim/20 bg-ink/30 hover:bg-ink/50'}
+        `}>
+            {/* Background decorative element */}
+            {active && (
+                <div className="absolute -right-4 -top-4 w-16 h-16 bg-sky-400/10 rounded-full blur-xl pointer-events-none"></div>
+            )}
+            
+            <div className="text-center mb-3 relative z-10 border-b border-gold-dim/20 pb-2">
+                {getMoonSvg(moonType, active)}
+                <h4 className={`text-[10px] sm:text-[11px] md:text-xs font-bold uppercase tracking-widest ${active ? 'text-sky-400' : 'text-gold-dim'}`}>{title}</h4>
+                <div className="text-[8px] sm:text-[9px] font-serif italic text-gold-dim/70 tracking-widest uppercase mt-0.5">{subtitle}</div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-1 sm:gap-1.5 md:gap-2 justify-items-center relative z-10">
                 {days.map(day => {
                     const isToday = day === atticDate.dayOfMonth;
+                    const isPast = day < atticDate.dayOfMonth;
+                    
                     return (
                         <div 
                             key={day} 
-                            className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center text-[7px] sm:text-[9px]
+                            className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-sm sm:rounded-md flex items-center justify-center text-[8px] sm:text-[10px] md:text-[11px] font-serif transition-all
                                 ${isToday 
-                                    ? 'bg-roman-red text-white shadow-[0_0_8px_rgba(139,37,0,0.6)] font-bold scale-125 z-10' 
-                                    : (isCurrentDecade(decadeNumber) ? 'bg-gold-leaf text-ink' : 'bg-gold-dim/40 text-parchment/80')
+                                    ? 'bg-sky-400 text-ink shadow-[0_0_10px_rgba(56,189,248,0.6)] font-bold scale-110 ring-1 ring-sky-300' 
+                                    : isPast
+                                        ? 'bg-gold-dim/20 text-gold-leaf/50 border border-gold-dim/30'
+                                        : 'bg-ink/50 text-gold-dim/40 border border-gold-dim/10'
                                 }`}
+                            title={`Día ${day}`}
                         >
+                            {day}
                         </div>
                     );
                 })}
             </div>
         </div>
-    );
+    )};
 
     return (
         <div 
@@ -124,12 +171,14 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                     </div>
 
                     {/* THE THREE DECADES OF THE LUNAR MONTH */}
-                    <div className="w-full bg-ink/40 p-4 rounded-lg border border-gold-dim/30">
-                        <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4">Mēn: El Ciclo de tres Décadas</h3>
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            {renderDecade(decade1, 1, "Ἱστάμενος (Creciente)")}
-                            {renderDecade(decade2, 2, "Μεσῶν (Medio)")}
-                            {renderDecade(decade3, 3, "Φθίνων (Menguante)")}
+                    <div className="w-full mt-4 mb-2">
+                        <h3 className="font-serif text-xs uppercase tracking-widest text-gold-leaf mb-5 flex items-center justify-center gap-3 border-y border-gold-dim/20 py-3 bg-ink/20">
+                            <span className="text-sky-400">☾</span> Mēn: El Ciclo Lunar <span className="text-sky-400">☽</span>
+                        </h3>
+                        <div className="flex flex-row justify-center gap-1.5 sm:gap-2 md:gap-3 w-full">
+                            {renderDecade(decade1, 1, "Ἱστάμενος", "Creciente", "waxing")}
+                            {renderDecade(decade2, 2, "Μεσῶν", "Medio", "full")}
+                            {renderDecade(decade3, 3, "Φθίνων", "Menguante", "waning")}
                         </div>
                     </div>
 
