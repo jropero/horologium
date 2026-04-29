@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { MapPin, Milestone } from 'lucide-react';
 import { getRomanProvince, getDistanceToRome } from '../utils/romanProvinces';
 import { getGreekRegion, getDistanceToAthens } from '../utils/greekRegions';
+import { getEgyptianRegion, getDistanceToHeliopolis } from '../utils/egyptianRegions';
 import { toRoman } from '../utils/romanTimeUtils';
 import { useCivilization } from '../contexts/CivilizationContext';
 
@@ -27,6 +28,13 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
     [latitude, longitude, civilization]
   );
 
+  const egyptianRegion = useMemo(() => 
+    civilization === 'aegyptus' 
+      ? getEgyptianRegion(latitude, longitude) 
+      : null, 
+    [latitude, longitude, civilization]
+  );
+
   const distance = useMemo(() => 
     civilization === 'rome'
       ? getDistanceToRome(latitude, longitude)
@@ -41,18 +49,36 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
     [latitude, longitude, civilization]
   );
 
-  const regionName = civilization === 'rome' ? province?.name : greekRegion?.name;
-  const regionDesc = civilization === 'rome' ? province?.desc : greekRegion?.desc;
+  const egyptianDistance = useMemo(() => 
+    civilization === 'aegyptus'
+      ? getDistanceToHeliopolis(latitude, longitude)
+      : null,
+    [latitude, longitude, civilization]
+  );
+
+  const regionName = civilization === 'rome' 
+    ? province?.name 
+    : civilization === 'hellas' 
+      ? greekRegion?.name 
+      : egyptianRegion?.name;
+
+  const regionDesc = civilization === 'rome' 
+    ? province?.desc 
+    : civilization === 'hellas' 
+      ? greekRegion?.desc 
+      : egyptianRegion?.desc;
 
   const distanceDisplay = civilization === 'rome' && distance
     ? { value: toRoman(distance.romanMiles), detail: `${distance.romanMiles.toLocaleString()} ${labels.distanceFromLabel}`, km: distance.km }
-    : greekDistance
+    : civilization === 'hellas' && greekDistance
       ? { value: `${greekDistance.stadia.toLocaleString()}`, detail: labels.distanceFromLabel, km: greekDistance.km }
-      : null;
+      : civilization === 'aegyptus' && egyptianDistance
+        ? { value: `${egyptianDistance.iteru.toLocaleString()}`, detail: labels.distanceFromLabel, km: egyptianDistance.km }
+        : null;
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 px-2 animate-fadeIn">
-      <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row gap-6 items-stretch relative overflow-hidden group">
+      <div className={`bg-ink/90 border rounded-lg p-6 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row gap-6 items-stretch relative overflow-hidden group ${civilization === 'aegyptus' ? 'border-emerald-500/30' : 'border-gold-dim/40'}`}>
         
         {/* Decorative background hatch */}
         <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
