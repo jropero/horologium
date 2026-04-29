@@ -10,6 +10,8 @@
   --color-festival: var(--festival-text);
   --color-woodcut-green: #4a5d43;
   --color-roman-red: var(--roman-red);
+  --color-egypt-accent: var(--egypt-accent);
+  --color-egypt-primary: var(--egypt-primary);
 
   --font-serif: "Cinzel", serif;
   --font-body: "IM Fell English", serif;
@@ -92,6 +94,8 @@
   --hatch-color: #451a03;
   --festival-text: #facc15;
   --roman-red: #ef4444;
+  --egypt-accent: #047857; /* emerald-700 for light parchment bg */
+  --egypt-primary: #34d399; /* emerald-400 for dark ink bg */
   --app-bg-pattern: 
     linear-gradient(rgba(26, 22, 18, 0.7), rgba(26, 22, 18, 0.7)),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -109,7 +113,9 @@
   --hatch-color: #d97706;
   --festival-text: #b45309;
   --roman-red: #b91c1c;
-  --app-bg-pattern: 
+  --egypt-accent: #34d399; /* emerald-400 for dark parchment bg */
+  --egypt-primary: #047857; /* emerald-700 for light ink bg */
+  --app-bg-pattern:  
     linear-gradient(rgba(254, 252, 240, 0.8), rgba(254, 252, 240, 0.8)),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   --app-bg-size: auto;

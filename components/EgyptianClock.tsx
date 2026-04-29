@@ -213,17 +213,17 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
           >
             <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
               <span className="text-2xl drop-shadow-[0_0_3px_rgba(207,181,59,0.4)]">{egyptianDateInfo.eDate.seasonHieroglyphic}</span>
-              <span className="text-gold-dim/40 text-xs">|</span>
+              <span className="text-gold-dim/60 text-xs">|</span>
               <span className="text-gold-leaf">{egyptianDateInfo.eDate.monthName} {egyptianDateInfo.eDate.dayOfMonth}</span>
             </div>
-            <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{formatEgyptianDate(egyptianDateInfo.eDate)}</div>
+            <div className="text-parchment/70 font-serif text-xs italic mb-2">{formatEgyptianDate(egyptianDateInfo.eDate)}</div>
             <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
-              <span className="text-xs px-2 py-0.5 border border-emerald-500/40 rounded bg-emerald-500/10 uppercase font-bold text-emerald-400">{egyptianDateInfo.eDate.seasonName}</span>
+              <span className="text-xs px-2 py-0.5 border border-emerald-500/40 rounded bg-emerald-500/10 uppercase font-bold text-egypt-primary">{egyptianDateInfo.eDate.seasonName}</span>
               <span className="flex items-center gap-1.5 bg-ink/40 px-2 py-0.5 rounded border border-gold-dim/20">
-                <span className="text-gold-dim">☽</span>
+                <span className="text-gold-leaf">☽</span>
                 <span>{romanTime.moonPhaseLabel}</span>
               </span>
-              <span className="text-gold-dim">•</span>
+              <span className="text-gold-dim/60">•</span>
               <span 
                 onClick={(e) => {
                   e.stopPropagation();
@@ -457,7 +457,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
               {egyptianDateInfo.currentPrognosis !== 'none' && (
                 <div className={`text-[9px] xs:text-[10px] md:text-xs px-2 py-1 rounded-full border flex items-center gap-1.5 shadow-sm transition-all animate-fadeIn
                   ${egyptianDateInfo.currentPrognosis === 'nefer' 
-                    ? 'bg-emerald-100 text-emerald-700 border-emerald-300' 
+                    ? 'bg-emerald-100 text-egypt-accent border-emerald-300' 
                     : 'bg-red-100 text-roman-red border-roman-red/30'}`}
                 >
                   <span className="text-xs xs:text-sm">{egyptianDateInfo.currentPrognosis === 'nefer' ? '☀️' : '🦂'}</span>
@@ -480,7 +480,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
               <div className="flex flex-col gap-2 w-full max-w-sm mx-auto mb-6 px-2">
                 {/* Estación (3) */}
                 <div className="responsive-wrap items-center gap-3">
-                  <span className="text-[9px] uppercase tracking-widest text-emerald-700 font-bold w-14 text-right">Estación</span>
+                  <span className="text-[9px] uppercase tracking-widest text-egypt-accent font-bold w-14 text-right">Estación</span>
                   <div className="flex flex-1 gap-1">
                     {[0, 1, 2].map(s => {
                       const seasonIndex = Math.floor(egyptianDateInfo.eDate.monthIndex / 4);
@@ -498,7 +498,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
                 {/* Mes (4) */}
                 <div className="responsive-wrap items-center gap-3">
-                  <span className="text-[9px] uppercase tracking-widest text-emerald-700 font-bold w-14 text-right">Mes</span>
+                  <span className="text-[9px] uppercase tracking-widest text-egypt-accent font-bold w-14 text-right">Mes</span>
                   <div className="flex flex-1 gap-1">
                     {[1, 2, 3, 4].map(m => {
                       const monthOfSeason = (egyptianDateInfo.eDate.monthIndex % 4) + 1;
@@ -516,7 +516,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
                 {/* Década (3) */}
                 <div className="responsive-wrap items-center gap-3">
-                  <span className="text-[9px] uppercase tracking-widest text-emerald-700 font-bold w-14 text-right">Década</span>
+                  <span className="text-[9px] uppercase tracking-widest text-egypt-accent font-bold w-14 text-right">Década</span>
                   <div className="flex flex-1 gap-1">
                     {[1, 2, 3].map(d => {
                       const decade = egyptianDateInfo.eDate.decade;
@@ -536,23 +536,23 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
             <div className="flex flex-col gap-2 justify-center items-center">
               <div className="flex flex-col items-center gap-1">
-                <div className="flex items-center gap-6 text-emerald-700 font-serif font-bold tracking-[0.3em] text-base">
+                <div className="flex items-center gap-6 text-egypt-accent font-serif font-bold tracking-[0.3em] text-base">
                   <span className="text-woodcut-green">❧</span>
                   <span>{romanTime.isDay ? labels.dayLabel : labels.nightLabel}</span>
                   <span className="text-woodcut-green">☙</span>
                 </div>
                 {romanTime.vigilia && (
-                  <div className="text-xs font-serif uppercase tracking-[0.2em] text-emerald-600 drop-shadow-sm font-bold mt-1">
+                  <div className="text-xs font-serif uppercase tracking-[0.2em] text-egypt-accent drop-shadow-sm font-bold mt-1">
                     𓊹 {romanTime.vigilia.name} 𓊹
                   </div>
                 )}
               </div>
 
               <div className="text-sm md:text-base font-serif text-ink mt-3 mb-3 bg-emerald-500/10 px-3 md:px-8 py-2.5 rounded-lg border border-emerald-500/30 shadow-sm flex flex-col items-center w-full max-w-[260px] mx-auto">
-                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-1">{labels.civilDayPartLabel}</div>
+                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-egypt-accent mb-1">{labels.civilDayPartLabel}</div>
                 <div className="flex flex-col items-center text-center px-1">
                   <span className="font-bold text-ink text-base md:text-lg leading-tight">{romanTime.civilDayPart.name}</span>
-                  <span className="text-[11px] md:text-sm font-bold italic text-emerald-600 mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
+                  <span className="text-[11px] md:text-sm font-bold italic text-egypt-accent mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
                 </div>
               </div>
 

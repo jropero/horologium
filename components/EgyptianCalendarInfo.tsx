@@ -65,7 +65,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
     return (
       <div className={`flex-1 min-w-[100px] p-3 rounded border transition-all flex flex-col items-center gap-1
-        ${isNefer ? 'bg-emerald-900/30 text-emerald-400 border-emerald-500/50' :
+        ${isNefer ? 'bg-emerald-900/30 text-egypt-primary border-emerald-500/50' :
           isAha ? 'bg-roman-red/20 text-parchment border-roman-red/50' :
             'bg-ink/40 text-gold-dim/40 border-gold-dim/20 opacity-50'}`}
       >
@@ -136,7 +136,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
           {/* EPAGOMENAL HIGHLIGHT */}
           {egyptianDate.isEpagomenal && epagomenalInfo && (
             <div className="w-full bg-gradient-to-b from-emerald-900/30 to-ink/60 p-6 rounded-lg border-2 border-emerald-500/40 shadow-lg">
-              <div className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2">
+              <div className="text-egypt-primary text-xs font-bold uppercase tracking-widest mb-2">
                 𓊹 Día Epagómeno {epagomenalInfo.dayNumber} 𓊹
               </div>
               <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
@@ -172,7 +172,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
                 setShowFestivals(true);
               }}
             >
-              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4 group-hover/decades:text-emerald-400 transition-colors flex justify-between items-center">
+              <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim mb-4 group-hover/decades:text-egypt-primary transition-colors flex justify-between items-center">
                 <span>Las tres Décadas del mes</span>
                 <span className="text-[10px] animate-pulse">✨ Ver Próximos Festivales</span>
               </h3>
@@ -237,7 +237,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
               <div className="flex flex-col gap-3">
                 {civilFestivals.map((f, i) => (
                   <div key={`civil-${i}`} className="w-full bg-emerald-500/5 p-4 rounded-lg border-2 border-emerald-500/30 text-left">
-                    <div className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1 flex justify-between items-center">
+                    <div className="text-egypt-primary text-[10px] font-bold uppercase tracking-widest mb-1 flex justify-between items-center">
                       <span>𓊹 Festival Civil 𓊹</span>
                       <span className="text-gold-dim/60">Fijo</span>
                     </div>
@@ -273,7 +273,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
               {deity.name}
             </h2>
-            <div className="text-xs text-emerald-400 font-bold uppercase tracking-widest">
+            <div className="text-xs text-egypt-primary font-bold uppercase tracking-widest">
               {deity.title}
             </div>
             <p className="font-serif text-sm text-parchment font-bold italic px-4 mt-2 leading-relaxed">
@@ -306,11 +306,11 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
         >
             {/* Header */}
             <div className="p-6 border-b border-emerald-500/30 bg-emerald-950/20 text-center">
-              <div className="text-emerald-400 text-3xl mb-2">𓊹</div>
+              <div className="text-egypt-primary text-3xl mb-2">𓊹</div>
               <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
                 Próximos Festivales
               </h2>
-              <p className="text-[10px] text-emerald-400/60 uppercase tracking-[0.3em] font-bold mt-1">
+              <p className="text-[10px] text-egypt-primary/60 uppercase tracking-[0.3em] font-bold mt-1">
                 Calendario Sagrado de Kemet
               </p>
             </div>
@@ -321,7 +321,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
                 <div key={i} className="group/fest">
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex flex-col gap-1">
-                      <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-emerald-400 transition-colors leading-tight">
+                      <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-egypt-primary transition-colors leading-tight">
                         {f.name}
                       </h4>
                       <span className="text-[10px] text-gold-dim/60 font-bold uppercase tracking-widest">
@@ -329,7 +329,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
                       </span>
                     </div>
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded px-2 py-1 text-right">
-                      <div className="text-[14px] text-emerald-400 font-black leading-none">{f.daysRemaining}</div>
+                      <div className="text-[14px] text-egypt-primary font-black leading-none">{f.daysRemaining}</div>
                       <div className="text-[7px] text-emerald-500/60 uppercase font-bold tracking-tighter">días</div>
                     </div>
                   </div>
@@ -342,7 +342,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
 
             {/* Footer */}
             <button 
-              className="w-full p-4 bg-emerald-500/10 border-t border-emerald-500/30 text-emerald-400 font-serif text-xs uppercase tracking-widest hover:bg-emerald-500/20 transition-all font-bold"
+              className="w-full p-4 bg-emerald-500/10 border-t border-emerald-500/30 text-egypt-primary font-serif text-xs uppercase tracking-widest hover:bg-emerald-500/20 transition-all font-bold"
               onClick={() => setShowFestivals(false)}
             >
               Cerrar Rollo Sagrado
