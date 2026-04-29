@@ -103,18 +103,18 @@ export const EGYPTIAN_SEASONS: EgyptianSeason[] = [
 // --- Datos de los 12 meses ---
 
 export const EGYPTIAN_MONTHS: EgyptianMonth[] = [
-  { name: 'Thoth',     monthHieroglyphs: '𓅟𓏏𓏭𓀭𓏊𓇳',       seasonIndex: 0, monthInSeason: 1 },
-  { name: 'Phaophi',   monthHieroglyphs: '𓊪𓈖𓇋𓊪𓏏𓏤',     seasonIndex: 0, monthInSeason: 2 },
-  { name: 'Athyr',     monthHieroglyphs: '𓉗𓏏𓉐𓅃𓂋𓆗',      seasonIndex: 0, monthInSeason: 3 },
-  { name: 'Choiak',    monthHieroglyphs: '𓂓𓅃𓎡𓏤𓂓',     seasonIndex: 0, monthInSeason: 4 },
-  { name: 'Tybi',      monthHieroglyphs: '𓏏𓄿𓂝𓃀𓏏𓏴𓏊𓇳',      seasonIndex: 1, monthInSeason: 1 },
-  { name: 'Mechir',    monthHieroglyphs: '𓊪𓈖𓅯𓄿𓅓𓂝𓐍𓏭𓂋𓏤𓏤',     seasonIndex: 1, monthInSeason: 2 },
-  { name: 'Phamenoth', monthHieroglyphs: '𓊪𓈖𓇋𓏠𓈖𓀭𓊵𓏏𓊪𓀭',   seasonIndex: 1, monthInSeason: 3 },
-  { name: 'Pharmuthi', monthHieroglyphs: '𓊪𓈖𓂋𓈖𓈖𓅱𓏏𓏏',  seasonIndex: 1, monthInSeason: 4 },
-  { name: 'Pachon',    monthHieroglyphs: '𓊪𓈖𓐍𓈖𓋴𓅱',      seasonIndex: 2, monthInSeason: 1 },
-  { name: 'Payni',     monthHieroglyphs: '𓊪𓈖𓇋𓈖𓏏',     seasonIndex: 2, monthInSeason: 2 },
-  { name: 'Epiphi',    monthHieroglyphs: '𓇋𓊪𓇋𓇋𓊪𓇋',     seasonIndex: 2, monthInSeason: 3 },
-  { name: 'Mesore',    monthHieroglyphs: '𓄟𓋴𓅱𓏏𓂋𓇳𓀭',    seasonIndex: 2, monthInSeason: 4 },
+  { name: 'Thoth',     monthHieroglyphs: '𓁟𓇳𓎛𓏏𓏤',         seasonIndex: 0, monthInSeason: 1 },
+  { name: 'Phaophi',   monthHieroglyphs: '𓉐𓈖𓇋𓊪𓏏𓊒',       seasonIndex: 0, monthInSeason: 2 },
+  { name: 'Athyr',     monthHieroglyphs: '𓉗𓅃𓇳',            seasonIndex: 0, monthInSeason: 3 },
+  { name: 'Choiak',    monthHieroglyphs: '𓂓𓇳𓂓',            seasonIndex: 0, monthInSeason: 4 },
+  { name: 'Tybi',      monthHieroglyphs: '𓇿𓂝𓎛𓏏',          seasonIndex: 1, monthInSeason: 1 },
+  { name: 'Mechir',    monthHieroglyphs: '𓉐𓈖𓉐𓐍𓂋𓅱',       seasonIndex: 1, monthInSeason: 2 },
+  { name: 'Phamenoth', monthHieroglyphs: '𓉐𓈖𓇋𓏠𓈖𓊵',       seasonIndex: 1, monthInSeason: 3 },
+  { name: 'Pharmuthi', monthHieroglyphs: '𓉐𓈖𓂋𓈖𓆙𓏏',       seasonIndex: 1, monthInSeason: 4 },
+  { name: 'Pachon',    monthHieroglyphs: '𓉐𓈖𓐍𓈖𓇳𓅱',       seasonIndex: 2, monthInSeason: 1 },
+  { name: 'Payni',     monthHieroglyphs: '𓉐𓈖𓇋𓈖𓏏',        seasonIndex: 2, monthInSeason: 2 },
+  { name: 'Epiphi',    monthHieroglyphs: '𓇋𓊪𓇋𓊪',          seasonIndex: 2, monthInSeason: 3 },
+  { name: 'Mesore',    monthHieroglyphs: '𓄟𓅱𓏏𓇳',          seasonIndex: 2, monthInSeason: 4 },
 ];
 
 // --- Funciones auxiliares ---
