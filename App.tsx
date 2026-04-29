@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Sun, Moon } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import EgyptianClock from './components/EgyptianClock';
 import BottomNav from './components/BottomNav';
@@ -41,6 +42,10 @@ const AppContent: React.FC = () => {
     document.documentElement.setAttribute('data-civ', civilization);
     localStorage.setItem('romanClockTheme', theme);
   }, [theme, civilization]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   // Initialize location from localStorage if available, otherwise default
   const [latitude, setLatitude] = useState<number>(() => {
@@ -118,7 +123,17 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
-      <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2">
+      
+      {/* Mobile Theme Toggle */}
+      <button 
+        onClick={toggleTheme}
+        className="fixed top-2 right-2 z-50 md:hidden w-8 h-8 flex items-center justify-center rounded-full bg-ink/90 backdrop-blur-md border border-gold-dim/40 shadow-lg text-gold-leaf hover:bg-ink transition-all active:scale-95"
+        aria-label="Toggle Theme"
+      >
+        {theme === 'dark' ? <Sun className="w-4 h-4 animate-spin-slow" /> : <Moon className="w-4 h-4" />}
+      </button>
+
+      <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
           {labels.appTitle} <span className="text-gold-dim font-normal text-xl md:text-2xl">{labels.appSubtitle}</span>
         </h1>
@@ -184,7 +199,7 @@ const AppContent: React.FC = () => {
         onUpdateLocation={handleUpdateLocation}
         onRefreshTime={() => setModernTime(new Date())}
         theme={theme}
-        onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+        onToggleTheme={toggleTheme}
       />
 
       <LocationSelector
