@@ -58,11 +58,13 @@ export interface WeatherSnapshot {
     condition: WeatherCondition;
     description: string;
     greekDescription?: string;
+    egyptianDescription?: string;
     code: number;
     windSpeed: number;
     windDirection: number;
     latinWindName: string;
     greekWindName?: string;
+    egyptianWindName?: string;
     surfacePressure: number;
     yearLabel: string; // "MMIII", "MCMLXXIII", etc.
 }

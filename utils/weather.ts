@@ -94,6 +94,43 @@ export const getGreekWeatherDesc = (code: number): string => {
     return GREEK_WEATHER_CODES[code] || 'Οὐρανός';
 };
 
+// --- EGYPTIAN WEATHER (KEMET) ---
+// Wind names based on the four sons of Horus and cardinal directions
+export const getEgyptianWindName = (degrees: number): string => {
+    if (degrees >= 337.5 || degrees < 22.5) return 'Mehit (N) 𓎔𓏏𓇯';      // North (Cool)
+    if (degrees >= 22.5 && degrees < 67.5) return 'Mehit-Iabty (NE)';
+    if (degrees >= 67.5 && degrees < 112.5) return 'Iabty (E) 𓋁𓃀𓏏𓏭𓇯';   // East
+    if (degrees >= 112.5 && degrees < 157.5) return 'Resyt-Iabty (SE)';
+    if (degrees >= 157.5 && degrees < 202.5) return 'Resyt (S) 𓉔𓋴𓇯';      // South (Hot)
+    if (degrees >= 202.5 && degrees < 247.5) return 'Resyt-Imanty (SW)';
+    if (degrees >= 247.5 && degrees < 292.5) return 'Imanty (W) 𓊿𓏏𓏭𓇯';   // West
+    if (degrees >= 292.5 && degrees < 337.5) return 'Mehit-Imanty (NW)';
+    return 'Ty 𓎗'; // Wind
+};
+
+const EGYPTIAN_WEATHER_CODES: Record<number, string> = {
+    0: 'Gueben 𓅱𓃀𓈖',           // Bright/Clear
+    1: 'Gueben 𓅱𓃀𓈖',
+    2: 'Pet Ashet 𓇯 𓆼𓏤',       // Cloudy (Numerous sky)
+    3: 'Pet Ashet 𓇯 𓆼𓏤',
+    45: 'Shety 𓈙𓏏𓏭',            // Fog
+    48: 'Shety 𓈙𓏏𓏭',
+    51: 'Heit Levis 𓎛𓇋𓏏𓇶',      // Drizzle
+    53: 'Heit 𓎛𓇋𓏏𓇶',
+    55: 'Heit 𓎛𓇋𓏏𓇶',
+    61: 'Heit 𓎛𓇋𓏏𓇶',
+    63: 'Heit 𓎛𓇋𓏏𓇶',
+    65: 'Heit 𓎛𓇋𓏏𓇶',
+    71: 'Nix (Snow)',           // No direct Egyptian term for snow, using Latin/Descriptive
+    80: 'Heit 𓎛𓇋𓏏𓇶',
+    95: 'Nesh 𓈖𓈙',             // Storm
+    99: 'Nesh 𓈖𓈙',
+};
+
+export const getEgyptianWeatherDesc = (code: number): string => {
+    return EGYPTIAN_WEATHER_CODES[code] || 'Pet 𓇯'; // Sky
+};
+
 const HISTORICAL_YEARS = [2003, 1973, 1949];
 
 const getRomanYear = (year: number): string => {
@@ -133,11 +170,13 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
             condition: cInfo.condition,
             description: cInfo.description,
             greekDescription: getGreekWeatherDesc(c.weather_code),
+            egyptianDescription: getEgyptianWeatherDesc(c.weather_code),
             code: c.weather_code,
             windSpeed: c.wind_speed_10m,
             windDirection: c.wind_direction_10m,
             latinWindName: getLatinWindName(c.wind_direction_10m),
             greekWindName: getGreekWindName(c.wind_direction_10m),
+            egyptianWindName: getEgyptianWindName(c.wind_direction_10m),
             surfacePressure: c.surface_pressure,
             yearLabel: "Hodie"
         };
@@ -157,11 +196,13 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
                     condition: info.condition,
                     description: info.description,
                     greekDescription: getGreekWeatherDesc(code),
+                    egyptianDescription: getEgyptianWeatherDesc(code),
                     code: code,
                     windSpeed: data.daily.wind_speed_10m_max[0],
                     windDirection: data.daily.wind_direction_10m_dominant[0],
                     latinWindName: getLatinWindName(data.daily.wind_direction_10m_dominant[0]),
                     greekWindName: getGreekWindName(data.daily.wind_direction_10m_dominant[0]),
+                    egyptianWindName: getEgyptianWindName(data.daily.wind_direction_10m_dominant[0]),
                     surfacePressure: 1013, // Valor por defecto para históricos si no se pide explícitamente
                     yearLabel: getRomanYear(year)
                 });
