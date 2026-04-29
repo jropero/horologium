@@ -32,6 +32,7 @@
   --festival-text: #fbbf24; /* amber-400 */
   --roman-red: #ff5252; /* Lighter red for dark background contrast */
   --app-bg-pattern: url('/assets/textures/wood-pattern.png');
+  --app-bg-size: auto;
 }
 
 [data-theme="light"] {
@@ -45,6 +46,7 @@
   --festival-text: #b45309; /* amber-700 */
   --roman-red: #b71c1c; /* Darker red for light background contrast */
   --app-bg-pattern: url('/assets/textures/aged-paper.png');
+  --app-bg-size: auto;
 }
 
 /* === HELLAS THEME === */
@@ -60,6 +62,7 @@
   --festival-text: #f1c40f;
   --roman-red: #ff7043;
   --app-bg-pattern: url('/assets/textures/stardust.png');
+  --app-bg-size: auto;
 }
 
 /* Hellenic Light Mode (Marble & Sea style) */
@@ -74,6 +77,42 @@
   --festival-text: #c0392b; /* Pompeian red / Classical red */
   --roman-red: #d32f2f;
   --app-bg-pattern: url('/assets/textures/aged-paper.png');
+  --app-bg-size: auto;
+}
+
+/* === AEGYPTUS THEME === */
+/* Egyptian Dark Mode (Sandstone & Night Nile) */
+[data-civ="aegyptus"] {
+  --ink: #1a1612; /* Rich sandstone/basalt mix */
+  --gold-leaf: #eab308; /* Vivid gold */
+  --gold-dim: #854d0e; /* Deep ochre */
+  --parchment: #fef3c7; /* Papyrus text */
+  --parchment-dark: #fde68a;
+  --midnight: #000000;
+  --hatch-color: #451a03;
+  --festival-text: #facc15;
+  --roman-red: #ef4444;
+  --app-bg-pattern: 
+    linear-gradient(rgba(26, 22, 18, 0.7), rgba(26, 22, 18, 0.7)),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  --app-bg-size: auto;
+}
+
+/* Egyptian Light Mode (Sandstone & Sunlight) */
+[data-theme="light"][data-civ="aegyptus"] {
+  --ink: #fefcf0; /* Sunny desert sand */
+  --gold-leaf: #713f12; /* Darker brown/gold for contrast */
+  --gold-dim: #422006;
+  --parchment: #1c1917; /* Very dark brown text */
+  --parchment-dark: #44403c;
+  --midnight: #fef3c7;
+  --hatch-color: #d97706;
+  --festival-text: #b45309;
+  --roman-red: #b91c1c;
+  --app-bg-pattern: 
+    linear-gradient(rgba(254, 252, 240, 0.8), rgba(254, 252, 240, 0.8)),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  --app-bg-size: auto;
 }
 
 @keyframes fadeIn {
@@ -89,6 +128,7 @@
   body {
     @apply bg-ink;
     background-image: var(--app-bg-pattern);
+    background-size: var(--app-bg-size);
     transition: background-color 0.5s ease;
   }
 }

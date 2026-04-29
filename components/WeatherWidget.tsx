@@ -16,21 +16,32 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         condition,
         description,
         greekDescription,
+        egyptianDescription,
         temperature,
         latinWindName,
         greekWindName,
+        egyptianWindName,
         windDirection,
         windSpeed
     } = weather.current;
 
-    const displayDesc = civilization === 'hellas' && greekDescription ? greekDescription : description;
-    const displayWind = civilization === 'hellas' && greekWindName ? greekWindName : latinWindName;
+    const displayDesc = civilization === 'hellas' && greekDescription 
+        ? greekDescription 
+        : civilization === 'aegyptus' && egyptianDescription
+            ? egyptianDescription
+            : description;
+
+    const displayWind = civilization === 'hellas' && greekWindName 
+        ? greekWindName 
+        : civilization === 'aegyptus' && egyptianWindName
+            ? egyptianWindName
+            : latinWindName;
 
     const renderIcon = () => {
         switch (condition) {
             case 'clear':
                 return (
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-gold-leaf" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg viewBox="0 0 24 24" className={`w-8 h-8 ${civilization === 'aegyptus' ? 'text-amber-400' : 'text-gold-leaf'}`} fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="12" cy="12" r="5" />
                         <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
                     </svg>
@@ -45,7 +56,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                 );
             case 'rain':
                 return (
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg viewBox="0 0 24 24" className={`w-8 h-8 ${civilization === 'aegyptus' ? 'text-emerald-400' : 'text-sky-400'}`} fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M16 14c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C2.47 5.34.75 7.22.75 9.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
                         <path d="M8 16l-2 4M12 16l-2 4M16 16l-2 4" />
                     </svg>
@@ -72,14 +83,15 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     return (
         <div
             onClick={onClick}
-            className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border border-gold-dim p-2 rounded shadow-lg transition-all 
-            ${onClick ? 'cursor-pointer hover:bg-gold-leaf/10 hover:border-gold-leaf group/weather' : ''} ${className}`}
+            className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border p-2 rounded shadow-lg transition-all 
+            ${civilization === 'aegyptus' ? 'border-emerald-500/30' : 'border-gold-dim'}
+            ${onClick ? `cursor-pointer hover:bg-white/5 group/weather ${civilization === 'aegyptus' ? 'hover:border-emerald-500' : 'hover:border-gold-leaf'}` : ''} ${className}`}
         >
-            <div className="text-gold-leaf flex-shrink-0">
+            <div className={`${civilization === 'aegyptus' ? 'text-emerald-400' : 'text-gold-leaf'} flex-shrink-0`}>
                 {renderIcon()}
             </div>
-            <div className="flex  flex-col border-r border-gold-dim/30 pr-3 justify-center">
-                <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest leading-none mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.skyLabel}</span>
+            <div className={`flex flex-col border-r justify-center pr-3 ${civilization === 'aegyptus' ? 'border-emerald-500/20' : 'border-gold-dim/30'}`}>
+                <span className={`font-serif text-xs uppercase tracking-widest leading-none mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>{labels.skyLabel}</span>
                 <span className="text-parchment font-serif text-sm font-bold leading-tight">{displayDesc}</span>
                 {civilization === 'hellas' && greekDescription && (
                     <div className="flex flex-col mb-1">
@@ -87,17 +99,20 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                         <span className="text-roman-red font-body italic text-[10px] font-bold uppercase mt-0.5 leading-none">{description}</span>
                     </div>
                 )}
+                {civilization === 'aegyptus' && (
+                    <span className="text-emerald-500 font-serif text-xs font-bold mt-1 drop-shadow-sm">{egyptianDescription?.split(' ')[1]}</span>
+                )}
                 <span className="text-stone-400 font-serif text-xs mt-0.5">{Math.round(temperature)}°C</span>
             </div>
 
             {/* SECCIÓN DE VIENTO */}
             {displayWind && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-                    <span className="text-gold-leaf font-serif text-xs uppercase tracking-widest mb-1 group-hover/weather:text-gold-leaf/80 transition-colors">{labels.windLabel}</span>
+                    <span className={`font-serif text-xs uppercase tracking-widest mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>{labels.windLabel}</span>
 
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
                         {/* Rosa de los vientos de fondo */}
-                        <svg viewBox="0 0 24 24" className="absolute inset-0 w-full h-full text-gold-dim opacity-40">
+                        <svg viewBox="0 0 24 24" className={`absolute inset-0 w-full h-full opacity-40 ${civilization === 'aegyptus' ? 'text-emerald-500/50' : 'text-gold-dim'}`}>
                             <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
                             <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
                             <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="1" />
@@ -112,22 +127,28 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                             style={{ transform: `rotate(${windDirection}deg)` }}
                         >
                             <g transform="translate(12,12)">
-                                <path d="M0 -10 L3 2 L0 0 Z" fill="#e3d6b3" />
-                                <path d="M0 -10 L-3 2 L0 0 Z" fill="#c9b993" />
-                                <path d="M0 10 L2 2 L0 0 Z" fill="#8a7826" />
-                                <path d="M0 10 L-2 2 L0 0 Z" fill="#5c4f15" />
-                                <circle cx="0" cy="0" r="1.5" fill="#1a1a1a" stroke="#e3d6b3" strokeWidth="0.5" />
+                                <path d="M0 -10 L3 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#34d399' : '#e3d6b3'} />
+                                <path d="M0 -10 L-3 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#059669' : '#c9b993'} />
+                                <path d="M0 10 L2 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#854d0e' : '#8a7826'} />
+                                <path d="M0 10 L-2 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#422006' : '#5c4f15'} />
+                                <circle cx="0" cy="0" r="1.5" fill="#1a1a1a" stroke={civilization === 'aegyptus' ? '#34d399' : '#e3d6b3'} strokeWidth="0.5" />
                             </g>
                         </svg>
                     </div>
 
                     <span className="text-stone-300 font-serif text-[10px] text-center leading-tight">
-                        {displayWind.split(' ')[0]}
+                        {civilization === 'aegyptus' ? displayWind.split(' ')[0] : displayWind.split(' ')[0]}
                     </span>
                     {civilization === 'hellas' && greekWindName && (
                         <div className="flex flex-col items-center">
                             <span className="font-serif text-[8px] tracking-widest uppercase text-gold-dim">{transliterateGreek(displayWind.split(' ')[0])}</span>
                             <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">{latinWindName.split(' ')[0]}</span>
+                        </div>
+                    )}
+                    {civilization === 'aegyptus' && (
+                        <div className="flex flex-col items-center">
+                            <span className="text-emerald-500 font-serif text-sm mt-0.5 drop-shadow-sm">{displayWind.split(' ').pop()}</span>
+                            <span className="text-emerald-600/60 font-body italic text-[8px] font-bold leading-none uppercase mt-0.5">{latinWindName.split(' ')[0]}</span>
                         </div>
                     )}
 

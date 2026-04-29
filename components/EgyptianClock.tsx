@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Eye, Star, Info } from 'lucide-react';
 import { RomanTimeData, WeatherData } from '../types';
+import WeatherWidget from './WeatherWidget';
 import EgyptianCalendarModal from './EgyptianCalendarModal';
 import WeatherModal from './WeatherModal';
 import HorusEclipseModal from './HorusEclipseModal';
@@ -196,6 +197,14 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
     <>
       <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
         <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-emerald-500/30 bg-ink">
+          
+          {weather && (
+            <WeatherWidget
+              weather={weather}
+              onClick={() => setIsWeatherOpen(true)}
+              className="cursor-pointer"
+            />
+          )}
 
           <div
             onClick={() => setIsCalendarOpen(true)}
