@@ -110,12 +110,16 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                         </div>
 
                         {/* MAIN: Deus Diei */}
-                        <div className="flex flex-col items-center gap-2 w-full bg-white/5 p-4 rounded border border-gold-dim/20 transition-all hover:bg-white/10">
-                            <div className="text-gold-dim text-xs uppercase tracking-widest mb-1">{labels.godOfDayTitle}</div>
-                            <h2 className="text-3xl md:text-4xl font-serif font-bold text-parchment drop-shadow-md">
+                        <div className="flex flex-col items-center gap-2 w-full bg-stone-900/40 p-6 rounded border border-gold-dim/20 shadow-inner">
+                            <div className="text-gold-dim text-[10px] uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
+                                <span className="opacity-40">—</span>
+                                {labels.godOfDayTitle}
+                                <span className="opacity-40">—</span>
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-serif font-black text-parchment drop-shadow-md uppercase tracking-wider">
                                 {info.god}
                             </h2>
-                            <p className="font-serif text-sm text-parchment/80 italic px-2">
+                            <p className="font-serif text-sm md:text-base text-parchment/80 italic px-4 mt-2 leading-relaxed">
                                 "{info.description}"
                             </p>
                         </div>
@@ -223,19 +227,21 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
 
                         {/* EPIC 10: Hostiae et Sacrificia */}
                         {sacrifice && (
-                            <div className="mt-4 p-4 bg-stone-900/60 border border-stone-500/30 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl">{sacrifice.icon || "🗡️"}</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-stone-400">
+                            <div className="mt-4 p-5 bg-stone-900/60 border border-stone-500/30 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg">
+                                <div className="flex items-center justify-center gap-3 w-full">
+                                    <span className="text-2xl filter drop-shadow-md">{sacrifice.icon || "🗡️"}</span>
+                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
                                         Sacrificia: {sacrifice.title}
                                     </span>
                                 </div>
-                                <p className="text-[11px] md:text-xs font-serif text-parchment/80 leading-relaxed text-left border-l-2 border-stone-500/50 pl-3 italic">
-                                    "{sacrifice.text}"
-                                </p>
-                                <span className="text-[8px] text-stone-500 self-end uppercase tracking-widest font-bold">
-                                    — Ovidio, {sacrifice.reference}
-                                </span>
+                                <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
+                                    <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
+                                        "{sacrifice.text}"
+                                    </p>
+                                    <span className="text-[9px] text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
+                                        — Ovidio, {sacrifice.reference}
+                                    </span>
+                                </div>
                             </div>
                         )}
 

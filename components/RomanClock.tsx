@@ -331,56 +331,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
           </div>
           </div>
 
-          {/* Bottom Row: Lore Alerts */}
-          {civilization === 'rome' && (ovidDialogue || ovidAstroEvent || activeTaboos.length > 0) && (
-            <div className="flex flex-col gap-4 w-full items-center pt-2">
-                {/* Epic 4: Divine Dialogue Trigger */}
-                {ovidDialogue && (
-                    <button 
-                        onClick={() => setIsDialogueOpen(true)}
-                        className="w-full max-w-lg flex items-center gap-3 bg-stone-800/50 border border-gold-leaf/30 hover:bg-gold-leaf/10 hover:border-gold-leaf p-3 rounded-lg shadow-lg transition-all group animate-bounce duration-[4000ms] text-left"
-                    >
-                        <span className="text-xl group-hover:scale-125 transition-transform shrink-0">🏛️</span>
-                        <div className="flex flex-col items-start">
-                            <span className="text-[10px] font-serif uppercase tracking-widest text-gold-leaf font-black">Coloquio Divino</span>
-                            <span className="text-[9px] font-serif italic text-parchment/60 leading-tight">Interrogar a {ovidDialogue.god}</span>
-                        </div>
-                    </button>
-                )}
 
-                {/* Epic 2: Astronomical Omen */}
-                {ovidAstroEvent && (
-                    <div className="w-full max-w-lg bg-indigo-950/40 border border-gold-leaf/30 rounded-lg p-3 flex flex-col gap-1 shadow-inner animate-pulse duration-[4000ms]">
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm">✨</span>
-                            <span className="text-[9px] font-serif uppercase tracking-widest font-black text-gold-leaf">Omen Astrorum</span>
-                        </div>
-                        <p className="text-[11px] font-serif italic text-parchment/90 leading-relaxed border-l border-gold-leaf/20 pl-2">
-                            "{ovidAstroEvent.text}"
-                        </p>
-                        <span className="text-[8px] text-gold-dim/60 self-end uppercase tracking-tighter mt-auto pt-1">
-                            — Fasti, {ovidAstroEvent.reference}
-                        </span>
-                    </div>
-                )}
-
-                {/* Epic 3: Omina et Signa (Taboos) */}
-                {activeTaboos.length > 0 && (
-                    <div className="w-full max-w-lg bg-roman-red/10 border border-roman-red/40 rounded-lg p-3 flex flex-col gap-1 shadow-sm">
-                        <div className="flex items-center gap-2 text-roman-red">
-                            <span className="text-sm">⚠️</span>
-                            <span className="text-[9px] font-serif uppercase tracking-widest font-black">{activeTaboos[0].title}</span>
-                        </div>
-                        <p className="text-[11px] font-serif italic text-roman-red leading-relaxed border-l border-roman-red/20 pl-2">
-                            "{activeTaboos[0].text}"
-                        </p>
-                        <span className="text-[8px] text-roman-red/60 self-end uppercase tracking-tighter font-bold mt-auto pt-1">
-                            — Ovidio, {activeTaboos[0].reference}
-                        </span>
-                    </div>
-                )}
-            </div>
-          )}
         </div>
 
         <div className="woodcut-border p-2 bg-ink relative overflow-hidden">
@@ -645,6 +596,57 @@ const RomanClock: React.FC<RomanClockProps> = ({
               </svg>
             </div>
           </div>
+
+          {/* Ovidian Lore Widgets (Moved below solar clock) */}
+          {civilization === 'rome' && (ovidDialogue || ovidAstroEvent || activeTaboos.length > 0) && (
+            <div className="flex flex-col gap-4 w-full items-center p-4 bg-ink border-y border-gold-dim/20">
+                {/* Epic 4: Divine Dialogue Trigger */}
+                {ovidDialogue && (
+                    <button 
+                        onClick={() => setIsDialogueOpen(true)}
+                        className="w-full max-w-lg flex items-center gap-3 bg-stone-800/50 border border-gold-leaf/30 hover:bg-gold-leaf/10 hover:border-gold-leaf p-3 rounded-lg shadow-lg transition-all group animate-bounce duration-[4000ms] text-left"
+                    >
+                        <span className="text-xl group-hover:scale-125 transition-transform shrink-0">🏛️</span>
+                        <div className="flex flex-col items-start">
+                            <span className="text-[10px] font-serif uppercase tracking-widest text-gold-leaf font-black">Coloquio Divino</span>
+                            <span className="text-[9px] font-serif italic text-parchment/60 leading-tight">Interrogar a {ovidDialogue.god}</span>
+                        </div>
+                    </button>
+                )}
+
+                {/* Epic 2: Astronomical Omen */}
+                {ovidAstroEvent && (
+                    <div className="w-full max-w-lg bg-indigo-950/40 border border-gold-leaf/30 rounded-lg p-3 flex flex-col gap-1 shadow-inner animate-pulse duration-[4000ms]">
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm">✨</span>
+                            <span className="text-[9px] font-serif uppercase tracking-widest font-black text-gold-leaf">Omen Astrorum</span>
+                        </div>
+                        <p className="text-[11px] font-serif italic text-parchment/90 leading-relaxed border-l border-gold-leaf/20 pl-2">
+                            "{ovidAstroEvent.text}"
+                        </p>
+                        <span className="text-[8px] text-gold-dim/60 self-end uppercase tracking-tighter mt-auto pt-1">
+                            — Fasti, {ovidAstroEvent.reference}
+                        </span>
+                    </div>
+                )}
+
+                {/* Epic 3: Omina et Signa (Taboos) */}
+                {activeTaboos.length > 0 && (
+                    <div className="w-full max-w-lg bg-roman-red/10 border border-roman-red/40 rounded-lg p-3 flex flex-col gap-1 shadow-sm">
+                        <div className="flex items-center gap-2 text-roman-red">
+                            <span className="text-sm">⚠️</span>
+                            <span className="text-[9px] font-serif uppercase tracking-widest font-black">{activeTaboos[0].title}</span>
+                        </div>
+                        <p className="text-[11px] font-serif italic text-roman-red leading-relaxed border-l border-roman-red/20 pl-2">
+                            "{activeTaboos[0].text}"
+                        </p>
+                        <span className="text-[8px] text-roman-red/60 self-end uppercase tracking-tighter font-bold mt-auto pt-1">
+                            — Ovidio, {activeTaboos[0].reference}
+                        </span>
+                    </div>
+                )}
+            </div>
+          )}
 
           <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
             <h2 className="responsive-wrap text-2xl xs:text-3xl md:text-5xl font-serif font-bold text-ink mb-1 uppercase tracking-wide drop-shadow-sm items-center justify-center gap-2">
