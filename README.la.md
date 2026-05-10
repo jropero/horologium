@@ -23,59 +23,60 @@
 
 ---
 
-**Horologium Romanam** est applicatio retis immersiva summae fidelitatis quae modum sentiendi temporis magnarum humanitatum maris Interni antiqui recreat. Algorithmis astronomicis accuratis utitur ad tempus modernum in systemata **horarum temporalium** convertendum, ubi dies et nox rhythmis solaribus et stellaribus organicis reguntur.
+**Horologium Romanam** est applicatio retis immersiva summae fidelitatis quae rationem sentiendi temporis magnarum gentium Maris Interni antiqui recreat. Algorithmis astronomicis accuratis utitur ad tempus hodiernum in rationes **horarum temporalium** convertendum, ubi dies et nox rhythmis solaribus et stellaribus organicis reguntur.
 
 ## 🏛️ Virtutes Praecipuae
 
-### 🌍 Humanitates (Modi Multiplices)
-- **Roma (Fasti Romani)**: Systema classicum cum Kalendis, Nonis et Idibus, cyclo nundinarum et anno *Ab Urbe Condita*.
-- **Hellas (Chronos)**: Calendarium Atticum plenum cum mensibus lunaribus, systemate trium decadum visualium, feriis cum mythis fundationis (Aition) et monitionibus dierum nefastorum (Apaphrades).
-- **Aegyptus (Horus)**: Calendarium Alexandrinum/Copticum cum tempestatibus (Akhet, Peret, Shemu), hemerologia "Bonorum et Malorum", cyclo Algol (Oculus Hori), enthronizatione Apis et feriis sacris.
+### 🌍 Gentes (Modi Multiplices)
+- **Roma (Fasti Romani)**: Ratio classica cum Kalendis, Nonis et Idibus, cyclo nundinarum et anno *Ab Urbe Condita*.
+- **Hellas (Chronos)**: Calendarium Atticum plenum cum mensibus lunaribus, ratione trium decadum conspicua, feriis cum fabulis originis (Aition) et monitionibus dierum nefastorum (Apaphrades).
+- **Aegyptus (Horus)**: Calendarium Alexandrinum cum tempestatibus (Akhet, Peret, Shemu), hemerologia Bonorum et Malorum, cyclo Algol (Oculus Hori), consecratione Apis, feriis sacris et **Nilometro vivo** quod gradus historicos aquarum ostendit.
 
-### 🎨 Experientia Visualis et Aesthetica
-- **Designatio Mobilibus Prima**: Fascia navigationis infera persistens ad celerem commutationem humanitatum et mutator thematis dynamicus ad mobilia optimizatus.
-- **Dualitas Thematis**: Sustentatio modi obscuri profundi et **Modi Membranei** (clari) qui antiqua manuscripta revocat.
-- **Skyline Proceduralis**: Scena dynamica quae templa Romana, acropoles Graecas vel obeliscos Aegyptios secundum humanitatem activam modo procedurāli generat.
-- **Accessibilitas WCAG AA**: Designatio ad summam legibilitatem optimizata cum contrastibus recensitis et typographia praestanti.
+### 🎨 Species et Elegantia
+- **Compositio Mobilibus Accommodata**: Fascia navigationis ima perpetua ad celeres gentium commutationes, et commutator thematis ad telephona aptatus.
+- **Dualitas Thematis**: Modus tenebrosus profundus atque **Modus Membraneus** (clarus) qui antiquos codices revocat.
+- **Prospectus Proceduralis**: Scaena viva quae templa Romana, acropoles Graecas vel obeliscos Aegyptios secundum gentem activam modo procedurali gignit.
+- **Accessibilitas WCAG AA**: Compositio ad summam legibilitatem aptata cum contrastibus probatis et typographia praestanti.
 
-### 🕰️ Chronometria et Astronomia Provecta
-- **Temporis Exactio**: Calculus in tempore reali *Horarum* (die) et *Vigiliarum* (nocte) secundum latitudinem et longitudinem exactam.
-- **Oculus Hori (Algol)**: Investigatio in tempore reali stellae variabilis Algol (2.86 dies), sicut actiones Hori in Papyro Cairensi 86637 codificata.
-- **Rector Horae**: Identificatio domini planetarii uniuscuiusque horae secundum ordinem Chaldaeorum.
+### 🕰️ Chronometria et Astronomia Subtilis
+- **Temporis Exactio**: Computatio in praesenti *Horarum* (die) et *Vigiliarum* (nocte) secundum latitudinem et longitudinem exactam.
+- **Oculus Hori (Algol)**: Observatio in praesenti stellae variabilis Algol (2.86 dies), quemadmodum actiones Hori in Papyro Cairensi 86637 descriptae sunt.
+- **Rector Horae**: Agnitio domini planetarii uniuscuiusque horae secundum ordinem Chaldaeorum.
+- **Nilometrum Historicum**: Exemplar hydrologicum per singulos menses quod cyclum annuum Nili — ab inundatione maxima in Phaophi usque ad siccitatem in Epiphi — ante oculos ponit.
 
 ### 🔮 Sapientia et Divinatio Antiqua
-- **Hemerologia Aegyptia**: Systema dierum "Bonorum et Malorum" (*Nefer* et *Aha*) in Papyro Cairensi 86637 fundatum.
-- **Sortes Vergilianae**: Instrumentum divinationis classicae integratum utens fragmentis Aeneidos.
-- **Sententiae & Apophthegmata**: Sapientia cottidiana Latine, Graece et Aegyptiace Antique, cum translitterationibus et translationibus.
+- **Hemerologia Aegyptia**: Ratio dierum Bonorum et Malorum (*Nefer* et *Aha*) in Papyro Cairensi 86637 fundata.
+- **Sortes Vergilianae**: Instrumentum divinationis classicae integratum, fragmentis Aeneidos utens.
+- **Sententiae & Apophthegmata**: Sapientia quotidiana Latine, Graece et Aegyptiace, cum litteris conversis et interpretationibus.
 
-### 📱 Technologia et Mobilitas
-- **PWA (Progressive Web App)**: In dēscriptōrio et mōbilibus sēparātim fīgī potest, cum plēnā sustentātiōne sine rēte (offline) grātiās "Service Workers".
-- **Capacitor Integratio**: Ad Android optimizatum cum integratione nativa (occultatio fasciae status, "splash screens").
-- **Geolocalizatio Intellegens**: Locus automaticus vel selectio manualis per investigatorem globalem urbium.
+### 📱 Ars Mechanica et Mobilitas
+- **PWA (Progressive Web App)**: In scriniis et telephonis mobilibus institui potest, cum plena operatione sine rete (offline) per "Service Workers".
+- **Capacitor Integratio**: Ad Android aptatum cum integratione nativa (occultatio fasciae status, "splash screens").
+- **Locorum Inventio Ingeniosa**: Locus automatice repertus vel manu selectus per investigatorem urbium orbis terrarum.
 
 ## 🛠️ Ratio Technica
 
 - **Cor**: React 19, TypeScript 5.8.
-- **Stilus**: Tailwind CSS 4 (machinamentum summae agilitatis).
-- **Instrumentum Aedificationis**: Vite 6 cum sustentatione PWA.
-- **Mobile**: Capacitor 8 ad pactionem nativam in Android.
-- **Geometria**: SVG dynamica ad horologium et scēnam procedurālem.
+- **Stilus**: Tailwind CSS 4 (machina summae celeritatis).
+- **Instrumentum Aedificandi**: Vite 6 cum sustentatione PWA.
+- **Mobile**: Capacitor 8 ad involucra nativa in Android.
+- **Geometria**: SVG viva ad horologium et scaenam proceduralem.
 - **Calculus**: Algorithmi astronomici summae accurationis pro phasibus lunaribus et cyclis stellaribus.
 
-## 🚀 Quomodo Agatur
+## 🚀 Quomodo Instituatur
 
-1. **Efodicere**:
+1. **Exscribere**:
    ```bash
    git clone https://github.com/jropero/horologium.git
    cd horologium
    ```
 
-2. **Dependentiae**:
+2. **Necessaria**:
    ```bash
    npm install
    ```
 
-3. **Evolutio**:
+3. **Explicare**:
    ```bash
    npm run dev
    ```
@@ -84,9 +85,10 @@
 
 > "Relinque temporis angustias, ad maiora natus es."
 
-Hoc opus non est modo horologium; est pons ad cogitandi rationem ubi tempus non erat mensura rigida tabernae, sed rhythmus organicus a sole, astris et hereditate humanitatum quae mundum finxerunt dictatūs.
+Hoc opus non est modo horologium; est pons ad rationem cogitandi in qua tempus non erat mensura rigida officinae, sed rhythmus organicus a sole, astris et hereditate gentium quae orbem terrarum finxerunt dictatus.
 
 ---
 
 *Cura historica et praestantia technica confectum.*
+
 
