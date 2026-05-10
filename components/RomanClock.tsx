@@ -183,7 +183,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
       <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
         <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
 
-          {weather && civilization === 'rome' && (
+          {weather && (civilization === 'rome' || civilization === 'hellas') && (
             <WeatherWidget
               weather={weather}
               onClick={() => setIsWeatherOpen(true)}
@@ -193,7 +193,8 @@ const RomanClock: React.FC<RomanClockProps> = ({
 
           <div
             onClick={() => setIsCalendarOpen(true)}
-            className="calendar-header-widget bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-gold-leaf transition-all group relative"
+            className={`calendar-header-widget bg-ink/80 border p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 transition-all group relative
+              ${civilization === 'hellas' ? 'border-sky-400/30 hover:border-sky-400' : 'border-gold-dim hover:border-gold-leaf'}`}
             title="Ver Calendario"
           >
             {civilization === 'rome' ? (
@@ -212,6 +213,24 @@ const RomanClock: React.FC<RomanClockProps> = ({
                   <span>{romanTime.moonPhaseLabel}</span>
                   <span className="text-gold-dim">•</span>
                   <span>Sol in {romanTime.zodiacSign}</span>
+                </div>
+              </>
+            ) : romanTime.atticDate ? (
+              <>
+                <div className="text-sky-400 font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
+                  <span className="text-lg">☾</span>
+                  <span>{romanTime.atticDate.monthName}</span>
+                </div>
+                <div className="text-gold-dim font-serif text-[10px] tracking-widest uppercase opacity-80">
+                  {transliterateGreek(romanTime.atticDate.monthName)}
+                </div>
+                <div className="text-parchment font-serif text-xs italic mt-1 font-bold">
+                  {romanTime.atticDate.spanishShort}
+                </div>
+                <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1.5">
+                  <span>{romanTime.moonPhaseLabel}</span>
+                  <span className="text-sky-400/40">•</span>
+                  <span className="text-sky-300">{translateGreekUI(romanTime.zodiacSign)}</span>
                 </div>
               </>
             ) : null}
