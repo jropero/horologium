@@ -30,7 +30,7 @@
 ### 🌍 Civilizaciones (Multimodal)
 - **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus, ciclo de nundinas y año *Ab Urbe Condita*.
 - **Hellas (Chronos)**: Calendario Ático completo con meses lunares, sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) y alertas de días nefastos (Apaphrades).
-- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis y festivales sagrados.
+- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, festivales sagrados y **Nilómetro dinámico** con niveles históricos.
 
 ### 🎨 Experiencia Visual y Estética
 - **Diseño Mobile-First**: Barra de navegación inferior persistente para cambios rápidos de cultura y selector de tema dinámico optimizado para móviles.
@@ -42,6 +42,7 @@
 - **Temporis Exactio**: Cálculo en tiempo real de *Horae* (día) y *Vigiliae* (noche) basado en la latitud/longitud exacta.
 - **Ojo de Horus (Algol)**: Seguimiento en tiempo real de la estrella variable Algol (2.86 días), codificada como las acciones de Horus en el Papiro de El Cairo 86637.
 - **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo.
+- **Nilómetro Histórico**: Modelo hidrológico mes a mes que recrea visualmente el ciclo anual del Nilo (desde la inundación máxima en Phaophi hasta el estiaje en Epiphi).
 
 ### 🔮 Sabiduría y Adivinación Antigua
 - **Hemerología Egipcia**: Sistema de días "Buenos y Malos" (*Nefer* y *Aha*) basado en el Papiro de El Cairo 86637.
