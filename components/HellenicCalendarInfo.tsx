@@ -31,7 +31,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
 
     const { festival, dailyDeity, atticDate } = greekInfo;
     const hasFestival = !!festival;
-    const apaphrades = checkApaphrades(atticDate.dayOfMonth, atticDate.monthLength, festival);
+    const apaphrades = checkApaphrades(atticDate.monthIndex, atticDate.dayOfMonth, festival);
     
     // Determine the displaying deity logic
     let displayDeityTitle = labels.godOfDayTitle || "Θεὸς τῆς Ἡμέρας";
@@ -201,10 +201,23 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                                     <div className="absolute inset-0 bg-rose-950/20 pointer-events-none rounded-lg" />
                                 )}
 
-                                <div className="text-gold-leaf text-xs font-bold uppercase tracking-widest mb-1 relative z-10 flex justify-center items-center gap-2">
-                                    {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
-                                    {displayDeityTitle}
-                                    {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+                                <div className="text-gold-leaf text-xs font-bold uppercase tracking-widest mb-1 relative z-10 flex flex-col items-center gap-1">
+                                    <div className="flex justify-center items-center gap-2">
+                                        {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+                                        {displayDeityTitle}
+                                        {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+                                    </div>
+                                    
+                                    {/* Indicadores Rápidos de Contenido Enriquecido */}
+                                    {hasFestival && (
+                                        <div className="flex gap-3 mt-1 px-3 py-1 bg-sky-400/5 rounded-full border border-sky-400/20">
+                                            {festival?.ritualOffering && <span title="Ofrenda Ritual" className="filter drop-shadow-sm">🏺</span>}
+                                            {festival?.pannychisDesc && <span title="Pannychis (Vigilia)" className="filter drop-shadow-sm animate-pulse">🕯️</span>}
+                                            {festival?.agonDesc && <span title="Agōn (Competición)" className="filter drop-shadow-sm">🌿</span>}
+                                            {festival?.economyDesc && <span title="Economía y Liturgias" className="filter drop-shadow-sm">🪙</span>}
+                                            {festival?.aition && <span title="Aition (Mito Fundacional)" className="filter drop-shadow-sm">📜</span>}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <h2 className={`text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight relative z-10`}>
@@ -237,20 +250,118 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                                         </span>
                                     </div>
                                 )}
-                            </div>
 
-                            {/* ALERTA: Días Tabú / Impuros (Apaphrades Hemerai) */}
-                            {apaphrades.isTaboo && (
-                                <div className="w-full mt-4 bg-rose-950/40 border border-rose-900/80 p-3 rounded-md flex items-center gap-3 shadow-inner relative z-10">
-                                    <span className="text-2xl filter drop-shadow-glow animate-pulse">🏺</span>
-                                    <div className="text-left flex flex-col">
-                                        <span className="text-xs font-serif uppercase tracking-[0.1em] font-bold text-rose-500 mb-0.5">
-                                            Apaphrades Hemerai (Día Nefasto)
-                                        </span>
-                                        <p className="text-[11px] font-serif text-rose-200/80 leading-snug">
-                                            {apaphrades.reason}
+                                {/* OFRENDA RITUAL ("El Menú de los Dioses") */}
+                                {festival?.ritualOffering && (
+                                    <div className="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-md relative z-10 flex items-start gap-3 shadow-sm">
+                                        <span className="text-2xl filter drop-shadow-md">{festival.ritualOffering.icon}</span>
+                                        <div className="flex flex-col text-left">
+                                            <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-amber-500 mb-0.5">
+                                                Ofrenda Tradicional
+                                            </span>
+                                            <span className="text-xs font-serif text-amber-100/90 leading-snug">
+                                                {festival.ritualOffering.item}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* VIGILIA NOCTURNA (Pannychis y Lampadedromia) */}
+                                {festival?.pannychisDesc && (
+                                    <div className="mt-3 p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
+                                        <span className="text-xl animate-pulse filter drop-shadow-[0_0_5px_rgba(129,140,248,0.8)]">🕯️</span>
+                                        <div className="flex flex-col text-left">
+                                            <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-indigo-400 mb-0.5">
+                                                Pannychis (Vigilia Sagrada)
+                                            </span>
+                                            <span className="text-[11px] font-serif text-indigo-200/80 leading-snug italic">
+                                                {festival.pannychisDesc}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* AGŌN (Juegos y Competiciones) */}
+                                {festival?.agonDesc && (
+                                    <div className="mt-3 p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
+                                        <span className="text-xl filter drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]">🌿</span>
+                                        <div className="flex flex-col text-left">
+                                            <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-emerald-400 mb-0.5">
+                                                Agōn (Competición)
+                                            </span>
+                                            <span className="text-[11px] font-serif text-emerald-100/80 leading-snug">
+                                                {festival.agonDesc}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* ECONOMÍA (Premios, Costes y Liturgias) */}
+                                {festival?.economyDesc && (
+                                    <div className="mt-3 p-3 bg-yellow-950/30 border border-yellow-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
+                                        <span className="text-xl filter drop-shadow-[0_0_5px_rgba(234,179,8,0.8)]">🪙</span>
+                                        <div className="flex flex-col text-left">
+                                            <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-yellow-500 mb-0.5">
+                                                El Precio de la Piedad
+                                            </span>
+                                            <span className="text-[11px] font-serif text-yellow-100/80 leading-snug italic">
+                                                {festival.economyDesc}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* AITION (Mito Fundacional) */}
+                                {festival?.aition && (
+                                    <div className="mt-4 p-4 bg-stone-900/80 border border-stone-700/50 rounded-md relative z-10 flex flex-col items-start gap-2 shadow-inner">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xl filter drop-shadow-md">📜</span>
+                                            <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-bold text-stone-300">
+                                                Aition: El Mito Fundacional
+                                            </span>
+                                        </div>
+                                        <p className="text-[12px] font-serif text-stone-400/90 leading-relaxed text-left border-l-2 border-stone-600/50 pl-3 italic">
+                                            {festival.aition}
                                         </p>
                                     </div>
+                                )}
+                            </div>
+
+                            {/* ALERTA: Días Tabú / Impuros (Apaphrades Hemerai) con Instrucciones */}
+                            {apaphrades.isTaboo && (
+                                <div className="w-full mt-6 bg-rose-950/60 border-2 border-rose-900/80 p-4 sm:p-5 rounded-md flex flex-col gap-3 shadow-[inset_0_0_30px_rgba(225,29,72,0.15)] relative z-10">
+                                    
+                                    {/* Barras de peligro "Atenienses" (estilo cuerda) */}
+                                    <div className="absolute top-0 left-0 right-0 h-1 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#881337_10px,#881337_20px)] opacity-50 rounded-t-sm"></div>
+                                    
+                                    <div className="flex items-center gap-4 border-b border-rose-900/50 pb-3">
+                                        <span className="text-4xl filter drop-shadow-[0_0_10px_rgba(225,29,72,0.8)] animate-bounce">
+                                            {apaphrades.icon}
+                                        </span>
+                                        <div className="text-left flex flex-col">
+                                            <span className="text-base font-serif uppercase tracking-[0.15em] font-black text-rose-500 leading-none mb-1">
+                                                Apaphrades Hemera
+                                            </span>
+                                            <span className="text-[10px] font-serif text-rose-300/80 tracking-widest uppercase">
+                                                (Día Nefasto y Prohibido)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <p className="text-xs sm:text-sm font-serif text-rose-200/90 leading-relaxed text-left italic">
+                                        {apaphrades.reason}
+                                    </p>
+
+                                    {apaphrades.instruction && (
+                                        <div className="bg-rose-900/30 border border-rose-500/40 rounded p-3 mt-2 shadow-inner">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-400 mb-1.5 flex items-center gap-2">
+                                                <span className="text-rose-500 animate-pulse">⚠️</span> Instrucción de Supervivencia:
+                                            </span>
+                                            <p className="font-serif text-xs text-rose-100/90 leading-snug text-left">
+                                                "{apaphrades.instruction}"
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -281,7 +392,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                             {/* List */}
                             <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
                                 {getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 3).map((f, i) => (
-                                    <div key={i} className="group/fest">
+                                    <div key={i} className="group/fest border-b border-gold-dim/10 pb-6 last:border-0">
                                         <div className="flex justify-between items-start mb-2">
                                             <div className="flex flex-col gap-1">
                                                 <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-sky-400 transition-colors leading-tight">
@@ -296,9 +407,43 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                                                 <div className="text-[7px] text-sky-400/60 uppercase font-bold tracking-tighter">días</div>
                                             </div>
                                         </div>
-                                        <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-sky-400/20 pl-4 py-1">
+                                        <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-sky-400/20 pl-4 py-1 mb-3">
                                             {f.description}
                                         </p>
+
+                                        {/* Información Enriquecida en la lista de Próximos */}
+                                        <div className="grid grid-cols-1 gap-2 pl-4">
+                                            {f.fullFestival?.ritualOffering && (
+                                                <div className="text-[10px] font-serif text-amber-200/70 flex items-center gap-2">
+                                                    <span>{f.fullFestival.ritualOffering.icon}</span>
+                                                    <span><b className="text-amber-500/80 uppercase tracking-tighter">Ofrenda:</b> {f.fullFestival.ritualOffering.item}</span>
+                                                </div>
+                                            )}
+                                            {f.fullFestival?.pannychisDesc && (
+                                                <div className="text-[10px] font-serif text-indigo-200/70 flex items-center gap-2">
+                                                    <span className="animate-pulse">🕯️</span>
+                                                    <span><b className="text-indigo-400/80 uppercase tracking-tighter">Vigilia:</b> {f.fullFestival.pannychisDesc}</span>
+                                                </div>
+                                            )}
+                                            {f.fullFestival?.agonDesc && (
+                                                <div className="text-[10px] font-serif text-emerald-200/70 flex items-center gap-2">
+                                                    <span>🌿</span>
+                                                    <span><b className="text-emerald-400/80 uppercase tracking-tighter">Agōn:</b> {f.fullFestival.agonDesc}</span>
+                                                </div>
+                                            )}
+                                            {f.fullFestival?.economyDesc && (
+                                                <div className="text-[10px] font-serif text-yellow-200/70 flex items-center gap-2">
+                                                    <span>🪙</span>
+                                                    <span><b className="text-yellow-500/80 uppercase tracking-tighter">Economía:</b> {f.fullFestival.economyDesc}</span>
+                                                </div>
+                                            )}
+                                            {f.fullFestival?.aition && (
+                                                <div className="text-[10px] font-serif text-stone-300/70 flex items-start gap-2 bg-stone-900/40 p-2 rounded mt-1 border-l-2 border-stone-600/50">
+                                                    <span className="text-xs">📜</span>
+                                                    <span><b className="text-stone-300 uppercase tracking-tighter">Aition:</b> {f.fullFestival.aition}</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>

@@ -1,15 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { BookOpen, Sparkles } from 'lucide-react';
 import { getRandomSors, SorsVergiliana } from '../utils/sortesVergilianae';
-import { getRandomSorsHomerica, SorsHomerica } from '../utils/sortesHomericae';
+import { getRandomDiosemeia, Diosemeia } from '../utils/diosemeiaData';
 import { EGYPTIAN_WISDOM, EgyptianWisdom } from '../utils/egyptianWisdomData';
 import { useCivilization } from '../contexts/CivilizationContext';
-import { transliterateGreek } from '../utils/greekTransliteration';
 
 const SortesVergilianae: React.FC = () => {
   const { civilization, labels } = useCivilization();
   const [sors, setSors] = useState<SorsVergiliana | null>(null);
-  const [sorsHomerica, setSorsHomerica] = useState<SorsHomerica | null>(null);
+  const [diosemeia, setDiosemeia] = useState<Diosemeia | null>(null);
   const [sorsAegyptiaca, setSorsAegyptiaca] = useState<EgyptianWisdom | null>(null);
   const [isRevealing, setIsRevealing] = useState(false);
   const [hasConsulted, setHasConsulted] = useState(false);
@@ -17,7 +16,7 @@ const SortesVergilianae: React.FC = () => {
   const handleConsult = useCallback(() => {
     setIsRevealing(true);
     setSors(null);
-    setSorsHomerica(null);
+    setDiosemeia(null);
     setSorsAegyptiaca(null);
 
     // Small delay for dramatic effect
@@ -25,7 +24,7 @@ const SortesVergilianae: React.FC = () => {
       if (civilization === 'rome') {
         setSors(getRandomSors());
       } else if (civilization === 'hellas') {
-        setSorsHomerica(getRandomSorsHomerica());
+        setDiosemeia(getRandomDiosemeia());
       } else {
         const randomIndex = Math.floor(Math.random() * EGYPTIAN_WISDOM.length);
         setSorsAegyptiaca(EGYPTIAN_WISDOM[randomIndex]);
@@ -36,9 +35,9 @@ const SortesVergilianae: React.FC = () => {
   }, [civilization]);
 
   const currentSors = civilization === 'rome' ? sors : null;
-  const currentHomerica = civilization === 'hellas' ? sorsHomerica : null;
+  const currentDiosemeia = civilization === 'hellas' ? diosemeia : null;
   const currentAegyptiaca = civilization === 'aegyptus' ? sorsAegyptiaca : null;
-  const hasSors = currentSors || currentHomerica || currentAegyptiaca;
+  const hasSors = currentSors || currentDiosemeia || currentAegyptiaca;
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 px-4 animate-fadeIn">
@@ -77,21 +76,43 @@ const SortesVergilianae: React.FC = () => {
             </div>
           )}
 
-          {/* Revealed verse — Greek */}
-          {currentHomerica && !isRevealing && (
-            <div className="text-center animate-fadeIn flex flex-col gap-2 relative">
-              <blockquote className="font-body text-parchment text-2xl md:text-4xl italic leading-relaxed mb-2 drop-shadow-glow">
-                «{currentHomerica.greek}»
-              </blockquote>
-              <p className="font-serif text-sm md:text-base text-gold-dim/80 tracking-widest uppercase mb-4">
-                {transliterateGreek(currentHomerica.greek)}
-              </p>
-              <div className="w-1/4 h-px bg-gold-dim/30 mx-auto mb-4"></div>
-              <p className="font-serif italic text-lg md:text-xl text-parchment/70 mb-4 leading-relaxed">
-                {currentHomerica.spanish}
-              </p>
-              <cite className="font-serif text-sm md:text-base uppercase tracking-[0.2em] text-gold-dim/80 not-italic font-bold">
-                — {currentHomerica.source} —
+          {/* Revealed omen — Greek (Diosemeia) */}
+          {currentDiosemeia && !isRevealing && (
+            <div className="text-center animate-fadeIn flex flex-col gap-4 relative w-full max-w-lg mx-auto bg-ink/40 p-6 md:p-8 rounded-xl border border-sky-400/30 shadow-[inset_0_0_20px_rgba(56,189,248,0.05)]">
+              {/* Esquinas ornamentales */}
+              <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-sky-400/50"></div>
+              <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-sky-400/50"></div>
+              <div className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-sky-400/50"></div>
+              <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-sky-400/50"></div>
+              
+              <div className="flex flex-col items-center justify-center gap-1 mb-2">
+                  <span className="text-3xl animate-pulse filter drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]">🌩️</span>
+                  <span className="font-serif text-sm md:text-base uppercase tracking-[0.3em] font-bold text-sky-400 mt-2">
+                      Diosemeia
+                  </span>
+                  <span className="font-serif text-[10px] uppercase tracking-widest text-sky-400/60">
+                      (Señal Divina)
+                  </span>
+              </div>
+
+              <div className="relative">
+                <span className="absolute -left-2 -top-2 text-3xl text-sky-400/20 font-serif">«</span>
+                <p className="font-serif italic text-base md:text-lg text-parchment leading-relaxed text-left border-l-2 border-sky-500/50 pl-4 py-1 z-10 relative">
+                    {currentDiosemeia.event}
+                </p>
+              </div>
+
+              <div className="w-1/3 h-px bg-gradient-to-r from-transparent via-sky-400/40 to-transparent mx-auto my-2"></div>
+              
+              <div className="bg-roman-red/10 border border-roman-red/20 rounded p-3">
+                <span className="font-serif text-[10px] uppercase tracking-[0.2em] font-bold text-roman-red/80 block mb-1">Pronóstico del Oráculo:</span>
+                <p className="font-body font-black text-sm md:text-base text-roman-red uppercase tracking-wide">
+                    {currentDiosemeia.meaning}
+                </p>
+              </div>
+
+              <cite className="font-serif text-xs md:text-sm text-stone-500 mt-2">
+                  — {currentDiosemeia.source} —
               </cite>
             </div>
           )}

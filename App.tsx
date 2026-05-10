@@ -30,7 +30,17 @@ const DEFAULT_LNG = 7.5744;
 
 const AppContent: React.FC = () => {
   const { civilization, labels } = useCivilization();
-  const [modernTime, setModernTime] = useState<Date>(new Date());
+  const [modernTime, setModernTime] = useState<Date>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const dateParam = params.get('date');
+    if (dateParam) {
+      const parsedDate = new Date(dateParam);
+      if (!isNaN(parsedDate.getTime())) {
+        return parsedDate;
+      }
+    }
+    return new Date();
+  });
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     const saved = localStorage.getItem('romanClockTheme');
     return (saved as 'dark' | 'light') || 'dark';
@@ -80,7 +90,11 @@ const AppContent: React.FC = () => {
   }, []);
 
   // Update modern time every 15 seconds to prevent high CPU usage
+  // Only if NOT in historical testing mode (no ?date parameter)
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('date')) return;
+
     const timer = setInterval(() => {
       setModernTime(new Date());
     }, 15000);

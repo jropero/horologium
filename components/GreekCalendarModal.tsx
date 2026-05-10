@@ -209,6 +209,71 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                     </div>
                   )}
 
+                  {/* Participantes Históricos (Compacto) */}
+                  {day.festival?.participants && (
+                    <div className="mt-2 text-[10px] sm:text-xs font-serif text-sky-300/80">
+                      <span className="text-gold-dim/60 uppercase tracking-widest font-bold">Participantes: </span>
+                      {day.festival.participants}
+                    </div>
+                  )}
+
+                  {/* Ofrenda Ritual */}
+                  {day.festival?.ritualOffering && (
+                    <div className="mt-3 p-2 bg-amber-900/10 border border-amber-500/20 rounded flex items-center gap-2">
+                      <span className="text-lg">{day.festival.ritualOffering.icon}</span>
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-serif uppercase tracking-widest font-bold text-amber-500/80">Ofrenda</span>
+                        <span className="text-[11px] font-serif text-amber-100/70 leading-tight">{day.festival.ritualOffering.item}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pannychis */}
+                  {day.festival?.pannychisDesc && (
+                    <div className="mt-2 p-2 bg-indigo-950/30 border border-indigo-500/20 rounded flex items-center gap-2">
+                      <span className="text-base animate-pulse">🕯️</span>
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-serif uppercase tracking-widest font-bold text-indigo-400/80">Vigilia</span>
+                        <span className="text-[10px] font-serif text-indigo-200/70 leading-tight italic">{day.festival.pannychisDesc}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Agōn */}
+                  {day.festival?.agonDesc && (
+                    <div className="mt-2 p-2 bg-emerald-950/20 border border-emerald-500/20 rounded flex items-center gap-2">
+                      <span className="text-lg">🌿</span>
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-serif uppercase tracking-widest font-bold text-emerald-400/80">Competición</span>
+                        <span className="text-[10px] font-serif text-emerald-100/70 leading-tight">{day.festival.agonDesc}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Economy */}
+                  {day.festival?.economyDesc && (
+                    <div className="mt-2 p-2 bg-yellow-950/20 border border-yellow-500/20 rounded flex items-center gap-2">
+                      <span className="text-lg">🪙</span>
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-serif uppercase tracking-widest font-bold text-yellow-500/80">Economía</span>
+                        <span className="text-[10px] font-serif text-yellow-100/70 leading-tight italic">{day.festival.economyDesc}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Aition */}
+                  {day.festival?.aition && (
+                    <div className="mt-2 p-2 bg-stone-900/60 border border-stone-700/40 rounded flex items-start gap-2">
+                        <span className="text-base mt-0.5">📜</span>
+                        <div className="flex flex-col">
+                            <span className="text-[9px] font-serif uppercase tracking-widest font-bold text-stone-300">Aition (Mito)</span>
+                            <span className="text-[10px] font-serif text-stone-400/80 leading-tight italic mt-0.5">
+                                {day.festival.aition}
+                            </span>
+                        </div>
+                    </div>
+                  )}
+
                   {/* Lunar Progress */}
                   <LunarProgress dayOfMonth={day.atticDate.dayOfMonth} />
                 </div>
