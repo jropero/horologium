@@ -20,6 +20,8 @@ import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
 import SortesVergilianae from './components/SortesVergilianae';
+import LocationModal from './components/LocationModal';
+import { LOCATIONS } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import { CivilizationProvider, useCivilization } from './contexts/CivilizationContext';
@@ -71,6 +73,11 @@ const AppContent: React.FC = () => {
   const [romanTimeData, setRomanTimeData] = useState<RomanTimeData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isGreekCalendarOpen, setIsGreekCalendarOpen] = useState<boolean>(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
+
+  // Determine current location name
+  const currentLocation = LOCATIONS.find(loc => loc.id !== 'gps' && Math.abs(latitude - (loc.lat || 0)) < 0.001 && Math.abs(longitude - (loc.lng || 0)) < 0.001);
+  const currentLocationName = currentLocation ? currentLocation.name : 'GPS / Custom';
 
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
@@ -138,14 +145,22 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
       
-      {/* Mobile Theme Toggle */}
-      <button 
-        onClick={toggleTheme}
-        className="fixed top-2 right-2 z-50 md:hidden w-8 h-8 flex items-center justify-center rounded-full bg-ink/90 backdrop-blur-md border border-gold-dim/40 shadow-lg text-gold-leaf hover:bg-ink transition-all active:scale-95"
-        aria-label="Toggle Theme"
-      >
-        {theme === 'dark' ? <Sun className="w-4 h-4 animate-spin-slow" /> : <Moon className="w-4 h-4" />}
-      </button>
+      {/* Mobile Theme Toggle and Location */}
+      <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end gap-1.5">
+        <button 
+          onClick={toggleTheme}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-ink/90 backdrop-blur-md border border-gold-dim/40 shadow-lg text-gold-leaf hover:bg-ink transition-all active:scale-95"
+          aria-label="Toggle Theme"
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4 animate-spin-slow" /> : <Moon className="w-4 h-4" />}
+        </button>
+        <button
+          onClick={() => setIsLocationModalOpen(true)}
+          className="text-[10px] font-serif tracking-widest uppercase text-gold-dim/80 bg-ink/80 px-2.5 py-1 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg active:scale-95 transition-all max-w-[100px] truncate"
+        >
+          {currentLocationName}
+        </button>
+      </div>
 
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
@@ -230,8 +245,13 @@ const AppContent: React.FC = () => {
         startDate={modernTime}
       />
 
-
-
+      <LocationModal
+        isOpen={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        onUpdateLocation={handleUpdateLocation}
+        currentLat={latitude}
+        currentLng={longitude}
+      />
 
       {/* Background vignette effect */}
       <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>

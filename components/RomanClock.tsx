@@ -10,6 +10,8 @@ import { generateGreekSkyline } from '../utils/greekSkylineGenerator';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
+import { OVID_MONTH_ETYMOLOGIES, OVID_ASTRONOMICAL_EVENTS, OVID_TABOOS, OVID_DIVINE_DIALOGUES, OVID_WEATHER_QUOTES } from '../utils/ovidFastiData';
+import InterrogatioDivina from './InterrogatioDivina';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -33,6 +35,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
   const { civilization, labels } = useCivilization();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
+  const [isDialogueOpen, setIsDialogueOpen] = useState(false);
 
   const stars = useMemo(() => {
     const starData = [];
@@ -54,6 +57,68 @@ const RomanClock: React.FC<RomanClockProps> = ({
     const seed = modernTime.getFullYear() * 10000 + (modernTime.getMonth() + 1) * 100 + modernTime.getDate();
     return civilization === 'rome' ? generateSkyline(seed) : generateGreekSkyline(seed);
   }, [modernTime.getDate(), civilization]);
+
+  // Epic 1 & 2: Ovid Fasti Data
+  const ovidMonthInfo = useMemo(() => {
+    if (civilization !== 'rome') return null;
+    const currentMonth = modernTime.getMonth() + 1; // 1-12
+    return OVID_MONTH_ETYMOLOGIES.find(m => m.month === currentMonth);
+  }, [modernTime.getMonth(), civilization]);
+
+  const ovidAstroEvent = useMemo(() => {
+    if (civilization !== 'rome') return null;
+    const currentMonth = modernTime.getMonth() + 1;
+    const currentDay = modernTime.getDate();
+    return OVID_ASTRONOMICAL_EVENTS.find(e => e.month === currentMonth && e.day === currentDay);
+  }, [modernTime.getDate(), modernTime.getMonth(), civilization]);
+
+  const activeTaboos = useMemo(() => {
+    if (civilization !== 'rome') return [];
+    const month = modernTime.getMonth() + 1;
+    const day = modernTime.getDate();
+    
+    return OVID_TABOOS.filter(t => {
+        // Lógica simplificada para rangos dentro del mismo mes o meses consecutivos
+        if (t.startMonth === t.endMonth) {
+            return month === t.startMonth && day >= t.startDay && day <= t.endDay;
+        }
+        if (month === t.startMonth) return day >= t.startDay;
+        if (month === t.endMonth) return day <= t.endDay;
+        if (month > t.startMonth && month < t.endMonth) return true;
+        return false;
+    });
+  }, [modernTime.getDate(), modernTime.getMonth(), civilization]);
+
+  const ovidDialogue = useMemo(() => {
+    if (civilization !== 'rome') return null;
+    const month = modernTime.getMonth() + 1;
+    const day = modernTime.getDate();
+
+    // 1. Janus: All January
+    if (month === 1) return OVID_DIVINE_DIALOGUES.find(d => d.god === "Jano");
+    
+    // 2. Marte: March 1st (Matronalia)
+    if (month === 3 && day === 1) return OVID_DIVINE_DIALOGUES.find(d => d.god === "Marte");
+    
+    // 3. Flora: Mensis Maius (Floralia range + rest of May)
+    if ((month === 4 && day >= 28) || month === 5) return OVID_DIVINE_DIALOGUES.find(d => d.god === "Flora");
+    
+    // 4. Minerva: June 13th (Quinquatrus Minusculae)
+    if (month === 6 && day === 13) return OVID_DIVINE_DIALOGUES.find(d => d.god.includes("Minerva"));
+
+    return null;
+  }, [modernTime.getDate(), modernTime.getMonth(), civilization]);
+
+  const ovidWeatherQuote = useMemo(() => {
+    if (civilization !== 'rome' || !weather) return null;
+    const { condition, temperature, windSpeed } = weather.current;
+    
+    if (condition === 'rain' || condition === 'storm') return OVID_WEATHER_QUOTES.find(q => q.condition === 'rain');
+    if (windSpeed > 20) return OVID_WEATHER_QUOTES.find(q => q.condition === 'wind');
+    if (temperature < 5 || condition === 'snow') return OVID_WEATHER_QUOTES.find(q => q.condition === 'snow');
+    if (temperature > 28 || condition === 'clear') return OVID_WEATHER_QUOTES.find(q => q.condition === 'clear');
+    return null;
+  }, [weather, civilization]);
 
   // Efectos de clima pre-calculados para que la aleatoriedad sea estable entre re-renders
   const weatherParticles = useMemo(() => {
@@ -180,26 +245,43 @@ const RomanClock: React.FC<RomanClockProps> = ({
 
   return (
     <>
-      <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
-        <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
+      <div className="w-full max-w-4xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
+        <div className="flex flex-col gap-4 p-4 border-b-2 border-gold-dim/30 bg-ink">
+          
+          {/* Single Column Layout for all Widgets */}
+          <div className="flex flex-col w-full items-center gap-4">
 
           {weather && (civilization === 'rome' || civilization === 'hellas') && (
-            <WeatherWidget
-              weather={weather}
-              onClick={() => setIsWeatherOpen(true)}
-              className="cursor-pointer"
-            />
+            <div className="flex flex-col gap-2 w-full max-w-lg">
+                <WeatherWidget
+                weather={weather}
+                onClick={() => setIsWeatherOpen(true)}
+                className="cursor-pointer"
+                />
+                {civilization === 'rome' && ovidWeatherQuote && (
+                    <div className="px-3 py-1.5 bg-sky-950/20 border-l-2 border-sky-400/40 animate-fadeIn">
+                        <p className="text-[10px] font-serif italic text-sky-200/70 leading-tight">
+                            "{ovidWeatherQuote.text}"
+                        </p>
+                        <p className="text-[8px] text-sky-400/40 uppercase tracking-tighter mt-0.5 text-right">— Ovidio, {ovidWeatherQuote.reference}</p>
+                    </div>
+                )}
+            </div>
           )}
+
+          {/* Central Lore Alerts Container (Moved to bottom row) */}
+
+
 
           <div
             onClick={() => setIsCalendarOpen(true)}
-            className={`calendar-header-widget bg-ink/80 border p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 transition-all group relative
+            className={`calendar-header-widget bg-ink/80 border p-3 rounded shadow-lg w-full max-w-lg flex flex-col items-center cursor-pointer hover:bg-white/5 transition-all group relative
               ${civilization === 'hellas' ? 'border-sky-400/30 hover:border-sky-400' : 'border-gold-dim hover:border-gold-leaf'}`}
             title="Ver Calendario"
           >
             {civilization === 'rome' ? (
               <>
-                <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
+                <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
                   <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
                   <span className="opacity-40 text-xs">|</span>
                   <span>{romanTime.romanDateString}</span>
@@ -207,17 +289,29 @@ const RomanClock: React.FC<RomanClockProps> = ({
                     <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
                   )}
                 </div>
-                <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80">{romanTime.romanDateFull}</div>
-                <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
+                <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80 text-center w-full">{romanTime.romanDateFull}</div>
+                <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1 w-full">
                   <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">{romanTime.nundinalLetter}</span>
                   <span>{romanTime.moonPhaseLabel}</span>
                   <span className="text-gold-dim">•</span>
                   <span>Sol in {romanTime.zodiacSign}</span>
                 </div>
+
+                {/* Epic 1: Month Etymology Subtitle */}
+                {ovidMonthInfo && (
+                  <div className="mt-4 text-center max-w-md mx-auto border-t border-gold-dim/20 pt-3">
+                    <p className="text-[10px] md:text-[11px] font-serif italic text-parchment/60 leading-tight">
+                        {ovidMonthInfo.text}
+                    </p>
+                    <div className="text-[8px] text-gold-dim/50 uppercase tracking-widest mt-0.5">
+                        {ovidMonthInfo.reference}
+                    </div>
+                  </div>
+                )}
               </>
             ) : romanTime.atticDate ? (
               <>
-                <div className="text-sky-400 font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
+                <div className="text-sky-400 font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
                   <span className="text-lg">☾</span>
                   <span>{romanTime.atticDate.monthName}</span>
                 </div>
@@ -227,7 +321,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 <div className="text-parchment font-serif text-xs italic mt-1 font-bold">
                   {romanTime.atticDate.spanishShort}
                 </div>
-                <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1.5">
+                <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1.5 w-full">
                   <span>{romanTime.moonPhaseLabel}</span>
                   <span className="text-sky-400/40">•</span>
                   <span className="text-sky-300">{translateGreekUI(romanTime.zodiacSign)}</span>
@@ -235,6 +329,58 @@ const RomanClock: React.FC<RomanClockProps> = ({
               </>
             ) : null}
           </div>
+          </div>
+
+          {/* Bottom Row: Lore Alerts */}
+          {civilization === 'rome' && (ovidDialogue || ovidAstroEvent || activeTaboos.length > 0) && (
+            <div className="flex flex-col gap-4 w-full items-center pt-2">
+                {/* Epic 4: Divine Dialogue Trigger */}
+                {ovidDialogue && (
+                    <button 
+                        onClick={() => setIsDialogueOpen(true)}
+                        className="w-full max-w-lg flex items-center gap-3 bg-stone-800/50 border border-gold-leaf/30 hover:bg-gold-leaf/10 hover:border-gold-leaf p-3 rounded-lg shadow-lg transition-all group animate-bounce duration-[4000ms] text-left"
+                    >
+                        <span className="text-xl group-hover:scale-125 transition-transform shrink-0">🏛️</span>
+                        <div className="flex flex-col items-start">
+                            <span className="text-[10px] font-serif uppercase tracking-widest text-gold-leaf font-black">Coloquio Divino</span>
+                            <span className="text-[9px] font-serif italic text-parchment/60 leading-tight">Interrogar a {ovidDialogue.god}</span>
+                        </div>
+                    </button>
+                )}
+
+                {/* Epic 2: Astronomical Omen */}
+                {ovidAstroEvent && (
+                    <div className="w-full max-w-lg bg-indigo-950/40 border border-gold-leaf/30 rounded-lg p-3 flex flex-col gap-1 shadow-inner animate-pulse duration-[4000ms]">
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm">✨</span>
+                            <span className="text-[9px] font-serif uppercase tracking-widest font-black text-gold-leaf">Omen Astrorum</span>
+                        </div>
+                        <p className="text-[11px] font-serif italic text-parchment/90 leading-relaxed border-l border-gold-leaf/20 pl-2">
+                            "{ovidAstroEvent.text}"
+                        </p>
+                        <span className="text-[8px] text-gold-dim/60 self-end uppercase tracking-tighter mt-auto pt-1">
+                            — Fasti, {ovidAstroEvent.reference}
+                        </span>
+                    </div>
+                )}
+
+                {/* Epic 3: Omina et Signa (Taboos) */}
+                {activeTaboos.length > 0 && (
+                    <div className="w-full max-w-lg bg-roman-red/10 border border-roman-red/40 rounded-lg p-3 flex flex-col gap-1 shadow-sm">
+                        <div className="flex items-center gap-2 text-roman-red">
+                            <span className="text-sm">⚠️</span>
+                            <span className="text-[9px] font-serif uppercase tracking-widest font-black">{activeTaboos[0].title}</span>
+                        </div>
+                        <p className="text-[11px] font-serif italic text-roman-red leading-relaxed border-l border-roman-red/20 pl-2">
+                            "{activeTaboos[0].text}"
+                        </p>
+                        <span className="text-[8px] text-roman-red/60 self-end uppercase tracking-tighter font-bold mt-auto pt-1">
+                            — Ovidio, {activeTaboos[0].reference}
+                        </span>
+                    </div>
+                )}
+            </div>
+          )}
         </div>
 
         <div className="woodcut-border p-2 bg-ink relative overflow-hidden">
@@ -571,6 +717,20 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 </div>
               </div>
 
+
+              {/* EPIC 8: Tempus Fugit (Memento Mori) */}
+              {civilization === 'rome' && (
+                  <div className="w-full max-w-sm mx-auto mt-6 pt-4 border-t border-ink/10 text-center opacity-80 hover:opacity-100 transition-opacity">
+                    <p className="font-serif text-[9px] uppercase tracking-[0.3em] text-ink/60 mb-1.5 font-bold">Tempus Fugit</p>
+                    <p className="font-serif text-[11px] md:text-xs italic text-ink/90 leading-relaxed px-4">
+                      "Resbalan los tiempos, y envejecemos por tácitos años, y los días escapan sin retardante freno."
+                    </p>
+                    <p className="font-serif text-[8px] uppercase tracking-[0.2em] text-ink/50 mt-1.5 font-bold">
+                        — Ovidio, Fasti, Libro VI, vv. 771-772
+                    </p>
+                  </div>
+              )}
+
             </div>
           </div>
         </div>
@@ -600,6 +760,14 @@ const RomanClock: React.FC<RomanClockProps> = ({
         currentLat={currentLat}
         currentLng={currentLng}
       />
+
+      {ovidDialogue && (
+        <InterrogatioDivina 
+            isOpen={isDialogueOpen}
+            onClose={() => setIsDialogueOpen(false)}
+            dialogue={ovidDialogue}
+        />
+      )}
     </>
   );
 };

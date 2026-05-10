@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { X, CalendarDays } from 'lucide-react';
 import { getRomanDate, getNundinalLetter, LATIN_WEEKDAYS } from '../utils/romanTimeUtils';
 import { getRomanDayInfo } from '../utils/romanCalendarData';
+import { OVID_MONTH_ETYMOLOGIES } from '../utils/ovidFastiData';
 
 interface RomanCalendarModalProps {
   isOpen: boolean;
@@ -31,6 +32,11 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
         info
       };
     });
+  }, [startDate]);
+
+  const ovidMonthInfo = useMemo(() => {
+    const currentMonth = startDate.getMonth() + 1;
+    return OVID_MONTH_ETYMOLOGIES.find(m => m.month === currentMonth);
   }, [startDate]);
 
   if (!isOpen) return null;
@@ -70,6 +76,21 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
           <div className="text-center text-gold-dim font-serif text-xs uppercase tracking-[0.3em] mb-4">
             — Dies VII Sequentes —
           </div>
+
+          {/* Epic 1: Ovid Etymology Banner */}
+          {ovidMonthInfo && (
+            <div className="mb-6 p-4 bg-gold-dim/5 border border-gold-dim/20 rounded-lg text-center relative">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-ink px-3 text-[10px] text-gold-dim uppercase tracking-[0.2em] font-bold">
+                    Etimología: Fastos
+                </div>
+                <p className="text-xs sm:text-sm font-serif italic text-parchment/70 leading-relaxed">
+                    "{ovidMonthInfo.text}"
+                </p>
+                <div className="mt-2 text-[9px] text-gold-dim/50 uppercase tracking-widest">
+                    — Ovidio, {ovidMonthInfo.reference}
+                </div>
+            </div>
+          )}
 
           {nextDays.map((day, idx) => {
             const isToday = idx === 0;
