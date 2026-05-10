@@ -8,21 +8,24 @@ import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
 
-const RomanCalendarInfo: React.FC = () => {
+interface RomanCalendarInfoProps {
+    currentDate?: Date;
+}
+
+const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new Date() }) => {
     const { civilization, labels } = useCivilization();
     const [info, setInfo] = useState<RomanDayInfo | null>(null);
     const [showFestivals, setShowFestivals] = useState(false);
     const [greekInfo, setGreekInfo] = useState<{ festival: AtticFestivalInfo | null; defaultDeity: AtticFestivalInfo; atticDate: AtticDateResult } | null>(null);
 
     useEffect(() => {
-        const today = new Date();
-        setInfo(getRomanDayInfo(today));
+        setInfo(getRomanDayInfo(currentDate));
 
-        const atticDate = getAtticDate(today);
+        const atticDate = getAtticDate(currentDate);
         const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
         const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
         setGreekInfo({ festival, defaultDeity, atticDate });
-    }, []);
+    }, [currentDate]);
 
     if (!info && !greekInfo) return null;
 
@@ -85,13 +88,13 @@ const RomanCalendarInfo: React.FC = () => {
                         )}
 
                         {/* EPHEMERIDES */}
-                        {getHistoricalEvents(new Date()).length > 0 && (
+                        {getHistoricalEvents(currentDate).length > 0 && (
                             <div className="mt-4 pt-4 border-t border-gold-dim/30 w-full animate-fadeIn">
                                 <div className="text-parchment/90 text-[10px] uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
                                     <span>📜</span> {labels.calendarInfoTitle} <span>📜</span>
                                 </div>
                                 <ul className="space-y-3">
-                                    {getHistoricalEvents(new Date()).map((evt: any, i: number) => (
+                                    {getHistoricalEvents(currentDate).map((evt: any, i: number) => (
                                         <li key={i} className="flex flex-col text-center">
                                             <span className="text-gold-leaf font-serif italic text-sm">"{evt.latin}"</span>
                                             <span className="text-parchment/70 text-xs">{evt.spanish}</span>
@@ -127,7 +130,7 @@ const RomanCalendarInfo: React.FC = () => {
 
                             {/* List */}
                             <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
-                                {getNextRomanFestivals(new Date(), 3).map((f, i) => (
+                                {getNextRomanFestivals(currentDate, 3).map((f, i) => (
                                     <div key={i} className="group/fest">
                                         <div className="flex justify-between items-start mb-2">
                                             <div className="flex flex-col gap-1">

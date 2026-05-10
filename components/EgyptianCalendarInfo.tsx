@@ -9,19 +9,21 @@ import { getFestivalsForDate, getNextEgyptianFestivals, Festival } from '../util
 import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egyptianHemerologyData';
 import { getAlgolPhase, getLunarPhase } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
+import Nilometer from './Nilometer';
 
 interface EgyptianCalendarInfoProps {
   onClick?: () => void;
+  currentDate?: Date;
 }
 
-const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) => {
+const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, currentDate = new Date() }) => {
   const { civilization, labels } = useCivilization();
   const [egyptianDate, setEgyptianDate] = useState<EgyptianDateResult | null>(null);
   const [showFestivals, setShowFestivals] = useState(false);
 
   useEffect(() => {
-    setEgyptianDate(getEgyptianDate(new Date()));
-  }, []);
+    setEgyptianDate(getEgyptianDate(currentDate));
+  }, [currentDate]);
 
   if (civilization !== 'aegyptus' || !egyptianDate) return null;
 
@@ -56,7 +58,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
     </div>
   );
 
-  const hemerology = getHemerologyForDate(new Date(), egyptianDate.monthIndex, egyptianDate.dayOfMonth);
+  const hemerology = getHemerologyForDate(currentDate, egyptianDate.monthIndex, egyptianDate.dayOfMonth);
 
   const PrognosisBlock = ({ title, prognosis }: { title: string, prognosis: Prognosis }) => {
     const isNefer = prognosis === 'nefer';
@@ -83,8 +85,8 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
     );
   };
 
-  const algol = getAlgolPhase(new Date());
-  const moonPhase = getLunarPhase(new Date());
+  const algol = getAlgolPhase(currentDate);
+  const moonPhase = getLunarPhase(currentDate);
   const lunarDay = Math.floor(moonPhase * 30) + 1;
 
   // Get festivals from the new definitive database
@@ -184,6 +186,9 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             </div>
           )}
 
+          {/* NILOMETER — Dynamic Nile Water Level */}
+          <Nilometer monthIndex={egyptianDate.monthIndex} seasonName={egyptianDate.seasonName} />
+
           {/* HEMEROLOGY SECTION */}
           <div className="w-full flex flex-col gap-3">
             <h3 className="font-serif text-xs uppercase tracking-widest text-gold-dim font-bold">Pronóstico del Día (Hemerología)</h3>
@@ -220,11 +225,19 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
                 </p>
               </div>
             )}
-            {(isNewMoon || isFullMoon) && (
+            {isNewMoon && (
+              <div className="bg-indigo-950/30 border border-indigo-500/40 p-3 rounded-md flex items-center gap-3 shadow-inner">
+                <span className="text-xl">🌑</span>
+                <p className="text-[11px] font-serif font-bold text-indigo-200 leading-tight text-left italic">
+                  Noche de Estirar la Cuerda (Pedj-Shes). Sin la luz de la luna, Seshat guía a los arquitectos alineando los templos con las estrellas imperecederas de Mesekhtiu (Osa Mayor).
+                </p>
+              </div>
+            )}
+            {isFullMoon && (
               <div className="bg-gold-leaf/5 border border-gold-leaf/20 p-3 rounded-md flex items-center gap-3 shadow-inner">
-                <span className="text-xl">🌙</span>
+                <span className="text-xl">🌕</span>
                 <p className="text-[11px] font-serif font-bold text-gold-dim leading-tight text-left italic">
-                  Fuerte influencia de Seth (Ciclo Lunar).
+                  Plenilunio sagrado. Las fuerzas lunares de Khonsu iluminan el cielo de Kemet.
                 </p>
               </div>
             )}
