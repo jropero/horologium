@@ -62,8 +62,8 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     description: "Continuación de los rituales de fuego apotropaicos para proteger a Egipto."
   },
   "7-4": {
-    name: "Masticación de Cebollas para Bastet",
-    description: "Un ritual nocturno para alejar el mal aliento de los espíritus malignos, honrando a la diosa leona/gata Bastet."
+    name: "🧅 Masticación de Cebollas para Bastet",
+    description: "Tras el oscuro festival de Sokar, los egipcios celebraban este extrañísimo ritual nocturno dedicado a la diosa leona/gata Bastet. Consistía en masticar cebollas crudas y atarse collares de cebollas alrededor del cuello. Se creía que el olor penetrante purificaba el aliento, curaba enfermedades y actuaba como magia apotropaica para ahuyentar a los demonios del inframundo y las fuerzas de Seth. Una noche de protección mágica pura. (Calendario de Medinet Habu, Lista 62)"
   },
   "8-1": {
     name: "Gran Festival de Renenutet",
@@ -72,6 +72,10 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
   "8-10": {
     name: "Vistiendo a Anubis",
     description: "Ceremonias de renovación de las vendas y amuletos sagrados en la necrópolis."
+  },
+  "9-1": {
+    name: "⛵ La Hermosa Fiesta del Valle (Heb Nefer en Inet)",
+    description: "La fiesta de los muertos más espectacular de Tebas. Las estatuas de Amón, Mut y Khonsu salían del templo de Karnak, cruzaban el Nilo en inmensas barcazas doradas y visitaban los templos funerarios de los faraones en la orilla oeste. Las familias iban a las tumbas de sus antepasados, hacían banquetes, bebían vino y encendían antorchas toda la noche para estar junto a los que ya no están. (Tetley, reinados de Seti II y Ramsés III)"
   },
   "10-28": {
     name: "Inicio del Festival de Epiphi",
@@ -109,8 +113,8 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
  */
 export const LUNAR_FESTIVALS: Record<number, Festival> = {
   1: {
-    name: "Festival de Mover la Arena (hnp-s')",
-    description: "Ritual de purificación de los cimientos de los templos y preparación del espacio sagrado al nacer la luna."
+    name: "Festival de Mover la Arena (hnp-s') y Pedj-Shes",
+    description: "Ritual de purificación de los cimientos de los templos al nacer la luna. En esta noche sin luz, el Faraón —acompañado de una sacerdotisa representando a Seshat, diosa de la arquitectura y la astronomía— salía a la oscuridad total del novilunio. Clavaban estacas y 'estiraban una cuerda' (Pedj-Shes) alineándola con la constelación de la Osa Mayor (Mesekhtiu) para encontrar el Norte verdadero y orientar los cimientos de los templos. (Templo de Thutmose III y Edfu de Ptolomeo III)"
   },
   3: {
     name: "Festival de la Vestimenta (Mnht)",
@@ -137,8 +141,8 @@ export const LUNAR_FESTIVALS: Record<number, Festival> = {
     description: "Calculado en la tercera lunación tras la aparición de Sirio, este antiguo ritual honraba a las almas transfiguradas (Akh)."
   },
   20: {
-    name: "Línea de la Milla del Nilo (sspt itrw)",
-    description: "Ceremonia vital de medición del nivel de las aguas y delimitación de fronteras tras la inundación."
+    name: "🌊 Línea de la Milla del Nilo (Shesepet Iteru)",
+    description: "En este día del ciclo lunar, los inspectores y sacerdotes bajaban a los Nilómetros —pozos escalonados conectados al río— para medir oficialmente el nivel de las aguas. De esta medición dependía la economía de todo el año: si el agua subía mucho, habría buena cosecha; si bajaba, habría hambruna. En este día se calculaban los impuestos que pagaría cada campesino ese año. (Papiros de Illahun)"
   },
   22: {
     name: "Festival de la Partida (hnt)",

@@ -160,7 +160,7 @@ const AppContent: React.FC = () => {
         />
       )}
       {civilization === 'aegyptus' && (
-        <EgyptianCalendarInfo />
+        <EgyptianCalendarInfo currentDate={modernTime} />
       )}
 
       {romanTimeData && (
@@ -190,7 +190,7 @@ const AppContent: React.FC = () => {
       )}
 
       {civilization === 'rome' ? (
-        <RomanCalendarInfo />
+        <RomanCalendarInfo currentDate={modernTime} />
       ) : null}
 
       {todaysSunTimes && romanTimeData && (
