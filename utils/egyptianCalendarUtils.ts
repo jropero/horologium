@@ -180,23 +180,32 @@ const isAlexandrianLeapYear = (gregorianStartYear: number): boolean => {
  * 4. Calcular la década (semana de 10 días):
  *    decade = ceil(dayOfMonth / 10) → valores 1, 2 o 3
  */
-export const getEgyptianDate = (gregorianDate: Date): EgyptianDateResult => {
-  const year = gregorianDate.getFullYear();
+/**
+ * Convierte una fecha gregoriana al calendario alejandrino.
+ * 
+ * NOTA: El día egipcio comienza al AMANECER. El parámetro isBeforeSunrise
+ * permite ajustar la fecha si estamos en la madrugada antes de la salida del sol.
+ */
+export const getEgyptianDate = (gregorianDate: Date, isBeforeSunrise: boolean = false): EgyptianDateResult => {
+  let dateToUse = new Date(gregorianDate);
+  if (isBeforeSunrise) {
+    // Si es antes del amanecer, técnicamente aún es el día anterior en el sistema egipcio
+    dateToUse.setDate(dateToUse.getDate() - 1);
+  }
+  
+  const year = dateToUse.getFullYear();
 
   // Paso 1: Determinar el año gregoriano en que comenzó el año alejandrino actual.
-  // El año alejandrino comienza en septiembre. Si la fecha es anterior a Thoth 1
-  // de este año, entonces estamos en el año alejandrino que comenzó el año pasado.
   let startYear = year;
   let thoth1 = getThoth1(startYear);
 
-  if (gregorianDate < thoth1) {
-    // La fecha es antes de Thoth 1 de este año → pertenece al año alejandrino anterior
+  if (dateToUse < thoth1) {
     startYear = year - 1;
     thoth1 = getThoth1(startYear);
   }
 
   // Paso 2: Calcular el día del año alejandrino (1-indexed)
-  const diffMs = gregorianDate.getTime() - thoth1.getTime();
+  const diffMs = dateToUse.getTime() - thoth1.getTime();
   const dayOfYear = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
 
   // Determinar si este año alejandrino es bisiesto

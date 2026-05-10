@@ -67,4 +67,24 @@ export const getRomanDayInfo = (date: Date): RomanDayInfo => {
         god: "Genius Huius Diei", // El Genio del día actual
         description: getDefaultStatusDescription('F'),
     };
-}
+};
+
+export const getNextRomanFestivals = (date: Date, limit: number = 3) => {
+  const nextFestivals = [];
+  const currentDate = new Date(date);
+
+  for (let i = 1; i <= 60; i++) {
+    currentDate.setDate(currentDate.getDate() + 1);
+    const info = getRomanDayInfo(currentDate);
+    if (info.festivalName) {
+      nextFestivals.push({
+        name: info.festivalName,
+        description: info.description,
+        date: currentDate.toLocaleDateString('es-ES', { month: 'long', day: 'numeric' }),
+        daysRemaining: i
+      });
+      if (nextFestivals.length >= limit) break;
+    }
+  }
+  return nextFestivals;
+};
