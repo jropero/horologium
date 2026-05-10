@@ -1,53 +1,53 @@
 /**
- * egyptianTimeUtils.ts — Egyptian time calculation (Horai, Vigiliae, Latinized)
- * Reuses solar math but provides Latin terminology for Greek astronomical terms.
+ * egyptianTimeUtils.ts — Egyptian time calculation (Wnwt, Watches)
+ * Aligned with Roman/Greek seasonal hours but with Egyptian specifics.
  */
 
 import { getSunTimes, getMoonPhase } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
 import { getEgyptianDate } from './egyptianCalendarUtils';
 
-// Latin names for Greek astronomical terms
-const PLANETARY_HOURS_LATIN = [
+// Planetary hours (neutral/Latin as it's the Graeco-Roman standard)
+const PLANETARY_HOURS_ORDER = [
   "Saturnus", "Iuppiter", "Mars", "Sol", "Venus", "Mercurius", "Luna"
 ];
 
 const DAY_START_INDEX = [3, 6, 2, 5, 1, 4, 0];
 
-const getEgyptianPlanetaryRuler = (currentHour: number, isDay: boolean, date: Date): string => {
+const getPlanetaryRuler = (currentHour: number, isDay: boolean, date: Date): string => {
   const dayOfWeek = date.getDay();
   const startIndex = DAY_START_INDEX[dayOfWeek];
   let hoursPassed = currentHour - 1;
   if (!isDay) hoursPassed += 12;
   const rulerIndex = (startIndex + hoursPassed) % 7;
-  return PLANETARY_HOURS_LATIN[rulerIndex];
+  return PLANETARY_HOURS_ORDER[rulerIndex];
 };
 
-const getLatinCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
+const getEgyptianCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
   if (isDay) {
-    if (hourFloat < 1.5)  return { name: "Diluculum", desc: "Amanecer" };
-    if (hourFloat < 4.0)  return { name: "Mane", desc: "Mañana" };
-    if (hourFloat < 5.5)  return { name: "Ante Meridiem", desc: "Antes del mediodía" };
-    if (hourFloat < 6.5)  return { name: "Meridies", desc: "Mediodía" };
-    if (hourFloat < 9.0)  return { name: "Post Meridiem", desc: "Tarde temprana" };
-    if (hourFloat < 11.0) return { name: "Vespera", desc: "Atardecer" };
-    return { name: "Crepusculum", desc: "Crepúsculo vespertino" };
+    if (hourFloat < 1.5)  return { name: "Amon-Ra", desc: "Amanecer (Ra triunfante)" };
+    if (hourFloat < 4.0)  return { name: "Mañana", desc: "Período matutino" };
+    if (hourFloat < 5.5)  return { name: "Hacia el Mediodía", desc: "Ascenso hacia el cenit" };
+    if (hourFloat < 6.5)  return { name: "Ra-Horakhty", desc: "Mediodía (Ra en el cenit)" };
+    if (hourFloat < 9.0)  return { name: "Tarde temprana", desc: "Descenso de Ra" };
+    if (hourFloat < 11.0) return { name: "Atum", desc: "Ocaso (Atum se retira)" };
+    return { name: "Crepúsculo", desc: "Hacia el Duat" };
   } else {
-    if (hourFloat < 1.5)  return { name: "Crepusculum", desc: "Anochecer" };
-    if (hourFloat < 3.0)  return { name: "Penumbra", desc: "Penumbra" };
-    if (hourFloat < 5.0)  return { name: "Nox Profunda", desc: "Noche cerrada" };
-    if (hourFloat < 6.5)  return { name: "Media Nox", desc: "Medianoche" };
-    if (hourFloat < 8.0)  return { name: "Post Media Nox", desc: "Tras la medianoche" };
-    if (hourFloat < 10.0) return { name: "Gallicinium", desc: "Canto del gallo" };
-    return { name: "Aurora", desc: "Aurora" };
+    if (hourFloat < 1.5)  return { name: "Crepúsculo", desc: "Entrada al Duat" };
+    if (hourFloat < 3.0)  return { name: "Anochecer", desc: "Oscuridad creciente" };
+    if (hourFloat < 5.5)  return { name: "Noche Profunda", desc: "Combate en el Duat" };
+    if (hourFloat < 6.5)  return { name: "Media Noche", desc: "Séptima hora (Ra en el abismo)" };
+    if (hourFloat < 8.0)  return { name: "Tras la Medianoche", desc: "Hacia el renacimiento" };
+    if (hourFloat < 10.0) return { name: "Gallicinium", desc: "Canto del gallo (Aviso del alba)" };
+    return { name: "Aurora", desc: "Victoria sobre Apep" };
   }
 };
 
-const getVigilia = (romanHour: number): { name: string, desc: string } => {
-  if (romanHour <= 3) return { name: "Vigilia I", desc: "Prima Vigilia" };
-  if (romanHour <= 6) return { name: "Vigilia II", desc: "Secunda Vigilia" };
-  if (romanHour <= 9) return { name: "Vigilia III", desc: "Tertia Vigilia" };
-  return { name: "Vigilia IV", desc: "Quarta Vigilia" };
+const getEgyptianWatch = (hour: number): { name: string, desc: string } => {
+  // Ancient Egyptians divided the night into 3 watches (First, Middle, Last)
+  if (hour <= 4) return { name: "Primera Guardia", desc: "Reloj de la noche (ẖt-hmt)" };
+  if (hour <= 8) return { name: "Segunda Guardia", desc: "Reloj medio (ẖt-hr-ib)" };
+  return { name: "Tercera Guardia", desc: "Reloj final (ẖt-pẖr)" };
 };
 
 const getLatinMoonPhaseName = (phase: number): string => {
@@ -61,13 +61,57 @@ const getLatinMoonPhaseName = (phase: number): string => {
   return "Luna Cornuta";
 };
 
+interface SunEvent {
+  time: Date;
+  type: 'sunrise' | 'sunset';
+}
+
 export const calculateEgyptianTime = (now: Date, lat: number, lng: number): RomanTimeData => {
-  const { sunrise, sunset } = getSunTimes(now, lat, lng);
-  const isDay = now >= sunrise && now < sunset;
-  
-  const baseTime = isDay ? sunrise : (now < sunrise ? new Date(sunrise.getTime() - 24*3600*1000) : sunset);
-  const endTime = isDay ? sunset : (now < sunrise ? sunrise : new Date(sunset.getTime() + 24*3600*1000));
-  
+  const points: SunEvent[] = [];
+
+  for (let i = -2; i <= 2; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() + i);
+    const { sunrise, sunset } = getSunTimes(d, lat, lng);
+    points.push({ time: sunrise, type: 'sunrise' });
+    points.push({ time: sunset, type: 'sunset' });
+  }
+
+  points.sort((a, b) => a.time.getTime() - b.time.getTime());
+
+  let currentEvent = points[0];
+  let nextEvent = points[1];
+  let found = false;
+
+  for (let i = 0; i < points.length - 1; i++) {
+    if (now >= points[i].time && now < points[i + 1].time) {
+      currentEvent = points[i];
+      nextEvent = points[i + 1];
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    if (now < points[0].time) {
+      currentEvent = { time: new Date(points[0].time.getTime() - 12 * 60 * 60 * 1000), type: points[0].type === 'sunrise' ? 'sunset' : 'sunrise' };
+      nextEvent = points[0];
+    } else {
+      currentEvent = points[points.length - 1];
+      nextEvent = { time: new Date(points[points.length - 1].time.getTime() + 12 * 60 * 60 * 1000), type: points[points.length - 1].type === 'sunrise' ? 'sunset' : 'sunrise' };
+    }
+  }
+
+  const isDay = currentEvent.type === 'sunrise';
+  const baseTime = currentEvent.time;
+  const endTime = nextEvent.time;
+
+  let nextSunriseDisplay = endTime;
+  if (isDay) {
+    const nextSr = points.find((p, idx) => idx > points.indexOf(nextEvent) && p.type === 'sunrise');
+    if (nextSr) nextSunriseDisplay = nextSr.time;
+  }
+
   const durationMs = endTime.getTime() - baseTime.getTime();
   const hourLengthMinutes = (durationMs / 1000 / 60) / 12;
   const elapsedMinutes = (now.getTime() - baseTime.getTime()) / 1000 / 60;
@@ -75,33 +119,40 @@ export const calculateEgyptianTime = (now: Date, lat: number, lng: number): Roma
   let romanHour = Math.floor(elapsedMinutes / hourLengthMinutes) + 1;
   romanHour = Math.max(1, Math.min(12, romanHour));
 
-  const civilDayPart = getLatinCivilDayPart(isDay, elapsedMinutes / hourLengthMinutes);
-  const vigilia = !isDay ? getVigilia(romanHour) : undefined;
+  const hourFloat = elapsedMinutes / hourLengthMinutes;
+  const civilDayPart = getEgyptianCivilDayPart(isDay, hourFloat);
+  const vigilia = !isDay ? getEgyptianWatch(romanHour) : undefined;
   
   const moonPhase = getMoonPhase(now);
-  const egyptianDate = getEgyptianDate(now);
+  
+  // Egyptian day starts at sunrise.
+  // Robust check: find today's sunrise.
+  const todaySunrise = points.find(p => p.type === 'sunrise' && p.time.getDate() === now.getDate())?.time;
+  const isBeforeSunrise = !isDay && todaySunrise && now < todaySunrise;
+  
+  const egyptianDate = getEgyptianDate(now, !!isBeforeSunrise);
 
   return {
     romanHour,
     isDay,
-    hourName: `Hora ${romanHour}`, // Use a neutral label or the Hour number
+    hourName: `Hora ${romanHour}`,
     hourLengthMinutes,
-    sunrise,
-    sunset,
-    nextSunrise: now < sunrise ? sunrise : new Date(sunrise.getTime() + 24*3600*1000),
+    sunrise: isDay ? baseTime : points.find(p => p.type === 'sunrise' && p.time < baseTime)?.time || new Date(baseTime.getTime() - 12 * 3600 * 1000),
+    sunset: isDay ? endTime : baseTime,
+    nextSunrise: nextSunriseDisplay,
     romanDateString: `${egyptianDate.dayOfMonth} de ${egyptianDate.monthName}`,
     romanDateFull: `${egyptianDate.dayOfMonth} de ${egyptianDate.monthName}`,
     atticDate: undefined,
     moonPhase,
     moonPhaseLabel: getLatinMoonPhaseName(moonPhase),
-    planetaryRuler: getEgyptianPlanetaryRuler(romanHour, isDay, now),
+    planetaryRuler: getPlanetaryRuler(romanHour, isDay, now),
     civilDayPart,
     vigilia,
     nundinalLetter: '',
     isMarketDay: false,
     dayOfWeek: ['Dies Solis', 'Dies Lunae', 'Dies Martis', 'Dies Mercurii', 'Dies Iovis', 'Dies Veneris', 'Dies Saturni'][now.getDay()],
     indiction: 0,
-    tutelaMensis: '', // We use the Egyptian deity instead
+    tutelaMensis: '', 
     zodiacSign: '' 
   };
 };

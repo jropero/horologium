@@ -153,11 +153,29 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
                   {hasFestival && (
                     <div className="flex flex-col mt-2">
                       <div className="text-festival font-serif text-sm sm:text-base uppercase tracking-[0.2em] font-black flex items-center gap-2 drop-shadow-md">
-                        <span className="text-lg">✧</span> {day.festival!.festivalName} <span className="text-lg">✧</span>
+                        <span className="text-lg text-sky-400/50">🏛️</span> {day.festival!.festivalName} 
                       </div>
-                      <span className="text-festival/70 font-serif text-[11px] uppercase tracking-widest mt-1 ml-6">
-                        {transliterateGreek(day.festival!.festivalName || '')}
-                      </span>
+                      
+                      {/* NUEVO: Nombre específico del día del festival */}
+                      {day.festival!.festivalDayName && (
+                        <span className="text-sky-400 font-serif text-[11px] font-bold uppercase tracking-widest mt-1">
+                          • {day.festival!.festivalDayName}
+                        </span>
+                      )}
+
+                      {/* NUEVO: Categoría y Apaphrades */}
+                      <div className="flex flex-wrap gap-2 mt-1.5 items-center">
+                        {day.festival!.category && (
+                          <span className="px-1.5 py-0.5 bg-ink/50 border border-gold-dim/40 text-gold-dim/80 font-serif text-[9px] uppercase tracking-wider rounded-sm">
+                            {day.festival!.category}
+                          </span>
+                        )}
+                        {day.festival!.isApaphrades && (
+                          <span className="px-1.5 py-0.5 bg-rose-900/30 border border-rose-500/50 text-rose-400 font-serif text-[9px] uppercase tracking-wider rounded-sm animate-pulse">
+                            🏺 Día Tabú (Apaphrades)
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
 

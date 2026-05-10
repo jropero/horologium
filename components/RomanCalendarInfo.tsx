@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { getRomanDayInfo, RomanDayInfo } from '../utils/romanCalendarData';
+import { getRomanDayInfo, RomanDayInfo, getNextRomanFestivals } from '../utils/romanCalendarData';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
 import { getAtticFestivalInfo, getDefaultAtticDeity, AtticFestivalInfo } from '../utils/atticCalendarData';
 import { getHistoricalEvents } from '../utils/romanHistoryData';
@@ -11,6 +11,7 @@ import { translateGreekUI } from '../utils/greekTranslations';
 const RomanCalendarInfo: React.FC = () => {
     const { civilization, labels } = useCivilization();
     const [info, setInfo] = useState<RomanDayInfo | null>(null);
+    const [showFestivals, setShowFestivals] = useState(false);
     const [greekInfo, setGreekInfo] = useState<{ festival: AtticFestivalInfo | null; defaultDeity: AtticFestivalInfo; atticDate: AtticDateResult } | null>(null);
 
     useEffect(() => {
@@ -43,7 +44,10 @@ const RomanCalendarInfo: React.FC = () => {
     if (civilization === 'rome' && info) {
         return (
             <div className="w-full max-w-md mx-auto mt-6 mb-6">
-                <div className="bg-ink/90 border border-gold-dim p-5 rounded-lg shadow-xl relative overflow-hidden text-center group">
+                <div 
+                    className="bg-ink/90 border border-gold-dim p-5 rounded-lg shadow-xl relative overflow-hidden text-center group cursor-pointer hover:border-roman-red transition-colors"
+                    onClick={() => setShowFestivals(true)}
+                >
 
                     {info.isMajorFestival && (
                         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-leaf via-transparent to-transparent" />
@@ -99,6 +103,63 @@ const RomanCalendarInfo: React.FC = () => {
 
                     </div>
                 </div>
+
+                {/* NEXT FESTIVALS MODAL */}
+                {showFestivals && (
+                    <div 
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
+                        onClick={() => setShowFestivals(false)}
+                    >
+                        <div 
+                            className="w-full max-w-lg bg-ink border-4 border-roman-red rounded-sm shadow-[0_0_50px_rgba(153,27,27,0.3)] overflow-hidden relative cursor-pointer"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Header */}
+                            <div className="p-6 border-b border-roman-red bg-rose-950/20 text-center">
+                                <div className="text-roman-red text-3xl mb-2">🏛️</div>
+                                <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
+                                    Proxima Festa
+                                </h2>
+                                <p className="text-[10px] text-roman-red uppercase tracking-[0.3em] font-bold mt-1">
+                                    Calendarium Romanum
+                                </p>
+                            </div>
+
+                            {/* List */}
+                            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
+                                {getNextRomanFestivals(new Date(), 3).map((f, i) => (
+                                    <div key={i} className="group/fest">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div className="flex flex-col gap-1">
+                                                <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-roman-red transition-colors leading-tight">
+                                                    {f.name}
+                                                </h4>
+                                                <span className="text-[10px] text-gold-dim/60 font-bold uppercase tracking-widest">
+                                                    {f.date}
+                                                </span>
+                                            </div>
+                                            <div className="bg-roman-red/10 border border-roman-red/30 rounded px-2 py-1 text-right">
+                                                <div className="text-[14px] text-roman-red font-black leading-none">{f.daysRemaining}</div>
+                                                <div className="text-[7px] text-roman-red/60 uppercase font-bold tracking-tighter">dies</div>
+                                            </div>
+                                        </div>
+                                        <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-roman-red/20 pl-4 py-1">
+                                            {f.description}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Footer */}
+                            <button 
+                                className="w-full p-4 bg-roman-red/10 border-t border-roman-red/30 text-roman-red font-serif text-xs uppercase tracking-widest hover:bg-roman-red/20 transition-all font-bold"
+                                onClick={() => setShowFestivals(false)}
+                            >
+                                Claudere Fastos
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }
