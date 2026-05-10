@@ -7,7 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
-        base: './',
+        base: '/r/',
       server: {
         port: 3000,
         host: '0.0.0.0',
@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
         react(),
         VitePWA({
           registerType: 'autoUpdate',
-          manifestFilename: 'manifest.json',
-          includeAssets: ['assets/**', 'favicon.ico', 'apple-touch-icon.png', 'manifest.json'],
+          manifestFilename: 'manifest-v2.webmanifest',
+          includeAssets: ['assets/**', 'favicon.ico', 'apple-touch-icon.png', 'manifest-v2.webmanifest'],
           manifest: {
             name: 'Horologium Romanum',
             short_name: 'Horologium',
@@ -26,6 +26,9 @@ export default defineConfig(({ mode }) => {
             theme_color: '#1a1a1a',
             background_color: '#1a1a1a',
             display: 'standalone',
+            start_url: '/r/',
+            scope: '/r/',
+            id: '/r/',
             icons: [
               {
                 src: 'assets/horologium-icon.png',
@@ -36,9 +39,7 @@ export default defineConfig(({ mode }) => {
             ]
           },
           workbox: {
-            globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,ttf,eot,json}'],
-            navigateFallback: null,
-            navigateFallbackDenylist: [/^\/api/],
+            globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json}'],
             runtimeCaching: [
               {
                 urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
