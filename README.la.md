@@ -76,10 +76,28 @@
    npm install
    ```
 
-3. **Explicare**:
+3. **Explicare in Loco**:
    ```bash
    npm run dev
    ```
+
+### 📦 Aedificatio et Editio
+
+Hoc opus duplici ratione aedificandi utitur ad vitandos errores itinerum inter PWA in subdirectorio et applicationem nativam:
+
+- **Pro Tela (PWA)**:
+  Aedificat itineribus absolutis utens (aptum subdirectoriis sicut `/r/`):
+  ```bash
+  npm run build
+  ```
+
+- **Pro Android (Capacitor)**:
+  Aedificat itineribus relativis (`base: './'`) utens, quae omnino necessaria sunt ut Capacitor opes in loco rectas inveniat:
+  ```bash
+  npm run build:cap
+  npx cap copy android
+  npx cap run android
+  ```
 
 ## 🏛️ Philosophia Operis
 

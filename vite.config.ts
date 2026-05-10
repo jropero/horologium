@@ -6,8 +6,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    const isCapacitor = process.env.BUILD_TARGET === 'capacitor';
+
     return {
-        base: '/r/',
+        base: isCapacitor ? './' : '/r/',
       server: {
         port: 3000,
         host: '0.0.0.0',
@@ -26,9 +28,9 @@ export default defineConfig(({ mode }) => {
             theme_color: '#1a1a1a',
             background_color: '#1a1a1a',
             display: 'standalone',
-            start_url: '/r/',
-            scope: '/r/',
-            id: '/r/',
+            start_url: isCapacitor ? './index.html' : '/r/',
+            scope: isCapacitor ? './' : '/r/',
+            id: isCapacitor ? './' : '/r/',
             icons: [
               {
                 src: 'assets/horologium-icon.png',
