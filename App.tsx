@@ -240,10 +240,7 @@ const AppContent: React.FC = () => {
         {labels.footerMotto}
       </footer>
 
-      {/* Solo se muestra en pantallas pequeñas, oculto en lg */}
-      <div className="block lg:hidden">
-        <BottomNav />
-      </div>
+      <BottomNav />
     </div>
   );
 };

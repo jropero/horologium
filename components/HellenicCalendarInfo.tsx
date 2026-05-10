@@ -376,7 +376,6 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                     >
                         <div 
                             className="w-full max-w-lg bg-ink border-4 border-sky-400/60 rounded-sm shadow-[0_0_50px_rgba(56,189,248,0.2)] overflow-hidden relative cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
                         >
                             {/* Header */}
                             <div className="p-6 border-b border-sky-400/30 bg-sky-950/20 text-center">
@@ -390,7 +389,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                             </div>
 
                             {/* List */}
-                            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
+                            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20 overscroll-behavior-contain">
                                 {getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 3).map((f, i) => (
                                     <div key={i} className="group/fest border-b border-gold-dim/10 pb-6 last:border-0">
                                         <div className="flex justify-between items-start mb-2">

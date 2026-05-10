@@ -12,9 +12,9 @@ const BottomNav: React.FC = () => {
   const { civilization, setCivilization } = useCivilization();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)]">
-      <div className="bg-ink/90 backdrop-blur-xl border-t border-gold-dim/20">
-        <div className="max-w-md mx-auto flex items-stretch justify-around h-[60px]">
+    <nav className="fixed bottom-0 lg:bottom-8 left-0 right-0 z-50 px-0 lg:px-4 pb-[env(safe-area-inset-bottom)] pointer-events-none">
+      <div className="bg-ink/90 backdrop-blur-xl border-t lg:border border-gold-dim/20 lg:rounded-2xl lg:shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-md mx-auto overflow-hidden pointer-events-auto transition-all duration-500 hover:border-gold-dim/40">
+        <div className="flex items-stretch justify-around h-[60px] lg:h-[70px]">
           {civs.map(({ id, icon: Icon, label, activeColor, activeGlow }) => {
             const isActive = civilization === id;
             return (
@@ -23,16 +23,16 @@ const BottomNav: React.FC = () => {
                 onClick={() => setCivilization(id)}
                 className={`
                   relative flex-1 flex flex-col items-center justify-center gap-1
-                  transition-all duration-300 active:scale-90
-                  ${isActive ? activeColor : 'text-parchment/30'}
+                  transition-all duration-300 active:scale-90 lg:hover:bg-white/5
+                  ${isActive ? activeColor : 'text-parchment/30 lg:hover:text-parchment/60'}
                 `}
               >
                 {/* Active indicator dot */}
                 {isActive && (
-                  <div className={`absolute top-1.5 w-1 h-1 rounded-full bg-current ${activeGlow}`} />
+                  <div className={`absolute top-1.5 lg:top-2 w-1 h-1 rounded-full bg-current ${activeGlow}`} />
                 )}
-                <Icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110' : ''}`} strokeWidth={isActive ? 2.5 : 1.5} />
-                <span className={`text-[10px] font-serif uppercase tracking-widest transition-all ${isActive ? 'opacity-100 font-bold' : 'opacity-60'}`}>
+                <Icon className={`w-6 h-6 lg:w-7 lg:h-7 transition-transform duration-300 ${isActive ? 'scale-110' : ''}`} strokeWidth={isActive ? 2.5 : 1.5} />
+                <span className={`text-[10px] lg:text-[11px] font-serif uppercase tracking-widest transition-all ${isActive ? 'opacity-100 font-bold' : 'opacity-60'}`}>
                   {label}
                 </span>
               </button>

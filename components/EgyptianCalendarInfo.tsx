@@ -316,7 +316,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick }) 
             </div>
 
             {/* List */}
-            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar overscroll-behavior-contain">
               {getNextEgyptianFestivals(egyptianDate.monthIndex, egyptianDate.dayOfMonth, 3).map((f, i) => (
                 <div key={i} className="group/fest">
                   <div className="flex justify-between items-start mb-2">

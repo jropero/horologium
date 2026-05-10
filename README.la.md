@@ -12,6 +12,13 @@
 
 [Español](README.md) | **Latine**
 
+---
+
+> [!TIP]
+> **Pagina Probationis:** Potes applicationem in actu videre et ultimas mutationes probare apud: [ekult.co.uk/r/](https://ekult.co.uk/r/)
+
+---
+
 </div>
 
 ---
@@ -22,10 +29,11 @@
 
 ### 🌍 Humanitates (Modi Multiplices)
 - **Roma (Fasti Romani)**: Systema classicum cum Kalendis, Nonis et Idibus, cyclo nundinarum et anno *Ab Urbe Condita*.
-- **Hellas (Chronos)**: Calendarium Atticum (Atheniense) plenum cum mensibus lunaribus, feriis historicis et systemate trium decadum.
-- **Aegyptus (Horus)**: Calendarium Alexandrinum/Copticum, cum tempestatibus Aegyptiis (Akhet, Peret, Shemu), diebus epagomenis et numinibus mensis.
+- **Hellas (Chronos)**: Calendarium Atticum plenum cum mensibus lunaribus, systemate trium decadum visualium, feriis cum mythis fundationis (Aition) et monitionibus dierum nefastorum (Apaphrades).
+- **Aegyptus (Horus)**: Calendarium Alexandrinum/Copticum cum tempestatibus (Akhet, Peret, Shemu), hemerologia "Bonorum et Malorum", cyclo Algol (Oculus Hori), enthronizatione Apis et feriis sacris.
 
 ### 🎨 Experientia Visualis et Aesthetica
+- **Designatio Mobilibus Prima**: Fascia navigationis infera persistens ad celerem commutationem humanitatum et mutator thematis dynamicus ad mobilia optimizatus.
 - **Dualitas Thematis**: Sustentatio modi obscuri profundi et **Modi Membranei** (clari) qui antiqua manuscripta revocat.
 - **Skyline Proceduralis**: Scena dynamica quae templa Romana, acropoles Graecas vel obeliscos Aegyptios secundum humanitatem activam modo procedurāli generat.
 - **Accessibilitas WCAG AA**: Designatio ad summam legibilitatem optimizata cum contrastibus recensitis et typographia praestanti.
