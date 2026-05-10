@@ -76,10 +76,28 @@
    npm install
    ```
 
-3. **Desarrollo**:
+3. **Desarrollo Local**:
    ```bash
    npm run dev
    ```
+
+### 📦 Compilación y Despliegue
+
+El proyecto cuenta con un sistema de compilación dual para resolver los conflictos de rutas entre la PWA en subdirectorios y la app nativa:
+
+- **Para Web (PWA)**:
+  Compila utilizando rutas absolutas (ideal para subcarpetas como `/r/`):
+  ```bash
+  npm run build
+  ```
+
+- **Para Android (Capacitor)**:
+  Compila utilizando rutas relativas (`base: './'`), requisito indispensable para que Capacitor cargue los recursos locales:
+  ```bash
+  npm run build:cap
+  npx cap copy android
+  npx cap run android
+  ```
 
 ## 🏛️ Filosofía del Proyecto
 
