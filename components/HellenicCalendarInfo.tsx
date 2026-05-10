@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
 import { getAtticFestivalInfo, getDailyAtticDeity, AtticFestivalInfo, checkApaphrades, getCategoryBadge, getNextAtticFestivals } from '../utils/atticCalendarData';
 import { useCivilization } from '../contexts/CivilizationContext';
@@ -129,6 +130,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
     )};
 
     return (
+        <>
         <div 
           className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2 cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
           onClick={onClick}
@@ -368,96 +370,6 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                     )}
                 </div>
 
-                {/* NEXT FESTIVALS MODAL */}
-                {showFestivals && (
-                    <div 
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
-                        onClick={() => setShowFestivals(false)}
-                    >
-                        <div 
-                            className="w-full max-w-lg bg-ink border-4 border-sky-400/60 rounded-sm shadow-[0_0_50px_rgba(56,189,248,0.2)] overflow-hidden relative cursor-pointer"
-                        >
-                            {/* Header */}
-                            <div className="p-6 border-b border-sky-400/30 bg-sky-950/20 text-center">
-                                <div className="text-sky-400 text-3xl mb-2">🏛️</div>
-                                <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
-                                    Próximos Festivales
-                                </h2>
-                                <p className="text-[10px] text-sky-400/60 uppercase tracking-[0.3em] font-bold mt-1">
-                                    Calendario Sagrado de Atenas
-                                </p>
-                            </div>
-
-                            {/* List */}
-                            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20 overscroll-behavior-contain">
-                                {getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 3).map((f, i) => (
-                                    <div key={i} className="group/fest border-b border-gold-dim/10 pb-6 last:border-0">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <div className="flex flex-col gap-1">
-                                                <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-sky-400 transition-colors leading-tight">
-                                                    {f.name}
-                                                </h4>
-                                                <span className="text-[10px] text-gold-dim/60 font-bold uppercase tracking-widest">
-                                                    {f.date}
-                                                </span>
-                                            </div>
-                                            <div className="bg-sky-400/10 border border-sky-400/30 rounded px-2 py-1 text-right">
-                                                <div className="text-[14px] text-sky-400 font-black leading-none">{f.daysRemaining}</div>
-                                                <div className="text-[7px] text-sky-400/60 uppercase font-bold tracking-tighter">días</div>
-                                            </div>
-                                        </div>
-                                        <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-sky-400/20 pl-4 py-1 mb-3">
-                                            {f.description}
-                                        </p>
-
-                                        {/* Información Enriquecida en la lista de Próximos */}
-                                        <div className="grid grid-cols-1 gap-2 pl-4">
-                                            {f.fullFestival?.ritualOffering && (
-                                                <div className="text-[10px] font-serif text-amber-200/70 flex items-center gap-2">
-                                                    <span>{f.fullFestival.ritualOffering.icon}</span>
-                                                    <span><b className="text-amber-500/80 uppercase tracking-tighter">Ofrenda:</b> {f.fullFestival.ritualOffering.item}</span>
-                                                </div>
-                                            )}
-                                            {f.fullFestival?.pannychisDesc && (
-                                                <div className="text-[10px] font-serif text-indigo-200/70 flex items-center gap-2">
-                                                    <span className="animate-pulse">🕯️</span>
-                                                    <span><b className="text-indigo-400/80 uppercase tracking-tighter">Vigilia:</b> {f.fullFestival.pannychisDesc}</span>
-                                                </div>
-                                            )}
-                                            {f.fullFestival?.agonDesc && (
-                                                <div className="text-[10px] font-serif text-emerald-200/70 flex items-center gap-2">
-                                                    <span>🌿</span>
-                                                    <span><b className="text-emerald-400/80 uppercase tracking-tighter">Agōn:</b> {f.fullFestival.agonDesc}</span>
-                                                </div>
-                                            )}
-                                            {f.fullFestival?.economyDesc && (
-                                                <div className="text-[10px] font-serif text-yellow-200/70 flex items-center gap-2">
-                                                    <span>🪙</span>
-                                                    <span><b className="text-yellow-500/80 uppercase tracking-tighter">Economía:</b> {f.fullFestival.economyDesc}</span>
-                                                </div>
-                                            )}
-                                            {f.fullFestival?.aition && (
-                                                <div className="text-[10px] font-serif text-stone-300/70 flex items-start gap-2 bg-stone-900/40 p-2 rounded mt-1 border-l-2 border-stone-600/50">
-                                                    <span className="text-xs">📜</span>
-                                                    <span><b className="text-stone-300 uppercase tracking-tighter">Aition:</b> {f.fullFestival.aition}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Footer */}
-                            <button 
-                                className="w-full p-4 bg-sky-400/10 border-t border-sky-400/30 text-sky-400 font-serif text-xs uppercase tracking-widest hover:bg-sky-400/20 transition-all font-bold"
-                                onClick={() => setShowFestivals(false)}
-                            >
-                                Cerrar Rollo Sagrado
-                            </button>
-                        </div>
-                    </div>
-                )}
-
                 {/* SVG Waves - Bottom */}
                 <svg className="w-full h-8 block" viewBox="0 0 100 20" preserveAspectRatio="none" style={{ background: 'transparent', borderTop: '2px solid var(--gold-dim)' }}>
                     <defs>
@@ -471,6 +383,105 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
 
             </div>
         </div>
+
+        {/* NEXT FESTIVALS MODAL */}
+        {showFestivals && (
+            <div 
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
+                onClick={() => setShowFestivals(false)}
+            >
+                <div 
+                    className="w-full max-w-lg bg-ink border-4 border-sky-400/60 rounded-sm shadow-[0_0_50px_rgba(56,189,248,0.2)] overflow-hidden relative cursor-auto"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {/* Header */}
+                    <div className="p-6 border-b border-sky-400/30 bg-sky-950/20 text-center relative">
+                        <button
+                            onClick={() => setShowFestivals(false)}
+                            className="absolute top-4 right-4 text-sky-400/60 hover:text-sky-400 transition-colors p-2 rounded-full hover:bg-sky-400/10 z-10"
+                            aria-label="Cerrar"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <div className="text-sky-400 text-3xl mb-2">🏛️</div>
+                        <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
+                            Próximos Festivales
+                        </h2>
+                        <p className="text-[10px] text-sky-400/60 uppercase tracking-[0.3em] font-bold mt-1">
+                            Calendario Sagrado de Atenas
+                        </p>
+                    </div>
+
+                    {/* List */}
+                    <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20 overscroll-behavior-contain">
+                        {getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 3).map((f, i) => (
+                            <div key={i} className="group/fest border-b border-gold-dim/10 pb-6 last:border-0">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="flex flex-col gap-1">
+                                        <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-sky-400 transition-colors leading-tight">
+                                            {f.name}
+                                        </h4>
+                                        <span className="text-[10px] text-gold-dim/60 font-bold uppercase tracking-widest">
+                                            {f.date}
+                                        </span>
+                                    </div>
+                                    <div className="bg-sky-400/10 border border-sky-400/30 rounded px-2 py-1 text-right">
+                                        <div className="text-[14px] text-sky-400 font-black leading-none">{f.daysRemaining}</div>
+                                        <div className="text-[7px] text-sky-400/60 uppercase font-bold tracking-tighter">días</div>
+                                    </div>
+                                </div>
+                                <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-sky-400/20 pl-4 py-1 mb-3">
+                                    {f.description}
+                                </p>
+
+                                {/* Información Enriquecida en la lista de Próximos */}
+                                <div className="grid grid-cols-1 gap-2 pl-4">
+                                    {f.fullFestival?.ritualOffering && (
+                                        <div className="text-[10px] font-serif text-amber-200/70 flex items-center gap-2">
+                                            <span>{f.fullFestival.ritualOffering.icon}</span>
+                                            <span><b className="text-amber-500/80 uppercase tracking-tighter">Ofrenda:</b> {f.fullFestival.ritualOffering.item}</span>
+                                        </div>
+                                    )}
+                                    {f.fullFestival?.pannychisDesc && (
+                                        <div className="text-[10px] font-serif text-indigo-200/70 flex items-center gap-2">
+                                            <span className="animate-pulse">🕯️</span>
+                                            <span><b className="text-indigo-400/80 uppercase tracking-tighter">Vigilia:</b> {f.fullFestival.pannychisDesc}</span>
+                                        </div>
+                                    )}
+                                    {f.fullFestival?.agonDesc && (
+                                        <div className="text-[10px] font-serif text-emerald-200/70 flex items-center gap-2">
+                                            <span>🌿</span>
+                                            <span><b className="text-emerald-400/80 uppercase tracking-tighter">Agōn:</b> {f.fullFestival.agonDesc}</span>
+                                        </div>
+                                    )}
+                                    {f.fullFestival?.economyDesc && (
+                                        <div className="text-[10px] font-serif text-yellow-200/70 flex items-center gap-2">
+                                            <span>🪙</span>
+                                            <span><b className="text-yellow-500/80 uppercase tracking-tighter">Economía:</b> {f.fullFestival.economyDesc}</span>
+                                        </div>
+                                    )}
+                                    {f.fullFestival?.aition && (
+                                        <div className="text-[10px] font-serif text-stone-300/70 flex items-start gap-2 bg-stone-900/40 p-2 rounded mt-1 border-l-2 border-stone-600/50">
+                                            <span className="text-xs">📜</span>
+                                            <span><b className="text-stone-300 uppercase tracking-tighter">Aition:</b> {f.fullFestival.aition}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Footer */}
+                    <button 
+                        className="w-full p-4 bg-sky-400/10 border-t border-sky-400/30 text-sky-400 font-serif text-xs uppercase tracking-widest hover:bg-sky-400/20 transition-all font-bold"
+                        onClick={() => setShowFestivals(false)}
+                    >
+                        Cerrar Rollo Sagrado
+                    </button>
+                </div>
+            </div>
+        )}
+        </>
     );
 };
 
