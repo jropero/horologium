@@ -12,6 +12,13 @@
 
 **Español** | [Latine](README.la.md)
 
+---
+
+> [!TIP]
+> **Página de Prueba:** Puedes ver la aplicación en funcionamiento y probar las últimas actualizaciones en: [ekult.co.uk/r/](https://ekult.co.uk/r/)
+
+---
+
 </div>
 
 ---
@@ -22,10 +29,11 @@
 
 ### 🌍 Civilizaciones (Multimodal)
 - **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus, ciclo de nundinas y año *Ab Urbe Condita*.
-- **Hellas (Chronos)**: Calendario Ático (Ateniense) completo con meses lunares, festivales históricos y sistema de tres décadas.
-- **Aegyptus (Horus)**: Calendario Alejandrino/Copto, con estaciones egipcias (Akhet, Peret, Shemu), días epagómenos y deidades del mes.
+- **Hellas (Chronos)**: Calendario Ático completo con meses lunares, sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) y alertas de días nefastos (Apaphrades).
+- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis y festivales sagrados.
 
 ### 🎨 Experiencia Visual y Estética
+- **Diseño Mobile-First**: Barra de navegación inferior persistente para cambios rápidos de cultura y selector de tema dinámico optimizado para móviles.
 - **Dualitas Thematis**: Soporte para modo oscuro profundo y un **Modo Pergamino** (claro) que evoca manuscritos antiguos.
 - **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas u obeliscos egipcios según la civilización activa.
 - **Accesibilidad WCAG AA**: Diseño optimizado para alta legibilidad con contrastes auditados y tipografía premium.

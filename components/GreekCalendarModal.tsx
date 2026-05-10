@@ -65,7 +65,6 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
     >
       <div
         className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col relative overflow-hidden"
-        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="bg-ink p-3 sm:p-4 border-b border-gold-dim/50 flex justify-between items-center sticky top-0 z-10 shadow-md">
@@ -85,7 +84,7 @@ const GreekCalendarModal: React.FC<GreekCalendarModalProps> = ({ isOpen, onClose
         </div>
 
         {/* Days list */}
-        <div className="overflow-y-auto p-3 sm:p-5 space-y-4 custom-scrollbar bg-ink/5">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-4 custom-scrollbar bg-ink/5 overscroll-behavior-contain">
           <div className="text-center text-gold-dim font-serif text-xs uppercase tracking-[0.3em] mb-4">
             {labels.calendarSubtitle}
           </div>
