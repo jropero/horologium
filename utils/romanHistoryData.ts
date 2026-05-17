@@ -68,7 +68,6 @@ export const ROMAN_HISTORY_DATA: Record<string, HistoricalEvent[]> = {
     "11-5": [{ latin: "Oratio Ciceronis in Catilinam prima.", spanish: "Primera Catilinaria de Cicerón (63 a.C.)." }],
     "11-7": [{ latin: "Caedes M. Tullii Ciceronis.", spanish: "Asesinato de Cicerón (43 a.C.)." }],
     "11-15": [{ latin: "Natalis Neronis.", spanish: "Nacimiento de Nerón (37 d.C.)." }],
-    "11-25": [{ latin: "Coronatio Caroli Magni.", spanish: "Coronación de Carlomagno (800 d.C.)." }],
 };
 
 export const getHistoricalEvents = (date: Date): HistoricalEvent[] => {
