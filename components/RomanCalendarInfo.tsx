@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getRomanDayInfo, RomanDayInfo, getNextRomanFestivals } from '../utils/romanCalendarData';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
 import { getAtticFestivalInfo, getDefaultAtticDeity, AtticFestivalInfo } from '../utils/atticCalendarData';
@@ -15,7 +15,7 @@ import {
     OVID_STATUS_EXPLANATIONS,
     OVID_SACRIFICIA
 } from '../utils/ovidFastiData';
-import { Info, X } from 'lucide-react';
+import { Info, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface RomanCalendarInfoProps {
     currentDate?: Date;
@@ -27,6 +27,37 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
     const [showFestivals, setShowFestivals] = useState(false);
     const [showStatusInfo, setShowStatusInfo] = useState(false);
     const [greekInfo, setGreekInfo] = useState<{ festival: AtticFestivalInfo | null; defaultDeity: AtticFestivalInfo; atticDate: AtticDateResult } | null>(null);
+    const [activeSacrificeIdx, setActiveSacrificeIdx] = useState(0);
+
+    const month = currentDate.getMonth() + 1;
+    const day = currentDate.getDate();
+    const isApril = month === 4;
+    const isMay = month === 5;
+    const isFloralia = isMay && (day >= 1 && day <= 3);
+    const isLemuria = isMay && (day === 9 || day === 11 || day === 13);
+    const isJune = month === 6;
+
+    const sacrificesForDay = OVID_SACRIFICIA.filter(e => e.month === month && e.day === day);
+    const hasMultipleSacrifices = sacrificesForDay.length > 1;
+
+    const randomGenericSacrifice = useMemo(() => {
+        if (sacrificesForDay.length > 0) return null;
+        // Deterministic pseudo-random index based on date
+        const seed = currentDate.getFullYear() * 10000 + (currentDate.getMonth() + 1) * 100 + currentDate.getDate();
+        const x = Math.sin(seed) * 10000;
+        const randomValue = x - Math.floor(x);
+        
+        const candidates = OVID_SACRIFICIA.filter(e => !e.isGeneric);
+        if (candidates.length === 0) return null;
+        const index = Math.floor(randomValue * candidates.length);
+        return candidates[index];
+    }, [currentDate, sacrificesForDay.length]);
+
+    const sacrifice = sacrificesForDay.length > 0 
+        ? sacrificesForDay[0] 
+        : randomGenericSacrifice;
+
+    const isGenericFallback = sacrificesForDay.length === 0 && sacrifice !== null;
 
     useEffect(() => {
         setInfo(getRomanDayInfo(currentDate));
@@ -35,6 +66,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
         const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
         const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
         setGreekInfo({ festival, defaultDeity, atticDate });
+        setActiveSacrificeIdx(0);
     }, [currentDate]);
 
     if (!info && !greekInfo) return null;
@@ -53,9 +85,6 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
         return "text-gold-leaf";
     };
 
-    const month = currentDate.getMonth() + 1;
-    const day = currentDate.getDate();
-
     const mosMaiorum = OVID_MOS_MAIORUM.find(e => e.month === month && e.day === day);
     const annalesBelli = OVID_ANNALES_BELLI.find(e => e.month === month && e.day === day);
     
@@ -71,8 +100,6 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
     
     
     const monument = OVID_AEDES_ET_MONUMENTA.find(e => e.month === month && e.day === day);
-
-    const sacrifice = OVID_SACRIFICIA.find(e => e.month === month && e.day === day) || OVID_SACRIFICIA.find(e => e.isGeneric);
     
     const statusExplanation = OVID_STATUS_EXPLANATIONS.find(e => e.status === info?.status) || 
                              (info?.status.startsWith('N') ? OVID_STATUS_EXPLANATIONS.find(e => e.status === 'N') : null);
@@ -226,23 +253,157 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                         )}
 
                         {/* EPIC 10: Hostiae et Sacrificia */}
-                        {sacrifice && (
-                            <div className="mt-4 p-5 bg-stone-900/60 border border-stone-500/30 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg">
-                                <div className="flex items-center justify-center gap-3 w-full">
-                                    <span className="text-2xl filter drop-shadow-md">{sacrifice.icon || "🗡️"}</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
-                                        Sacrificia: {sacrifice.title}
+                        {hasMultipleSacrifices ? (
+                            <div 
+                                className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-4 w-full animate-fadeIn ${
+                                    isApril 
+                                        ? 'bg-roman-red/15 border-2 border-roman-red/50 shadow-[0_0_25px_rgba(183,28,28,0.35)]' 
+                                        : isFloralia
+                                            ? 'bg-emerald-900/20 border-2 border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
+                                            : isLemuria
+                                                ? 'bg-indigo-950/40 border-2 border-indigo-500/50 shadow-[0_0_25px_rgba(99,102,241,0.25)]'
+                                                : isJune
+                                                    ? 'bg-orange-950/20 border-2 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.2)]'
+                                                    : 'bg-stone-950/90 border-2 border-roman-red/40 shadow-[0_0_20px_rgba(183,28,28,0.2)]'
+                                }`}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="flex flex-col items-center w-full border-b border-roman-red/20 pb-2">
+                                    <div className="text-4xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300 hover:scale-110 flex items-center gap-2">
+                                        {sacrificesForDay[activeSacrificeIdx].icon || "🗡️"}
+                                        {isApril && (
+                                            <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(239,68,68,0.4)] animate-pulse" title="Sangre purificadora o Fuego lustral de Abril">
+                                                {(sacrificesForDay[activeSacrificeIdx].icon?.includes('🔥') || sacrificesForDay[activeSacrificeIdx].title.toLowerCase().includes('zorra')) ? '🔥' : '🩸'}
+                                            </span>
+                                        )}
+                                        {isLemuria && (
+                                            <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(99,102,241,0.4)] animate-pulse" title="Espectro / Lemur de los Muertos">
+                                                👻
+                                            </span>
+                                        )}
+                                        {isJune && sacrificesForDay[activeSacrificeIdx].icon === "🫏" && (
+                                            <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(249,115,22,0.4)] animate-pulse" title="Pan de la Vestalia">
+                                                🍞
+                                            </span>
+                                        )}
+                                    </div>
+                                    <span className="text-xs font-serif uppercase tracking-[0.22em] font-black text-roman-red text-center mt-2">
+                                        {sacrificesForDay[activeSacrificeIdx].title}
+                                    </span>
+                                    {sacrificesForDay[activeSacrificeIdx].crime && (
+                                        <div className="mt-2 text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-roman-red bg-roman-red/10 px-3 py-1 rounded border border-roman-red/20 text-center max-w-full">
+                                            Crimen: {sacrificesForDay[activeSacrificeIdx].crime}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="w-full flex flex-col gap-2">
+                                    <blockquote className="italic text-[12px] md:text-[13px] font-serif text-parchment/90 border-l-2 border-roman-red/50 pl-4 py-2 leading-relaxed bg-stone-900/40 rounded-r shadow-inner text-left animate-fadeIn">
+                                        "{sacrificesForDay[activeSacrificeIdx].text}"
+                                    </blockquote>
+                                    <span className="text-[9px] text-stone-500 self-end uppercase tracking-widest font-bold">
+                                        — Ovidio, {sacrificesForDay[activeSacrificeIdx].reference}
                                     </span>
                                 </div>
-                                <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
-                                    <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
-                                        "{sacrifice.text}"
-                                    </p>
-                                    <span className="text-[9px] text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
-                                        — Ovidio, {sacrifice.reference}
-                                    </span>
+
+                                <div className="flex items-center justify-between w-full mt-1 pt-2 border-t border-stone-800">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveSacrificeIdx((prev) => (prev === 0 ? sacrificesForDay.length - 1 : prev - 1));
+                                        }}
+                                        className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
+                                        title="Anterior"
+                                    >
+                                        <ChevronLeft className="w-4 h-4" />
+                                    </button>
+
+                                    <div className="flex gap-1.5 items-center justify-center">
+                                        {sacrificesForDay.map((item, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveSacrificeIdx(idx);
+                                                }}
+                                                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                                                    idx === activeSacrificeIdx
+                                                        ? 'w-4 bg-roman-red shadow-[0_0_6px_rgba(239,68,68,0.7)]'
+                                                        : 'w-2 bg-stone-700 hover:bg-stone-500'
+                                                }`}
+                                                title={item.title}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveSacrificeIdx((prev) => (prev === sacrificesForDay.length - 1 ? 0 : prev + 1));
+                                        }}
+                                        className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
+                                        title="Siguiente"
+                                    >
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
                                 </div>
                             </div>
+                        ) : (
+                            sacrifice && (
+                                <div 
+                                    className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg ${
+                                        isApril 
+                                            ? 'bg-roman-red/15 border border-roman-red/50 shadow-[0_0_20px_rgba(183,28,28,0.25)]' 
+                                            : isFloralia
+                                                ? 'bg-emerald-900/20 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+                                                : isLemuria
+                                                    ? 'bg-indigo-950/40 border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.25)]'
+                                                    : isJune
+                                                        ? 'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]'
+                                                        : 'bg-stone-900/60 border border-stone-500/30'
+                                    }`}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="flex flex-col items-center gap-1.5 w-full">
+                                        <div className="flex items-center justify-center gap-3 w-full flex-wrap">
+                                            <span className="text-2xl filter drop-shadow-md flex items-center gap-2">
+                                                {sacrifice.icon || "🗡️"}
+                                                {isApril && (
+                                                    <span className="text-lg filter drop-shadow-md animate-pulse" title="Sangre purificadora o Fuego lustral de Abril">
+                                                        {(sacrifice.icon?.includes('🔥') || sacrifice.title.toLowerCase().includes('zorra')) ? '🔥' : '🩸'}
+                                                    </span>
+                                                )}
+                                                {isLemuria && (
+                                                    <span className="text-lg filter drop-shadow-md animate-pulse" title="Espectro / Lemur de los Muertos">
+                                                        👻
+                                                    </span>
+                                                )}
+                                                {isJune && sacrifice.icon === "🫏" && (
+                                                    <span className="text-lg filter drop-shadow-md animate-pulse" title="Pan de la Vestalia">
+                                                        🍞
+                                                    </span>
+                                                )}
+                                            </span>
+                                            <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
+                                                {isLemuria ? "Lemuria: Ofrenda Lustral" : `Sacrificia: ${sacrifice.title}`}
+                                            </span>
+                                        </div>
+                                        {isGenericFallback && (
+                                            <span className="text-[9px] bg-stone-900/80 text-amber-500/80 px-2 py-0.5 rounded border border-amber-500/20 uppercase tracking-widest font-extrabold animate-pulse">
+                                                📖 LORE HISTÓRICO (Aleatorio)
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
+                                        <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
+                                            "{sacrifice.text}"
+                                        </p>
+                                        <span className="text-[9px] text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
+                                            — Ovidio, {sacrifice.reference}
+                                        </span>
+                                    </div>
+                                </div>
+                            )
                         )}
 
                         {/* EPHEMERIDES */}
