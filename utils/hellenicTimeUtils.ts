@@ -214,9 +214,12 @@ export const calculateHellenicTime = (now: Date, lat: number, lng: number): Roma
   const moonPhase = getMoonPhase(now);
   const moonPhaseLabel = getGreekMoonPhaseName(moonPhase);
   
-  // The Attic day starts at sunset. 
-  // If we are in the evening (isDay is false and it is after noon), we are in the next Attic day.
-  const isAfterSunset = !isDay && now.getHours() >= 12;
+  // The Attic day starts at sunset.
+  // Use the real sunset time from the solar engine: when isDay is false,
+  // baseTime IS the sunset. We compare against today's sunset to determine
+  // if we've crossed into the next Attic day.
+  const todaySunset = isDay ? endTime : baseTime;
+  const isAfterSunset = now >= todaySunset && !isDay;
   const atticDate = getAtticDate(now, isAfterSunset);
 
   const olympiad = getOlympiadYear(now.getFullYear());

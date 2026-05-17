@@ -12,7 +12,7 @@ export const APOPHTHEGMATA: Apophthegma[] = [
   // === ΣΩΚΡΑΤΗΣ (Sócrates) ===
   { id: 1, greek: "Ἓν οἶδα ὅτι οὐδὲν οἶδα.", author: "Σωκράτης", translation: "Solo sé que no sé nada." },
   { id: 2, greek: "Ὁ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ.", author: "Σωκράτης", translation: "Una vida sin examen no merece ser vivida." },
-  { id: 3, greek: "Γνῶθι σεαυτόν.", author: "Σωκράτης", translation: "Conócete a ti mismo." },
+  { id: 3, greek: "Γνῶθι σεαυτόν.", author: "Επτά Σοφοί (Dελφοί)", translation: "Conócete a ti mismo. (Máxima délfica adoptada por Sócrates)" },
   { id: 4, greek: "Ἀρχὴ σοφίας ἡ τῶν ὀνομάτων ἐπίσκεψις.", author: "Σωκράτης", translation: "El principio de la sabiduría es la investigación de los nombres." },
   { id: 5, greek: "Τὸ δέ μοι μάλιστα θαυμαστὸν ἐφάνη, ὅτι ἑαυτοὺς μὲν οὐ γιγνώσκουσι.", author: "Σωκράτης", translation: "Lo más asombroso es que no se conocen a sí mismos." },
   { id: 6, greek: "Ἕν μόνον ἀγαθόν, τὴν ἐπιστήμην, καὶ ἕν μόνον κακόν, τὴν ἀμαθίαν.", author: "Σωκράτης", translation: "Solo hay un bien: el conocimiento; y un solo mal: la ignorancia." },
@@ -75,7 +75,7 @@ export const APOPHTHEGMATA: Apophthegma[] = [
   { id: 47, greek: "Τῷ χρόνῳ πάντα κρύπτεται κἀκφύεται.", author: "Σοφοκλῆς", translation: "El tiempo todo lo oculta y todo lo revela." },
 
   // === ΕΥΡΙΠΙΔΗΣ (Eurípides) ===
-  { id: 48, greek: "Ὃν οἱ θεοὶ φιλοῦσιν, ἀποθνῄσκει νέος.", author: "Εὐριπίδης", translation: "Aquel a quien los dioses aman, muere joven." },
+  { id: 48, greek: "Οὐκ ἔστιν ἐν βροτοῖς τουτ' ὂς εὐδαίμων ἐφύ.", author: "Εὐριπίδης", translation: "No hay entre los mortales quien haya nacido feliz." },
   { id: 49, greek: "Τίς δ' οἶδεν εἰ τὸ ζῆν μέν ἐστι κατθανεῖν, τὸ κατθανεῖν δὲ ζῆν;", author: "Εὐριπίδης", translation: "¿Quién sabe si vivir es morir y morir es vivir?" },
   { id: 50, greek: "Δεινὸν τὸ τίκτειν· φιλότεκνον γὰρ ἅπαν.", author: "Εὐριπίδης", translation: "Es terrible dar a luz, pues engendra amor inquebrantable." },
   { id: 51, greek: "Ἐκ τῶν λίθων τούτων ἡ ἀρετὴ ψυχῆς φαίνεται.", author: "Εὐριπίδης", translation: "En la adversidad se muestra la virtud del alma." },
@@ -139,10 +139,12 @@ export const APOPHTHEGMATA: Apophthegma[] = [
 ];
 
 export const getApophthegmaOfTheDay = (date: Date): Apophthegma => {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const diff = date.getTime() - start.getTime();
+  // Use Date.UTC to avoid DST-related drift (same fix as Egyptian wisdom)
+  const start = Date.UTC(date.getFullYear(), 0, 0);
+  const current = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+
   const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay);
+  const dayOfYear = Math.floor((current - start) / oneDay);
   const index = (dayOfYear - 1) % APOPHTHEGMATA.length;
   return APOPHTHEGMATA[index >= 0 ? index : 0];
 };
