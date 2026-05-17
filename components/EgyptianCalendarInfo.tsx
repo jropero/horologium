@@ -10,7 +10,7 @@ import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egypt
 import { getAlgolPhase, getLunarPhase } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 import Nilometer from './Nilometer';
-import { Waves, Feather, Wine, FishOff, Hammer, Ship, Skull, Music, ArrowDownToLine, Swords, Sparkles, Sailboat, Sprout, Moon, Bird, MoveUp, Crown, Sun, Flame, AlertTriangle, ArrowUpCircle, MicOff, Stars, ShieldAlert, Wheat, Shirt, SunMedium, Flower2, Ruler, Star, Eye, Scroll, Baby, PartyPopper, Landmark, Tent, CalendarClock } from 'lucide-react';
+import { Waves, Feather, Hammer, Ship, Music, Sparkles, Sailboat, Sprout, Moon, Bird, MoveUp, Crown, Sun, Flame, ArrowUpCircle, Wheat, Shirt, Eye, PartyPopper, Tent, CalendarClock, Ruler, Map, Circle, Compass, Sunrise } from 'lucide-react';
 
 const FestivalIcon = ({ name, className }: { name?: string; className?: string }) => {
   if (!name) return null;
@@ -19,22 +19,12 @@ const FestivalIcon = ({ name, className }: { name?: string; className?: string }
       return <Waves className={className} size={18} />;
     case 'Feather':
       return <Feather className={className} size={18} />;
-    case 'Wine':
-      return <Wine className={className} size={18} />;
-    case 'FishOff':
-      return <FishOff className={className} size={18} />;
     case 'Hammer':
       return <Hammer className={className} size={18} />;
     case 'Ship':
       return <Ship className={className} size={18} />;
-    case 'Skull':
-      return <Skull className={className} size={18} />;
     case 'Music':
       return <Music className={className} size={18} />;
-    case 'ArrowDownToLine':
-      return <ArrowDownToLine className={className} size={18} />;
-    case 'Swords':
-      return <Swords className={className} size={18} />;
     case 'Sparkles':
       return <Sparkles className={className} size={18} />;
     case 'Sailboat':
@@ -53,42 +43,30 @@ const FestivalIcon = ({ name, className }: { name?: string; className?: string }
       return <Sun className={className} size={18} />;
     case 'Flame':
       return <Flame className={className} size={18} />;
-    case 'AlertTriangle':
-      return <AlertTriangle className={className} size={18} />;
     case 'ArrowUpCircle':
       return <ArrowUpCircle className={className} size={18} />;
-    case 'MicOff':
-      return <MicOff className={className} size={18} />;
-    case 'Stars':
-      return <Stars className={className} size={18} />;
-    case 'ShieldAlert':
-      return <ShieldAlert className={className} size={18} />;
     case 'Wheat':
       return <Wheat className={className} size={18} />;
     case 'Shirt':
       return <Shirt className={className} size={18} />;
-    case 'SunMedium':
-      return <SunMedium className={className} size={18} />;
-    case 'Flower2':
-      return <Flower2 className={className} size={18} />;
-    case 'Ruler':
-      return <Ruler className={className} size={18} />;
-    case 'Star':
-      return <Star className={className} size={18} />;
     case 'Eye':
       return <Eye className={className} size={18} />;
-    case 'Scroll':
-      return <Scroll className={className} size={18} />;
-    case 'Baby':
-      return <Baby className={className} size={18} />;
     case 'PartyPopper':
       return <PartyPopper className={className} size={18} />;
-    case 'Landmark':
-      return <Landmark className={className} size={18} />;
     case 'Tent':
       return <Tent className={className} size={18} />;
     case 'CalendarClock':
       return <CalendarClock className={className} size={18} />;
+    case 'Ruler':
+      return <Ruler className={className} size={18} />;
+    case 'Map':
+      return <Map className={className} size={18} />;
+    case 'Circle':
+      return <Circle className={className} size={18} />;
+    case 'Compass':
+      return <Compass className={className} size={18} />;
+    case 'Sunrise':
+      return <Sunrise className={className} size={18} />;
     default:
       return null;
   }
