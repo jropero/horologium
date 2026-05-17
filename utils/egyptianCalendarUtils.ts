@@ -140,9 +140,9 @@ const isGregorianLeapYear = (year: number): boolean => {
  */
 const getThoth1 = (gregorianYear: number): Date => {
   const nextYearIsLeap = isGregorianLeapYear(gregorianYear + 1);
-  // En el sistema gregoriano moderno (1900-2099), Thoth 1 cae el 11 de septiembre.
-  // Si el próximo año es bisiesto, el año alejandrino actual tiene 6 epagómenos,
-  // lo que empuja el siguiente Thoth 1 al 12 de septiembre.
+  // Thoth 1 = 29 de agosto (Julian) = 11 de septiembre (Gregoriano, 1900-2099).
+  // En años donde el siguiente es bisiesto, Thoth 1 = 30 de agosto (Julian) = 12 de septiembre.
+  // La diferencia de 13 días entre Julian y Gregoriano es correcta para el período 1900-2099.
   const day = nextYearIsLeap ? 12 : 11;
   return new Date(gregorianYear, 8, day); // Mes 8 = Septiembre (0-indexed)
 };

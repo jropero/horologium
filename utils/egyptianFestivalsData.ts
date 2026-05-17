@@ -165,19 +165,24 @@ export const LUNAR_FESTIVALS: Record<number, Festival> = {
     description: "Cuarto (ocasionalmente quinto) día lunar. Atestiguado en los Papiros de Berlín 10282, 10412 y 10052 durante los reinados de Sesostris III y Amenemhet III.",
     icon: "PartyPopper"
   },
-  9: {
+  6: {
+    name: "Día del Buen Pan",
+    description: "Sexto día lunar. Preparación y ofrenda de panes sagrados recién horneados para el altar divino. Atestiguado en los Papiros de Illahun.",
+    icon: "Wheat"
+  },
+  10: {
     name: "Excursión de la Tierra (hnt-nt-t3)",
-    description: "Noveno o décimo día lunar. Atestiguado en P. Berlin 10009 y 10011 (año 16 de Sesostris III) y P. Cairo JE 71583.",
+    description: "Décimo día lunar. La deidad abandonaba su santuario para inspeccionar y bendecir los campos. Atestiguado en P. Berlin 10009 y 10011 (año 16 de Sesostris III).",
     icon: "Map"
   },
   15: {
     name: "Plenilunio (Smdt)",
-    description: "Día de Luna Llena. Ocasión clave para festivales mayores, incluyendo las intalaciones del Toro Apis en Memphis.",
+    description: "Día de Luna Llena. Ocasión clave para festivales mayores, incluyendo las instalaciones del Toro Apis en Memphis.",
     icon: "Circle"
   },
-  17: {
+  18: {
     name: "Fiesta Móvil de Wagy",
-    description: "Día 17 (o 18) lunar. Calculado en la tercera lunación tras el orto helíaco de Sirio. Usado en Illahun para fijar la cronología de las Dinastías 5 y 12.",
+    description: "Día 18 lunar. Calculado en la tercera lunación tras el orto helíaco de Sirio. Usado en Illahun (P. Berlin 10006) para fijar la cronología de las Dinastías 5 y 12.",
     icon: "Flame"
   },
   20: {
@@ -189,6 +194,11 @@ export const LUNAR_FESTIVALS: Record<number, Festival> = {
     name: "Festival de la Partida/Excursión (hnt)",
     description: "Día 22 lunar. Documentado en el año 12 de Sesostris III (P. Berlin 10165) y año 8 de Amenemhet III (P. Berlin 10218).",
     icon: "Compass"
+  },
+  23: {
+    name: "Cuarto Menguante (dnit sn-nw)",
+    description: "Día 23 lunar. Rituales de protección durante la fase de oscurecimiento y debilidad de la luna. Atestiguado en Illahun y Medinet Habu.",
+    icon: "Moon"
   }
 };
 
@@ -206,8 +216,9 @@ export function getFestivalsForDate(monthIndex: number, dayOfMonth: number, luna
 
   // --- RANGOS ESPECIALES ATESTIGUADOS EN EL LIBRO ---
 
-  // Mes 1 (II Akhet), Días 15 al 19 (y hasta III Akhet 12): Festival de Opet
-  if ((monthIndex === 1 && dayOfMonth >= 15) || (monthIndex === 2 && dayOfMonth <= 12)) {
+  // Mes 1 (II Akhet), Días 16 al 30 (y hasta III Akhet 12): Continuación del Festival de Opet
+  // El día 15 ya tiene entrada fija en CIVIL_FESTIVALS; este rango evita duplicación.
+  if ((monthIndex === 1 && dayOfMonth >= 16) || (monthIndex === 2 && dayOfMonth <= 12)) {
     civilFestivals.push({
       name: "Días del Festival de Opet",
       description: "Bajo Thutmose III comenzaba el día 15, pero bajo Ramsés II se desplazó al 19 y duraba casi un mes (hasta III Akhet 12).",
@@ -273,7 +284,7 @@ export function getNextEgyptianFestivals(monthIndex: number, dayOfMonth: number,
 
     const key = currentMonth === -1 ? `e-${currentDay}` : `${currentMonth}-${currentDay}`;
     if (CIVIL_FESTIVALS[key]) {
-      const monthName = currentMonth === -1 ? "Epagomenai" : ["Thoth", "Phaophi", "Hathor", "Choiak", "Tybi", "Mechir", "Phamenoth", "Pharmouthi", "Pachons", "Payni", "Epiphi", "Mesore"][currentMonth];
+      const monthName = currentMonth === -1 ? "Epagomenai" : ["Thoth", "Phaophi", "Athyr", "Choiak", "Tybi", "Mechir", "Phamenoth", "Pharmuthi", "Pachon", "Payni", "Epiphi", "Mesore"][currentMonth];
       results.push({
         ...CIVIL_FESTIVALS[key],
         date: `${currentDay} de ${monthName}`,
