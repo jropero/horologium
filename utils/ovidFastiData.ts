@@ -80,6 +80,7 @@ export interface OvidSacrifice {
     text: string;
     reference: string;
     icon?: string;
+    crime?: string;
 }
 
 export const OVID_MONTH_ETYMOLOGIES: OvidMonthEtymology[] = [
@@ -556,10 +557,164 @@ export const OVID_SACRIFICIA: OvidSacrifice[] = [
     {
         month: 1,
         day: 9,
-        title: "Agonalia: El Crimen de la Cerda",
-        text: "Ceres primera gozóse en la sangre de ávida puerca: del culpable con justa muerte vengó sus bienes. Pues siembras que en primavera tiernos jugos lechaban, por hocico de cerda crinosa halló arrancadas... Baco al chivo reclamó por roer las vides.",
-        reference: "Libro I, vv. 349-352, 359-360",
-        icon: "🐷"
+        title: "La Culpa de la Cerda",
+        text: "Ceres primera gozóse en la sangre de ávida puerca: del culpable con justa muerte vengó sus bienes. Pues siembras que en primavera tiernos jugos lechaban, por hocico de cerda crinosa halló arrancadas.",
+        reference: "Libro I, vv. 349-352",
+        icon: "🐖",
+        crime: "Destrozar las cosechas."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "El Crimen del Chivo",
+        text: "Alguien en la vid clavando los dientes... dijo: 'roe, chivo, la vid: de aquí empero, cuando estés junto al ara, será lo que en tus cuernos rociarse pueda'. Sigue el pacto a las voces: hoste por daño dado a ti, Baco, es rociado en los cuernos con derramado vino.",
+        reference: "Libro I, vv. 355-360",
+        icon: "🐐",
+        crime: "Comerse las vides de uva."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "La Culpa del Buey",
+        text: "Cubre con tierra el cuerpo de un muerto novillo: lo que pides de mí te dará aquél, cubierto. Hace el pastor lo ordenado. Hierven enjambres de pútrido buey: muerta una sola, ánimas mil ha dado.",
+        reference: "Libro I, vv. 377-380",
+        icon: "🐂",
+        crime: "Condenado para generar abejas de su cadáver putrefacto."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "La Culpa de la Oveja",
+        text: "Pide a la oveja el hado: gustó, ímproba, verbenas [hierbas sagradas], que a dioses del campo solía llevar piadosa vieja.",
+        reference: "Libro I, vv. 381-382",
+        icon: "🐑",
+        crime: "Comerse las hierbas sagradas de una anciana."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "La Ofrenda del Caballo",
+        text: "Con su caballo aplaca Persia a Hiperión ceñido de rayos, para que no al dios veloz víctima tarda dése.",
+        reference: "Libro I, vv. 385-386",
+        icon: "🐎",
+        crime: "Ninguno (Magia simpática: animal veloz para un dios veloz)."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "La Culpa del Asno",
+        text: "He aquí que rebuznando el asnillo... sacó de ronco hocico intempestivos ruidos. Se alza aterrada la Ninfa... Mas el dios muy preparado aun en sus partes viriles, a la luz de la luna risa de todos era. Fue castigado el autor del clamor con su muerte: y esta víctima al dios del Helesponto es grata.",
+        reference: "Libro I, vv. 433-440",
+        icon: "🫏",
+        crime: "Rebuznar y arruinar la cita íntima del dios Príapo con la Ninfa Lotis."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "El Crimen de las Aves",
+        text: "Habíais estado intactas, aves, solaces del campo... Pero esto nada os ayuda, porque tenéis crimen de lengua y dioses juzgan que sus mentes abrís vosotras.",
+        reference: "Libro I, vv. 441, 445-446",
+        icon: "🕊️",
+        crime: "Ser chismosas y revelar los secretos divinos."
+    },
+    {
+        month: 1,
+        day: 9,
+        title: "El Crimen del Gallo",
+        text: "De noche a diosa Noche se inmola el ave crestada, pues con son vigilante convida al tibio día.",
+        reference: "Libro I, vv. 455-456",
+        icon: "🐓",
+        crime: "Despertar al día y acortar el reinado de la oscuridad."
+    },
+    {
+        month: 2,
+        day: 13,
+        title: "El Carnero de los Idus",
+        text: "Casto sacerdote en templo de Júpiter magno, los Idus, vísceras de un carnero castrado en flamas liba.",
+        reference: "Libro II, vv. 587-588",
+        icon: "🐏",
+        crime: "Ofrenda lustral tradicional en los Idus de Febrero."
+    },
+    {
+        month: 2,
+        day: 15,
+        title: "El Chivo de las Lupercalias",
+        text: "Inmolada la cabra por costumbre a cornípedo Fauno... Nombróse el mes de esto [Februa], porque Lupercos con un cuero en tiras lustran todo el suelo y por expiación lo tienen.",
+        reference: "Libro II, vv. 361, 31-32",
+        icon: "🐐",
+        crime: "Poder fecundador y purificador de su piel (azotes con tiras de cuero llamadas februa)."
+    },
+    {
+        month: 2,
+        day: 15,
+        title: "El Perro de las Lupercalias",
+        text: "Aunque Ovidio omite el detalle del sacrificio del perro en los Fastos, esta víctima se inmolaba junto al chivo en la gruta Lupercal por su conexión con la purificación y la custodia de los rebaños frente a los lobos.",
+        reference: "Libro II, v. 361 (Contexto histórico)",
+        icon: "🐕",
+        crime: "Pureza y protección lustral (sacrificio apotropaico)."
+    },
+    {
+        month: 2,
+        day: 23,
+        title: "La Oveja de las Terminalias",
+        text: "Término común se esparce aun con degollado cordero y no se queja... En ella [la Vía Laurentina], que ritos con entrañas de rebaño lanígero se te hacen, Término, ve desde urbe sexta piedra.",
+        reference: "Libro II, vv. 655, 681-682",
+        icon: "🐑",
+        crime: "Sangre sobre el mojón de piedra para santificar las fronteras y límites del agro."
+    },
+    {
+        month: 2,
+        day: 23,
+        title: "El Cerdito de las Terminalias",
+        text: "Término común se esparce... y no se queja, cuando puerca le dan lactante.",
+        reference: "Libro II, vv. 655-656",
+        icon: "🐖",
+        crime: "Santificación rural del mojón de piedra de la propiedad privada."
+    },
+    {
+        month: 2,
+        day: 27,
+        title: "Los Caballos de las Equirrias",
+        text: "Y ya del mes segundo quedan dos noches, y Marte incita los rápidos potros a uncidos carros. De lo real quedó el puesto nombre de Equirrias, las cuales en su Campo el mismo dios divisa.",
+        reference: "Libro II, vv. 857-860",
+        icon: "🐎",
+        crime: "Carreras consagradas a Marte (magia de velocidad y potencia militar)."
+    },
+    {
+        month: 3,
+        day: 1,
+        title: "El Engaño de Numa: Por qué los Romanos no sacrifican humanos",
+        text: "Dijo (Júpiter): 'una cabeza corta': 'obedeceré —el rey le responde—, cebolla ha de cortarse sacada de mis huertos'. Éste añadió: 'de hombre': dice aquél: 'tomarás los cabellos'. Pide éste un alma, 'de pez', le responde Numa. Rio y dijo: 'con esto harás que conjuras mis dardos, oh héroe...'",
+        reference: "Libro III, vv. 339-344",
+        icon: "🧅🐟",
+        crime: "Sustitución ingeniosa de la ofrenda humana por elementos simbólicos (cebolla, cabello y pez)."
+    },
+    {
+        month: 3,
+        day: 7,
+        title: "Vejove: El Sacrificio de la Oveja",
+        text: "Y ante el santuario de Numa y el capitolino Tonante se inmola una oveja en alta mansión de Júpiter.",
+        reference: "Libro III, vv. 69-70",
+        icon: "🐑",
+        crime: "Ofrenda tradicional al capitolino Vejove."
+    },
+    {
+        month: 3,
+        day: 15,
+        title: "Anna Perenna: La Ofrenda de la Vaca",
+        text: "(Numa) la vaca Alba llevó con un níveo toro al yugo... Y porque no diera un salto, presta a pararse en la tierra, fue apenas ya, por mano de Evandro detenida.",
+        reference: "Libro III (Asociación mítica)",
+        icon: "🐂",
+        crime: "Asociación mítica con ritos antiguos de fundación y sacrificios propiciatorios del mes."
+    },
+    {
+        month: 3,
+        day: 23,
+        title: "Tubilustrium: Purificación de las Trompetas",
+        text: "De los cinco el último día lustrar trompetas canoras advierte y sacrificios hacer a fuerte diosa. Hoy puedes decir, alzando al sol el semblante: 'de la oveja de Frixo prensó éste ayer vellones'.",
+        reference: "Libro III, vv. 849-852",
+        icon: "🎺",
+        crime: "Purificación de trompetas de guerra (tubae) a una diosa fuerte."
     },
     {
         month: 4,
@@ -568,6 +723,132 @@ export const OVID_SACRIFICIA: OvidSacrifice[] = [
         text: "Ministros de atado vestido, apartad del buey los cuchillos: que are el buey; sacrificad a perezosa puerca. Apta cerviz al yugo por la segur herirse no debe: que viva y a menudo labore en dura tierra.",
         reference: "Libro IV, vv. 413-416",
         icon: "🐂"
+    },
+    {
+        month: 4,
+        day: 15,
+        title: "Fordicidia: La Vaca Preñada",
+        text: "Ofreced sacrificios con una preñada vaca. Forda es la vaca encinta y fecunda... Grávida está hoy la grey, grávidas por simiente hoy las tierras: a Tierra plena víctima plena dase. Cae, parte en fuerte de Júpiter, curia tres veces diez vacas recibe... Y cuando ministros, de las vísceras becerros quitaron... la virgen que es mayor de edad los becerros quema en el fuego.",
+        reference: "Libro IV, vv. 630-639",
+        icon: "🐄🩸",
+        crime: "Asegurar la fertilidad primaveral sacrificando una vaca encinta y consagrando las cenizas del feto becerro."
+    },
+    {
+        month: 4,
+        day: 19,
+        title: "Cerealia: Las Zorras Incendiarias",
+        text: "La causa pues por qué enviadas zorras llevan lomos por teas atadas debe por mí enseñarse... Ley de Carséolo veta que hoy también la zorra atrapada incendie; y porque penas pague, en las Cereales esta especie arde; y ella misma perece como perdió a las mieses.",
+        reference: "Libro IV, vv. 681-682, 709-712",
+        icon: "🦊🔥",
+        crime: "Castigo ancestral a los zorros por esparcir fuego en los campos de trigo arrojándolos al circo con teas encendidas."
+    },
+    {
+        month: 4,
+        day: 21,
+        title: "Parilia: El Sahumerio Purificador",
+        text: "Ve, pueblo, llega al sahumerio del ara virgínea; Vesta lo dará, puro serás por don de Vesta. Será sangre equina y rescoldos de becerro el sahumerio, tercer objeto, inane tallo del haba dura.",
+        reference: "Libro IV, vv. 731-734",
+        icon: "🐎🩸",
+        crime: "Purificación sagrada (suffimen) mediante la mezcla de cenizas de becerro, sangre de caballo y tallos de haba."
+    },
+    {
+        month: 4,
+        day: 25,
+        title: "La Oveja de la Robigalia",
+        text: "De antigua Robígine al bosque iba el flamen para, a las flamas, entrañas de perro, entrañas dar de oveja...",
+        reference: "Libro IV, vv. 907-908",
+        icon: "🐑",
+        crime: "Aplacar a la diosa Robígine (roya del trigo) para proteger las cosechas."
+    },
+    {
+        month: 4,
+        day: 25,
+        title: "El Perro de la Robigalia",
+        text: "¿Por qué se da nueva víctima [el perro] en ritos, buscas? Oye la causa —el flamen me dijo entonces—. Hay un Can, lo llaman Icario: salido tal astro, tierra ardida está seca... Por un can sideral un can aquí al ara se impone, y nada, sino el nombre tiene, por qué perezca.",
+        reference: "Libro IV, vv. 937-942",
+        icon: "🐕",
+        crime: "Sustitución mítica del Can sideral (Sirio) para conjurar sus ardientes rayos destructores."
+    },
+    {
+        month: 5,
+        day: 1,
+        title: "Floralia: Cabras y Liebres Pacíficas",
+        text: "¿Por qué en vez de líbicas leonas, con red te aprisionan pacíficas cabras y asustadizas liebres?... Respondió que no selvas, sino le concedieron los huertos, y las campiñas por fiera pugnaz no andables.",
+        reference: "Libro V, vv. 371-374",
+        icon: "🐇",
+        crime: "Ofrenda de bestias mansas en los campos y huertos de la diosa Flora."
+    },
+    {
+        month: 5,
+        day: 1,
+        title: "Floralia: La Ofrenda del Moretum",
+        text: "'¿No avergüenza —dije— que sirvieran el herboso moreto en mesas de la dueña? ¿O es que subsiste causa?' 'Cuentan que antiguos usaron de leche pura y de hierbas... Cándido queso a destrozadas hierbas se mezcla, para que antiguas viandas conozca antigua diosa'.",
+        reference: "Libro V, vv. 367-372",
+        icon: "🥗",
+        crime: "Ofrenda tradicional de queso y hierbas machacadas de los antiguos antepasados."
+    },
+    {
+        month: 5,
+        day: 9,
+        title: "Lemuria: La Redención por las Habas Negras",
+        text: "Y cuando en la onda de la fuente bien lavó puras sus manos, se vuelve y antes toma las habas negras, y vuelto las lanza. Mas mientras las lanza: '¡éstas yo envío; con estas habas —dice— redimo a mí y los míos!' Nueve veces dice esto y no voltea. Se piensa que júntalas la sombra y que atrás sigue sin que la vea nadie.",
+        reference: "Libro V, vv. 435-440",
+        icon: "🫘",
+        crime: "Redención mágica de la familia escupiendo habas negras a los fantasmas hambrientos en la noche."
+    },
+    {
+        month: 5,
+        day: 12,
+        title: "Ludi Martiales: El Sacrificio de Hirieo",
+        text: "Cuando volvióle el ánimo, al buey que cultiva su pobre agro inmola y lo asa en magna lumbre... Asentido habían todos; ante la piel del buey todos se habían parado... Entonces lo húmedo echado encima cubrieron con tierra: ya diez meses y el niño nacido había.",
+        reference: "Libro V, vv. 513-514, 531-534",
+        icon: "🐂",
+        crime: "Sacrificio hospitalario del único buey de un campesino en honor a los dioses visitantes."
+    },
+    {
+        month: 5,
+        day: 15,
+        title: "Mercuralia: El Incienso de los Comerciantes",
+        text: "Quienes profesan vender sus mercancías te ruegan, dándote incienso, que les otorgues lucros. Viene acá el mercader ceñido con túnica y puro con urna sahumada, agua... También sus cabellos con lauro rociante él mismo rocía y preces con voz que suele engañar pronuncia.",
+        reference: "Libro V, vv. 671-672, 675-680",
+        icon: "🪙",
+        crime: "Ofrenda de incienso aromático a Mercurio para bendecir las ganancias y argucias de los comerciantes."
+    },
+    {
+        month: 6,
+        day: 1,
+        title: "Calendas Fabarias: El Trueque Mágico de Carna",
+        text: "[Carna] rocía entradas con aguas... y de bimestral puerca crudas entrañas coge; y así: 'aves de la noche, perdonad entrañas pueriles —exclama—: por párvulo víctima parva cae. Tomad, os ruego, corazón por corazón, fibras por fibras. Os entrego por otra mejor, esta ánima'.",
+        reference: "Libro VI, vv. 157-162",
+        icon: "🐖",
+        crime: "Sustitución mágica de vidas ('animam pro meliore') entregando entrañas de cerdita para salvar al infante de las garras de las Estriges (lechuzas vampiro)."
+    },
+    {
+        month: 6,
+        day: 1,
+        title: "Calendas Fabarias: Tocino y Habas",
+        text: "La puerca era apreciada, muerta la puerca fiestas hacían. La tierra sólo habas y duras espeltas daba. Quien las dos mezcladas al par comiera en las sextas Calendas, niegan que se le puedan dañar las vísceras.",
+        reference: "Libro VI, vv. 181-184",
+        icon: "🍲",
+        crime: "Banquete tradicional para la buena salud de las vísceras y el sistema digestivo."
+    },
+    {
+        month: 6,
+        day: 9,
+        title: "Vestalia: El Descanso del Asno Coronado",
+        text: "Llega a estos años algo de la costumbre vetusta: platillo puro lleva a Vesta ofrendadas viandas. He aquí el pan cuelga de coronadas borricas, y floridas guirnaldas ásperas muelas velan.",
+        reference: "Libro VI, vv. 309-312",
+        icon: "🫏",
+        crime: "Costumbre antigua que rinde homenaje a los asnos de los molinos de pan velándolos con guirnaldas y roscas de pan."
+    },
+    {
+        month: 6,
+        day: 15,
+        title: "Q.St.D.F.: La Ofrenda de los Argei",
+        text: "Aun luego la virgen suele arrojar desde un puente de roble simulacros de junco de primitivos hombres... [Se decía] 'dad a falcífero anciano inmolados dos cuerpos del pueblo que recibidos sean por las etruscas aguas'... [o] que aquél [Hércules], hechos de paja, envió al agua Quirites: que se lanzan, a ejemplo de Hércules, cuerpos falsos.",
+        reference: "Libro VI, vv. 621-622, 627-628, 631-632",
+        icon: "🧍‍♂️🌊",
+        crime: "Sustitución mítica de sacrificios humanos por simulacros y efigies de junco arrojadas al Tíber desde el puente de roble."
     },
     {
         isGeneric: true,

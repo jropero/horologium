@@ -44,6 +44,128 @@ export const EGYPTIAN_WISDOM: EgyptianWisdom[] = [
   // === Proverbios y máximas diversas ===
   { id: 19, text: "La boca del hombre es su salvación, pero su hablar es también causa de su ruina.", author: "Anónimo", source: "Sabiduría popular egipcia" },
   { id: 20, text: "El conocimiento no tiene límites, y nadie ha alcanzado aún su perfección.", author: "Imhotep", source: "Atribuido a Imhotep" },
+
+  // === Citas históricas adicionales ===
+  {
+    id: 101,
+    text: "No te enorgullezcas de tu saber, ni te confíes porque seas sabio. Consulta al ignorante tanto como al instruido, pues no hay límite para el arte.",
+    author: "Visir Ptahhotep",
+    source: "Las Instrucciones de Ptahhotep (Dinastía V)"
+  },
+  {
+    id: 102,
+    text: "La justicia (Maat) es grande y su valor perdura. No ha sido alterada desde los tiempos de Osiris. El que quebranta las leyes será castigado.",
+    author: "Visir Ptahhotep",
+    source: "Las Instrucciones de Ptahhotep (Dinastía V)"
+  },
+  {
+    id: 103,
+    text: "No cambies los linderos de los campos, ni alteres la cuerda de medir; no codicies la tierra de una viuda.",
+    author: "Amenemope",
+    source: "Instrucciones de Amenemope (Dinastía XX)"
+  },
+  {
+    id: 104,
+    text: "Mejor es la pobreza en la mano del dios, que la riqueza acumulada en el granero con injusticia.",
+    author: "Amenemope",
+    source: "Instrucciones de Amenemope (Dinastía XX)"
+  },
+  {
+    id: 105,
+    text: "Haz la justicia mientras estés en la tierra. Consuela al que llora, no oprimas a la viuda, y no expulses a un hombre de las propiedades de su padre.",
+    author: "Rey Khety",
+    source: "Instrucciones para el rey Merikare (Primer Período Intermedio)"
+  },
+  {
+    id: 106,
+    text: "Mi corazón es mío en la Casa de los Corazones. Mi pecho es mío en la Casa de la Justicia. Que no me sea arrebatado ni testifique contra mí en la balanza.",
+    author: "Escriba Ani",
+    source: "El Libro de los Muertos, Papiro de Ani (Dinastía XIX)"
+  },
+  {
+    id: 107,
+    text: "Construye una casa, pero ama también el silencio. No te dejes atrapar por las palabras apresuradas ni por las disputas de la calle.",
+    author: "Escriba Any",
+    source: "Las Instrucciones de Any (Dinastía XVIII)"
+  },
+  {
+    id: 108,
+    text: "La tienda del silencioso está abierta. El lugar del hombre de voz suave es espacioso. Pero el que tiene lengua afilada no encuentra refugio.",
+    author: "Visir Kagemni",
+    source: "Las Instrucciones de Kagemni (Dinastía IV)"
+  },
+  {
+    id: 109,
+    text: "Habla la verdad, haz la verdad. Porque es grande, es poderosa, es duradera. Su valor te guiará a la condición de venerable ante los dioses.",
+    author: "Campesino Khunanup",
+    source: "El Cuento del Campesino Elocuente (Dinastía XII)"
+  },
+  {
+    id: 110,
+    text: "El que escucha es el que prospera. Que el que escucha se convierta en un hombre que es escuchado.",
+    author: "Visir Ptahhotep",
+    source: "Las Instrucciones de Ptahhotep (Dinastía V)"
+  },
+  {
+    id: 111,
+    text: "No pases la noche temiendo el mañana. Al amanecer, ¿qué es el mañana? El hombre ignora cómo será el mañana, pues el Dios es quien traza el destino.",
+    author: "Amenemope",
+    source: "Instrucciones de Amenemope (Dinastía XX)"
+  },
+  {
+    id: 112,
+    text: "La lengua es una espada; la palabra es más fuerte que cualquier combate. Un rey sabio es una fortaleza invencible.",
+    author: "Rey Khety",
+    source: "Instrucciones para el rey Merikare (Primer Período Intermedio)"
+  },
+  {
+    id: 113,
+    text: "No he hecho llorar a nadie. No he ordenado matar. No he causado dolor a ningún hombre. Soy puro, soy puro, soy puro.",
+    author: "Alma Justificada (El Difunto)",
+    source: "El Libro de los Muertos, La Confesión Negativa (Imperio Nuevo)"
+  },
+  {
+    id: 114,
+    text: "Sigue a tu corazón el tiempo que vivas. No hagas más de lo que se te manda; no acortes el tiempo de seguir al corazón, pues a los dioses les ofende la tristeza.",
+    author: "Visir Ptahhotep",
+    source: "Las Instrucciones de Ptahhotep (Dinastía V)"
+  },
+  {
+    id: 115,
+    text: "No hables mucho, pues los dioses detestan la verborrea. Que tus palabras sean pocas y que pesen con justicia en la balanza de tu corazón.",
+    author: "Escriba Any",
+    source: "Las Instrucciones de Any (Dinastía XVIII)"
+  },
+  {
+    id: 116,
+    text: "Oh Rey, no has partido muerto, has partido vivo. Siéntate sobre el trono de Osiris, con tu cetro de poder en la mano, y da órdenes a los Vivos.",
+    author: "Sacerdotes Lectores",
+    source: "Textos de las Pirámides, Pirámide de Unas (Dinastía V)"
+  },
+  {
+    id: 117,
+    text: "No rías ante el ciego ni te burles del enano. No arruines los planes del cojo. El hombre es arcilla y paja, y el Dios es su Gran Constructor.",
+    author: "Amenemope",
+    source: "Instrucciones de Amenemope (Dinastía XX)"
+  },
+  {
+    id: 118,
+    text: "Si eres líder, busca siempre un camino excelente para que tu conducta esté libre de toda culpa ante los dioses y los hombres.",
+    author: "Visir Ptahhotep",
+    source: "Las Instrucciones de Ptahhotep (Dinastía V)"
+  },
+  {
+    id: 119,
+    text: "Pasa un día feliz y no te canses de él. Mira, nadie puede llevarse consigo sus bienes materiales; mira, nadie de los que han partido ha regresado.",
+    author: "El Arpista Ciego",
+    source: "Canto del Arpista, Tumba de Antef (Imperio Medio)"
+  },
+  {
+    id: 120,
+    text: "No separes tu corazón de tu lengua, y todos tus planes tendrán éxito. Sé firme en tus intenciones y la divinidad caminará a tu lado.",
+    author: "Amenemope",
+    source: "Instrucciones de Amenemope (Dinastía XX)"
+  }
 ];
 
 /**
