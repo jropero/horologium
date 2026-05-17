@@ -1,200 +1,247 @@
 /**
  * egyptianFestivalsData.ts
- * Base de datos de festividades egipcias basadas en los papiros de Illahun, Medinet Habu y el Ramesseum.
+ * Base de datos de festividades egipcias estrictamente basadas en "The Reconstructed Chronology of the Egyptian Kings" (M.C. Tetley).
+ * Referencias principales: Papiros de Illahun (Dinastía 12), Calendario de Medinet Habu (Dinastía 19/20) y Papiro Ebers.
  */
 
 export interface Festival {
   name: string;
   description: string;
+  icon?: string;
 }
 
 /**
- * CIVIL_FESTIVALS: Festividades de fecha fija en el calendario civil (alejandrino/egipcio).
- * Mapeado por una clave string "mes-dia" o rangos lógicos.
+ * CIVIL_FESTIVALS: Festividades de fecha fija en el calendario civil.
+ * Clave: "mes-dia" (0 = I Akhet, 11 = IV Shemu, -1 = Epagómenos).
  */
 export const CIVIL_FESTIVALS: Record<string, Festival> = {
+  // I Akhet (Mes 0)
   "0-1": {
-    name: "Wep Renpet (El Abridor del Año)",
-    description: "Marca el inicio del año agrícola y la crecida del Nilo. Día de renovación, ofrendas a los dioses locales y celebración del cumpleaños de Ra-Horakhty."
-  },
-  "0-17": {
-    name: "Víspera de Wagy",
-    description: "Preparativos nocturnos para la gran festividad de los ancestros."
+    name: "Wep Renpet / Nacimiento de Re / Neheb-Kau",
+    description: "I Akhet 1. Múltiples atestiguaciones: El 'Abridor del Año' (Papiro Ebers), el 'Nacimiento de Re' (Papiro Cairo 86637, Din. 20), y Neheb-Kau según diversas interpretaciones.",
+    icon: "Sunrise"
   },
   "0-18": {
-    name: "Festival Fijo de Wagy",
-    description: "Festividad mortuoria muy solemne. Se hacían ofrendas de comida y bebida para asegurar el viaje de los difuntos y de Osiris al más allá."
+    name: "Festividad Fija de Wagy",
+    description: "I Akhet 18. Una de las dos formas del festival Wagy. Mientras la versión móvil dependía de la luna, esta era fija en el calendario civil (Illahun pBerlin 10282).",
+    icon: "Flame"
   },
   "0-19": {
-    name: "Festival de Thoth",
-    description: "Día dedicado al dios de la sabiduría, la luna y la escritura."
+    name: "Fiesta de Thoth",
+    description: "I Akhet 19. El festival que daba nombre al primer mes en el calendario grecorromano, atestiguado en Medinet Habu bajo Ramsés III.",
+    icon: "Feather"
   },
-  "2-30": {
-    name: "Procesión de Hathor",
-    description: "Dedicado a la diosa del amor, la embriaguez y la música. Conllevaba banquetes y cantos."
+
+  // II Akhet (Mes 1)
+  "1-15": {
+    name: "Inicio de la Fiesta de Opet",
+    description: "II Akhet 15. En la época de Thutmose III, la fiesta de Amón coincidía con Opet y comenzaba el día 15, aunque luego se movió al día 19 bajo Ramsés II.",
+    icon: "Ship"
   },
-  "3-26": {
-    name: "Gran Festival de Sokar",
-    description: "El dios halcón del inframundo es transportado en su barca Henu. Culminaba con la resurrección de Osiris."
+
+  // III Akhet (Mes 2)
+  "2-1": {
+    name: "Fiesta de Hathor",
+    description: "III Akhet 1. Según listas de festivales, Hathor daba nombre al tercer mes, celebrándose en el primer día (o desplazado a IV Akhet 1).",
+    icon: "Music"
+  },
+
+  // IV Akhet (Mes 3)
+  "3-1": {
+    name: "Fiesta de Hathor (variante) / Khoiak",
+    description: "IV Akhet 1. Atestiguado en la lista de cantantes de Illahun y Medinet Habu. También atestiguado como inicio del festival de Khoiak/Neheb-Kau.",
+    icon: "Crown"
+  },
+  "3-4": {
+    name: "Masticación de Cebollas para Bastet",
+    description: "IV Akhet 4. Festividad específica listada en el Calendario de Festivales de Medinet Habu (Lista 62).",
+    icon: "Eye"
   },
   "3-30": {
     name: "Levantamiento del Pilar Djed",
-    description: "El Faraón erigía un pilar sagrado que simbolizaba la columna vertebral de Osiris, devolviendo la estabilidad al mundo."
+    description: "IV Akhet 30. Culminación del mes de Khoiak, atestiguada por Jauhiainen en su estudio de los trabajadores de Deir el-Medina.",
+    icon: "MoveUp"
   },
+
+  // I Peret (Mes 4)
   "4-1": {
-    name: "Festival de Neheb-Kau",
-    description: "Marca el triunfo de Horus sobre Seth, la coronación del nuevo rey y el restablecimiento del Maat (orden cósmico)."
+    name: "Fiesta de Neheb-Kau / Khoiak",
+    description: "I Peret 1. Gardiner documentó repetidamente la fiesta de Neheb-Kau este día. En el Reino Medio se celebró como 'Ka-her-ka' (Khoiak).",
+    icon: "Sprout"
   },
+  "4-30": {
+    name: "Periplous (Navegación) de Mut",
+    description: "I Peret 30. Ostracon BM 29560 y Papiro Turín 68. La diosa Mut era llevada en navegación sagrada.",
+    icon: "Sailboat"
+  },
+
+  // II Peret (Mes 5)
   "5-1": {
     name: "Navegación de Anubis",
-    description: "Ritos fluviales relacionados con la momificación y el dios chacal protector de los muertos."
+    description: "II Peret 1. Listado en el Calendario de Medinet Habu (Lista 59) como el Festival de la Navegación del dios Anubis.",
+    icon: "Ship"
   },
-  "5-30": {
-    name: "Levantamiento del Cielo y Fiesta de Ptah",
-    description: "Festividad de origen menfita que conmemora el acto de la creación divina y el alzamiento de la bóveda celeste."
-  },
+
+  // III Peret (Mes 6)
   "6-1": {
     name: "Gran Quema (Rokeh Wer)",
-    description: "Se encendían grandes hogueras sagradas para alejar a los demonios y las fuerzas del Caos durante la época fría."
+    description: "III Peret 1. Papiro de Illahun 10069. Era el primer mes del año solar/agrícola tras el orto helíaco en el Reino Medio.",
+    icon: "Flame"
   },
+
+  // IV Peret (Mes 7)
   "7-1": {
     name: "Pequeña Quema (Rokeh Nedjes)",
-    description: "Continuación de los rituales de fuego apotropaicos para proteger a Egipto."
+    description: "IV Peret 1. Papiro de Illahun 10069 (Reino Medio). Marca el octavo mes del calendario civil de entonces.",
+    icon: "Flame"
   },
-  "7-4": {
-    name: "🧅 Masticación de Cebollas para Bastet",
-    description: "Tras el oscuro festival de Sokar, los egipcios celebraban este extrañísimo ritual nocturno dedicado a la diosa leona/gata Bastet. Consistía en masticar cebollas crudas y atarse collares de cebollas alrededor del cuello. Se creía que el olor penetrante purificaba el aliento, curaba enfermedades y actuaba como magia apotropaica para ahuyentar a los demonios del inframundo y las fuerzas de Seth. Una noche de protección mágica pura. (Calendario de Medinet Habu, Lista 62)"
+  "7-25": {
+    name: "Fiesta Weresh",
+    description: "IV Peret 25. Atestiguada en la Gran Estela de Dakhla bajo el reinado de Shoshenq I, vinculada a una procesión del dios Seth.",
+    icon: "Tent"
   },
+
+  // I Shemu (Mes 8)
   "8-1": {
-    name: "Gran Festival de Renenutet",
-    description: "Dedicado a la diosa serpiente protectora de los graneros. Se le ofrecían las primicias de la cosecha recién recolectada."
+    name: "Festival de Renenutet",
+    description: "I Shemu 1. Festividad de la cosecha dedicada a Renenutet. Atestiguado en las tumbas de Khaemhet y Neferhotep (Dinastía 18) y en Medinet Habu.",
+    icon: "Wheat"
   },
   "8-10": {
-    name: "Vistiendo a Anubis",
-    description: "Ceremonias de renovación de las vendas y amuletos sagrados en la necrópolis."
+    name: "Fiesta de Vestir a Anubis",
+    description: "I Shemu 10. Documentado en el Calendario de Festivales de Medinet Habu (Lista 65).",
+    icon: "Shirt"
   },
-  "9-1": {
-    name: "⛵ La Hermosa Fiesta del Valle (Heb Nefer en Inet)",
-    description: "La fiesta de los muertos más espectacular de Tebas. Las estatuas de Amón, Mut y Khonsu salían del templo de Karnak, cruzaban el Nilo en inmensas barcazas doradas y visitaban los templos funerarios de los faraones en la orilla oeste. Las familias iban a las tumbas de sus antepasados, hacían banquetes, bebían vino y encendían antorchas toda la noche para estar junto a los que ya no están. (Tetley, reinados de Seti II y Ramsés III)"
+  "8-11": {
+    name: "Procesión de Min a la Terraza",
+    description: "I Shemu 11. Lista 66 de Medinet Habu. Vinculado a la aparición de la luna nueva en la mañana.",
+    icon: "Sun"
   },
-  "10-28": {
-    name: "Inicio del Festival de Epiphi",
-    description: "Fiestas de renovación del templo y de los ancestros reales."
+
+  // II Shemu (Mes 9)
+  "9-25": {
+    name: "Cruce del Río (Hermosa Fiesta del Valle)",
+    description: "II Shemu 25. Documentado en Ostracon Cairo CG 25538 bajo Seti II. Amón cruzaba el río hacia la orilla occidental.",
+    icon: "Ship"
   },
+
+  // IV Shemu (Mes 11)
   "11-9": {
     name: "Unión con el Disco Solar",
-    description: "Las estatuas de los dioses eran llevadas al techo del templo para recargarse con la energía directa del sol (Ra)."
+    description: "IV Shemu 9. Ceremonia en Esna (época grecorromana) conectada teológicamente con Wep Renpet y el dios Re-Horakhty.",
+    icon: "Sun"
   },
-  // Epagómenos (usaremos monthIndex -1 en la lógica de búsqueda)
-  "e-1": {
-    name: "Nacimiento de Osiris",
-    description: "Primer día fuera del tiempo. Día nefasto, origen del señor del inframundo."
+  "11-24": {
+    name: "Fiesta de Ptah-al-sur-de-su-muro",
+    description: "IV Shemu 24. Documentado en un grafito de Saqqara en el año 34 de Ramsés II. Borchardt y Casperson demostraron que coincidía con una luna llena.",
+    icon: "Hammer"
   },
-  "e-2": {
-    name: "Nacimiento de Horus (Haroeris)",
-    description: "Día afortunado. Nacimiento del halcón divino."
-  },
-  "e-3": {
-    name: "Nacimiento de Seth",
-    description: "Día terrible. Nacimiento del dios del caos y el desierto."
-  },
-  "e-4": {
-    name: "Nacimiento de Isis",
-    description: "Día hermoso. Nacimiento de la diosa de la magia y madre protectora."
-  },
-  "e-5": {
-    name: "Nacimiento de Neftis",
-    description: "Nacimiento de la diosa de los lamentos y protectora de los difuntos."
-  }
+
+  // Días Epagómenos (Mes -1)
+  "e-1": { name: "Nacimiento de Osiris", description: "Primer día epagómeno. Dedicado a Osiris (Pág. 48-49).", icon: "Crown" },
+  "e-2": { name: "Nacimiento de Horus", description: "Segundo día epagómeno. Dedicado a Horus.", icon: "Bird" },
+  "e-3": { name: "Nacimiento de Seth", description: "Tercer día epagómeno. Dedicado a Seth.", icon: "Flame" },
+  "e-4": { name: "Nacimiento de Isis", description: "Cuarto día epagómeno. Dedicado a Isis.", icon: "Sparkles" },
+  "e-5": { name: "Nacimiento de Neftis", description: "Quinto día epagómeno. Dedicado a Neftis.", icon: "Moon" }
 };
 
 /**
- * LUNAR_FESTIVALS: Festividades que dependen del día lunar (1-30).
+ * LUNAR_FESTIVALS: Festividades dependientes estrictamente del día lunar.
+ * Estas fueron la clave para la datación de Tetley, Casperson, Krauss y Luft.
  */
 export const LUNAR_FESTIVALS: Record<number, Festival> = {
   1: {
-    name: "Festival de Mover la Arena (hnp-s') y Pedj-Shes",
-    description: "Ritual de purificación de los cimientos de los templos al nacer la luna. En esta noche sin luz, el Faraón —acompañado de una sacerdotisa representando a Seshat, diosa de la arquitectura y la astronomía— salía a la oscuridad total del novilunio. Clavaban estacas y 'estiraban una cuerda' (Pedj-Shes) alineándola con la constelación de la Osa Mayor (Mesekhtiu) para encontrar el Norte verdadero y orientar los cimientos de los templos. (Templo de Thutmose III y Edfu de Ptolomeo III)"
+    name: "Mover la Arena (hnp-sc) / Pedj-Shes (Estirar la Cuerda)",
+    description: "Día de Luna Nueva (Psdntyw). En los Papiros de Illahun (Sesostris III) es el día para 'Mover la Arena'. También era el día prescriptivo para 'Estirar la Cuerda' y fundar templos (ej. Thutmose III, año 24).",
+    icon: "Ruler"
   },
   3: {
-    name: "Festival de la Vestimenta (Mnht)",
-    description: "Los sacerdotes cambiaban los ropajes y ornamentos de las estatuas divinas en los santuarios cerrados."
+    name: "Festival de la Vestimenta (mnht)",
+    description: "Tercer día lunar. En los Papiros de Illahun sigue sistemáticamente dos días después al festival de Mover la Arena.",
+    icon: "Shirt"
   },
   4: {
-    name: "Festival de la Alegría (Ihhy)",
-    description: "Día de júbilo, cantos y música rítmica en el recinto del templo."
+    name: "Festival de la Alegría (ihhy)",
+    description: "Cuarto (ocasionalmente quinto) día lunar. Atestiguado en los Papiros de Berlín 10282, 10412 y 10052 durante los reinados de Sesostris III y Amenemhet III.",
+    icon: "PartyPopper"
   },
-  6: {
-    name: "Día del Buen Pan",
-    description: "Preparación y ofrenda de panes sagrados recién horneados para el altar divino."
-  },
-  10: {
+  9: {
     name: "Excursión de la Tierra (hnt-nt-t3)",
-    description: "La deidad abandonaba su santuario para inspeccionar y bendecir los campos circundantes."
+    description: "Noveno o décimo día lunar. Atestiguado en P. Berlin 10009 y 10011 (año 16 de Sesostris III) y P. Cairo JE 71583.",
+    icon: "Map"
   },
   15: {
-    name: "Fiesta del Plenilunio",
-    description: "Momento de máximo poder mágico. A menudo coincidía con la instalación de animales sagrados como el Toro Apis."
+    name: "Plenilunio (Smdt)",
+    description: "Día de Luna Llena. Ocasión clave para festivales mayores, incluyendo las intalaciones del Toro Apis en Memphis.",
+    icon: "Circle"
   },
   17: {
-    name: "Festival Móvil de Wagy",
-    description: "Calculado en la tercera lunación tras la aparición de Sirio, este antiguo ritual honraba a las almas transfiguradas (Akh)."
+    name: "Fiesta Móvil de Wagy",
+    description: "Día 17 (o 18) lunar. Calculado en la tercera lunación tras el orto helíaco de Sirio. Usado en Illahun para fijar la cronología de las Dinastías 5 y 12.",
+    icon: "Flame"
   },
   20: {
-    name: "🌊 Línea de la Milla del Nilo (Shesepet Iteru)",
-    description: "En este día del ciclo lunar, los inspectores y sacerdotes bajaban a los Nilómetros —pozos escalonados conectados al río— para medir oficialmente el nivel de las aguas. De esta medición dependía la economía de todo el año: si el agua subía mucho, habría buena cosecha; si bajaba, habría hambruna. En este día se calculaban los impuestos que pagaría cada campesino ese año. (Papiros de Illahun)"
+    name: "Línea de la Milla del Nilo (sspt itrw)",
+    description: "Día 20 (o 19/21) lunar. Registrado en el Papiro Berlín 10130 en el año 8 de Sesostris III.",
+    icon: "Waves"
   },
   22: {
-    name: "Festival de la Partida (hnt)",
-    description: "Procesiones sagradas hacia necrópolis u otros santuarios hermanos."
-  },
-  23: {
-    name: "Cuarto Menguante (dnit sn-nw)",
-    description: "Rituales de protección durante la fase de oscurecimiento y debilidad de la luna."
+    name: "Festival de la Partida/Excursión (hnt)",
+    description: "Día 22 lunar. Documentado en el año 12 de Sesostris III (P. Berlin 10165) y año 8 de Amenemhet III (P. Berlin 10218).",
+    icon: "Compass"
   }
 };
 
 /**
- * Recupera los festivales (tanto civiles como lunares) para una fecha dada.
+ * Recupera los festivales (civiles y lunares) para una fecha dada.
  */
 export function getFestivalsForDate(monthIndex: number, dayOfMonth: number, lunarDay: number): { civilFestivals: Festival[], lunarFestivals: Festival[] } {
   const civilFestivals: Festival[] = [];
   const lunarFestivals: Festival[] = [];
 
-  // 1. Festivales Civiles Fijos (por clave)
   const key = monthIndex === -1 ? `e-${dayOfMonth}` : `${monthIndex}-${dayOfMonth}`;
   if (CIVIL_FESTIVALS[key]) {
     civilFestivals.push(CIVIL_FESTIVALS[key]);
   }
 
-  // 2. Casos Especiales de Festivales Civiles (Rangos o Múltiples Días)
-  
-  // Mes 1, Días 15 al 30: Festival de Opet
-  if (monthIndex === 1 && dayOfMonth >= 15 && dayOfMonth <= 30) {
+  // --- RANGOS ESPECIALES ATESTIGUADOS EN EL LIBRO ---
+
+  // Mes 1 (II Akhet), Días 15 al 19 (y hasta III Akhet 12): Festival de Opet
+  if ((monthIndex === 1 && dayOfMonth >= 15) || (monthIndex === 2 && dayOfMonth <= 12)) {
     civilFestivals.push({
-      name: "Festival de Opet",
-      description: "La estatua de Amón viajaba en barca desde Karnak al templo de Lúxor para renovar la fuerza divina del Faraón."
+      name: "Días del Festival de Opet",
+      description: "Bajo Thutmose III comenzaba el día 15, pero bajo Ramsés II se desplazó al 19 y duraba casi un mes (hasta III Akhet 12).",
+      icon: "Ship"
     });
   }
 
-  // Mes 3, Días 1 al 7: Festival de Khoiak (Ka-her-ka)
-  if (monthIndex === 3 && dayOfMonth >= 1 && dayOfMonth <= 7) {
+  // Mes 5 (II Peret) 29 a Mes 6 (III Peret) 1: Levantar el Cielo / Fiesta de Ptah (Medinet Habu)
+  if ((monthIndex === 5 && dayOfMonth >= 29) || (monthIndex === 6 && dayOfMonth === 1)) {
     civilFestivals.push({
-      name: "Festival de Khoiak (Ka-her-ka)",
-      description: "Semana de misterios osiríacos. Se fabricaban figuras de limo y semillas ('Osiris germinantes') como símbolo de vida."
+      name: "Fiesta de Ptah / Levantamiento del Cielo",
+      description: "Festividad celebrada en días consecutivos a final de II Peret e inicio de III Peret (Listas 60 y 61 de Medinet Habu).",
+      icon: "ArrowUpCircle"
     });
   }
 
-  // Mes 6, Día 1: Doble festival (Ptah y Gran Quema)
-  // El de Ptah ya se incluye por la clave "5-30 y 6-1" (que manejaremos aquí también para el día 1 del mes 6)
-  if (monthIndex === 6 && dayOfMonth === 1) {
+  // Mes 10 (III Shemu) 28 a Mes 11 (IV Shemu) 2: Festival de Epiphi
+  if ((monthIndex === 10 && dayOfMonth >= 28) || (monthIndex === 11 && dayOfMonth <= 2)) {
     civilFestivals.push({
-      name: "Levantamiento del Cielo y Fiesta de Ptah",
-      description: "Festividad de origen menfita que conmemora el acto de la creación divina y el alzamiento de la bóveda celeste."
+      name: "Días del Festival de Epiphi",
+      description: "Días libres y de procesiones atestiguados bajo Ramsés X (IV Shemu 1-2) y Ramsés XI (III Shemu 28).",
+      icon: "Tent"
     });
   }
 
-  // 3. Festivales Lunares
+  // Mes -1 (Epagómenos): Transición
+  if (monthIndex === -1 && dayOfMonth >= 1 && dayOfMonth <= 5) {
+    civilFestivals.push({
+      name: "Período de los Días Epagómenos (Heriu Renpet)",
+      description: "Los cinco días añadidos al final del año civil de 360 días para completar el ciclo solar, previos a Wep Renpet (Pág. 48-49).",
+      icon: "CalendarClock"
+    });
+  }
+
   if (LUNAR_FESTIVALS[lunarDay]) {
     lunarFestivals.push(LUNAR_FESTIVALS[lunarDay]);
   }
@@ -202,19 +249,14 @@ export function getFestivalsForDate(monthIndex: number, dayOfMonth: number, luna
   return { civilFestivals, lunarFestivals };
 }
 
-/**
- * Encuentra los próximos N festivales civiles fijos a partir de una fecha.
- */
 export function getNextEgyptianFestivals(monthIndex: number, dayOfMonth: number, count: number = 3): (Festival & { date: string, daysRemaining: number })[] {
   const results: (Festival & { date: string, daysRemaining: number })[] = [];
   let currentMonth = monthIndex;
-  let currentDay = dayOfMonth + 1; // Empezamos a buscar desde mañana
+  let currentDay = dayOfMonth + 1;
 
-  // Iteramos hasta 365 días para cubrir todo el año
   for (let i = 0; i < 365 && results.length < count; i++) {
     const daysFromNow = i + 1;
     if (currentMonth === -1) {
-      // Epagómenos
       if (currentDay > 5) {
         currentMonth = 0;
         currentDay = 1;
@@ -224,41 +266,21 @@ export function getNextEgyptianFestivals(monthIndex: number, dayOfMonth: number,
         currentMonth++;
         currentDay = 1;
         if (currentMonth > 11) {
-          currentMonth = -1; // Entramos en epagómenos
+          currentMonth = -1;
         }
       }
     }
 
     const key = currentMonth === -1 ? `e-${currentDay}` : `${currentMonth}-${currentDay}`;
     if (CIVIL_FESTIVALS[key]) {
-      const monthName = currentMonth === -1 ? "Epagomenai" : ["Thoth", "Phaophi", "Athyr", "Choiak", "Tybi", "Mechir", "Phamenoth", "Pharmuthi", "Pachon", "Payni", "Epiphi", "Mesore"][currentMonth];
+      const monthName = currentMonth === -1 ? "Epagomenai" : ["Thoth", "Phaophi", "Hathor", "Choiak", "Tybi", "Mechir", "Phamenoth", "Pharmouthi", "Pachons", "Payni", "Epiphi", "Mesore"][currentMonth];
       results.push({
         ...CIVIL_FESTIVALS[key],
         date: `${currentDay} de ${monthName}`,
         daysRemaining: daysFromNow
       });
     }
-
-    // Casos especiales (Opet, Khoiak, etc.) - Solo el primer día del rango para no saturar
-    if (currentMonth === 1 && currentDay === 15) {
-      results.push({ 
-        name: "Festival de Opet", 
-        description: "La estatua de Amón viajaba en barca desde Karnak al templo de Lúxor para renovar la fuerza divina del Faraón.", 
-        date: "15 de Phaophi",
-        daysRemaining: daysFromNow
-      });
-    }
-    if (currentMonth === 3 && currentDay === 1) {
-      results.push({ 
-        name: "Festival de Khoiak (Ka-her-ka)", 
-        description: "Semana de misterios osiríacos. Se fabricaban figuras de limo y semillas ('Osiris germinantes') como símbolo de vida.", 
-        date: "1 de Choiak",
-        daysRemaining: daysFromNow
-      });
-    }
-
     currentDay++;
   }
-
   return results.slice(0, count);
 }
