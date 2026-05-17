@@ -1,8 +1,13 @@
 // atticCalendarUtils.ts — Lunisolar Attic calendar engine
-// Maps Gregorian dates to approximate Attic equivalents using lunar phases.
+// Maps Gregorian dates to Attic equivalents using real lunar phases.
 // The Noumenia (1st of month) is the first day after New Moon.
+// The Attic year begins with Hekatombaion at the first New Moon
+// after the summer solstice (~June 21).
 
 import { getMoonPhase } from './solar';
+
+const DAY_MS = 1000 * 60 * 60 * 24;
+const SYNODIC_MONTH = 29.53059; // Average synodic month in days
 
 // The 12 Attic months
 export const ATTIC_MONTHS = [
@@ -20,29 +25,31 @@ export const ATTIC_MONTHS = [
   { name: "Σκιροφοριών", latin: "Skirophorion", approxGreg: "Jun-Jul" }
 ];
 
+// Intercalary month (inserted after Poseideon in 13-lunation years)
+export const INTERCALARY_MONTH = { name: "Ποσειδεών Βʹ", latin: "Poseideon II", approxGreg: "Ene" };
+
 // Greek ordinal day names
 const GREEK_DAY_ORDINALS = [
   "", "πρώτη", "δευτέρα", "τρίτη", "τετάρτη", "πέμπτη",
   "ἕκτη", "ἑβδόμη", "ὀγδόη", "ἐνάτη", "δεκάτη"
 ];
 
+// --- Lunar search functions ---
+
 // Find the most recent New Moon before or on a given date
 const findNewMoon = (date: Date): Date => {
   const d = new Date(date);
-  // Walk backwards day by day to find where the phase wraps from ~0.99 back to ~0.01
   let prevPhase = getMoonPhase(d);
 
   for (let i = 1; i <= 35; i++) {
     const check = new Date(d);
     check.setDate(check.getDate() - i);
     const phase = getMoonPhase(check);
-    
-    // Going backwards, if phase jumps from < 0.2 to > 0.8, we crossed the new moon.
-    // The day closer to "now" (i-1) is the first day after the new moon.
+
     if (phase > 0.8 && prevPhase < 0.2) {
       const nmDate = new Date(d);
       nmDate.setDate(d.getDate() - (i - 1));
-      nmDate.setHours(0, 0, 0, 0); // Normalize to midnight
+      nmDate.setHours(0, 0, 0, 0);
       return nmDate;
     }
     prevPhase = phase;
@@ -50,17 +57,111 @@ const findNewMoon = (date: Date): Date => {
   return d; // fallback
 };
 
-// Determine which Attic month based on the Gregorian month of the New Moon
-const getAtticMonthIndex = (newMoonDate: Date): number => {
-  const month = newMoonDate.getMonth(); // 0-11
-  const mapping: { [key: number]: number } = {
-    6: 0, 7: 1, 8: 2, 9: 3, 10: 4, 11: 5,
-    0: 6, 1: 7, 2: 8, 3: 9, 4: 10, 5: 11
-  };
-  return mapping[month] ?? 0;
+// Find the next New Moon strictly after a given date
+const findNextNewMoon = (date: Date): Date => {
+  const d = new Date(date);
+  d.setDate(d.getDate() + 1);
+  let prevPhase = getMoonPhase(d);
+
+  for (let i = 1; i <= 35; i++) {
+    const check = new Date(d);
+    check.setDate(d.getDate() + i);
+    const phase = getMoonPhase(check);
+
+    if (prevPhase > 0.8 && phase < 0.2) {
+      check.setHours(0, 0, 0, 0);
+      return check;
+    }
+    prevPhase = phase;
+  }
+  const fallback = new Date(date);
+  fallback.setDate(date.getDate() + 30);
+  fallback.setHours(0, 0, 0, 0);
+  return fallback;
 };
 
-// Format day within the 3-decade system
+// Find the first New Moon on or after a given date
+const findFirstNewMoonOnOrAfter = (date: Date): Date => {
+  const phase = getMoonPhase(date);
+  if (phase < 0.04 || phase > 0.96) {
+    const result = new Date(date);
+    result.setHours(0, 0, 0, 0);
+    return result;
+  }
+  let prevPhase = phase;
+  for (let i = 1; i <= 35; i++) {
+    const check = new Date(date);
+    check.setDate(date.getDate() + i);
+    const p = getMoonPhase(check);
+    if (prevPhase > 0.8 && p < 0.2) {
+      check.setHours(0, 0, 0, 0);
+      return check;
+    }
+    prevPhase = p;
+  }
+  return new Date(date);
+};
+
+// --- Attic year engine ---
+
+// Get the start of the Attic year (Hekatombaion 1) for a given Gregorian year.
+// = first New Moon on or after the summer solstice (~June 21).
+const getAtticYearStart = (gregorianYear: number): Date => {
+  const solstice = new Date(gregorianYear, 5, 21); // June 21 (approximate)
+  return findFirstNewMoonOnOrAfter(solstice);
+};
+
+// Core: determine Attic month, day, and month length from a real date
+const getAtticMonthFromDate = (date: Date): {
+  monthIndex: number;
+  newMoon: Date;
+  monthLength: number;
+  isIntercalaryMonth: boolean;
+} => {
+  const year = date.getFullYear();
+
+  // Determine which Attic year we're in
+  let yearStart = getAtticYearStart(year);
+  if (date < yearStart) {
+    yearStart = getAtticYearStart(year - 1);
+  }
+
+  // Find the New Moon that starts our current month
+  const newMoon = findNewMoon(date);
+
+  // Count lunations from year start to our New Moon
+  const daysSinceStart = Math.max(0, (newMoon.getTime() - yearStart.getTime()) / DAY_MS);
+  const lunationCount = Math.round(daysSinceStart / SYNODIC_MONTH);
+
+  // Find the next New Moon to get real month length
+  const nextNewMoon = findNextNewMoon(newMoon);
+  const rawLength = Math.round((nextNewMoon.getTime() - newMoon.getTime()) / DAY_MS);
+  const monthLength = Math.max(29, Math.min(rawLength, 30));
+
+  // Detect intercalary year (13 lunations between solstices)
+  const nextYearStart = getAtticYearStart(yearStart.getFullYear() + 1);
+  const yearDays = (nextYearStart.getTime() - yearStart.getTime()) / DAY_MS;
+  const isIntercalaryYear = yearDays > 370;
+
+  let monthIndex: number;
+  let isIntercalaryMonth = false;
+
+  if (isIntercalaryYear && lunationCount === 6) {
+    // Lunation 6 in a 13-month year = Poseideon II
+    monthIndex = 5; // Display as Poseideon variant
+    isIntercalaryMonth = true;
+  } else if (isIntercalaryYear && lunationCount > 6) {
+    // After intercalary, shift back by 1
+    monthIndex = Math.min(lunationCount - 1, 11);
+  } else {
+    monthIndex = Math.min(lunationCount, 11);
+  }
+
+  return { monthIndex, newMoon, monthLength, isIntercalaryMonth };
+};
+
+// --- Day formatting (3-decade system) ---
+
 const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: string; full: string; spanishShort: string; spanishFull: string } => {
   if (dayOfMonth === 1) {
     return { short: "Νουμηνία", full: "Νουμηνία", spanishShort: "Día 1 (Novilunio)", spanishFull: "Luna Nueva" };
@@ -104,6 +205,8 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
   };
 };
 
+// --- Public interface ---
+
 export interface AtticDateResult {
   short: string;
   full: string;
@@ -114,40 +217,48 @@ export interface AtticDateResult {
   monthIndex: number;
   decade: number;
   monthLength: number;
+  isIntercalaryMonth: boolean;
 }
 
 export const getAtticDate = (date: Date, isAfterSunset: boolean = false): AtticDateResult => {
-  const newMoon = findNewMoon(date);
+  const { monthIndex, newMoon, monthLength, isIntercalaryMonth } = getAtticMonthFromDate(date);
 
-  // Calculate days since the new moon midnight
+  // Calculate days since the new moon
   const diffMs = date.getTime() - newMoon.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
+  const diffDays = Math.floor(diffMs / DAY_MS);
+
   // The day transition happens at sunset.
-  // We align daytime directly with the Hellenion calendar grid (e.g., Apr 20 = Mounichion 2),
-  // and advance the explicit Attic date strictly after civil sunset.
   let dayOfMonth = diffDays + (isAfterSunset ? 1 : 0);
 
-  // Approximate month length (29 or 30 days — alternating hollow/full months)
-  let monthIndex = getAtticMonthIndex(newMoon);
-  let monthLength = monthIndex % 2 === 0 ? 30 : 29;
-
-  // Handle month boundary (going backwards before Day 1)
+  // Handle month boundaries
   if (dayOfMonth <= 0) {
-    monthIndex = (monthIndex - 1 + 12) % 12;
-    monthLength = monthIndex % 2 === 0 ? 30 : 29;
-    dayOfMonth = monthLength + dayOfMonth; // if dayOfMonth is 0, goes to monthLength
+    // Before Day 1 — use previous month
+    const prevMonth = getAtticMonthFromDate(new Date(newMoon.getTime() - DAY_MS));
+    const prevMonthData = isIntercalaryMonth ? INTERCALARY_MONTH : ATTIC_MONTHS[prevMonth.monthIndex];
+    const prevBoundedDay = Math.min(prevMonth.monthLength + dayOfMonth, prevMonth.monthLength);
+    const prevDayFormatted = formatAtticDay(prevBoundedDay, prevMonth.monthLength);
+    return {
+      short: `${prevDayFormatted.short}, ${prevMonthData.name}`,
+      full: `${prevDayFormatted.full}, μηνὸς ${prevMonthData.name}`,
+      spanishShort: `${prevDayFormatted.spanishShort}, mes de ${prevMonthData.name}`,
+      spanishFull: `${prevDayFormatted.spanishFull}, mes de ${prevMonthData.name} (${prevMonthData.latin})`,
+      monthName: prevMonthData.name,
+      dayOfMonth: prevBoundedDay,
+      monthIndex: prevMonth.monthIndex,
+      decade: prevBoundedDay <= 10 ? 1 : prevBoundedDay <= 20 ? 2 : 3,
+      monthLength: prevMonth.monthLength,
+      isIntercalaryMonth: prevMonth.isIntercalaryMonth
+    };
   }
 
-  // Handle month boundary (going forwards)
   if (dayOfMonth > monthLength) {
-    dayOfMonth = monthLength; // Simplistic capping for now
+    dayOfMonth = monthLength;
   }
 
-  const monthData = ATTIC_MONTHS[monthIndex];
+  const monthData = isIntercalaryMonth ? INTERCALARY_MONTH : ATTIC_MONTHS[monthIndex];
   const boundedDay = Math.min(dayOfMonth, monthLength);
   const dayFormatted = formatAtticDay(boundedDay, monthLength);
-  
+
   let decade = 1;
   if (boundedDay > 10 && boundedDay <= 20) decade = 2;
   if (boundedDay > 20) decade = 3;
@@ -161,7 +272,8 @@ export const getAtticDate = (date: Date, isAfterSunset: boolean = false): AtticD
     dayOfMonth: boundedDay,
     monthIndex,
     decade,
-    monthLength
+    monthLength,
+    isIntercalaryMonth
   };
 };
 
