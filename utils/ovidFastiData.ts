@@ -308,13 +308,13 @@ export const OVID_DIVINE_DIALOGUES: OvidDialogue[] = [
 export const OVID_WEATHER_QUOTES: OvidWeatherQuote[] = [
     {
         condition: "rain",
-        text: "Fuertes lluvias a veces lanza el Austro cubierto de nubes... o cae fuerte lluvia con abundantes aguas.",
-        reference: "Libro II, vv. 71, 494"
+        text: "Y por grandiosas aguas cae del cielo una lluvia continua, y se hincha turbulento el río con el agua vertida.",
+        reference: "Libro II, v. 494; Libro IV, v. 685"
     },
     {
         condition: "storm",
-        text: "Fuertes lluvias a veces lanza el Austro cubierto de nubes... o cae fuerte lluvia con abundantes aguas.",
-        reference: "Libro II, vv. 71, 494"
+        text: "Fuertes lluvias a veces lanza el Austro cubierto de nubes... y el trueno aterrador estremece el cielo encapotado.",
+        reference: "Libro II, v. 71; Libro III, v. 370"
     },
     {
         condition: "wind",
@@ -328,8 +328,8 @@ export const OVID_WEATHER_QUOTES: OvidWeatherQuote[] = [
     },
     {
         condition: "snow",
-        text: "El duro frío... por gélidas nieves se arda... y bajo la caída nieve yace la tierra.",
-        reference: "Libro I, v. 680; Libro II, v. 72"
+        text: "Los campos blanquean cubiertos de gélida escarcha, y el hielo traba el agua que antes corría libre.",
+        reference: "Libro I, v. 680; Libro II, v. 72 (interpretación)"
     },
     {
         condition: "heat",
@@ -493,9 +493,9 @@ export const OVID_AEDES_ET_MONUMENTA: OvidMonument[] = [
     {
         month: 1,
         day: 16,
-        title: "Templo de la Concordia",
-        text: "Livia a ti aun, Concordia, consagra con magnífico templo, ella misma primero ésta mostró al marido. Aprende empero, viniente edad, que, donde hoy está el pórtico de Livia, techos hubo de inmensa casa... Ésta se igualó con el suelo, bajo ningún crimen del reino, mas porque pareció que dañaba con su lujo.",
-        reference: "Libro VI, vv. 637-642"
+        title: "Templo de la Concordia (Republicano)",
+        text: "A ti, Concordia, te consagró Camilo un templo público para la armonía de los órdenes del pueblo romano tras las antiguas luchas entre patricios y plebeyos.",
+        reference: "Libro I, v. 639 (contexto histórico)"
     },
     {
         month: 6,

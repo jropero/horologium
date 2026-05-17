@@ -86,6 +86,10 @@ export const toRoman = (num: number): string => {
   return roman;
 };
 
+// TUTELA_MENSIS (Deidades patronas de los meses)
+// Basado principalmente en Manilio (Astronomica II.433-452) quien asigna deidades a los signos zodiacales.
+// Nota: La correspondencia mes-deidad es una convención moderna aproximada, ya que en la antigüedad
+// la tutela aplicaba a los signos zodiacales (ej. Júpiter rige Sagitario, no julio directamente).
 const TUTELA_MENSIS = [
   "Iuno", "Neptunus", "Minerva", "Venus", "Apollo", "Mercurius",
   "Iuppiter", "Ceres", "Vulcanus", "Mars", "Diana", "Vesta"

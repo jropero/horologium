@@ -184,10 +184,12 @@ export const SENTENTIAE: Sententia[] = [
 ];
 
 export const getSententiaOfTheDay = (date: Date): Sententia => {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const diff = date.getTime() - start.getTime();
+  // Use Date.UTC to avoid DST-related drift (same fix as Greek and Egyptian modules)
+  const start = Date.UTC(date.getFullYear(), 0, 0);
+  const current = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+
   const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay);
+  const dayOfYear = Math.floor((current - start) / oneDay);
 
   const index = (dayOfYear - 1) % SENTENTIAE.length;
   return SENTENTIAE[index >= 0 ? index : 0];
