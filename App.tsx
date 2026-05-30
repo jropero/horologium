@@ -20,6 +20,7 @@ import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
 import SortesVergilianae from './components/SortesVergilianae';
+import OvidianLore from './components/OvidianLore';
 import LocationModal from './components/LocationModal';
 import { LOCATIONS } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -221,6 +222,8 @@ const AppContent: React.FC = () => {
       <SententiaDiei currentDate={modernTime} />
 
       <SortesVergilianae />
+      
+      <OvidianLore modernTime={modernTime} />
 
       <Controls
         latitude={latitude}

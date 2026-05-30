@@ -40,24 +40,9 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
     const sacrificesForDay = OVID_SACRIFICIA.filter(e => e.month === month && e.day === day);
     const hasMultipleSacrifices = sacrificesForDay.length > 1;
 
-    const randomGenericSacrifice = useMemo(() => {
-        if (sacrificesForDay.length > 0) return null;
-        // Deterministic pseudo-random index based on date
-        const seed = currentDate.getFullYear() * 10000 + (currentDate.getMonth() + 1) * 100 + currentDate.getDate();
-        const x = Math.sin(seed) * 10000;
-        const randomValue = x - Math.floor(x);
-        
-        const candidates = OVID_SACRIFICIA.filter(e => !e.isGeneric);
-        if (candidates.length === 0) return null;
-        const index = Math.floor(randomValue * candidates.length);
-        return candidates[index];
-    }, [currentDate, sacrificesForDay.length]);
-
     const sacrifice = sacrificesForDay.length > 0 
         ? sacrificesForDay[0] 
-        : randomGenericSacrifice;
-
-    const isGenericFallback = sacrificesForDay.length === 0 && sacrifice !== null;
+        : null;
 
     useEffect(() => {
         setInfo(getRomanDayInfo(currentDate));
@@ -388,11 +373,6 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                                 {isLemuria ? "Lemuria: Ofrenda Lustral" : `Sacrificia: ${sacrifice.title}`}
                                             </span>
                                         </div>
-                                        {isGenericFallback && (
-                                            <span className="text-[9px] bg-stone-900/80 text-amber-500/80 px-2 py-0.5 rounded border border-amber-500/20 uppercase tracking-widest font-extrabold animate-pulse">
-                                                📖 LORE HISTÓRICO (Aleatorio)
-                                            </span>
-                                        )}
                                     </div>
                                     <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
                                         <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
