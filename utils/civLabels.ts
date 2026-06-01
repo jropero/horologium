@@ -71,6 +71,7 @@ export interface CivLabels {
   civToggleRome: string;   // Roma / Ρώμη
   civToggleHellas: string;  // Hellas / Ἑλλάς
   civToggleAegyptus: string; // Aegyptus / Αἴγυπτος
+  civToggleZhongguo: string; // Zhongguo / 中国
 }
 
 export const getRomanLabels = (): CivLabels => ({
@@ -133,6 +134,7 @@ export const getRomanLabels = (): CivLabels => ({
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
+  civToggleZhongguo: '中国',
 });
 
 export const getHellenicLabels = (): CivLabels => ({
@@ -195,6 +197,7 @@ export const getHellenicLabels = (): CivLabels => ({
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
+  civToggleZhongguo: '中国',
 });
 
 export const getEgyptianLabels = (): CivLabels => ({
@@ -257,4 +260,68 @@ export const getEgyptianLabels = (): CivLabels => ({
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Kemet',
+  civToggleZhongguo: '中国',
+});
+
+export const getChineseLabels = (): CivLabels => ({
+  appTitle: 'HOROLOGIUM',
+  appSubtitle: 'ZHONGGUO',
+  footerMotto: '天人合一',
+  loadingText: '计算节气...',
+
+  dayLabel: '昼',
+  nightLabel: '夜',
+  civilDayPartLabel: '时辰',
+  planetaryRulerLabel: '值日星官',
+  monthTutelaLabel: '月令',
+
+  sunriseLabel: '日出',
+  sunsetLabel: '日落',
+  hourLengthLabel: '时节长度',
+  minuteUnit: '分',
+
+  skyLabel: '苍穹',
+  windLabel: '风',
+
+  calendarTitle: 'Almanaque de las Estaciones',
+  calendarSubtitle: '— 节气与候应 —',
+  todayLabel: '今',
+  godOfDayTitle: '— 候应 —',
+  festivalLabel: '✧ 节庆 ✧',
+  calendarInfoTitle: '自然现象',
+
+  quoteTitle: '季候养生',
+
+  oracleTitle: '易经占卜',
+  oracleSubtitle: '周易智慧',
+  oracleOpenBook: '起卦',
+  oracleConsultAgain: '重占',
+  oracleConsulting: '推演...',
+  oraclePrompt: '静心沉思，由易经指引方向。',
+
+  regionTitle: '神州大地',
+  regionFallback: '四海之外',
+  regionFallbackDesc: '九州之外的领域。',
+  distanceTitle: '九州中心',
+  distanceUnit: '里',
+  distanceFromLabel: '里 (洛阳)',
+
+  controlsTitle: '控制面板',
+  computeBtn: '计算',
+  findMeBtn: '定位',
+  lightLabel: '昼',
+  darkLabel: '夜',
+  notificationsBtn: '消息',
+  controlsFooter: '"顺天应时" — Armonía con el cielo.',
+
+  infoTitle: '节气与自然',
+  infoFirstLetter: 'Z',
+  infoParagraph1: '中国传统历法将太阳周年运动轨迹分为二十四等分，即二十四节气。每一个节气又细分为三候，反映了自然界在不同阶段的物候变化，体现了古人“天人合一”的宇宙观。',
+  infoParagraph2: '这种历法不仅指导了古代农耕生产，还深刻影响了中医养生与文化习俗。从春分到秋分，每一候都记录着花开叶落、候鸟迁徙的细微节律，让人与自然同频共振。',
+  infoBottomMotto: '天人合一 • 顺应天时',
+
+  civToggleRome: 'Roma',
+  civToggleHellas: 'Ἑλλάς',
+  civToggleAegyptus: 'Aegyptus',
+  civToggleZhongguo: '中国',
 });

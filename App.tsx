@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import EgyptianClock from './components/EgyptianClock';
+import ChineseClock from './components/ChineseClock'; // Added
 import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
@@ -169,13 +170,13 @@ const AppContent: React.FC = () => {
         </h1>
       </header>
 
-      {civilization === 'hellas' && (
+      {civilization !== 'zhongguo' && civilization === 'hellas' && (
         <HellenicCalendarInfo
           atticDate={romanTimeData?.atticDate}
           onClick={() => setIsGreekCalendarOpen(true)}
         />
       )}
-      {civilization === 'aegyptus' && (
+      {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
         <EgyptianCalendarInfo currentDate={modernTime} />
       )}
 
@@ -191,6 +192,8 @@ const AppContent: React.FC = () => {
               currentLat={latitude}
               currentLng={longitude}
             />
+          ) : civilization === 'zhongguo' ? (
+            <ChineseClock modernTime={modernTime} />
           ) : (
             <RomanClock
               modernTime={modernTime}
@@ -205,11 +208,11 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {civilization === 'rome' ? (
+      {civilization !== 'zhongguo' && civilization === 'rome' ? (
         <RomanCalendarInfo currentDate={modernTime} />
       ) : null}
 
-      {todaysSunTimes && romanTimeData && (
+      {civilization !== 'zhongguo' && todaysSunTimes && romanTimeData && (
         <SolarTimes
           sunrise={todaysSunTimes.sunrise}
           sunset={todaysSunTimes.sunset}
@@ -217,13 +220,13 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      <ProvinciaInfo latitude={latitude} longitude={longitude} />
+      {civilization !== 'zhongguo' && <ProvinciaInfo latitude={latitude} longitude={longitude} />}
 
-      <SententiaDiei currentDate={modernTime} />
+      {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
 
-      <SortesVergilianae />
+      {civilization !== 'zhongguo' && <SortesVergilianae />}
       
-      <OvidianLore modernTime={modernTime} />
+      {civilization !== 'zhongguo' && <OvidianLore modernTime={modernTime} />}
 
       <Controls
         latitude={latitude}
@@ -240,7 +243,7 @@ const AppContent: React.FC = () => {
         currentLng={longitude}
       />
 
-      <InfoSection />
+      {civilization !== 'zhongguo' && <InfoSection />}
 
       <GreekCalendarModal
         isOpen={isGreekCalendarOpen}
