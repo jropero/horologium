@@ -107,6 +107,18 @@ export const getSunTimes = (date: Date, lat: number, lng: number) => {
  * Anchored to Jan 29, 2025 for high accuracy in the current era.
  * 0 = New Moon, 0.25 = First Quarter, 0.5 = Full Moon, 0.75 = Last Quarter
  */
+/**
+ * Returns the ecliptic longitude of the Sun for a given Date (0-360°).
+ * 0° = Spring Equinox, 90° = Summer Solstice, 180° = Fall Equinox, 270° = Winter Solstice
+ * Used by the Chinese lunisolar calendar to locate solar terms and anchor lunar months.
+ */
+export const getSolarLongitudeDeg = (date: Date): number => {
+  const d = toDays(date);
+  const M = getSolarMeanAnomaly(d);
+  const L = getEclipticLongitude(M);
+  return ((L * DEG) % 360 + 360) % 360;
+};
+
 export const getMoonPhase = (date: Date): number => {
   const jd = toJulian(date);
   const T = (jd - 2451545.0) / 36525.0;

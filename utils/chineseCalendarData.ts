@@ -384,7 +384,7 @@ export const chineseCalendarData: SolarTerm[] = [
     id: 24, pinyin: "Dàhán", hanzi: "大寒", translation: "Gran Frío", approximateDates: "20 de Enero - 3 de Febrero",
     pentads: [
       { id: 1, description: "Ji Ru Shui Ze Fu Jian (鸡乳水泽腹坚): Las gallinas empollan, hielo firme en los lagos." },
-      { id: 2, description: "Zheng Niao Ji (征鸟厉): Las aves rapaces cazan con ferocidad.", description2: "Las aves rapaces se vuelven más feroces por la escasez." },
+      { id: 2, description: "Zheng Niao Ji (征鸟厉): Las aves rapaces cazan con ferocidad. Las aves rapaces se vuelven más feroces por la escasez." },
       { id: 3, description: "Shui Ze Fu Jian (水泽腹坚): Hielo firme en los lagos (Frío extremo)." }
     ],
     healthAdvice: "No hacer cambios bruscos de temperatura. Estiramientos suaves para prepararse para la primavera.",
