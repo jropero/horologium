@@ -17,7 +17,7 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
   const radius = 120;
 
   return (
-    <div className="flex flex-col items-center w-full max-w-sm mx-auto p-4 bg-ink/80 rounded-xl border border-rose-600/20 shadow-2xl">
+    <div className="flex flex-col items-center w-full max-w-sm mx-auto p-4 bg-ink/80 rounded-xl border border-rose-600/30 shadow-2xl">
       <h3 className="text-gold-leaf font-serif text-sm uppercase tracking-widest mb-4">时辰 · Shíchen</h3>
       
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mb-6">
@@ -50,9 +50,7 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
               {/* Sector Background */}
               <path
                 d={`M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`}
-                fill={isActive ? '#e11d48' : '#1e1b4b'}
-                fillOpacity={isActive ? 0.3 : 0.1}
-                stroke={isActive ? '#fb7185' : '#475569'}
+                className={`${isActive ? 'fill-gold-leaf/30 stroke-gold-leaf' : 'fill-ink/10 stroke-parchment/20'}`}
                 strokeWidth={isActive ? 2 : 1}
               />
               {/* Emoji & Hanzi */}
@@ -61,7 +59,7 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
                 y={ty}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={`text-xl ${isActive ? 'fill-gold-leaf' : 'fill-gold-dim/50'}`}
+                className={`text-xl ${isActive ? 'fill-gold-leaf' : 'fill-parchment/60'}`}
                 transform={`rotate(${midAngle} ${tx} ${ty})`}
               >
                 {shichen.animalEmoji}
@@ -71,7 +69,7 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
                 y={ty + 18}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={`text-[10px] ${isActive ? 'fill-gold-leaf' : 'fill-gold-dim/50'}`}
+                className={`text-[10px] ${isActive ? 'fill-gold-leaf' : 'fill-parchment/60'}`}
                 transform={`rotate(${midAngle} ${tx} ${ty + 18})`}
               >
                 {shichen.branchHanzi}
@@ -82,8 +80,8 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
 
         {/* Center Needle */}
         <g transform={`rotate(${needleRotation} ${center} ${center})`}>
-          <line x1={center} y1={center} x2={center} y2={center - radius + 30} stroke="#fb7185" strokeWidth="4" strokeLinecap="round" />
-          <circle cx={center} cy={center} r="6" fill="#e11d48" stroke="#ffffff" strokeWidth="2" />
+          <line x1={center} y1={center} x2={center} y2={center - radius + 30} className="stroke-gold-leaf" strokeWidth="4" strokeLinecap="round" />
+          <circle cx={center} cy={center} r="6" className="fill-gold-leaf stroke-parchment" strokeWidth="2" />
         </g>
       </svg>
 
@@ -93,23 +91,23 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
             <span className="text-2xl">{current.animalEmoji}</span>
             <div className="text-right">
                 <div className="text-gold-leaf font-bold text-lg">{current.branchHanzi} {current.animalHanzi}</div>
-                <div className="text-rose-400 text-xs uppercase">{current.animalName}</div>
+                <div className="text-parchment/70 text-xs uppercase">{current.animalName}</div>
             </div>
         </div>
         
-        <div className="text-sm text-gold-dim/70 mb-3 font-serif italic">
-            {current.startHour.toString().padStart(2, '0')}:00 - {current.endHour.toString().padStart(2, '0')}:00
+        <div className="text-sm text-parchment/70 mb-3 font-serif italic">
+            {current.startHour.toString().padStart(2, '0')}:00 — {current.endHour.toString().padStart(2, '0')}:00
         </div>
 
         {/* Meaning block */}
         <div className="text-left bg-rose-900/10 border-l-2 border-rose-600/50 p-3 mb-4 rounded-r">
           <p className="text-xs text-parchment/80 italic font-serif leading-relaxed">
-            <span className="font-bold text-rose-500 mr-1 not-italic tracking-wider uppercase text-[10px]">📜 Tradición:</span>
+            <span className="font-bold text-rose-400 mr-1 not-italic tracking-wider uppercase text-[10px]">📜 Tradición:</span>
             {current.meaning}
           </p>
         </div>
 
-        <div className="h-1.5 w-full bg-ink-dark rounded-full overflow-hidden border border-gold-dim/10">
+        <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-gold-dim/10">
             <div className="h-full bg-rose-600 transition-all duration-1000" style={{ width: `${progressPercent * 100}%` }} />
         </div>
       </div>

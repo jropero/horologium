@@ -228,20 +228,24 @@ const AppContent: React.FC = () => {
       
       {civilization !== 'zhongguo' && <OvidianLore modernTime={modernTime} />}
 
-      <Controls
-        latitude={latitude}
-        longitude={longitude}
-        onUpdateLocation={handleUpdateLocation}
-        onRefreshTime={() => setModernTime(new Date())}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      {civilization !== 'zhongguo' && (
+        <Controls
+          latitude={latitude}
+          longitude={longitude}
+          onUpdateLocation={handleUpdateLocation}
+          onRefreshTime={() => setModernTime(new Date())}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
+      )}
 
-      <LocationSelector
-        onUpdateLocation={handleUpdateLocation}
-        currentLat={latitude}
-        currentLng={longitude}
-      />
+      {civilization !== 'zhongguo' && (
+        <LocationSelector
+          onUpdateLocation={handleUpdateLocation}
+          currentLat={latitude}
+          currentLng={longitude}
+        />
+      )}
 
       {civilization !== 'zhongguo' && <InfoSection />}
 

@@ -51,6 +51,42 @@
   --app-bg-size: auto;
 }
 
+/* === ZHONGGUO THEME === */
+/* Chinese Dark Mode (Vermillion & Ink) */
+[data-civ="zhongguo"] {
+  --ink: #1a1410;
+  --gold-leaf: #e11d48;
+  --gold-dim: #be123c;
+  --parchment: #fef3c7;
+  --parchment-dark: #fde68a;
+  --midnight: #0c0a09;
+  --hatch-color: #292524;
+  --festival-text: #eab308;
+  --roman-red: #e11d48;
+  /* Ink wash style: Radial gradients simulating brushed ink depth */
+  --app-bg-pattern: 
+    radial-gradient(circle at 50% 50%, rgba(45, 30, 25, 0.4) 0%, rgba(20, 15, 10, 0.8) 100%),
+    linear-gradient(135deg, rgba(26, 20, 16, 1) 0%, rgba(60, 40, 30, 0.6) 100%);
+  --app-bg-size: cover;
+}
+
+[data-theme="light"][data-civ="zhongguo"] {
+  --ink: #faf5f0;
+  --gold-leaf: #b91c1c;
+  --gold-dim: #7f1d1d;
+  --parchment: #1c1917;
+  --parchment-dark: #292524;
+  --midnight: #fef3c7;
+  --hatch-color: #991b1b;
+  --festival-text: #b45309;
+  --roman-red: #dc2626;
+  /* Light ink wash style */
+  --app-bg-pattern: 
+    radial-gradient(circle at 50% 50%, rgba(240, 230, 210, 0.5) 0%, rgba(220, 210, 190, 0.3) 100%),
+    linear-gradient(135deg, #f5efe6 0%, #ede8de 100%);
+  --app-bg-size: cover;
+}
+
 /* === HELLAS THEME === */
 /* Hellenic Dark Mode (Black-figure pottery style) */
 [data-civ="hellas"] {
