@@ -130,23 +130,20 @@ export const getMoonPhase = (date: Date): number => {
   // Moon Mean Anomaly
   const M_ = 134.96340 + 477198.86752 * T + 0.0086972 * T * T;
 
-  // Calibrated Mean Elongation (D)
-  // Anchored to known New Moon: Jan 29, 2025 12:35 UTC (JD ~2460705.0243)
-  // Mean daily motion of elongation: 12.19074912 degrees
-  const knownNewMoonJD = 2460705.0243;
-  const daysSinceRef = jd - knownNewMoonJD;
-  const D_calibrated = daysSinceRef * 12.19074912;
+  // Mean elongation of the Moon from Meeus (Chapter 47)
+  const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T * T
+    + T * T * T / 545868 - T * T * T * T / 113065000;
 
   // Periodic terms (degrees) - Major inequalities (Evections, Variations, Equation of Center)
-  const elongation = D_calibrated
+  const elongation = D
     + 6.289 * Math.sin(M_ * RAD)
     - 2.100 * Math.sin(M * RAD)
-    - 1.274 * Math.sin((2 * D_calibrated - M_) * RAD)
-    + 0.658 * Math.sin(2 * D_calibrated * RAD)
+    - 1.274 * Math.sin((2 * D - M_) * RAD)
+    + 0.658 * Math.sin(2 * D * RAD)
     - 0.114 * Math.sin(2 * M_ * RAD)
-    - 0.055 * Math.sin(2 * D_calibrated - 2 * M_ * RAD);
+    - 0.055 * Math.sin(2 * D - 2 * M_ * RAD);
 
-  // Normalize to 0-1
+  // Normalize to 0-1 (0 = new moon, 0.25 = first quarter, 0.5 = full moon, 0.75 = last quarter)
   const phase = (elongation % 360 + 360) % 360 / 360;
   return phase;
 };
