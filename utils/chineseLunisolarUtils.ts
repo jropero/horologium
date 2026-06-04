@@ -99,41 +99,77 @@ export interface ChineseLunisolarDate {
   displayDate: string;
 }
 
-// Find the new moon ON or BEFORE the given date (day-level precision)
-const findNewMoon = (date: Date): Date => {
-  const d = new Date(date);
-  let prevPhase = getMoonPhase(d);
-  for (let i = 1; i <= 35; i++) {
-    const check = new Date(d);
-    check.setDate(check.getDate() - i);
-    const phase = getMoonPhase(check);
-    if (phase > 0.8 && prevPhase < 0.2) {
-      const nmDate = new Date(d);
-      nmDate.setDate(d.getDate() - (i - 1));
-      nmDate.setHours(0, 0, 0, 0);
-      return nmDate;
-    }
-    prevPhase = phase;
-  }
-  return d;
+// A "new moon day" is the calendar day (midnight-to-midnight local time) that
+// contains the true lunar conjunction. It is detected when the moon phase at
+// local midnight is near 1 (> 0.8, just before conjunction) and the next
+// midnight is near 0 (< 0.2, just after conjunction) — meaning the conjunction
+// fell within that calendar day.
+
+// Check if a DATE (at noon) is on a new moon day
+const isNMday = (d: Date): boolean => {
+  const today = new Date(d);
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  return getMoonPhase(today) > 0.8 && getMoonPhase(tomorrow) < 0.2;
 };
 
-// Find the next new moon strictly after the given date
-const findNextNewMoon = (date: Date): Date => {
+// Find the new moon day ON or BEFORE the given date
+const findNewMoon = (date: Date): Date => {
   const d = new Date(date);
+  d.setHours(12, 0, 0, 0);
+
+  if (isNMday(d)) {
+    const nm = new Date(d);
+    nm.setHours(0, 0, 0, 0);
+    return nm;
+  }
+
+  // Walk backward looking for the NM day
   let prevPhase = getMoonPhase(d);
-  for (let i = 1; i <= 35; i++) {
-    const check = new Date(d);
-    check.setDate(d.getDate() + i);
-    const phase = getMoonPhase(check);
-    if (prevPhase > 0.8 && phase < 0.2) {
-      check.setHours(0, 0, 0, 0);
-      return check;
+  for (let i = 1; i <= 32; i++) {
+    const curr = new Date(d);
+    curr.setDate(d.getDate() - i);
+    const phase = getMoonPhase(curr);
+    if (phase > 0.8 && prevPhase < 0.2) {
+      const nm = new Date(curr);
+      nm.setHours(0, 0, 0, 0);
+      return nm;
     }
     prevPhase = phase;
   }
-  const fallback = new Date(date);
-  fallback.setDate(date.getDate() + 30);
+
+  // Fallback: go back one synodic month
+  const fallback = new Date(d.getTime() - Math.round(SYNODIC_MONTH * DAY_MS));
+  fallback.setHours(0, 0, 0, 0);
+  return fallback;
+};
+
+// Find the next new moon day strictly after the given date.
+// The date is typically a NM day; we advance 3 days to skip past the current NM's
+// own phase transition boundary (midnight >0.8 → next midnight <0.2) so we find
+// the actual next NM ~29 days later.
+const findNextNewMoon = (date: Date): Date => {
+  const d = new Date(date);
+  d.setHours(12, 0, 0, 0);
+  d.setDate(d.getDate() + 3);
+
+  let prevPhase = getMoonPhase(d);
+  for (let i = 1; i <= 32; i++) {
+    const curr = new Date(d);
+    curr.setDate(d.getDate() + i);
+    const phase = getMoonPhase(curr);
+    if (prevPhase > 0.8 && phase < 0.2) {
+      const nm = new Date(curr);
+      nm.setHours(0, 0, 0, 0);
+      return nm;
+    }
+    prevPhase = phase;
+  }
+
+  const fallback = new Date(d);
+  fallback.setDate(d.getDate() + 30);
+  fallback.setHours(0, 0, 0, 0);
   return fallback;
 };
 
@@ -291,8 +327,8 @@ export const getChineseLunisolarDate = (date: Date): ChineseLunisolarDate => {
 
   const monthName = isLeapMonth ? `闰${CHINESE_MONTHS[(chineseMonth - 1 + 12) % 12]}` : CHINESE_MONTHS[(chineseMonth - 1 + 12) % 12];
 
-  // Display string: the last day of the month is always called 三十
-  const dayName = dayOfMonth === monthLength ? '三十' : (CHINESE_DAYS[dayOfMonth] || `${dayOfMonth}日`);
+  // CHINESE_DAYS already has correct names for 1-30 (e.g. 廿九 for 29, 三十 for 30)
+  const dayName = CHINESE_DAYS[dayOfMonth] || `${dayOfMonth}日`;
   const displayDate = `${yearSB.display}年${monthName}${dayName}`;
 
   const cnyDisplay = `${cnyDate.getFullYear()}-${String(cnyDate.getMonth() + 1).padStart(2, '0')}-${String(cnyDate.getDate()).padStart(2, '0')}`;
