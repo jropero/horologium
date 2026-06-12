@@ -1,5 +1,5 @@
 import React from 'react';
-import { Landmark, Columns3, Pyramid, Wind } from 'lucide-react';
+import { Landmark, Columns3, Pyramid, Wind, Sun } from 'lucide-react';
 import { useCivilization, Civilization } from '../contexts/CivilizationContext';
 
 const civs: { id: Civilization; icon: typeof Landmark; label: string; activeColor: string; activeGlow: string }[] = [
@@ -7,6 +7,7 @@ const civs: { id: Civilization; icon: typeof Landmark; label: string; activeColo
   { id: 'hellas', icon: Columns3, label: 'Ἑλλάς', activeColor: 'text-sky-400', activeGlow: 'shadow-[0_0_12px_rgba(56,189,248,0.4)]' },
   { id: 'aegyptus', icon: Pyramid, label: 'Kemet', activeColor: 'text-emerald-400', activeGlow: 'shadow-[0_0_12px_rgba(52,211,153,0.4)]' },
   { id: 'zhongguo', icon: Wind, label: '中国', activeColor: 'text-rose-600', activeGlow: 'shadow-[0_0_12px_rgba(225,29,72,0.4)]' },
+  { id: 'maya', icon: Sun, label: 'Maya', activeColor: 'text-emerald-500', activeGlow: 'shadow-[0_0_12px_rgba(16,185,129,0.4)]' },
 ];
 
 const BottomNav: React.FC = () => {

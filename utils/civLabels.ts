@@ -67,11 +67,18 @@ export interface CivLabels {
   infoParagraph2: string;
   infoBottomMotto: string;   // Tempus Fugit • Memento Mori / Πάντα ῥεῖ • Γνῶθι σεαυτόν
 
+  // Maya-specific
+  longCountLabel: string;   // Cuenta Larga
+  tzolkinLabel: string;     // Tzolk'in
+  haabLabel: string;        // Haab'
+  wayebWarning: string;     // ¡Días Nefastos!
+
   // Civilization toggle
   civToggleRome: string;   // Roma / Ρώμη
   civToggleHellas: string;  // Hellas / Ἑλλάς
   civToggleAegyptus: string; // Aegyptus / Αἴγυπτος
   civToggleZhongguo: string; // Zhongguo / 中国
+  civToggleMaya: string;   // Maya
 }
 
 export const getRomanLabels = (): CivLabels => ({
@@ -93,6 +100,11 @@ export const getRomanLabels = (): CivLabels => ({
 
   skyLabel: 'Caelum',
   windLabel: 'Ventus',
+
+  longCountLabel: '',
+  tzolkinLabel: '',
+  haabLabel: '',
+  wayebWarning: '',
 
   calendarTitle: 'Fasti Romani',
   calendarSubtitle: '— Dies VII Sequentes —',
@@ -135,6 +147,7 @@ export const getRomanLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
+  civToggleMaya: 'Maya',
 });
 
 export const getHellenicLabels = (): CivLabels => ({
@@ -156,6 +169,11 @@ export const getHellenicLabels = (): CivLabels => ({
 
   skyLabel: 'Οὐρανός',
   windLabel: 'Ἄνεμος',
+
+  longCountLabel: '',
+  tzolkinLabel: '',
+  haabLabel: '',
+  wayebWarning: '',
 
   calendarTitle: 'Ἡμερολόγιον Ἀττικόν',
   calendarSubtitle: '— Αἱ VII Ἑπόμεναι Ἡμέραι —',
@@ -198,6 +216,7 @@ export const getHellenicLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
+  civToggleMaya: 'Maya',
 });
 
 export const getEgyptianLabels = (): CivLabels => ({
@@ -219,6 +238,11 @@ export const getEgyptianLabels = (): CivLabels => ({
 
   skyLabel: 'Pet',
   windLabel: 'Tjaw',
+
+  longCountLabel: '',
+  tzolkinLabel: '',
+  haabLabel: '',
+  wayebWarning: '',
 
   calendarTitle: 'Calendario Alejandrino',
   calendarSubtitle: '— Heru VII Tepyt —',
@@ -259,8 +283,9 @@ export const getEgyptianLabels = (): CivLabels => ({
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
-  civToggleAegyptus: 'Kemet',
+  civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
+  civToggleMaya: 'Maya',
 });
 
 export const getChineseLabels = (): CivLabels => ({
@@ -282,6 +307,11 @@ export const getChineseLabels = (): CivLabels => ({
 
   skyLabel: '苍穹',
   windLabel: '风',
+
+  longCountLabel: '',
+  tzolkinLabel: '',
+  haabLabel: '',
+  wayebWarning: '',
 
   calendarTitle: 'Almanaque de las Estaciones',
   calendarSubtitle: '— 节气与候应 —',
@@ -324,4 +354,74 @@ export const getChineseLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
+  civToggleMaya: 'Maya',
+});
+
+export const getMayaLabels = (): CivLabels => ({
+  appTitle: 'HOROLOGIUM',
+  appSubtitle: 'MAYA',
+  footerMotto: 'IN LAK\'ECH',
+  loadingText: 'Consultando el Tzolk\'in...',
+
+  dayLabel: 'K\'in',
+  nightLabel: 'Ak\'ab',
+  civilDayPartLabel: 'Parte del Día',
+  planetaryRulerLabel: 'Señor de la Hora',
+  monthTutelaLabel: 'Deidad del Mes',
+
+  sunriseLabel: 'Salil K\'in',
+  sunsetLabel: 'Oc K\'in',
+  hourLengthLabel: 'Longitud de la Hora',
+  minuteUnit: 'minutos',
+
+  skyLabel: 'Ka\'an',
+  windLabel: 'Iik\'',
+
+  longCountLabel: 'Cuenta Larga',
+  tzolkinLabel: 'Tzolk\'in',
+  haabLabel: 'Haab\'',
+  wayebWarning: '¡Días Nefastos!',
+
+  calendarTitle: 'Calendario Maya',
+  calendarSubtitle: '— Ciclo Sagrado —',
+  todayLabel: 'Hoy',
+  godOfDayTitle: 'Señor de la Noche',
+  festivalLabel: '✧ K\'iin ✧',
+  calendarInfoTitle: 'Sabiduría de los Abuelos',
+
+  quoteTitle: 'Refrán del Día',
+
+  oracleTitle: 'Chilam Balam',
+  oracleSubtitle: 'Oráculo de la Rueda Calendárica',
+  oracleOpenBook: 'Abrir el Códice',
+  oracleConsultAgain: 'Consultar de Nuevo',
+  oracleConsulting: 'Los Ah Kin\'ob consultan...',
+  oraclePrompt: 'Abre el Chilam Balam al azar y deja que la palabra de los antiguos te guíe.',
+
+  regionTitle: 'Región Maya',
+  regionFallback: 'Fuera del Mundo Maya',
+  regionFallbackDesc: 'Más allá de las tierras del maíz y el jaguar.',
+  distanceTitle: 'Ombligo del Mundo',
+  distanceUnit: 'k\'in (días)',
+  distanceFromLabel: 'días desde la Ciudad de las Pirámides',
+
+  controlsTitle: 'CONTROLES',
+  computeBtn: 'Calcular',
+  findMeBtn: 'Encontrarme',
+  lightLabel: 'K\'iin',
+  darkLabel: 'Ak\'ab',
+  notificationsBtn: 'Notificaciones',
+  controlsFooter: '"In Lak\'ech" — Tú eres mi otro yo.',
+
+  infoTitle: 'Sobre el Tiempo Maya',
+  infoFirstLetter: 'M',
+  infoParagraph1: 'aya, la civilización de las selvas y pirámides, desarrolló uno de los sistemas calendáricos más precisos de la antigüedad. Combinaban el Tzolk\'in (260 días) con el Haab\' (365 días) en una Rueda Calendárica de 52 años.',
+  infoParagraph2: 'Junto a estos ciclos, la Cuenta Larga registraba fechas absolutas desde la creación del mundo (11 de agosto de 3114 a.C.). Los Ah Kin\'ob, sacerdotes del sol, observaban el movimiento de Venus y la Luna para sincronizar sus rituales con el cosmos.',
+  infoBottomMotto: 'In Lak\'ech • Hala Ken\'',
+
+  civToggleRome: 'Roma',
+  civToggleHellas: 'Ἑλλάς',
+  civToggleAegyptus: 'Aegyptus',
+  civToggleZhongguo: '中国',
+  civToggleMaya: 'Maya',
 });
