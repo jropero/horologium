@@ -31,11 +31,12 @@
 - **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus, ciclo de nundinas y año *Ab Urbe Condita*.
 - **Hellas (Chronos)**: Calendario Ático completo con meses lunares, sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) y alertas de días nefastos (Apaphrades).
 - **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, festivales sagrados y **Nilómetro dinámico** con niveles históricos.
+- **Maya (K'inich)**: Sistema Mesoamericano con la Rueda Calendárica animada (Tzolk'in y Haab' entrelazados), Cuenta Larga con cálculo exacto de B'ak'tun, K'atun, Tun, Winal y K'in, y Academia del Tiempo interactiva con predicciones a 7 días.
 
 ### 🎨 Experiencia Visual y Estética
 - **Diseño Mobile-First**: Barra de navegación inferior persistente para cambios rápidos de cultura y selector de tema dinámico optimizado para móviles.
 - **Dualitas Thematis**: Soporte para modo oscuro profundo y un **Modo Pergamino** (claro) que evoca manuscritos antiguos.
-- **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas u obeliscos egipcios según la civilización activa.
+- **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas, obeliscos egipcios o pirámides mayas según la civilización activa.
 - **Accesibilidad WCAG AA**: Diseño optimizado para alta legibilidad con contrastes auditados y tipografía premium.
 
 ### 🕰️ Cronometría y Astronomía Avanzada
@@ -43,6 +44,7 @@
 - **Ojo de Horus (Algol)**: Seguimiento en tiempo real de la estrella variable Algol (2.86 días), codificada como las acciones de Horus en el Papiro de El Cairo 86637.
 - **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo.
 - **Nilómetro Histórico**: Modelo hidrológico mes a mes que recrea visualmente el ciclo anual del Nilo (desde la inundación máxima en Phaophi hasta el estiaje en Epiphi).
+- **Engranajes del Calendario Maya**: Representación visual interactiva en formato SVG de los engranajes interconectados del Tzolk'in y el Haab'.
 
 ### 🔮 Sabiduría y Adivinación Antigua
 - **Hemerología Egipcia**: Sistema de días "Buenos y Malos" (*Nefer* y *Aha*) basado en el Papiro de El Cairo 86637.

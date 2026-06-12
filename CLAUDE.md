@@ -24,11 +24,11 @@ npx cap open android                    # Open Android Studio
 
 ### Civilization system
 
-The active civilization (`rome` | `hellas` | `aegyptus`) is stored in `CivilizationContext` (`contexts/CivilizationContext.tsx`) and persisted to `localStorage`. It drives three parallel tracks:
+The active civilization (`rome` | `hellas` | `aegyptus` | `maya`) is stored in `CivilizationContext` (`contexts/CivilizationContext.tsx`) and persisted to `localStorage`. It drives three parallel tracks:
 
-- **Time calculation**: `utils/romanTimeUtils.ts`, `utils/hellenicTimeUtils.ts`, `utils/egyptianTimeUtils.ts` — each returns a `RomanTimeData` object (see `types.ts`). These functions receive `(Date, lat, lng)` and compute temporal hours, calendar date, moon phase, planetary ruler, etc.
-- **Clock component**: `RomanClock` is used for both Rome and Hellas; `EgyptianClock` for Aegyptus.
-- **Calendar info bar**: `RomanCalendarInfo`, `HellenicCalendarInfo`, `EgyptianCalendarInfo` — rendered conditionally in `App.tsx`.
+- **Time calculation**: `utils/romanTimeUtils.ts`, `utils/hellenicTimeUtils.ts`, `utils/egyptianTimeUtils.ts`, `utils/mayaCalendarUtils.ts` — each returns a civilization-specific time object. These functions receive `(Date, lat, lng)` and compute temporal hours, calendar date, moon phase, planetary ruler, Long Count, etc.
+- **Clock component**: `RomanClock` is used for both Rome and Hellas; `EgyptianClock` for Aegyptus; `MayaClock` for Maya.
+- **Calendar info bar**: `RomanCalendarInfo`, `HellenicCalendarInfo`, `EgyptianCalendarInfo`, `MayaCalendarInfo` — rendered conditionally in `App.tsx`.
 - **UI labels**: All strings are civilization-specific, sourced from `utils/civLabels.ts` via the context.
 
 ### Astronomical core
@@ -41,11 +41,12 @@ Heavy static datasets live in `utils/`:
 - Roman: `romanCalendarData.ts`, `romanHistoryData.ts`, `romanYearData.ts`, `romanProvinces.ts`
 - Hellenic: `atticCalendarData.ts`, `atticCalendarUtils.ts`, `greekRegions.ts`, `greekTranslations.ts`, `greekTransliteration.ts`, `sortesHomericae.ts`
 - Egyptian: `egyptianCalendarData.ts`, `egyptianCalendarUtils.ts`, `egyptianDeities.ts`, `egyptianFestivalsData.ts`, `egyptianHemerologyData.ts`, `egyptianWisdomData.ts`, `egyptianAstronomy.ts`, `egyptianRegions.ts`
+- Maya: `mayaLoreData.ts`, `mayaCalendarUtils.ts`
 - Shared: `sententiaeData.ts`, `apophthegmataData.ts`, `sortesVergilianae.ts`, `locations.ts`
 
 ### Procedural skyline
 
-Three generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks) as the animated background.
+Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `mayaSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks, pyramids) as the animated background.
 
 ### Theming
 
