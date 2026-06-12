@@ -3,6 +3,8 @@ import { Sun, Moon } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import EgyptianClock from './components/EgyptianClock';
 import ChineseClock from './components/ChineseClock'; // Added
+import MayaClock from './components/MayaClock';
+import MayaCalendarInfo from './components/MayaCalendarInfo';
 import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
@@ -117,7 +119,9 @@ const AppContent: React.FC = () => {
         ? calculateRomanTime(modernTime, latitude, longitude)
         : civilization === 'hellas'
           ? calculateHellenicTime(modernTime, latitude, longitude)
-          : calculateEgyptianTime(modernTime, latitude, longitude);
+          : civilization === 'aegyptus'
+            ? calculateEgyptianTime(modernTime, latitude, longitude)
+            : calculateRomanTime(modernTime, latitude, longitude);
       setRomanTimeData(data);
 
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
@@ -179,6 +183,9 @@ const AppContent: React.FC = () => {
       {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
         <EgyptianCalendarInfo currentDate={modernTime} />
       )}
+      {civilization !== 'zhongguo' && civilization === 'maya' && (
+        <MayaCalendarInfo currentDate={modernTime} />
+      )}
 
       {romanTimeData && (
         <div className="w-full max-w-2xl mx-auto">
@@ -194,6 +201,15 @@ const AppContent: React.FC = () => {
             />
           ) : civilization === 'zhongguo' ? (
             <ChineseClock modernTime={modernTime} />
+          ) : civilization === 'maya' ? (
+            <MayaClock
+              modernTime={modernTime}
+              loading={loading}
+              weather={weather}
+              onUpdateLocation={handleUpdateLocation}
+              currentLat={latitude}
+              currentLng={longitude}
+            />
           ) : (
             <RomanClock
               modernTime={modernTime}
@@ -212,7 +228,7 @@ const AppContent: React.FC = () => {
         <RomanCalendarInfo currentDate={modernTime} />
       ) : null}
 
-      {civilization !== 'zhongguo' && todaysSunTimes && romanTimeData && (
+      {civilization !== 'zhongguo' && civilization !== 'maya' && todaysSunTimes && romanTimeData && (
         <SolarTimes
           sunrise={todaysSunTimes.sunrise}
           sunset={todaysSunTimes.sunset}
@@ -220,13 +236,13 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {civilization !== 'zhongguo' && <ProvinciaInfo latitude={latitude} longitude={longitude} />}
+      {civilization !== 'zhongguo' && civilization !== 'maya' && <ProvinciaInfo latitude={latitude} longitude={longitude} />}
 
-      {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
+      {civilization !== 'zhongguo' && civilization !== 'maya' && <SententiaDiei currentDate={modernTime} />}
 
-      {civilization !== 'zhongguo' && <SortesVergilianae />}
+      {civilization !== 'zhongguo' && civilization !== 'maya' && <SortesVergilianae />}
       
-      {civilization !== 'zhongguo' && <OvidianLore modernTime={modernTime} />}
+      {civilization !== 'zhongguo' && civilization !== 'maya' && <OvidianLore modernTime={modernTime} />}
 
       {civilization !== 'zhongguo' && (
         <Controls
