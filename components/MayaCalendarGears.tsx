@@ -59,20 +59,20 @@ const Gear: React.FC<{
 
       {/* Labels */}
       {labels.map((label, i) => {
-        const angle = (i * (360 / cogs)) - 90; // Start at top
-        const textRadius = radius - cogDepth - 20;
+        const angle = (i * (360 / cogs)); // Start at Right (0 degrees)
+        const textRadius = radius - cogDepth - (isNumbers ? 24 : 26);
         const textCx = cx + textRadius * Math.cos(angle * (Math.PI / 180));
         const textCy = cy + textRadius * Math.sin(angle * (Math.PI / 180));
         
         return (
-          <g key={i} transform={`translate(${textCx}, ${textCy}) rotate(${angle + 90})`}>
+          <g key={i} transform={`translate(${textCx}, ${textCy}) rotate(${angle})`}>
             <text 
               x="0" 
               y="0" 
               textAnchor="middle" 
               dominantBaseline="middle" 
               fill={color} 
-              fontSize={isNumbers ? "18" : "9"} 
+              fontSize={isNumbers ? "26" : "14"} 
               fontWeight="bold"
               className="font-serif uppercase"
             >
@@ -86,13 +86,11 @@ const Gear: React.FC<{
 };
 
 const MayaCalendarGears: React.FC<MayaCalendarGearsProps> = ({ mayaDate }) => {
-  // SVG dimensions
-  const width = 800;
-  const height = 500;
+  // Vertical SVG dimensions
+  const width = 550;
+  const height = 950;
 
   // Configuration for gears
-  // We want the 13-gear to mesh with the 20-gear, and the 20-gear to mesh with the 19-gear (Haab abstraction)
-  
   const cogs1 = 13;
   const cogs2 = 20;
   const cogs3 = 19; // 18 months + 1 Wayeb'
@@ -104,31 +102,25 @@ const MayaCalendarGears: React.FC<MayaCalendarGearsProps> = ({ mayaDate }) => {
   const r3 = cogs3 * baseRadius; // 152
   const cogDepth = 12;
 
-  // Center points to make them interlock
-  // Distance between centers should be rA + rB - cogDepth
-  const cx1 = 150;
-  const cy1 = 250;
+  // Center points (vertical layout)
+  const cx1 = 180;
+  const cy1 = 140;
   
-  const cx2 = cx1 + r1 + r2 - cogDepth;
-  const cy2 = 250;
+  const cx2 = 180;
+  const cy2 = cy1 + r1 + r2 - cogDepth; // 140 + 104 + 160 - 12 = 392
 
-  const cx3 = cx2 + r2 + r3 - cogDepth;
-  const cy3 = 250;
+  const cx3 = 180;
+  const cy3 = cy2 + r2 + r3 - cogDepth; // 392 + 160 + 152 - 12 = 692
 
   // Calculate rotations based on dates
-  // Tzolk'in number (1-13)
   const numIndex = mayaDate.tzolkin.number - 1; 
   const angleStep1 = 360 / cogs1;
-  const rotation1 = -(numIndex * angleStep1); // Negative so the top aligns
+  const rotation1 = -(numIndex * angleStep1); // Negative so the active is at angle 0 (Right)
 
-  // Tzolk'in name (1-20)
   const nameIndex = TZOLKIN_NAMES.indexOf(mayaDate.tzolkin.name);
   const angleStep2 = 360 / cogs2;
-  // Meshing: If gear 1 turns +1 cog, gear 2 turns -1 cog.
-  // Actually we just rotate to the correct index at the top.
   const rotation2 = -(nameIndex * angleStep2);
 
-  // Haab' name (1-19)
   const haabIndex = HAAB_NAMES.indexOf(mayaDate.haab.name);
   const angleStep3 = 360 / cogs3;
   const rotation3 = -(haabIndex * angleStep3);
@@ -140,7 +132,7 @@ const MayaCalendarGears: React.FC<MayaCalendarGearsProps> = ({ mayaDate }) => {
     <div className="w-full flex justify-center py-8 overflow-hidden bg-ink rounded-xl border-2 border-emerald-500/20 shadow-inner relative">
       <div className="absolute inset-0 woodcut-hatch opacity-10 pointer-events-none"></div>
       
-      <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} className="max-w-4xl drop-shadow-2xl">
+      <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} className="max-w-md drop-shadow-2xl">
         <defs>
           <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#10b981" stopOpacity="0.15" />
@@ -156,25 +148,12 @@ const MayaCalendarGears: React.FC<MayaCalendarGearsProps> = ({ mayaDate }) => {
           </radialGradient>
         </defs>
 
-        {/* Indicator arrows/markers */}
-        <g stroke="white" strokeWidth="2" fill="none" opacity="0.8">
-          {/* Top marker for Gear 1 */}
-          <path d={`M${cx1},${cy1 - r1 - 15} L${cx1 - 10},${cy1 - r1 - 30} L${cx1 + 10},${cy1 - r1 - 30} Z`} fill="#10b981" stroke="none" />
-          <text x={cx1} y={cy1 - r1 - 40} textAnchor="middle" fill="#10b981" fontSize="24" fontWeight="black" className="font-serif drop-shadow-md">{mayaDate.tzolkin.number}</text>
-
-          {/* Top marker for Gear 2 */}
-          <path d={`M${cx2},${cy2 - r2 - 15} L${cx2 - 10},${cy2 - r2 - 30} L${cx2 + 10},${cy2 - r2 - 30} Z`} fill="#34d399" stroke="none" />
-          <text x={cx2} y={cy2 - r2 - 40} textAnchor="middle" fill="#34d399" fontSize="24" fontWeight="black" className="font-serif uppercase drop-shadow-md">{mayaDate.tzolkin.name}</text>
-
-          {/* Top marker for Gear 3 */}
-          <path d={`M${cx3},${cy3 - r3 - 15} L${cx3 - 10},${cy3 - r3 - 30} L${cx3 + 10},${cy3 - r3 - 30} Z`} fill="#f59e0b" stroke="none" />
-          <text x={cx3} y={cy3 - r3 - 40} textAnchor="middle" fill="#f59e0b" fontSize="24" fontWeight="black" className="font-serif uppercase drop-shadow-md">{mayaDate.haab.number} {mayaDate.haab.name}</text>
-        </g>
-
+        {/* Glows */}
         <circle cx={cx1} cy={cy1} r={r1} fill="url(#glow1)" />
         <circle cx={cx2} cy={cy2} r={r2} fill="url(#glow2)" />
         <circle cx={cx3} cy={cy3} r={r3} fill="url(#glow3)" />
 
+        {/* Gears */}
         <Gear 
           cx={cx1} cy={cy1} radius={r1} cogs={cogs1} cogDepth={cogDepth} 
           rotation={rotation1} color="#10b981" labels={labels1} isNumbers={true}
@@ -188,9 +167,23 @@ const MayaCalendarGears: React.FC<MayaCalendarGearsProps> = ({ mayaDate }) => {
           rotation={rotation3} color="#f59e0b" labels={HAAB_NAMES}
         />
 
-        <text x={cx1} y={cy1 + r1 + 30} textAnchor="middle" fill="#10b981" fontSize="14" fontWeight="bold" className="font-serif tracking-widest uppercase">Números</text>
-        <text x={cx2} y={cy2 + r2 + 30} textAnchor="middle" fill="#34d399" fontSize="14" fontWeight="bold" className="font-serif tracking-widest uppercase">Tzolk'in</text>
-        <text x={cx3} y={cy3 + r3 + 30} textAnchor="middle" fill="#f59e0b" fontSize="14" fontWeight="bold" className="font-serif tracking-widest uppercase">Haab'</text>
+        {/* Indicator arrows/markers (Now on the Right) */}
+        <g stroke="white" strokeWidth="2" fill="none" opacity="0.9">
+          {/* Gear 1 */}
+          <path d={`M${cx1 + r1 + 5},${cy1} L${cx1 + r1 + 25},${cy1 - 15} L${cx1 + r1 + 25},${cy1 + 15} Z`} fill="#10b981" stroke="none" />
+          <text x={cx1 + r1 + 40} y={cy1 - 15} textAnchor="start" dominantBaseline="middle" fill="#10b981" fontSize="14" fontWeight="bold" className="font-serif tracking-widest uppercase">Números</text>
+          <text x={cx1 + r1 + 40} y={cy1 + 10} textAnchor="start" dominantBaseline="middle" fill="#10b981" fontSize="36" fontWeight="black" className="font-serif drop-shadow-md">{mayaDate.tzolkin.number}</text>
+
+          {/* Gear 2 */}
+          <path d={`M${cx2 + r2 + 5},${cy2} L${cx2 + r2 + 25},${cy2 - 15} L${cx2 + r2 + 25},${cy2 + 15} Z`} fill="#34d399" stroke="none" />
+          <text x={cx2 + r2 + 40} y={cy2 - 15} textAnchor="start" dominantBaseline="middle" fill="#34d399" fontSize="14" fontWeight="bold" className="font-serif tracking-widest uppercase">Tzolk'in</text>
+          <text x={cx2 + r2 + 40} y={cy2 + 10} textAnchor="start" dominantBaseline="middle" fill="#34d399" fontSize="36" fontWeight="black" className="font-serif uppercase drop-shadow-md">{mayaDate.tzolkin.name}</text>
+
+          {/* Gear 3 */}
+          <path d={`M${cx3 + r3 + 5},${cy3} L${cx3 + r3 + 25},${cy3 - 15} L${cx3 + r3 + 25},${cy3 + 15} Z`} fill="#f59e0b" stroke="none" />
+          <text x={cx3 + r3 + 40} y={cy3 - 15} textAnchor="start" dominantBaseline="middle" fill="#f59e0b" fontSize="14" fontWeight="bold" className="font-serif tracking-widest uppercase">Haab'</text>
+          <text x={cx3 + r3 + 40} y={cy3 + 10} textAnchor="start" dominantBaseline="middle" fill="#f59e0b" fontSize="36" fontWeight="black" className="font-serif uppercase drop-shadow-md">{mayaDate.haab.number} {mayaDate.haab.name}</text>
+        </g>
       </svg>
     </div>
   );
