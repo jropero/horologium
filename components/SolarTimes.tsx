@@ -5,11 +5,16 @@ interface SolarTimesProps {
   sunrise: Date;
   sunset: Date;
   currentHourLength: number;
+  timezone?: string;
 }
 
-const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLength }) => {
+const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLength, timezone }) => {
   const { labels } = useCivilization();
-  const format = (d: Date) => d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const format = (d: Date) => {
+    const opts: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+    if (timezone) opts.timeZone = timezone;
+    return d.toLocaleTimeString('en-GB', opts);
+  };
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-4 px-2">

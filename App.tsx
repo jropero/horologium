@@ -25,7 +25,7 @@ import ProvinciaInfo from './components/ProvinciaInfo';
 import SortesVergilianae from './components/SortesVergilianae';
 import OvidianLore from './components/OvidianLore';
 import LocationModal from './components/LocationModal';
-import { LOCATIONS } from './utils/locations';
+import { LOCATIONS, getTimezoneForLocation } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import { CivilizationProvider, useCivilization } from './contexts/CivilizationContext';
@@ -79,9 +79,10 @@ const AppContent: React.FC = () => {
   const [isGreekCalendarOpen, setIsGreekCalendarOpen] = useState<boolean>(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
 
-  // Determine current location name
+  // Determine current location name and timezone
   const currentLocation = LOCATIONS.find(loc => loc.id !== 'gps' && Math.abs(latitude - (loc.lat || 0)) < 0.001 && Math.abs(longitude - (loc.lng || 0)) < 0.001);
   const currentLocationName = currentLocation ? currentLocation.name : 'GPS / Custom';
+  const locationTimezone = getTimezoneForLocation(latitude, longitude);
 
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
@@ -233,6 +234,7 @@ const AppContent: React.FC = () => {
           sunrise={todaysSunTimes.sunrise}
           sunset={todaysSunTimes.sunset}
           currentHourLength={romanTimeData.hourLengthMinutes}
+          timezone={locationTimezone}
         />
       )}
 
