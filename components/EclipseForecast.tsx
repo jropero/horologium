@@ -20,15 +20,16 @@ const STARS: [number, number][] = [
 
 // Lunar eclipse: moon passing through Earth's umbra/penumbra
 const LunarEclipseSVG: React.FC<{ kind: string; uid: string }> = ({ kind, uid }) => {
-  const moonCx = 60, moonCy = 48, moonR = 20;
+  const moonCx = 48, moonCy = 48, moonR = 20;
   const clipId = `lc-${uid}`;
   const gradId = `lg-${uid}`;
 
   const moonColor  = kind === 'total' ? '#8B1515' : kind === 'partial' ? '#B87030' : '#C4A882';
   const moonDark   = kind === 'total' ? '#3A0808' : kind === 'partial' ? '#6B3A10' : '#8A6040';
 
-  // Shadow circle: how far Earth's umbra intrudes into the moon disk
-  const shadowCx = kind === 'total' ? 47 : kind === 'partial' ? 43 : 34;
+  // Shadow circle entering the moon disk from the left (Earth's umbra)
+  // total = full coverage (centred), partial = ~60% from left, penumbral = soft outer brush
+  const shadowCx = kind === 'total' ? 48 : kind === 'partial' ? 30 : 16;
   const shadowR  = kind === 'penumbral' ? 30 : 22;
   const shadowA  = kind === 'penumbral' ? 0.32 : 0.90;
 
