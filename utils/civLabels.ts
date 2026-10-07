@@ -55,9 +55,6 @@ export interface CivLabels {
   controlsTitle: string;   // GUBERNACULA / ΚΥΒΕΡΝΗΤΗΡΙΑ
   computeBtn: string;      // Computare / Ὑπολογίσαι
   findMeBtn: string;       // Invenire Me / Εὑρεῖν Με
-  lightLabel: string;      // Lux / Φῶς
-  darkLabel: string;       // Nox / Σκότος
-  notificationsBtn: string; // Nuntii / Ἀγγελίαι
   controlsFooter: string;
 
   // Info Section
@@ -66,6 +63,7 @@ export interface CivLabels {
   infoParagraph1: string;
   infoParagraph2: string;
   infoBottomMotto: string;   // Tempus Fugit • Memento Mori / Πάντα ῥεῖ • Γνῶθι σεαυτόν
+  infoBottomMottoEs?: string; // Spanish translation (omit for Latin)
 
   // Civilization-specific extras
   longCountLabel: string;
@@ -132,9 +130,6 @@ export const getRomanLabels = (): CivLabels => ({
   controlsTitle: 'GUBERNACULA',
   computeBtn: 'Computare',
   findMeBtn: 'Invenire Me',
-  lightLabel: 'Lux',
-  darkLabel: 'Nox',
-  notificationsBtn: 'Nuntii',
   controlsFooter: '"Tempus regit actum" — El tiempo rige el acto.',
 
   infoTitle: 'De Temporibus Romanorum',
@@ -201,9 +196,6 @@ export const getHellenicLabels = (): CivLabels => ({
   controlsTitle: 'ΚΥΒΕΡΝΗΤΗΡΙΑ',
   computeBtn: 'Ὑπολογίσαι',
   findMeBtn: 'Εὑρεῖν Με',
-  lightLabel: 'Φῶς',
-  darkLabel: 'Σκότος',
-  notificationsBtn: 'Ἀγγελίαι',
   controlsFooter: '"Πάντα ῥεῖ" — Todo fluye.',
 
   infoTitle: 'Περὶ τοῦ Ἑλληνικοῦ Χρόνου',
@@ -211,6 +203,7 @@ export const getHellenicLabels = (): CivLabels => ({
   infoParagraph1: 'ἱ Ἕλληνες τῆς ἀρχαιότητος τὴν ἡμέραν ὡσαύτως ἐμέτρουν. Ἡ ἡμέρα αὐτοῖς ἀπὸ ἀνατολῆς ἡλίου ἤρχετο καὶ εἰς δύσιν ἐτελεύτα, ἀεὶ εἰς δώδεκα μέρη ἴσα, ἃ ὥρας ἐκάλουν, διῃρημένη.',
   infoParagraph2: 'Ὅθεν, ὥσπερ ἡ τοῦ ἡλίου πορεία κατὰ τὰς ὥρας τοῦ ἔτους μεταβάλλεται, οὕτω καὶ τὸ τῆς ὥρας μῆκος. Χειμῶνος μὲν ὥρα τεσσαράκοντα πέντε λεπτὰ μόνον εἶναι δύναται· θέρους δὲ εἰς ἑβδομήκοντα πέντε ἐκτείνεται.',
   infoBottomMotto: 'Πάντα Ῥεῖ • Γνῶθι Σεαυτόν',
+  infoBottomMottoEs: 'Todo Fluye • Conócete a Ti Mismo',
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
@@ -270,9 +263,6 @@ export const getEgyptianLabels = (): CivLabels => ({
   controlsTitle: 'SEKHERU',
   computeBtn: 'Heseb',
   findMeBtn: 'Gemi Wi',
-  lightLabel: 'Shu',
-  darkLabel: 'Keku',
-  notificationsBtn: 'Wehawy',
   controlsFooter: '"Maat heru" — La verdad es la ley.',
 
   infoTitle: 'Sha en Kemet',
@@ -280,6 +270,7 @@ export const getEgyptianLabels = (): CivLabels => ({
   infoParagraph1: 'emet, la Tierra Negra, medía el tiempo con la precisión de sus sacerdotes-astrónomos. El año egipcio constaba de 12 meses de 30 días, organizados en tres décadas de 10 días, más 5 días epagómenos al final.',
   infoParagraph2: 'Las tres estaciones —Akhet (Inundación), Peret (Siembra) y Shemu (Cosecha)— marcaban el ritmo de la vida junto al Nilo. El día comenzaba al amanecer, dividido en 12 horas diurnas y 12 nocturnas de duración variable.',
   infoBottomMotto: 'Ankh Udja Seneb • Maat Kheru',
+  infoBottomMottoEs: 'Vida, Prosperidad, Salud • Justo de Voz',
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
@@ -339,16 +330,14 @@ export const getChineseLabels = (): CivLabels => ({
   controlsTitle: '控制面板',
   computeBtn: '计算',
   findMeBtn: '定位',
-  lightLabel: '昼',
-  darkLabel: '夜',
-  notificationsBtn: '消息',
   controlsFooter: '"顺天应时" — Armonía con el cielo.',
 
   infoTitle: '节气与自然',
-  infoFirstLetter: 'Z',
-  infoParagraph1: '中国传统历法将太阳周年运动轨迹分为二十四等分，即二十四节气。每一个节气又细分为三候，反映了自然界在不同阶段的物候变化，体现了古人“天人合一”的宇宙观。',
-  infoParagraph2: '这种历法不仅指导了古代农耕生产，还深刻影响了中医养生与文化习俗。从春分到秋分，每一候都记录着花开叶落、候鸟迁徙的细微节律，让人与自然同频共振。',
+  infoFirstLetter: '中国',
+  infoParagraph1: 'China observó el sol durante milenios y dividió su trayectoria anual en veinticuatro puntos precisos: las Divisiones Estacionales (二十四节气). Cada una abarca quince grados de la eclíptica y dura aproximadamente quince días. A su vez, cada división se subdivide en tres pentadas (候, hòu) de cinco días, cada una asociada a un fenómeno natural: el canto de un pájaro, la floración de una planta, el despertar de un insecto.',
+  infoParagraph2: 'Este sistema no es un simple calendario agrícola. Es una cosmología viva: la creencia de que el ser humano (人, rén), el cielo (天, tiān) y la tierra (地, dì) forman una unidad inseparable. Cada pentada es una instrucción sobre cómo vivir en armonía con el pulso del universo — qué comer, qué sembrar, cómo cuidar el cuerpo y el espíritu según el aliento (气, qì) que domina ese momento del año.',
   infoBottomMotto: '天人合一 • 顺应天时',
+  infoBottomMottoEs: 'Cielo, Tierra y Hombre son Uno • Sigue el Ritmo del Cielo',
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
@@ -408,9 +397,6 @@ export const getBabylonianLabels = (): CivLabels => ({
   controlsTitle: 'CONTROLES',
   computeBtn: 'Calcular',
   findMeBtn: 'Encontrarme',
-  lightLabel: 'Ūmu',
-  darkLabel: 'Mūšu',
-  notificationsBtn: 'Notificaciones',
   controlsFooter: '"Enūma Eliš" — Cuando en lo alto los cielos no tenían nombre...',
 
   infoTitle: 'Sobre el Tiempo Babilonio',
@@ -418,6 +404,7 @@ export const getBabylonianLabels = (): CivLabels => ({
   infoParagraph1: 'abilonia, la gran ciudad del Éufrates, fue la cuna del tiempo medido. Sus astrónomos-sacerdotes inventaron el zodíaco de doce signos, los planetas de la semana y el sistema sexagesimal que aún usamos: 60 segundos, 60 minutos, 360 grados.',
   infoParagraph2: 'El calendario lunisolar babilonio sincronizaba la luna con las estaciones mediante meses intercalares proclamados por decreto real. Cada nuevo mes comenzaba con la primera crescent de luna visible — el dios Sîn anunciaba el inicio del Warḫum sagrado.',
   infoBottomMotto: 'Enūma Eliš • Ina Šamê Rabûti',
+  infoBottomMottoEs: 'Cuando en lo Alto • Bajo los Grandes Cielos',
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
