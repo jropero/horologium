@@ -388,6 +388,13 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                     )}
                 </div>
 
+                {/* Lunar reckoning note */}
+                <div className="px-5 pt-3 pb-4 border-t border-sky-900/30 text-center">
+                    <p className="text-[10px] text-sky-400/35 font-serif leading-relaxed">
+                        Νουμηνία (día 1) es el primer creciente visible, un día tras la conjunción astronómica. El día ático comienza al atardecer — por ello esta fecha puede diferir ~2 días de otros cómputos lunares.
+                    </p>
+                </div>
+
                 <GreekMeanderBorder />
 
             </div>

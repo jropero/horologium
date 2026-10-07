@@ -38,6 +38,25 @@ const InfoSection: React.FC = () => {
              <p className="text-center font-serif text-base uppercase tracking-[0.3em] text-ink/60 font-bold">
                 {labels.infoBottomMotto}
              </p>
+             {labels.infoBottomMottoEs && (
+               <p className="text-center font-serif text-sm uppercase tracking-[0.25em] text-ink/35 mt-1">
+                 {labels.infoBottomMottoEs}
+               </p>
+             )}
+
+             {civilization === 'hellas' && (
+                <div className="mt-12 p-6 bg-sky-900/5 border-t-2 border-sky-500/20 rounded-b-lg">
+                  <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-sky-800 mb-4 flex items-center gap-3">
+                    <span className="text-2xl">🏛️</span>
+                    Sobre el Tiempo Griego
+                  </h4>
+                  <div className="space-y-4 font-body text-lg text-ink/80 leading-relaxed text-justify">
+                    <p>Los griegos de la antigüedad medían el día del mismo modo. El día comenzaba al amanecer y terminaba al anochecer, dividido siempre en doce partes iguales llamadas <em>ὧραι</em> (hōrai).</p>
+                    <p>Así como el curso del sol varía con las estaciones, también varía la duración de cada hora. En invierno una hora puede durar solo cuarenta y cinco minutos; en verano se extiende hasta los setenta y cinco.</p>
+                    <p className="text-center font-serif text-sm uppercase tracking-[0.3em] text-ink/50 font-bold pt-2">Πάντα Ῥεῖ · Todo fluye • Γνῶθι Σεαυτόν · Conócete a ti mismo</p>
+                  </div>
+                </div>
+              )}
 
              {civilization === 'aegyptus' && (
                 <div className="mt-12 p-6 bg-emerald-900/5 border-t-2 border-emerald-500/20 rounded-b-lg">
@@ -47,6 +66,18 @@ const InfoSection: React.FC = () => {
                   </h4>
                   <p className="font-body text-lg text-ink/80 leading-relaxed text-justify">
                     El calendario que estás viendo esconde el descubrimiento astrofísico más antiguo de la humanidad (c. 1200 a.C.). Recientes estudios (PLOS ONE, 2015) han demostrado que los días de 'buena' y 'mala' suerte de este papiro no eran superstición aleatoria, sino el registro exacto de las variaciones de brillo de la estrella binaria Algol (con un ciclo de 2.85 días) y de la Luna (29.53 días). Para los egipcios, los eclipses de Algol simbolizaban la debilidad del Ojo de Horus, mientras que la Luna representaba al dios Seth.
+                  </p>
+                </div>
+              )}
+
+             {civilization === 'zhongguo' && (
+                <div className="mt-12 p-6 bg-rose-900/5 border-t-2 border-rose-400/20 rounded-b-lg">
+                  <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-rose-800 mb-4 flex items-center gap-3">
+                    <span className="text-2xl">🌾</span>
+                    Patrimonio Inmaterial de la Humanidad
+                  </h4>
+                  <p className="font-body text-lg text-ink/80 leading-relaxed text-justify">
+                    En 2016, la UNESCO inscribió las Veinticuatro Divisiones Estacionales (二十四节气) en la Lista del Patrimonio Cultural Inmaterial de la Humanidad como "conocimiento de China sobre el tiempo y las prácticas desarrolladas a través de la observación del sol anual." Este sistema, de más de dos mil años de antigüedad, sigue determinando las fechas de festividades, la siembra y la recolección en el mundo agrícola chino, y guía la medicina tradicional, la alimentación estacional y los rituales familiares de más de mil millones de personas.
                   </p>
                 </div>
               )}
