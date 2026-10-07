@@ -107,7 +107,7 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                             )}
                             <div className="text-center mb-2 border-b border-gold-dim/20 pb-1.5">
                                 <div className={`text-[9px] font-bold uppercase tracking-widest ${active ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>{label}</div>
-                                <div className="text-[7px] font-serif italic text-gold-dim/40 tracking-wide uppercase mt-0.5">{sublabel}</div>
+                                <div className="text-[9px] font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">{sublabel}</div>
                             </div>
                             <div className="grid grid-cols-2 gap-1 justify-items-center">
                                 {days.filter(d => d <= daysInMonth).map(day => (
