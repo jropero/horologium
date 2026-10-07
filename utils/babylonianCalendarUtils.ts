@@ -2,7 +2,7 @@
 // Day starts at SUNSET (Babylonian civil convention).
 // Temporal hour math mirrors hellenicTimeUtils.ts (Meeus/NOAA solar engine).
 
-import { getSunTimes, getMoonPhase } from './solar';
+import { getSunTimes, getMoonPhase, springEquinoxJDE, trueNewMoonJDE, kForJDE } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
 import { BabylonianDate, BABYLONIAN_MONTHS } from '../types/babylonia';
 
@@ -54,68 +54,15 @@ const MONTH_DEITY_DESCS = [
 const toJD = (date: Date): number =>
   date.getTime() / 86400000 + 2440587.5;
 
-const getSpringEquinoxJD = (year: number): number =>
-  2451623.80984 + 365242.37404 * ((year - 2000) / 1000);
-
-// Meeus "Astronomical Algorithms" ch. 47 — true new moon JDE with perturbations.
-// Accurate to ~2 minutes; eliminates the ±14 h error of the mean lunation formula.
-const trueNewMoonJDE = (k: number): number => {
-  const T  = k / 1236.85;
-  const T2 = T * T, T3 = T2 * T, T4 = T3 * T;
-  let JDE = 2451550.09766
-    + 29.530588861 * k
-    + 0.00015437  * T2
-    - 0.000000150 * T3
-    + 0.00000000073 * T4;
-  const rad = Math.PI / 180;
-  const M      = (2.5534      + 29.10535670  * k - 0.0000014  * T2 - 0.00000011   * T3) * rad;
-  const Mprime = (201.5643    + 385.81693528 * k + 0.0107582  * T2 + 0.00001238   * T3 - 0.000000058 * T4) * rad;
-  const F      = (160.7108    + 390.67050284 * k - 0.0016118  * T2 - 0.00000227   * T3 + 0.000000011 * T4) * rad;
-  const Omega  = (124.7746    - 1.56375588   * k + 0.0020672  * T2 + 0.00000215   * T3) * rad;
-  const E = 1 - 0.002516 * T - 0.0000074 * T2;
-  const E2 = E * E;
-  JDE +=
-    -0.40720 * Math.sin(Mprime)
-    + 0.17241 * E   * Math.sin(M)
-    + 0.01608        * Math.sin(2 * Mprime)
-    + 0.01039        * Math.sin(2 * F)
-    + 0.00739 * E   * Math.sin(Mprime - M)
-    - 0.00514 * E   * Math.sin(Mprime + M)
-    + 0.00208 * E2  * Math.sin(2 * M)
-    - 0.00111        * Math.sin(Mprime - 2 * F)
-    - 0.00057        * Math.sin(Mprime + 2 * F)
-    + 0.00056 * E   * Math.sin(2 * Mprime + M)
-    - 0.00042        * Math.sin(3 * Mprime)
-    + 0.00042 * E   * Math.sin(M + 2 * F)
-    + 0.00038 * E   * Math.sin(M - 2 * F)
-    - 0.00024 * E   * Math.sin(2 * Mprime - M)
-    - 0.00017        * Math.sin(Omega)
-    - 0.00007        * Math.sin(Mprime + 2 * M)
-    + 0.00004        * Math.sin(2 * Mprime - 2 * F)
-    + 0.00004        * Math.sin(3 * M)
-    + 0.00003        * Math.sin(Mprime + M - 2 * F)
-    + 0.00003        * Math.sin(2 * Mprime + 2 * F)
-    - 0.00003        * Math.sin(Mprime + M + 2 * F)
-    + 0.00003        * Math.sin(Mprime - M + 2 * F)
-    - 0.00002        * Math.sin(Mprime - M - 2 * F)
-    - 0.00002        * Math.sin(3 * Mprime + M)
-    + 0.00002        * Math.sin(4 * Mprime);
-  return JDE;
-};
-
-// k index for a given decimal year (year + fractional month).
-const kForDecimalYear = (y: number): number => Math.round((y - 2000) * 12.3685);
-
 // First new moon whose crescent (first local sunset ≥ CRESCENT_MIN_AGE after conjunction)
 // falls on or after the spring equinox. Uses the observer's GPS location so that
 // e.g. a user in Reykjavik vs Auckland gets the astronomically correct sunset reference.
 const getNisannu1JD = (gregYear: number, lat: number, lng: number): number => {
-  const equinoxJD = getSpringEquinoxJD(gregYear);
+  const equinoxJD = springEquinoxJDE(gregYear);
   // Start ~35 days before equinox to catch the edge case where the previous lunation's
   // crescent qualifies (new moon before equinox but crescent after).
   const searchStart = equinoxJD - 35;
-  const approxYear = 2000 + (searchStart - 2451545.0) / 365.25;
-  let k = kForDecimalYear(approxYear) - 1;
+  let k = kForJDE(searchStart) - 1;
   for (let attempt = 0; attempt < 5; attempt++, k++) {
     const conjJD = trueNewMoonJDE(k);
     // Check up to 3 consecutive sunsets until we find one ≥ CRESCENT_MIN_AGE after conjunction.
@@ -129,8 +76,7 @@ const getNisannu1JD = (gregYear: number, lat: number, lng: number): number => {
     }
   }
   // Fallback: first conjunction strictly after equinox (should not normally be reached)
-  const approxFallback = 2000 + (equinoxJD - 2451545.0) / 365.25;
-  let kf = kForDecimalYear(approxFallback) - 1;
+  let kf = kForJDE(equinoxJD) - 1;
   let nm = trueNewMoonJDE(kf);
   while (nm < equinoxJD) { kf++; nm = trueNewMoonJDE(kf); }
   return nm;
@@ -243,7 +189,7 @@ export const getBabylonianCalendarMeta = (date: Date, lat: number, lng: number):
   const nisannuGregYear = nisannu1Date.getFullYear();
   const seYear = nisannuGregYear + 311;
 
-  const equinoxJD = getSpringEquinoxJD(nisannuGregYear);
+  const equinoxJD = springEquinoxJDE(nisannuGregYear);
   const springEquinoxDate = new Date((equinoxJD - 2440587.5) * 86400000);
   const driftDays = Math.max(0, Math.round(nisannu1JD - equinoxJD));
 

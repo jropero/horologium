@@ -1,203 +1,58 @@
-// A robust implementation of solar calculations based on Astronomical Algorithms (Meeus/NOAA).
-// Improves precision by accounting for atmospheric refraction (-0.833°), solar angular diameter,
-// and equation of time variability.
+import {
+  MoonPhase, SearchMoonPhase, SearchRiseSet, SunPosition, Seasons,
+  Body, Observer, Equator, Horizon,
+} from 'astronomy-engine';
 
-// Constants
-const PI = Math.PI;
-const RAD = PI / 180;
-const DEG = 180 / PI;
-
-// Date/Time constants
-const J1970 = 2440588;
-const J2000 = 2451545;
-const DAY_MS = 1000 * 60 * 60 * 24;
-
-// Obliquity of the Earth
-const e = RAD * 23.4397;
-
-// Helper functions for date conversion
-const toJulian = (date: Date) => date.valueOf() / DAY_MS - 0.5 + J1970;
-const fromJulian = (j: number) => new Date((j + 0.5 - J1970) * DAY_MS);
-const toDays = (date: Date) => toJulian(date) - J2000;
-
-// Sun position calculations
-const getRightAscension = (l: number, b: number) => {
-  return Math.atan2(Math.sin(l) * Math.cos(e) - Math.tan(b) * Math.sin(e), Math.cos(l));
-};
-
-const getDeclination = (l: number, b: number) => {
-  return Math.asin(Math.sin(b) * Math.cos(e) + Math.cos(b) * Math.sin(e) * Math.sin(l));
-};
-
-const getSolarMeanAnomaly = (d: number) => {
-  return RAD * (357.5291 + 0.98560028 * d);
-};
-
-const getEclipticLongitude = (M: number) => {
-  const C = RAD * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M)); // Equation of Center
-  const P = RAD * 102.9372; // Perihelion of the Earth
-  return M + C + P + PI; // Mean Longitude
-};
-
-const getSunCoords = (d: number) => {
-  const M = getSolarMeanAnomaly(d);
-  const L = getEclipticLongitude(M);
-
-  return {
-    dec: getDeclination(L, 0),
-    ra: getRightAscension(L, 0)
-  };
-};
+// JDE (Julian Day Ephemeris) ↔ JS Date; TT ≈ UTC within ~70 s — negligible for calendar use
+const jdeToDate = (jde: number): Date => new Date((jde - 2440587.5) * 86400000);
 
 export const getSunTimes = (date: Date, lat: number, lng: number) => {
-  // Normalize date to local noon to ensure we calculate for the correct calendar day
-  // (Avoids edge cases where calculating at 11:59 PM might snap to the next solar cycle)
+  // Normalize to local noon — anchors the search to the correct calendar day
   const targetDate = new Date(date);
   targetDate.setHours(12, 0, 0, 0);
 
-  const lw = RAD * -lng;
-  const phi = RAD * lat;
+  // Sunrise search starts at local midnight so the event falls within the 1-day window
+  const midnight = new Date(date);
+  midnight.setHours(0, 0, 0, 0);
 
-  const d = toDays(targetDate);
-  const n = Math.round(d - 0.0009 - lw / (2 * PI));
-  const noon = n + 0.0009 + lw / (2 * PI); // Julian cycle for approximate noon
+  const observer = new Observer(lat, lng, 0);
+  const riseResult = SearchRiseSet(Body.Sun, observer, +1, midnight,     1);
+  const setResult  = SearchRiseSet(Body.Sun, observer, -1, targetDate,   1);
 
-  // Calculate Solar Noon precisely (Equation of Time)
-  const M = getSolarMeanAnomaly(noon);
-  const L = getEclipticLongitude(M);
-  const equationOfTime = noon + (0.0053 * Math.sin(M)) - (0.0069 * Math.sin(2 * L));
-  const solarNoonJ = J2000 + equationOfTime;
-
-  // Calculate Sunrise and Sunset
-  // Standard altitude for sunrise/sunset is -0.833 degrees 
-  // (Atmospheric refraction: 34' + Sun semi-diameter: 16')
-  const h = -0.833 * RAD;
-
-  // Recalculate sun declination at noon for better precision
-  const sun = getSunCoords(equationOfTime);
-
-  const cosH = (Math.sin(h) - Math.sin(phi) * Math.sin(sun.dec)) / (Math.cos(phi) * Math.cos(sun.dec));
-
-  // Handle polar days/nights
-  if (cosH < -1) {
-    // Midnight Sun (Sun never sets)
-    // Return full day range
-    const startOfDay = new Date(targetDate); startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(targetDate); endOfDay.setHours(23, 59, 59, 999);
-    return { sunrise: startOfDay, sunset: endOfDay };
-  } else if (cosH > 1) {
-    // Polar Night (Sun never rises)
-    // Return 0-length day at noon
-    const solarNoonDate = fromJulian(solarNoonJ);
-    return { sunrise: solarNoonDate, sunset: solarNoonDate };
+  if (!riseResult || !setResult) {
+    // Polar edge: altitude at local noon determines day vs. night
+    const eq = Equator(Body.Sun, targetDate, observer, true, true);
+    const hz = Horizon(targetDate, observer, eq.ra, eq.dec, 'normal');
+    if (hz.altitude > 0) {
+      const startOfDay = new Date(targetDate); startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay   = new Date(targetDate); endOfDay.setHours(23, 59, 59, 999);
+      return { sunrise: startOfDay, sunset: endOfDay };
+    }
+    return { sunrise: targetDate, sunset: targetDate };
   }
 
-  const H = Math.acos(cosH); // Hour angle in radians
-  const J_set = solarNoonJ + (H / (2 * PI));
-  const J_rise = solarNoonJ - (H / (2 * PI));
-
-  return {
-    sunrise: fromJulian(J_rise),
-    sunset: fromJulian(J_set)
-  };
+  return { sunrise: riseResult.date, sunset: setResult.date };
 };
 
-/**
- * Calculates the moon phase (0 to 1) using a calibrated Meeus algorithm.
- * Anchored to Jan 29, 2025 for high accuracy in the current era.
- * 0 = New Moon, 0.25 = First Quarter, 0.5 = Full Moon, 0.75 = Last Quarter
- */
-/**
- * Returns the ecliptic longitude of the Sun for a given Date (0-360°).
- * 0° = Spring Equinox, 90° = Summer Solstice, 180° = Fall Equinox, 270° = Winter Solstice
- * Used by the Chinese lunisolar calendar to locate solar terms and anchor lunar months.
- */
-export const getSolarLongitudeDeg = (date: Date): number => {
-  const d = toDays(date);
-  const M = getSolarMeanAnomaly(d);
-  const L = getEclipticLongitude(M);
-  return ((L * DEG) % 360 + 360) % 360;
-};
+export const getSolarLongitudeDeg = (date: Date): number =>
+  ((SunPosition(date).elon % 360) + 360) % 360;
 
-export const getMoonPhase = (date: Date): number => {
-  const jd = toJulian(date);
-  const T = (jd - 2451545.0) / 36525.0;
-  const RAD = Math.PI / 180;
+export const getMoonPhase = (date: Date): number => MoonPhase(date) / 360;
 
-  // Standard Meeus Mean Elements for Anomalies (High precision enough for M/M')
-  // Sun Mean Anomaly
-  const M = 357.52911 + 35999.05029 * T - 0.0001537 * T * T;
-  // Moon Mean Anomaly
-  const M_ = 134.96340 + 477198.86752 * T + 0.0086972 * T * T;
-
-  // Mean elongation of the Moon from Meeus (Chapter 47)
-  const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T * T
-    + T * T * T / 545868 - T * T * T * T / 113065000;
-
-  // Periodic terms (degrees) - Major inequalities (Evections, Variations, Equation of Center)
-  const elongation = D
-    + 6.289 * Math.sin(M_ * RAD)
-    - 2.100 * Math.sin(M * RAD)
-    - 1.274 * Math.sin((2 * D - M_) * RAD)
-    + 0.658 * Math.sin(2 * D * RAD)
-    - 0.114 * Math.sin(2 * M_ * RAD)
-    - 0.055 * Math.sin((2 * D - 2 * M_) * RAD);
-
-  // Normalize to 0-1 (0 = new moon, 0.25 = first quarter, 0.5 = full moon, 0.75 = last quarter)
-  const phase = (elongation % 360 + 360) % 360 / 360;
-  return phase;
-};
-
-// ── Meeus Ch. 47 shared functions ─────────────────────────────────────────────
-// k = lunation number relative to J2000.0 epoch (Jan 6, 2000 new moon)
+// ── New-moon JDE helpers ───────────────────────────────────────────────────────
+// k = lunation index relative to J2000 new moon (JDE 2451550.09766)
 
 export const kForJDE = (jd: number): number =>
   Math.round((jd - 2451550.09766) / 29.530588861);
 
-// True new moon JDE with ~2-minute accuracy (Meeus Ch. 47, full perturbation series).
+// True new moon JDE via SearchMoonPhase (~arcsecond precision).
 export const trueNewMoonJDE = (k: number): number => {
-  const T = k / 1236.85;
-  const T2 = T * T;
-  const T3 = T2 * T;
-  const T4 = T3 * T;
-  let JDE = 2451550.09766 + 29.530588861 * k
-    + 0.00015437 * T2 - 0.000000150 * T3 + 0.00000000073 * T4;
-  const E = 1 - 0.002516 * T - 0.0000074 * T2;
-  const E2 = E * E;
-  const M  = (2.5534 + 29.10535670 * k - 0.0000014 * T2 - 0.00000011 * T3) * RAD;
-  const M_ = (201.5643 + 385.81693528 * k + 0.0107582 * T2 + 0.00001238 * T3 - 0.000000058 * T4) * RAD;
-  const F  = (160.7108 + 390.67050284 * k - 0.0016118 * T2 - 0.00000227 * T3 + 0.000000011 * T4) * RAD;
-  const Om = (124.7746 - 1.56375588 * k + 0.0020672 * T2 + 0.00000215 * T3) * RAD;
-  JDE +=
-    -0.40720 * Math.sin(M_)
-    + 0.17241 * E * Math.sin(M)
-    + 0.01608 * Math.sin(2 * M_)
-    + 0.01039 * Math.sin(2 * F)
-    + 0.00739 * E * Math.sin(M_ - M)
-    - 0.00514 * E * Math.sin(M_ + M)
-    + 0.00208 * E2 * Math.sin(2 * M)
-    - 0.00111 * Math.sin(M_ - 2 * F)
-    - 0.00057 * Math.sin(M_ + 2 * F)
-    + 0.00056 * E * Math.sin(2 * M_ + M)
-    - 0.00042 * Math.sin(3 * M_)
-    + 0.00042 * E * Math.sin(M + 2 * F)
-    + 0.00038 * E * Math.sin(M - 2 * F)
-    - 0.00024 * E * Math.sin(2 * M_ - M)
-    - 0.00017 * Math.sin(Om)
-    - 0.00007 * Math.sin(M_ + 2 * M)
-    + 0.00004 * Math.sin(2 * M_ - 2 * F)
-    + 0.00004 * Math.sin(3 * M)
-    + 0.00003 * Math.sin(M_ + M - 2 * F)
-    + 0.00003 * Math.sin(2 * M_ + 2 * F)
-    - 0.00003 * Math.sin(M_ + M + 2 * F)
-    + 0.00003 * Math.sin(M_ - M + 2 * F)
-    - 0.00002 * Math.sin(M_ - M - 2 * F)
-    - 0.00002 * Math.sin(3 * M_ + M)
-    + 0.00002 * Math.sin(4 * M_);
-  return JDE;
+  const approxJDE = 2451550.09766 + k * 29.530588861;
+  // Start 1 day before the mean new moon to ensure SearchMoonPhase finds the right event.
+  const result = SearchMoonPhase(0, jdeToDate(approxJDE - 1), 35);
+  return result ? result.tt + 2451545.0 : approxJDE;
 };
 
-// Most recent new moon JDE on or before jd.
 export const prevNewMoonJDE = (jd: number): number => {
   let k = kForJDE(jd);
   let nm = trueNewMoonJDE(k);
@@ -206,7 +61,6 @@ export const prevNewMoonJDE = (jd: number): number => {
   return nmNext <= jd ? nmNext : nm;
 };
 
-// Next new moon JDE strictly after jd.
 export const nextNewMoonJDE = (jd: number): number => {
   let k = kForJDE(jd) + 1;
   let nm = trueNewMoonJDE(k);
@@ -214,8 +68,13 @@ export const nextNewMoonJDE = (jd: number): number => {
   return nm;
 };
 
-// Meeus Table 27.a — December solstice JDE (Sun at ecliptic lon 270°).
-export const winterSolsticeJDE = (year: number): number => {
-  const T = (year - 2000) / 1000;
-  return 2451900.05952 + 365242.88257 * T - 0.00325 * T * T;
-};
+// ── Solstice / equinox JDE helpers ────────────────────────────────────────────
+
+export const winterSolsticeJDE = (year: number): number =>
+  Seasons(year).dec_solstice.tt + 2451545.0;
+
+export const springEquinoxJDE = (year: number): number =>
+  Seasons(year).mar_equinox.tt + 2451545.0;
+
+export const summerSolsticeJDE = (year: number): number =>
+  Seasons(year).jun_solstice.tt + 2451545.0;
