@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { X } from 'lucide-react';
 import { WeatherData } from '../types';
 import { getBabylonianDate } from '../utils/babylonianCalendarUtils';
-import { generateBabylonianSkyline } from '../utils/babylonianSkylineGenerator';
 import { getBabylonianLore } from '../utils/babylonianLoreData';
 import WeatherWidget from './WeatherWidget';
 import WeatherModal from './WeatherModal';
@@ -183,30 +182,6 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
 
-  const babDate = useMemo(
-    () => getBabylonianDate(modernTime, currentLat, currentLng),
-    [modernTime.getTime(), currentLat, currentLng]
-  );
-
-  const skylineElements = useMemo(
-    () => generateBabylonianSkyline(Math.floor(modernTime.getTime() / 86400000)),
-    [Math.floor(modernTime.getTime() / 86400000)]
-  );
-
-  const skyGradient = useMemo(() => {
-    const p = babDate.dayProgress;
-    if (!babDate.isDay) {
-      return 'linear-gradient(to bottom, #0a0510 0%, #1a0a05 50%, #2a1005 100%)';
-    }
-    if (p < 0.1) {
-      return 'linear-gradient(to bottom, #1a0a05 0%, #7c3b1a 40%, #d97706 80%, #fbbf24 100%)';
-    }
-    if (p < 0.75) {
-      return 'linear-gradient(to bottom, #1e3a6e 0%, #b45309 30%, #d97706 70%, #fde68a 100%)';
-    }
-    return 'linear-gradient(to bottom, #1a0a05 0%, #7c3b1a 40%, #d97706 80%, #fbbf24 100%)';
-  }, [babDate.isDay, babDate.dayProgress]);
-
   if (loading) {
     return (
       <div className="w-full h-96 flex items-center justify-center bg-ink border-4 border-blue-500/30 rounded-lg">
@@ -241,71 +216,6 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
           </div>
         </div>
 
-        {/* Main Stage */}
-        <div className="p-2 bg-ink relative overflow-hidden">
-          <div className="relative w-full aspect-[16/9] overflow-hidden border-2 border-blue-500/30">
-
-            <div className="absolute inset-0 woodcut-hatch opacity-10 pointer-events-none" />
-            <div className="absolute inset-0 bg-stardust opacity-20 pointer-events-none" />
-
-            <div
-              className="absolute inset-0 transition-all duration-2000"
-              style={{ background: skyGradient }}
-            />
-
-            {/* Ziggurat skyline */}
-            <svg
-              className="absolute bottom-0 left-0 w-full"
-              viewBox="0 0 300 200"
-              preserveAspectRatio="xMidYMax meet"
-            >
-              {skylineElements.map(el => (
-                <path
-                  key={el.id}
-                  d={el.path}
-                  fill="rgba(120,53,15,0.85)"
-                  stroke="rgba(180,83,9,0.4)"
-                  strokeWidth="0.5"
-                  opacity={el.opacity}
-                />
-              ))}
-            </svg>
-
-            {/* Center date display */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-center px-4">
-              <div
-                className="font-serif font-black text-parchment drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
-                style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: 1.05 }}
-              >
-                SE {babDate.seYear}
-              </div>
-
-              <div
-                className="font-serif text-parchment/95 tracking-widest drop-shadow-md font-bold"
-                style={{ fontSize: 'clamp(0.85rem, 3.5vw, 1.4rem)' }}
-              >
-                {babDate.monthName} · Día {babDate.day}
-                {babDate.isIntercalary && (
-                  <span className="ml-2 text-orange-300" style={{ fontSize: '70%' }}>(intercalar)</span>
-                )}
-              </div>
-
-              <div
-                className="font-serif text-parchment/80 italic mt-1"
-                style={{ fontSize: 'clamp(0.7rem, 2.5vw, 1rem)' }}
-              >
-                {babDate.hourName}
-              </div>
-
-              <div
-                className="font-serif text-parchment/70 tracking-wide"
-                style={{ fontSize: 'clamp(0.65rem, 2.2vw, 0.9rem)' }}
-              >
-                {babDate.planetaryRuler} · {babDate.watchName}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <BabylonianCalendarModal

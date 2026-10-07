@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getBabylonianDate, getBabylonianCalendarMeta, BabylonianCalendarMeta } from '../utils/babylonianCalendarUtils';
 import { getBabylonianLore, BabylonianDayEvent } from '../utils/babylonianLoreData';
+import { generateBabylonianSkyline } from '../utils/babylonianSkylineGenerator';
 import { BabylonianDate } from '../types/babylonia';
+import { WeatherData } from '../types';
+import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 
 interface BabylonianCalendarInfoProps {
   currentDate?: Date;
+  weather?: WeatherData | null;
+  currentLat?: number;
+  currentLng?: number;
 }
 
 // ─── Continuous moon-phase SVG ────────────────────────────────────────────────
@@ -175,7 +181,26 @@ const DayStatusCard: React.FC<{
   );
 };
 
-// ─── Day grid ─────────────────────────────────────────────────────────────────
+// ─── Day grid (three-panel decade layout) ────────────────────────────────────
+
+const PanelMoonSvg: React.FC<{ type: 'waxing' | 'full' | 'waning'; active: boolean }> = ({ type, active }) => {
+  const cls = `w-5 h-5 mx-auto mb-1 transition-all ${active ? 'text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.6)]' : 'text-blue-500/50'}`;
+  if (type === 'waxing') return (
+    <svg viewBox="0 0 24 24" className={cls} fill="currentColor">
+      <path d="M12 2 A 10 10 0 0 1 12 22 A 8 10 0 0 0 12 2 Z" />
+    </svg>
+  );
+  if (type === 'full') return (
+    <svg viewBox="0 0 24 24" className={cls} fill="currentColor">
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+  return (
+    <svg viewBox="0 0 24 24" className={cls} fill="currentColor">
+      <path d="M12 2 A 10 10 0 0 0 12 22 A 8 10 0 0 1 12 2 Z" />
+    </svg>
+  );
+};
 
 const DayGrid: React.FC<{
   today: number;
@@ -183,11 +208,20 @@ const DayGrid: React.FC<{
   dayEvents?: Record<number, BabylonianDayEvent>;
 }> = ({ today, monthLen, dayEvents }) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const days = Array.from({ length: monthLen }, (_, i) => i + 1);
 
   const handleTap = (day: number) => {
     setSelectedDay(prev => prev === day ? null : day);
   };
+
+  const panels: Array<{ days: number[]; moonType: 'waxing' | 'full' | 'waning'; title: string; subtitle: string }> = [
+    { days: Array.from({ length: 10 }, (_, i) => i + 1),            moonType: 'waxing', title: 'Arḫu elû',   subtitle: 'Luna creciente' },
+    { days: Array.from({ length: 10 }, (_, i) => i + 11),           moonType: 'full',   title: 'Arḫu šulum',  subtitle: 'Luna llena'     },
+    { days: Array.from({ length: monthLen - 20 }, (_, i) => i + 21), moonType: 'waning', title: 'Arḫu erbu',  subtitle: 'Luna menguante' },
+  ];
+
+  let activePanel = 0;
+  if (today >= 21) activePanel = 2;
+  else if (today >= 11) activePanel = 1;
 
   const selSpecial = selectedDay !== null ? SPECIAL_DAYS[selectedDay] : null;
   const selEvent   = selectedDay !== null && dayEvents ? dayEvents[selectedDay] : null;
@@ -195,41 +229,68 @@ const DayGrid: React.FC<{
 
   return (
     <div>
-      <div className="grid gap-1.5" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
-        {days.map(day => {
-          const phase      = (day - 1) / monthLen;
-          const isToday    = day === today;
-          const isPast     = day < today;
-          const isSelected = day === selectedDay;
-          const special    = SPECIAL_DAYS[day];
-          const hasFestival = dayEvents?.[day] !== undefined;
-
-          let cellClass = 'bg-ink/30 active:bg-blue-900/30';
-          if (isSelected) cellClass = 'bg-blue-400/20 ring-2 ring-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.4)]';
-          else if (isToday) cellClass = 'bg-blue-400/15 ring-1 ring-blue-400/70';
-          else if (special?.dot === 'sapatu') cellClass = 'bg-amber-900/20 ring-1 ring-amber-500/40';
-
-          let numClass = 'text-blue-300';
-          if (isSelected) numClass = 'text-white';
-          else if (isToday) numClass = 'text-blue-200';
-          else if (isPast) numClass = 'text-blue-400/60';
-
+      <div className="flex flex-row justify-center gap-1.5 sm:gap-2 w-full">
+        {panels.map(({ days, moonType, title, subtitle }) => {
+          let panelIdx = 0;
+          if (moonType === 'full') panelIdx = 1;
+          else if (moonType === 'waning') panelIdx = 2;
+          const active = panelIdx === activePanel;
           return (
-            <button
-              key={day}
-              type="button"
-              className={`relative flex flex-col items-center justify-center rounded-sm py-2 gap-1 transition-all cursor-pointer select-none ${cellClass}`}
-              onClick={() => handleTap(day)}
+            <div
+              key={moonType}
+              className={`p-2 sm:p-3 flex-1 rounded-lg border transition-all duration-500 relative overflow-hidden
+                ${active
+                  ? 'border-blue-400/50 bg-blue-900/10 shadow-[0_0_15px_rgba(96,165,250,0.1)] scale-[1.02] z-10'
+                  : 'border-blue-800/30 bg-ink/30'
+                }`}
             >
-              {hasFestival && (
-                <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.6)]" />
+              {active && (
+                <div className="absolute -right-4 -top-4 w-16 h-16 bg-blue-400/10 rounded-full blur-xl pointer-events-none" />
               )}
-              <TinyMoon phase={phase} size={16} dim={isPast && !isToday} />
-              <span className={`text-xs font-serif leading-none font-bold ${numClass}`}>{day}</span>
-              {special && (
-                <span className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${DOT_COLORS[special.dot]}`} />
-              )}
-            </button>
+
+              <div className="text-center mb-2 relative z-10 border-b border-blue-700/30 pb-2">
+                <PanelMoonSvg type={moonType} active={active} />
+                <h4 className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${active ? 'text-blue-300' : 'text-blue-500'}`}>{title}</h4>
+                <div className="text-[8px] font-serif italic text-blue-400/60 tracking-wide uppercase mt-0.5">{subtitle}</div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-1 justify-items-center relative z-10">
+                {days.map(day => {
+                  const isToday     = day === today;
+                  const isPast      = day < today;
+                  const isSelected  = day === selectedDay;
+                  const special     = SPECIAL_DAYS[day];
+                  const hasFestival = dayEvents?.[day] !== undefined;
+
+                  let cellClass = 'bg-ink/40 active:bg-blue-900/30';
+                  if (isSelected)                      cellClass = 'bg-blue-400/20 ring-2 ring-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.4)]';
+                  else if (isToday)                    cellClass = 'bg-blue-400/15 ring-1 ring-blue-400/70';
+                  else if (special?.dot === 'sapatu')  cellClass = 'bg-amber-500/20 ring-1 ring-amber-400/60';
+                  else if (special?.dot === 'quarter') cellClass = 'bg-sky-900/30 ring-1 ring-sky-400/40';
+                  else if (special?.dot === 'rest')    cellClass = 'bg-indigo-900/30 ring-1 ring-indigo-400/40';
+                  else if (hasFestival)                cellClass = 'bg-emerald-900/25 ring-1 ring-emerald-500/40';
+
+                  let numClass = 'text-blue-300';
+                  if (isSelected) numClass = 'text-white';
+                  else if (isToday) numClass = 'text-blue-200';
+                  else if (isPast)  numClass = 'text-blue-400/50';
+
+                  const phase = (day - 1) / monthLen;
+
+                  return (
+                    <button
+                      key={day}
+                      type="button"
+                      className={`relative flex flex-col items-center justify-center rounded-sm pt-1 pb-2 w-full gap-0 transition-all cursor-pointer select-none ${cellClass}`}
+                      onClick={() => handleTap(day)}
+                    >
+                      <TinyMoon phase={phase} size={11} dim={isPast && !isToday} />
+                      <span className={`text-[10px] font-serif leading-none font-bold ${numClass}`}>{day}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>
@@ -276,20 +337,16 @@ const DayGrid: React.FC<{
       {/* Legend */}
       <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
         {([
-          { dot: 'new'     as const, label: 'Luna nueva' },
-          { dot: 'quarter' as const, label: 'Cuartos lunares' },
-          { dot: 'sapatu'  as const, label: 'Šapattu' },
-          { dot: 'rest'    as const, label: 'Ūm nūḥi' },
-        ] as const).map(({ dot, label }) => (
-          <div key={dot} className="flex items-center gap-1">
-            <span className={`w-2 h-2 rounded-full inline-block ${DOT_COLORS[dot]}`} />
+          { cls: 'bg-sky-900/50 ring-1 ring-sky-400/50',     label: 'Cuartos lunares' },
+          { cls: 'bg-amber-500/25 ring-1 ring-amber-400/70', label: 'Šapattu' },
+          { cls: 'bg-indigo-900/40 ring-1 ring-indigo-400/50', label: 'Ūm nūḥi' },
+          { cls: 'bg-emerald-900/35 ring-1 ring-emerald-500/50', label: 'Festival' },
+        ]).map(({ cls, label }) => (
+          <div key={label} className="flex items-center gap-1">
+            <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
             <span className="text-xs text-blue-400 font-serif uppercase tracking-wide">{label}</span>
           </div>
         ))}
-        <div className="flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full inline-block bg-emerald-400" />
-          <span className="text-xs text-blue-400 font-serif uppercase tracking-wide">Festival histórico</span>
-        </div>
       </div>
     </div>
   );
@@ -506,7 +563,9 @@ const CuneiformBorder: React.FC<{ id: string }> = ({ id }) => (
 
 type ViewMode = 'month' | 'cycle';
 
-const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({ currentDate }) => {
+const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
+  currentDate, weather, currentLat = 32.5, currentLng = 44.4,
+}) => {
   const { civilization } = useCivilization();
   const [babData, setBabData] = useState<BabylonianDate | null>(null);
   const [meta, setMeta]      = useState<BabylonianCalendarMeta | null>(null);
@@ -514,14 +573,60 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({ current
 
   useEffect(() => {
     const date = currentDate ?? new Date();
-    setBabData(getBabylonianDate(date, 32.5, 44.4));
+    setBabData(getBabylonianDate(date, currentLat, currentLng));
     setMeta(getBabylonianCalendarMeta(date));
-  }, [currentDate]);
+  }, [currentDate, currentLat, currentLng]);
+
+  const skylineElements = useMemo(
+    () => generateBabylonianSkyline(Math.floor((currentDate ?? new Date()).getTime() / 86400000)),
+    [currentDate]
+  );
+
+  const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
+  const weatherParticles = useMemo(() => ({
+    ...generateWeatherParticles(rainIntensity),
+    stars: Array.from({ length: 60 }).map(() => ({
+      x: Math.random() * 300, y: Math.random() * 100,
+      r: Math.random() * 1.2 + 0.3, opacity: Math.random() * 0.7 + 0.3,
+    })),
+  }), [rainIntensity]);
 
   if ((civilization as string) !== 'babylonia' || !babData || !meta) return null;
 
   const lore = getBabylonianLore(babData.monthName);
-  const moonPhasePercent = Math.round(babData.moonPhase * 100);
+  const condition = weather?.current.condition ?? 'clear';
+
+  const skyGradient = (() => {
+    const p = babData.dayProgress;
+    if (!babData.isDay) {
+      if (condition === 'cloudy' || condition === 'fog' || condition === 'rain' || condition === 'storm') {
+        return 'linear-gradient(to bottom, #0a0d14 0%, #111827 60%, #1c1008 100%)';
+      }
+      return 'linear-gradient(to bottom, #050208 0%, #0a0510 40%, #1a0a05 80%, #2a1005 100%)';
+    }
+    if (p < 0.08) return 'linear-gradient(to bottom, #0f0a02 0%, #4a1a05 30%, #b45309 70%, #fbbf24 100%)';
+    if (p < 0.2)  return 'linear-gradient(to bottom, #1a0a05 0%, #7c3b1a 40%, #d97706 80%, #fde68a 100%)';
+    if (condition === 'fog') {
+      return babData.isDay
+        ? 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)'
+        : 'linear-gradient(to bottom, #1f2937 0%, #374151 100%)';
+    }
+    if (condition === 'snow') {
+      return babData.isDay
+        ? 'linear-gradient(to bottom, #6b7280 0%, #9ca3af 40%, #e5e7eb 100%)'
+        : 'linear-gradient(to bottom, #111827 0%, #1f2937 60%, #374151 100%)';
+    }
+    if (p < 0.75) {
+      if (condition === 'cloudy') {
+        return 'linear-gradient(to bottom, #374151 0%, #6b7280 30%, #c4a55a 70%, #fde68a 100%)';
+      }
+      if (condition === 'rain' || condition === 'storm') {
+        return 'linear-gradient(to bottom, #1e293b 0%, #334155 40%, #1c2333 80%, #111827 100%)';
+      }
+      return 'linear-gradient(to bottom, #1e3a6e 0%, #b45309 30%, #d97706 70%, #fde68a 100%)';
+    }
+    return 'linear-gradient(to bottom, #1a0a05 0%, #7c3b1a 40%, #d97706 80%, #fbbf24 100%)';
+  })();
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2">
@@ -531,35 +636,158 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({ current
 
         <div className="p-5 md:p-8 flex flex-col items-center gap-5 text-center">
 
-          {/* Month header */}
-          <div className="border-b border-blue-600/40 pb-4 w-full flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.5)]">𒀭</span>
-              <h3 className="font-serif text-xl md:text-2xl uppercase tracking-[0.2em] font-bold text-blue-300">
-                {babData.monthName}
-              </h3>
-            </div>
-            <div className="text-sm italic text-parchment font-body bg-blue-500/10 px-4 py-1 rounded-full border border-blue-500/25">
-              Warḫum {babData.monthIndex + 1}
-              {babData.isIntercalary && (
-                <span className="ml-2 text-indigo-400 text-xs font-bold">(Intercalar)</span>
-              )}
-            </div>
-          </div>
+          {/* Sky scene */}
+          <div className="relative w-full overflow-hidden border border-blue-500/30 rounded-sm" style={{ aspectRatio: '16/9' }}>
+            <div className="absolute inset-0 transition-all duration-2000" style={{ background: skyGradient }} />
 
-          {/* SE year + day */}
-          <div className="w-full">
-            <h2 className="text-3xl md:text-4xl font-serif font-black text-parchment drop-shadow-sm leading-tight">
-              SE {babData.seYear}
-            </h2>
-            <div className="font-serif text-base text-blue-300 font-bold italic mt-1">
-              Día {babData.day} · Era Seléucida
-            </div>
-            <div className="text-xs text-blue-400 font-serif mt-1">
-              Signo zodiacal: <span className="text-blue-200 font-bold">{babData.zodiacSign}</span>
-              {' · '}
-              <span className="text-blue-200 font-bold">{babData.moonPhaseName}</span>
-              {' ('}{moonPhasePercent}%{')'}
+            {/* Stars + weather — full-coverage layer */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
+              {!babData.isDay && (
+                <g>
+                  {weatherParticles.stars.map((s, i) => (
+                    <circle key={`star-${i}`} cx={s.x} cy={s.y} r={s.r} fill="#fff" opacity={s.opacity} />
+                  ))}
+                </g>
+              )}
+              {condition !== 'clear' && (
+                <g>
+                  {condition === 'snow' && (
+                    <g opacity="0.6">
+                      <path d="M -50 30 Q 60 5 140 35 T 350 20 L 350 -20 L -50 -20 Z" fill="#6b7280" className="anim-cloud-slow" />
+                      <path d="M -50 60 Q 80 35 170 55 T 350 50 L 350 -20 L -50 -20 Z" fill="#9ca3af" opacity="0.7" className="anim-cloud-fast" />
+                    </g>
+                  )}
+                  {condition === 'cloudy' && (
+                    <g opacity="0.45">
+                      <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
+                      <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
+                    </g>
+                  )}
+                  {condition === 'fog' && (
+                    <g>
+                      <rect x="-10" y="115" width="320" height="90" fill="url(#fog-ground-bab)" opacity="0.85" />
+                      <ellipse cx="70"  cy="105" rx="130" ry="14" fill="#e5e7eb" opacity="0.5" className="anim-cloud-slow" />
+                      <ellipse cx="220" cy="95"  rx="110" ry="11" fill="#f3f4f6" opacity="0.4" className="anim-cloud-fast" />
+                      <ellipse cx="150" cy="120" rx="160" ry="16" fill="#e5e7eb" opacity="0.55" className="anim-cloud-slow" />
+                      <defs>
+                        <linearGradient id="fog-ground-bab" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%"   stopColor="#d1d5db" stopOpacity="0" />
+                          <stop offset="40%"  stopColor="#d1d5db" stopOpacity="0.7" />
+                          <stop offset="100%" stopColor="#e5e7eb" stopOpacity="0.95" />
+                        </linearGradient>
+                      </defs>
+                    </g>
+                  )}
+                  {(condition === 'storm' || condition === 'rain') && (
+                    <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity="0.65">
+                      <path d="M -50 50 Q 30 20 80 40 T 180 30 T 280 50 T 350 30 L 350 -20 L -50 -20 Z" fill="#1e293b" />
+                      <path d="M -50 80 Q 70 50 160 80 T 350 60 L 350 -20 L -50 -20 Z" fill="#0f172a" opacity="0.8" />
+                    </g>
+                  )}
+                  {condition === 'storm' && (
+                    <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />
+                  )}
+                  {(condition === 'rain' || condition === 'storm') && (
+                    <g>
+                      {weatherParticles.rain.map((drop, i) => (
+                        <line
+                          key={`rain-${i}`}
+                          x1={drop.x} y1={drop.y}
+                          x2={drop.x + drop.drift} y2={drop.y + drop.length}
+                          stroke="#94a3b8" strokeWidth={drop.width} opacity={drop.opacity}
+                          className="anim-fall"
+                          style={{ '--drift': `${drop.driftPx}px`, '--dur': `${drop.dur}s`, animationDelay: `${drop.delay}s` } as React.CSSProperties}
+                        />
+                      ))}
+                    </g>
+                  )}
+                  {condition === 'snow' && (
+                    <g>
+                      {weatherParticles.snow.map((flake, i) => (
+                        <circle
+                          key={`snow-${i}`}
+                          cx={flake.x} cy={flake.y} r={flake.r}
+                          fill="#ffffff" opacity={flake.opacity}
+                          className="anim-fall"
+                          style={{ '--drift': `${flake.drift}px`, '--dur': `${flake.dur}s`, animationDelay: `${flake.delay}s` } as React.CSSProperties}
+                        />
+                      ))}
+                    </g>
+                  )}
+                </g>
+              )}
+            </svg>
+
+            {/* Ziggurat skyline — bottom-anchored, original proportions */}
+            <svg
+              className="absolute bottom-0 left-0 w-full"
+              viewBox="0 0 300 200"
+              preserveAspectRatio="xMidYMax meet"
+              style={condition === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
+            >
+              {skylineElements.map(el => (
+                <path
+                  key={el.id}
+                  d={el.path}
+                  fill="rgba(120,53,15,0.85)"
+                  stroke="rgba(180,83,9,0.4)"
+                  strokeWidth="0.5"
+                  opacity={el.opacity}
+                />
+              ))}
+              {condition === 'snow' && (
+                <>
+                  {/* White ground strip */}
+                  <path d="M 0 182 L 300 182 L 300 200 L 0 200 Z" fill="#dde1e7" />
+                  <path d="M 0 182 Q 50 178 100 182 T 200 182 T 300 182 V 200 H 0 Z" fill="#dde1e7" stroke="#f0f4f8" strokeWidth="1" />
+                  <path d="M 0 182 Q 50 178 100 182 T 200 180 T 300 182 V 178 Q 250 176 200 178 T 100 179 T 0 178 Z" fill="#f0f4f8" opacity="0.9" />
+                </>
+              )}
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-center px-4">
+              {/* 𒀭 + month name — prominent, inline */}
+              <div className="flex flex-col items-center leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className="text-parchment/70"
+                    style={{ fontSize: 'clamp(1.4rem, 5.5vw, 2.2rem)' }}
+                  >𒀭</span>
+                  <span
+                    className="font-serif text-parchment font-black uppercase tracking-[0.15em]"
+                    style={{ fontSize: 'clamp(2rem, 8vw, 3.5rem)', lineHeight: 1 }}
+                  >
+                    {babData.monthName}
+                    {babData.isIntercalary && (
+                      <span className="ml-2 text-orange-300" style={{ fontSize: '40%' }}>(intercalar)</span>
+                    )}
+                  </span>
+                </div>
+                <span
+                  className="font-serif text-parchment/60 italic tracking-widest"
+                  style={{ fontSize: 'clamp(0.6rem, 2vw, 0.85rem)' }}
+                >
+                  Warḫum {babData.monthIndex + 1}
+                </span>
+              </div>
+              {/* SE year — smaller, below */}
+              <div
+                className="font-serif text-parchment/55 font-bold drop-shadow-md mt-1"
+                style={{ fontSize: 'clamp(0.75rem, 2.8vw, 1.1rem)', letterSpacing: '0.2em' }}
+              >
+                SE {babData.seYear}
+              </div>
+              <div
+                className="font-serif text-parchment/75 italic mt-1"
+                style={{ fontSize: 'clamp(0.65rem, 2.2vw, 0.9rem)' }}
+              >
+                {babData.hourName}
+              </div>
+              <div
+                className="font-serif text-parchment/60 tracking-wide"
+                style={{ fontSize: 'clamp(0.6rem, 2vw, 0.8rem)' }}
+              >
+                {babData.planetaryRuler} · {babData.watchName}
+              </div>
             </div>
           </div>
 
