@@ -206,6 +206,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
   const { civilization, labels } = useCivilization();
   const [egyptianDate, setEgyptianDate] = useState<EgyptianDateResult | null>(null);
   const [showFestivals, setShowFestivals] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   useEffect(() => {
     setEgyptianDate(getEgyptianDate(currentDate));
@@ -227,17 +228,24 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
       <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gold-dim mb-2 text-center">{title}</h4>
       <div className="flex flex-wrap gap-1 justify-center">
         {days.map(day => {
-          const isToday = !egyptianDate.isEpagomenal && day === egyptianDate.dayOfMonth;
+          const isToday    = !egyptianDate.isEpagomenal && day === egyptianDate.dayOfMonth;
+          const isSelected = day === selectedDay;
+          const { civilFestivals } = getFestivalsForDate(egyptianDate.monthIndex, day, 0);
+          const hasFest = civilFestivals.length > 0;
+
+          let cls: string;
+          if (isSelected)   cls = 'bg-amber-400 text-ink shadow-[0_0_8px_rgba(251,191,36,0.7)] scale-125 z-10 ring-2 ring-amber-300';
+          else if (isToday) cls = 'bg-emerald-500 text-white shadow-[0_0_8px_rgba(16,185,129,0.6)] scale-125 z-10';
+          else if (hasFest) cls = isCurrentDecade(decadeNumber) ? 'bg-amber-500/60 ring-1 ring-amber-400' : 'bg-amber-700/35 ring-1 ring-amber-600/40';
+          else              cls = isCurrentDecade(decadeNumber) ? 'bg-gold-leaf text-ink' : 'bg-gold-dim/40 text-parchment/80';
+
           return (
-            <div
+            <button
               key={day}
-              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full flex items-center justify-center text-[7px] sm:text-[9px]
-                ${isToday
-                  ? 'bg-emerald-500 text-white shadow-[0_0_8px_rgba(16,185,129,0.6)] font-bold scale-125 z-10'
-                  : (isCurrentDecade(decadeNumber) ? 'bg-gold-leaf text-ink' : 'bg-gold-dim/40 text-parchment/80')
-                }`}
-            >
-            </div>
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setSelectedDay(prev => prev === day ? null : day); }}
+              className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all cursor-pointer ${cls}`}
+            />
           );
         })}
       </div>
@@ -358,6 +366,30 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
                 {renderDecade(decade2, 2, "Década II (11–20)")}
                 {renderDecade(decade3, 3, "Década III (21–30)")}
               </div>
+
+              {/* Day info panel */}
+              {(() => {
+                if (selectedDay === null) return (
+                  <p className="text-[10px] font-serif text-egypt-primary/40 text-center mt-2">Toca un día para ver su festival</p>
+                );
+                const { civilFestivals: sf } = getFestivalsForDate(egyptianDate.monthIndex, selectedDay, 0);
+                return (
+                  <div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-900/10 p-3 text-left animate-fadeIn" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-serif font-bold text-amber-400 uppercase tracking-wider">Día {selectedDay}</span>
+                      <button type="button" onClick={() => setSelectedDay(null)} className="text-amber-600/50 hover:text-amber-400 text-xs px-1 cursor-pointer">✕</button>
+                    </div>
+                    {sf.length > 0 ? sf.map((f, i) => (
+                      <div key={i} className="flex flex-col gap-0.5 mt-1">
+                        <span className="text-sm font-serif font-bold text-amber-300">{f.name}</span>
+                        <p className="text-xs font-serif text-parchment/80 leading-snug">{f.description}</p>
+                      </div>
+                    )) : (
+                      <span className="text-xs font-serif text-parchment/50">Sin festival civil registrado para este día.</span>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           )}
 
