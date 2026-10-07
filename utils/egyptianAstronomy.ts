@@ -1,3 +1,4 @@
+import { DefineStar, SearchRiseSet, Body, Observer } from 'astronomy-engine';
 import { getMoonPhase } from './solar';
 
 export interface AlgolState {
@@ -95,3 +96,78 @@ export const isAlgolEclipsed = (date: Date): boolean => {
   return phase >= 0.925 || phase <= 0.075;
 };
 
+// ── Sopdet (Sirius) heliacal rising ───────────────────────────────────────────
+// RA=6h 45.1m, Dec=-16.716°, distance=8.6 ly (distance in light-years converted to parsecs * 3.26)
+const SIRIUS_RA_H = 6.7525;
+const SIRIUS_DEC_DEG = -16.7161;
+const SIRIUS_DIST_LY = 8600; // astronomy-engine uses light-years for DefineStar
+
+export interface SopdetEvent {
+  rising: Date;
+  setting: Date;
+  daysSinceRising: number;
+  phase: 'visible' | 'invisible';
+}
+
+let _sopdetCache: { key: string; result: SopdetEvent } | null = null;
+
+// Heliacal rising: first morning the star rises within THRESHOLD minutes before sunrise.
+// Heliacal setting: last evening the star sets within THRESHOLD minutes after sunset.
+const THRESHOLD_MIN = 60;
+const DAY_MS = 86400000;
+
+function findHeliacalRising(year: number, observer: Observer): Date | null {
+  // Sirius heliacal rising at inhabited latitudes falls between May and September
+  let d = new Date(year, 4, 1);
+  for (let i = 0; i < 180; i++) {
+    const midnight = new Date(d); midnight.setHours(0, 0, 0, 0);
+    const sr = SearchRiseSet(Body.Sun,   observer, +1, midnight, 1);
+    const tr = SearchRiseSet(Body.Star1, observer, +1, midnight, 1);
+    if (sr && tr) {
+      const diff = (sr.date.getTime() - tr.date.getTime()) / 60000;
+      if (diff > 0 && diff < THRESHOLD_MIN) return new Date(d);
+    }
+    d = new Date(d.getTime() + DAY_MS);
+  }
+  return null;
+}
+
+function findHeliacalSetting(year: number, observer: Observer): Date | null {
+  // Heliacal setting (last visibility before disappearing into Sun's glare): April–July
+  let d = new Date(year, 3, 1);
+  for (let i = 0; i < 120; i++) {
+    const noon = new Date(d); noon.setHours(12, 0, 0, 0);
+    const ss = SearchRiseSet(Body.Sun,   observer, -1, noon, 1);
+    const ts = SearchRiseSet(Body.Star1, observer, -1, noon, 1);
+    if (ss && ts) {
+      const diff = (ts.date.getTime() - ss.date.getTime()) / 60000;
+      if (diff > 0 && diff < THRESHOLD_MIN) return new Date(d);
+    }
+    d = new Date(d.getTime() + DAY_MS);
+  }
+  return null;
+}
+
+export const getSopdetHeliacalEvent = (date: Date, lat: number, lng: number): SopdetEvent => {
+  const year = date.getFullYear();
+  const cacheKey = `${year}-${Math.round(lat * 10)}-${Math.round(lng * 10)}`;
+  if (_sopdetCache?.key === cacheKey) return _sopdetCache.result;
+
+  DefineStar(Body.Star1, SIRIUS_RA_H, SIRIUS_DEC_DEG, SIRIUS_DIST_LY);
+  const observer = new Observer(lat, lng, 0);
+
+  const rising  = findHeliacalRising(year,  observer) ?? findHeliacalRising(year - 1, observer) ?? new Date(year, 6, 19);
+  const setting = findHeliacalSetting(year, observer) ?? findHeliacalSetting(year - 1, observer) ?? new Date(year, 5, 1);
+
+  const today = new Date(date); today.setHours(0, 0, 0, 0);
+  const risingDay  = new Date(rising);  risingDay.setHours(0, 0, 0, 0);
+  const settingDay = new Date(setting); settingDay.setHours(0, 0, 0, 0);
+
+  const daysSinceRising = Math.floor((today.getTime() - risingDay.getTime()) / DAY_MS);
+  // Invisible window: setting (≈June) → rising (≈July), both within same year, setting < rising
+  const phase: 'visible' | 'invisible' = (today >= settingDay && today < risingDay) ? 'invisible' : 'visible';
+
+  const result: SopdetEvent = { rising, setting, daysSinceRising, phase };
+  _sopdetCache = { key: cacheKey, result };
+  return result;
+};

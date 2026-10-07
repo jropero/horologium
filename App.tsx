@@ -198,7 +198,7 @@ const AppContent: React.FC = () => {
         />
       )}
       {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
-        <EgyptianCalendarInfo currentDate={modernTime} />
+        <EgyptianCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
       )}
 
       {civilization !== 'zhongguo' && civilization === 'babylonia' && (
