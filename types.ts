@@ -59,6 +59,8 @@ export interface WeatherSnapshot {
     description: string;
     greekDescription?: string;
     egyptianDescription?: string;
+    chineseDescription?: string;
+    chineseWindName?: string;
     code: number;
     windSpeed: number;
     windDirection: number;

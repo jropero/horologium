@@ -218,7 +218,7 @@ const AppContent: React.FC = () => {
               currentLng={longitude}
             />
           ) : civilization === 'zhongguo' ? (
-            <ChineseClock modernTime={modernTime} />
+            <ChineseClock modernTime={modernTime} weather={effectiveWeather} />
           ) : civilization === 'babylonia' ? (
             <BabylonianClock
               modernTime={modernTime}
