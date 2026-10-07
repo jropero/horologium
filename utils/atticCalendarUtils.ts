@@ -2,12 +2,104 @@
 // Maps Gregorian dates to Attic equivalents using real lunar phases.
 // The Noumenia (1st of month) is the first day after New Moon.
 // The Attic year begins with Hekatombaion at the first New Moon
-// after the summer solstice (~June 21).
+// after the summer solstice.
 
 import { getMoonPhase } from './solar';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
-const SYNODIC_MONTH = 29.53059; // Average synodic month in days
+const SYNODIC_MONTH = 29.530588853;
+
+// ─── Julian Day helpers ───────────────────────────────────────────────────────
+
+const toJD  = (d: Date): number => d.getTime() / 86400000 + 2440587.5;
+const fromJD = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
+
+// Meeus ch. 27 Table 27.a — mean June solstice JDE, accurate to ±1–2 days.
+// The periodic correction terms (Table 27.c) add at most ~0.01 d; omitted here
+// since the crescent-delay tolerance (1.5 d) already absorbs that margin.
+const summerSolsticeJD = (year: number): number => {
+  const T = (year - 2000) / 1000;
+  return 2451716.56767 + 365241.62603 * T + 0.00325 * T * T;
+};
+
+// Meeus ch. 47 — true new moon JDE with perturbations (~2 min accuracy).
+const trueNewMoonJDE = (k: number): number => {
+  const T  = k / 1236.85;
+  const T2 = T * T, T3 = T2 * T, T4 = T3 * T;
+  let JDE = 2451550.09766
+    + 29.530588861 * k
+    + 0.00015437  * T2
+    - 0.000000150 * T3
+    + 0.00000000073 * T4;
+  const rad = Math.PI / 180;
+  const M      = (2.5534      + 29.10535670  * k - 0.0000014  * T2 - 0.00000011   * T3) * rad;
+  const Mprime = (201.5643    + 385.81693528 * k + 0.0107582  * T2 + 0.00001238   * T3 - 0.000000058 * T4) * rad;
+  const F      = (160.7108    + 390.67050284 * k - 0.0016118  * T2 - 0.00000227   * T3 + 0.000000011 * T4) * rad;
+  const Omega  = (124.7746    - 1.56375588   * k + 0.0020672  * T2 + 0.00000215   * T3) * rad;
+  const E = 1 - 0.002516 * T - 0.0000074 * T2;
+  const E2 = E * E;
+  JDE +=
+    -0.40720 * Math.sin(Mprime)
+    + 0.17241 * E   * Math.sin(M)
+    + 0.01608        * Math.sin(2 * Mprime)
+    + 0.01039        * Math.sin(2 * F)
+    + 0.00739 * E   * Math.sin(Mprime - M)
+    - 0.00514 * E   * Math.sin(Mprime + M)
+    + 0.00208 * E2  * Math.sin(2 * M)
+    - 0.00111        * Math.sin(Mprime - 2 * F)
+    - 0.00057        * Math.sin(Mprime + 2 * F)
+    + 0.00056 * E   * Math.sin(2 * Mprime + M)
+    - 0.00042        * Math.sin(3 * Mprime)
+    + 0.00042 * E   * Math.sin(M + 2 * F)
+    + 0.00038 * E   * Math.sin(M - 2 * F)
+    - 0.00024 * E   * Math.sin(2 * Mprime - M)
+    - 0.00017        * Math.sin(Omega)
+    - 0.00007        * Math.sin(Mprime + 2 * M)
+    + 0.00004        * Math.sin(2 * Mprime - 2 * F)
+    + 0.00004        * Math.sin(3 * M)
+    + 0.00003        * Math.sin(Mprime + M - 2 * F)
+    + 0.00003        * Math.sin(2 * Mprime + 2 * F)
+    - 0.00003        * Math.sin(Mprime + M + 2 * F)
+    + 0.00003        * Math.sin(Mprime - M + 2 * F)
+    - 0.00002        * Math.sin(Mprime - M - 2 * F)
+    - 0.00002        * Math.sin(3 * Mprime + M)
+    + 0.00002        * Math.sin(4 * Mprime);
+  return JDE;
+};
+
+const kForDecimalYear = (y: number): number => Math.round((y - 2000) * 12.3685);
+
+// Most recent new moon JDE on or before `jd`.
+const prevNewMoonJDE = (jd: number): number => {
+  const approxYear = 2000 + (jd - 2451545.0) / 365.25;
+  let k = kForDecimalYear(approxYear);
+  let nm = trueNewMoonJDE(k);
+  while (nm > jd) { k--; nm = trueNewMoonJDE(k); }
+  // One extra check: the next lunation might still be ≤ jd
+  const nmNext = trueNewMoonJDE(k + 1);
+  if (nmNext <= jd) { k++; nm = nmNext; }
+  return nm;
+};
+
+// First new moon JDE strictly after `jd`.
+const nextNewMoonJDE = (jd: number): number => {
+  const k = kForDecimalYear(2000 + (jd - 2451545.0) / 365.25);
+  // Try k and k+1; the one just after jd
+  for (let offset = 0; offset <= 2; offset++) {
+    const nm = trueNewMoonJDE(k + offset);
+    if (nm > jd) return nm;
+  }
+  return trueNewMoonJDE(k + 2);
+};
+
+// First new moon JDE on or after `jd`.
+const newMoonOnOrAfterJDE = (jd: number): number => {
+  const approxYear = 2000 + (jd - 2451545.0) / 365.25;
+  let k = kForDecimalYear(approxYear) - 1;
+  let nm = trueNewMoonJDE(k);
+  while (nm < jd) { k++; nm = trueNewMoonJDE(k); }
+  return nm;
+};
 
 // The 12 Attic months
 export const ATTIC_MONTHS = [
@@ -34,81 +126,19 @@ const GREEK_DAY_ORDINALS = [
   "ἕκτη", "ἑβδόμη", "ὀγδόη", "ἐνάτη", "δεκάτη"
 ];
 
-// --- Lunar search functions ---
-
-// Find the most recent New Moon before or on a given date
-const findNewMoon = (date: Date): Date => {
-  const d = new Date(date);
-  let prevPhase = getMoonPhase(d);
-
-  for (let i = 1; i <= 35; i++) {
-    const check = new Date(d);
-    check.setDate(check.getDate() - i);
-    const phase = getMoonPhase(check);
-
-    if (phase > 0.8 && prevPhase < 0.2) {
-      const nmDate = new Date(d);
-      nmDate.setDate(d.getDate() - (i - 1));
-      nmDate.setHours(0, 0, 0, 0);
-      return nmDate;
-    }
-    prevPhase = phase;
-  }
-  return d; // fallback
-};
-
-// Find the next New Moon strictly after a given date
-const findNextNewMoon = (date: Date): Date => {
-  const d = new Date(date);
-  d.setDate(d.getDate() + 1);
-  let prevPhase = getMoonPhase(d);
-
-  for (let i = 1; i <= 35; i++) {
-    const check = new Date(d);
-    check.setDate(d.getDate() + i);
-    const phase = getMoonPhase(check);
-
-    if (prevPhase > 0.8 && phase < 0.2) {
-      check.setHours(0, 0, 0, 0);
-      return check;
-    }
-    prevPhase = phase;
-  }
-  const fallback = new Date(date);
-  fallback.setDate(date.getDate() + 30);
-  fallback.setHours(0, 0, 0, 0);
-  return fallback;
-};
-
-// Find the first New Moon on or after a given date
-const findFirstNewMoonOnOrAfter = (date: Date): Date => {
-  const phase = getMoonPhase(date);
-  if (phase < 0.04 || phase > 0.96) {
-    const result = new Date(date);
-    result.setHours(0, 0, 0, 0);
-    return result;
-  }
-  let prevPhase = phase;
-  for (let i = 1; i <= 35; i++) {
-    const check = new Date(date);
-    check.setDate(date.getDate() + i);
-    const p = getMoonPhase(check);
-    if (prevPhase > 0.8 && p < 0.2) {
-      check.setHours(0, 0, 0, 0);
-      return check;
-    }
-    prevPhase = p;
-  }
-  return new Date(date);
-};
+// Minimum moon age before first crescent is visible (~1.5 days, Athens ~38°N).
+const CRESCENT_DELAY = 1.5;
 
 // --- Attic year engine ---
 
 // Get the start of the Attic year (Hekatombaion 1) for a given Gregorian year.
-// = first New Moon on or after the summer solstice (~June 21).
+// Hekatombaion 1 = Noumenia (first crescent) after the summer solstice.
+// Uses the crescent criterion: find the first new moon whose crescent
+// (conjunction + CRESCENT_DELAY) falls on or after the summer solstice.
 const getAtticYearStart = (gregorianYear: number): Date => {
-  const solstice = new Date(gregorianYear, 5, 21); // June 21 (approximate)
-  return findFirstNewMoonOnOrAfter(solstice);
+  const solsticeJD = summerSolsticeJD(gregorianYear);
+  const nmJD = newMoonOnOrAfterJDE(solsticeJD - CRESCENT_DELAY);
+  return fromJD(nmJD);
 };
 
 // Core: determine Attic month, day, and month length from a real date
@@ -127,14 +157,15 @@ const getAtticMonthFromDate = (date: Date): {
   }
 
   // Find the New Moon that starts our current month
-  const newMoon = findNewMoon(date);
+  const nmJD = prevNewMoonJDE(toJD(date));
+  const newMoon = fromJD(nmJD);
 
   // Count lunations from year start to our New Moon
   const daysSinceStart = Math.max(0, (newMoon.getTime() - yearStart.getTime()) / DAY_MS);
   const lunationCount = Math.round(daysSinceStart / SYNODIC_MONTH);
 
   // Find the next New Moon to get real month length
-  const nextNewMoon = findNextNewMoon(newMoon);
+  const nextNewMoon = fromJD(nextNewMoonJDE(nmJD));
   const rawLength = Math.round((nextNewMoon.getTime() - newMoon.getTime()) / DAY_MS);
   const monthLength = Math.max(29, Math.min(rawLength, 30));
 
