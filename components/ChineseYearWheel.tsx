@@ -50,16 +50,25 @@ const progressArcPath = (termIndex: number): string => {
   return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
 };
 
-// Cloud-puff blobs: overlapping ellipses at (cx, cy, rx, ry, drift class)
-const CLOUD_PUFFS: [number, number, number, number, string][] = [
-  [78,  102, 62, 20, 'anim-cloud-slow'],
-  [72,  86,  40, 14, 'anim-cloud-fast'],
-  [242, 108, 58, 19, 'anim-cloud-slow'],
-  [248, 92,  36, 13, 'anim-cloud-fast'],
-  [162, 62,  48, 17, 'anim-cloud-slow'],
-  [168, 258, 52, 18, 'anim-cloud-fast'],
-  [62,  210, 44, 15, 'anim-cloud-slow'],
-  [258, 212, 46, 16, 'anim-cloud-fast'],
+// Proper cloud shape: 3 bump-circles + flat base rect, all same fill.
+// Rendered inside a <g opacity> so overlapping shapes merge into one cloud silhouette.
+const CloudShape: React.FC<{ cx: number; cy: number; cls: string }> = ({ cx, cy, cls }) => (
+  <g className={cls}>
+    <ellipse cx={cx - 19} cy={cy + 7}  rx={16} ry={13} />
+    <ellipse cx={cx + 2}  cy={cy - 4}  rx={22} ry={19} />
+    <ellipse cx={cx + 22} cy={cy + 5}  rx={15} ry={12} />
+    <rect    x={cx - 35}  y={cy + 7}   width={77} height={16} rx={5} />
+  </g>
+);
+
+// Six clouds distributed around the wheel, alternating drift speed for parallax
+const CLOUD_POSITIONS: [number, number, string][] = [
+  [78,  95,  'anim-cloud-slow'],
+  [243, 95,  'anim-cloud-fast'],
+  [162, 58,  'anim-cloud-slow'],
+  [160, 262, 'anim-cloud-fast'],
+  [58,  212, 'anim-cloud-slow'],
+  [262, 212, 'anim-cloud-fast'],
 ];
 
 interface WheelWeatherProps {
@@ -105,20 +114,20 @@ const WheelWeatherOverlay: React.FC<WheelWeatherProps> = ({ condition, rain, sno
           </g>
         )}
 
-        {/* Clear sky cloud puffs (cloudy / snow) */}
+        {/* Cloud-shaped puffs for cloudy */}
         {showClouds && (
           <g opacity={0.22} fill="#cbd5e1">
-            {CLOUD_PUFFS.map(([cx, cy, rx, ry, cls], i) => (
-              <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} className={cls} />
+            {CLOUD_POSITIONS.map(([cx, cy, cls], i) => (
+              <CloudShape key={i} cx={cx} cy={cy} cls={cls} />
             ))}
           </g>
         )}
 
-        {/* Dark rain clouds */}
+        {/* Dark cloud-shaped puffs for rain/storm */}
         {showRainClouds && (
           <g opacity={0.32} fill="#1e293b">
-            {CLOUD_PUFFS.map(([cx, cy, rx, ry, cls], i) => (
-              <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} className={cls} />
+            {CLOUD_POSITIONS.map(([cx, cy, cls], i) => (
+              <CloudShape key={i} cx={cx} cy={cy} cls={cls} />
             ))}
           </g>
         )}

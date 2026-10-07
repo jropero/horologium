@@ -54,7 +54,7 @@ export function generateWeatherParticles(rainIntensity: number): WeatherParticle
     };
   });
 
-  const snow: SnowFlake[] = Array.from({ length: 93 }).map(() => {
+  const snow: SnowFlake[] = Array.from({ length: 55 }).map(() => {
     const dur = 3 + Math.random() * 4;
     return {
       x: Math.random() * 300,
