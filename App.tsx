@@ -67,6 +67,7 @@ const AppContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isGreekCalendarOpen, setIsGreekCalendarOpen] = useState<boolean>(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
+  const [isWeatherSelectorOpen, setIsWeatherSelectorOpen] = useState<boolean>(false);
 
   // Determine current location name and timezone
   const currentLocation = LOCATIONS.find(loc => loc.id !== 'gps' && Math.abs(latitude - (loc.lat || 0)) < 0.001 && Math.abs(longitude - (loc.lng || 0)) < 0.001);
@@ -133,6 +134,18 @@ const AppContent: React.FC = () => {
   const { weather } = useWeather(latitude, longitude);
   const [devWeatherCode, setDevWeatherCode] = useState<number | null>(null);
 
+  const DEV_OPTIONS = [
+    { code: null, label: 'Tiempo real' },
+    { code: 0, label: 'Despejado' },
+    { code: 3, label: 'Nublado' },
+    { code: 45, label: 'Niebla' },
+    { code: 61, label: 'Lluvia leve' },
+    { code: 65, label: 'Lluvia intensa' },
+    { code: 82, label: 'Lluvia violenta' },
+    { code: 95, label: 'Tormenta' },
+    { code: 73, label: 'Nieve' },
+  ] as const;
+
   const DEV_CONDITION_MAP: Record<number, WeatherCondition> = {
     0: 'clear', 3: 'cloudy', 45: 'fog', 61: 'rain', 65: 'rain', 82: 'rain', 95: 'storm', 99: 'storm', 73: 'snow',
   };
@@ -163,21 +176,12 @@ const AppContent: React.FC = () => {
         >
           {currentLocationName}
         </button>
-        <select
-          value={devWeatherCode ?? ''}
-          onChange={e => setDevWeatherCode(e.target.value === '' ? null : Number(e.target.value))}
-          className="text-[9px] font-serif uppercase tracking-wider text-gold-dim/70 bg-ink/80 px-2 py-0.5 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg appearance-none cursor-pointer"
+        <button
+          onClick={() => setIsWeatherSelectorOpen(true)}
+          className="text-[9px] font-serif uppercase tracking-wider text-gold-dim/70 bg-ink/80 px-2 py-0.5 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg active:scale-95 transition-all"
         >
-          <option value="">Tiempo real</option>
-          <option value="0">Despejado</option>
-          <option value="3">Nublado</option>
-          <option value="45">Niebla</option>
-          <option value="61">Lluvia leve</option>
-          <option value="65">Lluvia intensa</option>
-          <option value="82">Lluvia violenta</option>
-          <option value="95">Tormenta</option>
-          <option value="73">Nieve</option>
-        </select>
+          {devWeatherCode === null ? '☁ Tiempo real' : DEV_OPTIONS.find(o => o.code === devWeatherCode)?.label ?? '☁ Tiempo real'}
+        </button>
       </div>
 
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
@@ -295,6 +299,37 @@ const AppContent: React.FC = () => {
         currentLat={latitude}
         currentLng={longitude}
       />
+
+      {isWeatherSelectorOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setIsWeatherSelectorOpen(false)}
+        >
+          <div
+            className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-xs overflow-hidden"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="p-4 border-b border-gold-dim/30 text-center">
+              <h3 className="font-serif text-sm text-gold-leaf uppercase tracking-[0.3em] font-bold">Simular Tiempo</h3>
+            </div>
+            <div className="p-3 flex flex-col gap-1">
+              {DEV_OPTIONS.map(opt => (
+                <button
+                  key={opt.code ?? 'real'}
+                  onClick={() => { setDevWeatherCode(opt.code as number | null); setIsWeatherSelectorOpen(false); }}
+                  className={`w-full text-left px-4 py-2.5 rounded-lg font-serif text-sm uppercase tracking-widest transition-all border
+                    ${devWeatherCode === opt.code
+                      ? 'bg-gold-leaf text-ink border-gold-leaf font-bold'
+                      : 'text-parchment/80 border-gold-dim/20 hover:bg-gold-leaf/10 hover:border-gold-dim/50'
+                    }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Background vignette effect */}
       <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>
