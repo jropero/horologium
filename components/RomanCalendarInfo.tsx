@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { getRomanDayInfo, RomanDayInfo, getNextRomanFestivals } from '../utils/romanCalendarData';
+import { ROMAN_YEAR_DATA, YearDayEntry } from '../utils/romanYearData';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
 import { getAtticFestivalInfo, getDefaultAtticDeity, AtticFestivalInfo } from '../utils/atticCalendarData';
 import { getHistoricalEvents } from '../utils/romanHistoryData';
@@ -16,6 +17,177 @@ import {
     OVID_SACRIFICIA
 } from '../utils/ovidFastiData';
 import { Info, X, ChevronLeft, ChevronRight } from 'lucide-react';
+
+// ─── Roman Monthly Day Grid ──────────────────────────────────────────────────
+
+const STATUS_RING: Record<string, string> = {
+    NP_fest: 'bg-amber-500/20 ring-1 ring-amber-400/60',
+    NP:      'bg-amber-900/20 ring-1 ring-amber-700/40',
+    N:       'bg-rose-900/25 ring-1 ring-rose-500/40',
+    EN:      'bg-orange-900/20 ring-1 ring-orange-500/35',
+    F:       'bg-emerald-900/15 ring-1 ring-emerald-600/30',
+    C:       'bg-ink/30',
+};
+
+const STATUS_TEXT_COLOR: Record<string, string> = {
+    NP: 'text-amber-400', N: 'text-rose-400', EN: 'text-orange-400',
+    F: 'text-emerald-400', C: 'text-blue-400',
+};
+
+const STATUS_BADGE_CLS: Record<string, string> = {
+    NP: 'border-amber-500/40 text-amber-400 bg-amber-900/20',
+    N:  'border-rose-500/40 text-rose-400 bg-rose-900/20',
+    EN: 'border-orange-500/40 text-orange-400 bg-orange-900/20',
+    F:  'border-emerald-500/40 text-emerald-400 bg-emerald-900/20',
+    C:  'border-blue-500/40 text-blue-400 bg-blue-900/20',
+};
+
+const STATUS_NAMES: Record<string, string> = {
+    F: 'Fastus', C: 'Comitialis', N: 'Nefastus', NP: 'NP', EN: 'Endotercissus',
+};
+
+const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = ({ month, year, today }) => {
+    const [selectedDay, setSelectedDay] = useState<number | null>(null);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const getDayEntry = (day: number): YearDayEntry | undefined =>
+        ROMAN_YEAR_DATA[`${month}-${day}`];
+
+    const panels = [
+        { days: Array.from({ length: 10 }, (_, i) => i + 1),                   label: 'Kalendae', sublabel: 'Initium mensis' },
+        { days: Array.from({ length: 10 }, (_, i) => i + 11),                  label: 'Idvs',     sublabel: 'Medium mensis'  },
+        { days: Array.from({ length: daysInMonth - 20 }, (_, i) => i + 21),    label: 'Post Idvs', sublabel: 'Exitus mensis' },
+    ];
+
+    let activePanel = 0;
+    if (today >= 21) activePanel = 2;
+    else if (today >= 11) activePanel = 1;
+
+    const selEntry = selectedDay !== null ? getDayEntry(selectedDay) : null;
+
+    const cellCls = (day: number): string => {
+        const entry = getDayEntry(day);
+        if (day === selectedDay) return 'bg-gold-leaf/20 ring-2 ring-gold-leaf shadow-[0_0_8px_rgba(212,175,55,0.4)]';
+        if (day === today) return 'bg-gold-leaf/25 ring-2 ring-gold-leaf shadow-[0_0_12px_rgba(212,175,55,0.5)]';
+        if (!entry) return 'bg-ink/40';
+        const key = entry.status === 'NP' && entry.festivalName ? 'NP_fest' : entry.status;
+        return STATUS_RING[key] ?? 'bg-ink/30';
+    };
+
+    const numCls = (day: number): string => {
+        const entry = getDayEntry(day);
+        if (day === selectedDay) return 'text-gold-leaf font-black';
+        if (day === today) return 'text-gold-leaf font-black text-[13px]';
+        if (day < today) return 'text-parchment/30';
+        return STATUS_TEXT_COLOR[entry?.status ?? ''] ?? 'text-parchment/60';
+    };
+
+    return (
+        <div className="mt-4 w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="h-px flex-1 bg-gold-dim/20" />
+                <span className="text-gold-dim text-[10px] uppercase tracking-[0.3em] font-serif">Calendarium Mensis</span>
+                <div className="h-px flex-1 bg-gold-dim/20" />
+            </div>
+
+            <div className="flex flex-row justify-center gap-1.5 w-full">
+                {panels.map(({ days, label, sublabel }, panelIdx) => {
+                    const active = panelIdx === activePanel;
+                    return (
+                        <div
+                            key={label}
+                            className={`p-2 flex-1 rounded-lg border transition-all duration-500 relative overflow-hidden
+                                ${active
+                                    ? 'border-gold-dim/50 bg-amber-950/20 shadow-[0_0_15px_rgba(212,175,55,0.08)] scale-[1.02] z-10'
+                                    : 'border-gold-dim/20 bg-ink/30'
+                                }`}
+                        >
+                            {active && (
+                                <div className="absolute -right-4 -top-4 w-16 h-16 bg-gold-leaf/5 rounded-full blur-xl pointer-events-none" />
+                            )}
+                            <div className="text-center mb-2 border-b border-gold-dim/20 pb-1.5">
+                                <div className={`text-[9px] font-bold uppercase tracking-widest ${active ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>{label}</div>
+                                <div className="text-[7px] font-serif italic text-gold-dim/40 tracking-wide uppercase mt-0.5">{sublabel}</div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-1 justify-items-center">
+                                {days.filter(d => d <= daysInMonth).map(day => (
+                                        <button
+                                            key={day}
+                                            type="button"
+                                            className={`relative flex flex-col items-center justify-center rounded-sm py-1.5 w-full transition-all cursor-pointer select-none ${cellCls(day)}`}
+                                            onClick={() => setSelectedDay(prev => prev === day ? null : day)}
+                                        >
+                                            <span className={`text-[10px] font-serif leading-none font-bold ${numCls(day)}`}>{day}</span>
+                                        </button>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Info panel */}
+            <div className={`mt-2 rounded-lg border transition-all ${
+                selEntry && selectedDay !== null
+                    ? 'border-gold-dim/40 bg-amber-950/15 p-3'
+                    : 'border-gold-dim/20 bg-transparent py-2 px-3'
+            }`}>
+                {selEntry && selectedDay !== null ? (
+                    <div className="flex flex-col gap-2 text-left">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-serif font-bold text-gold-leaf uppercase tracking-wider">Dies {selectedDay}</span>
+                                <span className={`text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${STATUS_BADGE_CLS[selEntry.status] ?? 'border-gold-dim/30 text-gold-dim bg-transparent'}`}>
+                                    {STATUS_NAMES[selEntry.status] ?? selEntry.status}
+                                </span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setSelectedDay(null)}
+                                className="text-gold-dim/50 hover:text-gold-dim text-xs leading-none px-1 cursor-pointer"
+                            >✕</button>
+                        </div>
+                        {selEntry.festivalName ? (
+                            <div>
+                                <span className="text-sm font-serif font-bold text-amber-400">{selEntry.festivalName}</span>
+                                {selEntry.festivalDesc && (
+                                    <p className="text-xs font-serif text-parchment/80 mt-1 leading-snug">{selEntry.festivalDesc}</p>
+                                )}
+                            </div>
+                        ) : (
+                            <span className="text-xs font-serif text-parchment/70">{selEntry.statusFull}</span>
+                        )}
+                        {selEntry.deity && selEntry.deity !== 'Ninguna' && (
+                            <div className="border-t border-gold-dim/20 pt-2">
+                                <span className="text-xs font-serif font-bold text-gold-dim">{selEntry.deity}</span>
+                                <p className="text-xs font-serif text-parchment/60 mt-0.5 leading-snug">{selEntry.deityDesc}</p>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <p className="text-xs font-serif text-gold-dim/50 text-center">Toca un día para ver su información</p>
+                )}
+            </div>
+
+            {/* Legend */}
+            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
+                {([
+                    { cls: 'bg-amber-500/25 ring-1 ring-amber-400/60', label: 'Festum NP' },
+                    { cls: 'bg-amber-900/25 ring-1 ring-amber-700/40', label: 'NP' },
+                    { cls: 'bg-rose-900/25 ring-1 ring-rose-500/40',   label: 'Nefastus' },
+                    { cls: 'bg-orange-900/20 ring-1 ring-orange-500/35', label: 'Endotercissus' },
+                ] as const).map(({ cls, label }) => (
+                    <div key={label} className="flex items-center gap-1">
+                        <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
+                        <span className="text-[9px] text-gold-dim/50 font-serif uppercase tracking-wide">{label}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface RomanCalendarInfoProps {
     currentDate?: Date;
@@ -135,6 +307,13 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                 "{info.description}"
                             </p>
                         </div>
+
+                        {/* MONTHLY CALENDAR */}
+                        <RomanDayGrid
+                            month={currentDate.getMonth()}
+                            year={currentDate.getFullYear()}
+                            today={currentDate.getDate()}
+                        />
 
                         {/* BOTTOM: Festival */}
                         {info.festivalName && (
