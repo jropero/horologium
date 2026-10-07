@@ -575,7 +575,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   useEffect(() => {
     const date = currentDate ?? new Date();
     setBabData(getBabylonianDate(date, currentLat, currentLng));
-    setMeta(getBabylonianCalendarMeta(date));
+    setMeta(getBabylonianCalendarMeta(date, currentLat, currentLng));
   }, [currentDate, currentLat, currentLng]);
 
   const skylineElements = useMemo(

@@ -9,7 +9,10 @@ import { BabylonianDate, BABYLONIAN_MONTHS } from '../types/babylonia';
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const SYNODIC_MONTH = 29.530588853;
-const KNOWN_NEW_MOON_JD = 2451550.260; // Jan 6 2000 18:14 UTC → JD verified
+
+// Minimum moon age (days after conjunction) before the crescent can be visible.
+// At 0.75 days (18 h) the moon has enough elongation to be seen at sunset.
+const CRESCENT_MIN_AGE = 0.75;
 
 // ─── Planetary rulers (Chaldean order) ───────────────────────────────────────
 
@@ -54,16 +57,84 @@ const toJD = (date: Date): number =>
 const getSpringEquinoxJD = (year: number): number =>
   2451623.80984 + 365242.37404 * ((year - 2000) / 1000);
 
-const getNewMoonOnOrAfter = (jd: number): number => {
-  const daysSince = jd - KNOWN_NEW_MOON_JD;
-  let n = Math.ceil(daysSince / SYNODIC_MONTH);
-  let nm = KNOWN_NEW_MOON_JD + n * SYNODIC_MONTH;
-  while (nm < jd) { n++; nm = KNOWN_NEW_MOON_JD + n * SYNODIC_MONTH; }
-  return nm;
+// Meeus "Astronomical Algorithms" ch. 47 — true new moon JDE with perturbations.
+// Accurate to ~2 minutes; eliminates the ±14 h error of the mean lunation formula.
+const trueNewMoonJDE = (k: number): number => {
+  const T  = k / 1236.85;
+  const T2 = T * T, T3 = T2 * T, T4 = T3 * T;
+  let JDE = 2451550.09766
+    + 29.530588861 * k
+    + 0.00015437  * T2
+    - 0.000000150 * T3
+    + 0.00000000073 * T4;
+  const rad = Math.PI / 180;
+  const M      = (2.5534      + 29.10535670  * k - 0.0000014  * T2 - 0.00000011   * T3) * rad;
+  const Mprime = (201.5643    + 385.81693528 * k + 0.0107582  * T2 + 0.00001238   * T3 - 0.000000058 * T4) * rad;
+  const F      = (160.7108    + 390.67050284 * k - 0.0016118  * T2 - 0.00000227   * T3 + 0.000000011 * T4) * rad;
+  const Omega  = (124.7746    - 1.56375588   * k + 0.0020672  * T2 + 0.00000215   * T3) * rad;
+  const E = 1 - 0.002516 * T - 0.0000074 * T2;
+  const E2 = E * E;
+  JDE +=
+    -0.40720 * Math.sin(Mprime)
+    + 0.17241 * E   * Math.sin(M)
+    + 0.01608        * Math.sin(2 * Mprime)
+    + 0.01039        * Math.sin(2 * F)
+    + 0.00739 * E   * Math.sin(Mprime - M)
+    - 0.00514 * E   * Math.sin(Mprime + M)
+    + 0.00208 * E2  * Math.sin(2 * M)
+    - 0.00111        * Math.sin(Mprime - 2 * F)
+    - 0.00057        * Math.sin(Mprime + 2 * F)
+    + 0.00056 * E   * Math.sin(2 * Mprime + M)
+    - 0.00042        * Math.sin(3 * Mprime)
+    + 0.00042 * E   * Math.sin(M + 2 * F)
+    + 0.00038 * E   * Math.sin(M - 2 * F)
+    - 0.00024 * E   * Math.sin(2 * Mprime - M)
+    - 0.00017        * Math.sin(Omega)
+    - 0.00007        * Math.sin(Mprime + 2 * M)
+    + 0.00004        * Math.sin(2 * Mprime - 2 * F)
+    + 0.00004        * Math.sin(3 * M)
+    + 0.00003        * Math.sin(Mprime + M - 2 * F)
+    + 0.00003        * Math.sin(2 * Mprime + 2 * F)
+    - 0.00003        * Math.sin(Mprime + M + 2 * F)
+    + 0.00003        * Math.sin(Mprime - M + 2 * F)
+    - 0.00002        * Math.sin(Mprime - M - 2 * F)
+    - 0.00002        * Math.sin(3 * Mprime + M)
+    + 0.00002        * Math.sin(4 * Mprime);
+  return JDE;
 };
 
-const getNisannu1JD = (gregYear: number): number =>
-  getNewMoonOnOrAfter(getSpringEquinoxJD(gregYear));
+// k index for a given decimal year (year + fractional month).
+const kForDecimalYear = (y: number): number => Math.round((y - 2000) * 12.3685);
+
+// First new moon whose crescent (first local sunset ≥ CRESCENT_MIN_AGE after conjunction)
+// falls on or after the spring equinox. Uses the observer's GPS location so that
+// e.g. a user in Reykjavik vs Auckland gets the astronomically correct sunset reference.
+const getNisannu1JD = (gregYear: number, lat: number, lng: number): number => {
+  const equinoxJD = getSpringEquinoxJD(gregYear);
+  // Start ~35 days before equinox to catch the edge case where the previous lunation's
+  // crescent qualifies (new moon before equinox but crescent after).
+  const searchStart = equinoxJD - 35;
+  const approxYear = 2000 + (searchStart - 2451545.0) / 365.25;
+  let k = kForDecimalYear(approxYear) - 1;
+  for (let attempt = 0; attempt < 5; attempt++, k++) {
+    const conjJD = trueNewMoonJDE(k);
+    // Check up to 3 consecutive sunsets until we find one ≥ CRESCENT_MIN_AGE after conjunction.
+    for (let offset = 1; offset <= 3; offset++) {
+      const checkDate = new Date((conjJD - 2440587.5 + offset) * 86400000);
+      const { sunset } = getSunTimes(checkDate, lat, lng);
+      const sunsetJD = toJD(sunset);
+      if (sunsetJD - conjJD < CRESCENT_MIN_AGE) continue; // moon too young
+      if (sunsetJD >= equinoxJD) return conjJD;           // crescent after equinox → Nisannu
+      break;                                               // crescent before equinox → next lunation
+    }
+  }
+  // Fallback: first conjunction strictly after equinox (should not normally be reached)
+  const approxFallback = 2000 + (equinoxJD - 2451545.0) / 365.25;
+  let kf = kForDecimalYear(approxFallback) - 1;
+  let nm = trueNewMoonJDE(kf);
+  while (nm < equinoxJD) { kf++; nm = trueNewMoonJDE(kf); }
+  return nm;
+};
 
 // ─── Derived helpers ──────────────────────────────────────────────────────────
 
@@ -161,12 +232,12 @@ export interface BabylonianCalendarMeta {
   seYear: number;
 }
 
-export const getBabylonianCalendarMeta = (date: Date): BabylonianCalendarMeta => {
+export const getBabylonianCalendarMeta = (date: Date, lat: number, lng: number): BabylonianCalendarMeta => {
   const gregYear = date.getFullYear();
 
-  let nisannu1JD = getNisannu1JD(gregYear);
+  let nisannu1JD = getNisannu1JD(gregYear, lat, lng);
   const currentJD = toJD(date);
-  if (currentJD < nisannu1JD) nisannu1JD = getNisannu1JD(gregYear - 1);
+  if (currentJD < nisannu1JD) nisannu1JD = getNisannu1JD(gregYear - 1, lat, lng);
 
   const nisannu1Date = new Date((nisannu1JD - 2440587.5) * 86400000);
   const nisannuGregYear = nisannu1Date.getFullYear();
@@ -176,7 +247,7 @@ export const getBabylonianCalendarMeta = (date: Date): BabylonianCalendarMeta =>
   const springEquinoxDate = new Date((equinoxJD - 2440587.5) * 86400000);
   const driftDays = Math.max(0, Math.round(nisannu1JD - equinoxJD));
 
-  const nextNisannu1JD = getNisannu1JD(nisannuGregYear + 1);
+  const nextNisannu1JD = getNisannu1JD(nisannuGregYear + 1, lat, lng);
   const yearLengthMonths = (nextNisannu1JD - nisannu1JD) / SYNODIC_MONTH;
   const isIntercalaryYear = yearLengthMonths > 12.5;
 
@@ -195,13 +266,13 @@ export const getBabylonianCalendarMeta = (date: Date): BabylonianCalendarMeta =>
   const intercalaryPositions: number[] = [];
   for (let pos = 1; pos <= 19; pos++) {
     const checkGreg = (cycleStartSE + pos - 1) - 311;
-    const checkNisannu = getNisannu1JD(checkGreg);
-    const checkNext = getNisannu1JD(checkGreg + 1);
+    const checkNisannu = getNisannu1JD(checkGreg, lat, lng);
+    const checkNext = getNisannu1JD(checkGreg + 1, lat, lng);
     if ((checkNext - checkNisannu) / SYNODIC_MONTH > 12.5) intercalaryPositions.push(pos);
   }
 
   // Is the immediately following Babylonian year intercalary?
-  const nextNisannu1JD2 = getNisannu1JD(nisannuGregYear + 2);
+  const nextNisannu1JD2 = getNisannu1JD(nisannuGregYear + 2, lat, lng);
   const nextYearIsIntercalary = (nextNisannu1JD2 - nextNisannu1JD) / SYNODIC_MONTH > 12.5;
 
   return {
@@ -265,12 +336,12 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
   const gregYear = calendarDate.getFullYear();
 
   // Find this Babylonian year's Nisannu 1
-  let nisannu1JD = getNisannu1JD(gregYear);
+  let nisannu1JD = getNisannu1JD(gregYear, lat, lng);
   const currentJD = toJD(calendarDate);
 
   if (currentJD < nisannu1JD) {
     // Before this year's Nisannu — we're still in last year's Babylonian year
-    nisannu1JD = getNisannu1JD(gregYear - 1);
+    nisannu1JD = getNisannu1JD(gregYear - 1, lat, lng);
   }
 
   // SE year based on which Gregorian year Nisannu 1 falls in
@@ -284,7 +355,7 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
   const dayInMonth = Math.floor(daysSinceNisannu % SYNODIC_MONTH) + 1;
 
   // Intercalary year: next Nisannu more than 12.5 months away?
-  const nextNisannu1JD = getNisannu1JD(nisannuGregYear + 1);
+  const nextNisannu1JD = getNisannu1JD(nisannuGregYear + 1, lat, lng);
   const yearLengthMonths = (nextNisannu1JD - nisannu1JD) / SYNODIC_MONTH;
   const isIntercalaryYear = yearLengthMonths > 12.5;
   const totalMonths = isIntercalaryYear ? 13 : 12;

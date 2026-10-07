@@ -21,6 +21,7 @@ export function getTimezoneForLocation(lat: number, lng: number): string | undef
 export const LOCATIONS: LocationItem[] = [
     { id: 'gps', name: 'Actual (GPS)', icon: Navigation, lat: null, lng: null },
     { id: 'basilea', name: 'Basilea', icon: MapPin, lat: 47.5546368, lng: 7.5532081, timezone: 'Europe/Zurich' },
+    { id: 'barcelona', name: 'Barcelona', icon: MapPin, lat: 41.3828939, lng: 2.1774322, timezone: 'Europe/Madrid' },
     { id: 'parla', name: 'Parla', icon: MapPin, lat: 40.2348316, lng: -3.7876793, timezone: 'Europe/Madrid' },
     { id: 'lagartera', name: 'Lagartera', icon: MapPin, lat: 39.9071497, lng: -5.2106728, timezone: 'Europe/Madrid' },
     { id: 'corral', name: 'Corral de Almaguer', icon: MapPin, lat: 39.7608446, lng: -3.1667764, timezone: 'Europe/Madrid' },
