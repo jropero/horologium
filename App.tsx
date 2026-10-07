@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
 import RomanClock from './components/RomanClock';
 import EgyptianClock from './components/EgyptianClock';
 import ChineseClock from './components/ChineseClock'; // Added
@@ -9,7 +8,7 @@ import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
 import SolarTimes from './components/SolarTimes';
-import { RomanTimeData } from './types';
+import { RomanTimeData, WeatherCondition, WeatherData } from './types';
 import { calculateRomanTime } from './utils/romanTimeUtils';
 import { calculateHellenicTime } from './utils/hellenicTimeUtils';
 import { calculateEgyptianTime } from './utils/egyptianTimeUtils';
@@ -48,21 +47,10 @@ const AppContent: React.FC = () => {
     }
     return new Date();
   });
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    const saved = localStorage.getItem('romanClockTheme');
-    return (saved as 'dark' | 'light') || 'dark';
-  });
-
-  // Handle theme and civilization background changes
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', 'dark');
     document.documentElement.setAttribute('data-civ', civilization);
-    localStorage.setItem('romanClockTheme', theme);
-  }, [theme, civilization]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
+  }, [civilization]);
 
   // Initialize location from localStorage if available, otherwise default
   const [latitude, setLatitude] = useState<number>(() => {
@@ -143,6 +131,18 @@ const AppContent: React.FC = () => {
 
   // Weather Data
   const { weather } = useWeather(latitude, longitude);
+  const [devWeatherCode, setDevWeatherCode] = useState<number | null>(null);
+
+  const DEV_CONDITION_MAP: Record<number, WeatherCondition> = {
+    0: 'clear', 3: 'cloudy', 45: 'fog', 61: 'rain', 65: 'rain', 82: 'rain', 95: 'storm', 99: 'storm', 73: 'snow',
+  };
+  const effectiveWeather: WeatherData | null = useMemo(() => {
+    if (devWeatherCode === null || !weather) return weather;
+    return {
+      ...weather,
+      current: { ...weather.current, code: devWeatherCode, condition: DEV_CONDITION_MAP[devWeatherCode] ?? 'clear' },
+    };
+  }, [weather, devWeatherCode]);
 
   const handleUpdateLocation = (lat: number, lng: number) => {
     setLoading(true);
@@ -155,21 +155,29 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
       
-      {/* Mobile Theme Toggle and Location */}
+      {/* Mobile Location + Dev Weather Selector */}
       <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end gap-1.5">
-        <button 
-          onClick={toggleTheme}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-ink/90 backdrop-blur-md border border-gold-dim/40 shadow-lg text-gold-leaf hover:bg-ink transition-all active:scale-95"
-          aria-label="Toggle Theme"
-        >
-          {theme === 'dark' ? <Sun className="w-4 h-4 animate-spin-slow" /> : <Moon className="w-4 h-4" />}
-        </button>
         <button
           onClick={() => setIsLocationModalOpen(true)}
           className="text-[10px] font-serif tracking-widest uppercase text-gold-dim/80 bg-ink/80 px-2.5 py-1 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg active:scale-95 transition-all max-w-[100px] truncate"
         >
           {currentLocationName}
         </button>
+        <select
+          value={devWeatherCode ?? ''}
+          onChange={e => setDevWeatherCode(e.target.value === '' ? null : Number(e.target.value))}
+          className="text-[9px] font-serif uppercase tracking-wider text-gold-dim/70 bg-ink/80 px-2 py-0.5 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg appearance-none cursor-pointer"
+        >
+          <option value="">Tiempo real</option>
+          <option value="0">Despejado</option>
+          <option value="3">Nublado</option>
+          <option value="45">Niebla</option>
+          <option value="61">Lluvia leve</option>
+          <option value="65">Lluvia intensa</option>
+          <option value="82">Lluvia violenta</option>
+          <option value="95">Tormenta</option>
+          <option value="73">Nieve</option>
+        </select>
       </div>
 
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
@@ -187,8 +195,14 @@ const AppContent: React.FC = () => {
       {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
         <EgyptianCalendarInfo currentDate={modernTime} />
       )}
+
       {civilization !== 'zhongguo' && civilization === 'babylonia' && (
-        <BabylonianCalendarInfo currentDate={modernTime} />
+        <BabylonianCalendarInfo
+          currentDate={modernTime}
+          weather={effectiveWeather}
+          currentLat={latitude}
+          currentLng={longitude}
+        />
       )}
 
       {romanTimeData && (
@@ -198,7 +212,7 @@ const AppContent: React.FC = () => {
               modernTime={modernTime}
               romanTime={romanTimeData}
               loading={loading}
-              weather={weather}
+              weather={effectiveWeather}
               onUpdateLocation={handleUpdateLocation}
               currentLat={latitude}
               currentLng={longitude}
@@ -209,7 +223,7 @@ const AppContent: React.FC = () => {
             <BabylonianClock
               modernTime={modernTime}
               loading={loading}
-              weather={weather}
+              weather={effectiveWeather}
               onUpdateLocation={handleUpdateLocation}
               currentLat={latitude}
               currentLng={longitude}
@@ -219,7 +233,7 @@ const AppContent: React.FC = () => {
               modernTime={modernTime}
               romanTime={romanTimeData}
               loading={loading}
-              weather={weather}
+              weather={effectiveWeather}
               onUpdateLocation={handleUpdateLocation}
               currentLat={latitude}
               currentLng={longitude}
@@ -255,8 +269,6 @@ const AppContent: React.FC = () => {
           longitude={longitude}
           onUpdateLocation={handleUpdateLocation}
           onRefreshTime={() => setModernTime(new Date())}
-          theme={theme}
-          onToggleTheme={toggleTheme}
         />
       )}
 
@@ -268,7 +280,7 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {civilization !== 'zhongguo' && <InfoSection />}
+      <InfoSection />
 
       <GreekCalendarModal
         isOpen={isGreekCalendarOpen}
