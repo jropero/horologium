@@ -11,6 +11,7 @@ import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
 import { OVID_ASTRONOMICAL_EVENTS, OVID_WEATHER_QUOTES } from '../utils/ovidFastiData';
+import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -21,6 +22,7 @@ interface RomanClockProps {
   currentLat: number;
   currentLng: number;
 }
+
 
 const RomanClock: React.FC<RomanClockProps> = ({
   modernTime,
@@ -74,28 +76,10 @@ const RomanClock: React.FC<RomanClockProps> = ({
     return null;
   }, [weather, civilization]);
 
-  // Efectos de clima pre-calculados para que la aleatoriedad sea estable entre re-renders
-  const weatherParticles = useMemo(() => {
-    return {
-      rain: Array.from({ length: 40 }).map(() => ({
-        x: Math.random() * 300,
-        y: -30 - Math.random() * 50,
-        length: Math.random() * 15 + 10,
-        width: Math.random() * 0.5 + 0.5,
-        opacity: Math.random() * 0.5 + 0.2,
-        dur: 0.5 + Math.random() * 0.4,
-        drift: -5 - Math.random() * 10
-      })),
-      snow: Array.from({ length: 30 }).map(() => ({
-        x: Math.random() * 300,
-        y: -20 - Math.random() * 50,
-        r: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.6 + 0.4,
-        dur: 3 + Math.random() * 4,
-        drift: -20 + Math.random() * 40
-      }))
-    };
-  }, []);
+  const rainCode = weather?.current.code ?? 63;
+  const rainIntensity = RAIN_INTENSITY[rainCode] ?? 0.45;
+
+  const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity), [rainIntensity]);
 
   const progressPercent = useMemo(() => {
     if (!romanTime) return 0;
@@ -180,6 +164,8 @@ const RomanClock: React.FC<RomanClockProps> = ({
     );
   };
 
+  const weatherCond = weather?.current.condition ?? 'clear';
+
   if (loading) {
     return (
       <div className="w-full h-96 flex items-center justify-center bg-ink border-4 border-gold-dim rounded-lg ">
@@ -209,6 +195,16 @@ const RomanClock: React.FC<RomanClockProps> = ({
               className="absolute inset-0 transition-all duration-1000"
               style={{
                 background: (() => {
+                  if (weatherCond === 'fog') {
+                    return romanTime.isDay
+                      ? 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)'
+                      : 'linear-gradient(to bottom, #1f2937 0%, #374151 100%)';
+                  }
+                  if (weatherCond === 'snow') {
+                    return romanTime.isDay
+                      ? 'linear-gradient(to bottom, #6b7280 0%, #9ca3af 40%, #e5e7eb 100%)'
+                      : 'linear-gradient(to bottom, #111827 0%, #1f2937 60%, #374151 100%)';
+                  }
                   if (romanTime.isDay) {
                     if (progressPercent < 0.15) {
                       // Amanecer
@@ -227,6 +223,10 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 opacity: 1
               }}
             ></div>
+
+            {weatherCond === 'storm' && (
+              <div className="absolute inset-0 bg-white opacity-0 anim-lightning pointer-events-none z-10" />
+            )}
 
             <div className="absolute inset-0 flex items-center justify-center">
               <svg viewBox="0 0 300 200" className="w-full h-full">
@@ -252,7 +252,12 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 <path d="M 30 180 A 120 120 0 0 1 270 180" fill="none" stroke="#cfb53b" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
 
                 {/* CAPA 2: El Sol y la Luna (detrás de las montañas/suelo) */}
-                <g transform={`translate(${objectX}, ${objectY})`}>
+                <g
+                  transform={`translate(${objectX}, ${objectY})`}
+                  style={(weatherCond === 'rain' || weatherCond === 'storm' || weatherCond === 'snow') && romanTime.isDay
+                    ? { filter: 'blur(2.5px)', opacity: 0.45 }
+                    : undefined}
+                >
                   {romanTime.isDay ? (
                     <g className="animate-[spin_20s_linear_infinite]">
                       <circle r="10" fill="#cfb53b" stroke="#8a7826" strokeWidth="1" />
@@ -269,31 +274,53 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 </g>
 
                 {/* CAPA 2.5: Efectos climáticos (Lluvia, Nieve, Nubes y Rayos) */}
-                {weather && weather.current.condition !== 'clear' && (
-                  <g className="weather-effects pointer-events-none" style={{ mixBlendMode: 'screen' }}>
+                {weatherCond !== 'clear' && (
+                  <g className="weather-effects pointer-events-none">
 
-                    {/* Nubes Ligeras o Niebla */}
-                    {(weather.current.condition === 'cloudy' || weather.current.condition === 'fog') && (
+                    {/* Nubes */}
+                    {weatherCond === 'cloudy' && (
                       <g opacity="0.4">
                         <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
                         <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
                       </g>
                     )}
 
+                    {/* Niebla: bandas horizontales + neblina de suelo */}
+                    {weatherCond === 'fog' && (
+                      <g>
+                        <rect x="-10" y="115" width="320" height="90" fill="url(#fog-ground)" opacity="0.85" />
+                        <ellipse cx="70"  cy="105" rx="130" ry="14" fill="#e5e7eb" opacity="0.5" className="anim-cloud-slow" />
+                        <ellipse cx="220" cy="95"  rx="110" ry="11" fill="#f3f4f6" opacity="0.4" className="anim-cloud-fast" />
+                        <ellipse cx="150" cy="120" rx="160" ry="16" fill="#e5e7eb" opacity="0.55" className="anim-cloud-slow" />
+                        <defs>
+                          <linearGradient id="fog-ground" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%"   stopColor="#d1d5db" stopOpacity="0" />
+                            <stop offset="40%"  stopColor="#d1d5db" stopOpacity="0.7" />
+                            <stop offset="100%" stopColor="#e5e7eb" stopOpacity="0.95" />
+                          </linearGradient>
+                        </defs>
+                      </g>
+                    )}
+
+                    {/* Nieve: nubes grises bajas */}
+                    {weatherCond === 'snow' && (
+                      <g opacity="0.6">
+                        <path d="M -50 30 Q 60 5 140 35 T 350 20 L 350 -20 L -50 -20 Z" fill="#6b7280" className="anim-cloud-slow" />
+                        <path d="M -50 60 Q 80 35 170 55 T 350 50 L 350 -20 L -50 -20 Z" fill="#9ca3af" opacity="0.7" className="anim-cloud-fast" />
+                      </g>
+                    )}
+
                     {/* Tormenta: Nubes oscuras espesas y Relámpagos */}
-                    {(weather.current.condition === 'storm' || weather.current.condition === 'rain') && (
+                    {(weatherCond === 'storm' || weatherCond === 'rain') && (
                       <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity="0.6">
                         <path d="M -50 50 Q 30 20 80 40 T 180 30 T 280 50 T 350 30 L 350 -20 L -50 -20 Z" fill="#1e293b" />
                         <path d="M -50 80 Q 70 50 160 80 T 350 60 L 350 -20 L -50 -20 Z" fill="#0f172a" opacity="0.8" />
                       </g>
                     )}
 
-                    {weather.current.condition === 'storm' && (
-                      <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />
-                    )}
 
                     {/* Lluvia */}
-                    {(weather.current.condition === 'rain' || weather.current.condition === 'storm') && (
+                    {(weatherCond === 'rain' || weatherCond === 'storm') && (
                       <g>
                         {weatherParticles.rain.map((drop, i) => (
                           <line
@@ -306,14 +333,14 @@ const RomanClock: React.FC<RomanClockProps> = ({
                             strokeWidth={drop.width}
                             opacity={drop.opacity}
                             className="anim-fall"
-                            style={{ '--drift': `${drop.drift * 10}px`, '--dur': `${drop.dur}s` } as React.CSSProperties}
+                            style={{ '--drift': `${drop.driftPx}px`, '--dur': `${drop.dur}s`, animationDelay: `${drop.delay}s` } as React.CSSProperties}
                           />
                         ))}
                       </g>
                     )}
 
                     {/* Nieve */}
-                    {weather.current.condition === 'snow' && (
+                    {weatherCond === 'snow' && (
                       <g>
                         {weatherParticles.snow.map((flake, i) => (
                           <circle
@@ -324,7 +351,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
                             fill="#ffffff"
                             opacity={flake.opacity}
                             className="anim-fall"
-                            style={{ '--drift': `${flake.drift}px`, '--dur': `${flake.dur}s` } as React.CSSProperties}
+                            style={{ '--drift': `${flake.drift}px`, '--dur': `${flake.dur}s`, animationDelay: `${flake.delay}s` } as React.CSSProperties}
                           />
                         ))}
                       </g>
@@ -333,7 +360,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 )}
 
                 {/* CAPA 3: El suelo oscuro y el Skyline Procedural */}
-                <g className="city-skyline">
+                <g className="city-skyline" style={weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}>
                   {skylineElements.map(el => (
                     <path
                       key={el.id}
@@ -345,8 +372,11 @@ const RomanClock: React.FC<RomanClockProps> = ({
                     />
                   ))}
                 </g>
-                <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill="var(--ink)" />
-                <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill="var(--ink)" stroke="var(--gold-dim)" strokeWidth="1" />
+                <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} />
+                <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} stroke={weatherCond === 'snow' ? '#f0f4f8' : 'var(--gold-dim)'} strokeWidth="1" />
+                {weatherCond === 'snow' && (
+                  <path d="M 0 180 Q 50 173 100 180 T 200 178 T 300 180 V 175 Q 250 172 200 175 T 100 177 T 0 175 Z" fill="#f0f4f8" opacity="0.9" />
+                )}
 
                 {/* CAPA 4: El Gnomon (Día) o La Clepsidra (Noche) */}
                 <defs>
