@@ -141,9 +141,81 @@ export const getMoonPhase = (date: Date): number => {
     - 1.274 * Math.sin((2 * D - M_) * RAD)
     + 0.658 * Math.sin(2 * D * RAD)
     - 0.114 * Math.sin(2 * M_ * RAD)
-    - 0.055 * Math.sin(2 * D - 2 * M_ * RAD);
+    - 0.055 * Math.sin((2 * D - 2 * M_) * RAD);
 
   // Normalize to 0-1 (0 = new moon, 0.25 = first quarter, 0.5 = full moon, 0.75 = last quarter)
   const phase = (elongation % 360 + 360) % 360 / 360;
   return phase;
+};
+
+// ── Meeus Ch. 47 shared functions ─────────────────────────────────────────────
+// k = lunation number relative to J2000.0 epoch (Jan 6, 2000 new moon)
+
+export const kForJDE = (jd: number): number =>
+  Math.round((jd - 2451550.09766) / 29.530588861);
+
+// True new moon JDE with ~2-minute accuracy (Meeus Ch. 47, full perturbation series).
+export const trueNewMoonJDE = (k: number): number => {
+  const T = k / 1236.85;
+  const T2 = T * T;
+  const T3 = T2 * T;
+  const T4 = T3 * T;
+  let JDE = 2451550.09766 + 29.530588861 * k
+    + 0.00015437 * T2 - 0.000000150 * T3 + 0.00000000073 * T4;
+  const E = 1 - 0.002516 * T - 0.0000074 * T2;
+  const E2 = E * E;
+  const M  = (2.5534 + 29.10535670 * k - 0.0000014 * T2 - 0.00000011 * T3) * RAD;
+  const M_ = (201.5643 + 385.81693528 * k + 0.0107582 * T2 + 0.00001238 * T3 - 0.000000058 * T4) * RAD;
+  const F  = (160.7108 + 390.67050284 * k - 0.0016118 * T2 - 0.00000227 * T3 + 0.000000011 * T4) * RAD;
+  const Om = (124.7746 - 1.56375588 * k + 0.0020672 * T2 + 0.00000215 * T3) * RAD;
+  JDE +=
+    -0.40720 * Math.sin(M_)
+    + 0.17241 * E * Math.sin(M)
+    + 0.01608 * Math.sin(2 * M_)
+    + 0.01039 * Math.sin(2 * F)
+    + 0.00739 * E * Math.sin(M_ - M)
+    - 0.00514 * E * Math.sin(M_ + M)
+    + 0.00208 * E2 * Math.sin(2 * M)
+    - 0.00111 * Math.sin(M_ - 2 * F)
+    - 0.00057 * Math.sin(M_ + 2 * F)
+    + 0.00056 * E * Math.sin(2 * M_ + M)
+    - 0.00042 * Math.sin(3 * M_)
+    + 0.00042 * E * Math.sin(M + 2 * F)
+    + 0.00038 * E * Math.sin(M - 2 * F)
+    - 0.00024 * E * Math.sin(2 * M_ - M)
+    - 0.00017 * Math.sin(Om)
+    - 0.00007 * Math.sin(M_ + 2 * M)
+    + 0.00004 * Math.sin(2 * M_ - 2 * F)
+    + 0.00004 * Math.sin(3 * M)
+    + 0.00003 * Math.sin(M_ + M - 2 * F)
+    + 0.00003 * Math.sin(2 * M_ + 2 * F)
+    - 0.00003 * Math.sin(M_ + M + 2 * F)
+    + 0.00003 * Math.sin(M_ - M + 2 * F)
+    - 0.00002 * Math.sin(M_ - M - 2 * F)
+    - 0.00002 * Math.sin(3 * M_ + M)
+    + 0.00002 * Math.sin(4 * M_);
+  return JDE;
+};
+
+// Most recent new moon JDE on or before jd.
+export const prevNewMoonJDE = (jd: number): number => {
+  let k = kForJDE(jd);
+  let nm = trueNewMoonJDE(k);
+  if (nm > jd) { k--; nm = trueNewMoonJDE(k); }
+  const nmNext = trueNewMoonJDE(k + 1);
+  return nmNext <= jd ? nmNext : nm;
+};
+
+// Next new moon JDE strictly after jd.
+export const nextNewMoonJDE = (jd: number): number => {
+  let k = kForJDE(jd) + 1;
+  let nm = trueNewMoonJDE(k);
+  while (nm <= jd) { k++; nm = trueNewMoonJDE(k); }
+  return nm;
+};
+
+// Meeus Table 27.a — December solstice JDE (Sun at ecliptic lon 270°).
+export const winterSolsticeJDE = (year: number): number => {
+  const T = (year - 2000) / 1000;
+  return 2451900.05952 + 365242.88257 * T - 0.00325 * T * T;
 };
