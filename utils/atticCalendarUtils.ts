@@ -169,7 +169,11 @@ const getAtticMonthFromDate = (date: Date): {
   const rawLength = Math.round((nextNewMoon.getTime() - newMoon.getTime()) / DAY_MS);
   const monthLength = Math.max(29, Math.min(rawLength, 30));
 
-  // Detect intercalary year (13 lunations between solstices)
+  // Detect intercalary year (13 lunations between solstices).
+  // Threshold of 370 d separates 12-lunation (~354 d) from 13-lunation (~384 d) years.
+  // This is a modern astronomical reconstruction — Athenian intercalation was decided
+  // ad hoc by the archon, not by a fixed rule. The Metonic cycle (7 intercalary months
+  // per 19 years) was known from 432 BC but its use in the civil calendar is disputed.
   const nextYearStart = getAtticYearStart(yearStart.getFullYear() + 1);
   const yearDays = (nextYearStart.getTime() - yearStart.getTime()) / DAY_MS;
   const isIntercalaryYear = yearDays > 370;
