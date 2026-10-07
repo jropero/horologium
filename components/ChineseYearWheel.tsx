@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SOLAR_TERMS } from '../utils/chineseCalendarData';
+import { WeatherData } from '../types';
+import { generateWeatherParticles, RAIN_INTENSITY } from '../utils/weatherParticles';
 
 interface Props {
   currentTermIndex: number; // 0-based (0=立春 … 23=大寒)
+  weather?: WeatherData | null;
 }
 
 const CX = 160, CY = 160;
@@ -47,9 +50,120 @@ const progressArcPath = (termIndex: number): string => {
   return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
 };
 
-const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex }) => {
+// Cloud-puff blobs: overlapping ellipses at (cx, cy, rx, ry, drift class)
+const CLOUD_PUFFS: [number, number, number, number, string][] = [
+  [78,  102, 62, 20, 'anim-cloud-slow'],
+  [72,  86,  40, 14, 'anim-cloud-fast'],
+  [242, 108, 58, 19, 'anim-cloud-slow'],
+  [248, 92,  36, 13, 'anim-cloud-fast'],
+  [162, 62,  48, 17, 'anim-cloud-slow'],
+  [168, 258, 52, 18, 'anim-cloud-fast'],
+  [62,  210, 44, 15, 'anim-cloud-slow'],
+  [258, 212, 46, 16, 'anim-cloud-fast'],
+];
+
+interface WheelWeatherProps {
+  condition: string;
+  rain: ReturnType<typeof generateWeatherParticles>['rain'];
+  snow: ReturnType<typeof generateWeatherParticles>['snow'];
+}
+
+const WheelWeatherOverlay: React.FC<WheelWeatherProps> = ({ condition, rain, snow }) => {
+  const showClouds = condition === 'cloudy';
+  const showRainClouds = condition === 'rain' || condition === 'storm';
+  const showFog = condition === 'fog';
+  const showRain = condition === 'rain' || condition === 'storm';
+  const showSnow = condition === 'snow';
+  const showLightning = condition === 'storm';
+
+  return (
+    <svg
+      aria-hidden
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      viewBox="0 0 320 320"
+    >
+      <defs>
+        <clipPath id="wheel-clip-zh">
+          <circle cx={CX} cy={CY} r={OUTER_R + 12} />
+        </clipPath>
+        <radialGradient id="fog-zh-radial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stopColor="#d1d5db" stopOpacity="0.05" />
+          <stop offset="60%"  stopColor="#d1d5db" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#e5e7eb" stopOpacity="0.45" />
+        </radialGradient>
+      </defs>
+
+      <g clipPath="url(#wheel-clip-zh)">
+        {/* Fog: radial veil + drifting fog wisps */}
+        {showFog && (
+          <g opacity={0.55}>
+            <circle cx={CX} cy={CY} r={OUTER_R + 12} fill="url(#fog-zh-radial)" />
+            <ellipse cx="60"  cy="130" rx="120" ry="22" fill="#e5e7eb" opacity="0.35" className="anim-cloud-slow" />
+            <ellipse cx="260" cy="160" rx="100" ry="18" fill="#f3f4f6" opacity="0.28" className="anim-cloud-fast" />
+            <ellipse cx="155" cy="195" rx="130" ry="20" fill="#e5e7eb" opacity="0.32" className="anim-cloud-slow" />
+            <ellipse cx="160" cy="108" rx="110" ry="16" fill="#f3f4f6" opacity="0.25" className="anim-cloud-fast" />
+          </g>
+        )}
+
+        {/* Clear sky cloud puffs (cloudy / snow) */}
+        {showClouds && (
+          <g opacity={0.22} fill="#cbd5e1">
+            {CLOUD_PUFFS.map(([cx, cy, rx, ry, cls], i) => (
+              <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} className={cls} />
+            ))}
+          </g>
+        )}
+
+        {/* Dark rain clouds */}
+        {showRainClouds && (
+          <g opacity={0.32} fill="#1e293b">
+            {CLOUD_PUFFS.map(([cx, cy, rx, ry, cls], i) => (
+              <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} className={cls} />
+            ))}
+          </g>
+        )}
+
+        {/* Rain drops */}
+        {showRain && rain.map((drop, i) => (
+          <line
+            key={i}
+            x1={drop.x} y1={drop.y}
+            x2={drop.x + drop.drift} y2={drop.y + drop.length}
+            stroke="#94a3b8"
+            strokeWidth={drop.width}
+            opacity={drop.opacity * 0.7}
+            className="anim-fall"
+            style={{ '--drift': `${drop.driftPx}px`, '--dur': `${drop.dur}s`, animationDelay: `${drop.delay}s` } as React.CSSProperties}
+          />
+        ))}
+
+        {/* Snowflakes */}
+        {showSnow && snow.map((flake, i) => (
+          <circle
+            key={i}
+            cx={flake.x} cy={flake.y} r={flake.r}
+            fill="#ffffff"
+            opacity={flake.opacity * 0.8}
+            className="anim-fall"
+            style={{ '--drift': `${flake.drift}px`, '--dur': `${flake.dur}s`, animationDelay: `${flake.delay}s` } as React.CSSProperties}
+          />
+        ))}
+
+        {/* Lightning flash */}
+        {showLightning && (
+          <rect x="0" y="0" width="320" height="320" fill="white" opacity="0.15" className="anim-lightning" />
+        )}
+      </g>
+    </svg>
+  );
+};
+
+const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
   const activeTerm = SOLAR_TERMS[currentTermIndex];
   const activeSeason = getSeason(currentTermIndex);
+  const condition = weather?.current.condition ?? 'clear';
+  const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 0] ?? 0;
+  const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity), [rainIntensity]);
 
   return (
     <div className="w-full bg-ink/90 border border-gold-dim/20 rounded-xl p-4 shadow-xl">
@@ -57,7 +171,8 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex }) => {
         节气 · Ciclo Solar
       </h3>
 
-      <svg width="100%" viewBox="0 0 320 320" className="mx-auto max-w-xs">
+      <div className="relative mx-auto max-w-xs">
+        <svg width="100%" viewBox="0 0 320 320">
         {/* ── Sectors ── */}
         {SOLAR_TERMS.map((term, idx) => {
           const season = getSeason(idx);
@@ -216,6 +331,16 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex }) => {
           {activeTerm?.translation}
         </text>
       </svg>
+
+        {/* ── Weather overlay ── */}
+        {condition !== 'clear' && (
+          <WheelWeatherOverlay
+            condition={condition}
+            rain={weatherParticles.rain}
+            snow={weatherParticles.snow}
+          />
+        )}
+      </div>
 
       {/* ── Season legend ── */}
       <div className="flex justify-center gap-3 mt-1 mb-4">
