@@ -12,6 +12,7 @@ import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
 import { OVID_ASTRONOMICAL_EVENTS, OVID_WEATHER_QUOTES } from '../utils/ovidFastiData';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
+import WeatherSvgEffects from './WeatherSvgEffects';
 
 interface RomanClockProps {
   modernTime: Date;
@@ -276,86 +277,11 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 {/* CAPA 2.5: Efectos climáticos (Lluvia, Nieve, Nubes y Rayos) */}
                 {weatherCond !== 'clear' && (
                   <g className="weather-effects pointer-events-none">
-
-                    {/* Nubes */}
-                    {weatherCond === 'cloudy' && (
-                      <g opacity="0.4">
-                        <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
-                        <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
-                      </g>
-                    )}
-
-                    {/* Niebla: bandas horizontales + neblina de suelo */}
-                    {weatherCond === 'fog' && (
-                      <g>
-                        <rect x="-10" y="115" width="320" height="90" fill="url(#fog-ground)" opacity="0.85" />
-                        <ellipse cx="70"  cy="105" rx="130" ry="14" fill="#e5e7eb" opacity="0.5" className="anim-cloud-slow" />
-                        <ellipse cx="220" cy="95"  rx="110" ry="11" fill="#f3f4f6" opacity="0.4" className="anim-cloud-fast" />
-                        <ellipse cx="150" cy="120" rx="160" ry="16" fill="#e5e7eb" opacity="0.55" className="anim-cloud-slow" />
-                        <defs>
-                          <linearGradient id="fog-ground" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%"   stopColor="#d1d5db" stopOpacity="0" />
-                            <stop offset="40%"  stopColor="#d1d5db" stopOpacity="0.7" />
-                            <stop offset="100%" stopColor="#e5e7eb" stopOpacity="0.95" />
-                          </linearGradient>
-                        </defs>
-                      </g>
-                    )}
-
-                    {/* Nieve: nubes grises bajas */}
-                    {weatherCond === 'snow' && (
-                      <g opacity="0.6">
-                        <path d="M -50 30 Q 60 5 140 35 T 350 20 L 350 -20 L -50 -20 Z" fill="#6b7280" className="anim-cloud-slow" />
-                        <path d="M -50 60 Q 80 35 170 55 T 350 50 L 350 -20 L -50 -20 Z" fill="#9ca3af" opacity="0.7" className="anim-cloud-fast" />
-                      </g>
-                    )}
-
-                    {/* Tormenta: Nubes oscuras espesas y Relámpagos */}
-                    {(weatherCond === 'storm' || weatherCond === 'rain') && (
-                      <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity="0.6">
-                        <path d="M -50 50 Q 30 20 80 40 T 180 30 T 280 50 T 350 30 L 350 -20 L -50 -20 Z" fill="#1e293b" />
-                        <path d="M -50 80 Q 70 50 160 80 T 350 60 L 350 -20 L -50 -20 Z" fill="#0f172a" opacity="0.8" />
-                      </g>
-                    )}
-
-
-                    {/* Lluvia */}
-                    {(weatherCond === 'rain' || weatherCond === 'storm') && (
-                      <g>
-                        {weatherParticles.rain.map((drop, i) => (
-                          <line
-                            key={`rain-${i}`}
-                            x1={drop.x}
-                            y1={drop.y}
-                            x2={drop.x + drop.drift}
-                            y2={drop.y + drop.length}
-                            stroke="#94a3b8"
-                            strokeWidth={drop.width}
-                            opacity={drop.opacity}
-                            className="anim-fall"
-                            style={{ '--drift': `${drop.driftPx}px`, '--dur': `${drop.dur}s`, animationDelay: `${drop.delay}s` } as React.CSSProperties}
-                          />
-                        ))}
-                      </g>
-                    )}
-
-                    {/* Nieve */}
-                    {weatherCond === 'snow' && (
-                      <g>
-                        {weatherParticles.snow.map((flake, i) => (
-                          <circle
-                            key={`snow-${i}`}
-                            cx={flake.x}
-                            cy={flake.y}
-                            r={flake.r}
-                            fill="#ffffff"
-                            opacity={flake.opacity}
-                            className="anim-fall"
-                            style={{ '--drift': `${flake.drift}px`, '--dur': `${flake.dur}s`, animationDelay: `${flake.delay}s` } as React.CSSProperties}
-                          />
-                        ))}
-                      </g>
-                    )}
+                    <WeatherSvgEffects
+                      condition={weatherCond}
+                      weatherParticles={weatherParticles}
+                      fogGradientId="fog-ground-roman"
+                    />
                   </g>
                 )}
 
