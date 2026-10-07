@@ -123,6 +123,15 @@ const DayStatusCard: React.FC<{
     ? SPECIAL_DAY_THEME[special.dot]
     : { text: 'text-blue-400', border: 'border-blue-700/30', bg: 'bg-blue-900/10', glow: '' };
 
+  // Plain day with no special designation and no event — just a text label
+  if (!special && !event) {
+    return (
+      <p className="font-serif text-xs uppercase tracking-[0.25em] text-blue-500/60 text-center">
+        Día {day} del mes
+      </p>
+    );
+  }
+
   return (
     <div className={`w-full border ${theme.border} ${theme.bg} ${theme.glow} rounded-sm shadow-lg text-center flex flex-col items-center gap-4 p-5 relative overflow-hidden`}>
 
@@ -130,40 +139,12 @@ const DayStatusCard: React.FC<{
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-400 via-transparent to-transparent pointer-events-none" />
       )}
 
-      {/* Special day name — equivalent to Roman "Nonae" / "Idus" header */}
-      {special ? (
+      {special && (
         <div className={`border-b border-blue-600/40 pb-2 w-full flex items-center justify-center gap-3`}>
           <span className="text-2xl filter drop-shadow-md">{SPECIAL_DAY_ICON[special.dot]}</span>
           <h3 className={`font-serif text-lg uppercase tracking-[0.2em] font-bold ${theme.text}`}>
             {special.label}
           </h3>
-        </div>
-      ) : (
-        <div className="border-b border-blue-600/30 pb-2 w-full flex items-center justify-center gap-3">
-          <span className="text-xl opacity-50">𒀭</span>
-          <h3 className="font-serif text-sm uppercase tracking-[0.25em] text-blue-500">
-            Día {day} del mes
-          </h3>
-        </div>
-      )}
-
-      {/* Deity of the day — equivalent to Roman "Deus Hodiernus" */}
-      {lore && (
-        <div className="flex flex-col items-center gap-2 w-full bg-blue-950/30 p-5 rounded border border-blue-800/25 shadow-inner">
-          <div className="text-blue-300 text-[10px] uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
-            <span className="opacity-40">—</span>
-            Dios Hodiernus
-            <span className="opacity-40">—</span>
-          </div>
-          <span className="text-3xl mb-1">{lore.icon}</span>
-          <h2 className="text-3xl md:text-4xl font-serif font-black text-parchment drop-shadow-md uppercase tracking-wider">
-            {lore.deity}
-          </h2>
-          {special && (
-            <p className="font-serif text-sm text-parchment/80 italic px-4 mt-2 leading-relaxed">
-              "{special.akkadian}"
-            </p>
-          )}
         </div>
       )}
 
