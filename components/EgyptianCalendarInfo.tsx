@@ -7,7 +7,7 @@ import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
 import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
 import { getFestivalsForDate, getNextEgyptianFestivals, Festival } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, DailyHemerology, Prognosis } from '../utils/egyptianHemerologyData';
-import { getAlgolPhase, getLunarPhase } from '../utils/egyptianAstronomy';
+import { getAlgolPhase, getLunarPhase, getSopdetHeliacalEvent, SopdetEvent } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 import Nilometer from './Nilometer';
 import { Waves, Feather, Hammer, Ship, Music, Sparkles, Sailboat, Sprout, Moon, Bird, MoveUp, Crown, Sun, Flame, ArrowUpCircle, Wheat, Shirt, Eye, PartyPopper, Tent, CalendarClock, Ruler, Map, Circle, Compass, Sunrise } from 'lucide-react';
@@ -200,17 +200,23 @@ const LotusFreizeBorder: React.FC<{ id: string }> = ({ id }) => (
 interface EgyptianCalendarInfoProps {
   onClick?: () => void;
   currentDate?: Date;
+  lat?: number;
+  lng?: number;
 }
 
-const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, currentDate = new Date() }) => {
+const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, currentDate = new Date(), lat, lng }) => {
   const { civilization, labels } = useCivilization();
   const [egyptianDate, setEgyptianDate] = useState<EgyptianDateResult | null>(null);
   const [showFestivals, setShowFestivals] = useState(false);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [sopdet, setSopdet] = useState<SopdetEvent | null>(null);
 
   useEffect(() => {
     setEgyptianDate(getEgyptianDate(currentDate));
-  }, [currentDate]);
+    if (lat != null && lng != null) {
+      setSopdet(getSopdetHeliacalEvent(currentDate, lat, lng));
+    }
+  }, [currentDate, lat, lng]);
 
   if (civilization !== 'aegyptus' || !egyptianDate) return null;
 
@@ -416,6 +422,51 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
           {/* ASTRONOMICAL INFLUENCES */}
           <div className="w-full flex flex-col gap-2 mt-2">
+
+            {/* Sopdet (Sirius) heliacal rising widget */}
+            {sopdet && (() => {
+              const dateStr = sopdet.rising.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+              if (sopdet.phase === 'invisible') {
+                const daysUntil = -sopdet.daysSinceRising;
+                return (
+                  <div className="bg-indigo-950/40 border border-indigo-400/30 p-3 rounded-md flex items-start gap-3">
+                    <span className="text-xl shrink-0">✦</span>
+                    <div className="text-left">
+                      <p className="text-[11px] font-serif font-bold text-indigo-300 uppercase tracking-widest">Sopdet (Sirio) — invisible</p>
+                      <p className="text-[11px] font-serif text-parchment/80 italic leading-snug mt-0.5">
+                        Oculta en el resplandor solar. <strong className="text-indigo-300">Peret Sopdet</strong> en {daysUntil} día{daysUntil !== 1 ? 's' : ''} ({dateStr}).
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+              const days = sopdet.daysSinceRising;
+              const isRisingDay = days === 0;
+              if (isRisingDay) return (
+                <div className="bg-amber-900/30 border-2 border-amber-400/60 p-3 rounded-md flex items-start gap-3 animate-pulse shadow-[0_0_12px_rgba(251,191,36,0.3)]">
+                  <span className="text-xl shrink-0">✦</span>
+                  <div className="text-left">
+                    <p className="text-[11px] font-serif font-bold text-amber-300 uppercase tracking-widest">¡Peret Sopdet! — Salida helíaca de Sopdet</p>
+                    <p className="text-[11px] font-serif text-parchment/90 italic leading-snug mt-0.5">
+                      Hoy Sopdet (Sirio) vuelve a aparecer antes del amanecer. Anuncia la crecida del Nilo y el inicio del Año Nuevo egipcio.
+                    </p>
+                  </div>
+                </div>
+              );
+              return (
+                <div className="bg-emerald-950/30 border border-emerald-500/25 p-3 rounded-md flex items-start gap-3">
+                  <span className="text-xl shrink-0">✦</span>
+                  <div className="text-left">
+                    <p className="text-[11px] font-serif font-bold text-emerald-300 uppercase tracking-widest">Sopdet (Sirio) — visible</p>
+                    <p className="text-[11px] font-serif text-parchment/80 italic leading-snug mt-0.5">
+                      Día <strong className="text-emerald-300">{days}</strong> desde <strong className="text-emerald-300">Peret Sopdet</strong> ({dateStr}).
+                      La diosa custodia la crecida del Nilo.
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
+
             {moonPhase >= 0.45 && moonPhase <= 0.55 && (
               <div className="bg-gold-leaf/20 text-gold-leaf border border-gold-leaf/50 p-3 rounded-md flex items-center gap-3 shadow-inner animate-pulse">
                 <span className="text-xl">🌕</span>
