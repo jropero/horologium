@@ -15,7 +15,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
   condition,
   weatherParticles,
   fogGradientId,
-  cloudOpacity = 0.4,
+  cloudOpacity = 0.65,
   stormOpacity = 0.6,
 }) => {
   if (condition === 'clear') return null;
@@ -24,15 +24,15 @@ const WeatherSvgEffects: React.FC<Props> = ({
     <>
       {condition === 'cloudy' && (
         <g opacity={cloudOpacity}>
-          <path d="M -50 40 Q 50 10 120 50 T 250 30 T 350 60 L 350 -20 L -50 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
-          <path d="M -50 70 Q 80 50 150 70 T 350 90 L 350 -20 L -50 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
+          <path d="M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
+          <path d="M -200 70 Q 80 50 150 70 T 350 90 T 500 70 L 500 -20 L -200 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
         </g>
       )}
 
       {condition === 'snow' && (
         <g opacity="0.6">
-          <path d="M -50 30 Q 60 5 140 35 T 350 20 L 350 -20 L -50 -20 Z" fill="#6b7280" className="anim-cloud-slow" />
-          <path d="M -50 60 Q 80 35 170 55 T 350 50 L 350 -20 L -50 -20 Z" fill="#9ca3af" opacity="0.7" className="anim-cloud-fast" />
+          <path d="M -200 30 Q 60 5 140 35 T 350 20 T 500 30 L 500 -20 L -200 -20 Z" fill="#6b7280" className="anim-cloud-slow" />
+          <path d="M -200 60 Q 80 35 170 55 T 350 50 T 500 60 L 500 -20 L -200 -20 Z" fill="#9ca3af" opacity="0.7" className="anim-cloud-fast" />
         </g>
       )}
 
@@ -54,8 +54,8 @@ const WeatherSvgEffects: React.FC<Props> = ({
 
       {(condition === 'storm' || condition === 'rain') && (
         <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity={stormOpacity}>
-          <path d="M -50 50 Q 30 20 80 40 T 180 30 T 280 50 T 350 30 L 350 -20 L -50 -20 Z" fill="#1e293b" />
-          <path d="M -50 80 Q 70 50 160 80 T 350 60 L 350 -20 L -50 -20 Z" fill="#0f172a" opacity="0.8" />
+          <path d="M -200 50 Q 30 20 80 40 T 180 30 T 280 50 T 500 30 L 500 -20 L -200 -20 Z" fill="#1e293b" className="anim-cloud-slow" />
+          <path d="M -200 80 Q 70 50 160 80 T 350 60 T 500 80 L 500 -20 L -200 -20 Z" fill="#0f172a" opacity="0.8" className="anim-cloud-fast" />
         </g>
       )}
 

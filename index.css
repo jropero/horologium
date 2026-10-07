@@ -149,10 +149,12 @@
 
   /* Weather Animations (Hardware Accelerated) */
   .anim-cloud-fast {
-    animation: driftFast 20s linear infinite;
+    animation: driftFast 18s ease-in-out infinite;
+    will-change: transform;
   }
   .anim-cloud-slow {
-    animation: driftSlow 25s linear infinite;
+    animation: driftSlow 24s ease-in-out infinite;
+    will-change: transform;
   }
   .anim-lightning {
     animation: lightningFlash 7s infinite;
@@ -160,28 +162,35 @@
   .anim-fall {
     animation: fallDown var(--dur) linear infinite;
   }
+
+  @keyframes driftFast {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(80px); }
+  }
+  @keyframes driftSlow {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-70px); }
+  }
+  @keyframes lightningFlash {
+    0%, 40%, 46%, 50%, 100% { opacity: 0; }
+    42%, 48% { opacity: 0.8; }
+    44% { opacity: 0.3; }
+  }
+  @keyframes fallDown {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(var(--drift), 800px); }
+  }
 }
 
-@keyframes driftFast {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(20px); }
+/* Register --drift as a typed length so transform: translate(var(--drift), ...) runs
+   on the GPU compositor thread instead of the main thread. Without this, browsers
+   treat the custom property as unknown type and fall back to main-thread animation. */
+@property --drift {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
 }
 
-@keyframes driftSlow {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-15px); }
-}
-
-@keyframes lightningFlash {
-  0%, 40%, 46%, 50%, 100% { opacity: 0; }
-  42%, 48% { opacity: 0.8; }
-  44% { opacity: 0.3; }
-}
-
-@keyframes fallDown {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(var(--drift), 800px); }
-}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
