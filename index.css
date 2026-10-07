@@ -37,20 +37,6 @@
   --app-bg-size: auto;
 }
 
-[data-theme="light"] {
-  --ink: #fdfaf1;
-  --gold-leaf: #8a7826;
-  --gold-dim: #5c4f15;
-  --parchment: #1a1a1a;
-  --parchment-dark: #2c2c2c;
-  --midnight: #f0ebe0;
-  --hatch-color: #8a7826;
-  --festival-text: #b45309; /* amber-700 */
-  --roman-red: #b71c1c; /* Darker red for light background contrast */
-  --app-bg-pattern: url('/assets/textures/aged-paper.png');
-  --app-bg-size: auto;
-}
-
 /* === ZHONGGUO THEME === */
 /* Chinese Dark Mode (Vermillion & Ink) */
 [data-civ="zhongguo"] {
@@ -70,23 +56,6 @@
   --app-bg-size: cover;
 }
 
-[data-theme="light"][data-civ="zhongguo"] {
-  --ink: #faf5f0;
-  --gold-leaf: #b91c1c;
-  --gold-dim: #7f1d1d;
-  --parchment: #1c1917;
-  --parchment-dark: #292524;
-  --midnight: #fef3c7;
-  --hatch-color: #991b1b;
-  --festival-text: #b45309;
-  --roman-red: #dc2626;
-  /* Light ink wash style */
-  --app-bg-pattern: 
-    radial-gradient(circle at 50% 50%, rgba(240, 230, 210, 0.5) 0%, rgba(220, 210, 190, 0.3) 100%),
-    linear-gradient(135deg, #f5efe6 0%, #ede8de 100%);
-  --app-bg-size: cover;
-}
-
 /* === HELLAS THEME === */
 /* Hellenic Dark Mode (Black-figure pottery style) */
 [data-civ="hellas"] {
@@ -100,21 +69,6 @@
   --festival-text: #f1c40f;
   --roman-red: #ff7043;
   --app-bg-pattern: url('/assets/textures/stardust.png');
-  --app-bg-size: auto;
-}
-
-/* Hellenic Light Mode (Marble & Sea style) */
-[data-theme="light"][data-civ="hellas"] {
-  --ink: #f8f9f9; /* Marble white */
-  --gold-leaf: #2c3e50; /* Aegean deep blue */
-  --gold-dim: #1a252f;
-  --parchment: #11151c; /* Dark text */
-  --parchment-dark: #2c3e50;
-  --midnight: #e5e8e8;
-  --hatch-color: #2c3e50;
-  --festival-text: #c0392b; /* Pompeian red / Classical red */
-  --roman-red: #d32f2f;
-  --app-bg-pattern: url('/assets/textures/aged-paper.png');
   --app-bg-size: auto;
 }
 
@@ -138,25 +92,6 @@
   --app-bg-size: auto;
 }
 
-/* Egyptian Light Mode (Sandstone & Sunlight) */
-[data-theme="light"][data-civ="aegyptus"] {
-  --ink: #fefcf0; /* Sunny desert sand */
-  --gold-leaf: #713f12; /* Darker brown/gold for contrast */
-  --gold-dim: #422006;
-  --parchment: #1c1917; /* Very dark brown text */
-  --parchment-dark: #44403c;
-  --midnight: #fef3c7;
-  --hatch-color: #d97706;
-  --festival-text: #b45309;
-  --roman-red: #b91c1c;
-  --egypt-accent: #34d399; /* emerald-400 for dark parchment bg */
-  --egypt-primary: #047857; /* emerald-700 for light ink bg */
-  --app-bg-pattern:  
-    linear-gradient(rgba(254, 252, 240, 0.8), rgba(254, 252, 240, 0.8)),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  --app-bg-size: auto;
-}
-
 /* === BABYLONIA THEME === */
 /* Dark mode: Lapis Lazuli Night — Ishtar Gate */
 [data-civ="babylonia"] {
@@ -173,23 +108,6 @@
     radial-gradient(ellipse at 25% 15%, rgba(37,99,235,0.18) 0%, transparent 55%),
     radial-gradient(ellipse at 75% 85%, rgba(30,58,138,0.22) 0%, transparent 55%),
     linear-gradient(to bottom, #07101d 0%, #050c16 100%);
-  --app-bg-size: cover;
-}
-
-/* Light mode: Lapis Lazuli Day — whitewashed clay relief */
-[data-theme="light"][data-civ="babylonia"] {
-  --ink: #f0f4fc;
-  --gold-leaf: #1d4ed8;        /* blue-700 for light bg */
-  --gold-dim: #1e40af;         /* blue-800 */
-  --parchment: #0f172a;        /* blue-950 — high contrast text */
-  --parchment-dark: #1e293b;
-  --midnight: #dbeafe;
-  --hatch-color: #1d4ed8;
-  --festival-text: #1d4ed8;
-  --roman-red: #4f46e5;        /* indigo-600 */
-  --app-bg-pattern:
-    linear-gradient(rgba(240,244,252,0.93), rgba(240,244,252,0.93)),
-    linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
   --app-bg-size: cover;
 }
 
@@ -262,7 +180,7 @@
 
 @keyframes fallDown {
   0% { transform: translate(0, 0); }
-  100% { transform: translate(var(--drift), 250px); }
+  100% { transform: translate(var(--drift), 800px); }
 }
 
 /* Custom Scrollbar */
