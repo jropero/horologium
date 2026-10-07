@@ -257,6 +257,12 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                     } else if (progressPercent > 0.85) {
                       return 'linear-gradient(to bottom, #1e3b70 0%, #29539b 40%, #fd746c 80%, var(--parchment) 100%)';
                     }
+                    if (weatherCond === 'cloudy') {
+                      return 'linear-gradient(to bottom, #94a3b8 0%, #cbd5e1 60%, #e2e8f0 100%)';
+                    }
+                    if (weatherCond === 'rain' || weatherCond === 'storm') {
+                      return 'linear-gradient(to bottom, #334155 0%, #475569 50%, #64748b 100%)';
+                    }
                     return 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)';
                   } else {
                     return 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)';
@@ -292,7 +298,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
                 <g
                   transform={`translate(${objectX}, ${objectY})`}
-                  style={(weatherCond === 'rain' || weatherCond === 'storm' || weatherCond === 'snow') && romanTime.isDay
+                  style={(weatherCond === 'rain' || weatherCond === 'storm' || weatherCond === 'snow' || weatherCond === 'fog') && romanTime.isDay
                     ? { filter: 'blur(2.5px)', opacity: 0.45 }
                     : undefined}
                 >
@@ -333,6 +339,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                     />
                   ))}
                 </g>
+                <g style={weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}>
                 <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} />
                 <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} stroke={weatherCond === 'snow' ? '#f0f4f8' : '#10b981'} strokeWidth="1" />
                 {weatherCond === 'snow' && (
@@ -410,6 +417,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                     ))}
                   </g>
                 )}
+                </g>{/* end fog-blur group: ground + central element */}
               </svg>
             </div>
           </div>

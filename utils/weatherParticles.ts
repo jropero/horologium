@@ -36,7 +36,7 @@ export interface WeatherParticles {
 }
 
 export function generateWeatherParticles(rainIntensity: number): WeatherParticles {
-  const count = Math.round(lerp(50, 200, rainIntensity));
+  const count = Math.round(lerp(50, 140, rainIntensity));
 
   const rain: RainDrop[] = Array.from({ length: count }).map(() => {
     const dur = lerp(2.4, 1.1, rainIntensity) + Math.random() * 0.6;

@@ -654,7 +654,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 condition={condition}
                 weatherParticles={weatherParticles}
                 fogGradientId="fog-ground-bab"
-                cloudOpacity={0.45}
+                cloudOpacity={0.7}
                 stormOpacity={0.65}
               />
               {condition === 'storm' && (
