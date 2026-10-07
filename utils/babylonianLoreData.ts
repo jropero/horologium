@@ -89,7 +89,7 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     description: '«La obra de las diosas» (gipir Ištarāte) — las estatuas de las diosas son llevadas al río sagrado para su lustración y purificación anual. En todo el país los templos celebran ritos de consagración. El día 3, Nabû abandona su morada y las puertas del Esagila se abren para Bēl y Nabû; en Uruk se celebra un matrimonio sagrado entre Anu y Antu. El día 17, el Akītu de Ištar de Arbela se celebra en Milkiya.',
     festival: '«Obra de las diosas» — lustración de estatuas divinas en el río sagrado; asamblea de los dioses en el Eturnunna el día 3.º; matrimonio sagrado de Anu y Antu en Uruk; Akītu de Ištar de Arbela el día 17.º.',
     zodiacSign: 'Širu',
-    icon: '🌊',
+    icon: '💫',
     dayEvents: {
       1:  { shortLabel: 'Lustración de las diosas', description: '«La obra de las diosas» (gipir Ištarāte) da inicio. Las estatuas de las grandes diosas son transportadas en procesión hasta el río sagrado, donde son bañadas y purificadas con agua corriente antes de retornar a sus templos consagradas para el nuevo año.', type: 'procession' },
       3:  { shortLabel: 'Matrimonio de Anu y Antu', description: 'Nabû abandona su morada y las puertas del Esagila se abren para Bēl y Nabû. En el Eanna de Uruk, Anu y Antu celebran su matrimonio sagrado en el Eturnunna: las estatuas comparten el lecho divino mientras los sacerdotes recitan himnos nupciales.', type: 'marriage' },
