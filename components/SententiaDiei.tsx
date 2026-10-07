@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getSententiaOfTheDay, SENTENTIAE, Sententia } from '../utils/sententiaeData';
 import { getApophthegmaOfTheDay, APOPHTHEGMATA, Apophthegma } from '../utils/apophthegmataData';
 import { getEgyptianWisdomOfTheDay, EGYPTIAN_WISDOM, EgyptianWisdom } from '../utils/egyptianWisdomData';
+import { getBabylonianWisdomOfTheDay, BABYLONIAN_WISDOM, BabylonianWisdom } from '../utils/babylonianWisdomData';
 import { Feather, RefreshCw } from 'lucide-react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
@@ -15,12 +16,13 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   const [sententia, setSententia] = useState<Sententia | null>(null);
   const [apophthegma, setApophthegma] = useState<Apophthegma | null>(null);
   const [egyptianWisdom, setEgyptianWisdom] = useState<EgyptianWisdom | null>(null);
+  const [babylonianWisdom, setBabylonianWisdom] = useState<BabylonianWisdom | null>(null);
 
-  // Initialize with the quote of the day
   useEffect(() => {
     setSententia(getSententiaOfTheDay(currentDate));
     setApophthegma(getApophthegmaOfTheDay(currentDate));
     setEgyptianWisdom(getEgyptianWisdomOfTheDay(currentDate));
+    setBabylonianWisdom(getBabylonianWisdomOfTheDay(currentDate));
   }, [currentDate.toDateString()]);
 
   const handleRandomize = () => {
@@ -30,16 +32,31 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
     } else if (civilization === 'hellas') {
       const randomIndex = Math.floor(Math.random() * APOPHTHEGMATA.length);
       setApophthegma(APOPHTHEGMATA[randomIndex]);
+    } else if (civilization === 'babylonia') {
+      const randomIndex = Math.floor(Math.random() * BABYLONIAN_WISDOM.length);
+      setBabylonianWisdom(BABYLONIAN_WISDOM[randomIndex]);
     } else {
       const randomIndex = Math.floor(Math.random() * EGYPTIAN_WISDOM.length);
       setEgyptianWisdom(EGYPTIAN_WISDOM[randomIndex]);
     }
   };
 
-  const quoteText = civilization === 'rome' ? sententia?.latin : civilization === 'hellas' ? apophthegma?.greek : egyptianWisdom?.text;
-  const quoteAuthor = civilization === 'rome' ? sententia?.author : civilization === 'hellas' ? apophthegma?.author : egyptianWisdom?.author;
-  const quoteTranslation = civilization === 'rome' ? sententia?.translation : civilization === 'hellas' ? apophthegma?.translation : undefined;
-  const quoteSource = civilization === 'aegyptus' ? egyptianWisdom?.source : undefined;
+  const isBab = civilization === 'babylonia';
+  const quoteText = civilization === 'rome' ? sententia?.latin
+    : civilization === 'hellas' ? apophthegma?.greek
+    : isBab ? babylonianWisdom?.text
+    : egyptianWisdom?.text;
+  const quoteAuthor = civilization === 'rome' ? sententia?.author
+    : civilization === 'hellas' ? apophthegma?.author
+    : isBab ? babylonianWisdom?.author
+    : egyptianWisdom?.author;
+  const quoteTranslation = civilization === 'rome' ? sententia?.translation
+    : civilization === 'hellas' ? apophthegma?.translation
+    : undefined;
+  const quoteSource = isBab ? babylonianWisdom?.source
+    : civilization === 'aegyptus' ? egyptianWisdom?.source
+    : undefined;
+  const quoteAkkadian = isBab ? babylonianWisdom?.akkadian : undefined;
   const quoteTransliteration = civilization === 'hellas' && quoteText ? transliterateGreek(quoteText) : null;
 
   if (!quoteText) return null;
@@ -77,6 +94,11 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
           {quoteTransliteration && (
             <p className="font-serif text-sm md:text-base text-gold-dim tracking-widest uppercase">
               {quoteTransliteration}
+            </p>
+          )}
+          {quoteAkkadian && (
+            <p className="font-serif text-sm text-gold-dim/70 tracking-wider italic mt-1">
+              {quoteAkkadian}
             </p>
           )}
         </div>

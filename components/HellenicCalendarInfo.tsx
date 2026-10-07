@@ -6,6 +6,32 @@ import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
 
+// ─── Greek meander frieze (CSS background, tiles horizontally at true proportions) ──
+//     Source: "Ancient Greek Meander 1" (Craftsmanspace / Openclipart, public domain).
+
+const MEANDER_URI = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="707 2266 19535 8465">' +
+  '<rect x="707" y="2266" width="19535" height="8465" fill="#0d0e1a"/>' +
+  '<g fill="#c3500f" stroke="none">' +
+  '<polygon points="706 2726 14658 2726 14658 2261 706 2261" transform="matrix(1.4001 0 0 1.4001 -280.96 -899.66)"/>' +
+  '<polygon points="2566 3657 2566 5982 1171 5982 1171 5517 2101 5517 2101 4122 706 4122 706 4587 1636 4587 1636 5052 706 5052 706 6447 3031 6447 3031 3191 706 3191 706 3657" transform="matrix(1.4001 0 0 1.4001 -280.96 -899.66)"/>' +
+  '<polygon points="3962 7377 3962 3657 7217 3657 7217 5982 5822 5982 5822 5517 6752 5517 6752 4122 4427 4122 4427 7377 8612 7377 8612 3657 11867 3657 11867 5982 10472 5982 10472 5517 11402 5517 11402 4122 9077 4122 9077 7377 13262 7377 13262 3657 14658 3657 14658 3191 12797 3191 12797 6912 9542 6912 9542 4587 10937 4587 10937 5052 10007 5052 10007 6447 12332 6447 12332 3191 8147 3191 8147 6912 4892 6912 4892 4587 6287 4587 6287 5052 5357 5052 5357 6447 7682 6447 7682 3191 3496 3191 3496 6912 706 6912 706 7377" transform="matrix(1.4001 0 0 1.4001 -280.96 -899.66)"/>' +
+  '<polygon points="14192 6912 14192 4587 14658 4587 14658 4122 13727 4122 13727 7377 14658 7377 14658 6912" transform="matrix(1.4001 0 0 1.4001 -280.96 -899.66)"/>' +
+  '<polygon points="14658 7842 706 7842 706 8307 14658 8307" transform="matrix(1.4001 0 0 1.4001 -280.96 -899.66)"/>' +
+  '</g></svg>'
+)}`;
+
+const GreekMeanderBorder: React.FC = () => (
+  <div
+    className="w-full h-14 block"
+    style={{
+      backgroundImage: `url("${MEANDER_URI}")`,
+      backgroundSize: 'auto 100%',
+      backgroundRepeat: 'repeat-x',
+    }}
+  />
+);
+
 interface HellenicCalendarInfoProps {
   atticDate?: AtticDateResult;
   onClick?: () => void;
@@ -137,15 +163,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
         >
             <div className="bg-ink/90 border-[4px] border-gold-dim p-0 rounded-sm shadow-2xl relative overflow-hidden group hover:border-gold-leaf transition-colors">
                 
-                {/* SVG Greek Meander (Cenefa) - Top */}
-                <svg className="w-full h-8 block" viewBox="0 0 100 20" preserveAspectRatio="none" style={{ background: 'transparent', borderBottom: '2px solid var(--gold-dim)' }}>
-                     <defs>
-                        <pattern id="meander" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                            <path d="M0,5 l5,0 l0,10 l10,0 l0,-5 l-5,0 l0,5 l5,0 l0,-10 l-10,0 l0,5 l-5,0 Z" fill="none" stroke="var(--gold-leaf)" strokeWidth="1.5" />
-                        </pattern>
-                    </defs>
-                    <rect x="0" y="0" width="100%" height="20" fill="url(#meander)" />
-                </svg>
+                <GreekMeanderBorder />
 
                 <div className="p-5 md:p-8 flex flex-col items-center gap-6 text-center">
 
@@ -370,16 +388,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
                     )}
                 </div>
 
-                {/* SVG Waves - Bottom */}
-                <svg className="w-full h-8 block" viewBox="0 0 100 20" preserveAspectRatio="none" style={{ background: 'transparent', borderTop: '2px solid var(--gold-dim)' }}>
-                    <defs>
-                        <pattern id="waves" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                            <path d="M0,10 Q5,0 10,10 T20,10" fill="none" stroke="var(--gold-leaf)" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-                            <path d="M0,15 Q5,5 10,15 T20,15" fill="none" stroke="var(--gold-dim)" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-                        </pattern>
-                    </defs>
-                    <rect x="0" y="0" width="100%" height="20" fill="url(#waves)" />
-                </svg>
+                <GreekMeanderBorder />
 
             </div>
         </div>
