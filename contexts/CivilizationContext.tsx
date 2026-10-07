@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getRomanLabels, getHellenicLabels, getEgyptianLabels, getChineseLabels, getMayaLabels, CivLabels } from '../utils/civLabels';
+import { getRomanLabels, getHellenicLabels, getEgyptianLabels, getChineseLabels, getBabylonianLabels, CivLabels } from '../utils/civLabels';
 
-export type Civilization = 'rome' | 'hellas' | 'aegyptus' | 'zhongguo' | 'maya';
+export type Civilization = 'rome' | 'hellas' | 'aegyptus' | 'zhongguo' | 'babylonia';
 
 interface CivilizationContextType {
   civilization: Civilization;
@@ -39,7 +39,7 @@ export const CivilizationProvider: React.FC<CivilizationProviderProps> = ({ chil
         ? getEgyptianLabels()
         : civilization === 'zhongguo'
           ? getChineseLabels()
-          : getMayaLabels();
+          : getBabylonianLabels();
 
   return (
     <CivilizationContext.Provider value={{ civilization, setCivilization, labels }}>

@@ -67,18 +67,18 @@ export interface CivLabels {
   infoParagraph2: string;
   infoBottomMotto: string;   // Tempus Fugit • Memento Mori / Πάντα ῥεῖ • Γνῶθι σεαυτόν
 
-  // Maya-specific
-  longCountLabel: string;   // Cuenta Larga
-  tzolkinLabel: string;     // Tzolk'in
-  haabLabel: string;        // Haab'
-  wayebWarning: string;     // ¡Días Nefastos!
+  // Civilization-specific extras
+  longCountLabel: string;
+  tzolkinLabel: string;
+  haabLabel: string;
+  wayebWarning: string;
 
   // Civilization toggle
-  civToggleRome: string;   // Roma / Ρώμη
-  civToggleHellas: string;  // Hellas / Ἑλλάς
-  civToggleAegyptus: string; // Aegyptus / Αἴγυπτος
-  civToggleZhongguo: string; // Zhongguo / 中国
-  civToggleMaya: string;   // Maya
+  civToggleRome: string;
+  civToggleHellas: string;
+  civToggleAegyptus: string;
+  civToggleZhongguo: string;
+  civToggleBabylonia: string;
 }
 
 export const getRomanLabels = (): CivLabels => ({
@@ -147,7 +147,7 @@ export const getRomanLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
-  civToggleMaya: 'Maya',
+  civToggleBabylonia: 'Babilonia',
 });
 
 export const getHellenicLabels = (): CivLabels => ({
@@ -216,7 +216,7 @@ export const getHellenicLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
-  civToggleMaya: 'Maya',
+  civToggleBabylonia: 'Babilonia',
 });
 
 export const getEgyptianLabels = (): CivLabels => ({
@@ -285,7 +285,7 @@ export const getEgyptianLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
-  civToggleMaya: 'Maya',
+  civToggleBabylonia: 'Babilonia',
 });
 
 export const getChineseLabels = (): CivLabels => ({
@@ -354,74 +354,74 @@ export const getChineseLabels = (): CivLabels => ({
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
-  civToggleMaya: 'Maya',
+  civToggleBabylonia: 'Babilonia',
 });
 
-export const getMayaLabels = (): CivLabels => ({
-  appTitle: 'HOROLOGIUM',
-  appSubtitle: 'MAYA',
-  footerMotto: 'IN LAK\'ECH',
-  loadingText: 'Consultando el Tzolk\'in...',
+export const getBabylonianLabels = (): CivLabels => ({
+  appTitle: 'BĒRU',
+  appSubtitle: 'BĀBILIM',
+  footerMotto: 'ENŪMA ELIŠ',
+  loadingText: 'Los astrónomos consultan las tablillas...',
 
-  dayLabel: 'K\'in',
-  nightLabel: 'Ak\'ab',
+  dayLabel: 'Ūmu',
+  nightLabel: 'Mūšu',
   civilDayPartLabel: 'Parte del Día',
-  planetaryRulerLabel: 'Señor de la Hora',
+  planetaryRulerLabel: 'Planeta Rector',
   monthTutelaLabel: 'Deidad del Mes',
 
-  sunriseLabel: 'Salil K\'in',
-  sunsetLabel: 'Oc K\'in',
+  sunriseLabel: 'Ṣīt Šamši',
+  sunsetLabel: 'Erēb Šamši',
   hourLengthLabel: 'Longitud de la Hora',
   minuteUnit: 'minutos',
 
-  skyLabel: 'Ka\'an',
-  windLabel: 'Iik\'',
+  skyLabel: 'Šamû',
+  windLabel: 'Šāru',
 
-  longCountLabel: 'Cuenta Larga',
-  tzolkinLabel: 'Tzolk\'in',
-  haabLabel: 'Haab\'',
-  wayebWarning: '¡Días Nefastos!',
+  longCountLabel: 'Era Seléucida',
+  tzolkinLabel: 'Warḫum',
+  haabLabel: 'Māšaltu',
+  wayebWarning: '¡Mes Intercalar!',
 
-  calendarTitle: 'Calendario Maya',
-  calendarSubtitle: '— Ciclo Sagrado —',
-  todayLabel: 'Hoy',
-  godOfDayTitle: 'Señor de la Noche',
-  festivalLabel: '✧ K\'iin ✧',
-  calendarInfoTitle: 'Sabiduría de los Abuelos',
+  calendarTitle: 'Warḫum Bābilim',
+  calendarSubtitle: '— Ciclo Lunar Sagrado —',
+  todayLabel: 'Ūmu Annû',
+  godOfDayTitle: 'Deidad del Mes',
+  festivalLabel: '✧ Isinnu ✧',
+  calendarInfoTitle: 'Sabiduría de los Escribas',
 
-  quoteTitle: 'Refrán del Día',
+  quoteTitle: 'Sabiduría del Día',
 
-  oracleTitle: 'Chilam Balam',
-  oracleSubtitle: 'Oráculo de la Rueda Calendárica',
-  oracleOpenBook: 'Abrir el Códice',
+  oracleTitle: 'Tablilla del Destino',
+  oracleSubtitle: 'Oráculo de los Astrónomos',
+  oracleOpenBook: 'Abrir la Tablilla',
   oracleConsultAgain: 'Consultar de Nuevo',
-  oracleConsulting: 'Los Ah Kin\'ob consultan...',
-  oraclePrompt: 'Abre el Chilam Balam al azar y deja que la palabra de los antiguos te guíe.',
+  oracleConsulting: 'Los kalû-sacerdotes consultan...',
+  oraclePrompt: 'Los astrónomos del Esagila observan el cielo y revelan los presagios escritos en las tablillas de arcilla.',
 
-  regionTitle: 'Región Maya',
-  regionFallback: 'Fuera del Mundo Maya',
-  regionFallbackDesc: 'Más allá de las tierras del maíz y el jaguar.',
-  distanceTitle: 'Ombligo del Mundo',
-  distanceUnit: 'k\'in (días)',
-  distanceFromLabel: 'días desde la Ciudad de las Pirámides',
+  regionTitle: 'Región de Babilonia',
+  regionFallback: 'Más Allá de los Ríos',
+  regionFallbackDesc: 'Más allá del Éufrates y el Tigris.',
+  distanceTitle: 'Esagila',
+  distanceUnit: 'bēru',
+  distanceFromLabel: 'bēru desde Babilonia',
 
   controlsTitle: 'CONTROLES',
   computeBtn: 'Calcular',
   findMeBtn: 'Encontrarme',
-  lightLabel: 'K\'iin',
-  darkLabel: 'Ak\'ab',
+  lightLabel: 'Ūmu',
+  darkLabel: 'Mūšu',
   notificationsBtn: 'Notificaciones',
-  controlsFooter: '"In Lak\'ech" — Tú eres mi otro yo.',
+  controlsFooter: '"Enūma Eliš" — Cuando en lo alto los cielos no tenían nombre...',
 
-  infoTitle: 'Sobre el Tiempo Maya',
-  infoFirstLetter: 'M',
-  infoParagraph1: 'aya, la civilización de las selvas y pirámides, desarrolló uno de los sistemas calendáricos más precisos de la antigüedad. Combinaban el Tzolk\'in (260 días) con el Haab\' (365 días) en una Rueda Calendárica de 52 años.',
-  infoParagraph2: 'Junto a estos ciclos, la Cuenta Larga registraba fechas absolutas desde la creación del mundo (11 de agosto de 3114 a.C.). Los Ah Kin\'ob, sacerdotes del sol, observaban el movimiento de Venus y la Luna para sincronizar sus rituales con el cosmos.',
-  infoBottomMotto: 'In Lak\'ech • Hala Ken\'',
+  infoTitle: 'Sobre el Tiempo Babilonio',
+  infoFirstLetter: 'B',
+  infoParagraph1: 'abilonia, la gran ciudad del Éufrates, fue la cuna del tiempo medido. Sus astrónomos-sacerdotes inventaron el zodíaco de doce signos, los planetas de la semana y el sistema sexagesimal que aún usamos: 60 segundos, 60 minutos, 360 grados.',
+  infoParagraph2: 'El calendario lunisolar babilonio sincronizaba la luna con las estaciones mediante meses intercalares proclamados por decreto real. Cada nuevo mes comenzaba con la primera crescent de luna visible — el dios Sîn anunciaba el inicio del Warḫum sagrado.',
+  infoBottomMotto: 'Enūma Eliš • Ina Šamê Rabûti',
 
   civToggleRome: 'Roma',
   civToggleHellas: 'Ἑλλάς',
   civToggleAegyptus: 'Aegyptus',
   civToggleZhongguo: '中国',
-  civToggleMaya: 'Maya',
+  civToggleBabylonia: 'Bābilim',
 });
