@@ -72,6 +72,131 @@ const FestivalIcon = ({ name, className }: { name?: string; className?: string }
   }
 };
 
+// ─── Temple lotus-papyrus frieze border ───────────────────────────────────────
+//     Based on Egyptian tomb and temple wall paintings (New Kingdom):
+//     alternating open lotus flowers and papyrus umbels on a deep ground
+//     with red-ochre + blue banded strips top and bottom (mummy-case style).
+
+const LotusFreizeBorder: React.FC<{ id: string }> = ({ id }) => (
+  <svg className="w-full h-14 block" viewBox="0 0 200 36" preserveAspectRatio="none">
+    <defs>
+      {/* === Tile: 50 × 36 units === */}
+      <pattern id={id} x="0" y="0" width="50" height="36" patternUnits="userSpaceOnUse">
+
+        {/* Deep dark Nilotic ground */}
+        <rect width="50" height="36" fill="#0c0804" />
+
+        {/* ── Top band: Egyptian blue strip + red-ochre block ── */}
+        <rect x="0" y="0"   width="50" height="2"   fill="#1840a0" />
+        <rect x="0" y="2"   width="50" height="3"   fill="#c0391a" />
+        {[12.5, 25, 37.5].map(x => (
+          <line key={x} x1={x} y1="2" x2={x} y2="5" stroke="rgba(0,0,0,0.4)" strokeWidth="0.5" />
+        ))}
+        <line x1="0" y1="2" x2="50" y2="2" stroke="rgba(240,200,72,0.35)" strokeWidth="0.4" />
+        <line x1="0" y1="5" x2="50" y2="5" stroke="rgba(212,168,50,0.92)" strokeWidth="0.7" />
+
+        {/* ── Bottom band: red-ochre block + Egyptian blue strip ── */}
+        <rect x="0" y="31"  width="50" height="3"   fill="#c0391a" />
+        <rect x="0" y="34"  width="50" height="2"   fill="#1840a0" />
+        {[12.5, 25, 37.5].map(x => (
+          <line key={x} x1={x} y1="31" x2={x} y2="34" stroke="rgba(0,0,0,0.4)" strokeWidth="0.5" />
+        ))}
+        <line x1="0" y1="31" x2="50" y2="31" stroke="rgba(212,168,50,0.92)" strokeWidth="0.7" />
+        <line x1="0" y1="34" x2="50" y2="34" stroke="rgba(240,200,72,0.35)" strokeWidth="0.4" />
+
+        {/* ══════════════════════════════════════════════════════════════
+            OPEN LOTUS — centred at (25, 23), ribs from calyx base
+            ══════════════════════════════════════════════════════════════ */}
+
+        {/* Coloured petal fill zones, radiating outward */}
+        {/* Blue zone: between centre rib and inner pair */}
+        <path d="M25,23 L22,9.5 L25,13 L28,9.5 Z"                fill="#2560c0" />
+        <path d="M25,23 L18,12  L22,9.5 L24,13  Z"               fill="#1a4da8" />
+        <path d="M25,23 L32,12  L28,9.5 L26,13  Z"               fill="#1a4da8" />
+        {/* Green zone: between inner and outer pairs */}
+        <path d="M25,23 L14,16  L18,12  L21,14  Z"               fill="#2a7a3a" />
+        <path d="M25,23 L36,16  L32,12  L29,14  Z"               fill="#2a7a3a" />
+        {/* Red zone: outer petals */}
+        <path d="M25,23 L11,20  L14,16  L17,16  Z"               fill="#c03020" />
+        <path d="M25,23 L39,20  L36,16  L33,16  Z"               fill="#c03020" />
+
+        {/* Cream rib lines over the fills */}
+        <line x1="25" y1="23" x2="25" y2="8.5"  stroke="rgba(238,228,200,0.85)" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="22" y2="9.5"  stroke="rgba(238,228,200,0.80)" strokeWidth="1.0" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="28" y2="9.5"  stroke="rgba(238,228,200,0.80)" strokeWidth="1.0" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="18" y2="12"   stroke="rgba(238,228,200,0.72)" strokeWidth="0.9" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="32" y2="12"   stroke="rgba(238,228,200,0.72)" strokeWidth="0.9" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="14" y2="16"   stroke="rgba(238,228,200,0.60)" strokeWidth="0.8" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="36" y2="16"   stroke="rgba(238,228,200,0.60)" strokeWidth="0.8" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="11" y2="20"   stroke="rgba(238,228,200,0.48)" strokeWidth="0.7" strokeLinecap="round" />
+        <line x1="25" y1="23" x2="39" y2="20"   stroke="rgba(238,228,200,0.48)" strokeWidth="0.7" strokeLinecap="round" />
+
+        {/* Arc spanning outer rib tips */}
+        <path d="M11,20 A18,21 0 0,1 39,20" fill="none" stroke="rgba(238,228,200,0.38)" strokeWidth="0.8" />
+
+        {/* Gold sepal cup at base */}
+        <path d="M19,23.5 Q25,27 31,23.5 L30,21.5 Q25,25 20,21.5 Z" fill="rgba(212,168,40,0.9)" />
+        {/* Gold calyx node */}
+        <circle cx="25" cy="23" r="2.2" fill="rgba(212,168,40,0.97)" />
+
+        {/* Lotus stem */}
+        <line x1="25" y1="25.2" x2="25" y2="28" stroke="rgba(180,140,50,0.82)" strokeWidth="0.9" strokeLinecap="round" />
+
+        {/* ══════════════════════════════════════════════════════════════
+            PAPYRUS UMBEL — centred at x=0 (= x=50 tile edge, seamless)
+            Ribs fan up from base at y=21; right half visible here,
+            left half appears from adjacent tile repetition.
+            ══════════════════════════════════════════════════════════════ */}
+
+        {/* Stem */}
+        <line x1="0" y1="21" x2="0" y2="28" stroke="rgba(180,140,50,0.82)" strokeWidth="0.9" strokeLinecap="round" />
+        {/* Centre stalk */}
+        <line x1="0" y1="21" x2="0"    y2="7.5"  stroke="#4a9a5a" strokeWidth="1.5" strokeLinecap="round" />
+        {/* Right fan ribs (visible in this tile) */}
+        <line x1="0" y1="21" x2="5"    y2="8.5"  stroke="#3a8a4a" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="0" y1="21" x2="9"    y2="10"   stroke="#2a7a3a" strokeWidth="1.1" strokeLinecap="round" />
+        <line x1="0" y1="21" x2="12"   y2="13"   stroke="#3a8a4a" strokeWidth="1.0" strokeLinecap="round" />
+        <line x1="0" y1="21" x2="14"   y2="17.5" stroke="#2a7a3a" strokeWidth="0.9" strokeLinecap="round" />
+        {/* Left fan ribs (clipped here; appear in preceding tile) */}
+        <line x1="0" y1="21" x2="-5"   y2="8.5"  stroke="#3a8a4a" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="0" y1="21" x2="-9"   y2="10"   stroke="#2a7a3a" strokeWidth="1.1" strokeLinecap="round" />
+        <line x1="0" y1="21" x2="-12"  y2="13"   stroke="#3a8a4a" strokeWidth="1.0" strokeLinecap="round" />
+        <line x1="0" y1="21" x2="-14"  y2="17.5" stroke="#2a7a3a" strokeWidth="0.9" strokeLinecap="round" />
+        {/* Gold node at papyrus base */}
+        <circle cx="0" cy="21" r="1.6" fill="rgba(212,168,40,0.95)" />
+
+        {/* ── RIGHT edge papyrus (mirror of x=0, for right-side seamlessness) ── */}
+        <line x1="50" y1="21" x2="50" y2="28"  stroke="rgba(180,140,50,0.82)" strokeWidth="0.9" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="50"  y2="7.5"  stroke="#4a9a5a" strokeWidth="1.5" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="45"  y2="8.5"  stroke="#3a8a4a" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="41"  y2="10"   stroke="#2a7a3a" strokeWidth="1.1" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="38"  y2="13"   stroke="#3a8a4a" strokeWidth="1.0" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="36"  y2="17.5" stroke="#2a7a3a" strokeWidth="0.9" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="55"  y2="8.5"  stroke="#3a8a4a" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="59"  y2="10"   stroke="#2a7a3a" strokeWidth="1.1" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="62"  y2="13"   stroke="#3a8a4a" strokeWidth="1.0" strokeLinecap="round" />
+        <line x1="50" y1="21" x2="64"  y2="17.5" stroke="#2a7a3a" strokeWidth="0.9" strokeLinecap="round" />
+        <circle cx="50" cy="21" r="1.6" fill="rgba(212,168,40,0.95)" />
+
+        {/* ── Connecting curved stem at base ── */}
+        <path d="M0,28 Q12.5,30 25,28 Q37.5,26 50,28"
+              fill="none" stroke="rgba(180,140,50,0.68)" strokeWidth="0.7" />
+
+        {/* ── Hanging lotus buds at midpoints (x=12.5, x=37.5) ── */}
+        <line x1="12.5" y1="28.5" x2="12.5" y2="29.5" stroke="rgba(180,140,50,0.5)" strokeWidth="0.6" />
+        <path d="M12.5,29.5 L10.5,33 L12.5,31.5 L14.5,33 Z" fill="#1a50b0" opacity="0.82" />
+
+        <line x1="37.5" y1="28.5" x2="37.5" y2="29.5" stroke="rgba(180,140,50,0.5)" strokeWidth="0.6" />
+        <path d="M37.5,29.5 L35.5,33 L37.5,31.5 L39.5,33 Z" fill="#1a50b0" opacity="0.82" />
+
+      </pattern>
+    </defs>
+
+    <rect x="0" y="0" width="100%" height="36" fill="#0c0804" />
+    <rect x="0" y="0" width="100%" height="36" fill={`url(#${id})`} />
+  </svg>
+);
+
 interface EgyptianCalendarInfoProps {
   onClick?: () => void;
   currentDate?: Date;
@@ -164,18 +289,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
     >
       <div className="bg-ink/90 border-[4px] border-gold-dim p-0 rounded-sm shadow-2xl relative overflow-hidden group hover:border-emerald-500/60 transition-colors">
 
-        {/* Egyptian border pattern — Top (lotus/papyrus motif) */}
-        <svg className="w-full h-8 block" viewBox="0 0 100 20" preserveAspectRatio="none" style={{ background: 'transparent', borderBottom: '2px solid var(--gold-dim)' }}>
-          <defs>
-            <pattern id="egyptian-border" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M10,2 L13,8 L10,6 L7,8 Z" fill="none" stroke="var(--gold-leaf)" strokeWidth="1" />
-              <path d="M10,6 L10,18" stroke="var(--gold-leaf)" strokeWidth="1" />
-              <path d="M0,18 L20,18" stroke="var(--gold-dim)" strokeWidth="0.5" />
-              <path d="M5,14 Q10,10 15,14" fill="none" stroke="var(--gold-leaf)" strokeWidth="0.8" opacity="0.6" />
-            </pattern>
-          </defs>
-          <rect x="0" y="0" width="100%" height="20" fill="url(#egyptian-border)" />
-        </svg>
+        <LotusFreizeBorder id="lotus-top" />
 
         <div className="p-5 md:p-8 flex flex-col items-center gap-6 text-center">
 
@@ -362,16 +476,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
           </div>
         </div>
 
-        {/* Bottom border — Nile wave pattern */}
-        <svg className="w-full h-8 block" viewBox="0 0 100 20" preserveAspectRatio="none" style={{ background: 'transparent', borderTop: '2px solid var(--gold-dim)' }}>
-          <defs>
-            <pattern id="nile-waves" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M0,10 Q5,4 10,10 T20,10" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-              <path d="M0,15 Q5,9 10,15 T20,15" fill="none" stroke="var(--gold-dim)" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
-            </pattern>
-          </defs>
-          <rect x="0" y="0" width="100%" height="20" fill="url(#nile-waves)" />
-        </svg>
+        <LotusFreizeBorder id="lotus-btm" />
       </div>
     </div>
 
