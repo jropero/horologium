@@ -144,7 +144,7 @@ const getThoth1 = (gregorianYear: number): Date => {
   // En años donde el siguiente es bisiesto, Thoth 1 = 30 de agosto (Julian) = 12 de septiembre.
   // La diferencia de 13 días entre Julian y Gregoriano es correcta para el período 1900-2099.
   const day = nextYearIsLeap ? 12 : 11;
-  return new Date(gregorianYear, 8, day); // Mes 8 = Septiembre (0-indexed)
+  return new Date(Date.UTC(gregorianYear, 8, day)); // UTC to avoid DST ±1h shift
 };
 
 /**
@@ -194,18 +194,20 @@ export const getEgyptianDate = (gregorianDate: Date, isBeforeSunrise: boolean = 
   }
   
   const year = dateToUse.getFullYear();
+  // Normalize to UTC midnight from local calendar date: eliminates DST ±1h error.
+  const dateUTCMid = new Date(Date.UTC(year, dateToUse.getMonth(), dateToUse.getDate()));
 
   // Paso 1: Determinar el año gregoriano en que comenzó el año alejandrino actual.
   let startYear = year;
   let thoth1 = getThoth1(startYear);
 
-  if (dateToUse < thoth1) {
+  if (dateUTCMid < thoth1) {
     startYear = year - 1;
     thoth1 = getThoth1(startYear);
   }
 
   // Paso 2: Calcular el día del año alejandrino (1-indexed)
-  const diffMs = dateToUse.getTime() - thoth1.getTime();
+  const diffMs = dateUTCMid.getTime() - thoth1.getTime();
   const dayOfYear = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
 
   // Determinar si este año alejandrino es bisiesto

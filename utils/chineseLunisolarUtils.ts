@@ -1,7 +1,9 @@
-import { getMoonPhase, getSolarLongitudeDeg } from './solar';
+import { getSolarLongitudeDeg, prevNewMoonJDE, nextNewMoonJDE, winterSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
 
 const DAY_MS = 86400000;
-const SYNODIC_MONTH = 29.53059;
+
+const toJD = (d: Date): number => d.getTime() / DAY_MS + 2440587.5;
+const fromJD = (jd: number): Date => new Date((jd - 2440587.5) * DAY_MS);
 
 // Major solar term angles (中气) at each 30° of ecliptic longitude
 const MAJOR_TERM_ANGLES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
@@ -99,78 +101,22 @@ export interface ChineseLunisolarDate {
   displayDate: string;
 }
 
-// A "new moon day" is the calendar day (midnight-to-midnight local time) that
-// contains the true lunar conjunction. It is detected when the moon phase at
-// local midnight is near 1 (> 0.8, just before conjunction) and the next
-// midnight is near 0 (< 0.2, just after conjunction) — meaning the conjunction
-// fell within that calendar day.
-
-// Check if a DATE (at noon) is on a new moon day
-const isNMday = (d: Date): boolean => {
-  const today = new Date(d);
-  today.setHours(0, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  return getMoonPhase(today) > 0.8 && getMoonPhase(tomorrow) < 0.2;
-};
-
-// Find the new moon day ON or BEFORE the given date
+// Find the local calendar day (midnight) of the true new moon conjunction
+// on or before the given date (includes the full day of `date`).
 const findNewMoon = (date: Date): Date => {
-  const d = new Date(date);
-  d.setHours(12, 0, 0, 0);
-
-  if (isNMday(d)) {
-    const nm = new Date(d);
-    nm.setHours(0, 0, 0, 0);
-    return nm;
-  }
-
-  // Walk backward looking for the NM day
-  let prevPhase = getMoonPhase(d);
-  for (let i = 1; i <= 32; i++) {
-    const curr = new Date(d);
-    curr.setDate(d.getDate() - i);
-    const phase = getMoonPhase(curr);
-    if (phase > 0.8 && prevPhase < 0.2) {
-      const nm = new Date(curr);
-      nm.setHours(0, 0, 0, 0);
-      return nm;
-    }
-    prevPhase = phase;
-  }
-
-  // Fallback: go back one synodic month
-  const fallback = new Date(d.getTime() - Math.round(SYNODIC_MONTH * DAY_MS));
-  fallback.setHours(0, 0, 0, 0);
-  return fallback;
+  const nmJDE = prevNewMoonJDE(toJD(date) + 1.0);
+  const d = fromJD(nmJDE);
+  d.setHours(0, 0, 0, 0);
+  return d;
 };
 
-// Find the next new moon day strictly after the given date.
-// The date is typically a NM day; we advance 3 days to skip past the current NM's
-// own phase transition boundary (midnight >0.8 → next midnight <0.2) so we find
-// the actual next NM ~29 days later.
+// Find the next new moon day strictly after `date` (which is itself a NM day).
 const findNextNewMoon = (date: Date): Date => {
-  const d = new Date(date);
-  d.setHours(12, 0, 0, 0);
-  d.setDate(d.getDate() + 3);
-
-  let prevPhase = getMoonPhase(d);
-  for (let i = 1; i <= 32; i++) {
-    const curr = new Date(d);
-    curr.setDate(d.getDate() + i);
-    const phase = getMoonPhase(curr);
-    if (prevPhase > 0.8 && phase < 0.2) {
-      const nm = new Date(curr);
-      nm.setHours(0, 0, 0, 0);
-      return nm;
-    }
-    prevPhase = phase;
-  }
-
-  const fallback = new Date(d);
-  fallback.setDate(d.getDate() + 30);
-  fallback.setHours(0, 0, 0, 0);
-  return fallback;
+  const curJDE = prevNewMoonJDE(toJD(date) + 1.0);
+  const nextJDE = nextNewMoonJDE(curJDE);
+  const d = fromJD(nextJDE);
+  d.setHours(0, 0, 0, 0);
+  return d;
 };
 
 // Check if a lunar month interval [start, end) contains any major solar term (中气)
@@ -186,19 +132,11 @@ const intervalContainsMajorTerm = (start: Date, end: Date): boolean => {
   return false;
 };
 
-// Find the winter solstice day (sun ecliptic longitude crosses 270°)
+// Winter solstice day (Meeus Table 27.a, December solstice).
 const findWinterSolstice = (year: number): Date => {
-  const start = new Date(year, 11, 15);
-  let prev = getSolarLongitudeDeg(start);
-  for (let i = 1; i <= 25; i++) {
-    const curr = new Date(year, 11, 15 + i);
-    const lon = getSolarLongitudeDeg(curr);
-    if (prev < 270 && lon >= 270) return curr;
-    prev = lon;
-  }
-  const fallback = new Date(year, 11, 21);
-  fallback.setHours(0, 0, 0, 0);
-  return fallback;
+  const d = fromJD(winterSolsticeJDE(year));
+  d.setHours(0, 0, 0, 0);
+  return d;
 };
 
 // --- Public API ---
@@ -263,19 +201,21 @@ export const getChineseLunisolarDate = (date: Date): ChineseLunisolarDate => {
   // Find the current new moon (start of our lunar month)
   const currentNM = findNewMoon(date);
 
-  // Count lunations from month-11 start to current new moon
-  const diffMs = currentNM.getTime() - m11.getTime();
-  const lunations = Math.round(diffMs / (SYNODIC_MONTH * DAY_MS));
+  // Exact lunation counting via Meeus k-indices (no rounding error).
+  const k_m11 = kForJDE(prevNewMoonJDE(toJD(m11) + 1.0));
+  const k_current = kForJDE(prevNewMoonJDE(toJD(currentNM) + 1.0));
+  const lunations = k_current - k_m11;
 
-  // Chinese year determination: the year starts at month 1 (正月 = Chinese New Year).
-  // CNY is the new moon 2 lunations after the month-11 start.
-  const cnyDate = new Date(m11.getTime() + Math.round(2 * SYNODIC_MONTH * DAY_MS));
+  // CNY: 2nd new moon after month-11 (true conjunction time via Meeus).
+  const cnyJDE = trueNewMoonJDE(k_m11 + 2);
+  const cnyDate = fromJD(cnyJDE);
+  cnyDate.setHours(0, 0, 0, 0);
 
-  // Check leap year: count lunations between this month-11 start and the next
+  // Leap year: exact lunation count between this m11 and the next.
   const nextWS = findWinterSolstice(ws.getFullYear() + 1);
   const nextM11 = findNewMoon(nextWS);
-  const yearDays = (nextM11.getTime() - m11.getTime()) / DAY_MS;
-  const lunationsInYear = Math.round(yearDays / SYNODIC_MONTH);
+  const k_nextM11 = kForJDE(prevNewMoonJDE(toJD(nextM11) + 1.0));
+  const lunationsInYear = k_nextM11 - k_m11;
   const isLeapYear = lunationsInYear > 12;
 
   // Determine month number accounting for leap months
