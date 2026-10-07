@@ -22,6 +22,7 @@ import GreekCalendarModal from './components/GreekCalendarModal';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
+import EclipseForecast from './components/EclipseForecast';
 import SortesVergilianae from './components/SortesVergilianae';
 import OvidianLore from './components/OvidianLore';
 import LocationModal from './components/LocationModal';
@@ -266,6 +267,10 @@ const AppContent: React.FC = () => {
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
       
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && <OvidianLore modernTime={modernTime} />}
+
+      {civilization === 'rome' && (
+        <EclipseForecast currentDate={modernTime} latitude={latitude} longitude={longitude} />
+      )}
 
       {civilization !== 'zhongguo' && (
         <Controls

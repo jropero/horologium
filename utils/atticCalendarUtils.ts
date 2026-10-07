@@ -4,7 +4,7 @@
 // The Attic year begins with Hekatombaion at the first New Moon
 // after the summer solstice.
 
-import { getMoonPhase } from './solar';
+import { getMoonPhase, summerSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 const SYNODIC_MONTH = 29.530588853;
@@ -14,68 +14,11 @@ const SYNODIC_MONTH = 29.530588853;
 const toJD  = (d: Date): number => d.getTime() / 86400000 + 2440587.5;
 const fromJD = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
 
-// Meeus ch. 27 Table 27.a — mean June solstice JDE, accurate to ±1–2 days.
-// The periodic correction terms (Table 27.c) add at most ~0.01 d; omitted here
-// since the crescent-delay tolerance (1.5 d) already absorbs that margin.
-const summerSolsticeJD = (year: number): number => {
-  const T = (year - 2000) / 1000;
-  return 2451716.56767 + 365241.62603 * T + 0.00325 * T * T;
-};
-
-// Meeus ch. 47 — true new moon JDE with perturbations (~2 min accuracy).
-const trueNewMoonJDE = (k: number): number => {
-  const T  = k / 1236.85;
-  const T2 = T * T, T3 = T2 * T, T4 = T3 * T;
-  let JDE = 2451550.09766
-    + 29.530588861 * k
-    + 0.00015437  * T2
-    - 0.000000150 * T3
-    + 0.00000000073 * T4;
-  const rad = Math.PI / 180;
-  const M      = (2.5534      + 29.10535670  * k - 0.0000014  * T2 - 0.00000011   * T3) * rad;
-  const Mprime = (201.5643    + 385.81693528 * k + 0.0107582  * T2 + 0.00001238   * T3 - 0.000000058 * T4) * rad;
-  const F      = (160.7108    + 390.67050284 * k - 0.0016118  * T2 - 0.00000227   * T3 + 0.000000011 * T4) * rad;
-  const Omega  = (124.7746    - 1.56375588   * k + 0.0020672  * T2 + 0.00000215   * T3) * rad;
-  const E = 1 - 0.002516 * T - 0.0000074 * T2;
-  const E2 = E * E;
-  JDE +=
-    -0.40720 * Math.sin(Mprime)
-    + 0.17241 * E   * Math.sin(M)
-    + 0.01608        * Math.sin(2 * Mprime)
-    + 0.01039        * Math.sin(2 * F)
-    + 0.00739 * E   * Math.sin(Mprime - M)
-    - 0.00514 * E   * Math.sin(Mprime + M)
-    + 0.00208 * E2  * Math.sin(2 * M)
-    - 0.00111        * Math.sin(Mprime - 2 * F)
-    - 0.00057        * Math.sin(Mprime + 2 * F)
-    + 0.00056 * E   * Math.sin(2 * Mprime + M)
-    - 0.00042        * Math.sin(3 * Mprime)
-    + 0.00042 * E   * Math.sin(M + 2 * F)
-    + 0.00038 * E   * Math.sin(M - 2 * F)
-    - 0.00024 * E   * Math.sin(2 * Mprime - M)
-    - 0.00017        * Math.sin(Omega)
-    - 0.00007        * Math.sin(Mprime + 2 * M)
-    + 0.00004        * Math.sin(2 * Mprime - 2 * F)
-    + 0.00004        * Math.sin(3 * M)
-    + 0.00003        * Math.sin(Mprime + M - 2 * F)
-    + 0.00003        * Math.sin(2 * Mprime + 2 * F)
-    - 0.00003        * Math.sin(Mprime + M + 2 * F)
-    + 0.00003        * Math.sin(Mprime - M + 2 * F)
-    - 0.00002        * Math.sin(Mprime - M - 2 * F)
-    - 0.00002        * Math.sin(3 * Mprime + M)
-    + 0.00002        * Math.sin(4 * Mprime);
-  return JDE;
-};
-
-const kForDecimalYear = (y: number): number => Math.round((y - 2000) * 12.3685);
-
 // Most recent new moon JDE on or before `jd`.
 const prevNewMoonJDE = (jd: number): number => {
-  const approxYear = 2000 + (jd - 2451545.0) / 365.25;
-  let k = kForDecimalYear(approxYear);
+  let k = kForJDE(jd);
   let nm = trueNewMoonJDE(k);
   while (nm > jd) { k--; nm = trueNewMoonJDE(k); }
-  // One extra check: the next lunation might still be ≤ jd
   const nmNext = trueNewMoonJDE(k + 1);
   if (nmNext <= jd) { k++; nm = nmNext; }
   return nm;
@@ -83,8 +26,7 @@ const prevNewMoonJDE = (jd: number): number => {
 
 // First new moon JDE strictly after `jd`.
 const nextNewMoonJDE = (jd: number): number => {
-  const k = kForDecimalYear(2000 + (jd - 2451545.0) / 365.25);
-  // Try k and k+1; the one just after jd
+  const k = kForJDE(jd);
   for (let offset = 0; offset <= 2; offset++) {
     const nm = trueNewMoonJDE(k + offset);
     if (nm > jd) return nm;
@@ -94,8 +36,7 @@ const nextNewMoonJDE = (jd: number): number => {
 
 // First new moon JDE on or after `jd`.
 const newMoonOnOrAfterJDE = (jd: number): number => {
-  const approxYear = 2000 + (jd - 2451545.0) / 365.25;
-  let k = kForDecimalYear(approxYear) - 1;
+  let k = kForJDE(jd) - 1;
   let nm = trueNewMoonJDE(k);
   while (nm < jd) { k++; nm = trueNewMoonJDE(k); }
   return nm;
@@ -136,7 +77,7 @@ const CRESCENT_DELAY = 1.5;
 // Uses the crescent criterion: find the first new moon whose crescent
 // (conjunction + CRESCENT_DELAY) falls on or after the summer solstice.
 const getAtticYearStart = (gregorianYear: number): Date => {
-  const solsticeJD = summerSolsticeJD(gregorianYear);
+  const solsticeJD = summerSolsticeJDE(gregorianYear);
   const nmJD = newMoonOnOrAfterJDE(solsticeJD - CRESCENT_DELAY);
   return fromJD(nmJD);
 };
