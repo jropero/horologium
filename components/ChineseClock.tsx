@@ -56,7 +56,7 @@ const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime, weather }) => {
 
       {/* 2. Ciclo del Año */}
       <div className="w-full mb-8">
-        <ChineseYearWheel currentTermIndex={getTermIndex(term.id)} />
+        <ChineseYearWheel currentTermIndex={getTermIndex(term.id)} weather={weather} />
       </div>
 
       {/* 3. Costumbres */}
