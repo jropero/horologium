@@ -131,6 +131,55 @@ export const getEgyptianWeatherDesc = (code: number): string => {
     return EGYPTIAN_WEATHER_CODES[code] || 'Pet 𓇯'; // Sky
 };
 
+// --- CHINESE WEATHER (ZHONGGUO 中國) ---
+// Eight Winds (八風, Bā Fēng) — from the Lüshi Chunqiu & Huainanzi
+export const getChineseWindName = (degrees: number): string => {
+    if (degrees >= 337.5 || degrees < 22.5)   return '廣莫風 Guǎng mò (N)';    // Viento del Gran Desierto
+    if (degrees >= 22.5  && degrees < 67.5)   return '條風 Tiáo fēng (NE)';    // Viento Armonizador
+    if (degrees >= 67.5  && degrees < 112.5)  return '明庶風 Míng shù (E)';    // Viento de la Multitud Luminosa
+    if (degrees >= 112.5 && degrees < 157.5)  return '清明風 Qīng míng (SE)';  // Viento Claro y Brillante
+    if (degrees >= 157.5 && degrees < 202.5)  return '景風 Jǐng fēng (S)';     // Viento Espléndido
+    if (degrees >= 202.5 && degrees < 247.5)  return '涼風 Liáng fēng (SO)';   // Viento Fresco
+    if (degrees >= 247.5 && degrees < 292.5)  return '閶闔風 Chāng hé (O)';    // Viento de la Puerta del Cielo
+    if (degrees >= 292.5 && degrees < 337.5)  return '不周風 Bù zhōu (NO)';    // Viento Incompleto — ¡rompió el pilar del Cielo!
+    return '風 Fēng';
+};
+
+const CHINESE_WEATHER_CODES: Record<number, string> = {
+    0:  '天朗氣清 Tiān lǎng qì qīng',   // Clear sky — "Sky clear, air pure"
+    1:  '風和日麗 Fēng hé rì lì',         // Mainly clear — "Wind gentle, sun beautiful"
+    2:  '雲淡風輕 Yún dàn fēng qīng',    // Partly cloudy — "Clouds thin, breeze light"
+    3:  '烏雲蔽日 Wū yún bì rì',          // Overcast — "Dark clouds cover the sun"
+    45: '雲遮霧繞 Yún zhē wù rào',        // Fog — "Clouds cover, mist surrounds"
+    48: '冰霧凝結 Bīng wù níng jié',      // Rime fog — "Icy mist coagulates"
+    51: '細雨霏霏 Xì yǔ fēi fēi',         // Light drizzle — "Fine rain drizzles endlessly"
+    53: '細雨霏霏 Xì yǔ fēi fēi',
+    55: '甘霖普降 Gān lín pǔ jiàng',      // Dense drizzle — "Sweet heaven-rain falls everywhere"
+    56: '冰雨霏霏 Bīng yǔ fēi fēi',
+    57: '冰雨霏霏 Bīng yǔ fēi fēi',
+    61: '甘霖普降 Gān lín pǔ jiàng',
+    63: '大雨滂沱 Dà yǔ páng tuó',        // Moderate rain — "Great rain torrential"
+    65: '傾盆大雨 Qīng pén dà yǔ',        // Heavy rain — "Upturned bucket rain"
+    66: '冰雨滂沱 Bīng yǔ páng tuó',
+    67: '傾盆冰雨 Qīng pén bīng yǔ',
+    71: '瑞雪兆豐 Ruì xuě zhào fēng',     // Light snow — "Auspicious snow foretells harvest"
+    73: '玉屑紛飛 Yù xiè fēn fēi',        // Moderate snow — "Jade shavings fly about"
+    75: '大雪紛飛 Dà xuě fēn fēi',        // Heavy snow — "Great snow flies everywhere"
+    77: '冰晶如玉 Bīng jīng rú yù',       // Snow grains — "Ice crystals like jade"
+    80: '驟雨驟晴 Zhòu yǔ zhòu qíng',    // Showers — "Sudden rain, sudden clear"
+    81: '龍王行雨 Lóng wáng xíng yǔ',    // Moderate showers — "The Dragon King sends rain"
+    82: '龍王震怒 Lóng wáng zhèn nù',    // Violent showers — "The Dragon King rages"
+    85: '玉屑飄飄 Yù xiè piāo piāo',
+    86: '大雪如席 Dà xuě rú xí',
+    95: '雷霆萬鈞 Léi tíng wàn jūn',     // Thunderstorm — "Thunder of ten thousand catties"
+    96: '天公震怒 Tiān gōng zhèn nù',    // Thunderstorm + hail — "The Heavenly Lord rages"
+    99: '雷霆震怒 Léi tíng zhèn nù',     // Severe thunderstorm
+};
+
+export const getChineseWeatherDesc = (code: number): string => {
+    return CHINESE_WEATHER_CODES[code] || '天氣未詳 Tiānqì wèi xiáng';
+};
+
 const HISTORICAL_YEARS = [2003, 1973, 1949];
 
 const getRomanYear = (year: number): string => {
@@ -171,12 +220,14 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
             description: cInfo.description,
             greekDescription: getGreekWeatherDesc(c.weather_code),
             egyptianDescription: getEgyptianWeatherDesc(c.weather_code),
+            chineseDescription: getChineseWeatherDesc(c.weather_code),
             code: c.weather_code,
             windSpeed: c.wind_speed_10m,
             windDirection: c.wind_direction_10m,
             latinWindName: getLatinWindName(c.wind_direction_10m),
             greekWindName: getGreekWindName(c.wind_direction_10m),
             egyptianWindName: getEgyptianWindName(c.wind_direction_10m),
+            chineseWindName: getChineseWindName(c.wind_direction_10m),
             surfacePressure: c.surface_pressure,
             yearLabel: "Hodie"
         };
@@ -197,13 +248,15 @@ export const fetchWeather = async (lat: number, lng: number): Promise<WeatherDat
                     description: info.description,
                     greekDescription: getGreekWeatherDesc(code),
                     egyptianDescription: getEgyptianWeatherDesc(code),
+                    chineseDescription: getChineseWeatherDesc(code),
                     code: code,
                     windSpeed: data.daily.wind_speed_10m_max[0],
                     windDirection: data.daily.wind_direction_10m_dominant[0],
                     latinWindName: getLatinWindName(data.daily.wind_direction_10m_dominant[0]),
                     greekWindName: getGreekWindName(data.daily.wind_direction_10m_dominant[0]),
                     egyptianWindName: getEgyptianWindName(data.daily.wind_direction_10m_dominant[0]),
-                    surfacePressure: 1013, // Valor por defecto para históricos si no se pide explícitamente
+                    chineseWindName: getChineseWindName(data.daily.wind_direction_10m_dominant[0]),
+                    surfacePressure: 1013,
                     yearLabel: getRomanYear(year)
                 });
             }

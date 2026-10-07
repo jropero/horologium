@@ -1,10 +1,12 @@
 import React from 'react';
 import { getChineseCalendarData } from '../utils/chineseCalendarUtils';
 import { getChineseLunisolarDate } from '../utils/chineseLunisolarUtils';
+import { WeatherData } from '../types';
 import ChineseCalendarInfo from './ChineseCalendarInfo';
 import ChineseAnimalClock from './ChineseAnimalClock';
 import ChineseYearWheel from './ChineseYearWheel';
 import ChineseDatePillars from './ChineseDatePillars';
+import ChineseWeatherOracle from './ChineseWeatherOracle';
 
 const TERM_SEASONS = [
   { hanzi: '春', es: 'Primavera', color: 'text-emerald-400', border: 'border-emerald-600/40', bg: 'bg-emerald-900/30' },
@@ -16,9 +18,10 @@ const TERM_SEASONS = [
 
 interface ChineseClockProps {
   modernTime: Date;
+  weather?: WeatherData | null;
 }
 
-const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime }) => {
+const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime, weather }) => {
   const { term, pentad, daysUntilChange } = getChineseCalendarData(modernTime);
   const lunar = getChineseLunisolarDate(modernTime);
   const termSeasonIdx = Math.floor((term.id - 1) / 6);
@@ -60,6 +63,11 @@ const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime }) => {
       <div className="w-full mb-8">
         <ChineseCalendarInfo term={term} pentad={pentad} />
       </div>
+
+      {/* 3b. Weather Oracle */}
+      {weather && (
+        <ChineseWeatherOracle weather={weather} />
+      )}
 
       {/* 4. Fecha lunisolar + Tres Pilares */}
       <div className="w-full mb-8">

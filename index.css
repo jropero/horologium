@@ -180,6 +180,33 @@
     0% { transform: translate(0, 0); }
     100% { transform: translate(var(--drift), 800px); }
   }
+
+  /* Chinese weather animations */
+  .anim-float {
+    animation: floatUpDown 4s ease-in-out infinite;
+    will-change: transform;
+  }
+  .anim-dragon {
+    animation: dragonFly var(--dragon-dur, 14s) linear infinite;
+    will-change: transform;
+  }
+  .anim-glow-pulse {
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes floatUpDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes dragonFly {
+    0%   { transform: translateX(-80px); opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { transform: translateX(calc(100% + 80px)); opacity: 0; }
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.75; filter: drop-shadow(0 0 6px currentColor); }
+    50% { opacity: 1; filter: drop-shadow(0 0 18px currentColor) drop-shadow(0 0 32px currentColor); }
+  }
 }
 
 /* Register --drift as a typed length so transform: translate(var(--drift), ...) runs
