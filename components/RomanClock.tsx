@@ -457,8 +457,10 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 <div className="font-body text-sm font-bold opacity-90 italic text-roman-red mt-1">{translateGreekUI(romanTime.hourName)}</div>
               </div>
             )}
-            <div className="flex flex-col gap-2 justify-center items-center">
-              <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center w-full">
+
+              {/* Dies / Nox */}
+              <div className="flex flex-col items-center gap-1 mt-1">
                 <div className="flex items-center gap-6 text-roman-red font-serif font-bold tracking-[0.3em] text-base">
                   <span className="text-woodcut-green">❧</span>
                   <span>{romanTime.isDay ? labels.dayLabel : labels.nightLabel}</span>
@@ -471,46 +473,44 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 )}
               </div>
 
-              <div className="text-sm md:text-base font-serif text-ink mt-3 mb-3 bg-gold-dim/10 px-3 md:px-8 py-2.5 rounded-lg border border-gold-dim/30 shadow-sm flex flex-col items-center w-full max-w-[260px] mx-auto">
-                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.civilDayPartLabel}</div>
+              {/* Pars Diei Civilis */}
+              <div className="w-full border-t border-ink/10 mt-4 pt-3">
+                <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold-dim mb-1.5">{labels.civilDayPartLabel}</div>
                 {civilization === 'rome' ? (
-                  <div className="flex flex-col items-center text-center px-1">
-                    <span className="font-bold text-ink leading-tight">{romanTime.civilDayPart.name}</span>
-                    <span className="text-[11px] md:text-sm italic text-ink/70 leading-snug">{romanTime.civilDayPart.desc}</span>
-                  </div>
+                  <>
+                    <div className="font-serif font-bold text-ink text-base leading-tight">{romanTime.civilDayPart.name}</div>
+                    <div className="text-[11px] italic text-ink/60 mt-0.5 leading-snug">{romanTime.civilDayPart.desc}</div>
+                  </>
                 ) : (
-                  <div className="flex flex-col items-center text-center px-1">
-                    <span className="font-bold text-ink text-base md:text-lg leading-tight">{romanTime.civilDayPart.name}</span>
-                    <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.civilDayPart.name)}</span>
-                    <span className="text-[11px] md:text-sm font-bold italic text-roman-red mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
-                  </div>
+                  <>
+                    <div className="font-serif font-bold text-ink text-base leading-tight">{romanTime.civilDayPart.name}</div>
+                    <div className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.civilDayPart.name)}</div>
+                    <div className="text-[11px] font-bold italic text-roman-red mt-0.5 leading-snug">{romanTime.civilDayPart.desc}</div>
+                  </>
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 mt-4 px-4 pb-2 border-b border-gold-dim/20 sm:border-none">
-                <div className="flex flex-col items-center text-ink/80 text-center">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.planetaryRulerLabel}</div>
+              {/* Rector Horae + Tutela Mensis — always side by side */}
+              <div className="w-full border-t border-ink/10 mt-4 pt-3 grid grid-cols-2">
+                <div className="flex flex-col items-center border-r border-ink/10 px-2">
+                  <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1.5">{labels.planetaryRulerLabel}</div>
                   {civilization === 'rome' ? (
-                    <span className="font-bold text-ink text-sm uppercase">{romanTime.planetaryRuler}</span>
+                    <span className="font-serif font-bold text-ink text-sm uppercase">{romanTime.planetaryRuler}</span>
                   ) : (
                     <>
-                      <span className="font-bold text-ink text-lg">{romanTime.planetaryRuler}</span>
+                      <span className="font-bold text-ink text-base">{romanTime.planetaryRuler}</span>
                       <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.planetaryRuler)}</span>
                       <span className="text-xs font-bold italic text-roman-red">{translateGreekUI(romanTime.planetaryRuler)}</span>
                     </>
                   )}
                 </div>
-
-                <div className="hidden sm:block w-px h-10 bg-gold-dim/30"></div>
-                <div className="w-16 h-px sm:hidden bg-gold-dim/30"></div>
-
-                <div className="flex flex-col items-center text-ink/80 text-center">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.monthTutelaLabel}</div>
+                <div className="flex flex-col items-center px-2">
+                  <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1.5">{labels.monthTutelaLabel}</div>
                   {civilization === 'rome' ? (
-                    <span className="font-bold text-ink text-sm uppercase">{romanTime.tutelaMensis}</span>
+                    <span className="font-serif font-bold text-ink text-sm uppercase">{romanTime.tutelaMensis}</span>
                   ) : (
                     <>
-                      <span className="font-bold text-ink text-lg">{romanTime.tutelaMensis}</span>
+                      <span className="font-bold text-ink text-base">{romanTime.tutelaMensis}</span>
                       <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">{transliterateGreek(romanTime.tutelaMensis)}</span>
                       <span className="text-xs font-bold italic text-roman-red">{translateGreekUI(romanTime.tutelaMensis)}</span>
                     </>
@@ -518,19 +518,31 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 </div>
               </div>
 
-
-              {/* EPIC 8: Tempus Fugit (Memento Mori) */}
-              {civilization === 'rome' && (
-                <div className="w-full max-w-sm mx-auto mt-6 pt-4 border-t border-ink/10 text-center opacity-80 hover:opacity-100 transition-opacity">
-                  <p className="font-serif text-[9px] uppercase tracking-[0.3em] text-ink/60 mb-1.5 font-bold">Tempus Fugit</p>
-                  <p className="font-serif text-[11px] md:text-xs italic text-ink/90 leading-relaxed px-4">
-                    "Resbalan los tiempos, y envejecemos por tácitos años, y los días escapan sin retardante freno."
-                  </p>
-                  <p className="font-serif text-[8px] uppercase tracking-[0.2em] text-ink/50 mt-1.5 font-bold">
-                    — Ovidio, Fasti, Libro VI, vv. 771-772
-                  </p>
+              {/* Ortus / Occasus / Longitudo Horae */}
+              <div className="w-full border-t border-ink/10 mt-4 pt-3 grid grid-cols-3 text-center">
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-base leading-none">☀</span>
+                  <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim mt-1">Ortus Solis</div>
+                  <div className="font-serif font-bold text-ink text-sm">
+                    {String(romanTime.sunrise.getHours()).padStart(2, '0')}:{String(romanTime.sunrise.getMinutes()).padStart(2, '0')}
+                  </div>
                 </div>
-              )}
+                <div className="flex flex-col items-center gap-0.5 border-x border-ink/10 px-1">
+                  <span className="text-base leading-none">⧗</span>
+                  <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim mt-1">Longitudo Horae</div>
+                  <div className="font-serif font-bold text-ink text-sm">
+                    {Math.round(romanTime.hourLengthMinutes)} minuta
+                  </div>
+                </div>
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-base leading-none">☾</span>
+                  <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim mt-1">Occasus Solis</div>
+                  <div className="font-serif font-bold text-ink text-sm">
+                    {String(romanTime.sunset.getHours()).padStart(2, '0')}:{String(romanTime.sunset.getMinutes()).padStart(2, '0')}
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

@@ -57,17 +57,17 @@
 }
 
 /* === HELLAS THEME === */
-/* Hellenic Dark Mode (Black-figure pottery style) */
+/* Hellenic Dark Mode (Minoan Aegean / kyanite palette) */
 [data-civ="hellas"] {
-  --ink: #11151c; /* Deep sea black/blue */
-  --gold-leaf: #e67e22; /* Brighter terracotta for contrast */
-  --gold-dim: #f39c12;
-  --parchment: #fdebd0; /* Light clay for text */
-  --parchment-dark: #f5cba7;
-  --midnight: #0a0c10;
+  --ink: #0d1420; /* Deep Aegean night */
+  --gold-leaf: #4a90c4; /* Aegean blue — primary accent */
+  --gold-dim: #6aaed8; /* lighter Aegean blue — secondary */
+  --parchment: #ddeaf5; /* cool linen for readable text */
+  --parchment-dark: #b8d4ea;
+  --midnight: #080f1a;
   --hatch-color: #000000;
-  --festival-text: #f1c40f;
-  --roman-red: #ff7043;
+  --festival-text: #90c8e8;
+  --roman-red: #5088b8; /* blue-slate secondary accent */
   --app-bg-pattern: url('/assets/textures/stardust.png');
   --app-bg-size: auto;
 }
