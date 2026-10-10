@@ -18,14 +18,13 @@
 //
 // PUNTO DE ANCLAJE (Época):
 //   El día 1 del mes de Thoth (1er mes del año) cae normalmente
-//   el 11 de septiembre gregoriano. Sin embargo, en el año gregoriano
-//   ANTERIOR a un año bisiesto gregoriano, Thoth 1 cae el 12 de septiembre.
+//   el 11 de septiembre gregoriano. En el año gregoriano que precede
+//   a un año bisiesto gregoriano, Thoth 1 cae el 12 de septiembre,
+//   porque el año anterior tuvo 6 epagómenos (getThoth1 encapsula esto).
 //
-//   Regla del bisiesto alejandrino:
-//   El año alejandrino que comienza en septiembre del año G es bisiesto
-//   si (G + 1) es bisiesto en el calendario gregoriano.
-//   Es decir, el 6.º día epagómeno se añade cuando el próximo año
-//   gregoriano es bisiesto, lo que mantiene la sincronización.
+//   La longitud del año (365 o 366 días) se deduce de la distancia entre
+//   dos Thoth 1 consecutivos — así no hay regla de bisiesto separada
+//   que mantener en sincronía.
 //
 // ESTACIONES EGIPCIAS:
 //   Los 12 meses se agrupan en 3 estaciones de 4 meses:
@@ -147,18 +146,6 @@ const getThoth1 = (gregorianYear: number): Date => {
   return new Date(Date.UTC(gregorianYear, 8, day)); // UTC to avoid DST ±1h shift
 };
 
-/**
- * Determina si el año alejandrino que comienza en el año gregoriano dado
- * es bisiesto (tiene 6 días epagómenos en lugar de 5).
- *
- * El año alejandrino es bisiesto si el SIGUIENTE año gregoriano es bisiesto.
- * Esto mantiene la sincronización: el 6.º epagómeno se inserta justo
- * antes de que el año gregoriano bisiesto añada su 29 de febrero.
- */
-const isAlexandrianLeapYear = (gregorianStartYear: number): boolean => {
-  return isGregorianLeapYear(gregorianStartYear + 1);
-};
-
 // --- Función principal de conversión ---
 
 /**
@@ -210,10 +197,11 @@ export const getEgyptianDate = (gregorianDate: Date, isBeforeSunrise: boolean = 
   const diffMs = dateUTCMid.getTime() - thoth1.getTime();
   const dayOfYear = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
 
-  // Determinar si este año alejandrino es bisiesto
-  const leapYear = isAlexandrianLeapYear(startYear);
-  const totalEpagomenal = leapYear ? 6 : 5;
-  const totalDays = 360 + totalEpagomenal; // 365 o 366
+  // La longitud del año se deduce de los dos Thoth 1 consecutivos.
+  // Esto es la única fuente de verdad — no hay regla de bisiesto separada.
+  const nextThoth1 = getThoth1(startYear + 1);
+  const totalDays = Math.round((nextThoth1.getTime() - thoth1.getTime()) / (1000 * 60 * 60 * 24));
+  const leapYear = totalDays === 366;
 
   // Paso 3: Convertir dayOfYear a mes/día
   if (dayOfYear > 360 && dayOfYear <= totalDays) {
