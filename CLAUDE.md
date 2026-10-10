@@ -20,15 +20,15 @@ npx cap open android                    # Open Android Studio
 
 ## Architecture
 
-**Horologium Romanum** is a PWA + Android app that converts modern time into the temporal systems of three ancient Mediterranean civilizations using precise astronomical algorithms. No backend — all computation is client-side.
+**Horologium Romanum** is a PWA + Android app that converts modern time into the temporal systems of five ancient civilizations using precise astronomical algorithms. No backend — all computation is client-side.
 
 ### Civilization system
 
-The active civilization (`rome` | `hellas` | `aegyptus` | `babylonia`) is stored in `CivilizationContext` (`contexts/CivilizationContext.tsx`) and persisted to `localStorage`. It drives three parallel tracks:
+The active civilization (`rome` | `hellas` | `aegyptus` | `babylonia` | `zhongguo`) is stored in `CivilizationContext` (`contexts/CivilizationContext.tsx`) and persisted to `localStorage`. It drives three parallel tracks:
 
-- **Time calculation**: `utils/romanTimeUtils.ts`, `utils/hellenicTimeUtils.ts`, `utils/egyptianTimeUtils.ts`, `utils/babylonianCalendarUtils.ts` — each returns a civilization-specific time object. These functions receive `(Date, lat, lng)` and compute temporal hours, calendar date, moon phase, planetary ruler, etc.
-- **Clock component**: `RomanClock` is used for both Rome and Hellas; `EgyptianClock` for Aegyptus; `BabylonianClock` for Babylonia.
-- **Calendar info bar**: `RomanCalendarInfo`, `HellenicCalendarInfo`, `EgyptianCalendarInfo`, `BabylonianCalendarInfo` — rendered conditionally in `App.tsx`.
+- **Time calculation**: `utils/romanTimeUtils.ts`, `utils/hellenicTimeUtils.ts`, `utils/egyptianTimeUtils.ts`, `utils/babylonianCalendarUtils.ts`, `utils/chineseTimeUtils.ts` — each returns a civilization-specific time object. These functions receive `(Date, lat, lng)` and compute temporal hours, calendar date, moon phase, planetary ruler, etc.
+- **Clock component**: `RomanClock` for Rome and Hellas; `EgyptianClock` for Aegyptus; `BabylonianClock` for Babylonia; `ChineseClock` for Zhongguo.
+- **Calendar info bar**: `RomanCalendarInfo`, `HellenicCalendarInfo`, `EgyptianCalendarInfo`, `BabylonianCalendarInfo` — rendered conditionally in `App.tsx`. Zhongguo has no separate info bar; all content is embedded in `ChineseClock`.
 - **UI labels**: All strings are civilization-specific, sourced from `utils/civLabels.ts` via the context.
 
 ### Astronomical core
@@ -41,12 +41,13 @@ Heavy static datasets live in `utils/`:
 - Roman: `romanCalendarData.ts`, `romanHistoryData.ts`, `romanYearData.ts`, `romanProvinces.ts`
 - Hellenic: `atticCalendarData.ts`, `atticCalendarUtils.ts`, `greekRegions.ts`, `greekTranslations.ts`, `greekTransliteration.ts`, `sortesHomericae.ts`
 - Egyptian: `egyptianCalendarData.ts`, `egyptianCalendarUtils.ts`, `egyptianDeities.ts`, `egyptianFestivalsData.ts`, `egyptianHemerologyData.ts`, `egyptianWisdomData.ts`, `egyptianAstronomy.ts`, `egyptianRegions.ts`
-- Babylonian: `babylonianCalendarUtils.ts`, `babylonianLoreData.ts`, `babylonianSkylineGenerator.ts`
+- Babylonian: `babylonianCalendarUtils.ts`, `babylonianLoreData.ts`, `babylonianSkylineGenerator.ts`, `babylonianWisdomData.ts`
+- Chinese: `chineseCalendarData.ts`, `chineseCalendarUtils.ts`, `chineseLunisolarUtils.ts`, `chineseTimeUtils.ts`
 - Shared: `sententiaeData.ts`, `apophthegmataData.ts`, `sortesVergilianae.ts`, `locations.ts`
 
 ### Procedural skyline
 
-Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks, ziggurats) as the animated background.
+Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks, ziggurats). `RomanClock` uses the first two (switching on civilization); `EgyptianClock` uses the third; `BabylonianCalendarInfo` uses the fourth inline. `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
 
 ### Theming
 
@@ -133,3 +134,36 @@ Mobile-first tap/click (no hover):
 - Tapping a selected day deselects it (panel closes).
 - Info panel renders below the grid (not a tooltip/overlay) showing special day info + festival description.
 - Green dot top-right of cell = has `dayEvent`. Bottom dot = SPECIAL_DAYS (sapatu, quarters, etc.).
+
+---
+
+## Chinese Calendar (Zhongguo) — Implementation Notes
+
+### Time system
+
+- **Shichen** (時辰): The day is divided into 12 double-hours keyed to the Twelve Earthly Branches (地支, *dìzhī*). Each Shichen spans 2 solar hours and is associated with a zodiac animal. `getCurrentShichen(date)` in `utils/chineseTimeUtils.ts` returns the current branch and progress within it.
+- **Solar Terms** (二十四节气, *Èrshísì Jiéqì*): 24 points of the ecliptic at 15° intervals, each ~15 days. Each is further divided into 3 pentads (候, *hòu*) of 5 days, each associated with a natural phenomenon. Computed in `utils/chineseCalendarUtils.ts`.
+- **Lunisolar calendar**: Month boundaries follow actual lunar conjunctions. `utils/chineseLunisolarUtils.ts` computes the current month, day, and whether the year is intercalary.
+- **Sexagenary cycle** (干支, *gānzhī*): 60-year cycle combining 10 Heavenly Stems (天干) and 12 Earthly Branches. Year, month, day, and hour each have their own pillar — together forming the Four Pillars of Destiny (八字, *bāzì*).
+
+### Key components
+
+- `ChineseClock` — main container; renders the animal clock face, solar term indicator, and sub-panels.
+- `ChineseAnimalClock` — SVG clock face with the 12 zodiac animals arranged as hour sectors.
+- `ChineseDatePillars` — Four Pillars (bāzì) display.
+- `ChineseSolarTermsModal` — full 24-term wheel with pentad details.
+- `ChineseYearCycle` / `ChineseYearWheel` — 60-year sexagenary cycle visualization.
+- `ChineseWeatherOracle` — weather framed in traditional Chinese cosmology.
+- `SexagenaryCycleCard` — compact card showing the current year's stem-branch pair.
+
+### Theme — Ink Wash / Vermilion palette
+
+CSS variables are overridden in `[data-civ="zhongguo"]` block in `index.css`:
+- `--ink`: `#1a1410` (deep ink-wash dark)
+- `--gold-leaf`: `#e11d48` (rose-600, vermilion red primary accent)
+- `--gold-dim`: `#be123c` (rose-700, secondary)
+- `--parchment`: `#fef3c7` (warm amber-50 for text)
+- `--roman-red`: `#e11d48` (same as gold-leaf here)
+- Background: radial ink-wash gradients simulating brushed ink depth.
+
+Tailwind utility classes in Chinese components use `red-*` / `rose-*` for primary accents and `amber-*` / `yellow-*` for secondary. Minimum font size: `text-xs` throughout.
