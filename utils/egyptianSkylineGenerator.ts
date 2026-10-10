@@ -27,7 +27,7 @@ export const generateEgyptianSkyline = (seed: number): EgyptianSkylineElement[] 
   const rand = PRNG(seed);
   const elements: EgyptianSkylineElement[] = [];
 
-  const leftZone = { start: 5, end: 100 };
+  const leftZone  = { start: 5,   end: 100 };
   const rightZone = { start: 200, end: 295 };
 
   const generateElement = (xStart: number, zoneEnd: number): { el: EgyptianSkylineElement, nextX: number } | null => {
@@ -39,11 +39,11 @@ export const generateEgyptianSkyline = (seed: number): EgyptianSkylineElement[] 
     const scale = 0.5 + rand() * 0.7;
 
     switch (type) {
-      case 'pyramid': width = 35 * scale; height = 25 * scale; break;
-      case 'obelisk': width = 5 * scale; height = 32 * scale; break;
-      case 'pylon': width = 28 * scale; height = 18 * scale; break;
+      case 'pyramid':   width = 35 * scale; height = 25 * scale; break;
+      case 'obelisk':   width = 6  * scale; height = 34 * scale; break;
+      case 'pylon':     width = 30 * scale; height = 20 * scale; break;
       case 'palm_tree': width = 10 * scale; height = 24 * scale; break;
-      case 'sphinx': width = 30 * scale; height = 12 * scale; break;
+      case 'sphinx':    width = 30 * scale; height = 12 * scale; break;
     }
 
     if (xStart + width > zoneEnd) return null;
@@ -52,7 +52,6 @@ export const generateEgyptianSkyline = (seed: number): EgyptianSkylineElement[] 
     const cx = xStart + width / 2;
     let baseY = 180;
 
-    // Terrain curve matching greekSkylineGenerator
     if (cx >= 0 && cx <= 100) {
       const t = cx / 100;
       baseY = 180 - 40 * t + 40 * t * t + 4;
@@ -62,46 +61,69 @@ export const generateEgyptianSkyline = (seed: number): EgyptianSkylineElement[] 
     }
 
     switch (type) {
+
       case 'pyramid': {
-        // Large triangle — the Great Pyramid silhouette
+        // Great Pyramid silhouette: triangle with subtle face division
         path += `M ${xStart} ${baseY} L ${cx} ${baseY - height} L ${xStart + width} ${baseY} Z `;
-        // Subtle face division line from apex to base midpoint
+        // Slight face division from apex toward right base third
         const faceMid = xStart + width * 0.6;
         path += `M ${cx} ${baseY - height} L ${faceMid} ${baseY} `;
         break;
       }
 
       case 'obelisk': {
-        // Tall thin pillar with pyramidion (pointed tip)
-        const halfW = width / 2;
-        const pyramidionH = height * 0.12;
-        const shaftTop = baseY - height + pyramidionH;
-        // Shaft
-        path += `M ${cx - halfW} ${baseY} L ${cx - halfW} ${shaftTop} L ${cx + halfW} ${shaftTop} L ${cx + halfW} ${baseY} Z `;
-        // Pyramidion (small pyramid on top)
-        path += `M ${cx - halfW - 0.5} ${shaftTop} L ${cx} ${baseY - height} L ${cx + halfW + 0.5} ${shaftTop} Z `;
-        // Base pedestal
-        path += `M ${cx - halfW - 2} ${baseY} L ${cx + halfW + 2} ${baseY} L ${cx + halfW + 2} ${baseY - 2} L ${cx - halfW - 2} ${baseY - 2} Z `;
+        // Historically accurate tapered obelisk:
+        //   - square base pedestal (wider than shaft)
+        //   - shaft narrows from bottom to top (~45% of base width at apex)
+        //   - distinct pyramidion (≈15% of total height)
+        const pedH   = Math.max(1.5, height * 0.07);
+        const pyrH   = height * 0.15;
+        const shaftH = height - pedH - pyrH;
+        const pedW   = width * 1.6;            // pedestal wider than shaft
+        const topW   = width * 0.45;           // shaft narrows to 45% at top
+
+        const shaftBotY = baseY - pedH;
+        const shaftTopY = shaftBotY - shaftH;
+        const apexY     = shaftTopY - pyrH;
+
+        // Pedestal
+        path += `M ${cx - pedW / 2} ${baseY} L ${cx + pedW / 2} ${baseY} `;
+        path += `L ${cx + pedW / 2} ${shaftBotY} L ${cx - pedW / 2} ${shaftBotY} Z `;
+        // Tapered shaft (trapezoid — wide at base, narrow at top)
+        path += `M ${cx - width / 2} ${shaftBotY} L ${cx - topW / 2} ${shaftTopY} `;
+        path += `L ${cx + topW / 2} ${shaftTopY} L ${cx + width / 2} ${shaftBotY} Z `;
+        // Pyramidion — clear sharp triangle
+        path += `M ${cx - topW / 2} ${shaftTopY} L ${cx} ${apexY} L ${cx + topW / 2} ${shaftTopY} Z `;
         break;
       }
 
       case 'pylon': {
-        // Temple gateway — two trapezoidal towers with a gap
-        const towerW = width * 0.35;
-        const gapW = width * 0.3;
-        const taper = towerW * 0.15; // inward taper at top (battered walls)
-        // Left tower (trapezoid — wider at base, narrower at top)
+        // Temple gateway: two massive battered (inward-sloping) towers flanking a tall doorway.
+        // No horizontal lintel — the towers are independent, the void between is the gate.
+        const towerW  = width * 0.42;
+        const gapW    = width * 0.16;          // narrow gate void
+        const taper   = towerW * 0.22;         // strong batter (inward slope)
+        const corniceH = Math.max(1.5, height * 0.07); // flat cap at top
+
+        // Left tower (battered trapezoid — wider at base)
         const lt = xStart;
-        path += `M ${lt} ${baseY} L ${lt + taper} ${baseY - height} L ${lt + towerW - taper} ${baseY - height} L ${lt + towerW} ${baseY} Z `;
+        path += `M ${lt} ${baseY} L ${lt + taper} ${baseY - height} `;
+        path += `L ${lt + towerW - taper} ${baseY - height} L ${lt + towerW} ${baseY} Z `;
+        // Left cavetto cornice (flat rectangular cap on top of tower)
+        path += `M ${lt + taper - 1.5} ${baseY - height} `;
+        path += `L ${lt + towerW - taper + 1.5} ${baseY - height} `;
+        path += `L ${lt + towerW - taper + 1.5} ${baseY - height - corniceH} `;
+        path += `L ${lt + taper - 1.5} ${baseY - height - corniceH} Z `;
+
         // Right tower
         const rt = xStart + towerW + gapW;
-        path += `M ${rt} ${baseY} L ${rt + taper} ${baseY - height} L ${rt + towerW - taper} ${baseY - height} L ${rt + towerW} ${baseY} Z `;
-        // Lintel connecting the two towers
-        const lintelY = baseY - height * 0.6;
-        path += `M ${lt + towerW} ${lintelY} L ${rt} ${lintelY} L ${rt} ${lintelY + 2} L ${lt + towerW} ${lintelY + 2} Z `;
-        // Cavetto cornice on each tower (small triangle at top)
-        path += `M ${lt + taper - 1} ${baseY - height} L ${lt + towerW - taper + 1} ${baseY - height} L ${lt + towerW - taper + 1} ${baseY - height - 2} L ${lt + taper - 1} ${baseY - height - 2} Z `;
-        path += `M ${rt + taper - 1} ${baseY - height} L ${rt + towerW - taper + 1} ${baseY - height} L ${rt + towerW - taper + 1} ${baseY - height - 2} L ${rt + taper - 1} ${baseY - height - 2} Z `;
+        path += `M ${rt} ${baseY} L ${rt + taper} ${baseY - height} `;
+        path += `L ${rt + towerW - taper} ${baseY - height} L ${rt + towerW} ${baseY} Z `;
+        // Right cavetto cornice
+        path += `M ${rt + taper - 1.5} ${baseY - height} `;
+        path += `L ${rt + towerW - taper + 1.5} ${baseY - height} `;
+        path += `L ${rt + towerW - taper + 1.5} ${baseY - height - corniceH} `;
+        path += `L ${rt + taper - 1.5} ${baseY - height - corniceH} Z `;
         break;
       }
 
@@ -109,40 +131,50 @@ export const generateEgyptianSkyline = (seed: number): EgyptianSkylineElement[] 
         // Thin trunk with fan-shaped fronds at top
         const trunkW = width * 0.12;
         const trunkH = height * 0.55;
-        // Trunk (slightly curved)
-        const sway = (rand() - 0.5) * 3;
-        path += `M ${cx - trunkW / 2} ${baseY} L ${cx - trunkW / 2 + sway} ${baseY - trunkH} L ${cx + trunkW / 2 + sway} ${baseY - trunkH} L ${cx + trunkW / 2} ${baseY} Z `;
-        // Fronds (5 curved leaf shapes radiating from top)
-        const topX = cx + sway;
-        const topY = baseY - trunkH;
+        const sway   = (rand() - 0.5) * 3;
+        path += `M ${cx - trunkW / 2} ${baseY} L ${cx - trunkW / 2 + sway} ${baseY - trunkH} `;
+        path += `L ${cx + trunkW / 2 + sway} ${baseY - trunkH} L ${cx + trunkW / 2} ${baseY} Z `;
+        const topX    = cx + sway;
+        const topY    = baseY - trunkH;
         const frondLen = height * 0.5;
         for (let i = 0; i < 5; i++) {
-          const angle = -70 + i * 35; // spread from -70 to +70 degrees
-          const rad = (angle * Math.PI) / 180;
-          const endX = topX + Math.sin(rad) * frondLen;
-          const endY = topY - Math.cos(rad) * frondLen * 0.6;
-          const cpX = topX + Math.sin(rad) * frondLen * 0.5;
-          const cpY = topY - Math.cos(rad) * frondLen * 0.8;
+          const angle = -70 + i * 35;
+          const r = (angle * Math.PI) / 180;
+          const endX = topX + Math.sin(r) * frondLen;
+          const endY = topY - Math.cos(r) * frondLen * 0.6;
+          const cpX  = topX + Math.sin(r) * frondLen * 0.5;
+          const cpY  = topY - Math.cos(r) * frondLen * 0.8;
           path += `M ${topX} ${topY} Q ${cpX} ${cpY} ${endX} ${endY} Q ${cpX + 1} ${cpY + 2} ${topX} ${topY} `;
         }
         break;
       }
 
       case 'sphinx': {
-        // Recumbent lion body with human head
-        const bodyH = height * 0.6;
-        const headH = height;
-        const bodyLen = width * 0.8;
-        const headW = width * 0.2;
-        // Body (elongated rectangle with rounded back)
-        path += `M ${xStart} ${baseY} L ${xStart} ${baseY - bodyH} Q ${xStart + bodyLen * 0.5} ${baseY - bodyH - 3} ${xStart + bodyLen} ${baseY - bodyH} L ${xStart + bodyLen} ${baseY} Z `;
-        // Paws extending forward
-        path += `M ${xStart + bodyLen} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - bodyH * 0.4} L ${xStart + bodyLen} ${baseY - bodyH * 0.5} Z `;
-        // Head (taller section at front)
-        const headX = xStart + bodyLen - headW * 0.5;
-        path += `M ${headX} ${baseY - bodyH} L ${headX} ${baseY - headH} L ${headX + headW} ${baseY - headH} L ${headX + headW} ${baseY - bodyH} Z `;
-        // Nemes headdress flare
-        path += `M ${headX - 1} ${baseY - headH + 2} L ${headX + headW + 1} ${baseY - headH + 2} L ${headX + headW + 1} ${baseY - headH} L ${headX - 1} ${baseY - headH} Z `;
+        // Recumbent sphinx: elongated lion body + human head with nemes headdress
+        const bodyH  = height * 0.55;
+        const headH  = height * 0.92;
+        const bodyLen = width * 0.72;
+        const headW  = width * 0.22;
+        const nemesW = headW * 1.55;   // nemes wider than head (drapes over shoulders)
+
+        // Body with gentle arch on back
+        path += `M ${xStart} ${baseY} L ${xStart} ${baseY - bodyH} `;
+        path += `Q ${xStart + bodyLen * 0.4} ${baseY - bodyH - 2} ${xStart + bodyLen} ${baseY - bodyH} `;
+        path += `L ${xStart + bodyLen} ${baseY} Z `;
+        // Extended paws in front
+        path += `M ${xStart + bodyLen} ${baseY - bodyH * 0.4} L ${xStart + width} ${baseY - bodyH * 0.28} `;
+        path += `L ${xStart + width} ${baseY} L ${xStart + bodyLen} ${baseY} Z `;
+
+        // Head (rectangular block rising above body)
+        const headX = xStart + bodyLen - headW * 0.3;
+        path += `M ${headX} ${baseY - bodyH} L ${headX} ${baseY - headH} `;
+        path += `L ${headX + headW} ${baseY - headH} L ${headX + headW} ${baseY - bodyH} Z `;
+
+        // Nemes headdress: wider than head, slopes down on both sides
+        const nemesX = headX - (nemesW - headW) / 2;
+        path += `M ${headX} ${baseY - headH} L ${headX + headW} ${baseY - headH} `;                         // top of head
+        path += `L ${headX + headW} ${baseY - bodyH - 1} L ${nemesX + nemesW} ${baseY - headH + 4} `;      // right side drape
+        path += `L ${nemesX} ${baseY - headH + 4} L ${headX} ${baseY - bodyH - 1} Z `;                     // left side drape
         break;
       }
     }
@@ -156,9 +188,9 @@ export const generateEgyptianSkyline = (seed: number): EgyptianSkylineElement[] 
         y: baseY - height,
         width,
         height,
-        opacity: 0.8 + rand() * 0.2
+        opacity: 0.8 + rand() * 0.2,
       },
-      nextX: xStart + width + 2 + rand() * 10
+      nextX: xStart + width + 2 + rand() * 10,
     };
   };
 
