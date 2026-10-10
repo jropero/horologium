@@ -172,27 +172,25 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({ atticDate: 
 
                 <div className="p-5 md:p-8 flex flex-col items-center gap-6 text-center">
 
-                    {/* TOP: Month name & General Date Info */}
-                    <div className="border-b border-gold-dim/30 pb-4 w-full flex flex-col items-center justify-center gap-2">
+                    {/* TOP: Month name */}
+                    <div className="border-b border-gold-dim/30 pb-4 w-full flex flex-col items-center justify-center gap-1">
                         <div className="flex items-center gap-2">
                             <span className="text-2xl filter drop-shadow-sm">🏛️</span>
                             <h3 className="font-serif text-xl md:text-2xl uppercase tracking-[0.2em] font-bold text-gold-leaf">
                                 {atticDate.monthName}
                             </h3>
                         </div>
-                        <div className="font-serif text-xs tracking-widest text-gold-dim uppercase">{transliterateGreek(atticDate.monthName)}</div>
-                        <div className="text-sm italic text-parchment font-body bg-gold-leaf/10 px-4 py-1 rounded-full shadow-inner border border-gold-leaf/20">Mes de {translateGreekUI(atticDate.monthName)}</div>
+                        <div className="font-serif text-xs tracking-widest text-gold-dim uppercase">
+                            {transliterateGreek(atticDate.monthName)} · {translateGreekUI(atticDate.monthName)}
+                        </div>
                     </div>
 
-                    {/* MAIN: Date and decades timeline */}
+                    {/* MAIN: Full date */}
                     <div className="w-full my-2">
                         <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-sm leading-tight mb-1">
                             {atticDate.full}
                         </h2>
-                        <div className="font-serif text-xs tracking-widest text-gold-dim uppercase mb-1">
-                            {transliterateGreek(atticDate.full)}
-                        </div>
-                        <p className="font-serif text-base text-gold-leaf font-bold italic px-2 mt-2">
+                        <p className="font-serif text-base text-gold-leaf font-bold italic px-2 mt-1">
                             "{atticDate.spanishFull}"
                         </p>
                     </div>

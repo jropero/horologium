@@ -9,7 +9,8 @@ interface SolarTimesProps {
 }
 
 const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLength, timezone }) => {
-  const { labels } = useCivilization();
+  const { civilization, labels } = useCivilization();
+  const isEgypt = civilization === 'aegyptus';
   const format = (d: Date) => {
     const opts: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
     if (timezone) opts.timeZone = timezone;
@@ -18,9 +19,13 @@ const SolarTimes: React.FC<SolarTimesProps> = ({ sunrise, sunset, currentHourLen
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-4 px-2">
-      <div className="flex flex-col md:flex-row justify-between items-center bg-ink/90 border border-gold-dim/40 p-5 rounded-lg shadow-xl gap-6 text-parchment relative overflow-hidden group transition-all hover:bg-ink/95">
-        {/* Decorative background hatch */}
-        <div className="absolute inset-0 woodcut-hatch opacity-10 pointer-events-none"></div>
+      <div
+        className={`flex flex-col md:flex-row justify-between items-center border p-5 shadow-xl gap-6 text-parchment relative overflow-hidden group transition-all ${
+          isEgypt ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg hover:bg-ink/95'
+        }`}
+        style={isEgypt ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
+      >
+        {!isEgypt && <div className="absolute inset-0 woodcut-hatch opacity-10 pointer-events-none"></div>}
         
         <div className="flex flex-col md:flex-row items-center gap-4 z-10 flex-1 justify-center">
            <div className="text-gold-leaf text-3xl filter drop-shadow-glow">☀</div>

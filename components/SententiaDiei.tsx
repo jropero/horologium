@@ -63,15 +63,17 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
 
   return (
     <div className="w-full max-w-2xl mx-auto my-6 px-4">
-      <div 
+      <div
         onClick={handleRandomize}
-        className="relative bg-ink/90 border border-gold-dim/40 rounded-lg p-8 shadow-2xl backdrop-blur-md group cursor-pointer hover:bg-ink/95 transition-all duration-300 active:scale-[0.98] overflow-hidden"
+        className={`relative border p-8 shadow-2xl group cursor-pointer transition-all duration-300 active:scale-[0.98] overflow-hidden ${
+          civilization === 'aegyptus' ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md hover:bg-ink/95'
+        }`}
+        style={civilization === 'aegyptus' ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
         title="Click for a random quote"
       >
-        {/* Decorative background hatch */}
-        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+        {civilization !== 'aegyptus' && <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>}
 
-        {/* Esquinas ornamentales */}
+        {/* Corner ornaments */}
         <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
         <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
         <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>

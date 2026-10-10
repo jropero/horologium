@@ -41,10 +41,13 @@ const SortesVergilianae: React.FC = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 px-4 animate-fadeIn">
-      <div className="bg-ink/90 border border-gold-dim/40 rounded-lg overflow-hidden shadow-2xl backdrop-blur-md relative group">
-        
-        {/* Decorative background hatch */}
-        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+      <div
+        className={`border overflow-hidden shadow-2xl relative group ${
+          civilization === 'aegyptus' ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md'
+        }`}
+        style={civilization === 'aegyptus' ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
+      >
+        {civilization !== 'aegyptus' && <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>}
 
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gold-dim/20 bg-white/5 relative z-10">
