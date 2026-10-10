@@ -78,10 +78,13 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 px-2 animate-fadeIn">
-      <div className={`bg-ink/90 border rounded-lg p-6 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row gap-6 items-stretch relative overflow-hidden group ${civilization === 'aegyptus' ? 'border-emerald-500/30' : 'border-gold-dim/40'}`}>
-        
-        {/* Decorative background hatch */}
-        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+      <div
+        className={`border p-6 shadow-2xl flex flex-col sm:flex-row gap-6 items-stretch relative overflow-hidden group ${
+          civilization === 'aegyptus' ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md'
+        }`}
+        style={civilization === 'aegyptus' ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
+      >
+        {civilization !== 'aegyptus' && <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>}
 
         {/* Provincia / Region */}
         <div className="flex-1 flex items-start gap-3 sm:border-r sm:border-gold-dim/20 sm:pr-4 z-10">

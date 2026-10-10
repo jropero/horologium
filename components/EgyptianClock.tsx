@@ -1,16 +1,10 @@
-import React, { useMemo, useState } from 'react';
-import { Eye, Star, Info } from 'lucide-react';
+import React, { useMemo } from 'react';
 import { RomanTimeData, WeatherData } from '../types';
-import WeatherWidget from './WeatherWidget';
-import EgyptianCalendarModal from './EgyptianCalendarModal';
-import WeatherModal from './WeatherModal';
-import HorusEclipseModal from './HorusEclipseModal';
 import { generateEgyptianSkyline } from '../utils/egyptianSkylineGenerator';
 import { useCivilization } from '../contexts/CivilizationContext';
-import { getEgyptianDate, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
+import { getEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEgyptianMonthDeity } from '../utils/egyptianCalendarData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
-import { getAlgolPhase, AlgolState } from '../utils/egyptianAstronomy';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
 
@@ -34,9 +28,6 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   currentLng
 }) => {
   const { labels } = useCivilization();
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [isWeatherOpen, setIsWeatherOpen] = useState(false);
-  const [isHorusOpen, setIsHorusOpen] = useState(false);
 
   const stars = useMemo(() => {
     const starData = [];
@@ -84,8 +75,6 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
     return { eDate, deity, hemerology, currentPrognosis, partName };
   }, [modernTime.getDate(), romanTime.romanHour, romanTime.isDay]);
-
-  const algol = useMemo(() => getAlgolPhase(modernTime), [modernTime.getTime()]);
 
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
   const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity), [rainIntensity]);
@@ -179,61 +168,10 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   const objectY = cy - pathRadius * Math.sin(rad);
 
   return (
-    <>
-      <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
-        <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-emerald-500/30 bg-ink">
-          
-          {weather && (
-            <WeatherWidget
-              weather={weather}
-              onClick={() => setIsWeatherOpen(true)}
-              className="cursor-pointer"
-            />
-          )}
+    <div className="w-full max-w-2xl mx-auto shadow-2xl animate-fadeIn" style={{ background: '#0c0804', border: '4px solid rgba(24,64,160,0.55)', borderRadius: '2px' }}>
 
-          <div
-            onClick={() => setIsCalendarOpen(true)}
-            className="calendar-header-widget bg-ink/80 border border-gold-dim p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-emerald-500 transition-all group relative ml-auto"
-            title="Ver Calendario Egipcio"
-          >
-            <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center md:justify-end gap-3 font-bold">
-              <span className="text-2xl drop-shadow-[0_0_3px_rgba(207,181,59,0.4)]">{egyptianDateInfo.eDate.seasonHieroglyphic}</span>
-              <span className="text-gold-dim/60 text-xs">|</span>
-              <span className="text-gold-leaf">{egyptianDateInfo.eDate.monthName} {egyptianDateInfo.eDate.dayOfMonth}</span>
-            </div>
-            <div className="text-parchment/70 font-serif text-xs italic mb-2">{formatEgyptianDate(egyptianDateInfo.eDate)}</div>
-            <div className="flex items-center gap-3 justify-center md:justify-end text-parchment font-serif text-sm italic mt-1">
-              <span className="text-xs px-2 py-0.5 border border-emerald-500/40 rounded bg-emerald-500/10 uppercase font-bold text-egypt-primary">{egyptianDateInfo.eDate.seasonName}</span>
-              <span className="flex items-center gap-1.5 bg-ink/40 px-2 py-0.5 rounded border border-gold-dim/20">
-                <span className="text-gold-leaf">☽</span>
-                <span>{romanTime.moonPhaseLabel}</span>
-              </span>
-              <span className="text-gold-dim/60">•</span>
-              <span 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsHorusOpen(true);
-                }}
-                className={`flex items-center gap-1.5 px-2 py-0.5 rounded border transition-all duration-700 cursor-pointer hover:scale-105 ${
-                  algol.isEclipsed 
-                    ? 'bg-roman-red/10 border-roman-red/30 text-roman-red opacity-70' 
-                    : 'bg-gold-leaf/10 border-gold-leaf/30 text-gold-leaf drop-shadow-[0_0_5px_rgba(207,181,59,0.4)]'
-                }`}
-                title={algol.stateText}
-              >
-                <Eye className={`w-3.5 h-3.5 ${algol.isEclipsed ? 'animate-pulse' : ''}`} />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Horus</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-2 justify-center md:justify-end text-gold-leaf font-serif text-xs mt-2 font-bold drop-shadow-sm">
-              <span>{egyptianDateInfo.deity.deity}</span>
-              <span className="text-lg drop-shadow-[0_0_2px_rgba(207,181,59,0.3)]">{egyptianDateInfo.deity.deityHieroglyphic}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="woodcut-border p-2 bg-ink relative overflow-hidden">
-          <div className="relative w-full aspect-[16/9] bg-midnight overflow-hidden border-2 border-emerald-500/30">
+        <div className="relative overflow-hidden">
+          <div className="relative w-full aspect-[16/9] overflow-hidden border-b-2" style={{ borderColor: 'rgba(24,64,160,0.35)' }}>
             <div className="absolute inset-0 woodcut-hatch opacity-20 pointer-events-none"></div>
             <div className="absolute inset-0 bg-stardust opacity-30 pointer-events-none"></div>
 
@@ -422,14 +360,15 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
             </div>
           </div>
 
-          <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
-            <h2 className="responsive-wrap text-2xl xs:text-3xl md:text-5xl font-serif font-bold text-ink mb-3 uppercase tracking-wide drop-shadow-sm items-center justify-center gap-2 xs:gap-4">
+          <div className="p-5 text-center border-t-2" style={{ borderColor: 'rgba(24,64,160,0.30)' }}>
+            {/* Hour + prognosis */}
+            <h2 className="responsive-wrap text-2xl xs:text-3xl md:text-5xl font-serif font-bold text-parchment mb-3 uppercase tracking-wide items-center justify-center gap-3 xs:gap-4">
               <span>Hora {romanTime.romanHour}</span>
               {egyptianDateInfo.currentPrognosis !== 'none' && (
-                <div className={`text-[9px] xs:text-[10px] md:text-xs px-2 py-1 rounded-full border flex items-center gap-1.5 shadow-sm transition-all animate-fadeIn
-                  ${egyptianDateInfo.currentPrognosis === 'nefer' 
-                    ? 'bg-emerald-100 text-egypt-accent border-emerald-300' 
-                    : 'bg-red-100 text-roman-red border-roman-red/30'}`}
+                <div className={`text-[9px] xs:text-[10px] md:text-xs px-2 py-1 rounded border flex items-center gap-1.5 transition-all animate-fadeIn
+                  ${egyptianDateInfo.currentPrognosis === 'nefer'
+                    ? 'bg-emerald-900/30 text-emerald-300 border-emerald-500/40'
+                    : 'bg-red-900/20 text-red-300 border-red-500/35'}`}
                 >
                   <span className="text-xs xs:text-sm">{egyptianDateInfo.currentPrognosis === 'nefer' ? '☀️' : '🦂'}</span>
                   <span className="font-bold uppercase tracking-widest">
@@ -439,135 +378,100 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
               )}
             </h2>
 
-            {/* Visual Date Tracker */}
+            {/* Date tracker */}
             {egyptianDateInfo.eDate.isEpagomenal ? (
-              <div className="mb-6">
-                <span className="text-amber-600 font-bold uppercase tracking-widest text-sm drop-shadow-sm">
+              <div className="mb-5">
+                <span className="font-bold uppercase tracking-widest text-sm" style={{ color: 'rgba(212,168,50,0.85)' }}>
                   {egyptianDateInfo.eDate.seasonHieroglyphic} Días Epagómenos {egyptianDateInfo.eDate.seasonHieroglyphic}
                 </span>
-                <div className="font-body text-xs mt-1 text-ink/70">Día {egyptianDateInfo.eDate.dayOfMonth}</div>
+                <div className="font-serif text-xs mt-1 text-parchment/60">Día {egyptianDateInfo.eDate.dayOfMonth}</div>
               </div>
             ) : (
-              <div className="flex flex-col gap-2 w-full max-w-sm mx-auto mb-6 px-2">
-                {/* Estación (3) */}
-                <div className="responsive-wrap items-center gap-3">
-                  <span className="text-[9px] uppercase tracking-widest text-egypt-accent font-bold w-14 text-right">Estación</span>
-                  <div className="flex flex-1 gap-1">
-                    {[0, 1, 2].map(s => {
-                      const seasonIndex = Math.floor(egyptianDateInfo.eDate.monthIndex / 4);
-                      return (
-                        <div key={s} className={`h-1.5 flex-1 rounded-sm transition-all duration-500 ${
-                          s === seasonIndex ? 'bg-emerald-600 shadow-[0_0_8px_rgba(5,150,105,0.5)]' 
-                          : s < seasonIndex ? 'bg-emerald-600/30' 
-                          : 'bg-gold-dim/20'
+              <div className="flex flex-col gap-2 w-full max-w-sm mx-auto mb-5 px-2">
+                {[
+                  {
+                    label: 'Estación',
+                    items: [0, 1, 2],
+                    active: Math.floor(egyptianDateInfo.eDate.monthIndex / 4),
+                    text: egyptianDateInfo.eDate.seasonName,
+                    activeClass: 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.4)]',
+                    doneClass: 'bg-emerald-700/40',
+                  },
+                  {
+                    label: 'Mes',
+                    items: [0, 1, 2, 3],
+                    active: egyptianDateInfo.eDate.monthIndex % 4,
+                    text: egyptianDateInfo.eDate.monthName,
+                    activeClass: 'bg-[#1840a0] shadow-[0_0_8px_rgba(24,64,160,0.5)]',
+                    doneClass: 'bg-[#1840a0]/30',
+                  },
+                  {
+                    label: 'Década',
+                    items: [0, 1, 2],
+                    active: egyptianDateInfo.eDate.decade - 1,
+                    text: `Día ${egyptianDateInfo.eDate.dayOfMonth}`,
+                    activeClass: 'bg-gold-leaf shadow-[0_0_8px_rgba(212,168,50,0.4)]',
+                    doneClass: 'bg-gold-leaf/25',
+                  },
+                ].map(({ label, items, active, text, activeClass, doneClass }) => (
+                  <div key={label} className="responsive-wrap items-center gap-3">
+                    <span className="text-[9px] uppercase tracking-widest font-bold w-14 text-right" style={{ color: 'rgba(212,168,50,0.60)' }}>{label}</span>
+                    <div className="flex flex-1 gap-1">
+                      {items.map((_, i) => (
+                        <div key={i} className={`h-1.5 flex-1 rounded-sm transition-all duration-500 ${
+                          i === active ? activeClass : i < active ? doneClass : 'bg-[#1840a0]/10'
                         }`} />
-                      );
-                    })}
+                      ))}
+                    </div>
+                    <span className="w-16 text-left text-xs font-serif text-parchment/75 font-bold">{text}</span>
                   </div>
-                  <span className="w-16 text-left text-xs font-serif text-ink/90 font-bold uppercase tracking-wider">{egyptianDateInfo.eDate.seasonName}</span>
-                </div>
-
-                {/* Mes (4) */}
-                <div className="responsive-wrap items-center gap-3">
-                  <span className="text-[9px] uppercase tracking-widest text-egypt-accent font-bold w-14 text-right">Mes</span>
-                  <div className="flex flex-1 gap-1">
-                    {[1, 2, 3, 4].map(m => {
-                      const monthOfSeason = (egyptianDateInfo.eDate.monthIndex % 4) + 1;
-                      return (
-                        <div key={m} className={`h-1.5 flex-1 rounded-sm transition-all duration-500 ${
-                          m === monthOfSeason ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' 
-                          : m < monthOfSeason ? 'bg-emerald-500/30' 
-                          : 'bg-gold-dim/20'
-                        }`} />
-                      );
-                    })}
-                  </div>
-                  <span className="w-16 text-left text-xs font-serif text-ink/90 font-bold uppercase tracking-wider">{egyptianDateInfo.eDate.monthName}</span>
-                </div>
-
-                {/* Década (3) */}
-                <div className="responsive-wrap items-center gap-3">
-                  <span className="text-[9px] uppercase tracking-widest text-egypt-accent font-bold w-14 text-right">Década</span>
-                  <div className="flex flex-1 gap-1">
-                    {[1, 2, 3].map(d => {
-                      const decade = egyptianDateInfo.eDate.decade;
-                      return (
-                        <div key={d} className={`h-1.5 flex-1 rounded-sm transition-all duration-500 ${
-                          d === decade ? 'bg-gold-leaf shadow-[0_0_8px_rgba(207,181,59,0.5)]' 
-                          : d < decade ? 'bg-gold-leaf/30' 
-                          : 'bg-gold-dim/20'
-                        }`} />
-                      );
-                    })}
-                  </div>
-                  <span className="w-16 text-left text-[10px] font-body italic text-ink/70 font-bold">Día {egyptianDateInfo.eDate.dayOfMonth}</span>
-                </div>
+                ))}
               </div>
             )}
 
-            <div className="flex flex-col gap-2 justify-center items-center">
+            {/* Day/night + vigilia */}
+            <div className="flex flex-col gap-3 justify-center items-center">
               <div className="flex flex-col items-center gap-1">
-                <div className="flex items-center gap-6 text-egypt-accent font-serif font-bold tracking-[0.3em] text-base">
-                  <span className="text-woodcut-green">❧</span>
+                <div className="flex items-center gap-6 font-serif font-bold tracking-[0.3em] text-base text-egypt-primary">
+                  <span style={{ color: 'rgba(212,168,50,0.55)' }}>❧</span>
                   <span>{romanTime.isDay ? labels.dayLabel : labels.nightLabel}</span>
-                  <span className="text-woodcut-green">☙</span>
+                  <span style={{ color: 'rgba(212,168,50,0.55)' }}>☙</span>
                 </div>
                 {romanTime.vigilia && (
-                  <div className="text-xs font-serif uppercase tracking-[0.2em] text-egypt-accent drop-shadow-sm font-bold mt-1">
+                  <div className="text-xs font-serif uppercase tracking-[0.2em] text-egypt-primary font-bold mt-1">
                     𓊹 {romanTime.vigilia.name} 𓊹
                   </div>
                 )}
               </div>
 
-              <div className="text-sm md:text-base font-serif text-ink mt-3 mb-3 bg-emerald-500/10 px-3 md:px-8 py-2.5 rounded-lg border border-emerald-500/30 shadow-sm flex flex-col items-center w-full max-w-[260px] mx-auto">
-                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-egypt-accent mb-1">{labels.civilDayPartLabel}</div>
+              {/* Civil day part */}
+              <div className="font-serif mt-2 mb-2 px-6 py-2.5 rounded border flex flex-col items-center w-full max-w-[260px] mx-auto"
+                   style={{ background: 'rgba(24,64,160,0.12)', borderColor: 'rgba(24,64,160,0.35)' }}>
+                <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] mb-1" style={{ color: 'rgba(212,168,50,0.65)' }}>{labels.civilDayPartLabel}</div>
                 <div className="flex flex-col items-center text-center px-1">
-                  <span className="font-bold text-ink text-base md:text-lg leading-tight">{romanTime.civilDayPart.name}</span>
-                  <span className="text-[11px] md:text-sm font-bold italic text-egypt-accent mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
+                  <span className="font-bold text-parchment text-base md:text-lg leading-tight">{romanTime.civilDayPart.name}</span>
+                  <span className="text-[11px] md:text-sm font-bold italic text-egypt-primary mt-1 leading-snug">{romanTime.civilDayPart.desc}</span>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 mt-4 px-4 pb-2 border-b border-gold-dim/20 sm:border-none">
-                <div className="flex flex-col items-center text-ink/80 text-center">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.planetaryRulerLabel}</div>
-                  <span className="font-bold text-ink text-sm uppercase">{romanTime.planetaryRuler}</span>
+              {/* Planetary ruler + deity */}
+              <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 mt-2 px-4 pb-2">
+                <div className="flex flex-col items-center text-center">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: 'rgba(212,168,50,0.55)' }}>{labels.planetaryRulerLabel}</div>
+                  <span className="font-bold text-parchment text-sm uppercase">{romanTime.planetaryRuler}</span>
                 </div>
-
-                <div className="hidden sm:block w-px h-10 bg-gold-dim/30"></div>
-                <div className="w-16 h-px sm:hidden bg-gold-dim/30"></div>
-
-                <div className="flex flex-col items-center text-ink/80 text-center">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1">{labels.monthTutelaLabel}</div>
-                  <span className="font-bold text-ink text-lg">{egyptianDateInfo.deity.deity}</span>
-                  <span className="text-xs font-bold">{egyptianDateInfo.deity.deityHieroglyphic}</span>
+                <div className="hidden sm:block w-px h-10" style={{ background: 'rgba(24,64,160,0.30)' }}></div>
+                <div className="w-16 h-px sm:hidden" style={{ background: 'rgba(24,64,160,0.30)' }}></div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: 'rgba(212,168,50,0.55)' }}>{labels.monthTutelaLabel}</div>
+                  <span className="font-bold text-parchment text-lg">{egyptianDateInfo.deity.deity}</span>
+                  <span className="text-xs font-bold text-gold-leaf">{egyptianDateInfo.deity.deityHieroglyphic}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <EgyptianCalendarModal
-        isOpen={isCalendarOpen}
-        onClose={() => setIsCalendarOpen(false)}
-        startDate={modernTime}
-      />
-
-      <WeatherModal
-        isOpen={isWeatherOpen}
-        onClose={() => setIsWeatherOpen(false)}
-        weather={weather}
-        onUpdateLocation={onUpdateLocation}
-        currentLat={currentLat}
-        currentLng={currentLng}
-      />
-
-      <HorusEclipseModal
-        isOpen={isHorusOpen}
-        onClose={() => setIsHorusOpen(false)}
-        currentDate={modernTime}
-      />
-    </>
+    </div>
   );
 };
 
