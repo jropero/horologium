@@ -410,12 +410,18 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
               <path
                 key={el.id}
                 d={el.path}
-                fill={isNight ? 'rgba(40,20,5,0.92)' : 'rgba(100,55,15,0.82)'}
-                stroke={isNight ? 'rgba(80,40,10,0.4)' : 'rgba(160,90,20,0.35)'}
+                fill={weatherCond === 'snow' ? 'rgba(55,65,80,0.88)' : isNight ? 'rgba(40,20,5,0.92)' : 'rgba(100,55,15,0.82)'}
+                stroke={weatherCond === 'snow' ? 'rgba(140,165,190,0.45)' : isNight ? 'rgba(80,40,10,0.4)' : 'rgba(160,90,20,0.35)'}
                 strokeWidth="0.5"
                 opacity={el.opacity}
               />
             ))}
+            {/* Snow floor */}
+            <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} />
+            <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} stroke={weatherCond === 'snow' ? '#f0f4f8' : '#10b981'} strokeWidth="1" />
+            {weatherCond === 'snow' && (
+              <path d="M 0 180 Q 50 173 100 180 T 200 178 T 300 180 V 175 Q 250 172 200 175 T 100 177 T 0 175 Z" fill="#f0f4f8" opacity="0.9" />
+            )}
           </svg>
 
           {/* Text overlay */}
