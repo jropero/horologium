@@ -39,6 +39,19 @@ export const getSolarLongitudeDeg = (date: Date): number =>
 
 export const getMoonPhase = (date: Date): number => MoonPhase(date) / 360;
 
+export const getMoonPosition = (
+  date: Date, lat: number, lng: number
+): { altitude: number; azimuth: number } => {
+  try {
+    const observer = new Observer(lat, lng, 0);
+    const eq = Equator(Body.Moon, date, observer, true, true);
+    const hz = Horizon(date, observer, eq.ra, eq.dec, 'normal');
+    return { altitude: hz.altitude, azimuth: hz.azimuth };
+  } catch {
+    return { altitude: -90, azimuth: 180 };
+  }
+};
+
 // ── New-moon JDE helpers ───────────────────────────────────────────────────────
 // k = lunation index relative to J2000 new moon (JDE 2451550.09766)
 

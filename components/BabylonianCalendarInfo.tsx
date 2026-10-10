@@ -7,6 +7,7 @@ import { BabylonianDate } from '../types/babylonia';
 import { WeatherData } from '../types';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
+import { getMoonPosition } from '../utils/solar';
 
 interface BabylonianCalendarInfoProps {
   currentDate?: Date;
@@ -160,6 +161,49 @@ const DayStatusCard: React.FC<{
         </div>
       )}
     </div>
+  );
+};
+
+// ─── Sky moon renderer (Sin, the moon god) ───────────────────────────────────
+
+const renderSinMoon = (phase: number) => {
+  const r = 14;
+  const normalizedPhase = (phase % 1 + 1) % 1;
+  const isWaxing = normalizedPhase <= 0.5;
+  const sweep1 = isWaxing ? 1 : 0;
+  const rx = Math.max(0.1, r * Math.abs(Math.cos(normalizedPhase * Math.PI * 2)));
+  let sweep2 = 0;
+  if (normalizedPhase <= 0.25) sweep2 = 0;
+  else if (normalizedPhase <= 0.5) sweep2 = 1;
+  else if (normalizedPhase <= 0.75) sweep2 = 0;
+  else sweep2 = 1;
+  const d = `M 0 -${r} A ${r} ${r} 0 0 ${sweep1} 0 ${r} A ${rx} ${r} 0 0 ${sweep2} 0 -${r} Z`;
+  const maskId = `bab-moon-mask-${normalizedPhase.toFixed(3)}`;
+  return (
+    <g transform="rotate(-15)">
+      <defs>
+        <clipPath id={maskId}><path d={d} /></clipPath>
+        <radialGradient id="bab-moon-light" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="60%" stopColor="#c8d8f4" />
+          <stop offset="100%" stopColor="#93c5fd" />
+        </radialGradient>
+        <radialGradient id="bab-moon-dark" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#1e293b" />
+          <stop offset="100%" stopColor="#0a1020" />
+        </radialGradient>
+        <filter id="bab-moon-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+      <circle cx="0" cy="0" r={r + 3} fill="rgba(147,197,253,0.08)" />
+      <circle cx="0" cy="0" r={r} fill="url(#bab-moon-dark)" />
+      <g clipPath={`url(#${maskId})`} filter="url(#bab-moon-glow)">
+        <circle cx="0" cy="0" r={r} fill="url(#bab-moon-light)" />
+      </g>
+      <circle cx="0" cy="0" r={r} fill="none" stroke="#93c5fd" strokeWidth="0.5" opacity="0.5" />
+    </g>
   );
 };
 
@@ -576,6 +620,12 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   if ((civilization as string) !== 'babylonia' || !babData || !meta) return null;
 
   const lore = getBabylonianLore(babData.monthName);
+
+  // Sin (moon god) — real sky position
+  const sinPos = !babData.isDay ? getMoonPosition(currentDate ?? new Date(), currentLat, currentLng) : null;
+  const sinVisible = sinPos !== null && sinPos.altitude >= 0;
+  const sinX = sinPos && sinVisible ? Math.max(14, Math.min(286, 150 + (sinPos.azimuth - 180) / 90 * 120)) : 150;
+  const sinY = sinPos && sinVisible ? Math.max(14, Math.min(165, 165 - sinPos.altitude / 90 * 150)) : 80;
   const condition = weather?.current.condition ?? 'clear';
 
   const skyGradient = (() => {
@@ -629,6 +679,11 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                   {weatherParticles.stars.map((s, i) => (
                     <circle key={`star-${i}`} cx={s.x} cy={s.y} r={s.r} fill="#fff" opacity={s.opacity} />
                   ))}
+                </g>
+              )}
+              {sinVisible && (
+                <g transform={`translate(${sinX}, ${sinY})`}>
+                  {renderSinMoon(babData.moonPhase)}
                 </g>
               )}
               <WeatherSvgEffects

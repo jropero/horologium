@@ -8,7 +8,7 @@ import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
 import { generateGreekSkyline } from '../utils/greekSkylineGenerator';
-import { getSunTimes } from '../utils/solar';
+import { getSunTimes, getMoonPosition, getMoonPhase } from '../utils/solar';
 import { WeatherData } from '../types';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
@@ -261,6 +261,47 @@ const DECADE_LABELS: Record<number, { title: string; subtitle: string }> = {
   3: { title: 'Φθίνων',    subtitle: 'Menguante'  },
 };
 
+// ─── Sky moon renderer (Selene) ───────────────────────────────────────────────
+
+const renderSeleneMoon = (phase: number) => {
+  const r = 14;
+  const normalizedPhase = (phase % 1 + 1) % 1;
+  const isWaxing = normalizedPhase <= 0.5;
+  const sweep1 = isWaxing ? 1 : 0;
+  const rx = Math.max(0.1, r * Math.abs(Math.cos(normalizedPhase * Math.PI * 2)));
+  let sweep2 = 0;
+  if (normalizedPhase > 0.25 && normalizedPhase <= 0.5) sweep2 = 1;
+  else if (normalizedPhase > 0.75) sweep2 = 1;
+  const d = `M 0 -${r} A ${r} ${r} 0 0 ${sweep1} 0 ${r} A ${rx} ${r} 0 0 ${sweep2} 0 -${r} Z`;
+  const maskId = `hel-moon-mask-${normalizedPhase.toFixed(3)}`;
+  return (
+    <g transform="rotate(-15)">
+      <defs>
+        <clipPath id={maskId}><path d={d} /></clipPath>
+        <radialGradient id="hel-moon-light" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="60%" stopColor="#e0ecff" />
+          <stop offset="100%" stopColor="#bdd4f4" />
+        </radialGradient>
+        <radialGradient id="hel-moon-dark" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#0d1a2e" />
+          <stop offset="100%" stopColor="#060d18" />
+        </radialGradient>
+        <filter id="hel-moon-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+      <circle cx="0" cy="0" r={r + 4} fill="rgba(200,225,255,0.06)" />
+      <circle cx="0" cy="0" r={r} fill="url(#hel-moon-dark)" />
+      <g clipPath={`url(#${maskId})`} filter="url(#hel-moon-glow)">
+        <circle cx="0" cy="0" r={r} fill="url(#hel-moon-light)" />
+      </g>
+      <circle cx="0" cy="0" r={r} fill="none" stroke="rgba(200,225,255,0.4)" strokeWidth="0.5" />
+    </g>
+  );
+};
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
@@ -282,14 +323,34 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     setGreekInfo({ festival, dailyDeity, atticDate: targetAtticDate });
   }, [propAtticDate]);
 
-  const { isDay, dayProgress } = useMemo(() => {
+  const { isDay, dayProgress, moonPhase, moonSvgX, moonSvgY, moonVisible } = useMemo(() => {
     const date = currentDate ?? new Date();
     const sun = getSunTimes(date, currentLat, currentLng);
     const now = date.getTime();
     const rise = sun.sunrise.getTime();
     const set  = sun.sunset.getTime();
     const day  = now >= rise && now <= set;
-    return { isDay: day, dayProgress: day ? (now - rise) / (set - rise) : 0 };
+    const phase = getMoonPhase(date);
+
+    let svgX = 150, svgY = 80, visible = false;
+    if (!day) {
+      const pos = getMoonPosition(date, currentLat, currentLng);
+      if (pos.altitude >= 0) {
+        svgX = Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120));
+        // Map horizon→y=165 (near skyline), zenith→y=15 (near top of sky)
+        svgY = Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150));
+        visible = true;
+      }
+    }
+
+    return {
+      isDay: day,
+      dayProgress: day ? (now - rise) / (set - rise) : 0,
+      moonPhase: phase,
+      moonSvgX: svgX,
+      moonSvgY: svgY,
+      moonVisible: visible,
+    };
   }, [currentDate, currentLat, currentLng]);
 
   const skylineElements = useMemo(
@@ -398,6 +459,11 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 ))}
               </g>
             )}
+            {moonVisible && (
+              <g transform={`translate(${moonSvgX}, ${moonSvgY})`}>
+                {renderSeleneMoon(moonPhase)}
+              </g>
+            )}
             <WeatherSvgEffects
               condition={condition}
               weatherParticles={weatherParticles}
@@ -475,6 +541,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               {atticDate.spanishShort.split(',')[0].trim()}
             </div>
           </div>
+
         </div>
 
         <div className="p-5 md:p-8 flex flex-col items-center gap-5 text-center">

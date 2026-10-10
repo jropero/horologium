@@ -7,6 +7,7 @@ import { getEgyptianMonthDeity } from '../utils/egyptianCalendarData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
+import { getMoonPosition } from '../utils/solar';
 
 interface EgyptianClockProps {
   modernTime: Date;
@@ -167,6 +168,20 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   const objectX = cx + pathRadius * Math.cos(rad);
   const objectY = cy - pathRadius * Math.sin(rad);
 
+  // Real moon position based on actual altitude/azimuth
+  let moonSvgX = objectX;
+  let moonSvgY = objectY;
+  let moonVisible = !romanTime.isDay;
+  if (!romanTime.isDay) {
+    const moonPos = getMoonPosition(modernTime, currentLat, currentLng);
+    if (moonPos.altitude >= 0) {
+      moonSvgX = Math.max(14, Math.min(286, 150 + (moonPos.azimuth - 180) / 90 * 120));
+      moonSvgY = Math.max(14, Math.min(165, 165 - moonPos.altitude / 90 * 150));
+    } else {
+      moonVisible = false;
+    }
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto shadow-2xl animate-fadeIn" style={{ background: '#0c0804', border: '4px solid rgba(24,64,160,0.55)', borderRadius: '2px' }}>
 
@@ -203,7 +218,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                     }
                     return 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)';
                   } else {
-                    return 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)';
+                    return 'linear-gradient(to bottom, #0c0a12 0%, #14100a 60%, #1c1208 100%)';
                   }
                 })(),
                 opacity: 1
@@ -234,13 +249,14 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
                 <path d="M 30 180 A 120 120 0 0 1 270 180" fill="none" stroke="#cfb53b" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
 
-                <g
-                  transform={`translate(${objectX}, ${objectY})`}
-                  style={(weatherCond === 'rain' || weatherCond === 'storm' || weatherCond === 'snow' || weatherCond === 'fog') && romanTime.isDay
-                    ? { filter: 'blur(2.5px)', opacity: 0.45 }
-                    : undefined}
-                >
-                  {romanTime.isDay ? (
+                {/* Sol */}
+                {romanTime.isDay && (
+                  <g
+                    transform={`translate(${objectX}, ${objectY})`}
+                    style={(weatherCond === 'rain' || weatherCond === 'storm' || weatherCond === 'snow' || weatherCond === 'fog')
+                      ? { filter: 'blur(2.5px)', opacity: 0.45 }
+                      : undefined}
+                  >
                     <g className="animate-[spin_20s_linear_infinite]">
                       <circle r="10" fill="#cfb53b" stroke="#8a7826" strokeWidth="1" />
                       {[...Array(12)].map((_, i) => (
@@ -250,10 +266,15 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                         </React.Fragment>
                       ))}
                     </g>
-                  ) : (
-                    renderMoon(romanTime.moonPhase)
-                  )}
-                </g>
+                  </g>
+                )}
+
+                {/* Luna — real sky position */}
+                {moonVisible && (
+                  <g transform={`translate(${moonSvgX}, ${moonSvgY})`}>
+                    {renderMoon(romanTime.moonPhase)}
+                  </g>
+                )}
 
                 {weatherCond !== 'clear' && (
                   <g className="weather-effects pointer-events-none">
@@ -270,7 +291,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
                     <path
                       key={el.id}
                       d={el.path}
-                      fill="var(--ink)"
+                      fill={romanTime.isDay ? 'var(--ink)' : 'rgba(90,60,15,0.9)'}
                       stroke="#10b981"
                       strokeWidth="0.5"
                       opacity={el.opacity}
