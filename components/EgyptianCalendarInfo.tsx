@@ -125,6 +125,22 @@ const STAR_CATALOG: [number, number, number][] = [
   [5.9931,  37.2122,  2.62], // Theta Aur θ Aur
 ];
 
+// Galactic (l, b) → ICRS equatorial (RA hours, Dec degrees)
+// Uses the IAU galactic-to-ICRS rotation matrix (transpose of equatorial-to-galactic).
+function galToEquatorial(l_deg: number, b_deg: number): { ra: number; dec: number } {
+  const D = Math.PI / 180;
+  const l = l_deg * D, b = b_deg * D;
+  const gx = Math.cos(b) * Math.cos(l);
+  const gy = Math.cos(b) * Math.sin(l);
+  const gz = Math.sin(b);
+  const x = -0.054875539 * gx + 0.494109454 * gy - 0.867666136 * gz;
+  const y = -0.873437105 * gx - 0.444829590 * gy - 0.198076390 * gz;
+  const z = -0.483834992 * gx + 0.746982249 * gy + 0.455983795 * gz;
+  let ra = Math.atan2(y, x) / D;
+  if (ra < 0) ra += 360;
+  return { ra: ra / 15, dec: Math.asin(Math.max(-1, Math.min(1, z))) / D };
+}
+
 const FestivalIcon = ({ name, className }: { name?: string; className?: string }) => {
   if (!name) return null;
   const props = { className, size: 16 };
@@ -448,6 +464,38 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
     });
   }, [currentDate, lat, lng]);
 
+  const milkyWay = useMemo(() => {
+    if (lat == null || lng == null) return [];
+    const observer = new Observer(lat, lng, 0);
+    // Five concentric galactic-latitude strips: dense core + two diffuse halos
+    const layers = [
+      { b:  0, r: 11, scale: 1.00 },
+      { b:  4, r:  8, scale: 0.55 },
+      { b: -4, r:  8, scale: 0.55 },
+      { b:  9, r:  5, scale: 0.22 },
+      { b: -9, r:  5, scale: 0.22 },
+    ];
+    const pts: { x: number; y: number; r: number; opacity: number }[] = [];
+    for (const { b, r, scale } of layers) {
+      for (let l = 0; l < 360; l += 4) {
+        const { ra, dec } = galToEquatorial(l, b);
+        try {
+          const hz = Horizon(currentDate, observer, ra, dec, 'normal');
+          if (hz.altitude < 2) continue;
+          const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
+          const svgY = 165 - hz.altitude / 90 * 150;
+          if (svgX < 0 || svgX > 300 || svgY < 4 || svgY > 163) continue;
+          // Galactic center (l≈0°) and Cygnus arm (l≈70°) are brightest
+          const lr = l * Math.PI / 180;
+          const brightness = 0.28 + 0.62 * Math.max(0, Math.cos(lr))
+                                  + 0.38 * Math.max(0, Math.cos((l - 70) * Math.PI / 80));
+          pts.push({ x: svgX, y: svgY, r, opacity: Math.min(brightness, 1) * scale * 0.11 });
+        } catch { /* below horizon */ }
+      }
+    }
+    return pts;
+  }, [currentDate, lat, lng]);
+
   const weatherCond = weather?.current.condition ?? 'clear';
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
   const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity), [rainIntensity]);
@@ -525,8 +573,18 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
                 <feGaussianBlur stdDeviation="1.2" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
+              <filter id="milky-way-blur" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="5.5" />
+              </filter>
               <clipPath id="jup-clip-info"><circle r="5" /></clipPath>
             </defs>
+            {isNight && milkyWay.length > 0 && (
+              <g filter="url(#milky-way-blur)">
+                {milkyWay.map((pt, i) => (
+                  <circle key={i} cx={pt.x} cy={pt.y} r={pt.r} fill="#c4d8f8" opacity={pt.opacity} />
+                ))}
+              </g>
+            )}
             {isNight && (
               <g>
                 {stars.map((s, i) => (
