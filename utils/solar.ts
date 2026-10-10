@@ -52,6 +52,19 @@ export const getMoonPosition = (
   }
 };
 
+export const getPlanetPosition = (
+  body: Body, date: Date, lat: number, lng: number
+): { altitude: number; azimuth: number } => {
+  try {
+    const observer = new Observer(lat, lng, 0);
+    const eq = Equator(body, date, observer, true, true);
+    const hz = Horizon(date, observer, eq.ra, eq.dec, 'normal');
+    return { altitude: hz.altitude, azimuth: hz.azimuth };
+  } catch {
+    return { altitude: -90, azimuth: 180 };
+  }
+};
+
 // ── New-moon JDE helpers ───────────────────────────────────────────────────────
 // k = lunation index relative to J2000 new moon (JDE 2451550.09766)
 
