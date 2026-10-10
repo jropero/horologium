@@ -257,7 +257,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
 
                 <path d="M 30 180 A 120 120 0 0 1 270 180" fill="none" stroke="#cfb53b" strokeWidth="1" strokeDasharray="4 4" opacity="0.5" />
 
-                {/* CAPA 2: El Sol y la Luna (detrás de las montañas/suelo) */}
+                {/* CAPA 2: El Sol y la Luna */}
                 <g
                   transform={`translate(${objectX}, ${objectY})`}
                   style={(weatherCond === 'rain' || weatherCond === 'storm' || weatherCond === 'snow' || weatherCond === 'fog') && romanTime.isDay
