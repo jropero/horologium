@@ -141,6 +141,32 @@ function galToEquatorial(l_deg: number, b_deg: number): { ra: number; dec: numbe
   return { ra: ra / 15, dec: Math.asin(Math.max(-1, Math.min(1, z))) / D };
 }
 
+// Static grid: galactic → equatorial + brightness, precomputed once at module load.
+// l and b are fixed constants, so RA/Dec never changes between renders.
+const MILKY_WAY_GRID = (() => {
+  const layers = [
+    { b:  0, r: 11, scale: 1.00 },
+    { b:  4, r:  8, scale: 0.55 },
+    { b: -4, r:  8, scale: 0.55 },
+    { b:  9, r:  5, scale: 0.22 },
+    { b: -9, r:  5, scale: 0.22 },
+  ];
+  const pts: { ra: number; dec: number; r: number; scale: number; brightness: number }[] = [];
+  for (const { b, r, scale } of layers) {
+    for (let l = 0; l < 360; l += 4) {
+      const { ra, dec } = galToEquatorial(l, b);
+      const lr = l * Math.PI / 180;
+      const brightness = Math.min(
+        0.28 + 0.62 * Math.max(0, Math.cos(lr))
+             + 0.38 * Math.max(0, Math.cos((l - 70) * Math.PI / 80)),
+        1
+      );
+      pts.push({ ra, dec, r, scale, brightness });
+    }
+  }
+  return pts;
+})();
+
 const FestivalIcon = ({ name, className }: { name?: string; className?: string }) => {
   if (!name) return null;
   const props = { className, size: 16 };
@@ -462,39 +488,50 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
         return [{ x: svgX, y: svgY, r, opacity, glow }];
       } catch { return []; }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lng]);
+
+  const isNightMemo = useMemo(() => {
+    if (lat != null && lng != null) {
+      const { sunrise, sunset } = getSunTimes(currentDate, lat, lng);
+      const t = currentDate.getTime();
+      return t < sunrise.getTime() || t >= sunset.getTime();
+    }
+    const h = currentDate.getHours();
+    return h < 6 || h >= 20;
   }, [currentDate, lat, lng]);
 
   const milkyWay = useMemo(() => {
     if (lat == null || lng == null) return [];
     const observer = new Observer(lat, lng, 0);
-    // Five concentric galactic-latitude strips: dense core + two diffuse halos
-    const layers = [
-      { b:  0, r: 11, scale: 1.00 },
-      { b:  4, r:  8, scale: 0.55 },
-      { b: -4, r:  8, scale: 0.55 },
-      { b:  9, r:  5, scale: 0.22 },
-      { b: -9, r:  5, scale: 0.22 },
-    ];
     const pts: { x: number; y: number; r: number; opacity: number }[] = [];
-    for (const { b, r, scale } of layers) {
-      for (let l = 0; l < 360; l += 4) {
-        const { ra, dec } = galToEquatorial(l, b);
-        try {
-          const hz = Horizon(currentDate, observer, ra, dec, 'normal');
-          if (hz.altitude < 2) continue;
-          const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-          const svgY = 165 - hz.altitude / 90 * 150;
-          if (svgX < 0 || svgX > 300 || svgY < 4 || svgY > 163) continue;
-          // Galactic center (l≈0°) and Cygnus arm (l≈70°) are brightest
-          const lr = l * Math.PI / 180;
-          const brightness = 0.28 + 0.62 * Math.max(0, Math.cos(lr))
-                                  + 0.38 * Math.max(0, Math.cos((l - 70) * Math.PI / 80));
-          pts.push({ x: svgX, y: svgY, r, opacity: Math.min(brightness, 1) * scale * 0.11 });
-        } catch { /* below horizon */ }
-      }
+    for (const { ra, dec, r, scale, brightness } of MILKY_WAY_GRID) {
+      try {
+        const hz = Horizon(currentDate, observer, ra, dec, 'normal');
+        if (hz.altitude < 2) continue;
+        const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
+        const svgY = 165 - hz.altitude / 90 * 150;
+        if (svgX < 0 || svgX > 300 || svgY < 6 || svgY > 163) continue;
+        pts.push({ x: svgX, y: svgY, r, opacity: brightness * scale * 0.11 });
+      } catch { /* below horizon */ }
     }
     return pts;
-  }, [currentDate, lat, lng]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lng]);
+
+  const visiblePlanets = useMemo(() => {
+    if (lat == null || lng == null) return [];
+    return PLANET_CONFIGS.map(cfg => {
+      const pos = getPlanetPosition(cfg.body, currentDate, lat, lng);
+      if (pos.altitude < 0) return null;
+      return {
+        ...cfg,
+        svgX: Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120)),
+        svgY: Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150)),
+      };
+    }).filter((p): p is NonNullable<typeof p> => p !== null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lng]);
 
   const weatherCond = weather?.current.condition ?? 'clear';
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
@@ -503,14 +540,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
   if (civilization !== 'aegyptus' || !egyptianDate) return null;
 
   const hour = currentDate.getHours();
-  const isNight = (() => {
-    if (lat != null && lng != null) {
-      const { sunrise, sunset } = getSunTimes(currentDate, lat, lng);
-      const t = currentDate.getTime();
-      return t < sunrise.getTime() || t >= sunset.getTime();
-    }
-    return hour < 6 || hour >= 20;
-  })();
+  const isNight = isNightMemo;
   const skyGradient = isNight
     ? 'linear-gradient(to bottom, #030108 0%, #0a0418 45%, #1a0e05 80%, #2a1808 100%)'
     : getSkyGradient(hour);
@@ -528,17 +558,6 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
   const hasAstroAlerts = algol.isEclipsed || isNewMoon || isFullMoon ||
     (moonPhase >= 0.45 && moonPhase <= 0.55);
 
-  const visiblePlanets = (lat != null && lng != null)
-    ? PLANET_CONFIGS.map(cfg => {
-        const pos = getPlanetPosition(cfg.body, currentDate, lat, lng);
-        if (pos.altitude < 0) return null;
-        return {
-          ...cfg,
-          svgX: Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120)),
-          svgY: Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150)),
-        };
-      }).filter((p): p is NonNullable<typeof p> => p !== null)
-    : [];
 
   return (
     <>
