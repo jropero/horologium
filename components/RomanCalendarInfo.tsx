@@ -53,15 +53,20 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
     const getDayEntry = (day: number): YearDayEntry | undefined =>
         ROMAN_YEAR_DATA[`${month}-${day}`];
 
+    // Nones: day 7 in March, May, July, October; day 5 all others
+    const nones = [2, 4, 6, 9].includes(month) ? 7 : 5;
+    // Ides: day 15 in those same months; day 13 otherwise
+    const ides = [2, 4, 6, 9].includes(month) ? 15 : 13;
+
     const panels = [
-        { days: Array.from({ length: 10 }, (_, i) => i + 1),                   label: 'Kalendae', sublabel: 'Initium mensis' },
-        { days: Array.from({ length: 10 }, (_, i) => i + 11),                  label: 'Idvs',     sublabel: 'Medium mensis'  },
-        { days: Array.from({ length: daysInMonth - 20 }, (_, i) => i + 21),    label: 'Post Idvs', sublabel: 'Exitus mensis' },
+        { days: Array.from({ length: nones - 1 }, (_, i) => i + 1),            label: 'Kalendae', sublabel: 'Ante Nonas' },
+        { days: Array.from({ length: ides - nones }, (_, i) => i + nones),     label: 'Nonae',    sublabel: 'Ante Idvs'  },
+        { days: Array.from({ length: daysInMonth - ides + 1 }, (_, i) => i + ides), label: 'Idvs', sublabel: 'Post Idvs' },
     ];
 
     let activePanel = 0;
-    if (today >= 21) activePanel = 2;
-    else if (today >= 11) activePanel = 1;
+    if (today >= ides) activePanel = 2;
+    else if (today >= nones) activePanel = 1;
 
     const selEntry = selectedDay !== null ? getDayEntry(selectedDay) : null;
 
@@ -96,7 +101,8 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                     return (
                         <div
                             key={label}
-                            className={`p-2 flex-1 rounded-lg border transition-all duration-500 relative overflow-hidden
+                            style={{ flex: days.length }}
+                            className={`p-2 rounded-lg border transition-all duration-500 relative overflow-hidden
                                 ${active
                                     ? 'border-gold-dim/50 bg-amber-950/20 shadow-[0_0_15px_rgba(212,175,55,0.08)] scale-[1.02] z-10'
                                     : 'border-gold-dim/20 bg-ink/30'
@@ -109,7 +115,7 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                                 <div className={`text-[9px] font-bold uppercase tracking-widest ${active ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>{label}</div>
                                 <div className="text-[9px] font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">{sublabel}</div>
                             </div>
-                            <div className="grid grid-cols-2 gap-1 justify-items-center">
+                            <div className={`grid gap-1 justify-items-center ${panelIdx === 2 ? 'grid-cols-3' : 'grid-cols-2'}`}>
                                 {days.filter(d => d <= daysInMonth).map(day => (
                                         <button
                                             key={day}

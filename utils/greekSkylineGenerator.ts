@@ -1,5 +1,6 @@
 // greekSkylineGenerator.ts — Greek architecture SVG path generator
-// Generates Parthenon-style temples, stoas, tholoi, olive trees, Ionic columns, theatres, hermai, oikoi
+// Clean colonnade silhouettes in left/right zones, matching Egypt's approach.
+// Temple columns are separate sub-paths so sky shows through the gaps.
 
 export type GreekBuildingType = 'parthenon' | 'stoa' | 'tholos' | 'olive' | 'ionic_column' | 'theatre' | 'herma' | 'oikos';
 
@@ -27,172 +28,127 @@ export const generateGreekSkyline = (seed: number): GreekSkylineElement[] => {
   const rand = PRNG(seed);
   const elements: GreekSkylineElement[] = [];
 
-  const leftZone = { start: 5, end: 100 };
-  const rightZone = { start: 200, end: 295 };
+  const leftZone  = { start: 5,   end: 112 };
+  const rightZone = { start: 188, end: 295 };
 
-  const generateElement = (xStart: number, zoneEnd: number): { el: GreekSkylineElement, nextX: number } | null => {
-    const types: GreekBuildingType[] = ['parthenon', 'stoa', 'tholos', 'olive', 'olive', 'ionic_column', 'theatre', 'herma', 'oikos'];
+  const generateElement = (xStart: number, zoneEnd: number): { el: GreekSkylineElement; nextX: number } | null => {
+    const types: GreekBuildingType[] = ['parthenon', 'parthenon', 'tholos', 'olive', 'olive', 'ionic_column', 'theatre', 'stoa'];
     const type = types[Math.floor(rand() * types.length)];
 
-    let width = 0;
-    let height = 0;
-    const scale = 0.5 + rand() * 0.7;
+    let width = 0, height = 0;
+    const scale = 0.45 + rand() * 0.65;
 
     switch (type) {
-      case 'parthenon': width = 30 * scale; height = 22 * scale; break;
-      case 'stoa': width = 45 * scale; height = 12 * scale; break;
-      case 'tholos': width = 18 * scale; height = 18 * scale; break;
-      case 'olive': width = 12 * scale; height = 20 * scale; break;
-      case 'ionic_column': width = 4 * scale; height = 30 * scale; break;
-      case 'theatre': width = 40 * scale; height = 16 * scale; break;
-      case 'herma': width = 5 * scale; height = 22 * scale; break;
-      case 'oikos': width = 25 * scale; height = 12 * scale; break;
+      case 'parthenon':    width = 40 * scale; height = 34 * scale; break;
+      case 'stoa':         width = 48 * scale; height = 16 * scale; break;
+      case 'tholos':       width = 18 * scale; height = 22 * scale; break;
+      case 'olive':        width = 18 * scale; height = 30 * scale; break;
+      case 'ionic_column': width =  4 * scale; height = 38 * scale; break;
+      case 'theatre':      width = 42 * scale; height = 22 * scale; break;
+      default: break;
     }
 
     if (xStart + width > zoneEnd) return null;
 
-    let path = '';
     const cx = xStart + width / 2;
     let baseY = 180;
-
-    if (cx >= 0 && cx <= 100) {
-      const t = cx / 100;
+    if (cx >= 0 && cx <= 112) {
+      const t = cx / 112;
       baseY = 180 - 40 * t + 40 * t * t + 4;
-    } else if (cx >= 200 && cx <= 300) {
-      const t = (cx - 200) / 100;
+    } else if (cx >= 188 && cx <= 300) {
+      const t = (cx - 188) / 112;
       baseY = 180 - 40 * t + 40 * t * t + 4;
     }
 
+    let path = '';
+
     switch (type) {
       case 'parthenon': {
-        // Classic Greek temple with columns and pediment
-        const colW = width * 0.08;
-        const colH = height * 0.65;
-        const numCols = 6;
-        const spacing = width / (numCols + 1);
+        // Colonnade: individual column rects (sky visible between them)
+        // + solid entablature bar + pediment triangle
+        const numCols = Math.max(4, Math.round(4 + (width / 40) * 2));
+        const colH    = height * 0.68;
+        const colW    = width / (numCols * 2.1); // column width; gap ≈ colW between each
+        const spacing = width / numCols;
+        const colBase = baseY;
+        const colTop  = colBase - colH;
 
-        // Stylobate (base platform with 3 steps)
-        path += `M ${xStart - 2} ${baseY} L ${xStart + width + 2} ${baseY} L ${xStart + width + 2} ${baseY - 2} L ${xStart - 2} ${baseY - 2} Z `;
-        path += `M ${xStart - 1} ${baseY - 2} L ${xStart + width + 1} ${baseY - 2} L ${xStart + width + 1} ${baseY - 4} L ${xStart - 1} ${baseY - 4} Z `;
-
-        // Columns
-        for (let i = 1; i <= numCols; i++) {
-          const colX = xStart + spacing * i - colW / 2;
-          path += `M ${colX} ${baseY - 4} L ${colX + colW} ${baseY - 4} L ${colX + colW} ${baseY - 4 - colH} L ${colX} ${baseY - 4 - colH} Z `;
+        // Each column as its own closed sub-path (sky shows between them)
+        for (let i = 0; i < numCols; i++) {
+          const lx = xStart + i * spacing + (spacing - colW) / 2;
+          path += `M ${lx} ${colBase} L ${lx+colW} ${colBase} L ${lx+colW} ${colTop} L ${lx} ${colTop} Z `;
         }
 
-        // Entablature (architrave)
-        const entY = baseY - 4 - colH;
-        path += `M ${xStart - 1} ${entY} L ${xStart + width + 1} ${entY} L ${xStart + width + 1} ${entY - 3} L ${xStart - 1} ${entY - 3} Z `;
+        // Solid entablature bar across the top of the columns
+        path += `M ${xStart-1} ${colTop} L ${xStart+width+1} ${colTop} L ${xStart+width+1} ${colTop-height*0.12} L ${xStart-1} ${colTop-height*0.12} Z `;
 
-        // Pediment (triangular)
-        path += `M ${xStart - 2} ${entY - 3} L ${cx} ${baseY - height} L ${xStart + width + 2} ${entY - 3} Z `;
+        // Pediment triangle
+        const entTop = colTop - height * 0.12;
+        path += `M ${xStart-1} ${entTop} L ${cx} ${entTop-height*0.20} L ${xStart+width+1} ${entTop} Z `;
         break;
       }
 
       case 'stoa': {
-        // Long colonnade (covered walkway)
-        path += `M ${xStart} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - height} L ${xStart} ${baseY - height} Z `;
-        // Roof
-        path += `M ${xStart - 1} ${baseY - height} L ${xStart + width + 1} ${baseY - height} L ${xStart + width + 1} ${baseY - height - 2} L ${xStart - 1} ${baseY - height - 2} Z `;
-        // Columns along front
-        const numCols = Math.max(4, Math.floor(width / 6));
-        const colSpacing = width / numCols;
+        // Long colonnade hall — thin columns with solid roof
+        const numCols = Math.max(3, Math.round(width / 9));
+        const colH    = height * 0.82;
+        const colW    = Math.max(1.5, width / (numCols * 2.6));
+        const spacing = width / numCols;
+
         for (let i = 0; i < numCols; i++) {
-          const colX = xStart + i * colSpacing + colSpacing * 0.4;
-          path += `M ${colX} ${baseY} L ${colX + 1.5} ${baseY} L ${colX + 1.5} ${baseY - height} L ${colX} ${baseY - height} Z `;
+          const lx = xStart + i * spacing + (spacing - colW) / 2;
+          path += `M ${lx} ${baseY} L ${lx+colW} ${baseY} L ${lx+colW} ${baseY-colH} L ${lx} ${baseY-colH} Z `;
         }
+        // Solid roof slab
+        path += `M ${xStart-1} ${baseY-colH} L ${xStart+width+1} ${baseY-colH} L ${xStart+width+1} ${baseY-height} L ${xStart-1} ${baseY-height} Z `;
         break;
       }
 
       case 'tholos': {
-        // Circular temple (like at Delphi)
-        const baseH = height * 0.4;
-        // Circular base
-        path += `M ${xStart} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - baseH} L ${xStart} ${baseY - baseH} Z `;
-        // Dome/conical roof
-        path += `M ${xStart - 1} ${baseY - baseH} A ${width / 2} ${height * 0.6} 0 0 1 ${xStart + width + 1} ${baseY - baseH} Z `;
-        // Small finial on top
-        path += `M ${cx - 1} ${baseY - height + 2} L ${cx + 1} ${baseY - height + 2} L ${cx} ${baseY - height - 1} Z `;
+        // Circular temple: stepped base + dome arc
+        const baseH = height * 0.32;
+        path += `M ${xStart} ${baseY} L ${xStart+width} ${baseY} L ${xStart+width} ${baseY-baseH} L ${xStart} ${baseY-baseH} Z `;
+        path += `M ${xStart-1} ${baseY-baseH} A ${width/2} ${height*0.68} 0 0 1 ${xStart+width+1} ${baseY-baseH} Z `;
         break;
       }
 
       case 'olive': {
-        // Olive tree — rounded canopy on thin trunk
-        const trunkW = width * 0.15;
-        const trunkH = height * 0.4;
-        // Trunk
-        path += `M ${cx - trunkW / 2} ${baseY} L ${cx + trunkW / 2} ${baseY} L ${cx + trunkW / 2} ${baseY - trunkH} L ${cx - trunkW / 2} ${baseY - trunkH} Z `;
-        // Canopy (irregular ellipse / organic shape)
-        const canopyY = baseY - trunkH;
-        const crx = width * 0.5;
-        const cry = height * 0.35;
-        path += `M ${cx - crx} ${canopyY} Q ${cx - crx * 0.6} ${canopyY - cry * 1.3} ${cx} ${canopyY - cry} Q ${cx + crx * 0.6} ${canopyY - cry * 1.3} ${cx + crx} ${canopyY} Q ${cx + crx * 0.3} ${canopyY + 2} ${cx} ${canopyY + 1} Q ${cx - crx * 0.3} ${canopyY + 2} ${cx - crx} ${canopyY} Z `;
+        const trunkW = width * 0.14, trunkH = height * 0.32;
+        path += `M ${cx-trunkW/2} ${baseY} L ${cx+trunkW/2} ${baseY} L ${cx+trunkW/2} ${baseY-trunkH} L ${cx-trunkW/2} ${baseY-trunkH} Z `;
+        const cY = baseY - trunkH, crx = width * 0.52, cry = height * 0.40;
+        // Main canopy
+        path += `M ${cx-crx} ${cY} Q ${cx-crx*0.5} ${cY-cry*1.35} ${cx} ${cY-cry} Q ${cx+crx*0.5} ${cY-cry*1.35} ${cx+crx} ${cY} Q ${cx+crx*0.3} ${cY+3} ${cx} ${cY+2} Q ${cx-crx*0.3} ${cY+3} ${cx-crx} ${cY} Z `;
+        // Secondary lobe for organic look
+        path += `M ${cx-crx*0.65} ${cY+1} Q ${cx-crx*0.8} ${cY-cry*0.7} ${cx-crx*0.05} ${cY-cry*0.5} Q ${cx+crx*0.65} ${cY-cry*0.6} ${cx+crx*0.6} ${cY+1} Z `;
         break;
       }
 
       case 'ionic_column': {
-        // Ionic column with volute capital
-        path += `M ${xStart} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - height} L ${xStart} ${baseY - height} Z `;
-        // Capital with volutes (wider than column)
-        path += `M ${xStart - 2} ${baseY - height} L ${xStart + width + 2} ${baseY - height} L ${xStart + width + 2} ${baseY - height - 2} L ${xStart - 2} ${baseY - height - 2} Z `;
-        // Volute hints (small circles)
-        path += `M ${xStart - 2} ${baseY - height - 1} A 1.5 1.5 0 1 1 ${xStart - 2} ${baseY - height - 1.01} `;
-        path += `M ${xStart + width + 2} ${baseY - height - 1} A 1.5 1.5 0 1 1 ${xStart + width + 2} ${baseY - height - 1.01} `;
+        // Tall single column — shaft + wider capital slab
+        path += `M ${xStart} ${baseY} L ${xStart+width} ${baseY} L ${xStart+width*0.85} ${baseY-height*0.88} L ${xStart+width*0.15} ${baseY-height*0.88} Z `;
+        path += `M ${xStart-2} ${baseY-height*0.88} L ${xStart+width+2} ${baseY-height*0.88} L ${xStart+width+2} ${baseY-height} L ${xStart-2} ${baseY-height} Z `;
         break;
       }
 
       case 'theatre': {
-        // Greek semicircular theatre (theatron)
-        // Cavea (semicircular seating)
-        path += `M ${xStart} ${baseY} A ${width / 2} ${height} 0 0 1 ${xStart + width} ${baseY} `;
-        // Close the bottom
-        path += `L ${xStart + width} ${baseY} L ${xStart} ${baseY} Z `;
-        // Orchestra (small semicircle in center)
-        const orchR = width * 0.2;
-        path += `M ${cx - orchR} ${baseY} A ${orchR} ${orchR * 0.6} 0 0 1 ${cx + orchR} ${baseY} Z `;
-        break;
-      }
-
-      case 'herma': {
-        // Herm pillar (rectangular pillar with suggestion of head)
-        // Base
-        path += `M ${xStart - 1} ${baseY} L ${xStart + width + 1} ${baseY} L ${xStart + width + 1} ${baseY - 3} L ${xStart - 1} ${baseY - 3} Z `;
-        // Shaft
-        path += `M ${xStart} ${baseY - 3} L ${xStart + width} ${baseY - 3} L ${xStart + width} ${baseY - height + 4} L ${xStart} ${baseY - height + 4} Z `;
-        // Head (circle on top)
-        path += `M ${cx} ${baseY - height + 4} A ${width * 0.6} ${width * 0.6} 0 1 1 ${cx} ${baseY - height + 4.01} Z `;
-        break;
-      }
-
-      case 'oikos': {
-        // Simple Greek house
-        // Main building
-        path += `M ${xStart} ${baseY} L ${xStart + width * 0.7} ${baseY} L ${xStart + width * 0.7} ${baseY - height} L ${xStart} ${baseY - height} Z `;
-        // Pitched roof
-        path += `M ${xStart - 1} ${baseY - height} L ${xStart + width * 0.35} ${baseY - height - 5} L ${xStart + width * 0.7 + 1} ${baseY - height} Z `;
-        // Courtyard wall
-        path += `M ${xStart + width * 0.7} ${baseY} L ${xStart + width} ${baseY} L ${xStart + width} ${baseY - height * 0.5} L ${xStart + width * 0.7} ${baseY - height * 0.5} Z `;
+        // Semicircular theatron with seating tier arcs
+        path += `M ${xStart} ${baseY} A ${width/2} ${height} 0 0 1 ${xStart+width} ${baseY} Z `;
+        for (let t = 1; t <= 3; t++) {
+          const fr = t / 4.2;
+          const aw = (width/2)*fr, ah = height*fr*0.9;
+          path += `M ${cx-aw} ${baseY} A ${aw} ${ah} 0 0 1 ${cx+aw} ${baseY} A ${aw*0.87} ${ah*0.84} 0 0 0 ${cx-aw*0.87} ${baseY} Z `;
+        }
         break;
       }
     }
 
     return {
-      el: {
-        id: `skyline-${type}-${xStart}`,
-        type,
-        path,
-        x: xStart,
-        y: baseY - height,
-        width,
-        height,
-        opacity: 0.8 + rand() * 0.2
-      },
-      nextX: xStart + width + 2 + rand() * 10
+      el: { id: `skyline-${type}-${Math.round(xStart)}`, type, path, x: xStart, y: baseY - height, width, height, opacity: 0.8 + rand() * 0.2 },
+      nextX: xStart + width + 1 + rand() * 5,
     };
   };
 
-  // Left side
+  // Left zone
   let currentX = leftZone.start;
   while (currentX < leftZone.end) {
     const res = generateElement(currentX, leftZone.end);
@@ -201,7 +157,7 @@ export const generateGreekSkyline = (seed: number): GreekSkylineElement[] => {
     currentX = res.nextX;
   }
 
-  // Right side
+  // Right zone
   currentX = rightZone.start;
   while (currentX < rightZone.end) {
     const res = generateElement(currentX, rightZone.end);
