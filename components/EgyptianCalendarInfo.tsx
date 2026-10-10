@@ -437,13 +437,13 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
       try {
         const hz = Horizon(currentDate, observer, ra, dec, 'normal');
         if (hz.altitude < 0) return [];
-        const svgX = 150 + (hz.azimuth - 180) / 90 * 120;
+        const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
         const svgY = 165 - hz.altitude / 90 * 150;
-        // Drop stars outside the visible window (no clamping — let SVG clip naturally)
         if (svgX < 2 || svgX > 298 || svgY < 6 || svgY > 163) return [];
-        const r = Math.max(0.5, 1.7 - (mag + 1.5) * 0.32);
-        const opacity = Math.max(0.25, 0.95 - (mag + 1.5) * 0.14);
-        return [{ x: svgX, y: svgY, r, opacity }];
+        const r = Math.max(0.8, 2.8 - (mag + 1.5) * 0.42);
+        const opacity = Math.max(0.4, 0.95 - (mag + 1.5) * 0.10);
+        const glow = mag < 2.0;
+        return [{ x: svgX, y: svgY, r, opacity, glow }];
       } catch { return []; }
     });
   }, [currentDate, lat, lng]);
@@ -521,12 +521,20 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
                 <feGaussianBlur stdDeviation="1.5" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
+              <filter id="star-glow-info" x="-150%" y="-150%" width="400%" height="400%">
+                <feGaussianBlur stdDeviation="1.2" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
               <clipPath id="jup-clip-info"><circle r="5" /></clipPath>
             </defs>
             {isNight && (
               <g>
                 {stars.map((s, i) => (
-                  <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#fff" opacity={s.opacity} />
+                  <circle
+                    key={i} cx={s.x} cy={s.y} r={s.r}
+                    fill="#fff" opacity={s.opacity}
+                    filter={s.glow ? 'url(#star-glow-info)' : undefined}
+                  />
                 ))}
               </g>
             )}
