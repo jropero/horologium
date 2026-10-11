@@ -51,11 +51,11 @@ Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egypt
 
 ### Theming
 
-Two themes (`dark` / `light`/parchment) are set via `data-theme` and `data-civ` HTML attributes. Custom Tailwind tokens: `ink`, `gold-leaf`, `gold-dim`, `parchment`, `parchment-dark`, `midnight`. Fonts: `Cinzel` (serif headings) and `IM Fell English` (body). See `tailwind.config.js`.
+A single dark theme is driven by the `data-civ` HTML attribute (set in `App.tsx`), which selects civilization-specific CSS variable overrides in `index.css`. Custom Tailwind tokens: `ink`, `gold-leaf`, `gold-dim`, `parchment`, `parchment-dark`, `midnight`. Fonts: `Cinzel` (serif headings) and `IM Fell English` (body). See `tailwind.config.js`.
 
 ### Weather
 
-`hooks/useWeather.ts` fetches from Open-Meteo (free, no key required) via `utils/weather.ts`. Results include civilization-specific wind names and descriptions. Refreshed every 30 minutes.
+`hooks/useWeather.ts` fetches from Open-Meteo (free, no key required) via `utils/weather.ts`. Results include civilization-specific wind names and descriptions. Live weather is refreshed every 30 minutes. When the user time-travels to a date (via `DateTimePicker` / `CivilCalendarDatePicker`), `App.tsx` passes that date to `useWeather`, and `fetchWeather` pulls the recorded weather for that specific day/hour from the archive API (`archive-api.open-meteo.com`), falling back to the forecast API's `past_days` window for recent dates and to live weather when no historical data exists (e.g. the future or dates before 1940). This drives every weather effect in the app.
 
 ### Capacitor (Android)
 

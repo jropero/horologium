@@ -53,7 +53,6 @@ const AppContent: React.FC = () => {
     return new Date();
   });
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', 'dark');
     document.documentElement.setAttribute('data-civ', civilization);
   }, [civilization]);
 
