@@ -771,6 +771,39 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
             </div>
           </div>
 
+          {/* ── Efemérides del día + deidad del mes (bajo el hero, sobre el calendario) ── */}
+          <div className="w-full flex flex-col gap-4">
+            <DayStatusCard day={babData.day} lore={lore} />
+
+            {lore && (
+              <div className="w-full bg-blue-900/15 p-5 rounded-lg border-2 border-blue-500/25 shadow-sm">
+                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
+                  <span>𒀭</span> Deidad del Mes <span>𒀭</span>
+                </div>
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <span className="text-3xl">{lore.icon}</span>
+                  <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
+                    {lore.deity}
+                  </h2>
+                </div>
+                <p className="font-serif text-sm text-parchment/90 italic px-4 leading-relaxed">
+                  "{lore.description}"
+                </p>
+                <div className="mt-4 p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
+                  <span className="text-xl mt-0.5">🏛️</span>
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
+                      Festival / Ritual Principal
+                    </span>
+                    <span className="text-sm font-serif text-blue-100/95 leading-snug">
+                      {lore.festival}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* View toggle */}
           <div className="flex gap-0 rounded-lg overflow-hidden border border-blue-600/40 w-full max-w-xs">
             {(['month', 'cycle'] as ViewMode[]).map(v => (
@@ -804,9 +837,6 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 dayEvents={lore?.dayEvents}
               />
 
-              {/* Day status card — Babylonian "Nonae / Deus Hodiernus" */}
-              <DayStatusCard day={babData.day} lore={lore} />
-
               <div className="border-t border-blue-700/30 pt-3 mt-1">
                 <div className="text-xs text-blue-400 uppercase tracking-widest font-serif font-bold mb-1 text-center">
                   Sincronía Lunar–Solar
@@ -825,35 +855,6 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 <span>𒀭</span>
               </div>
               <MetonicCycle meta={meta} />
-            </div>
-          )}
-
-          {/* Deity & festival */}
-          {lore && (
-            <div className="w-full bg-blue-900/15 p-5 rounded-lg border-2 border-blue-500/25 shadow-sm">
-              <div className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-1">
-                Deidad del Mes
-              </div>
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <span className="text-3xl">{lore.icon}</span>
-                <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
-                  {lore.deity}
-                </h2>
-              </div>
-              <p className="font-serif text-sm text-parchment/90 italic px-4 leading-relaxed">
-                "{lore.description}"
-              </p>
-              <div className="mt-4 p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
-                <span className="text-xl mt-0.5">🏛️</span>
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
-                    Festival / Ritual Principal
-                  </span>
-                  <span className="text-sm font-serif text-blue-100/95 leading-snug">
-                    {lore.festival}
-                  </span>
-                </div>
-              </div>
             </div>
           )}
 

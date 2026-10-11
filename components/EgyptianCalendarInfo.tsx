@@ -814,6 +814,65 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
         {/* ── Main content ─────────────────────────────────────────────────── */}
         <div className="p-5 md:p-7 flex flex-col gap-5">
 
+          {/* ── Efemérides del día (bajo el hero, sobre el calendario) ──────── */}
+          {!egyptianDate.isEpagomenal && (civilFestivals.length > 0 || lunarFestivals.length > 0) && (
+            <div className="flex flex-col gap-3">
+              <SectionHeader>Festividades de Hoy</SectionHeader>
+              <div className="flex flex-col gap-2 mt-1">
+                {civilFestivals.map((f, i) => (
+                  <div key={`civ-ephem-${i}`} className="flex items-start gap-3 p-3 rounded border text-left"
+                       style={{ background: 'rgba(24,64,160,0.10)', borderColor: 'rgba(24,64,160,0.35)' }}>
+                    <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
+                    <div className="min-w-0">
+                      <div className="text-[9px] uppercase tracking-widest font-serif flex items-center gap-2"
+                           style={{ color: 'rgba(212,168,50,0.60)' }}>
+                        <span>𓊹 Festival Civil</span>
+                        <span className="text-parchment/25">· Fijo</span>
+                      </div>
+                      <div className="text-parchment font-serif font-bold text-sm">{f.name}</div>
+                      <p className="font-serif text-[11px] text-parchment/70 italic leading-snug mt-0.5">{f.description}</p>
+                    </div>
+                  </div>
+                ))}
+                {lunarFestivals.map((f, i) => (
+                  <div key={`lun-ephem-${i}`} className="flex items-start gap-3 p-3 rounded border text-left"
+                       style={{ background: 'rgba(212,168,50,0.06)', borderColor: 'rgba(212,168,50,0.30)' }}>
+                    <FestivalIcon name={f.icon} className="text-amber-400 shrink-0" />
+                    <div className="min-w-0">
+                      <div className="text-[9px] uppercase tracking-widest font-serif flex items-center gap-2"
+                           style={{ color: 'rgba(212,168,50,0.60)' }}>
+                        <span>𓊹 Festival Lunar</span>
+                        <span className="text-parchment/25">· Día {lunarDay}</span>
+                      </div>
+                      <div className="text-parchment font-serif font-bold text-sm">{f.name}</div>
+                      <p className="font-serif text-[11px] text-parchment/70 italic leading-snug mt-0.5">{f.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Deity card (always shown) ──────────────────────────────── */}
+          <div
+            className="flex flex-col items-center gap-2 p-5 rounded border-2 text-center"
+            style={{ background: 'rgba(212,168,50,0.05)', borderColor: 'rgba(212,168,50,0.22)' }}
+          >
+            <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(212,168,50,0.65)' }}>
+              {egyptianDate.isEpagomenal ? '— Madre Celeste —' : labels.godOfDayTitle}
+            </div>
+            <div className="text-3xl" style={{ color: 'rgba(212,168,50,0.90)' }}>𓊹</div>
+            <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment leading-tight">
+              {deity.name}
+            </h2>
+            <div className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+              {deity.title}
+            </div>
+            <p className="font-serif text-sm text-parchment/85 italic px-4 mt-1 leading-relaxed">
+              "{deity.description}"
+            </p>
+          </div>
+
           {/* EPAGOMENAL highlight (shown instead of view toggle) */}
           {egyptianDate.isEpagomenal && epagomenalInfo && (
             <div
@@ -1229,27 +1288,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
             </div>
           )}
 
-          {/* ── Deity card (always shown) ──────────────────────────────── */}
-          <div
-            className="flex flex-col items-center gap-2 p-5 rounded border-2 text-center mt-1"
-            style={{ background: 'rgba(212,168,50,0.05)', borderColor: 'rgba(212,168,50,0.22)' }}
-          >
-            <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(212,168,50,0.65)' }}>
-              {egyptianDate.isEpagomenal ? '— Madre Celeste —' : labels.godOfDayTitle}
-            </div>
-            <div className="text-3xl" style={{ color: 'rgba(212,168,50,0.90)' }}>𓊹</div>
-            <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment leading-tight">
-              {deity.name}
-            </h2>
-            <div className="text-xs font-bold uppercase tracking-widest text-emerald-400">
-              {deity.title}
-            </div>
-            <p className="font-serif text-sm text-parchment/85 italic px-4 mt-1 leading-relaxed">
-              "{deity.description}"
-            </p>
           </div>
-
-        </div>
 
         <LotusFreizeBorder id="lotus-btm" />
       </div>
