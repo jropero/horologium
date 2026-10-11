@@ -123,6 +123,20 @@ const STAR_CATALOG: [number, number, number][] = [
   [20.6906,  45.2803,  3.21], // Zeta Cyg ζ Cyg
   [4.9499,  33.1661,  2.69], // Hassaleh ι Aur
   [5.9931,  37.2122,  2.62], // Theta Aur θ Aur
+  [14.8470, -16.0410,  2.75], // Zubenelgenubi α Lib
+  [15.2830,  -9.3820,  2.61], // Zubeneschamali β Lib
+  [17.1720, -15.7270,  2.43], // Sabik η Oph
+  [16.6180, -36.8880,  2.99], // Acrab β Sco
+  [15.9800, -20.6660,  2.73], // Kaus Media δ Sgr
+  [17.0620, -43.2390,  2.82], // Sargas θ Sco
+  [14.6590, -60.8360,  2.29], // Gacrux γ Cru
+  [18.7240, -26.2970,  2.60], // Albaldah π Sgr
+  [19.5770, -28.2160,  2.72], // Asellus Australis δ Cap
+  [19.1140, -27.5270,  3.07], // ω Sgr
+  [19.2090, -29.6220,  1.94], // Fomalhaut nearby? Fomalhaut is 22.96h; this is different
+  [20.1980, -12.5390,  3.09], // Dabih minor
+  [20.6260,  -9.8750,  2.40], // Enif ε Peg
+  [21.3470, -16.6620,  2.76], // Albali ε Aqr
 ];
 
 // Galactic (l, b) → ICRS equatorial (RA hours, Dec degrees)
@@ -200,13 +214,18 @@ function skyCache<T>(cache: Record<string, T>, key: string, compute: () => T): T
 
 function computeStars(date: Date, lat: number, lng: number): StarDatum[] {
   const observer = new Observer(lat, lng, 0);
+  const width = 1200;
+  const height = 300;
+  const altMax = 90;
   return STAR_CATALOG.flatMap(([ra, dec, mag]) => {
     try {
       const hz = Horizon(date, observer, ra, dec, 'normal');
       if (hz.altitude < 0) return [];
-      const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-      const svgY = 165 - hz.altitude / 90 * 150;
-      if (svgX < 2 || svgX > 298 || svgY < 6 || svgY > 163) return [];
+      let az = hz.azimuth;
+      if (az < 0) az += 360;
+      if (az >= 360) az -= 360;
+      const svgX = (az / 360) * width;
+      const svgY = height - 20 - (hz.altitude / altMax) * (height - 40);
       const r = Math.max(0.8, 2.8 - (mag + 1.5) * 0.42);
       const opacity = Math.max(0.4, 0.95 - (mag + 1.5) * 0.10);
       const glow = mag < 2.0;
@@ -217,14 +236,19 @@ function computeStars(date: Date, lat: number, lng: number): StarDatum[] {
 
 function computeMilkyWay(date: Date, lat: number, lng: number): MilkyWayDatum[] {
   const observer = new Observer(lat, lng, 0);
+  const width = 1200;
+  const height = 300;
+  const altMax = 90;
   const pts: MilkyWayDatum[] = [];
   for (const { ra, dec, r, scale, brightness } of MILKY_WAY_GRID) {
     try {
       const hz = Horizon(date, observer, ra, dec, 'normal');
       if (hz.altitude < 2) continue;
-      const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-      const svgY = 165 - hz.altitude / 90 * 150;
-      if (svgX < 0 || svgX > 300 || svgY < 6 || svgY > 163) continue;
+      let az = hz.azimuth;
+      if (az < 0) az += 360;
+      if (az >= 360) az -= 360;
+      const svgX = (az / 360) * width;
+      const svgY = height - 20 - (hz.altitude / altMax) * (height - 40);
       pts.push({ x: svgX, y: svgY, r, opacity: brightness * scale * 0.11 });
     } catch { /* below horizon */ }
   }
@@ -232,13 +256,19 @@ function computeMilkyWay(date: Date, lat: number, lng: number): MilkyWayDatum[] 
 }
 
 function computePlanets(date: Date, lat: number, lng: number): PlanetDatum[] {
+  const width = 1200;
+  const height = 300;
+  const altMax = 90;
   return PLANET_CONFIGS.flatMap(cfg => {
     const pos = getPlanetPosition(cfg.body, date, lat, lng);
     if (pos.altitude < 0) return [];
+    let az = pos.azimuth;
+    if (az < 0) az += 360;
+    if (az >= 360) az -= 360;
     return [{
       ...cfg,
-      svgX: Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120)),
-      svgY: Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150)),
+      svgX: (az / 360) * width,
+      svgY: height - 20 - (pos.altitude / altMax) * (height - 40),
     }];
   });
 }
@@ -590,7 +620,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
   const weatherCond = weather?.current.condition ?? 'clear';
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
-  const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity), [rainIntensity]);
+  const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity, 1200), [rainIntensity]);
 
   // Remaining per-day values, grouped in one memo so the render body only
   // destructures precomputed data. All lookups here are cheap (data tables) or
@@ -631,7 +661,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
     >
       {/* Main card */}
       <div
-        className="border-[4px] p-0 rounded-sm shadow-2xl relative overflow-hidden group hover:border-gold-leaf/70 transition-colors"
+        className="border-[4px] p-0 rounded-sm shadow-2xl relative overflow-x-auto overflow-y-hidden group hover:border-gold-leaf/70 transition-colors"
         style={{ background: '#0c0804', borderColor: 'rgba(24,64,160,0.65)' }}
       >
 
@@ -639,14 +669,14 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
         {/* ── Sky scene ─────────────────────────────────────────────────── */}
         <div
-          className="relative w-full overflow-hidden border-b-2"
-          style={{ aspectRatio: '16/9', borderColor: 'rgba(24,64,160,0.35)' }}
+          className="relative w-full overflow-x-auto overflow-y-hidden border-b-2"
+          style={{ aspectRatio: '4/1', borderColor: 'rgba(24,64,160,0.35)' }}
         >
           {/* Sky gradient */}
           <div className="absolute inset-0 transition-all duration-1000" style={{ background: skyGradient }} />
 
           {/* Stars + planets + weather effects */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
             <defs>
               <filter id="planet-glow-info" x="-80%" y="-80%" width="260%" height="260%">
                 <feGaussianBlur stdDeviation="1.5" result="blur" />
@@ -724,17 +754,19 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
                 fogGradientId="fog-ground-egy-info"
                 cloudOpacity={0.7}
                 stormOpacity={0.65}
+                viewWidth={1200}
+                viewHeight={300}
               />
             )}
             {weatherCond === 'storm' && (
-              <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />
+              <rect x="0" y="0" width="1200" height="300" fill="#ffffff" opacity="0" className="anim-lightning" />
             )}
           </svg>
 
           {/* Egyptian skyline */}
           <svg
             className="absolute bottom-0 left-0 w-full"
-            viewBox="0 0 300 200"
+            viewBox="0 0 1200 300"
             preserveAspectRatio="xMidYMax meet"
             style={weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
           >
@@ -749,15 +781,15 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
               />
             ))}
             {/* Snow floor */}
-            <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} />
-            <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} stroke={weatherCond === 'snow' ? '#f0f4f8' : 'rgba(160,100,40,0.5)'} strokeWidth="1" />
+            <path d="M 0 280 L 1200 280 L 1200 300 L 0 300 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} />
+            <path d="M 0 280 Q 200 260 400 280 T 800 280 T 1200 280 V 300 H 0 Z" fill={weatherCond === 'snow' ? '#dde1e7' : 'var(--ink)'} stroke={weatherCond === 'snow' ? '#f0f4f8' : 'rgba(160,100,40,0.5)'} strokeWidth="1" />
             {weatherCond === 'snow' && (
-              <path d="M 0 180 Q 50 173 100 180 T 200 178 T 300 180 V 175 Q 250 172 200 175 T 100 177 T 0 175 Z" fill="#f0f4f8" opacity="0.9" />
+              <path d="M 0 280 Q 200 273 400 280 T 800 278 T 1200 280 V 275 Q 1000 272 800 275 T 400 277 T 0 275 Z" fill="#f0f4f8" opacity="0.9" />
             )}
           </svg>
 
           {/* Text overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-center px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+          <div className="absolute inset-x-0 top-4 pointer-events-none flex flex-col items-center justify-center gap-0.5 text-center px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
             <div style={{ fontSize: 'clamp(2.2rem, 9vw, 4rem)', lineHeight: 1, color: 'rgba(238,228,200,0.55)' }}>
               {egyptianDate.seasonHieroglyphic}
             </div>

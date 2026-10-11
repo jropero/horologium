@@ -35,14 +35,17 @@ export interface WeatherParticles {
   snow: SnowFlake[];
 }
 
-export function generateWeatherParticles(rainIntensity: number): WeatherParticles {
-  const count = Math.round(lerp(50, 140, rainIntensity));
+export function generateWeatherParticles(rainIntensity: number, viewWidth = 300): WeatherParticles {
+  // Wider skies (e.g. the 1200-unit Egyptian panorama) get proportionally more
+  // particles so the field does not look sparse. viewWidth=300 keeps legacy densities.
+  const density = Math.max(1, viewWidth / 600);
+  const count = Math.round(lerp(50, 140, rainIntensity) * density);
 
   const rain: RainDrop[] = Array.from({ length: count }).map(() => {
     const dur = lerp(2.4, 1.1, rainIntensity) + Math.random() * 0.6;
     const drift = -5 - Math.random() * 10;
     return {
-      x: Math.random() * 360 - 30, // -30→330: distributes across full width + right overhang
+      x: Math.random() * (viewWidth + 60) - 30, // distributes across full width + overhang
       y: -30 - Math.random() * 50,
       length: lerp(6, 30, rainIntensity) + Math.random() * 5,
       width: lerp(0.4, 1.6, rainIntensity) + Math.random() * 0.3,
@@ -54,10 +57,10 @@ export function generateWeatherParticles(rainIntensity: number): WeatherParticle
     };
   });
 
-  const snow: SnowFlake[] = Array.from({ length: 55 }).map(() => {
+  const snow: SnowFlake[] = Array.from({ length: Math.round(55 * density) }).map(() => {
     const dur = 3 + Math.random() * 4;
     return {
-      x: Math.random() * 300,
+      x: Math.random() * viewWidth,
       y: -20 - Math.random() * 50,
       r: Math.random() * 1.5 + 0.5,
       opacity: Math.random() * 0.6 + 0.4,
