@@ -139,8 +139,8 @@ const AppContent: React.FC = () => {
     updateTime();
   }, [modernTime, latitude, longitude, loading, civilization]);
 
-  // Weather Data
-  const { weather } = useWeather(latitude, longitude);
+  // Weather Data — when time-traveling, load the weather recorded on that day/time.
+  const { weather } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
   const [devWeatherCode, setDevWeatherCode] = useState<number | null>(null);
 
   const DEV_OPTIONS = [
@@ -325,6 +325,7 @@ const AppContent: React.FC = () => {
               onUpdateLocation={handleUpdateLocation}
               currentLat={latitude}
               currentLng={longitude}
+              isTimeTraveling={isTimeTraveling}
             />
           ) : (
             <RomanClock
@@ -335,6 +336,7 @@ const AppContent: React.FC = () => {
               onUpdateLocation={handleUpdateLocation}
               currentLat={latitude}
               currentLng={longitude}
+              isTimeTraveling={isTimeTraveling}
             />
           )}
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Wind, Thermometer, CloudSun, History, Gauge, Navigation, MapPin, Map } from 'lucide-react';
+import { X, Wind, Thermometer, CloudSun, History, Gauge, Navigation, MapPin, Map, Hourglass } from 'lucide-react';
 import { WeatherData, WeatherSnapshot } from '../types';
 import { LOCATIONS } from '../utils/locations';
 import { Geolocation } from '@capacitor/geolocation';
@@ -13,6 +13,10 @@ interface WeatherModalProps {
     onUpdateLocation: (lat: number, lng: number) => void;
     currentLat: number;
     currentLng: number;
+    /** True while the app is showing a time-travel date instead of the present. */
+    isTimeTraveling?: boolean;
+    /** The date/time currently being viewed (only meaningful while time traveling). */
+    travelDate?: Date;
 }
 
 const WeatherIcon = ({ condition, className = "w-12 h-12" }: { condition: string, className?: string }) => {
@@ -105,7 +109,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
     weather,
     onUpdateLocation,
     currentLat,
-    currentLng
+    currentLng,
+    isTimeTraveling = false,
+    travelDate,
 }) => {
     const { civilization, labels } = useCivilization();
     const [isLocLoading, setIsLocLoading] = React.useState(false);
@@ -167,6 +173,27 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                     </button>
                 </div>
 
+                {/* Time-travel banner (mirrors the app's amber Viaje Temporal bar) */}
+                {isTimeTraveling && (
+                    <div className="relative z-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-amber-950/60 border-b border-amber-700/40 px-4 py-2 text-amber-300">
+                        <Hourglass className="w-3.5 h-3.5 shrink-0" />
+                        <span className="font-serif text-[11px] uppercase tracking-[0.25em] font-bold">
+                            Viaje Temporal
+                        </span>
+                        {travelDate && (
+                            <>
+                                <span className="text-amber-700/60">·</span>
+                                <span className="font-serif text-[11px] tabular-nums text-amber-400/90">
+                                    {travelDate.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                                </span>
+                            </>
+                        )}
+                        <span className="ml-1 text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded border border-amber-700/40 text-amber-400/80">
+                            {weather.isHistorical ? 'Datos históricos' : 'Sin registro · actual'}
+                        </span>
+                    </div>
+                )}
+
                 {/* Content */}
                 <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar relative z-10">
                     
@@ -210,7 +237,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                     <div className="bg-gradient-to-br from-gold-leaf/5 to-transparent border border-gold-leaf/30 rounded-2xl p-6 mb-8 shadow-inner">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                                <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">Status Praesens</span>
+                                <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">
+                                    {isTimeTraveling ? 'Status Temporis' : 'Status Praesens'}
+                                </span>
                                 <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
                                     {civilization === 'hellas' && current.greekDescription ? current.greekDescription : current.description}
                                 </h3>

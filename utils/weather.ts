@@ -182,6 +182,8 @@ export const getChineseWeatherDesc = (code: number): string => {
 
 const HISTORICAL_YEARS = [2003, 1973, 1949];
 
+const pad2 = (n: number): string => String(n).padStart(2, '0');
+
 const getRomanYear = (year: number): string => {
     if (year === 2003) return "MMIII";
     if (year === 1973) return "MCMLXXIII";
@@ -189,80 +191,187 @@ const getRomanYear = (year: number): string => {
     return year.toString();
 };
 
-export const fetchWeather = async (lat: number, lng: number): Promise<WeatherData | null> => {
-    try {
-        const today = new Date();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
+interface SnapshotInput {
+    temperature: number;
+    code: number;
+    windSpeed: number;
+    windDirection: number;
+    surfacePressure: number;
+    yearLabel: string;
+}
 
-        // URL para Clima Actual - Usamos 'current' para obtener surface_pressure
-        const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure`;
- 
-        // URLs para Clima Histórico
+/** Builds a complete WeatherSnapshot (WMO code + civilization flavourings) from raw values. */
+const buildSnapshot = ({
+    temperature,
+    code,
+    windSpeed,
+    windDirection,
+    surfacePressure,
+    yearLabel,
+}: SnapshotInput): WeatherSnapshot => {
+    const info = WEATHER_CODES[code] || { condition: 'clear', description: 'Caelum Ignosum' };
+    return {
+        temperature,
+        condition: info.condition,
+        description: info.description,
+        greekDescription: getGreekWeatherDesc(code),
+        egyptianDescription: getEgyptianWeatherDesc(code),
+        chineseDescription: getChineseWeatherDesc(code),
+        code,
+        windSpeed,
+        windDirection,
+        latinWindName: getLatinWindName(windDirection),
+        greekWindName: getGreekWindName(windDirection),
+        egyptianWindName: getEgyptianWindName(windDirection),
+        chineseWindName: getChineseWindName(windDirection),
+        surfacePressure,
+        yearLabel,
+    };
+};
+
+const HOURLY_VARS = 'temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure';
+
+/** Index of the hourly row matching the target wall-clock hour, else the first usable row. */
+const pickHourlyIndex = (hourly: any, target: Date): number => {
+    if (!hourly || !Array.isArray(hourly.time) || !Array.isArray(hourly.temperature_2m)) return -1;
+    const targetHour = target.getHours();
+    for (let i = 0; i < hourly.time.length; i++) {
+        if (Number(String(hourly.time[i]).slice(11, 13)) === targetHour && hourly.temperature_2m[i] != null) {
+            return i;
+        }
+    }
+    return hourly.temperature_2m.findIndex((v: number | null) => v != null);
+};
+
+const snapshotFromHourly = (hourly: any, index: number, yearLabel: string): WeatherSnapshot | null => {
+    if (index < 0) return null;
+    const temperature = hourly.temperature_2m?.[index];
+    const code = hourly.weather_code?.[index];
+    if (temperature == null || code == null) return null;
+    return buildSnapshot({
+        temperature,
+        code,
+        windSpeed: hourly.wind_speed_10m?.[index] ?? 0,
+        windDirection: hourly.wind_direction_10m?.[index] ?? 0,
+        surfacePressure: hourly.surface_pressure?.[index] ?? 1013,
+        yearLabel,
+    });
+};
+
+/**
+ * Weather for a specific historical date/time at a location.
+ * Tries the archive (reanalysis) API first, then the forecast API's `past_days`
+ * window for recent dates the archive has not published yet. Returns null when
+ * the date is outside the historical range (e.g. the future).
+ */
+const fetchHistoricalSnapshot = async (lat: number, lng: number, target: Date): Promise<WeatherSnapshot | null> => {
+    const dateStr = `${target.getFullYear()}-${pad2(target.getMonth() + 1)}-${pad2(target.getDate())}`;
+
+    try {
+        const archiveUrl = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}&start_date=${dateStr}&end_date=${dateStr}&hourly=${HOURLY_VARS}&timezone=auto`;
+        const res = await fetch(archiveUrl);
+        if (res.ok) {
+            const data = await res.json();
+            const snapshot = snapshotFromHourly(data.hourly, pickHourlyIndex(data.hourly, target), 'Hodie');
+            if (snapshot) return snapshot;
+        }
+    } catch {
+        // Fall through to the forecast past-days window.
+    }
+
+    const daysAgo = Math.ceil((Date.now() - target.getTime()) / 86400000);
+    if (daysAgo >= 0 && daysAgo <= 92) {
+        try {
+            const pastDays = Math.min(92, Math.max(1, daysAgo + 1));
+            const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=${HOURLY_VARS}&past_days=${pastDays}&timezone=auto`;
+            const res = await fetch(forecastUrl);
+            if (res.ok) {
+                const data = await res.json();
+                const index = pickHourlyIndex(data.hourly, target);
+                if (index >= 0 && String(data.hourly.time[index]).slice(0, 10) === dateStr) {
+                    return snapshotFromHourly(data.hourly, index, 'Hodie');
+                }
+            }
+        } catch {
+            // No historical data available.
+        }
+    }
+
+    return null;
+};
+
+/**
+ * Fetches weather for a location.
+ * When `targetDate` is given (time travel), the current snapshot becomes the
+ * weather recorded at that date/time and the comparison years are shifted to the
+ * same month/day. Without it, everything is relative to the present.
+ */
+export const fetchWeather = async (lat: number, lng: number, targetDate?: Date): Promise<WeatherData | null> => {
+    try {
+        const now = new Date();
+        // Treat a target within the hour as "live" so the minute-fresh forecast is kept.
+        const isLive = !targetDate || Math.abs(now.getTime() - targetDate.getTime()) < 60 * 60 * 1000;
+
+        // Reference day for the "same day in past years" comparison.
+        const ref = targetDate ?? now;
+        const month = pad2(ref.getMonth() + 1);
+        const day = pad2(ref.getDate());
+
+        // --- Selected day (historical) or present weather ---
+        let current: WeatherSnapshot | null = null;
+        let isHistorical = false;
+        if (!isLive && targetDate) {
+            current = await fetchHistoricalSnapshot(lat, lng, targetDate);
+            if (current) isHistorical = true;
+        }
+
+        if (!current) {
+            const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure`;
+            const res = await fetch(currentUrl);
+            if (res.ok) {
+                const c = (await res.json()).current;
+                if (c && c.temperature_2m != null) {
+                    current = buildSnapshot({
+                        temperature: c.temperature_2m,
+                        code: c.weather_code,
+                        windSpeed: c.wind_speed_10m ?? 0,
+                        windDirection: c.wind_direction_10m ?? 0,
+                        surfacePressure: c.surface_pressure ?? 1013,
+                        yearLabel: 'Hodie',
+                    });
+                }
+            }
+        }
+
+        if (!current) return null;
+
+        // --- Historical comparison: same day across HISTORICAL_YEARS ---
         const historicalUrls = HISTORICAL_YEARS.map(year => {
             const dateStr = `${year}-${month}-${day}`;
             return `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}&start_date=${dateStr}&end_date=${dateStr}&daily=weather_code,temperature_2m_mean,wind_speed_10m_max,wind_direction_10m_dominant&timezone=auto`;
         });
- 
-        const responses = await Promise.all([
-            fetch(currentUrl),
-            ...historicalUrls.map(url => fetch(url))
-        ]);
- 
-        // Procesar Actual
-        const currData = await responses[0].json();
-        const c = currData.current;
-        const cInfo = WEATHER_CODES[c.weather_code] || { condition: 'clear', description: 'Caelum Ignosum' };
-        
-        const current: WeatherSnapshot = {
-            temperature: c.temperature_2m,
-            condition: cInfo.condition,
-            description: cInfo.description,
-            greekDescription: getGreekWeatherDesc(c.weather_code),
-            egyptianDescription: getEgyptianWeatherDesc(c.weather_code),
-            chineseDescription: getChineseWeatherDesc(c.weather_code),
-            code: c.weather_code,
-            windSpeed: c.wind_speed_10m,
-            windDirection: c.wind_direction_10m,
-            latinWindName: getLatinWindName(c.wind_direction_10m),
-            greekWindName: getGreekWindName(c.wind_direction_10m),
-            egyptianWindName: getEgyptianWindName(c.wind_direction_10m),
-            chineseWindName: getChineseWindName(c.wind_direction_10m),
-            surfacePressure: c.surface_pressure,
-            yearLabel: "Hodie"
-        };
- 
-        // Procesar Históricos
+
+        const responses = await Promise.all(historicalUrls.map(url => fetch(url)));
+
         const historical: WeatherSnapshot[] = [];
-        for (let i = 1; i < responses.length; i++) {
+        for (let i = 0; i < responses.length; i++) {
             if (!responses[i].ok) continue;
             const data = await responses[i].json();
-            const year = HISTORICAL_YEARS[i - 1];
-            
-            if (data.daily) {
-                const code = data.daily.weather_code[0];
-                const info = WEATHER_CODES[code] || { condition: 'clear', description: 'Caelum' };
-                historical.push({
-                    temperature: data.daily.temperature_2m_mean[0],
-                    condition: info.condition,
-                    description: info.description,
-                    greekDescription: getGreekWeatherDesc(code),
-                    egyptianDescription: getEgyptianWeatherDesc(code),
-                    chineseDescription: getChineseWeatherDesc(code),
-                    code: code,
-                    windSpeed: data.daily.wind_speed_10m_max[0],
-                    windDirection: data.daily.wind_direction_10m_dominant[0],
-                    latinWindName: getLatinWindName(data.daily.wind_direction_10m_dominant[0]),
-                    greekWindName: getGreekWindName(data.daily.wind_direction_10m_dominant[0]),
-                    egyptianWindName: getEgyptianWindName(data.daily.wind_direction_10m_dominant[0]),
-                    chineseWindName: getChineseWindName(data.daily.wind_direction_10m_dominant[0]),
+            const year = HISTORICAL_YEARS[i];
+            const daily = data.daily;
+            if (daily && daily.weather_code?.[0] != null && daily.temperature_2m_mean?.[0] != null) {
+                historical.push(buildSnapshot({
+                    temperature: daily.temperature_2m_mean[0],
+                    code: daily.weather_code[0],
+                    windSpeed: daily.wind_speed_10m_max?.[0] ?? 0,
+                    windDirection: daily.wind_direction_10m_dominant?.[0] ?? 0,
                     surfacePressure: 1013,
-                    yearLabel: getRomanYear(year)
-                });
+                    yearLabel: getRomanYear(year),
+                }));
             }
         }
 
-        return { current, historical };
+        return { current, historical, isHistorical };
     } catch (error) {
         console.error("Error al consultar Chronos:", error);
         return null;

@@ -74,5 +74,7 @@ export interface WeatherSnapshot {
 export interface WeatherData {
     current: WeatherSnapshot;
     historical: WeatherSnapshot[]; // Un array con los años pasados
+    /** True when `current` is recorded weather for a time-travel date (not the present). */
+    isHistorical?: boolean;
 }
 // --- END OF FILE horologium-main/types.ts ---

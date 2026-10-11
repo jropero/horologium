@@ -16,6 +16,7 @@ interface BabylonianClockProps {
   onUpdateLocation: (lat: number, lng: number) => void;
   currentLat: number;
   currentLng: number;
+  isTimeTraveling?: boolean;
 }
 
 // ─── Inline calendar modal ────────────────────────────────────────────────────
@@ -177,6 +178,7 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
   onUpdateLocation,
   currentLat,
   currentLng,
+  isTimeTraveling = false,
 }) => {
   const { labels } = useCivilization();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -233,6 +235,8 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
         onUpdateLocation={onUpdateLocation}
         currentLat={currentLat}
         currentLng={currentLng}
+        isTimeTraveling={isTimeTraveling}
+        travelDate={isTimeTraveling ? modernTime : undefined}
       />
     </>
   );
