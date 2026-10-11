@@ -5,6 +5,7 @@
 import { getSunTimes, getMoonPhase, springEquinoxJDE, trueNewMoonJDE, kForJDE } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
 import { BabylonianDate, BABYLONIAN_MONTHS } from '../types/babylonia';
+import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -57,7 +58,7 @@ const toJD = (date: Date): number =>
 // First new moon whose crescent (first local sunset ≥ CRESCENT_MIN_AGE after conjunction)
 // falls on or after the spring equinox. Uses the observer's GPS location so that
 // e.g. a user in Reykjavik vs Auckland gets the astronomically correct sunset reference.
-const getNisannu1JD = (gregYear: number, lat: number, lng: number): number => {
+export const getNisannu1JD = (gregYear: number, lat: number, lng: number): number => {
   const equinoxJD = springEquinoxJDE(gregYear);
   // Start ~35 days before equinox to catch the edge case where the previous lunation's
   // crescent qualifies (new moon before equinox but crescent after).
@@ -435,5 +436,72 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
     indiction: 0,
     tutelaMensis: MONTH_DEITIES[babDate.monthIndex % 12],
     zodiacSign: getBabylonianZodiac(now),
+  };
+};
+
+// ─── Annual civil calendar (for the date picker) ───────────────────────────────
+
+const jdToDate = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
+
+const addLocalDays = (d: Date, n: number): Date => {
+  const out = new Date(d);
+  out.setDate(out.getDate() + n);
+  return out;
+};
+
+/** Gregorian year that anchors the Babylonian year (Nisannu 1) containing `date`. */
+export const getBabylonianYearAnchor = (date: Date, lat: number, lng: number): number =>
+  getBabylonianDate(date, lat, lng).seYear - 311;
+
+/**
+ * Builds a full Babylonian civil year (Nisannu → next Nisannu) as months of days
+ * mapped to Gregorian dates. Matches the arithmetic used by `getBabylonianDate`
+ * when evaluated at local noon, so labels and selected dates stay consistent.
+ */
+export const getBabylonianCalendarYear = (anchorGregYear: number, lat: number, lng: number): CivilCalendarYear => {
+  const nisJD = getNisannu1JD(anchorGregYear, lat, lng);
+  const nextNisJD = getNisannu1JD(anchorGregYear + 1, lat, lng);
+  const isIntercalaryYear = (nextNisJD - nisJD) / SYNODIC_MONTH > 12.5;
+  const totalMonths = isIntercalaryYear ? 13 : 12;
+  const seYear = anchorGregYear + 311;
+
+  const months: CivilCalendarMonth[] = [];
+
+  for (let m = 0; m < totalMonths; m++) {
+    const isIntercalaryMonth = isIntercalaryYear && m === 12;
+    const name = isIntercalaryMonth ? 'Addaru II' : BABYLONIAN_MONTHS[m % 12];
+    const days: CivilCalendarDay[] = [];
+
+    for (let d = 1; d <= 30; d++) {
+      const target = nisJD + m * SYNODIC_MONTH + (d - 1);
+      let g = jdToDate(target);
+      g.setHours(12, 0, 0, 0);
+      if (toJD(g) < target) g = addLocalDays(g, 1);
+      if (toJD(g) >= target + 1) g = addLocalDays(g, -1);
+
+      const monthsSince = Math.floor((toJD(g) - nisJD) / SYNODIC_MONTH);
+      if (monthsSince !== m) break;
+
+      const dayInMonth = Math.floor((toJD(g) - nisJD) % SYNODIC_MONTH) + 1;
+      days.push({ day: Math.max(1, Math.min(dayInMonth, 30)), gregorian: g });
+    }
+
+    if (days.length === 0) break;
+
+    months.push({
+      key: `bab-${m}`,
+      name,
+      latin: `Warḫum ${m + 1}`,
+      translation: isIntercalaryMonth ? 'Mes intercalar' : MONTH_DEITIES[m % 12],
+      kind: isIntercalaryMonth ? 'intercalary' : 'regular',
+      days,
+    });
+  }
+
+  return {
+    anchorGregYear,
+    yearLabel: `SE ${seYear}`,
+    yearSubtitle: isIntercalaryYear ? 'Año intercalar · 13 meses' : 'Año de 12 meses',
+    months,
   };
 };

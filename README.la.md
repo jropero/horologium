@@ -30,12 +30,15 @@
 ### 🌍 Gentes (Modi Multiplices)
 - **Roma (Fasti Romani)**: Ratio classica cum Kalendis, Nonis et Idibus, cyclo nundinarum et anno *Ab Urbe Condita*.
 - **Hellas (Chronos)**: Calendarium Atticum plenum cum mensibus lunaribus, ratione trium decadum conspicua, feriis cum fabulis originis (Aition) et monitionibus dierum nefastorum (Apaphrades).
-- **Aegyptus (Horus)**: Calendarium Alexandrinum cum tempestatibus (Akhet, Peret, Shemu), hemerologia Bonorum et Malorum, cyclo Algol (Oculus Hori), consecratione Apis, feriis sacris et **Nilometro vivo** quod gradus historicos aquarum ostendit.
+- **Aegyptus (Horus)**: Calendarium Alexandrinum cum tempestatibus (Akhet, Peret, Shemu), hemerologia Bonorum et Malorum, cyclo Algol (Oculus Hori), consecratione Apis, feriis sacris, **ortu heliaco Sopdet** (Sirius) et **Nilometro vivo** quod gradus historicos aquarum ostendit.
+- **Babylonia (Ishtar)**: Calendarium lunisolare Babylonicum cum Era Seleucida, mensibus Nisannu–Addaru, cyclo Metonico intercalationis, custodia nocturna (maṣṣartu), diebus sacris (Šapaṭu/dies 15) et fasciis decoris Portae Ishtar.
+- **Zhongguo (中国)**: Calendarium lunisolare Sinicum cum XXIV Terminis Solaribus (二十四节气), Duodecim Ramis Terrestribus (地支) ut mensura horarum, cyclo sexagesimali Quattuor Columnarum (bāzì), zodiaco duodecim animalium et rota cycli sexagenarii anni.
 
 ### 🎨 Species et Elegantia
 - **Compositio Mobilibus Accommodata**: Fascia navigationis ima perpetua ad celeres gentium commutationes, et commutator thematis ad telephona aptatus.
 - **Dualitas Thematis**: Modus tenebrosus profundus atque **Modus Membraneus** (clarus) qui antiquos codices revocat.
-- **Prospectus Proceduralis**: Scaena viva quae templa Romana, acropoles Graecas vel obeliscos Aegyptios secundum gentem activam modo procedurali gignit.
+- **Prospectus Proceduralis**: Scaena viva quae templa Romana, acropoles Graecas, obeliscos Aegyptios vel ziggurata Babylonica secundum gentem activam modo procedurali gignit.
+- **Caela Astronomica**: Scaenae nocturnae secundum gentem cum veris positionibus stellarum et Lunae — inter quas Via Lactea Aegyptia — et effectibus tempestatum dynamicis (pluvia, nix, nebula).
 - **Accessibilitas WCAG AA**: Compositio ad summam legibilitatem aptata cum contrastibus probatis et typographia praestanti.
 
 ### 🕰️ Chronometria et Astronomia Subtilis
@@ -43,6 +46,9 @@
 - **Oculus Hori (Algol)**: Observatio in praesenti stellae variabilis Algol (2.86 dies), quemadmodum actiones Hori in Papyro Cairensi 86637 descriptae sunt.
 - **Rector Horae**: Agnitio domini planetarii uniuscuiusque horae secundum ordinem Chaldaeorum.
 - **Nilometrum Historicum**: Exemplar hydrologicum per singulos menses quod cyclum annuum Nili — ab inundatione maxima in Phaophi usque ad siccitatem in Epiphi — ante oculos ponit.
+- **Termini Solares Sinici**: XXIV jié qì ut cyclus anni repraesentantur cum statu praesenti, proximo termino et pentagrammate praesentis pentadis.
+- **Iter Temporis**: Selector diei qui calendarium annuum plenum cuiusque gentis ostendit et annos secundum propriam aeram numerat — Olympiadem Graecam, cyclum Soticum Aegyptium (ortum heliacum Sopdet) et Aeram Seleucidam Babylonicam; Roma et Zhongguo selectorem Gregorianum retinent.
+- **Praedictio Eclipsium**: Instrumentum cum imaginibus SVG et veris ephemeridibus astronomicis eclipsium solarium lunariumque.
 
 ### 🔮 Sapientia et Divinatio Antiqua
 - **Hemerologia Aegyptia**: Ratio dierum Bonorum et Malorum (*Nefer* et *Aha*) in Papyro Cairensi 86637 fundata.

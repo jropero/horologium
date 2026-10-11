@@ -212,18 +212,18 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             {/* ══ Caustic shimmer below water surface ══ */}
             {waterH > 20 && (
               <>
-                <ellipse cx={lX + lW * 0.36} cy={waterY + 12} rx="4" ry="1.3"
+                <ellipse className="anim-nile-caustic-a" cx={lX + lW * 0.36} cy={waterY + 12} rx="4" ry="1.3"
                   fill={nile.waterColorLight} opacity="0.11" />
-                <ellipse cx={lX + lW * 0.72} cy={waterY + 27} rx="2.5" ry="0.9"
+                <ellipse className="anim-nile-caustic-b" cx={lX + lW * 0.72} cy={waterY + 27} rx="2.5" ry="0.9"
                   fill={nile.waterColorLight} opacity="0.09" />
-                <ellipse cx={rX + rW * 0.55} cy={waterY + 18} rx="3.2" ry="1.1"
+                <ellipse className="anim-nile-caustic-c" cx={rX + rW * 0.55} cy={waterY + 18} rx="3.2" ry="1.1"
                   fill={nile.waterColorLight} opacity="0.10" />
               </>
             )}
 
             {/* ══ Animated wave surfaces ══ */}
             {waterH > 0 && (
-              <>
+              <g className="anim-nile-surface">
                 {/* Left channel wave */}
                 <path
                   d={`M${lX},${waterY} Q${lX + lW * 0.52},${waterY - 2.8} ${colX},${waterY}`}
@@ -236,7 +236,7 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
                   fill="none" stroke={nile.waterColorLight} strokeWidth="1.35" opacity="0.9"
                   filter="url(#nm-glow)"
                 />
-              </>
+              </g>
             )}
 
             {/* ══ Central column — granite body ══ */}
@@ -287,7 +287,7 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
 
             {/* ══ Water-level indicator ══ */}
             {waterH > 0 && (
-              <>
+              <g className="anim-nile-surface">
                 {/* Dashed lines in each channel (skip over the column) */}
                 <line x1={lX} y1={waterY} x2={colX} y2={waterY}
                   stroke={nile.waterColorLight} strokeWidth="1.4" strokeDasharray="3,2.5" opacity="0.72"
@@ -301,7 +301,7 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
                   fill={nile.waterColorLight} opacity="0.80"
                   filter="url(#nm-glow)"
                 />
-              </>
+              </g>
             )}
 
             {/* ══ Column capital (top slab + gold accent) ══ */}

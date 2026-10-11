@@ -5,6 +5,9 @@
 // after the summer solstice.
 
 import { getMoonPhase, summerSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
+import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
+import { translateGreekUI } from './greekTranslations';
+import { getOlympiadYear } from './greekEra';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 const SYNODIC_MONTH = 29.530588853;
@@ -76,7 +79,7 @@ const CRESCENT_DELAY = 1.5;
 // Hekatombaion 1 = Noumenia (first crescent) after the summer solstice.
 // Uses the crescent criterion: find the first new moon whose crescent
 // (conjunction + CRESCENT_DELAY) falls on or after the summer solstice.
-const getAtticYearStart = (gregorianYear: number): Date => {
+export const getAtticYearStart = (gregorianYear: number): Date => {
   const solsticeJD = summerSolsticeJDE(gregorianYear);
   const nmJD = newMoonOnOrAfterJDE(solsticeJD - CRESCENT_DELAY);
   return fromJD(nmJD);
@@ -261,5 +264,134 @@ export const getAtticDateForDisplay = (date: Date): {
   return {
     atticDate: getAtticDate(date),
     moonPhase: getMoonPhase(date)
+  };
+};
+
+// ─── Annual civil calendar (for the date picker) ───────────────────────────────
+
+/** Gregorian year that anchors the Attic year containing `date`. */
+export const getAtticYearAnchor = (date: Date): number => {
+  const y = date.getFullYear();
+  return date >= getAtticYearStart(y) ? y : y - 1;
+};
+
+const addLocalDays = (d: Date, n: number): Date => {
+  const out = new Date(d);
+  out.setDate(out.getDate() + n);
+  return out;
+};
+
+// Next conjunction strictly after `nmJD`, robust against JD→Date rounding
+// (the local `nextNewMoonJDE` can return the same instant when fed a JDE).
+const nextLunationJDE = (nmJD: number): number => {
+  let k = kForJDE(nmJD);
+  let nm = trueNewMoonJDE(k);
+  while (nm <= nmJD + 1) { k++; nm = trueNewMoonJDE(k); }
+  return nm;
+};
+
+/**
+ * Builds a full Attic civil year as months of days mapped to Gregorian dates.
+ * Every generated Gregorian date sits at local noon so that the app's own
+ * `getAtticDate` reports exactly the month/day shown in the picker.
+ */
+export const getAtticCalendarYear = (anchorGregYear: number): CivilCalendarYear => {
+  const yearStart = getAtticYearStart(anchorGregYear);
+  const nextYearStart = getAtticYearStart(anchorGregYear + 1);
+  const yearStartJD = toJD(yearStart);
+  const nextYearStartJD = toJD(nextYearStart);
+  const isIntercalaryYear = nextYearStartJD - yearStartJD > 370;
+
+  // Conjunction preceding the year start, used by getAtticDate's "before day 1"
+  // branch (a noon before the year's New Moon still belongs to the prior month).
+  const prevStartNmJD = (() => {
+    let k = kForJDE(yearStartJD);
+    let nm = trueNewMoonJDE(k);
+    while (nm > yearStartJD) { k--; nm = trueNewMoonJDE(k); }
+    return nm;
+  })();
+
+  // Ordered conjunctions: [prev, year start (lun 0), lun 1 … lun M].
+  const moons: { jd: number; lunation: number }[] = [
+    { jd: prevStartNmJD, lunation: -1 },
+    { jd: yearStartJD, lunation: 0 },
+  ];
+  let cursorJD = yearStartJD;
+  let lun = 0;
+  while (cursorJD < nextYearStartJD - 0.5 && moons.length < 18) {
+    cursorJD = nextLunationJDE(cursorJD);
+    lun++;
+    moons.push({ jd: cursorJD, lunation: lun });
+  }
+
+  const monthLengthAt = (i: number): number => {
+    const b = moons[i + 1]?.jd ?? nextYearStartJD;
+    return Math.max(29, Math.min(30, Math.round(b - moons[i].jd)));
+  };
+
+  const monthMetaForLunation = (l: number): { name: string; latin: string; isIntercalary: boolean } => {
+    if (l <= -1) return { name: ATTIC_MONTHS[11].name, latin: ATTIC_MONTHS[11].latin, isIntercalary: false };
+    if (isIntercalaryYear && l === 6) {
+      return { name: INTERCALARY_MONTH.name, latin: INTERCALARY_MONTH.latin, isIntercalary: true };
+    }
+    const idx = Math.min(isIntercalaryYear && l > 6 ? l - 1 : l, 11);
+    return { name: ATTIC_MONTHS[idx].name, latin: ATTIC_MONTHS[idx].latin, isIntercalary: false };
+  };
+
+  let totalMonths = 0;
+  for (let i = 1; i < moons.length; i++) {
+    if (moons[i].jd < nextYearStartJD - 0.5) totalMonths = moons[i].lunation + 1;
+  }
+
+  // Scan calendar days at local noon, replicating getAtticDate exactly.
+  const buckets = new Map<number, CivilCalendarDay[]>();
+  let i = 1; // moons pointer: current most-recent conjunction
+  const scanEnd = new Date(nextYearStart.getFullYear(), nextYearStart.getMonth(), nextYearStart.getDate(), 12, 0, 0, 0);
+
+  for (let g = addLocalDays(yearStart, 1); g.getTime() <= scanEnd.getTime(); g = addLocalDays(g, 1)) {
+    const noon = new Date(g.getFullYear(), g.getMonth(), g.getDate(), 12, 0, 0, 0);
+    const jd = toJD(noon);
+    while (i + 1 < moons.length && moons[i + 1].jd <= jd) i++;
+
+    const dayOfMonth = Math.floor(jd - moons[i].jd);
+    let lunation: number;
+    let day: number;
+
+    if (dayOfMonth <= 0) {
+      lunation = moons[i - 1]?.lunation ?? -1;
+      const prevLen = monthLengthAt(i - 1);
+      day = Math.min(prevLen + dayOfMonth, prevLen);
+    } else {
+      lunation = moons[i].lunation;
+      day = Math.min(dayOfMonth, monthLengthAt(i));
+    }
+
+    if (lunation < 0 || lunation >= totalMonths || day < 1) continue;
+    if (!buckets.has(lunation)) buckets.set(lunation, []);
+    buckets.get(lunation)!.push({ day, gregorian: noon });
+  }
+
+  const months: CivilCalendarMonth[] = [];
+  for (let m = 0; m < totalMonths; m++) {
+    const days = buckets.get(m);
+    if (!days || days.length === 0) continue;
+    const meta = monthMetaForLunation(m);
+    months.push({
+      key: `attic-${m}`,
+      name: meta.name,
+      latin: meta.latin,
+      translation: translateGreekUI(meta.name),
+      kind: meta.isIntercalary ? 'intercalary' : 'regular',
+      days,
+    });
+  }
+
+  const olympiad = getOlympiadYear(anchorGregYear);
+
+  return {
+    anchorGregYear,
+    yearLabel: `Ol. ${olympiad.olympiad} · año ${olympiad.year}`,
+    yearSubtitle: `${isIntercalaryYear ? 'Año intercalar · 13 meses' : 'Año de 12 meses'} · ${anchorGregYear}/${anchorGregYear + 1}`,
+    months,
   };
 };
