@@ -206,12 +206,21 @@ export interface SiriusDailyData {
   elongation: number;         // angular separation from the Sun in degrees
 }
 
-export const getSiriusDailyData = (date: Date, lat: number, lng: number): SiriusDailyData => {
-  DefineStar(Body.Star1, SIRIUS_RA_H, SIRIUS_DEC_DEG, SIRIUS_DIST_LY);
-  const observer = new Observer(lat, lng, 0);
+// Sirius rise/set/transit are stable within a (calendar day, coordinates) pair,
+// so cache the module-level result. ~10ms per full computation; the day+location
+// changes rarely, and the Kemet tab re-renders on every 15s clock tick.
+const _siriusCache = new Map<string, SiriusDailyData>();
+const _SIRIUS_CACHE_MAX = 32;
 
+export const getSiriusDailyData = (date: Date, lat: number, lng: number): SiriusDailyData => {
   const midnight = new Date(date);
   midnight.setHours(0, 0, 0, 0);
+  const cacheKey = `${midnight.getTime()}|${lat.toFixed(4)},${lng.toFixed(4)}`;
+  const cached = _siriusCache.get(cacheKey);
+  if (cached) return cached;
+
+  DefineStar(Body.Star1, SIRIUS_RA_H, SIRIUS_DEC_DEG, SIRIUS_DIST_LY);
+  const observer = new Observer(lat, lng, 0);
 
   const riseResult = SearchRiseSet(Body.Star1, observer, +1, midnight, 1);
   const setResult  = SearchRiseSet(Body.Star1, observer, -1, midnight, 1);
@@ -239,7 +248,13 @@ export const getSiriusDailyData = (date: Date, lat: number, lng: number): Sirius
   const cosAngle = Math.sin(dec1) * Math.sin(dec2) + Math.cos(dec1) * Math.cos(dec2) * Math.cos(ra1 - ra2);
   const elongation = Math.acos(Math.max(-1, Math.min(1, cosAngle))) * 180 / Math.PI;
 
-  return { riseTime, setTime, transitTime, altitudeAtMidnight, elongation };
+  const result: SiriusDailyData = { riseTime, setTime, transitTime, altitudeAtMidnight, elongation };
+  if (_siriusCache.size >= _SIRIUS_CACHE_MAX) {
+    const oldest = _siriusCache.keys().next().value;
+    if (oldest !== undefined) _siriusCache.delete(oldest);
+  }
+  _siriusCache.set(cacheKey, result);
+  return result;
 };
 
 export const getSopdetHeliacalEvent = (date: Date, lat: number, lng: number): SopdetEvent => {

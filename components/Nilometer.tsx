@@ -213,19 +213,11 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             {waterH > 20 && (
               <>
                 <ellipse cx={lX + lW * 0.36} cy={waterY + 12} rx="4" ry="1.3"
-                  fill={nile.waterColorLight} opacity="0.11">
-                  <animate attributeName="opacity" values="0.05;0.18;0.05" dur="2.7s" repeatCount="indefinite" />
-                  <animate attributeName="rx" values="4;5.5;4" dur="3.2s" repeatCount="indefinite" />
-                </ellipse>
+                  fill={nile.waterColorLight} opacity="0.11" />
                 <ellipse cx={lX + lW * 0.72} cy={waterY + 27} rx="2.5" ry="0.9"
-                  fill={nile.waterColorLight} opacity="0.09">
-                  <animate attributeName="opacity" values="0.04;0.15;0.04" dur="3.8s" begin="0.6s" repeatCount="indefinite" />
-                </ellipse>
+                  fill={nile.waterColorLight} opacity="0.09" />
                 <ellipse cx={rX + rW * 0.55} cy={waterY + 18} rx="3.2" ry="1.1"
-                  fill={nile.waterColorLight} opacity="0.10">
-                  <animate attributeName="opacity" values="0.06;0.17;0.06" dur="3.1s" begin="1.2s" repeatCount="indefinite" />
-                  <animate attributeName="rx" values="3.2;4.4;3.2" dur="3.8s" begin="1.2s" repeatCount="indefinite" />
-                </ellipse>
+                  fill={nile.waterColorLight} opacity="0.10" />
               </>
             )}
 
@@ -237,31 +229,13 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
                   d={`M${lX},${waterY} Q${lX + lW * 0.52},${waterY - 2.8} ${colX},${waterY}`}
                   fill="none" stroke={nile.waterColorLight} strokeWidth="1.35" opacity="0.9"
                   filter="url(#nm-glow)"
-                >
-                  <animate attributeName="d"
-                    values={[
-                      `M${lX},${waterY} Q${lX + lW * 0.52},${waterY - 2.8} ${colX},${waterY}`,
-                      `M${lX},${waterY} Q${lX + lW * 0.52},${waterY + 2.2} ${colX},${waterY}`,
-                      `M${lX},${waterY} Q${lX + lW * 0.52},${waterY - 2.8} ${colX},${waterY}`,
-                    ].join(';')}
-                    dur="3.8s" repeatCount="indefinite"
-                  />
-                </path>
-                {/* Right channel wave — opposite phase */}
+                />
+                {/* Right channel wave */}
                 <path
                   d={`M${rX},${waterY} Q${rX + rW * 0.48},${waterY + 2.2} ${rX + rW},${waterY}`}
                   fill="none" stroke={nile.waterColorLight} strokeWidth="1.35" opacity="0.9"
                   filter="url(#nm-glow)"
-                >
-                  <animate attributeName="d"
-                    values={[
-                      `M${rX},${waterY} Q${rX + rW * 0.48},${waterY + 2.2} ${rX + rW},${waterY}`,
-                      `M${rX},${waterY} Q${rX + rW * 0.48},${waterY - 2.8} ${rX + rW},${waterY}`,
-                      `M${rX},${waterY} Q${rX + rW * 0.48},${waterY + 2.2} ${rX + rW},${waterY}`,
-                    ].join(';')}
-                    dur="3.8s" repeatCount="indefinite"
-                  />
-                </path>
+                />
               </>
             )}
 
@@ -317,14 +291,10 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
                 {/* Dashed lines in each channel (skip over the column) */}
                 <line x1={lX} y1={waterY} x2={colX} y2={waterY}
                   stroke={nile.waterColorLight} strokeWidth="1.4" strokeDasharray="3,2.5" opacity="0.72"
-                  filter="url(#nm-glow)">
-                  <animate attributeName="opacity" values="0.5;0.85;0.5" dur="2.6s" repeatCount="indefinite" />
-                </line>
+                  filter="url(#nm-glow)" />
                 <line x1={colX + colW} y1={waterY} x2={rX + rW} y2={waterY}
                   stroke={nile.waterColorLight} strokeWidth="1.4" strokeDasharray="3,2.5" opacity="0.72"
-                  filter="url(#nm-glow)">
-                  <animate attributeName="opacity" values="0.5;0.85;0.5" dur="2.6s" repeatCount="indefinite" />
-                </line>
+                  filter="url(#nm-glow)" />
                 {/* Small arrowhead on column left-face pointing at current cubit level */}
                 <polygon
                   points={`${colX},${waterY - 3} ${colX + 5},${waterY} ${colX},${waterY + 3}`}

@@ -1,13 +1,13 @@
 // EgyptianCalendarInfo.tsx — Egyptian calendar info panel (restyled)
 // Palette: lotus-papyrus SVG — Egyptian blue #1840a0, red-ochre #c0391a, gold, dark ground
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
 import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
 import { getFestivalsForDate, getNextEgyptianFestivals } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
-import { getAlgolPhase, getAlgolDailyData, getLunarPhase, getSopdetHeliacalEvent, getSiriusDailyData, SopdetEvent, SiriusDailyData, AlgolDailyData } from '../utils/egyptianAstronomy';
+import { getAlgolPhase, getAlgolDailyData, getLunarPhase, getSopdetHeliacalEvent, getSiriusDailyData } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 import Nilometer from './Nilometer';
 import { generateEgyptianSkyline } from '../utils/egyptianSkylineGenerator';
@@ -166,6 +166,91 @@ const MILKY_WAY_GRID = (() => {
   }
   return pts;
 })();
+
+// ── Frozen sky render (stars / milky way / planets) ─────────────────────────
+// The painted sky intentionally ignores the clock and reacts only to the
+// observer's coordinates (same-day render, per commit 15744fa). Because its
+// inputs can't change without a location change, the ~1.1ms + ~8.4ms of Horizon
+// lookups are cached module-wide — re-entering the Kemet tab reuses the exact
+// same arrays instead of recomputing them on every remount. Bounded to 8
+// locations (far beyond the handful the app stores).
+interface StarDatum { x: number; y: number; r: number; opacity: number; glow: boolean }
+interface MilkyWayDatum { x: number; y: number; r: number; opacity: number }
+type PlanetDatum = (typeof PLANET_CONFIGS)[number] & { svgX: number; svgY: number };
+// Records (insertion-ordered) instead of Map — this module imports the `Map`
+// icon from lucide-react, which shadows the global Map constructor at this scope.
+const _starsCache: Record<string, StarDatum[]> = {};
+const _milkyWayCache: Record<string, MilkyWayDatum[]> = {};
+const _planetsCache: Record<string, PlanetDatum[]> = {};
+const _SKY_CACHE_MAX = 8;
+
+function skyCacheKey(lat: number, lng: number): string {
+  return `${lat.toFixed(4)},${lng.toFixed(4)}`;
+}
+
+function skyCache<T>(cache: Record<string, T>, key: string, compute: () => T): T {
+  const hit = cache[key];
+  if (hit) return hit;
+  const value = compute();
+  const keys = Object.keys(cache);
+  if (keys.length >= _SKY_CACHE_MAX) delete cache[keys[0]];
+  cache[key] = value;
+  return value;
+}
+
+function computeStars(date: Date, lat: number, lng: number): StarDatum[] {
+  const observer = new Observer(lat, lng, 0);
+  return STAR_CATALOG.flatMap(([ra, dec, mag]) => {
+    try {
+      const hz = Horizon(date, observer, ra, dec, 'normal');
+      if (hz.altitude < 0) return [];
+      const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
+      const svgY = 165 - hz.altitude / 90 * 150;
+      if (svgX < 2 || svgX > 298 || svgY < 6 || svgY > 163) return [];
+      const r = Math.max(0.8, 2.8 - (mag + 1.5) * 0.42);
+      const opacity = Math.max(0.4, 0.95 - (mag + 1.5) * 0.10);
+      const glow = mag < 2.0;
+      return [{ x: svgX, y: svgY, r, opacity, glow }];
+    } catch { return []; }
+  });
+}
+
+function computeMilkyWay(date: Date, lat: number, lng: number): MilkyWayDatum[] {
+  const observer = new Observer(lat, lng, 0);
+  const pts: MilkyWayDatum[] = [];
+  for (const { ra, dec, r, scale, brightness } of MILKY_WAY_GRID) {
+    try {
+      const hz = Horizon(date, observer, ra, dec, 'normal');
+      if (hz.altitude < 2) continue;
+      const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
+      const svgY = 165 - hz.altitude / 90 * 150;
+      if (svgX < 0 || svgX > 300 || svgY < 6 || svgY > 163) continue;
+      pts.push({ x: svgX, y: svgY, r, opacity: brightness * scale * 0.11 });
+    } catch { /* below horizon */ }
+  }
+  return pts;
+}
+
+function computePlanets(date: Date, lat: number, lng: number): PlanetDatum[] {
+  return PLANET_CONFIGS.flatMap(cfg => {
+    const pos = getPlanetPosition(cfg.body, date, lat, lng);
+    if (pos.altitude < 0) return [];
+    return [{
+      ...cfg,
+      svgX: Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120)),
+      svgY: Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150)),
+    }];
+  });
+}
+
+function getSkyRender(date: Date, lat: number, lng: number) {
+  const key = skyCacheKey(lat, lng);
+  return {
+    stars: skyCache(_starsCache, key, () => computeStars(date, lat, lng)),
+    milkyWay: skyCache(_milkyWayCache, key, () => computeMilkyWay(date, lat, lng)),
+    planets: skyCache(_planetsCache, key, () => computePlanets(date, lat, lng)),
+  };
+}
 
 const FestivalIcon = ({ name, className }: { name?: string; className?: string }) => {
   if (!name) return null;
@@ -448,48 +533,50 @@ interface EgyptianCalendarInfoProps {
 
 const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, currentDate = new Date(), lat, lng, weather }) => {
   const { civilization, labels } = useCivilization();
-  const [egyptianDate, setEgyptianDate] = useState<EgyptianDateResult | null>(null);
   const [showFestivals, setShowFestivals] = useState(false);
-  const [sopdet, setSopdet] = useState<SopdetEvent | null>(null);
-  const [sopdetDaily, setSopdetDaily] = useState<SiriusDailyData | null>(null);
   const [sopdetExpanded, setSopdetExpanded] = useState(false);
-  const [algolDaily, setAlgolDaily] = useState<AlgolDailyData | null>(null);
   const [algolExpanded, setAlgolExpanded] = useState(false);
   const [view, setView] = useState<ViewMode>('calendar');
   const [isHorusOpen, setIsHorusOpen] = useState(false);
 
-  useEffect(() => {
-    setEgyptianDate(getEgyptianDate(currentDate));
-    if (lat != null && lng != null) {
-      setSopdet(getSopdetHeliacalEvent(currentDate, lat, lng));
-      setSopdetDaily(getSiriusDailyData(currentDate, lat, lng));
-      setAlgolDaily(getAlgolDailyData(currentDate, lat, lng));
-    }
-  }, [currentDate, lat, lng]);
+  // Stable local-midnight stamp: changes only when the calendar day changes,
+  // so day-level astronomy (Egyptian date, Sopdet, Sirius) is computed once per
+  // day+location instead of on every 15s clock tick.
+  const dayKey = (() => {
+    const d = new Date(currentDate);
+    d.setHours(0, 0, 0, 0);
+    return d.getTime();
+  })();
 
-  const skylineElements = useMemo(
-    () => generateEgyptianSkyline(Math.floor((currentDate ?? new Date()).getTime() / 86400000)),
-    [currentDate]
+  const egyptianDate = useMemo(() => getEgyptianDate(new Date(dayKey)), [dayKey]);
+
+  // Sopdet heliacal event: depends on the year + coordinates (cached in egyptianAstronomy.ts).
+  const sopdet = useMemo(
+    () => (lat != null && lng != null ? getSopdetHeliacalEvent(new Date(dayKey), lat, lng) : null),
+    [dayKey, lat, lng]
   );
 
-  const stars = useMemo(() => {
-    if (lat == null || lng == null) return [];
-    const observer = new Observer(lat, lng, 0);
-    return STAR_CATALOG.flatMap(([ra, dec, mag]) => {
-      try {
-        const hz = Horizon(currentDate, observer, ra, dec, 'normal');
-        if (hz.altitude < 0) return [];
-        const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-        const svgY = 165 - hz.altitude / 90 * 150;
-        if (svgX < 2 || svgX > 298 || svgY < 6 || svgY > 163) return [];
-        const r = Math.max(0.8, 2.8 - (mag + 1.5) * 0.42);
-        const opacity = Math.max(0.4, 0.95 - (mag + 1.5) * 0.10);
-        const glow = mag < 2.0;
-        return [{ x: svgX, y: svgY, r, opacity, glow }];
-      } catch { return []; }
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lng]);
+  // Heavy daily tables are only computed when the user actually expands the panels.
+  const sopdetDaily = useMemo(
+    () => (sopdetExpanded && lat != null && lng != null ? getSiriusDailyData(new Date(dayKey), lat, lng) : null),
+    [sopdetExpanded, dayKey, lat, lng]
+  );
+  // Algol phase is live (time-of-day sensitive), so it keeps refreshing while open.
+  const algolDaily = useMemo(
+    () => (algolExpanded && lat != null && lng != null ? getAlgolDailyData(currentDate, lat, lng) : null),
+    [algolExpanded, currentDate, lat, lng]
+  );
+
+  // Skyline is a deterministic per-day pattern — seed it on the same day stamp it consumes.
+  const skylineDay = Math.floor((currentDate ?? new Date()).getTime() / 86400000);
+  const skylineElements = useMemo(() => generateEgyptianSkyline(skylineDay), [skylineDay]);
+
+  // Frozen sky render — module-cached per coordinates, so it is computed once
+  // per location (not per render, per clock tick, or per tab remount).
+  const skyRender = lat != null && lng != null ? getSkyRender(currentDate, lat, lng) : null;
+  const stars = skyRender?.stars ?? [];
+  const milkyWay = skyRender?.milkyWay ?? [];
+  const visiblePlanets = skyRender?.planets ?? [];
 
   const isNightMemo = useMemo(() => {
     if (lat != null && lng != null) {
@@ -501,63 +588,40 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
     return h < 6 || h >= 20;
   }, [currentDate, lat, lng]);
 
-  const milkyWay = useMemo(() => {
-    if (lat == null || lng == null) return [];
-    const observer = new Observer(lat, lng, 0);
-    const pts: { x: number; y: number; r: number; opacity: number }[] = [];
-    for (const { ra, dec, r, scale, brightness } of MILKY_WAY_GRID) {
-      try {
-        const hz = Horizon(currentDate, observer, ra, dec, 'normal');
-        if (hz.altitude < 2) continue;
-        const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-        const svgY = 165 - hz.altitude / 90 * 150;
-        if (svgX < 0 || svgX > 300 || svgY < 6 || svgY > 163) continue;
-        pts.push({ x: svgX, y: svgY, r, opacity: brightness * scale * 0.11 });
-      } catch { /* below horizon */ }
-    }
-    return pts;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lng]);
-
-  const visiblePlanets = useMemo(() => {
-    if (lat == null || lng == null) return [];
-    return PLANET_CONFIGS.map(cfg => {
-      const pos = getPlanetPosition(cfg.body, currentDate, lat, lng);
-      if (pos.altitude < 0) return null;
-      return {
-        ...cfg,
-        svgX: Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120)),
-        svgY: Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150)),
-      };
-    }).filter((p): p is NonNullable<typeof p> => p !== null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lat, lng]);
-
   const weatherCond = weather?.current.condition ?? 'clear';
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
   const weatherParticles = useMemo(() => generateWeatherParticles(rainIntensity), [rainIntensity]);
 
-  if (civilization !== 'aegyptus' || !egyptianDate) return null;
+  // Remaining per-day values, grouped in one memo so the render body only
+  // destructures precomputed data. All lookups here are cheap (data tables) or
+  // cached (moon phase), so recomputing on the clock tick is negligible.
+  const derived = useMemo(() => {
+    const deity = getEgyptianMonthDeity(egyptianDate.monthIndex);
+    const epagomenalInfo = egyptianDate.isEpagomenal ? getEpagomenalDayInfo(egyptianDate.dayOfMonth) : null;
+    const hemerology = getHemerologyForDate(currentDate, egyptianDate.monthIndex, egyptianDate.dayOfMonth);
+    const algol = getAlgolPhase(currentDate);
+    const moonPhase = getLunarPhase(currentDate);
+    const lunarDay = Math.floor(moonPhase * 30) + 1;
+    const { civilFestivals, lunarFestivals } = getFestivalsForDate(egyptianDate.monthIndex, egyptianDate.dayOfMonth, lunarDay);
+    const isNewMoon  = moonPhase < 0.03 || moonPhase > 0.97;
+    const isFullMoon = moonPhase > 0.47 && moonPhase < 0.53;
+    const hasAstroAlerts = algol.isEclipsed || isNewMoon || isFullMoon ||
+      (moonPhase >= 0.45 && moonPhase <= 0.55);
+    return { deity, epagomenalInfo, hemerology, algol, moonPhase, lunarDay, civilFestivals, lunarFestivals, isNewMoon, isFullMoon, hasAstroAlerts };
+  }, [dayKey, currentDate, egyptianDate]);
+
+  if (civilization !== 'aegyptus') return null;
+
+  const {
+    deity, epagomenalInfo, hemerology, algol, moonPhase, lunarDay,
+    civilFestivals, lunarFestivals, isNewMoon, isFullMoon, hasAstroAlerts,
+  } = derived;
 
   const hour = currentDate.getHours();
   const isNight = isNightMemo;
   const skyGradient = isNight
     ? 'linear-gradient(to bottom, #030108 0%, #0a0418 45%, #1a0e05 80%, #2a1808 100%)'
     : getSkyGradient(hour);
-
-  const deity = getEgyptianMonthDeity(egyptianDate.monthIndex);
-  const epagomenalInfo = egyptianDate.isEpagomenal ? getEpagomenalDayInfo(egyptianDate.dayOfMonth) : null;
-  const hemerology = getHemerologyForDate(currentDate, egyptianDate.monthIndex, egyptianDate.dayOfMonth);
-  const algol = getAlgolPhase(currentDate);
-  const moonPhase = getLunarPhase(currentDate);
-  const lunarDay = Math.floor(moonPhase * 30) + 1;
-  const { civilFestivals, lunarFestivals } = getFestivalsForDate(egyptianDate.monthIndex, egyptianDate.dayOfMonth, lunarDay);
-  const isNewMoon  = moonPhase < 0.03 || moonPhase > 0.97;
-  const isFullMoon = moonPhase > 0.47 && moonPhase < 0.53;
-
-  const hasAstroAlerts = algol.isEclipsed || isNewMoon || isFullMoon ||
-    (moonPhase >= 0.45 && moonPhase <= 0.55);
-
 
   return (
     <>
