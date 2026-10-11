@@ -516,7 +516,7 @@ const BottomNav: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 lg:bottom-8 left-0 right-0 z-50 px-0 lg:px-4 pb-[env(safe-area-inset-bottom)] pointer-events-none">
-      <div className="bg-ink/90 backdrop-blur-xl border-t lg:border border-gold-dim/20 lg:rounded-2xl lg:shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-md mx-auto overflow-hidden pointer-events-auto transition-all duration-500 hover:border-gold-dim/40">
+      <div className="bg-ink/95 border-t lg:border border-gold-dim/20 lg:rounded-2xl lg:shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-md mx-auto overflow-hidden pointer-events-auto transition-all duration-500 hover:border-gold-dim/40">
         <div className="flex items-stretch justify-around h-[60px] lg:h-[70px]">
           {civs.map(({ id, Icon, label, activeColor, activeGlow }) => {
             const isActive = civilization === id;

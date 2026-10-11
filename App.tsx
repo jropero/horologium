@@ -202,19 +202,19 @@ const AppContent: React.FC = () => {
       <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end gap-1.5">
         <button
           onClick={() => setIsLocationModalOpen(true)}
-          className="text-[10px] font-serif tracking-widest uppercase text-gold-dim/80 bg-ink/80 px-2.5 py-1 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg active:scale-95 transition-all max-w-[100px] truncate"
+          className="text-[10px] font-serif tracking-widest uppercase text-gold-dim/80 bg-ink/90 px-2.5 py-1 rounded-full border border-gold-dim/20 shadow-lg active:scale-95 transition-all max-w-[100px] truncate"
         >
           {currentLocationName}
         </button>
         <button
           onClick={() => setIsWeatherSelectorOpen(true)}
-          className="text-[9px] font-serif uppercase tracking-wider text-gold-dim/70 bg-ink/80 px-2 py-0.5 rounded-full border border-gold-dim/20 backdrop-blur-md shadow-lg active:scale-95 transition-all"
+          className="text-[9px] font-serif uppercase tracking-wider text-gold-dim/70 bg-ink/90 px-2 py-0.5 rounded-full border border-gold-dim/20 shadow-lg active:scale-95 transition-all"
         >
           {devWeatherCode === null ? '☁ Tiempo real' : DEV_OPTIONS.find(o => o.code === devWeatherCode)?.label ?? '☁ Tiempo real'}
         </button>
         <button
           onClick={openTravelModal}
-          className={`text-[9px] font-serif uppercase tracking-wider px-2 py-0.5 rounded-full border backdrop-blur-md shadow-lg active:scale-95 transition-all ${
+          className={`text-[9px] font-serif uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-lg active:scale-95 transition-all ${
             isTimeTraveling
               ? 'text-amber-400 bg-amber-950/80 border-amber-700/50'
               : 'text-gold-dim/70 bg-ink/80 border-gold-dim/20'
