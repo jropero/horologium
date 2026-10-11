@@ -1,3 +1,5 @@
+import { BABYLONIAN_MONTH_REGENTS } from '../types/babylonia';
+
 export interface BabylonianDayEvent {
   shortLabel: string;   // Brief name shown in the day cell tooltip
   description: string;  // Full description shown on selection
@@ -5,19 +7,22 @@ export interface BabylonianDayEvent {
 }
 
 export interface BabylonianLore {
-  monthName: string;    // Akkadian name
-  deity: string;        // Patron deity
-  description: string;  // 1-2 sentences about the month
-  festival: string;     // Main festival or ritual
-  zodiacSign: string;   // Babylonian zodiac sign
-  icon: string;         // emoji
+  monthName: string;      // Akkadian name
+  monthRegent: string;    // Canonical regent of the month (cuneiform regent lists)
+  festivalDeity: string;  // Deity presiding the month's main festival / Astrolabe B menology
+  regentNote?: string;    // Note on variants or ambiguity in the regent lists
+  description: string;    // 1-2 sentences about the month
+  festival: string;       // Main festival or ritual
+  zodiacSign: string;     // Babylonian zodiac sign
+  icon: string;           // emoji
   dayEvents?: Record<number, BabylonianDayEvent>; // specific events keyed by day of month
 }
 
 export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   {
     monthName: 'Nisannu',
-    deity: 'Marduk',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[0],
+    festivalDeity: 'Marduk',
     description: 'El inicio del año sagrado — el Akītu de primavera se celebra en Babilonia durante once días. La estatua de Marduk parte del Esagila en gran procesión hacia el Bīt Akitu extramuros; en la cuarta noche los sacerdotes recitan el Enūma Eliš ante el dios. El rey es humillado ante Marduk, entrega su cetro y confiesa sus faltas; el día 8.º recupera su poder soberano para otro año.',
     festival: 'Akītu (Año Nuevo) — procesión de Marduk al Bīt Akitu; recitación del Enūma Eliš la noche del 4.º día; humillación y reinvestidura del rey ante Marduk el día 8.º.',
     zodiacSign: 'Agru',
@@ -31,7 +36,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Ayaru',
-    deity: 'Ningirsu',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[1],
+    festivalDeity: 'Ningirsu',
     description: 'El mes en que «la tierra se abre, los bueyes son uncidos y el campo se vuelve fértil» (Astrolabio B). Las Pléyades — las Sibitti — ascienden en el cielo del atardecer. El día 2, Nabû viaja desde Borsippa hasta el Ebursaba de Babilonia para desposar a la diosa Nana; el día 7, Nabû llega a Uruk y asume la corona de Anu como rey de los dioses.',
     festival: 'Matrimonio de Nabû y Nana — el día 2 Nabû parte del Ezida y entra al Ebursaba; el día 7 asume la coronación de Anu en el Eanna de Uruk; carreras sagradas de Nabû.',
     zodiacSign: 'Gudanna',
@@ -45,7 +51,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Simanu',
-    deity: 'Sîn',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[2],
+    festivalDeity: 'Sîn',
     description: '«El mes del molde de ladrillos del rey; el rey usa el molde de ladrillos; todos los países construyen sus casas» (Astrolabio B). El rey coloca simbólicamente el primer ladrillo en el horno para inaugurar la temporada de construcción. El día 9, ritos junto al kiln del Eanna de Uruk; el día 25, la Señora de Babilonia (Bēlet-Babili) procesiona por las calles.',
     festival: 'Ritos del molde de ladrillos — el rey inaugura la temporada de construcción; ofrendas junto al horno del Eanna el día 9.º; procesión de Bēlet-Babili el día 25.º.',
     zodiacSign: 'Mastabbagalgal',
@@ -58,7 +65,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Duʾūzu',
-    deity: 'Dumuzi',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[3],
+    festivalDeity: 'Dumuzi',
     description: 'El gran mes del lamento: Dumuzi, el pastor-dios, es capturado por los demonios galla y arrastrado al Inframundo. «En el mes Dumuzi, cuando Ištar hizo llorar a las gentes de la tierra por Dumuzi, su amado.» Del día 26 al 28, la estatua del dios es expuesta sobre un féretro mientras lamentaciones llenan los templos. El día 11, las diosas del Esagila e Ezida se intercambian de morada para «alargar las noches» del solsticio de verano.',
     festival: 'Lamentaciones de Dumuzi-Tammuz — exposición del dios sobre un féretro los días 26.º–28.º; cantos fúnebres en las puertas de los templos; intercambio ritual de diosas entre el Esagila y el Ezida el día 11.º.',
     zodiacSign: 'Pulukku',
@@ -72,7 +80,9 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Abu',
-    deity: 'Gilgameš',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[4],
+    festivalDeity: 'Gilgameš',
+    regentNote: 'con variante Ninurta',
     description: 'El mes de los muertos — la festividad ab/pum consiste en un montículo sagrado sobre la entrada al Inframundo por donde los difuntos retornan al mundo de los vivos. Se encienden antorchas y braseros para que los muertos encuentren el camino. Durante nueve días se celebran carreras y combates de lucha en honor de Gilgameš. La noche del día 28, el exorcismo Maqlu es recitado para expulsar a las brujas que regresan del Sheol.',
     festival: 'Festival ab/pum — encendido de antorchas para los Anunnaki; combates y certámenes atléticos por nueve días en honor de Gilgameš; recitación del Maqlu la noche del día 28.º.',
     zodiacSign: 'Urgula',
@@ -85,7 +95,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Ulūlu',
-    deity: 'Ištar',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[5],
+    festivalDeity: 'Ištar',
     description: '«La obra de las diosas» (gipir Ištarāte) — las estatuas de las diosas son llevadas al río sagrado para su lustración y purificación anual. En todo el país los templos celebran ritos de consagración. El día 3, Nabû abandona su morada y las puertas del Esagila se abren para Bēl y Nabû; en Uruk se celebra un matrimonio sagrado entre Anu y Antu. El día 17, el Akītu de Ištar de Arbela se celebra en Milkiya.',
     festival: '«Obra de las diosas» — lustración de estatuas divinas en el río sagrado; asamblea de los dioses en el Eturnunna el día 3.º; matrimonio sagrado de Anu y Antu en Uruk; Akītu de Ištar de Arbela el día 17.º.',
     zodiacSign: 'Širu',
@@ -98,7 +109,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Tašrītu',
-    deity: 'Enlil',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[6],
+    festivalDeity: 'Enlil',
     description: 'El segundo Akītu del año — el contrapeso otoñal de la gran fiesta de Nisannu. El día 3, Bēl es vestido para el festival; el día 8, la gran puerta del Esagila se abre y el Enūma Eliš es recitado ante el dios; la procesión de Bēl parte hacia el Bīt Akitu como en primavera. El día 27, en Nippur se celebra el festival del Montículo Sagrado con ofrendas a los antepasados de Enlil. «Las primicias del año son santificadas» (Astrolabio B).',
     festival: 'Segundo Akītu — Bēl procesiona al Bīt Akitu el día 8.º; Enūma Eliš recitado por los cantores; en Uruk, Anu reside siete días en el Bīt Akitu y retorna en gran procesión; festival del Montículo Sagrado en Nippur el día 27.º.',
     zodiacSign: 'Zibanitu',
@@ -111,7 +123,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Araḫsamnu',
-    deity: 'Adad',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[7],
+    festivalDeity: 'Adad',
     description: '«El mes en que el arado es liberado; la azada y el arado se disputan en el campo; el Akītu de la estación de la siembra se celebra; el mes de Adad, inspector de los canales del cielo y la tierra» (Astrolabio B). La Disputa entre la Azada y el Arado —conservada en sumerio— es recitada durante el festival. El arado es colgado en el granero hasta el año siguiente.',
     festival: 'Akītu de la siembra (a-ki-tu ur) — el arado es liberado del campo y guardado; recitación de la Disputa Azada-Arado; ofrendas a Adad para propiciar las lluvias de invierno y los canales.',
     zodiacSign: 'Zuqaqīpu',
@@ -123,7 +136,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Kislīmu',
-    deity: 'Nergal',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[8],
+    festivalDeity: 'Nergal',
     description: '«El héroe poderoso Nergal que ha surgido del Inframundo, el arma abrumadora de los dos dioses» (Astrolabio B). En Kislīmu se corren carreras a pie en torno a cada centro de culto, rememorando la victoria de Ninurta sobre el pájaro Anzû. En el Eanna de Uruk, el Festival del Brasero (Kinunu) se celebra los días 1.º, 2.º, 6.º, 7.º, 14.º y 15.º: fuegos son encendidos en los braseros de todos los dioses.',
     festival: 'Festival del Brasero (Kinunu) — fuegos encendidos en los braseros de todos los dioses del Eanna; carreras a pie en cada ciudad en honor de la victoria de Ninurta sobre el Anzû.',
     zodiacSign: 'Pabilsag',
@@ -139,7 +153,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Ṭebētu',
-    deity: 'Anu',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[9],
+    festivalDeity: 'Anu',
     description: '«El mes Ṭebētu, el gran festival de Anu, el esplendor de Ištar» (Astrolabio B). El día 16, el Akītu de Ištar: «ella ilumina el Emagmaš; el rey es vestido de ropas puras.» Los días más cortos del año; el día 3, las diosas del Esagila y del Ezida se intercambian de templos para «alargar el día» y restablecer el equilibrio cósmico tras el solsticio. El Festival Nabru examina los presagios para el año venidero.',
     festival: 'Gran festival de Anu; Akītu de Ištar el día 16.º; intercambio ritual de diosas entre el Esagila y el Ezida para corregir el desequilibrio del solsticio de invierno; Festival Nabru de presagios.',
     zodiacSign: 'Suḫurmāšu',
@@ -151,7 +166,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Šabāṭu',
-    deity: 'Nabû',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[10],
+    festivalDeity: 'Nabû',
     description: '«En Šabāṭu es el matrimonio de los dioses» — Bēl desposa a Beltiya; Nabû desposa a Tašmētu. Este mes abre el tramo más intenso del año litúrgico: el período Šabāṭu–Addaru–Nisannu. Desde el día 16, durante ocho días se recitan ante Aššur en el Bīt Dagan grandes lamentaciones sumerias, himnos y plegarias luilla; los peregrinos acuden desde todo el reino.',
     festival: 'Matrimonio sagrado de Bēl–Beltiya y Nabû–Tašmētu; ocho días de lamentaciones y cantos ante Aššur en el Bīt Dagan desde el día 16.º; «mes del banquete de Enlil» en Nippur.',
     zodiacSign: 'Gula',
@@ -163,7 +179,9 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
   },
   {
     monthName: 'Addaru',
-    deity: 'Ea',
+    monthRegent: BABYLONIAN_MONTH_REGENTS[11],
+    festivalDeity: 'Ea',
+    regentNote: 'los Siete grandes dioses',
     description: '«En los vastos campos de Ningirsu la hoz no es abandonada; el mes de la alegría de Enki, el mes de Ea» (Astrolabio B). El festival garratu se celebra los días 17 y 18. El día 6, las estatuas de los dioses parten en solemne procesión. Los astrónomos del Esagila calculan si el año necesita un Addaru II intercalar; si Nisannu aún no alcanza la primavera, proclaman el décimotercero mes.',
     festival: 'Festival garratu los días 17.º y 18.º; procesión solemne de los dioses el día 6.º; cómputo astronómico del posible mes intercalar Addaru II para realinear el calendario lunar con las estaciones solares.',
     zodiacSign: 'Zibbātu',

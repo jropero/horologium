@@ -783,23 +783,45 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 <div className="flex items-center justify-center gap-3 mb-3">
                   <span className="text-3xl">{lore.icon}</span>
                   <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
-                    {lore.deity}
+                    {lore.festivalDeity}
                   </h2>
                 </div>
                 <p className="font-serif text-sm text-parchment/90 italic px-4 leading-relaxed">
                   "{lore.description}"
                 </p>
-                <div className="mt-4 p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
-                  <span className="text-xl mt-0.5">🏛️</span>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
-                      Festival / Ritual Principal
-                    </span>
-                    <span className="text-sm font-serif text-blue-100/95 leading-snug">
-                      {lore.festival}
-                    </span>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
+                    <span className="text-xl mt-0.5 text-blue-300">𒀭</span>
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
+                        Regente del Mes
+                      </span>
+                      <span className="text-sm font-serif text-blue-100/95 leading-snug">
+                        {lore.monthRegent}
+                        {lore.regentNote && (
+                          <span className="text-blue-300/70 italic"> · {lore.regentNote}</span>
+                        )}
+                      </span>
+                      <span className="mt-1 text-xs font-serif text-blue-200/75 leading-relaxed">
+                        {babData.monthRegentDesc}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
+                    <span className="text-xl mt-0.5">🏛️</span>
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
+                        Festival / Ritual Principal
+                      </span>
+                      <span className="text-sm font-serif text-blue-100/95 leading-snug">
+                        {lore.festival}
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <p className="mt-3 text-xs font-serif italic text-blue-300/60 text-center leading-snug">
+                  Regente según las listas cuneiformes de los meses (IV R 33 · Astrolabio B).
+                </p>
               </div>
             )}
           </div>

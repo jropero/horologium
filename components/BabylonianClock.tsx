@@ -122,17 +122,31 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
                   <div className="text-xs font-bold uppercase tracking-widest text-blue-400">
                     Deidad del Mes
                   </div>
-                  <div className="text-lg font-serif font-black text-parchment">{lore.deity}</div>
+                  <div className="text-lg font-serif font-black text-parchment">{lore.festivalDeity}</div>
                 </div>
               </div>
               <p className="text-xs font-serif text-parchment/80 italic leading-relaxed">
                 "{lore.description}"
               </p>
-              <div className="mt-1 p-2 bg-blue-800/20 border border-blue-600/20 rounded text-left">
-                <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
-                  Festival / Ritual
+              <div className="grid gap-2 sm:grid-cols-2">
+                <div className="p-2 bg-blue-800/20 border border-blue-600/20 rounded text-left">
+                  <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
+                    Regente del Mes
+                  </div>
+                  <div className="text-xs font-serif text-blue-100/90">
+                    {lore.monthRegent}
+                    {lore.regentNote && <span className="text-blue-300/70 italic"> · {lore.regentNote}</span>}
+                  </div>
+                  <div className="mt-1 text-xs font-serif text-blue-200/70 leading-relaxed">
+                    {babDate.monthRegentDesc}
+                  </div>
                 </div>
-                <div className="text-xs font-serif text-blue-100/90">{lore.festival}</div>
+                <div className="p-2 bg-blue-800/20 border border-blue-600/20 rounded text-left">
+                  <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
+                    Festival / Ritual
+                  </div>
+                  <div className="text-xs font-serif text-blue-100/90">{lore.festival}</div>
+                </div>
               </div>
               <div className="text-xs text-blue-400 font-serif">
                 Signo zodiacal: <span className="text-blue-300 font-bold">{lore.zodiacSign}</span>
