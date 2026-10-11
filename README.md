@@ -30,7 +30,7 @@
 ### 🌍 Civilizaciones (Multimodal)
 - **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus, ciclo de nundinas y año *Ab Urbe Condita*.
 - **Hellas (Chronos)**: Calendario Ático completo con meses lunares, sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) y alertas de días nefastos (Apaphrades).
-- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, festivales sagrados y **Nilómetro dinámico** con niveles históricos.
+- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, festivales sagrados, **salida helíaca de Sopdet** (Sirio) y **Nilómetro dinámico** con niveles históricos.
 - **Babylonia (Ishtar)**: Calendario lunisolar babilónico con Era Seléucida, meses Nisannu–Addaru, ciclo metónico de intercalación, guardia nocturna (maṣṣartu), días sagrados (Šapaṭu/día 15) y friso decorativo de la Puerta de Ishtar.
 - **Zhongguo (中国)**: Calendario lunisolar chino con los 24 Términos Solares (二十四节气), las Doce Ramas Terrestres (地支) como marco de horas, el ciclo sexagesimal de los Cuatro Pilares (bāzì), el zodíaco de los 12 animales y la rueda del ciclo sexagenario del año.
 
@@ -38,6 +38,7 @@
 - **Diseño Mobile-First**: Barra de navegación inferior persistente para cambios rápidos de cultura y selector de tema dinámico optimizado para móviles.
 - **Dualitas Thematis**: Soporte para modo oscuro profundo y un **Modo Pergamino** (claro) que evoca manuscritos antiguos.
 - **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas, obeliscos egipcios o ziggurats babilónicos según la civilización activa.
+- **Cielos Astronómicos**: Escenas nocturnas por civilización con posiciones reales de estrellas y Luna —incluida la Vía Láctea egipcia— y efectos meteorológicos dinámicos (lluvia, nieve, niebla).
 - **Accesibilidad WCAG AA**: Diseño optimizado para alta legibilidad con contrastes auditados y tipografía premium.
 
 ### 🕰️ Cronometría y Astronomía Avanzada
@@ -46,6 +47,8 @@
 - **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo.
 - **Nilómetro Histórico**: Modelo hidrológico mes a mes que recrea visualmente el ciclo anual del Nilo (desde la inundación máxima en Phaophi hasta el estiaje en Epiphi).
 - **Términos Solares Chinos**: Los 24 jié qì representados como ciclo de año con estado actual, siguiente término y pentagrama de la pentada actual.
+- **Viaje Temporal**: Selector de fecha que muestra el calendario anual completo de cada cultura y numera los años según su propia era —la Olimpiada griega, el ciclo sótico egipcio (orto helíaco de Sopdet) y la Era Seléucida babilónica—; Roma y China conservan el selector gregoriano.
+- **Previsión de Eclipses**: Widget con ilustraciones SVG y efemérides astronómicas reales de eclipses solares y lunares.
 
 ### 🔮 Sabiduría y Adivinación Antigua
 - **Hemerología Egipcia**: Sistema de días "Buenos y Malos" (*Nefer* y *Aha*) basado en el Papiro de El Cairo 86637.

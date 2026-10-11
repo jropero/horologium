@@ -33,6 +33,8 @@
 //   • Shemu (𓈙𓈗𓅓𓅱) — Cosecha (meses 9-12)
 // ══════════════════════════════════════════════════════════════════════════
 
+import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
+
 // --- Interfaces ---
 
 export interface EgyptianSeason {
@@ -137,7 +139,7 @@ const isGregorianLeapYear = (year: number): boolean => {
  * Esto se debe a que el día epagómeno adicional del año alejandrino
  * ANTERIOR desplaza Thoth 1 un día hacia adelante.
  */
-const getThoth1 = (gregorianYear: number): Date => {
+export const getThoth1 = (gregorianYear: number): Date => {
   const nextYearIsLeap = isGregorianLeapYear(gregorianYear + 1);
   // Thoth 1 = 29 de agosto (Julian) = 11 de septiembre (Gregoriano, 1900-2099).
   // En años donde el siguiente es bisiesto, Thoth 1 = 30 de agosto (Julian) = 12 de septiembre.
@@ -267,4 +269,90 @@ export const formatEgyptianDate = (result: EgyptianDateResult): string => {
     return `Día epagómeno ${result.dayOfMonth} — Epagomenai (${result.seasonTranslation})`;
   }
   return `${result.dayOfMonth} de ${result.monthName} (${result.monthHieroglyphs}), ${result.seasonName} ${result.seasonHieroglyphic} — Década ${result.decade}`;
+};
+
+// ─── Annual civil calendar (for the date picker) ───────────────────────────────
+
+const addLocalDays = (d: Date, n: number): Date => {
+  const out = new Date(d);
+  out.setDate(out.getDate() + n);
+  return out;
+};
+
+// ─── Sothic cycle (era for the date picker) ───────────────────────────────────
+// El ciclo sótico es el análogo egipcio a las olimpiadas griegas: el orto
+// helíaco de Sopdet (Sirio) vuelve a coincidir con el Año Nuevo (Thoth 1)
+// aproximadamente cada 1460 años julianos. Tomamos como época la coincidencia
+// documentada del año 139 d.C. (la "Era de Menophres").
+const SOTHIC_EPOCH_YEAR = 139;
+const SOTHIC_CYCLE_LENGTH = 1460;
+
+export const getSothicCycleYear = (
+  gregorianYear: number,
+): { cycle: number; year: number; epoch: number; label: string } => {
+  const cycle = Math.floor((gregorianYear - SOTHIC_EPOCH_YEAR) / SOTHIC_CYCLE_LENGTH);
+  const epoch = SOTHIC_EPOCH_YEAR + cycle * SOTHIC_CYCLE_LENGTH;
+  const year = gregorianYear - epoch + 1;
+  return {
+    cycle,
+    year,
+    epoch,
+    label: `Ciclo Sótico · año ${year}`,
+  };
+};
+
+/**
+ * Builds a full Alexandrian civil year as months of days mapped to Gregorian
+ * dates. The year runs Thoth 1 → next Thoth 1 (365 or 366 days), and every
+ * generated date sits at local noon for consistency with the app display.
+ */
+export const getEgyptianCalendarYear = (anchorGregYear: number): CivilCalendarYear => {
+  const thoth1 = getThoth1(anchorGregYear);
+  const nextThoth1 = getThoth1(anchorGregYear + 1);
+  const totalDays = Math.round((nextThoth1.getTime() - thoth1.getTime()) / (1000 * 60 * 60 * 24));
+  const isLeapYear = totalDays === 366;
+
+  // Local calendar date of Thoth 1 (getEgyptianDate normalizes on local Y/M/D).
+  const start = new Date(thoth1.getFullYear(), thoth1.getMonth(), thoth1.getDate(), 12, 0, 0, 0);
+
+  const months: CivilCalendarMonth[] = [];
+
+  for (let m = 0; m < 12; m++) {
+    const meta = EGYPTIAN_MONTHS[m];
+    const season = EGYPTIAN_SEASONS[meta.seasonIndex];
+    const days: CivilCalendarDay[] = [];
+    for (let d = 1; d <= 30; d++) {
+      days.push({ day: d, gregorian: addLocalDays(start, m * 30 + (d - 1)) });
+    }
+    months.push({
+      key: `egy-${m}`,
+      name: meta.name,
+      latin: meta.monthHieroglyphs,
+      translation: `${season.name} · ${season.translation}`,
+      kind: 'regular',
+      days,
+    });
+  }
+
+  // Epagomenal days (5, or 6 in Alexandrian leap years)
+  const epagomenalCount = isLeapYear ? 6 : 5;
+  const epagomenalDays: CivilCalendarDay[] = [];
+  for (let e = 1; e <= epagomenalCount; e++) {
+    epagomenalDays.push({ day: e, gregorian: addLocalDays(start, 360 + (e - 1)) });
+  }
+  months.push({
+    key: 'egy-epag',
+    name: 'Epagomenai',
+    latin: '𓇳𓏤𓏤𓏤𓏤𓏤',
+    translation: 'Días sobre el año',
+    kind: 'epagomenal',
+    days: epagomenalDays,
+  });
+
+  return {
+    anchorGregYear,
+    yearLabel: getSothicCycleYear(anchorGregYear).label,
+    yearSubtitle: `${isLeapYear ? 'Año bisiesto · 6 epagómenos' : 'Año de 5 epagómenos'} · ${anchorGregYear} d.C.`,
+    months,
+  };
 };

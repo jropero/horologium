@@ -27,6 +27,8 @@ import EclipseForecast from './components/EclipseForecast';
 import SortesVergilianae from './components/SortesVergilianae';
 import OvidianLore from './components/OvidianLore';
 import LocationModal from './components/LocationModal';
+import DateTimePicker from './components/DateTimePicker';
+import CivilCalendarDatePicker from './components/CivilCalendarDatePicker';
 import { LOCATIONS, getTimezoneForLocation } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
@@ -74,7 +76,6 @@ const AppContent: React.FC = () => {
     new URLSearchParams(window.location.search).has('date')
   );
   const [travelModalOpen, setTravelModalOpen] = useState<boolean>(false);
-  const [travelInput, setTravelInput] = useState<string>('');
 
   // Determine current location name and timezone
   const currentLocation = LOCATIONS.find(loc => loc.id !== 'gps' && Math.abs(latitude - (loc.lat || 0)) < 0.001 && Math.abs(longitude - (loc.lng || 0)) < 0.001);
@@ -172,18 +173,11 @@ const AppContent: React.FC = () => {
     localStorage.setItem('romanClockLng', lng.toString());
   };
 
-  const toDatetimeLocal = (d: Date): string => {
-    const p = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
-  };
-
   const openTravelModal = () => {
-    setTravelInput(toDatetimeLocal(modernTime));
     setTravelModalOpen(true);
   };
 
-  const applyTravelDate = () => {
-    const d = new Date(travelInput);
+  const applyTravelDate = (d: Date) => {
     if (isNaN(d.getTime())) return;
     setModernTime(d);
     setIsTimeTraveling(true);
@@ -368,50 +362,24 @@ const AppContent: React.FC = () => {
       />
 
       {travelModalOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-          onClick={() => setTravelModalOpen(false)}
-        >
-          <div
-            className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-xs overflow-hidden"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="p-4 border-b border-gold-dim/30 text-center">
-              <h3 className="font-serif text-sm text-gold-leaf uppercase tracking-[0.3em] font-bold">⏳ Viaje Temporal</h3>
-              <p className="text-[10px] text-gold-dim/60 font-serif mt-1 tracking-wide">Simula cualquier fecha y hora</p>
-            </div>
-            <div className="p-4 flex flex-col gap-3">
-              <input
-                type="datetime-local"
-                value={travelInput}
-                min="0100-01-01T00:00"
-                max="2100-12-31T23:59"
-                onChange={e => setTravelInput(e.target.value)}
-                className="w-full bg-stone-900 border border-gold-dim/30 rounded-lg px-3 py-2 font-serif text-sm text-parchment focus:outline-none focus:border-gold-leaf/60 [color-scheme:dark]"
-              />
-              <button
-                onClick={applyTravelDate}
-                className="w-full py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/40 text-gold-leaf font-serif text-sm uppercase tracking-widest hover:bg-gold-leaf/20 transition-all font-bold"
-              >
-                Viajar a esta fecha
-              </button>
-              {isTimeTraveling && (
-                <button
-                  onClick={() => { returnToLive(); setTravelModalOpen(false); }}
-                  className="w-full py-2 rounded-lg border border-amber-700/40 text-amber-400 font-serif text-xs uppercase tracking-widest hover:bg-amber-900/20 transition-all"
-                >
-                  Volver al presente
-                </button>
-              )}
-              <button
-                onClick={() => setTravelModalOpen(false)}
-                className="w-full text-center text-[10px] text-gold-dim/50 font-serif uppercase tracking-widest py-1 hover:text-gold-dim transition-colors"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
+        civilization === 'hellas' || civilization === 'aegyptus' || civilization === 'babylonia' ? (
+          <CivilCalendarDatePicker
+            civilization={civilization}
+            initialDate={modernTime}
+            lat={latitude}
+            lng={longitude}
+            onConfirm={applyTravelDate}
+            onClose={() => setTravelModalOpen(false)}
+            onReturnToLive={isTimeTraveling ? () => { returnToLive(); setTravelModalOpen(false); } : undefined}
+          />
+        ) : (
+          <DateTimePicker
+            initialDate={modernTime}
+            onConfirm={applyTravelDate}
+            onClose={() => setTravelModalOpen(false)}
+            onReturnToLive={isTimeTraveling ? () => { returnToLive(); setTravelModalOpen(false); } : undefined}
+          />
+        )
       )}
 
       {isWeatherSelectorOpen && (

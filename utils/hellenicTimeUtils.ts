@@ -4,6 +4,7 @@
 import { getSunTimes, getMoonPhase } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
 import { getAtticDate, AtticDateResult } from './atticCalendarUtils';
+import { getOlympiadYear } from './greekEra';
 
 // Greek hour names (day) — Ordinals in Ancient Greek
 export const GREEK_HOURS_DAY = [
@@ -40,43 +41,10 @@ export const getGreekPlanetaryRuler = (currentHour: number, isDay: boolean, date
   return PLANETARY_HOURS_GREEK[rulerIndex];
 };
 
-// Olympiad year calculation (776 BC = Ol. 1, Year 1)
-export const getOlympiadYear = (gregorianYear: number): { olympiad: number; year: number; label: string } => {
-  const yearsSinceFirstOlympiad = gregorianYear + 775; // 776 BC = year 0 in this system
-  const olympiad = Math.floor(yearsSinceFirstOlympiad / 4) + 1;
-  const year = (yearsSinceFirstOlympiad % 4) + 1;
-  return {
-    olympiad,
-    year,
-    label: `Ὀλ. ${toGreekNumeral(olympiad)}, ἔτος ${year}`
-  };
-};
-
-// Simple Greek numeral conversion (for display)
-const toGreekNumeral = (n: number): string => {
-  // For simplicity, use standard numerals with Greek styling for large numbers
-  // Ancient Greek used alphabetic numerals (Milesian system)
-  if (n <= 0) return '0';
-
-  const units = ['', 'αʹ', 'βʹ', 'γʹ', 'δʹ', 'εʹ', 'ϛʹ', 'ζʹ', 'ηʹ', 'θʹ'];
-  const tens = ['', 'ιʹ', 'κʹ', 'λʹ', 'μʹ', 'νʹ', 'ξʹ', 'οʹ', 'πʹ', 'ϟʹ'];
-  const hundreds = ['', 'ρʹ', 'σʹ', 'τʹ', 'υʹ', 'φʹ', 'χʹ', 'ψʹ', 'ωʹ', 'ϡʹ'];
-
-  if (n < 10) return units[n];
-  if (n < 100) {
-    const t = Math.floor(n / 10);
-    const u = n % 10;
-    return (tens[t] + (u > 0 ? units[u] : '')).replace(/ʹ(?=.*ʹ)/g, '');
-  }
-  if (n < 1000) {
-    const h = Math.floor(n / 100);
-    const rest = n % 100;
-    const result = hundreds[h] + (rest > 0 ? toGreekNumeral(rest) : '');
-    return result.replace(/ʹ(?=.*ʹ)/g, '');
-  }
-  // For numbers >= 1000, just use the number directly
-  return n.toString();
-};
+// Olympiad dating and the Greek numeral helper now live in greekEra.ts so the
+// Attic calendar builders can reuse them without a circular import. Re-exported
+// here to preserve the existing public surface of this module.
+export { getOlympiadYear } from './greekEra';
 
 // Greek zodiac signs
 export const getGreekZodiacSign = (date: Date): string => {
