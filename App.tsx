@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Menu, X, MapPin, CloudSun, Hourglass } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import EgyptianClock from './components/EgyptianClock';
 import ChineseClock from './components/ChineseClock'; // Added
@@ -72,6 +73,7 @@ const AppContent: React.FC = () => {
   const [isGreekCalendarOpen, setIsGreekCalendarOpen] = useState<boolean>(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
   const [isWeatherSelectorOpen, setIsWeatherSelectorOpen] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isTimeTraveling, setIsTimeTraveling] = useState<boolean>(() =>
     new URLSearchParams(window.location.search).has('date')
   );
@@ -192,30 +194,68 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
       
-      {/* Mobile Location + Dev Weather Selector */}
-      <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end gap-1.5">
+      {/* Mobile menu — burger button with dropdown (location, weather, date) */}
+      <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end">
+        {isMobileMenuOpen && (
+          <div
+            className="fixed inset-0 -z-10"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
         <button
-          onClick={() => setIsLocationModalOpen(true)}
-          className="text-[10px] font-serif tracking-widest uppercase text-gold-dim/80 bg-ink/90 px-2.5 py-1 rounded-full border border-gold-dim/20 shadow-lg active:scale-95 transition-all max-w-[100px] truncate"
+          onClick={() => setIsMobileMenuOpen(open => !open)}
+          aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={isMobileMenuOpen}
+          className="relative w-9 h-9 flex items-center justify-center rounded-full text-gold-dim/80 bg-ink/90 border border-gold-dim/20 shadow-lg active:scale-95 transition-all"
         >
-          {currentLocationName}
+          {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {isTimeTraveling && (
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]" />
+          )}
         </button>
-        <button
-          onClick={() => setIsWeatherSelectorOpen(true)}
-          className="text-[9px] font-serif uppercase tracking-wider text-gold-dim/70 bg-ink/90 px-2 py-0.5 rounded-full border border-gold-dim/20 shadow-lg active:scale-95 transition-all"
-        >
-          {devWeatherCode === null ? '☁ Tiempo real' : DEV_OPTIONS.find(o => o.code === devWeatherCode)?.label ?? '☁ Tiempo real'}
-        </button>
-        <button
-          onClick={openTravelModal}
-          className={`text-[9px] font-serif uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-lg active:scale-95 transition-all ${
-            isTimeTraveling
-              ? 'text-amber-400 bg-amber-950/80 border-amber-700/50'
-              : 'text-gold-dim/70 bg-ink/80 border-gold-dim/20'
-          }`}
-        >
-          {isTimeTraveling ? '⏳ Viajando' : '🕰 Fecha'}
-        </button>
+
+        {isMobileMenuOpen && (
+          <div className="mt-2 w-52 bg-ink/95 border border-gold-dim/30 rounded-xl shadow-2xl overflow-hidden backdrop-blur-md animate-fadeIn">
+            <button
+              onClick={() => { setIsLocationModalOpen(true); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+            >
+              <MapPin className="w-4 h-4 shrink-0 text-gold-dim/70" />
+              <span className="flex flex-col min-w-0">
+                <span className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60">Locus</span>
+                <span className="font-serif text-xs text-parchment/90 truncate">{currentLocationName}</span>
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setIsWeatherSelectorOpen(true); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+            >
+              <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
+              <span className="flex flex-col min-w-0">
+                <span className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60">Caelum</span>
+                <span className="font-serif text-xs text-parchment/90 truncate">
+                  {devWeatherCode === null ? 'Tiempo real' : DEV_OPTIONS.find(o => o.code === devWeatherCode)?.label ?? 'Tiempo real'}
+                </span>
+              </span>
+            </button>
+
+            <button
+              onClick={() => { openTravelModal(); setIsMobileMenuOpen(false); }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+            >
+              <Hourglass className={`w-4 h-4 shrink-0 ${isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'}`} />
+              <span className="flex flex-col min-w-0">
+                <span className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60">Tempus</span>
+                <span className={`font-serif text-xs truncate ${isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'}`}>
+                  {isTimeTraveling ? 'Viajando' : 'Fecha actual'}
+                </span>
+              </span>
+            </button>
+          </div>
+        )}
       </div>
 
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
