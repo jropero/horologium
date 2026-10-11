@@ -22,6 +22,7 @@ interface RomanClockProps {
   onUpdateLocation: (lat: number, lng: number) => void;
   currentLat: number;
   currentLng: number;
+  isTimeTraveling?: boolean;
 }
 
 
@@ -32,7 +33,8 @@ const RomanClock: React.FC<RomanClockProps> = ({
   weather,
   onUpdateLocation,
   currentLat,
-  currentLng
+  currentLng,
+  isTimeTraveling = false,
 }) => {
   const { civilization, labels } = useCivilization();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -630,6 +632,8 @@ const RomanClock: React.FC<RomanClockProps> = ({
         onUpdateLocation={onUpdateLocation}
         currentLat={currentLat}
         currentLng={currentLng}
+        isTimeTraveling={isTimeTraveling}
+        travelDate={isTimeTraveling ? modernTime : undefined}
       />
 
     </>
