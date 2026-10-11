@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
 import {
-  getAtticFestivalInfo, getDailyAtticDeity, AtticFestivalInfo,
+  getAtticFestivalInfo, getDailyAtticDeity, getDefaultAtticDeity, AtticFestivalInfo,
   checkApaphrades, getCategoryBadge, getNextAtticFestivals,
 } from '../utils/atticCalendarData';
+import GreekDaysList from './GreekDaysList';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
@@ -126,6 +127,7 @@ const DayGrid: React.FC<{
   else if (today >= 11) activePanel = 1;
 
   const selFest = selectedDay !== null ? getAtticFestivalInfo(monthIndex, selectedDay) : null;
+  const selHoly = selectedDay !== null ? getDailyAtticDeity(selectedDay, monthLen) : null;
 
   return (
     <div>
@@ -161,12 +163,15 @@ const DayGrid: React.FC<{
                   const isPast     = day < today;
                   const isSelected = day === selectedDay;
                   const hasFest    = getAtticFestivalInfo(monthIndex, day) !== null;
+                  const hasHoly    = getDailyAtticDeity(day, monthLen) !== null;
 
                   let cellClass = 'bg-ink/40 active:bg-sky-900/30';
-                  if (isSelected)             cellClass = 'bg-sky-400/20 ring-2 ring-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.4)]';
-                  else if (isToday)           cellClass = 'bg-sky-400/15 ring-1 ring-sky-400/70';
+                  if (isSelected)              cellClass = 'bg-sky-400/20 ring-2 ring-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.4)]';
+                  else if (isToday)            cellClass = 'bg-sky-400/15 ring-1 ring-sky-400/70';
                   else if (hasFest && !isPast) cellClass = 'bg-sky-700/30 ring-1 ring-sky-400/45';
                   else if (hasFest && isPast)  cellClass = 'bg-sky-900/30 ring-1 ring-sky-600/35';
+                  else if (hasHoly && !isPast) cellClass = 'bg-amber-900/20 ring-1 ring-amber-500/40';
+                  else if (hasHoly && isPast)  cellClass = 'bg-amber-950/15 ring-1 ring-amber-700/30';
 
                   let numClass = 'text-sky-300';
                   if (isSelected) numClass = 'text-white';
@@ -193,11 +198,13 @@ const DayGrid: React.FC<{
 
       {/* Info panel */}
       <div className={`mt-3 rounded-lg border transition-all ${
-        selFest && selectedDay !== null
-          ? 'border-sky-500/40 bg-sky-900/20 p-3'
+        selectedDay !== null && (selFest || selHoly)
+          ? selFest
+            ? 'border-sky-500/40 bg-sky-900/20 p-3'
+            : 'border-amber-500/40 bg-amber-900/15 p-3'
           : 'border-sky-800/30 bg-transparent py-2 px-3'
       }`}>
-        {selFest && selectedDay !== null ? (
+        {selectedDay !== null && (selFest || selHoly) ? (
           <div className="flex flex-col gap-2 text-left animate-fadeIn">
             <div className="flex items-center justify-between">
               <span className="text-xs font-serif font-bold text-sky-400 uppercase tracking-wider">Ἡμέρα {selectedDay}</span>
@@ -208,17 +215,37 @@ const DayGrid: React.FC<{
                 aria-label="Cerrar"
               >✕</button>
             </div>
-            <div>
-              <span className="text-xs font-serif font-bold text-sky-300">{selFest.festivalName}</span>
-              {selFest.festivalDayName && (
-                <span className="ml-2 text-[10px] uppercase tracking-widest text-sky-400/70">{selFest.festivalDayName}</span>
-              )}
-              <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">{selFest.festivalDesc}</p>
-              {selFest.deity && (
-                <span className="text-[10px] text-gold-dim font-serif mt-1 block">Deidad: {selFest.deity}</span>
-              )}
-            </div>
+            {selFest ? (
+              <div>
+                <span className="text-xs font-serif font-bold text-sky-300">{selFest.festivalName}</span>
+                {selFest.festivalDayName && (
+                  <span className="ml-2 text-[10px] uppercase tracking-widest text-sky-400/70">{selFest.festivalDayName}</span>
+                )}
+                <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">{selFest.festivalDesc}</p>
+                {selFest.deity && (
+                  <span className="text-[10px] text-gold-dim font-serif mt-1 block">Deidad: {selFest.deity}</span>
+                )}
+              </div>
+            ) : (
+              <div>
+                <span className="text-xs font-serif font-bold text-amber-300">{selHoly!.festivalName}</span>
+                <span className="ml-2 text-[10px] uppercase tracking-widest text-amber-400/70">Día Sagrado</span>
+                <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">{selHoly!.festivalDesc}</p>
+                {selHoly!.deity && (
+                  <span className="text-[10px] text-gold-dim font-serif mt-1 block">Deidad: {selHoly!.deity}</span>
+                )}
+              </div>
+            )}
+            {selFest && selHoly && (
+              <span className="text-[10px] font-serif text-amber-400/80 leading-snug">
+                También hoy: {selHoly.festivalName} — {selHoly.deity}
+              </span>
+            )}
           </div>
+        ) : selectedDay !== null ? (
+          <p className="text-xs font-serif text-sky-400/50 text-center">
+            Sin celebración registrada para este día.
+          </p>
         ) : (
           <p className="text-xs font-serif text-sky-400/50 text-center">
             Toca un día para ver su significado
@@ -231,6 +258,7 @@ const DayGrid: React.FC<{
         {([
           { cls: 'bg-sky-400/15 ring-1 ring-sky-400/70', label: 'Hoy' },
           { cls: 'bg-sky-700/30 ring-1 ring-sky-400/45', label: 'Festival' },
+          { cls: 'bg-amber-900/20 ring-1 ring-amber-500/40', label: 'Día Sagrado' },
         ] as { cls: string; label: string }[]).map(({ cls, label }) => (
           <div key={label} className="flex items-center gap-1">
             <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
@@ -246,14 +274,13 @@ const DayGrid: React.FC<{
 
 interface HellenicCalendarInfoProps {
   atticDate?: AtticDateResult;
-  onClick?: () => void;
   weather?: WeatherData | null;
   currentLat?: number;
   currentLng?: number;
   currentDate?: Date;
 }
 
-type ViewMode = 'month' | 'festivals';
+type ViewMode = 'month' | 'festivals' | 'days';
 
 const DECADE_LABELS: Record<number, { title: string; subtitle: string }> = {
   1: { title: 'Ἱστάμενος', subtitle: 'Creciente' },
@@ -305,7 +332,7 @@ const renderSeleneMoon = (phase: number) => {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
-  atticDate: propAtticDate, onClick,
+  atticDate: propAtticDate,
   weather, currentLat = 37.9838, currentLng = 23.7275, currentDate,
 }) => {
   const { civilization, labels } = useCivilization();
@@ -371,6 +398,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
   const { festival, dailyDeity, atticDate } = greekInfo;
   const hasFestival = !!festival;
+  const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
   const apaphrades = checkApaphrades(atticDate.monthIndex, atticDate.dayOfMonth, festival);
 
   let displayDeityTitle = labels.godOfDayTitle || "Θεὸς τῆς Ἡμέρας";
@@ -384,6 +412,9 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
   } else if (dailyDeity) {
     deityName = dailyDeity.deity;
     deityDesc = dailyDeity.deityDesc;
+  } else {
+    deityName = defaultDeity.deity;
+    deityDesc = defaultDeity.festivalDesc;
   }
 
   const condition = weather?.current.condition ?? 'clear';
@@ -432,8 +463,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
   return (
     <div
-      className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2 cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
-      onClick={onClick}
+      className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2"
     >
       <div className="bg-ink/90 border-[4px] border-gold-dim hover:border-gold-leaf transition-colors p-0 rounded-sm shadow-2xl relative overflow-hidden group">
 
@@ -546,12 +576,119 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
         <div className="p-5 md:p-8 flex flex-col items-center gap-5 text-center">
 
+          {/* ── Deity / festival of the day (always visible) ─────────────── */}
+          {deityName && (
+            <div className="w-full bg-sky-900/15 p-5 rounded-lg border-2 border-sky-500/25 shadow-sm relative overflow-hidden">
+              {festival?.category && (
+                <div className="absolute -top-3 right-4 px-2 py-0.5 bg-sky-900/80 border border-sky-400/50 text-sky-300 text-[10px] uppercase tracking-[0.1em] rounded-sm backdrop-blur-md shadow-lg font-serif z-20">
+                  {getCategoryBadge(festival.category)}
+                </div>
+              )}
+              {festival?.isApaphrades && (
+                <div className="absolute inset-0 bg-rose-950/20 pointer-events-none rounded-lg" />
+              )}
+
+              <div className="text-sky-400 text-xs font-bold uppercase tracking-widest mb-1 relative z-10 flex flex-col items-center gap-1">
+                <div className="flex items-center gap-2">
+                  {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+                  {displayDeityTitle}
+                  {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+                </div>
+                {hasFestival && (
+                  <div className="flex gap-3 mt-1 px-3 py-1 bg-sky-400/5 rounded-full border border-sky-400/20">
+                    {festival?.ritualOffering && <span title="Ofrenda Ritual">🏺</span>}
+                    {festival?.pannychisDesc && <span title="Pannychis" className="animate-pulse">🕯️</span>}
+                    {festival?.agonDesc && <span title="Agōn">🌿</span>}
+                    {festival?.economyDesc && <span title="Economía">🪙</span>}
+                    {festival?.aition && <span title="Aition">📜</span>}
+                  </div>
+                )}
+              </div>
+
+              <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight relative z-10 mt-1">
+                {deityName}
+              </h2>
+              <div className="font-serif text-[10px] text-sky-300/70 tracking-widest uppercase mb-1 relative z-10">
+                {transliterateGreek(deityName)}
+              </div>
+
+              {festival?.festivalDayName && (
+                <div className="mt-3 mb-1 inline-block px-4 py-1.5 bg-sky-900/30 border-t border-b border-sky-400/30 text-sky-400 font-serif text-sm font-bold tracking-widest uppercase relative z-10 shadow-inner">
+                  {festival.festivalDayName}
+                </div>
+              )}
+
+              <p className="font-serif text-sm text-parchment/90 italic px-4 mt-3 leading-relaxed relative z-10">
+                "{deityDesc}"
+              </p>
+
+              {festival?.participants && (
+                <div className="mt-4 pt-3 border-t border-sky-800/30 w-full text-center relative z-10 flex flex-col items-center">
+                  <span className="text-sky-400/60 text-[9px] uppercase tracking-[0.2em] mb-1 font-bold">Participantes:</span>
+                  <span className="text-xs font-serif text-sky-200 font-bold">{festival.participants}</span>
+                </div>
+              )}
+
+              {festival?.ritualOffering && (
+                <div className="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-md relative z-10 flex items-start gap-3 shadow-sm">
+                  <span className="text-2xl">{festival.ritualOffering.icon}</span>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-amber-500 mb-0.5">Ofrenda Tradicional</span>
+                    <span className="text-xs font-serif text-amber-100/90 leading-snug">{festival.ritualOffering.item}</span>
+                  </div>
+                </div>
+              )}
+
+              {festival?.pannychisDesc && (
+                <div className="mt-3 p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
+                  <span className="text-xl animate-pulse">🕯️</span>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-indigo-400 mb-0.5">Pannychis (Vigilia Sagrada)</span>
+                    <span className="text-[11px] font-serif text-indigo-200/80 leading-snug italic">{festival.pannychisDesc}</span>
+                  </div>
+                </div>
+              )}
+
+              {festival?.agonDesc && (
+                <div className="mt-3 p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
+                  <span className="text-xl">🌿</span>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-emerald-400 mb-0.5">Agōn (Competición)</span>
+                    <span className="text-[11px] font-serif text-emerald-100/80 leading-snug">{festival.agonDesc}</span>
+                  </div>
+                </div>
+              )}
+
+              {festival?.economyDesc && (
+                <div className="mt-3 p-3 bg-yellow-950/30 border border-yellow-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
+                  <span className="text-xl">🪙</span>
+                  <div className="flex flex-col text-left">
+                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-yellow-500 mb-0.5">El Precio de la Piedad</span>
+                    <span className="text-[11px] font-serif text-yellow-100/80 leading-snug italic">{festival.economyDesc}</span>
+                  </div>
+                </div>
+              )}
+
+              {festival?.aition && (
+                <div className="mt-4 p-4 bg-stone-900/80 border border-stone-700/50 rounded-md relative z-10 flex flex-col items-start gap-2 shadow-inner">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">📜</span>
+                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-bold text-stone-300">Aition: El Mito Fundacional</span>
+                  </div>
+                  <p className="text-[12px] font-serif text-stone-400/90 leading-relaxed text-left border-l-2 border-stone-600/50 pl-3 italic">
+                    {festival.aition}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* ── View toggle ──────────────────────────────────────────────── */}
           <div
-            className="flex gap-0 rounded-lg overflow-hidden border border-sky-600/40 w-full max-w-xs"
+            className="flex gap-0 rounded-lg overflow-hidden border border-sky-600/40 w-full max-w-sm"
             onClick={e => e.stopPropagation()}
           >
-            {(['month', 'festivals'] as ViewMode[]).map(v => (
+            {(['month', 'festivals', 'days'] as ViewMode[]).map(v => (
               <button
                 key={v}
                 type="button"
@@ -562,7 +699,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                     : 'text-sky-500 hover:text-sky-300 hover:bg-sky-900/20'
                   }`}
               >
-                {v === 'month' ? '☽ Mes Lunar' : '🏛️ Festivales'}
+                {v === 'month' ? '☽ Mes' : v === 'festivals' ? '🏛️ Fiestas' : '🕯️ 7 Ἡμέρες'}
               </button>
             ))}
           </div>
@@ -582,113 +719,6 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 monthLen={atticDate.monthLength}
                 monthIndex={atticDate.monthIndex}
               />
-
-              {/* Deity / festival card */}
-              {deityName && (
-                <div className="w-full bg-sky-900/15 p-5 rounded-lg border-2 border-sky-500/25 shadow-sm relative overflow-hidden">
-                  {festival?.category && (
-                    <div className="absolute -top-3 right-4 px-2 py-0.5 bg-sky-900/80 border border-sky-400/50 text-sky-300 text-[10px] uppercase tracking-[0.1em] rounded-sm backdrop-blur-md shadow-lg font-serif z-20">
-                      {getCategoryBadge(festival.category)}
-                    </div>
-                  )}
-                  {festival?.isApaphrades && (
-                    <div className="absolute inset-0 bg-rose-950/20 pointer-events-none rounded-lg" />
-                  )}
-
-                  <div className="text-sky-400 text-xs font-bold uppercase tracking-widest mb-1 relative z-10 flex flex-col items-center gap-1">
-                    <div className="flex items-center gap-2">
-                      {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
-                      {displayDeityTitle}
-                      {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
-                    </div>
-                    {hasFestival && (
-                      <div className="flex gap-3 mt-1 px-3 py-1 bg-sky-400/5 rounded-full border border-sky-400/20">
-                        {festival?.ritualOffering && <span title="Ofrenda Ritual">🏺</span>}
-                        {festival?.pannychisDesc && <span title="Pannychis" className="animate-pulse">🕯️</span>}
-                        {festival?.agonDesc && <span title="Agōn">🌿</span>}
-                        {festival?.economyDesc && <span title="Economía">🪙</span>}
-                        {festival?.aition && <span title="Aition">📜</span>}
-                      </div>
-                    )}
-                  </div>
-
-                  <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight relative z-10 mt-1">
-                    {deityName}
-                  </h2>
-                  <div className="font-serif text-[10px] text-sky-300/70 tracking-widest uppercase mb-1 relative z-10">
-                    {transliterateGreek(deityName)}
-                  </div>
-
-                  {festival?.festivalDayName && (
-                    <div className="mt-3 mb-1 inline-block px-4 py-1.5 bg-sky-900/30 border-t border-b border-sky-400/30 text-sky-400 font-serif text-sm font-bold tracking-widest uppercase relative z-10 shadow-inner">
-                      {festival.festivalDayName}
-                    </div>
-                  )}
-
-                  <p className="font-serif text-sm text-parchment/90 italic px-4 mt-3 leading-relaxed relative z-10">
-                    "{deityDesc}"
-                  </p>
-
-                  {festival?.participants && (
-                    <div className="mt-4 pt-3 border-t border-sky-800/30 w-full text-center relative z-10 flex flex-col items-center">
-                      <span className="text-sky-400/60 text-[9px] uppercase tracking-[0.2em] mb-1 font-bold">Participantes:</span>
-                      <span className="text-xs font-serif text-sky-200 font-bold">{festival.participants}</span>
-                    </div>
-                  )}
-
-                  {festival?.ritualOffering && (
-                    <div className="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-md relative z-10 flex items-start gap-3 shadow-sm">
-                      <span className="text-2xl">{festival.ritualOffering.icon}</span>
-                      <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-amber-500 mb-0.5">Ofrenda Tradicional</span>
-                        <span className="text-xs font-serif text-amber-100/90 leading-snug">{festival.ritualOffering.item}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {festival?.pannychisDesc && (
-                    <div className="mt-3 p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
-                      <span className="text-xl animate-pulse">🕯️</span>
-                      <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-indigo-400 mb-0.5">Pannychis (Vigilia Sagrada)</span>
-                        <span className="text-[11px] font-serif text-indigo-200/80 leading-snug italic">{festival.pannychisDesc}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {festival?.agonDesc && (
-                    <div className="mt-3 p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
-                      <span className="text-xl">🌿</span>
-                      <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-emerald-400 mb-0.5">Agōn (Competición)</span>
-                        <span className="text-[11px] font-serif text-emerald-100/80 leading-snug">{festival.agonDesc}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {festival?.economyDesc && (
-                    <div className="mt-3 p-3 bg-yellow-950/30 border border-yellow-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
-                      <span className="text-xl">🪙</span>
-                      <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-yellow-500 mb-0.5">El Precio de la Piedad</span>
-                        <span className="text-[11px] font-serif text-yellow-100/80 leading-snug italic">{festival.economyDesc}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {festival?.aition && (
-                    <div className="mt-4 p-4 bg-stone-900/80 border border-stone-700/50 rounded-md relative z-10 flex flex-col items-start gap-2 shadow-inner">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">📜</span>
-                        <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-bold text-stone-300">Aition: El Mito Fundacional</span>
-                      </div>
-                      <p className="text-[12px] font-serif text-stone-400/90 leading-relaxed text-left border-l-2 border-stone-600/50 pl-3 italic">
-                        {festival.aition}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
 
               {/* Apaphrades warning */}
               {apaphrades.isTaboo && (
@@ -736,6 +766,13 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 ))}
               </div>
 
+            </div>
+          )}
+
+          {/* ── DAYS VIEW (7 following days — folded modal) ────────────────── */}
+          {view === 'days' && (
+            <div className="w-full flex flex-col" onClick={e => e.stopPropagation()}>
+              <GreekDaysList startDate={currentDate ?? new Date()} />
             </div>
           )}
 

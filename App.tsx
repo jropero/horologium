@@ -20,7 +20,6 @@ import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import HellenicCalendarInfo from './components/HellenicCalendarInfo';
 import EgyptianCalendarInfo from './components/EgyptianCalendarInfo';
-import GreekCalendarModal from './components/GreekCalendarModal';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
@@ -69,7 +68,6 @@ const AppContent: React.FC = () => {
 
   const [romanTimeData, setRomanTimeData] = useState<RomanTimeData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isGreekCalendarOpen, setIsGreekCalendarOpen] = useState<boolean>(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
   const [isWeatherSelectorOpen, setIsWeatherSelectorOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
@@ -283,7 +281,6 @@ const AppContent: React.FC = () => {
       {civilization !== 'zhongguo' && civilization === 'hellas' && (
         <HellenicCalendarInfo
           atticDate={romanTimeData?.atticDate}
-          onClick={() => setIsGreekCalendarOpen(true)}
           weather={effectiveWeather}
           currentLat={latitude}
           currentLng={longitude}
@@ -387,12 +384,6 @@ const AppContent: React.FC = () => {
       )}
 
       <InfoSection />
-
-      <GreekCalendarModal
-        isOpen={isGreekCalendarOpen}
-        onClose={() => setIsGreekCalendarOpen(false)}
-        startDate={modernTime}
-      />
 
       <LocationModal
         isOpen={isLocationModalOpen}

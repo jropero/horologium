@@ -3,7 +3,6 @@ import React, { useMemo, useState } from 'react';
 import { RomanTimeData, WeatherData } from '../types';
 import WeatherWidget from './WeatherWidget';
 import RomanCalendarModal from './RomanCalendarModal';
-import GreekCalendarModal from './GreekCalendarModal';
 import WeatherModal from './WeatherModal';
 import { generateSkyline } from '../utils/skylineGenerator';
 import { generateGreekSkyline } from '../utils/greekSkylineGenerator';
@@ -564,10 +563,9 @@ const RomanClock: React.FC<RomanClockProps> = ({
             )}
 
             <div
-              onClick={() => setIsCalendarOpen(true)}
-              className={`calendar-header-widget bg-ink/80 border p-3 rounded shadow-lg w-full max-w-lg flex flex-col items-center cursor-pointer hover:bg-white/5 transition-all group relative
-              ${civilization === 'hellas' ? 'border-sky-400/30 hover:border-sky-400' : 'border-gold-dim hover:border-gold-leaf'}`}
-              title="Ver Calendario"
+              onClick={civilization === 'rome' ? () => setIsCalendarOpen(true) : undefined}
+              className={`calendar-header-widget bg-ink/80 border p-3 rounded shadow-lg w-full max-w-lg flex flex-col items-center ${civilization === 'hellas' ? 'border-sky-400/30' : 'border-gold-dim hover:border-gold-leaf cursor-pointer hover:bg-white/5'} transition-all group relative`}
+              title={civilization === 'rome' ? 'Ver Calendario' : undefined}
             >
               {civilization === 'rome' ? (
                 <>
@@ -611,14 +609,8 @@ const RomanClock: React.FC<RomanClockProps> = ({
         </div>
       </div>
 
-      {civilization === 'rome' ? (
+      {civilization === 'rome' && (
         <RomanCalendarModal
-          isOpen={isCalendarOpen}
-          onClose={() => setIsCalendarOpen(false)}
-          startDate={modernTime}
-        />
-      ) : (
-        <GreekCalendarModal
           isOpen={isCalendarOpen}
           onClose={() => setIsCalendarOpen(false)}
           startDate={modernTime}
