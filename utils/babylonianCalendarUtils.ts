@@ -4,7 +4,7 @@
 
 import { getSunTimes, getMoonPhase, springEquinoxJDE, trueNewMoonJDE, kForJDE } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
-import { BabylonianDate, BABYLONIAN_MONTHS } from '../types/babylonia';
+import { BabylonianDate, BABYLONIAN_MONTHS, BABYLONIAN_MONTH_REGENTS } from '../types/babylonia';
 import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -28,26 +28,23 @@ const AKKADIAN_ORDINALS = [
   'sebe', 'samāne', 'tiš', 'eser', 'ḫaddašer', 'šinalšer'
 ];
 
-// ─── Month deities ────────────────────────────────────────────────────────────
+// ─── Month regents ────────────────────────────────────────────────────────────
+// Canonical monthly regents live in types/babylonia.ts (BABYLONIAN_MONTH_REGENTS);
+// the descriptions below follow that same order.
 
-const MONTH_DEITIES = [
-  'Marduk', 'Ea', 'Sîn', 'Dumuzi', 'Gula', 'Ištar',
-  'Šamaš', 'Marduk', 'Nabû', 'Šamaš', 'Enlil', 'Anu'
-];
-
-const MONTH_DEITY_DESCS = [
-  'El gran Akitu celebra el año nuevo y la renovación del cosmos bajo el poder de Marduk.',
-  'Ea, señor de las aguas subterráneas y la sabiduría, preside la siembra primaveral.',
-  'Sîn, el dios luna, guía la primera cosecha de la cebada bajo su luz plateada.',
-  'El lamento de Dumuzi: el dios de la vegetación desciende al inframundo y la tierra llora.',
-  'Gula, gran diosa de la medicina, purifica el cuerpo y el espíritu con ritos de sanación.',
-  'Ištar, señora del amor y la guerra, recibe ofrendas sagradas en sus grandes templos.',
-  'El segundo Akitu conmemora el equinoccio otoñal bajo la protección de Šamaš.',
-  'El arado vuelve a la tierra húmeda; Marduk recibe los primeros frutos de la siembra.',
-  'Nabû, señor de los escribas, ilumina las noches de Kislīmu con el festival de las lámparas.',
-  'Los grandes ritos del solsticio honran a Šamaš en su punto más bajo sobre el horizonte.',
-  'Enlil desata las tormentas y los vientos del gran mar del norte sobre las llanuras.',
-  'Anu, señor del cielo estrellado, completa el ciclo del año y aguarda el renacimiento.'
+const MONTH_REGENT_DESCS = [
+  'Anu, señor del cielo, y Enlil, señor del aire y de la tierra, comparten la regencia del primer mes: el de la renovación del año y el retorno de la vida.',
+  'Ea (Enki), dios de las aguas dulces, la sabiduría y las artes mágicas, patrón de artesanos y exorcistas, rige el segundo mes, el de la siembra.',
+  'Sîn (Nanna), dios de la luna y señor del cómputo del tiempo y del calendario, rige el tercer mes.',
+  'Ninurta (Ninib), dios del arado y de la guerra victoriosa, vencedor del Anzû, rige el cuarto mes.',
+  'Ningishzida, señor del Árbol de la Verdad y guardián de las puertas del Inframundo, rige el quinto mes.',
+  'Ištar (Inanna), señora del amor, la guerra y el planeta Venus, rige el sexto mes.',
+  'Šamaš (Utu), dios del sol, juez de los vivos y protector de la justicia, rige el séptimo mes.',
+  'Marduk, rey de los dioses de Babilonia y señor de los destinos, rige el octavo mes.',
+  'Nergal, señor del Inframundo, de la peste y de la guerra, rige el noveno mes.',
+  'Papsukkal, visir y mensajero de los grandes dioses, rige el décimo mes.',
+  'Adad (Ramman), dios de la tormenta, la lluvia y el trueno, rige el undécimo mes.',
+  'Los Sebitti, los Siete dioses guerreros hijos de Anu que marchan al frente de Erra, rigen el duodécimo mes.',
 ];
 
 // ─── Julian Day helpers ───────────────────────────────────────────────────────
@@ -311,9 +308,9 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
   const isIntercalary = isIntercalaryYear && monthIndex === 12;
   const monthName = isIntercalary ? 'Addaru II' : BABYLONIAN_MONTHS[monthIndex % 12];
 
-  const deityIndex = monthIndex % 12;
-  const monthDeity = MONTH_DEITIES[deityIndex];
-  const monthDeityDesc = MONTH_DEITY_DESCS[deityIndex];
+  const regentIndex = monthIndex % 12;
+  const monthRegent = BABYLONIAN_MONTH_REGENTS[regentIndex];
+  const monthRegentDesc = MONTH_REGENT_DESCS[regentIndex];
 
   return {
     seYear,
@@ -333,8 +330,8 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
     moonPhase,
     moonPhaseName,
     dayProgress,
-    monthDeity,
-    monthDeityDesc,
+    monthRegent,
+    monthRegentDesc,
   };
 };
 
@@ -434,7 +431,7 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
     isMarketDay: false,
     dayOfWeek: `Yūm ${planetaryRuler}`,
     indiction: 0,
-    tutelaMensis: MONTH_DEITIES[babDate.monthIndex % 12],
+    tutelaMensis: BABYLONIAN_MONTH_REGENTS[babDate.monthIndex % 12],
     zodiacSign: getBabylonianZodiac(now),
   };
 };
@@ -492,7 +489,7 @@ export const getBabylonianCalendarYear = (anchorGregYear: number, lat: number, l
       key: `bab-${m}`,
       name,
       latin: `Warḫum ${m + 1}`,
-      translation: isIntercalaryMonth ? 'Mes intercalar' : MONTH_DEITIES[m % 12],
+      translation: isIntercalaryMonth ? 'Mes intercalar' : `Regente: ${BABYLONIAN_MONTH_REGENTS[m % 12]}`,
       kind: isIntercalaryMonth ? 'intercalary' : 'regular',
       days,
     });

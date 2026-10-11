@@ -93,7 +93,10 @@ Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoU
 ### Day events in `babylonianLoreData.ts`
 
 Each month entry in `BABYLONIAN_LORE` has:
-- `deity`, `icon`, `description`, `festival`, `zodiacSign` — month-level metadata.
+- `monthRegent`, `festivalDeity`, `regentNote?`, `icon`, `description`, `festival`, `zodiacSign` — month-level metadata.
+  - `monthRegent` = canonical regent of the month, from the cuneiform month-regent lists (IV R 33; the Astrolabe B regent series). Shared source of truth: `BABYLONIAN_MONTH_REGENTS` in `types/babylonia.ts` (also drives `tutelaMensis` and the date-picker gloss). The regent's descriptive bio shown in the UI is `MONTH_REGENT_DESCS` in `babylonianCalendarUtils.ts`, exposed as `monthRegentDesc` on the date object.
+  - `festivalDeity` = deity presiding the month's main festival / the Astrolabe B menology ("the month of X"). This is the evocative hero of the month card; it is NOT the regent.
+  - `regentNote` = note on variants/ambiguity (Abu: Ningishzida con variante Ninurta; Addaru: los Siete grandes dioses).
 - `dayEvents?: Record<number, BabylonianDayEvent>` — day-specific festivals/rituals.
 
 `BabylonianDayEvent` interface:
@@ -101,10 +104,10 @@ Each month entry in `BABYLONIAN_LORE` has:
 interface BabylonianDayEvent {
   shortLabel: string;  // 1-3 word label shown in day grid dot tooltip
   description: string; // full ritual description shown in tap panel
-  type: 'festival' | 'ritual' | 'omen' | 'rest';
+  type: 'akitu' | 'procession' | 'mourning' | 'marriage' | 'ritual' | 'festival' | 'astronomy';
 }
 ```
-Days with `dayEvents` entries show a **green dot** (top-right of cell) in the DayGrid. Primary sources used: Cohen 1983 *Cultic Calendars of the Ancient Near East*, ANETODAY ritual texts.
+Days with `dayEvents` entries show a **green dot** (top-right of cell) in the DayGrid. Primary source for festivals: Cohen 1993 *Cultic Calendars of the Ancient Near East* (CDL Press), ANETODAY ritual texts. Month regents follow the cuneiform month-regent lists (IV R 33; Astrolabe B / KAV 218, ed. Horowitz, *The Three Stars Each*, 2014), corroborated by the *Iqqur īpuš* menology (Labat 1965, no. 105) and Muss-Arnolt 1892 (JBL 11).
 
 ### Theme — Lapis Lazuli / Ishtar Gate palette
 
