@@ -9,6 +9,13 @@ interface Props {
   fogGradientId: string;
   cloudOpacity?: number;
   stormOpacity?: number;
+  /**
+   * Dimensions of the surrounding SVG viewBox. The decorative cloud/fog/storm
+   * shapes below are authored for a 300×200 sky and scaled to match. Defaults
+   * keep the original 300×200 civilisations unchanged.
+   */
+  viewWidth?: number;
+  viewHeight?: number;
 }
 
 const WeatherSvgEffects: React.FC<Props> = ({
@@ -17,20 +24,28 @@ const WeatherSvgEffects: React.FC<Props> = ({
   fogGradientId,
   cloudOpacity = 0.65,
   stormOpacity = 0.6,
+  viewWidth = 300,
+  viewHeight = 200,
 }) => {
   if (condition === 'clear') return null;
+
+  // Map the 300×200 authoring space onto the real viewBox so the same shapes
+  // fill both the classic 300×200 skies and the wide 1200×300 Egyptian panorama.
+  const sx = viewWidth / 300;
+  const sy = viewHeight / 200;
+  const scale = `scale(${sx} ${sy})`;
 
   return (
     <>
       {condition === 'cloudy' && (
-        <g opacity={cloudOpacity}>
+        <g opacity={cloudOpacity} transform={scale}>
           <path d="M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
           <path d="M -200 70 Q 80 50 150 70 T 350 90 T 500 70 L 500 -20 L -200 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
         </g>
       )}
 
       {condition === 'snow' && (
-        <g opacity="0.6">
+        <g opacity="0.6" transform={scale}>
           <path d="M -200 30 Q 60 5 140 35 T 350 20 T 500 30 L 500 -20 L -200 -20 Z" fill="#6b7280" className="anim-cloud-slow" />
           <path d="M -200 60 Q 80 35 170 55 T 350 50 T 500 60 L 500 -20 L -200 -20 Z" fill="#9ca3af" opacity="0.7" className="anim-cloud-fast" />
         </g>
@@ -45,15 +60,17 @@ const WeatherSvgEffects: React.FC<Props> = ({
               <stop offset="100%" stopColor="#e5e7eb" stopOpacity="0.95" />
             </linearGradient>
           </defs>
-          <rect x="-10" y="115" width="320" height="90" fill={`url(#${fogGradientId})`} opacity="0.85" />
-          <ellipse cx="70"  cy="105" rx="130" ry="14" fill="#e5e7eb" opacity="0.5"  className="anim-cloud-slow" />
-          <ellipse cx="220" cy="95"  rx="110" ry="11" fill="#f3f4f6" opacity="0.4"  className="anim-cloud-fast" />
-          <ellipse cx="150" cy="120" rx="160" ry="16" fill="#e5e7eb" opacity="0.55" className="anim-cloud-slow" />
+          <g transform={scale}>
+            <rect x="-10" y="115" width="320" height="90" fill={`url(#${fogGradientId})`} opacity="0.85" />
+            <ellipse cx="70"  cy="105" rx="130" ry="14" fill="#e5e7eb" opacity="0.5"  className="anim-cloud-slow" />
+            <ellipse cx="220" cy="95"  rx="110" ry="11" fill="#f3f4f6" opacity="0.4"  className="anim-cloud-fast" />
+            <ellipse cx="150" cy="120" rx="160" ry="16" fill="#e5e7eb" opacity="0.55" className="anim-cloud-slow" />
+          </g>
         </g>
       )}
 
       {(condition === 'storm' || condition === 'rain') && (
-        <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity={stormOpacity}>
+        <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity={stormOpacity} transform={scale}>
           <path d="M -200 50 Q 30 20 80 40 T 180 30 T 280 50 T 500 30 L 500 -20 L -200 -20 Z" fill="#1e293b" className="anim-cloud-slow" />
           <path d="M -200 80 Q 70 50 160 80 T 350 60 T 500 80 L 500 -20 L -200 -20 Z" fill="#0f172a" opacity="0.8" className="anim-cloud-fast" />
         </g>
