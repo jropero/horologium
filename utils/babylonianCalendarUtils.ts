@@ -265,18 +265,21 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
     : `Māšaltu ${AKKADIAN_ORDINALS[temporalHour - 1]} ša Mūši`;
 
   const watchData = getWatch(temporalHour, isDay);
-  const { name: planetaryRuler, nameEn: planetaryRulerEn } =
-    getBabylonianPlanetaryRuler(temporalHour, isDay, date);
 
-  const moonPhase = getMoonPhase(date);
-  const moonPhaseName = getBabylonianMoonPhaseName(moonPhase);
-
-  // ─── Lunisolar calendar ───────────────────────────────────────────────────
   // Babylonian civil day starts at sunset. The "representative Gregorian date"
   // for a Babylonian day is the date of its morning (sunrise portion). At night
   // (after today's sunset OR before tomorrow's sunrise) the next sunrise anchors
   // the JD so that midnight-to-sunrise hours show the same day as the afternoon.
+  // Must be computed before getBabylonianPlanetaryRuler so the correct weekday
+  // is used during the sunset-to-midnight window (when date.getDay() is still
+  // the previous Gregorian day but the Babylonian civil day has already advanced).
   const calendarDate = isDay ? date : nextEvent.time; // nextEvent = next sunrise at night
+
+  const { name: planetaryRuler, nameEn: planetaryRulerEn } =
+    getBabylonianPlanetaryRuler(temporalHour, isDay, calendarDate);
+
+  const moonPhase = getMoonPhase(date);
+  const moonPhaseName = getBabylonianMoonPhaseName(moonPhase);
   const gregYear = calendarDate.getFullYear();
 
   // Find this Babylonian year's Nisannu 1
@@ -394,7 +397,8 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
   const moonPhase = getMoonPhase(now);
   const moonPhaseLabel = getBabylonianMoonPhaseName(moonPhase);
 
-  const { name: planetaryRuler } = getBabylonianPlanetaryRuler(romanHour, isDay, now);
+  const civilDate = isDay ? now : nextEvent.time;
+  const { name: planetaryRuler } = getBabylonianPlanetaryRuler(romanHour, isDay, civilDate);
 
   // Babylonian date string for romanDateString field
   const babDate = getBabylonianDate(now, lat, lng);
