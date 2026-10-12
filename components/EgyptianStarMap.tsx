@@ -33,6 +33,19 @@ const DAY_MS = 24 * 3600 * 1000;
 const BACKDROP_MAG_LIMIT = 4.5;
 const BACKDROP_ALPHA = 0.85;
 
+// Dev aid: opening the app with `?mockplanets` spreads every planet across the
+// visible sky so all pictograms can be inspected regardless of the ephemeris.
+// Order matches PLANETS in utils/egyptianSkyMap.ts (Mercury…Saturn).
+const MOCK_PLANET_SKY: { alt: number; az: number }[] = [
+  { alt: 14, az: 128 }, // Djehuty (Mercury)
+  { alt: 26, az: 164 }, // Nit (Venus)
+  { alt: 42, az: 198 }, // Hor (Mars)
+  { alt: 30, az: 236 }, // Amun (Jupiter)
+  { alt: 54, az: 176 }, // Sobek (Saturn)
+];
+const wantsMockPlanets = () =>
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('mockplanets');
+
 // Sky palettes: [zenith, middle, horizon] as RGB.
 type RGB = [number, number, number];
 const hex = (h: string): RGB => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)) as RGB;
@@ -73,6 +86,100 @@ const starAlpha = (mag: number) => clamp01(1.2 - 0.1 * mag);
 const GOLD_LABEL = 'rgba(212,168,50,0.70)';
 const LINE_COLOR = 'rgba(212,168,50,0.25)';
 
+/**
+ * Distinct Egyptian planet pictograms, recovered from the pre-panorama SVG scene:
+ * Nit (Venus) blazes with rays, Hor (Mars) is red, Amun (Jupiter) is banded and
+ * Sobek (Saturn) wears a ring — so each body reads without its written name.
+ */
+const drawPlanet = (
+  ctx: CanvasRenderingContext2D,
+  key: string,
+  x: number,
+  y: number,
+  r: number,
+  color: string,
+) => {
+  ctx.save();
+  ctx.translate(x, y);
+  switch (key) {
+    case 'venus': {
+      // Nit — the brilliant one, with four rays.
+      ctx.fillStyle = 'rgba(255,255,255,0.10)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.16)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 1.7, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+      ctx.lineWidth = 1;
+      for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]] as const) {
+        ctx.beginPath();
+        ctx.moveTo(dx * (r + 1.5), dy * (r + 1.5));
+        ctx.lineTo(dx * r * 2.7, dy * r * 2.7);
+        ctx.stroke();
+      }
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      break;
+    }
+    case 'mars': {
+      // Hor — the red one.
+      ctx.fillStyle = 'rgba(255,64,64,0.10)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(224,48,48,0.22)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 1.35, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,128,128,0.5)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+      break;
+    }
+    case 'jupiter': {
+      // Amun — a banded disc.
+      ctx.fillStyle = 'rgba(255,255,240,0.08)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.save();
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.clip();
+      ctx.fillStyle = color;
+      ctx.fillRect(-r, -r, r * 2, r * 2);
+      ctx.fillStyle = 'rgba(192,112,48,0.40)';
+      ctx.fillRect(-r, -r * 0.85, r * 2, r * 0.30);
+      ctx.fillStyle = 'rgba(200,112,48,0.65)';
+      ctx.fillRect(-r, -r * 0.45, r * 2, r * 0.32);
+      ctx.fillStyle = 'rgba(160,80,32,0.50)';
+      ctx.fillRect(-r, r * 0.15, r * 2, r * 0.22);
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(255,255,240,0.45)';
+      ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+      break;
+    }
+    case 'saturn': {
+      // Sobek — the ringed one.
+      ctx.fillStyle = 'rgba(255,204,102,0.07)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
+      const ringX = r * 2, ringY = r * 0.62;
+      ctx.strokeStyle = 'rgba(200,160,64,0.5)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.ellipse(0, 0, ringX, ringY, 0, Math.PI, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = '#f0e8c0';
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(212,170,68,0.9)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.ellipse(0, 0, ringX, ringY, 0, 0, Math.PI); ctx.stroke();
+      break;
+    }
+    default: {
+      // Djehuty (Mercury) — a small swift disc.
+      ctx.fillStyle = 'rgba(214,196,176,0.12)';
+      ctx.beginPath(); ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      break;
+    }
+  }
+  ctx.restore();
+};
+
 const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay, sunrise, sunset, horizon = 1 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -88,7 +195,16 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
 
   // Positions refresh once per minute; drawing in between only shifts the azimuth window.
   const minuteKey = Math.floor(date.getTime() / 60000);
-  const sky: SkySnapshot = useMemo(() => computeSky(date, lat, lng), [minuteKey, lat, lng]);
+  const sky: SkySnapshot = useMemo(() => {
+    const snapshot = computeSky(date, lat, lng);
+    if (wantsMockPlanets()) {
+      snapshot.planets = snapshot.planets.map((p, i) => ({
+        ...p,
+        ...(MOCK_PLANET_SKY[i] ?? { alt: 24, az: 180 + i * 20 }),
+      }));
+    }
+    return snapshot;
+  }, [minuteKey, lat, lng]);
   const catalogStars = useMemo(
     () => (catalog ? projectCatalog(catalog, date, lat, lng) : null),
     [catalog, minuteKey, lat, lng],
@@ -264,23 +380,16 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       glow.style.transform = `translate(${sx}px, ${sy}px)`;
     }
 
-    // Planets: a disk inside a thin gold ring, with the Egyptian name.
+    // Planets: each body gets its own pictogram, labelled with its familiar name.
     ctx.font = '11px Cinzel, serif';
     ctx.textAlign = 'center';
     for (const p of sky.planets) {
       const x = xFor(p.az), y = yFor(p.alt);
       if (p.alt <= 0 || !onScreen(x, y)) continue;
-      ctx.strokeStyle = 'rgba(212,168,50,0.55)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(x, y, p.radius + 3.5, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(x, y, p.radius, 0, Math.PI * 2);
-      ctx.fill();
+      const r = p.radius * 1.6;
+      drawPlanet(ctx, p.key, x, y, r, p.color);
       ctx.fillStyle = dayFactor > 0.6 ? 'rgba(255,240,210,0.85)' : GOLD_LABEL;
-      ctx.fillText(p.label, x, y - p.radius - 9);
+      ctx.fillText(p.label, x, y - r - 8);
     }
 
     // Iah — the Moon, lit limb turned toward the Sun.
