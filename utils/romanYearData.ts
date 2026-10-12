@@ -9,7 +9,9 @@ export interface YearDayEntry {
     festivalDesc?: string;
 }
 
-// FORMAT: "Month-Day" (0-based month)
+// FORMAT: "Month-Day" (0-based month), common-year days.
+// Lookups go through getRomanYearDataKey (romanTimeUtils.ts): in leap years
+// "1-29" (Dies Bissextus) is shown on 24 Feb and 25–29 Feb use "1-24".."1-28".
 export const ROMAN_YEAR_DATA: Record<string, YearDayEntry> = {
     // --- IANUARIUS (JANUARY) ---
     "0-1": { status: 'F', statusFull: "Kalendae Ianuariae", deity: "Jano / Juno", deityDesc: "Dios de los inicios y diosa del mes.", festivalName: "Kalendae Ianuariae", festivalDesc: "Celebración del Año Nuevo romano dedicada a Jano. Durante el Imperio, los nuevos cónsules asumían su cargo y se realizaban votos públicos por el estado." },
@@ -73,7 +75,7 @@ export const ROMAN_YEAR_DATA: Record<string, YearDayEntry> = {
     "1-26": { status: 'EN', statusFull: "Dies Endotercissus", deity: "Ninguna", deityDesc: "Día sin deidad específica." },
     "1-27": { status: 'NP', statusFull: "Equirria", deity: "Marte", deityDesc: "Dios de la guerra.", festivalName: "Equirria", festivalDesc: "Primera de las carreras de carros y caballos en el Campo de Marte, dedicadas al dios antes de la temporada militar." },
     "1-28": { status: 'C', statusFull: "Dies Comitialis", deity: "Ninguna", deityDesc: "Día sin deidad específica." },
-    "1-29": { status: 'C', statusFull: "Dies Bissextus", deity: "Ninguna", deityDesc: "Día intercalar romano.", festivalName: "Dies Bissextus", festivalDesc: "Día añadido en el calendario juliano en años bisiestos (bis sextus dies ante calendas martias)." },
+    "1-29": { status: 'C', statusFull: "Dies Bissextus", deity: "Ninguna", deityDesc: "Día intercalar romano.", festivalName: "Dies Bissextus", festivalDesc: "Día añadido en el calendario juliano en años bisiestos duplicando el sexto día antes de las calendas de marzo (ante diem bis sextum Kalendas Martias); en la convención moderna corresponde al 24 de febrero." },
 
     // --- MARTIUS (MARCH) ---
     "2-1": { status: 'NP', statusFull: "Kalendae", deity: "Marte / Juno Lucina", deityDesc: "Dios de la guerra y diosa del parto.", festivalName: "Feriae Marti / Matronalia", festivalDesc: "Original Año Nuevo del calendario de Rómulo. Comienzan las procesiones de los sacerdotes Salii y las esposas celebran la Matronalia." },

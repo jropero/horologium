@@ -70,7 +70,7 @@ const buildYear = (
 ): CivilCalendarYear => {
   switch (civilization) {
     case 'hellas':
-      return getAtticCalendarYear(anchorGregYear);
+      return getAtticCalendarYear(anchorGregYear, lat, lng);
     case 'aegyptus':
       return getEgyptianCalendarYear(anchorGregYear);
     case 'babylonia':
@@ -82,7 +82,7 @@ const buildYear = (
 const getAnchor = (civilization: CivilPickerCivilization, date: Date, lat: number, lng: number): number => {
   switch (civilization) {
     case 'hellas':
-      return getAtticYearAnchor(date);
+      return getAtticYearAnchor(date, lat, lng);
     case 'aegyptus':
       return getEgyptianDate(date).alexandrianYear;
     case 'babylonia':

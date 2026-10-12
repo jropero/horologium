@@ -197,9 +197,12 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
 
 interface RomanCalendarInfoProps {
     currentDate?: Date;
+    /** Observer location for the Attic comparison date (defaults to Athens). */
+    lat?: number;
+    lng?: number;
 }
 
-const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new Date() }) => {
+const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new Date(), lat, lng }) => {
     const { civilization, labels } = useCivilization();
     const [info, setInfo] = useState<RomanDayInfo | null>(null);
     const [showFestivals, setShowFestivals] = useState(false);
@@ -225,12 +228,12 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
     useEffect(() => {
         setInfo(getRomanDayInfo(currentDate));
 
-        const atticDate = getAtticDate(currentDate);
+        const atticDate = getAtticDate(currentDate, lat, lng);
         const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
         const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
         setGreekInfo({ festival, defaultDeity, atticDate });
         setActiveSacrificeIdx(0);
-    }, [currentDate]);
+    }, [currentDate, lat, lng]);
 
     if (!info && !greekInfo) return null;
 

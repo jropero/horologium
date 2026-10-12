@@ -7,6 +7,7 @@ import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
 import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
 import { getFestivalsForDate, getNextEgyptianFestivals } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
+import { getEgyptianDayAnchor } from '../utils/egyptianTimeUtils';
 import { getAlgolPhase, getAlgolDailyData, getLunarPhase, getSopdetHeliacalEvent, getSiriusDailyData } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 import Nilometer from './Nilometer';
@@ -16,241 +17,8 @@ import WeatherSvgEffects from './WeatherSvgEffects';
 import { WeatherData } from '../types';
 import { Waves, Feather, Hammer, Ship, Music, Sparkles, Sailboat, Sprout, Moon, Bird, MoveUp, Crown, Sun, Flame, ArrowUpCircle, Wheat, Shirt, Eye, PartyPopper, Tent, CalendarClock, Ruler, Map, Circle, Compass, Sunrise } from 'lucide-react';
 import HorusEclipseModal from './HorusEclipseModal';
-import { getPlanetPosition, getSunTimes } from '../utils/solar';
-import { Body, Observer, Horizon } from 'astronomy-engine';
-
-const PLANET_CONFIGS = [
-  { body: Body.Mars,    name: 'Hor',   color: '#e05a5a', glow: '#ff9999', r: 4   },
-  { body: Body.Venus,   name: 'Nit',   color: '#f8f8ff', glow: '#ffffff', r: 5   },
-  { body: Body.Jupiter, name: 'Amun',  color: '#e8e4b8', glow: '#fffff0', r: 4.5 },
-  { body: Body.Saturn,  name: 'Sobek', color: '#c8a040', glow: '#ffcc66', r: 3.5 },
-] as const;
-
-// Bright star catalog: [RA hours, Dec degrees, V-magnitude]
-const STAR_CATALOG: [number, number, number][] = [
-  // ── Magnitude < 1.5 ──
-  [6.7525, -16.7161, -1.46], // Sirius α CMa
-  [6.3992, -52.6957, -0.72], // Canopus α Car
-  [14.2611,  19.1822, -0.05], // Arcturus α Boo
-  [18.6156,  38.7836,  0.03], // Vega α Lyr
-  [5.2783,  45.9981,  0.08], // Capella α Aur
-  [5.2422,  -8.2017,  0.12], // Rigel β Ori
-  [7.6553,   5.2250,  0.34], // Procyon α CMi
-  [5.9194,   7.4069,  0.42], // Betelgeuse α Ori
-  [1.6285, -57.2367,  0.46], // Achernar α Eri
-  [14.0639, -60.3731,  0.61], // Hadar β Cen
-  [19.8460,   8.8683,  0.77], // Altair α Aql
-  [12.4431, -63.0991,  0.77], // Acrux α Cru
-  [4.5986,  16.5094,  0.85], // Aldebaran α Tau
-  [16.4901, -26.4321,  0.91], // Antares α Sco
-  [13.4198, -11.1613,  0.97], // Spica α Vir
-  [7.7552,  28.0261,  1.14], // Pollux β Gem
-  [22.9608, -29.6223,  1.16], // Fomalhaut α PsA
-  [20.6905,  45.2803,  1.25], // Deneb α Cyg
-  [12.7944, -59.6887,  1.25], // Mimosa β Cru
-  [6.9771, -28.9721,  1.50], // Adhara ε CMa
-  // ── Magnitude 1.5–2.0 ──
-  [17.5630, -37.1036,  1.62], // Shaula λ Sco
-  [5.4186,   6.3497,  1.64], // Bellatrix γ Ori
-  [5.4380,  28.6082,  1.65], // Elnath β Tau
-  [9.2197, -69.7172,  1.67], // Miaplacidus β Car
-  [5.6036,  -1.2019,  1.70], // Alnilam ε Ori
-  [5.6794,  -1.9425,  1.77], // Alnitak ζ Ori
-  [12.9003,  55.9600,  1.77], // Alioth ε UMa
-  [3.4056,  49.8612,  1.79], // Mirfak α Per
-  [11.0621,  61.7508,  1.79], // Dubhe α UMa
-  [5.7958,  -9.6697,  1.86], // Saiph κ Ori
-  [13.7923,  49.3133,  1.86], // Alkaid η UMa
-  [18.4029, -34.3843,  1.85], // Kaus Australis ε Sgr
-  [5.9927,  44.9474,  1.90], // Menkalinan β Aur
-  [6.6285,  16.3994,  1.93], // Alhena γ Gem
-  [6.3783, -17.9559,  1.98], // Mirzam β CMa
-  [2.5303,  89.2642,  1.98], // Polaris α UMi
-  [9.4597,  -8.6586,  1.98], // Alphard α Hya
-  [2.1197,  23.4624,  2.00], // Hamal α Ari
-  // ── Magnitude 2.0–2.5 ──
-  [7.5767,  31.8883,  1.58], // Castor α Gem
-  [18.9213, -26.2967,  2.02], // Nunki σ Sgr
-  [0.1394,  29.0904,  2.07], // Alpheratz α And
-  [17.5822,  12.5600,  2.08], // Rasalhague α Oph
-  [1.1621,  35.6233,  2.05], // Mirach β And
-  [3.1361,  40.9556,  2.10], // Algol β Per
-  [2.0651,  42.3297,  2.10], // Almach γ And
-  [11.8178,  14.5722,  2.14], // Denebola β Leo
-  [20.3694,  40.2567,  2.20], // Sadr γ Cyg
-  [10.1397,  11.9672,  2.30], // Regulus α Leo
-  [15.7379,  26.7147,  2.21], // Kornephoros β Her
-  [13.3986,  54.9253,  2.23], // Mizar ζ UMa
-  [17.9422,  51.4889,  2.23], // Eltanin γ Dra
-  [0.6753,  56.5373,  2.23], // Schedar α Cas
-  [16.0000, -22.6217,  2.29], // Dschubba δ Sco
-  [11.0307,  56.3824,  2.37], // Merak β UMa
-  [14.7491,  27.0742,  2.37], // Izar ε Boo
-  [22.0913, -46.9610,  2.39], // Al Na'ir α Gru
-  [21.7363,   9.8750,  2.40], // Enif ε Peg
-  [23.0638,  28.0828,  2.42], // Scheat β Peg
-  [11.8972,  53.6948,  2.44], // Phecda γ UMa
-  [20.7704,  33.9702,  2.46], // Aljanah ε Cyg
-  [21.7364,  58.2011,  2.47], // Alderamin α Cep
-  [23.0794,  15.2044,  2.49], // Markab α Peg
-  [0.1529,  59.1498,  2.27], // Caph β Cas
-  [0.9453,  60.7167,  2.47], // Gamma Cas
-  // ── Magnitude 2.5–3.5 (constellation fill) ──
-  [1.4301,  60.2353,  2.68], // Ruchbah δ Cas
-  [1.9107,  20.8081,  2.64], // Sheratan β Ari
-  [13.9119,  18.3978,  2.68], // Muphrid η Boo
-  [21.5259,  -5.5711,  2.87], // Sadalsuud β Aqr
-  [19.7494,  45.1303,  2.87], // Delta Cyg δ Cyg
-  [0.2208,  15.1836,  2.83], // Algenib γ Peg
-  [3.7913,  24.1053,  2.85], // Alcyone η Tau (Pleiades)
-  [21.7839, -16.1272,  2.85], // Deneb Algedi δ Cap
-  [22.0962,  -0.3200,  2.96], // Sadalmelik α Aqr
-  [3.9641,  40.0103,  2.89], // Epsilon Per ε Per
-  [19.7711,  10.6133,  2.72], // Tarazed γ Aql
-  [10.3328,  19.8417,  2.01], // Algieba γ Leo
-  [19.5122,  27.9597,  3.05], // Albireo β Cyg
-  [1.9063,  63.6700,  3.35], // Segin ε Cas
-  [5.5875,   9.9344,  3.39], // Meissa λ Ori
-  [6.3825,  22.5136,  2.86], // Tejat μ Gem
-  [6.7322,  25.1311,  2.98], // Mebsuda ε Gem
-  [22.9107, -15.8208,  3.27], // Skat δ Aqr
-  [12.2569,  57.0322,  3.31], // Megrez δ UMa
-  [18.9822,  32.6894,  3.25], // Sulafat γ Lyr
-  [3.8193,  24.0514,  3.62], // Atlas 27 Tau (Pleiades)
-  [3.7043,  24.1133,  3.70], // Electra 17 Tau (Pleiades)
-  [3.0483,  53.5067,  2.93], // Gamma Per γ Per
-  [20.3506, -14.7816,  3.05], // Dabih β Cap
-  [20.6906,  45.2803,  3.21], // Zeta Cyg ζ Cyg
-  [4.9499,  33.1661,  2.69], // Hassaleh ι Aur
-  [5.9931,  37.2122,  2.62], // Theta Aur θ Aur
-];
-
-// Galactic (l, b) → ICRS equatorial (RA hours, Dec degrees)
-// Uses the IAU galactic-to-ICRS rotation matrix (transpose of equatorial-to-galactic).
-function galToEquatorial(l_deg: number, b_deg: number): { ra: number; dec: number } {
-  const D = Math.PI / 180;
-  const l = l_deg * D, b = b_deg * D;
-  const gx = Math.cos(b) * Math.cos(l);
-  const gy = Math.cos(b) * Math.sin(l);
-  const gz = Math.sin(b);
-  const x = -0.054875539 * gx + 0.494109454 * gy - 0.867666136 * gz;
-  const y = -0.873437105 * gx - 0.444829590 * gy - 0.198076390 * gz;
-  const z = -0.483834992 * gx + 0.746982249 * gy + 0.455983795 * gz;
-  let ra = Math.atan2(y, x) / D;
-  if (ra < 0) ra += 360;
-  return { ra: ra / 15, dec: Math.asin(Math.max(-1, Math.min(1, z))) / D };
-}
-
-// Static grid: galactic → equatorial + brightness, precomputed once at module load.
-// l and b are fixed constants, so RA/Dec never changes between renders.
-const MILKY_WAY_GRID = (() => {
-  const layers = [
-    { b:  0, r: 11, scale: 1.00 },
-    { b:  4, r:  8, scale: 0.55 },
-    { b: -4, r:  8, scale: 0.55 },
-    { b:  9, r:  5, scale: 0.22 },
-    { b: -9, r:  5, scale: 0.22 },
-  ];
-  const pts: { ra: number; dec: number; r: number; scale: number; brightness: number }[] = [];
-  for (const { b, r, scale } of layers) {
-    for (let l = 0; l < 360; l += 4) {
-      const { ra, dec } = galToEquatorial(l, b);
-      const lr = l * Math.PI / 180;
-      const brightness = Math.min(
-        0.28 + 0.62 * Math.max(0, Math.cos(lr))
-             + 0.38 * Math.max(0, Math.cos((l - 70) * Math.PI / 80)),
-        1
-      );
-      pts.push({ ra, dec, r, scale, brightness });
-    }
-  }
-  return pts;
-})();
-
-// ── Frozen sky render (stars / milky way / planets) ─────────────────────────
-// The painted sky intentionally ignores the clock and reacts only to the
-// observer's coordinates (same-day render, per commit 15744fa). Because its
-// inputs can't change without a location change, the ~1.1ms + ~8.4ms of Horizon
-// lookups are cached module-wide — re-entering the Kemet tab reuses the exact
-// same arrays instead of recomputing them on every remount. Bounded to 8
-// locations (far beyond the handful the app stores).
-interface StarDatum { x: number; y: number; r: number; opacity: number; glow: boolean }
-interface MilkyWayDatum { x: number; y: number; r: number; opacity: number }
-type PlanetDatum = (typeof PLANET_CONFIGS)[number] & { svgX: number; svgY: number };
-// Records (insertion-ordered) instead of Map — this module imports the `Map`
-// icon from lucide-react, which shadows the global Map constructor at this scope.
-const _starsCache: Record<string, StarDatum[]> = {};
-const _milkyWayCache: Record<string, MilkyWayDatum[]> = {};
-const _planetsCache: Record<string, PlanetDatum[]> = {};
-const _SKY_CACHE_MAX = 8;
-
-function skyCacheKey(lat: number, lng: number): string {
-  return `${lat.toFixed(4)},${lng.toFixed(4)}`;
-}
-
-function skyCache<T>(cache: Record<string, T>, key: string, compute: () => T): T {
-  const hit = cache[key];
-  if (hit) return hit;
-  const value = compute();
-  const keys = Object.keys(cache);
-  if (keys.length >= _SKY_CACHE_MAX) delete cache[keys[0]];
-  cache[key] = value;
-  return value;
-}
-
-function computeStars(date: Date, lat: number, lng: number): StarDatum[] {
-  const observer = new Observer(lat, lng, 0);
-  return STAR_CATALOG.flatMap(([ra, dec, mag]) => {
-    try {
-      const hz = Horizon(date, observer, ra, dec, 'normal');
-      if (hz.altitude < 0) return [];
-      const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-      const svgY = 165 - hz.altitude / 90 * 150;
-      if (svgX < 2 || svgX > 298 || svgY < 6 || svgY > 163) return [];
-      const r = Math.max(0.8, 2.8 - (mag + 1.5) * 0.42);
-      const opacity = Math.max(0.4, 0.95 - (mag + 1.5) * 0.10);
-      const glow = mag < 2.0;
-      return [{ x: svgX, y: svgY, r, opacity, glow }];
-    } catch { return []; }
-  });
-}
-
-function computeMilkyWay(date: Date, lat: number, lng: number): MilkyWayDatum[] {
-  const observer = new Observer(lat, lng, 0);
-  const pts: MilkyWayDatum[] = [];
-  for (const { ra, dec, r, scale, brightness } of MILKY_WAY_GRID) {
-    try {
-      const hz = Horizon(date, observer, ra, dec, 'normal');
-      if (hz.altitude < 2) continue;
-      const svgX = 150 + (hz.azimuth - 180) / 120 * 150;
-      const svgY = 165 - hz.altitude / 90 * 150;
-      if (svgX < 0 || svgX > 300 || svgY < 6 || svgY > 163) continue;
-      pts.push({ x: svgX, y: svgY, r, opacity: brightness * scale * 0.11 });
-    } catch { /* below horizon */ }
-  }
-  return pts;
-}
-
-function computePlanets(date: Date, lat: number, lng: number): PlanetDatum[] {
-  return PLANET_CONFIGS.flatMap(cfg => {
-    const pos = getPlanetPosition(cfg.body, date, lat, lng);
-    if (pos.altitude < 0) return [];
-    return [{
-      ...cfg,
-      svgX: Math.max(14, Math.min(286, 150 + (pos.azimuth - 180) / 90 * 120)),
-      svgY: Math.max(14, Math.min(165, 165 - pos.altitude / 90 * 150)),
-    }];
-  });
-}
-
-function getSkyRender(date: Date, lat: number, lng: number) {
-  const key = skyCacheKey(lat, lng);
-  return {
-    stars: skyCache(_starsCache, key, () => computeStars(date, lat, lng)),
-    milkyWay: skyCache(_milkyWayCache, key, () => computeMilkyWay(date, lat, lng)),
-    planets: skyCache(_planetsCache, key, () => computePlanets(date, lat, lng)),
-  };
-}
+import { getSunTimes } from '../utils/solar';
+import EgyptianStarMap from './EgyptianStarMap';
 
 const FestivalIcon = ({ name, className }: { name?: string; className?: string }) => {
   if (!name) return null;
@@ -360,17 +128,6 @@ const LotusFreizeBorder: React.FC<{ id: string }> = ({ id }) => (
     <rect x="0" y="0" width="100%" height="36" fill={`url(#${id})`} />
   </svg>
 );
-
-// ─── Sky gradient by hour ────────────────────────────────────────────────────
-const getSkyGradient = (hour: number): string => {
-  if (hour < 5 || hour >= 21)
-    return 'linear-gradient(to bottom, #030108 0%, #0a0418 45%, #1a0e05 80%, #2a1808 100%)';
-  if (hour < 7)
-    return 'linear-gradient(to bottom, #0a0205 0%, #5a1200 25%, #c0500a 55%, #e88020 80%, #f5c060 100%)';
-  if (hour < 18)
-    return 'linear-gradient(to bottom, #1a3a6e 0%, #2460a0 30%, #b08030 65%, #e8c070 85%, #f5dca0 100%)';
-  return 'linear-gradient(to bottom, #1a0802 0%, #6a1500 30%, #c04010 60%, #e07020 85%, #f0b050 100%)';
-};
 
 // ─── Section header ──────────────────────────────────────────────────────────
 const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -548,7 +305,12 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
     return d.getTime();
   })();
 
-  const egyptianDate = useMemo(() => getEgyptianDate(new Date(dayKey)), [dayKey]);
+  // The Egyptian civil day begins at sunrise (same anchor as calculateEgyptianTime
+  // and EgyptianClock), so before sunrise the previous day's date is shown.
+  const egyptianDayKey = lat != null && lng != null
+    ? getEgyptianDayAnchor(currentDate, lat, lng).getTime()
+    : dayKey;
+  const egyptianDate = useMemo(() => getEgyptianDate(new Date(egyptianDayKey)), [egyptianDayKey]);
 
   // Sopdet heliacal event: depends on the year + coordinates (cached in egyptianAstronomy.ts).
   const sopdet = useMemo(
@@ -571,22 +333,18 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
   const skylineDay = Math.floor((currentDate ?? new Date()).getTime() / 86400000);
   const skylineElements = useMemo(() => generateEgyptianSkyline(skylineDay), [skylineDay]);
 
-  // Frozen sky render — module-cached per coordinates, so it is computed once
-  // per location (not per render, per clock tick, or per tab remount).
-  const skyRender = lat != null && lng != null ? getSkyRender(currentDate, lat, lng) : null;
-  const stars = skyRender?.stars ?? [];
-  const milkyWay = skyRender?.milkyWay ?? [];
-  const visiblePlanets = skyRender?.planets ?? [];
-
+  const sunTimes = useMemo(
+    () => (lat != null && lng != null ? getSunTimes(currentDate, lat, lng) : null),
+    [dayKey, lat, lng],
+  );
   const isNightMemo = useMemo(() => {
-    if (lat != null && lng != null) {
-      const { sunrise, sunset } = getSunTimes(currentDate, lat, lng);
+    if (sunTimes) {
       const t = currentDate.getTime();
-      return t < sunrise.getTime() || t >= sunset.getTime();
+      return t < sunTimes.sunrise.getTime() || t >= sunTimes.sunset.getTime();
     }
     const h = currentDate.getHours();
     return h < 6 || h >= 20;
-  }, [currentDate, lat, lng]);
+  }, [currentDate, sunTimes]);
 
   const weatherCond = weather?.current.condition ?? 'clear';
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
@@ -617,11 +375,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
     civilFestivals, lunarFestivals, isNewMoon, isFullMoon, hasAstroAlerts,
   } = derived;
 
-  const hour = currentDate.getHours();
   const isNight = isNightMemo;
-  const skyGradient = isNight
-    ? 'linear-gradient(to bottom, #030108 0%, #0a0418 45%, #1a0e05 80%, #2a1808 100%)'
-    : getSkyGradient(hour);
 
   return (
     <>
@@ -642,81 +396,24 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
           className="relative w-full overflow-hidden border-b-2"
           style={{ aspectRatio: '16/9', borderColor: 'rgba(24,64,160,0.35)' }}
         >
-          {/* Sky gradient */}
-          <div className="absolute inset-0 transition-all duration-1000" style={{ background: skyGradient }} />
+          {/* Layers: star map (z-0, owns horizontal drag) → skyline → weather → text.
+              Everything above the star map is pointer-events:none so drags reach it. */}
+          {sunTimes ? (
+            <EgyptianStarMap
+              date={currentDate}
+              lat={lat!}
+              lng={lng!}
+              isDay={!isNight}
+              sunrise={sunTimes.sunrise}
+              sunset={sunTimes.sunset}
+              horizon={0.9}
+            />
+          ) : (
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, #010408 0%, #040c18 55%, #0c0804 100%)' }} />
+          )}
 
-          {/* Stars + planets + weather effects */}
+          {/* Weather effects */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <filter id="planet-glow-info" x="-80%" y="-80%" width="260%" height="260%">
-                <feGaussianBlur stdDeviation="1.5" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-              <filter id="star-glow-info" x="-150%" y="-150%" width="400%" height="400%">
-                <feGaussianBlur stdDeviation="1.2" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-              <filter id="milky-way-blur" x="-60%" y="-60%" width="220%" height="220%">
-                <feGaussianBlur stdDeviation="5.5" />
-              </filter>
-              <clipPath id="jup-clip-info"><circle r="5" /></clipPath>
-            </defs>
-            {isNight && milkyWay.length > 0 && (
-              <g filter="url(#milky-way-blur)">
-                {milkyWay.map((pt, i) => (
-                  <circle key={i} cx={pt.x} cy={pt.y} r={pt.r} fill="#c4d8f8" opacity={pt.opacity} />
-                ))}
-              </g>
-            )}
-            {isNight && (
-              <g>
-                {stars.map((s, i) => (
-                  <circle
-                    key={i} cx={s.x} cy={s.y} r={s.r}
-                    fill="#fff" opacity={s.opacity}
-                    filter={s.glow ? 'url(#star-glow-info)' : undefined}
-                  />
-                ))}
-              </g>
-            )}
-            {visiblePlanets.map(p => (
-              <g key={p.name} transform={`translate(${p.svgX}, ${p.svgY})`}>
-                <title>{p.name}</title>
-                {p.name === 'Sobek' ? <>
-                  {/* Saturn — disc + ring */}
-                  <circle r="9" fill="#ffcc66" opacity="0.07" />
-                  <path d="M -8 0 A 8 2.5 0 0 0 8 0" fill="none" stroke="#c8a040" strokeWidth="1.2" opacity="0.5" />
-                  <circle r="4" fill="#f0e8c0" />
-                  <path d="M -8 0 A 8 2.5 0 0 1 8 0" fill="none" stroke="#d4aa44" strokeWidth="1.5" opacity="0.9" />
-                </> : p.name === 'Amun' ? <>
-                  {/* Jupiter — banded disc */}
-                  <circle r="8" fill="#fffff0" opacity="0.07" />
-                  <circle r="5" fill="#e8d9a0" />
-                  <g clipPath="url(#jup-clip-info)">
-                    <rect x="-5" y="-2.5" width="10" height="1.5" fill="#c87030" opacity="0.65" />
-                    <rect x="-5" y="0.5"  width="10" height="1"   fill="#a05020" opacity="0.50" />
-                    <rect x="-5" y="-4.5" width="10" height="1"   fill="#c07030" opacity="0.40" />
-                  </g>
-                  <circle r="5" fill="none" stroke="#fffff0" strokeWidth="0.4" opacity="0.4" />
-                </> : p.name === 'Nit' ? <>
-                  {/* Venus — brilliant */}
-                  <circle r="8"  fill="#ffffff" opacity="0.05" />
-                  <circle r="5"  fill="#ffffff" opacity="0.10" />
-                  <circle r="3.5" fill="#f8f8ff" />
-                  <circle r="3.5" fill="none" stroke="#ffffff" strokeWidth="0.5" opacity="0.6" />
-                  <line x1="0" y1="-5"  x2="0" y2="-8"  stroke="#ffffff" strokeWidth="0.5" opacity="0.5" />
-                  <line x1="0" y1="5"   x2="0" y2="8"   stroke="#ffffff" strokeWidth="0.5" opacity="0.5" />
-                  <line x1="-5"  y1="0" x2="-8"  y2="0" stroke="#ffffff" strokeWidth="0.5" opacity="0.5" />
-                  <line x1="5"   y1="0" x2="8"   y2="0" stroke="#ffffff" strokeWidth="0.5" opacity="0.5" />
-                </> : <>
-                  {/* Mars (Hor) — red disc */}
-                  <circle r="8.5" fill="#ff4040" opacity="0.08" />
-                  <circle r="5.5" fill="#e03030" opacity="0.20" />
-                  <circle r="4.5" fill="#e03030" />
-                  <circle r="4.5" fill="none" stroke="#ff8080" strokeWidth="0.5" opacity="0.5" />
-                </>}
-              </g>
-            ))}
             {weatherCond !== 'clear' && (
               <WeatherSvgEffects
                 condition={weatherCond}
@@ -733,7 +430,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
           {/* Egyptian skyline */}
           <svg
-            className="absolute bottom-0 left-0 w-full"
+            className="absolute bottom-0 left-0 w-full pointer-events-none"
             viewBox="0 0 300 200"
             preserveAspectRatio="xMidYMax meet"
             style={weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
@@ -757,7 +454,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
           </svg>
 
           {/* Text overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-center px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+          <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center gap-0.5 text-center px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
             <div style={{ fontSize: 'clamp(2.2rem, 9vw, 4rem)', lineHeight: 1, color: 'rgba(238,228,200,0.55)' }}>
               {egyptianDate.seasonHieroglyphic}
             </div>

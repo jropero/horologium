@@ -28,17 +28,18 @@
 ## 🏛️ Características Destacadas
 
 ### 🌍 Civilizaciones (Multimodal)
-- **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus, ciclo de nundinas y año *Ab Urbe Condita*.
-- **Hellas (Chronos)**: Calendario Ático completo con meses lunares, sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) y alertas de días nefastos (Apaphrades).
+- **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus (incluido el *bis sextum* de los años bisiestos y el calendario juliano para fechas anteriores a 1582), ciclo de nundinas y año *Ab Urbe Condita*.
+- **Hellas (Chronos)**: Calendario Ático completo con meses lunares (el día empieza al ocaso y cada mes con la primera luna creciente visible desde tu ubicación), sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) y alertas de días nefastos (Apaphrades).
 - **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, festivales sagrados, **salida helíaca de Sopdet** (Sirio) y **Nilómetro dinámico** con niveles históricos.
-- **Babylonia (Ishtar)**: Calendario lunisolar babilónico con Era Seléucida, meses Nisannu–Addaru, ciclo metónico de intercalación, guardia nocturna (maṣṣartu), días sagrados (Šapaṭu/día 15) y friso decorativo de la Puerta de Ishtar.
-- **Zhongguo (中国)**: Calendario lunisolar chino con los 24 Términos Solares (二十四节气), las Doce Ramas Terrestres (地支) como marco de horas, el ciclo sexagesimal de los Cuatro Pilares (bāzì), el zodíaco de los 12 animales y la rueda del ciclo sexagenario del año.
+- **Babylonia (Ishtar)**: Calendario lunisolar babilónico con Era Seléucida, meses Nisannu–Addaru que empiezan al ocaso con la primera luna creciente visible desde tu ubicación, ciclo metónico de intercalación, guardia nocturna (maṣṣartu), días sagrados (Šapaṭu/día 15) y friso decorativo de la Puerta de Ishtar.
+- **Zhongguo (中国)**: Calendario lunisolar chino con los 24 Términos Solares (二十四节气), las Doce Ramas Terrestres (地支) como marco de horas, el ciclo sexagesimal (干支) del año, el mes y el día lunares (calculados en hora de China, UTC+8), el zodíaco de los 12 animales y la rueda del ciclo sexagenario del año.
 
 ### 🎨 Experiencia Visual y Estética
 - **Diseño Mobile-First**: Barra de navegación inferior persistente para cambios rápidos de cultura y selector de tema dinámico optimizado para móviles.
 - **Dualitas Thematis**: Soporte para modo oscuro profundo y un **Modo Pergamino** (claro) que evoca manuscritos antiguos.
 - **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas, obeliscos egipcios o ziggurats babilónicos según la civilización activa.
-- **Cielos Astronómicos**: Escenas nocturnas por civilización con posiciones reales de estrellas y Luna —incluida la Vía Láctea egipcia— y efectos meteorológicos dinámicos (lluvia, nieve, niebla).
+- **Cielos Astronómicos**: Escenas nocturnas por civilización con posiciones reales de estrellas y Luna y efectos meteorológicos dinámicos (lluvia, nieve, niebla).
+- **Mapa Estelar Egipcio (360°)**: El cielo del encabezado egipcio es un panorama arrastrable de todo el horizonte, calculado para la ubicación y la hora (también en el viaje temporal). Muestra Sopdet (Sirio), el Ojo de Horus (Algol, atenuado durante su eclipse), Sah (Orión), Meskhetyu (la Osa Mayor), el cuerpo de Nut (Vía Láctea), Iah (la Luna con su fase real), Ra y los cinco planetas con sus nombres egipcios. Un botón alterna con el **cielo completo** (2851 estrellas hasta magnitud 5.5); de día solo quedan el Sol y los planetas, con transición en el crepúsculo.
 - **Accesibilidad WCAG AA**: Diseño optimizado para alta legibilidad con contrastes auditados y tipografía premium.
 
 ### 🕰️ Cronometría y Astronomía Avanzada
@@ -66,8 +67,9 @@
 - **Styling**: Tailwind CSS 4 (motor de alto rendimiento).
 - **Build Tool**: Vite 6 con soporte PWA.
 - **Mobile**: Capacitor 8 para empaquetado nativo en Android.
-- **Geometría**: SVG dinámicos para el reloj y el skyline procedimental.
-- **Cálculo**: Algoritmos astronómicos de precisión para fases lunares y ciclos estelares.
+- **Geometría**: SVG dinámicos para el reloj y el skyline procedimental; Canvas 2D para el mapa estelar egipcio.
+- **Cálculo**: Algoritmos astronómicos de precisión para fases lunares y ciclos estelares ([astronomy-engine](https://github.com/cosinekitty/astronomy)).
+- **Datos estelares**: Catálogo de Estrellas Brillantes de Yale, vía [d3-celestial](https://github.com/ofrohn/d3-celestial) (BSD-3-Clause).
 
 ## 🚀 Instalación y Desarrollo
 

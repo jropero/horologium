@@ -65,8 +65,10 @@ export const PLANETARY_HOURS_ORDER = [
 
 const DAY_START_INDEX = [3, 6, 2, 5, 1, 4, 0];
 
-export const getPlanetaryRuler = (currentRomanHour: number, isDay: boolean, date: Date): string => {
-  const dayOfWeek = date.getDay();
+// `date` is the sunrise that opened the planetary day; with `lng` its weekday is
+// taken at the observer's mean local solar time (independent of device timezone).
+export const getPlanetaryRuler = (currentRomanHour: number, isDay: boolean, date: Date, lng?: number): string => {
+  const dayOfWeek = lng === undefined ? date.getDay() : new Date(date.getTime() + lng * 240000).getUTCDay();
   const startIndex = DAY_START_INDEX[dayOfWeek];
   let hoursPassed = currentRomanHour - 1;
   if (!isDay) hoursPassed += 12;
@@ -120,18 +122,84 @@ export const getZodiacSign = (date: Date): string => {
   return "Piscibus";                                                      // Pisces (Abl. pl.)
 };
 
+// ── Civil date in the calendar the Romans actually used ───────────────────────
+// JS Dates are proleptic Gregorian. Before the Gregorian reform (15 Oct 1582,
+// JDN 2299161) the Roman date must be computed from the Julian calendar date,
+// whose leap rule (every 4th year) also differs from the Gregorian one.
+export interface CivilDateParts {
+  year: number;
+  month: number; // 0-11
+  day: number;   // 1-31
+  isJulian: boolean;
+}
+
+const GREGORIAN_REFORM_JDN = 2299161;
+
+const gregorianToJDN = (y: number, m1: number, d: number): number => {
+  const a = Math.floor((14 - m1) / 12);
+  const yy = y + 4800 - a;
+  const mm = m1 + 12 * a - 3;
+  return d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4)
+    - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+};
+
+const jdnToJulian = (jdn: number): { year: number; month: number; day: number } => {
+  const c = jdn + 32082;
+  const d = Math.floor((4 * c + 3) / 1461);
+  const e = c - Math.floor((1461 * d) / 4);
+  const m = Math.floor((5 * e + 2) / 153);
+  return {
+    day: e - Math.floor((153 * m + 2) / 5) + 1,
+    month: m + 3 - 12 * Math.floor(m / 10) - 1,
+    year: d - 4800 + Math.floor(m / 10),
+  };
+};
+
+/** Local civil date parts, converted to the Julian calendar before 1582-10-15. */
+export const getCivilDateParts = (date: Date): CivilDateParts => {
+  const y = date.getFullYear(), m = date.getMonth(), d = date.getDate();
+  const jdn = gregorianToJDN(y, m + 1, d);
+  if (jdn >= GREGORIAN_REFORM_JDN) return { year: y, month: m, day: d, isJulian: false };
+  return { ...jdnToJulian(jdn), isJulian: true };
+};
+
+export const isCivilLeapYear = (parts: CivilDateParts): boolean =>
+  parts.isJulian
+    ? parts.year % 4 === 0
+    : (parts.year % 4 === 0 && parts.year % 100 !== 0) || parts.year % 400 === 0;
+
+const daysInCivilMonth = (parts: CivilDateParts): number => {
+  if (parts.month === 1) return isCivilLeapYear(parts) ? 29 : 28;
+  return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][parts.month];
+};
+
+/**
+ * Key into ROMAN_YEAR_DATA ("month-day", 0-based month) for a civil date.
+ * In leap years the bissextile day is the doubled a.d. VI Kal. Mar. Modern
+ * convention: 24 Feb = a.d. bis VI Kal. Mar. (served by the "1-29" Dies Bissextus
+ * entry), and 25-29 Feb take the entries of the common-year days 24-28
+ * (so Regifugium falls on 25 Feb and Equirria on 28 Feb).
+ */
+export const getRomanYearDataKey = (date: Date): string => {
+  const p = getCivilDateParts(date);
+  if (p.month === 1 && isCivilLeapYear(p)) {
+    if (p.day === 24) return '1-29';
+    if (p.day > 24) return `1-${p.day - 1}`;
+  }
+  return `${p.month}-${p.day}`;
+};
+
 export interface RomanDateResult {
   short: string;
   full: string;
 }
 
 export const getRomanDate = (date: Date): RomanDateResult => {
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
+  const civil = getCivilDateParts(date);
+  const { month, year } = civil;
+  let day = civil.day;
   const aucYear = year + 753;
-  const currentYear = date.getFullYear();
-  const indiction = getIndiction(currentYear);
+  const indiction = getIndiction(year);
 
   const isMarchMayJulyOct = [2, 4, 6, 9].includes(month);
   const nonesDate = isMarchMayJulyOct ? 7 : 5;
@@ -172,8 +240,17 @@ export const getRomanDate = (date: Date): RomanDateResult => {
   } else if (day === idesDate) {
     romanString = `Idibus ${MONTH_ABBREVS[month]}`;
     fullLatinString = `Idibus ${MONTH_NAMES_ABLATIVE[month]}`;
+  } else if (month === 1 && day === 24 && isCivilLeapYear(civil)) {
+    // Dies bissextus: the doubled sixth day before the Kalends of March
+    romanString = `a.d. bis VI Kal ${MONTH_ABBREVS[2]}`;
+    fullLatinString = `Ante diem bis sextum Kalendas ${MONTH_NAMES_ACCUSATIVE[2]}`;
   } else {
-    const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+    let lastDayOfMonth = daysInCivilMonth(civil);
+    if (month === 1 && lastDayOfMonth === 29) {
+      // After the bissextile day, count as in a common year (25 Feb = a.d. VI)
+      lastDayOfMonth = 28;
+      if (day > 24) day -= 1;
+    }
     const daysBefore = (lastDayOfMonth - day) + 1 + 1;
     const nextMonthIdx = (month + 1) % 12;
     refName = `Kal ${MONTH_ABBREVS[nextMonthIdx]}`;
@@ -211,8 +288,15 @@ const getVigilia = (romanHour: number): { name: string, desc: string } => {
   return { name: "Quarta Vigilia", desc: "Cuarta Guardia" };
 };
 
+/** Nundinal letter that marks the market day (nundinae) in this app's cycle. */
+export const NUNDINAE_LETTER = 'C';
+
 export const getNundinalLetter = (date: Date): string => {
-  const daysSinceEpoch = Math.floor(date.getTime() / (1000 * 60 * 60 * 24));
+  // Count whole days of the LOCAL civil date (the Roman day began at midnight),
+  // not UTC days, so the letter changes at local midnight in every timezone.
+  const utcMidnight = new Date(0);
+  utcMidnight.setUTCFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+  const daysSinceEpoch = Math.round(utcMidnight.getTime() / (1000 * 60 * 60 * 24));
   // Usamos módulo 8 para ciclar entre 0 y 7. El (+ 8) asegura que no haya negativos.
   const nundinalIndex = (daysSinceEpoch % 8 + 8) % 8;
   const nundinalLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -289,6 +373,13 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
   const baseTime = currentEvent.time;
   const endTime = nextEvent.time;
 
+  // Latest sunrise at or before the start of the current period: the sunrise
+  // that opened this planetary day (by night, the sunrise before this sunset).
+  const prevSunrise = isDay
+    ? baseTime
+    : [...points].reverse().find(p => p.type === 'sunrise' && p.time < baseTime)?.time
+      || new Date(baseTime.getTime() - 12 * 3600 * 1000);
+
   let nextSunriseDisplay = endTime;
   if (isDay) {
     const nextSr = points.find((p, idx) => idx > points.indexOf(nextEvent) && p.type === 'sunrise');
@@ -326,20 +417,22 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
     isDay,
     hourName,
     hourLengthMinutes,
-    sunrise: isDay ? baseTime : points.find(p => p.type === 'sunrise' && p.time < baseTime)?.time || new Date(baseTime.getTime() - 12 * 3600 * 1000),
+    sunrise: prevSunrise,
     sunset: isDay ? endTime : baseTime,
     nextSunrise: nextSunriseDisplay,
     romanDateString: dateInfo.short,
     romanDateFull: dateInfo.full,
     moonPhase,
     moonPhaseLabel,
-    planetaryRuler: getPlanetaryRuler(romanHour, isDay, now),
+    // The planetary day runs sunrise to sunrise: night hours (incl. those after
+    // midnight) belong to the weekday of the preceding sunrise.
+    planetaryRuler: getPlanetaryRuler(romanHour, isDay, prevSunrise, lng),
     civilDayPart,
     vigilia,
     nundinalLetter,
-    isMarketDay: nundinalLetter === 'C',
+    isMarketDay: nundinalLetter === NUNDINAE_LETTER,
     dayOfWeek: LATIN_WEEKDAYS[now.getDay()],
-    indiction: getIndiction(now.getFullYear()),
+    indiction: getIndiction(getCivilDateParts(now).year),
     tutelaMensis: TUTELA_MENSIS[now.getMonth()],
     zodiacSign: getZodiacSign(now)
   };

@@ -28,17 +28,18 @@
 ## 🏛️ Virtutes Praecipuae
 
 ### 🌍 Gentes (Modi Multiplices)
-- **Roma (Fasti Romani)**: Ratio classica cum Kalendis, Nonis et Idibus, cyclo nundinarum et anno *Ab Urbe Condita*.
-- **Hellas (Chronos)**: Calendarium Atticum plenum cum mensibus lunaribus, ratione trium decadum conspicua, feriis cum fabulis originis (Aition) et monitionibus dierum nefastorum (Apaphrades).
+- **Roma (Fasti Romani)**: Ratio classica cum Kalendis, Nonis et Idibus (etiam die *bis sexto* annorum bissextilium et calendario Iuliano ante annum MDLXXXII), cyclo nundinarum et anno *Ab Urbe Condita*.
+- **Hellas (Chronos)**: Calendarium Atticum plenum cum mensibus lunaribus (dies ab occasu solis incipit, mensis a prima luna nova e loco tuo conspecta), ratione trium decadum conspicua, feriis cum fabulis originis (Aition) et monitionibus dierum nefastorum (Apaphrades).
 - **Aegyptus (Horus)**: Calendarium Alexandrinum cum tempestatibus (Akhet, Peret, Shemu), hemerologia Bonorum et Malorum, cyclo Algol (Oculus Hori), consecratione Apis, feriis sacris, **ortu heliaco Sopdet** (Sirius) et **Nilometro vivo** quod gradus historicos aquarum ostendit.
-- **Babylonia (Ishtar)**: Calendarium lunisolare Babylonicum cum Era Seleucida, mensibus Nisannu–Addaru, cyclo Metonico intercalationis, custodia nocturna (maṣṣartu), diebus sacris (Šapaṭu/dies 15) et fasciis decoris Portae Ishtar.
-- **Zhongguo (中国)**: Calendarium lunisolare Sinicum cum XXIV Terminis Solaribus (二十四节气), Duodecim Ramis Terrestribus (地支) ut mensura horarum, cyclo sexagesimali Quattuor Columnarum (bāzì), zodiaco duodecim animalium et rota cycli sexagenarii anni.
+- **Babylonia (Ishtar)**: Calendarium lunisolare Babylonicum cum Era Seleucida, mensibus Nisannu–Addaru qui ab occasu solis cum prima luna nova e loco tuo conspecta incipiunt, cyclo Metonico intercalationis, custodia nocturna (maṣṣartu), diebus sacris (Šapaṭu/dies 15) et fasciis decoris Portae Ishtar.
+- **Zhongguo (中国)**: Calendarium lunisolare Sinicum cum XXIV Terminis Solaribus (二十四节气), Duodecim Ramis Terrestribus (地支) ut mensura horarum, cyclo sexagesimali (干支) anni, mensis et diei lunaris (hora Sinica, UTC+8 computatis), zodiaco duodecim animalium et rota cycli sexagenarii anni.
 
 ### 🎨 Species et Elegantia
 - **Compositio Mobilibus Accommodata**: Fascia navigationis ima perpetua ad celeres gentium commutationes, et commutator thematis ad telephona aptatus.
 - **Dualitas Thematis**: Modus tenebrosus profundus atque **Modus Membraneus** (clarus) qui antiquos codices revocat.
 - **Prospectus Proceduralis**: Scaena viva quae templa Romana, acropoles Graecas, obeliscos Aegyptios vel ziggurata Babylonica secundum gentem activam modo procedurali gignit.
-- **Caela Astronomica**: Scaenae nocturnae secundum gentem cum veris positionibus stellarum et Lunae — inter quas Via Lactea Aegyptia — et effectibus tempestatum dynamicis (pluvia, nix, nebula).
+- **Caela Astronomica**: Scaenae nocturnae secundum gentem cum veris positionibus stellarum et Lunae et effectibus tempestatum dynamicis (pluvia, nix, nebula).
+- **Tabula Stellarum Aegyptia (360°)**: Caelum capitis Aegyptii est prospectus totius horizontis qui digito trahi potest, ad locum et horam computatus (etiam in itinere temporis). Ostendit Sopdet (Sirium), Oculum Hori (Algol, in eclipsi obscuratum), Sah (Orionem), Meskhetyu (Ursam Maiorem), corpus Nut (Viam Lacteam), Iah (Lunam cum vera phase), Ra et quinque planetas nominibus Aegyptiis. Globulus ad **caelum plenum** transit (2851 stellae usque ad magnitudinem 5.5); interdiu solum Sol et planetae manent, crepusculo transeunte.
 - **Accessibilitas WCAG AA**: Compositio ad summam legibilitatem aptata cum contrastibus probatis et typographia praestanti.
 
 ### 🕰️ Chronometria et Astronomia Subtilis
@@ -66,8 +67,9 @@
 - **Stilus**: Tailwind CSS 4 (machina summae celeritatis).
 - **Instrumentum Aedificandi**: Vite 6 cum sustentatione PWA.
 - **Mobile**: Capacitor 8 ad involucra nativa in Android.
-- **Geometria**: SVG viva ad horologium et scaenam proceduralem.
-- **Calculus**: Algorithmi astronomici summae accurationis pro phasibus lunaribus et cyclis stellaribus.
+- **Geometria**: SVG viva ad horologium et scaenam proceduralem; Canvas 2D ad tabulam stellarum Aegyptiam.
+- **Calculus**: Algorithmi astronomici summae accurationis pro phasibus lunaribus et cyclis stellaribus ([astronomy-engine](https://github.com/cosinekitty/astronomy)).
+- **Data Stellarum**: Catalogus Stellarum Clararum Yalensis, per [d3-celestial](https://github.com/ofrohn/d3-celestial) (BSD-3-Clause).
 
 ## 🚀 Quomodo Instituatur
 

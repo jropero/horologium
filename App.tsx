@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Menu, X, MapPin, CloudSun, Hourglass } from 'lucide-react';
 import RomanClock from './components/RomanClock';
-import EgyptianClock from './components/EgyptianClock';
-import ChineseClock from './components/ChineseClock'; // Added
-import BabylonianClock from './components/BabylonianClock';
 import PlanetaryPositions from './components/PlanetaryPositions';
-import BabylonianCalendarInfo from './components/BabylonianCalendarInfo';
 import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
@@ -19,7 +15,6 @@ import { getSunTimes } from './utils/solar';
 import { useWeather } from './hooks/useWeather';
 import RomanCalendarInfo from './components/RomanCalendarInfo';
 import HellenicCalendarInfo from './components/HellenicCalendarInfo';
-import EgyptianCalendarInfo from './components/EgyptianCalendarInfo';
 import SententiaDiei from './components/SententiaDiei';
 import LocationSelector from './components/LocationSelector';
 import ProvinciaInfo from './components/ProvinciaInfo';
@@ -28,11 +23,18 @@ import SortesVergilianae from './components/SortesVergilianae';
 import OvidianLore from './components/OvidianLore';
 import LocationModal from './components/LocationModal';
 import DateTimePicker from './components/DateTimePicker';
-import CivilCalendarDatePicker from './components/CivilCalendarDatePicker';
 import { LOCATIONS, getTimezoneForLocation } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import { CivilizationProvider, useCivilization } from './contexts/CivilizationContext';
+
+// Non-Roman civilizations are split into their own chunks, loaded on first switch
+const EgyptianClock = lazy(() => import('./components/EgyptianClock'));
+const ChineseClock = lazy(() => import('./components/ChineseClock'));
+const BabylonianClock = lazy(() => import('./components/BabylonianClock'));
+const EgyptianCalendarInfo = lazy(() => import('./components/EgyptianCalendarInfo'));
+const BabylonianCalendarInfo = lazy(() => import('./components/BabylonianCalendarInfo'));
+const CivilCalendarDatePicker = lazy(() => import('./components/CivilCalendarDatePicker'));
 
 // Default to Basilea
 const DEFAULT_LAT = 47.5632;
@@ -101,8 +103,6 @@ const AppContent: React.FC = () => {
   // Update modern time every 15 seconds. Paused when time-traveling.
   useEffect(() => {
     if (isTimeTraveling) return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('date')) return;
 
     const timer = setInterval(() => {
       setModernTime(new Date());
@@ -184,6 +184,12 @@ const AppContent: React.FC = () => {
   };
 
   const returnToLive = () => {
+    // Drop a ?date= deep link so a reload stays in the present
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('date')) {
+      url.searchParams.delete('date');
+      window.history.replaceState(null, '', url);
+    }
     setIsTimeTraveling(false);
     setModernTime(new Date());
   };
@@ -288,20 +294,25 @@ const AppContent: React.FC = () => {
         />
       )}
       {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
-        <EgyptianCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} weather={effectiveWeather} />
+        <Suspense fallback={null}>
+          <EgyptianCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} weather={effectiveWeather} />
+        </Suspense>
       )}
 
       {civilization !== 'zhongguo' && civilization === 'babylonia' && (
-        <BabylonianCalendarInfo
-          currentDate={modernTime}
-          weather={effectiveWeather}
-          currentLat={latitude}
-          currentLng={longitude}
-        />
+        <Suspense fallback={null}>
+          <BabylonianCalendarInfo
+            currentDate={modernTime}
+            weather={effectiveWeather}
+            currentLat={latitude}
+            currentLng={longitude}
+          />
+        </Suspense>
       )}
 
       {romanTimeData && (
         <div className="w-full max-w-2xl mx-auto">
+          <Suspense fallback={null}>
           {civilization === 'aegyptus' ? (
             <EgyptianClock
               modernTime={modernTime}
@@ -336,11 +347,12 @@ const AppContent: React.FC = () => {
               isTimeTraveling={isTimeTraveling}
             />
           )}
+          </Suspense>
         </div>
       )}
 
       {civilization !== 'zhongguo' && civilization === 'rome' ? (
-        <RomanCalendarInfo currentDate={modernTime} />
+        <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
       ) : null}
 
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && todaysSunTimes && romanTimeData && (
@@ -393,6 +405,7 @@ const AppContent: React.FC = () => {
         currentLng={longitude}
       />
 
+      <Suspense fallback={null}>
       {travelModalOpen && (
         civilization === 'hellas' || civilization === 'aegyptus' || civilization === 'babylonia' ? (
           <CivilCalendarDatePicker
@@ -413,6 +426,7 @@ const AppContent: React.FC = () => {
           />
         )
       )}
+      </Suspense>
 
       {isWeatherSelectorOpen && (
         <div

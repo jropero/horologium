@@ -1,9 +1,20 @@
-import { getSolarLongitudeDeg, prevNewMoonJDE, nextNewMoonJDE, winterSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
+import { getSolarLongitudeDeg, prevNewMoonJDE, winterSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
 
 const DAY_MS = 86400000;
+// The Chinese calendar is reckoned in China Standard Time (UTC+8): new-moon
+// days, the winter-solstice day and the 中气 test all use CST civil days,
+// independent of the device timezone.
+const CST_OFFSET_MS = 8 * 3600000;
 
-const toJD = (d: Date): number => d.getTime() / DAY_MS + 2440587.5;
-const fromJD = (jd: number): Date => new Date((jd - 2440587.5) * DAY_MS);
+const toJD = (ms: number): number => ms / DAY_MS + 2440587.5;
+const jdToMs = (jd: number): number => (jd - 2440587.5) * DAY_MS;
+
+/** CST civil day number (days since 1970-01-01 in UTC+8) of an instant. */
+const cstDayOf = (ms: number): number => Math.floor((ms + CST_OFFSET_MS) / DAY_MS);
+/** UTC instant at which a CST civil day begins. */
+const cstDayStartMs = (day: number): number => day * DAY_MS - CST_OFFSET_MS;
+/** YYYY-MM-DD of a CST civil day. */
+const cstDayISO = (day: number): string => new Date(day * DAY_MS).toISOString().slice(0, 10);
 
 // Major solar term angles (中气) at each 30° of ecliptic longitude
 const MAJOR_TERM_ANGLES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
@@ -101,43 +112,77 @@ export interface ChineseLunisolarDate {
   displayDate: string;
 }
 
-// Find the local calendar day (midnight) of the true new moon conjunction
-// on or before the given date (includes the full day of `date`).
-const findNewMoon = (date: Date): Date => {
-  const nmJDE = prevNewMoonJDE(toJD(date) + 1.0);
-  const d = fromJD(nmJDE);
-  d.setHours(0, 0, 0, 0);
+// ---- Lunation helpers (all in CST civil days) ----
+
+/** CST day on which lunation k's conjunction falls. */
+const nmDayCache = new Map<number, number>();
+const newMoonDay = (k: number): number => {
+  let d = nmDayCache.get(k);
+  if (d === undefined) {
+    d = cstDayOf(jdToMs(trueNewMoonJDE(k)));
+    nmDayCache.set(k, d);
+  }
   return d;
 };
 
-// Find the next new moon day strictly after `date` (which is itself a NM day).
-const findNextNewMoon = (date: Date): Date => {
-  const curJDE = prevNewMoonJDE(toJD(date) + 1.0);
-  const nextJDE = nextNewMoonJDE(curJDE);
-  const d = fromJD(nextJDE);
-  d.setHours(0, 0, 0, 0);
-  return d;
+/** Lunation index k of the month containing CST day `day` (conjunction on or before that day). */
+const lunationOnOrBefore = (day: number): number => {
+  // Search up to the END of the CST day (start of the next one), not 24 h past the moment.
+  const nmJDE = prevNewMoonJDE(toJD(cstDayStartMs(day + 1)) - 1e-9);
+  let k = kForJDE(nmJDE);
+  // Guard against index/day disagreement at the boundaries.
+  while (newMoonDay(k) > day) k--;
+  while (newMoonDay(k + 1) <= day) k++;
+  return k;
 };
 
-// Check if a lunar month interval [start, end) contains any major solar term (中气)
-const intervalContainsMajorTerm = (start: Date, end: Date): boolean => {
-  const startLon = getSolarLongitudeDeg(start);
-  const endLon = getSolarLongitudeDeg(end);
+/** Does the lunar month [startDay, endDay) contain a major solar term (中气) on a CST day inside it? */
+const monthContainsMajorTerm = (startDay: number, endDay: number): boolean => {
+  const startLon = getSolarLongitudeDeg(new Date(cstDayStartMs(startDay)));
+  const endLon = getSolarLongitudeDeg(new Date(cstDayStartMs(endDay)));
   const diff = ((endLon - startLon) % 360 + 360) % 360;
-
   for (const angle of MAJOR_TERM_ANGLES) {
     const angleDist = ((angle - startLon) % 360 + 360) % 360;
-    if (angleDist > 1e-8 && angleDist < diff) return true;
+    if (angleDist < diff) return true;
   }
   return false;
 };
 
-// Winter solstice day (Meeus Table 27.a, December solstice).
-const findWinterSolstice = (year: number): Date => {
-  const d = fromJD(winterSolsticeJDE(year));
-  d.setHours(0, 0, 0, 0);
-  return d;
+interface MonthLabel { k: number; month: number; leap: boolean }
+interface SuiLayout { k11: number; kNext11: number; months: MonthLabel[]; kNewYear: number }
+
+/**
+ * Layout of the 岁 (sui) from month 11 of Gregorian year y (the month containing the
+ * December solstice) up to, but excluding, the next month 11.
+ */
+const suiCache = new Map<number, SuiLayout>();
+const getSui = (y: number): SuiLayout => {
+  const cached = suiCache.get(y);
+  if (cached) return cached;
+  const m11K = (yy: number) => lunationOnOrBefore(cstDayOf(jdToMs(winterSolsticeJDE(yy))));
+  const k11 = m11K(y);
+  const kNext11 = m11K(y + 1);
+  const hasLeap = kNext11 - k11 > 12;
+  const months: MonthLabel[] = [{ k: k11, month: 11, leap: false }];
+  let m = 11;
+  let leapDone = !hasLeap;
+  for (let k = k11 + 1; k < kNext11; k++) {
+    if (!leapDone && !monthContainsMajorTerm(newMoonDay(k), newMoonDay(k + 1))) {
+      months.push({ k, month: m, leap: true });
+      leapDone = true;
+      continue;
+    }
+    m = m % 12 + 1;
+    months.push({ k, month: m, leap: false });
+  }
+  const kNewYear = months.find(x => x.month === 1 && !x.leap)!.k;
+  const layout = { k11, kNext11, months, kNewYear };
+  suiCache.set(y, layout);
+  return layout;
 };
+
+/** Lunation index of 正月初一 of Gregorian year Y (it always falls in the sui of Y-1). */
+const newYearK = (Y: number): number => getSui(Y - 1).kNewYear;
 
 // --- Public API ---
 
@@ -160,14 +205,16 @@ const getMonthStemBranch = (yearStemIndex: number, chineseMonth: number) => {
   return {
     stem: HEAVENLY_STEMS[stemIdx],
     branch: EARTHLY_BRANCHES[branchIdx],
+    stemIndex: stemIdx,
+    branchIndex: branchIdx,
     display: `${HEAVENLY_STEMS[stemIdx]}${EARTHLY_BRANCHES[branchIdx]}`
   };
 };
 
-const getDayStemBranch = (date: Date) => {
-  // Reference: 2000-01-01 midnight (JD floor 2451544) = 甲午日 (cycle 30)
-  const jd = date.getTime() / DAY_MS - 0.5 + 2440588;
-  const cycle = ((Math.floor(jd) - 2451544 + 30) % 60 + 60) % 60;
+const getDayStemBranch = (cstDay: number) => {
+  // JDN of the CST civil date; day index = (JDN + 49) mod 60, 0 = 甲子.
+  // Check: 2000-01-01 (JDN 2451545) = 54 = 戊午.
+  const cycle = ((cstDay + 2440588 + 49) % 60 + 60) % 60;
   const stem = HEAVENLY_STEMS[cycle % 10];
   const branch = EARTHLY_BRANCHES[cycle % 12];
   return {
@@ -179,99 +226,38 @@ const getDayStemBranch = (date: Date) => {
 };
 
 export const getChineseLunisolarDate = (date: Date): ChineseLunisolarDate => {
-  const year = date.getFullYear();
-  const winterSolstice = findWinterSolstice(year);
-  const m11Start = findNewMoon(winterSolstice);
+  const day = cstDayOf(date.getTime());
+  const kNow = lunationOnOrBefore(day);
 
-  // Determine which month-11 anchor to use
-  let ws = winterSolstice;
-  let m11 = m11Start;
+  // Pick the sui (month-11 to month-11 span) that contains today.
+  let y = new Date(day * DAY_MS).getUTCFullYear();
+  let sui = getSui(y);
+  while (kNow < sui.k11) sui = getSui(--y);
+  while (kNow >= sui.kNext11) sui = getSui(++y);
 
-  if (date < m11) {
-    // Try previous year's winter solstice
-    ws = findWinterSolstice(year - 1);
-    m11 = findNewMoon(ws);
+  const label = sui.months[kNow - sui.k11];
+  const chineseMonth = label.month;
+  const isLeapMonth = label.leap;
 
-    if (date < m11) {
-      ws = findWinterSolstice(year - 2);
-      m11 = findNewMoon(ws);
-    }
-  }
-
-  // Find the current new moon (start of our lunar month)
-  const currentNM = findNewMoon(date);
-
-  // Exact lunation counting via Meeus k-indices (no rounding error).
-  const k_m11 = kForJDE(prevNewMoonJDE(toJD(m11) + 1.0));
-  const k_current = kForJDE(prevNewMoonJDE(toJD(currentNM) + 1.0));
-  const lunations = k_current - k_m11;
-
-  // CNY: 2nd new moon after month-11 (true conjunction time via Meeus).
-  const cnyJDE = trueNewMoonJDE(k_m11 + 2);
-  const cnyDate = fromJD(cnyJDE);
-  cnyDate.setHours(0, 0, 0, 0);
-
-  // Leap year: exact lunation count between this m11 and the next.
-  const nextWS = findWinterSolstice(ws.getFullYear() + 1);
-  const nextM11 = findNewMoon(nextWS);
-  const k_nextM11 = kForJDE(prevNewMoonJDE(toJD(nextM11) + 1.0));
-  const lunationsInYear = k_nextM11 - k_m11;
-  const isLeapYear = lunationsInYear > 12;
-
-  // Determine month number accounting for leap months
-  let chineseMonth: number;
-  let isLeapMonth = false;
-
-  if (isLeapYear) {
-    // Generate all new moons from m11 to nextM11
-    const intervalNM: Date[] = [new Date(m11)];
-    for (let i = 0; i < lunationsInYear; i++) {
-      intervalNM.push(findNextNewMoon(intervalNM[i]));
-    }
-
-    // Find the first interval (after month 11) with no major term → leap month
-    let leapIndex = -1;
-    for (let i = 1; i < intervalNM.length - 1; i++) {
-      if (!intervalContainsMajorTerm(intervalNM[i], intervalNM[i + 1])) {
-        leapIndex = i;
-        break;
-      }
-    }
-
-    if (leapIndex < 0) {
-      chineseMonth = ((11 + lunations - 1) % 12 + 12) % 12 + 1;
-    } else if (lunations < leapIndex) {
-      chineseMonth = ((11 + lunations - 1) % 12 + 12) % 12 + 1;
-    } else {
-      chineseMonth = ((11 + lunations - 2) % 12 + 12) % 12 + 1;
-      if (lunations === leapIndex) isLeapMonth = true;
-    }
-  } else {
-    chineseMonth = ((11 + lunations - 1) % 12 + 12) % 12 + 1;
-  }
-
-  const lunarYear = (chineseMonth >= 1 && chineseMonth <= 10)
-    ? cnyDate.getFullYear()
-    : cnyDate.getFullYear() - 1;
+  // Lunar year: changes at 正月初一. sui.kNewYear is New Year of Gregorian year y+1.
+  const lunarYear = kNow >= sui.kNewYear ? y + 1 : y;
+  // Leap year = the lunar year (New Year to New Year) has 13 months.
+  const isLeapYear = newYearK(lunarYear + 1) - newYearK(lunarYear) > 12;
+  const cnyDisplay = cstDayISO(newMoonDay(sui.kNewYear));
 
   // Sexagenary cycles
   const yearSB = getYearStemBranch(lunarYear);
   const monthSB = getMonthStemBranch(yearSB.stemIndex, chineseMonth);
-  const daySB = getDayStemBranch(date);
+  const daySB = getDayStemBranch(day);
 
-  // Day of month (detect actual month length: 29 or 30 days)
-  const nextNM = findNextNewMoon(currentNM);
-  const monthLength = Math.round((nextNM.getTime() - currentNM.getTime()) / DAY_MS);
-  const dayDiff = Math.floor((date.getTime() - currentNM.getTime()) / DAY_MS);
-  const dayOfMonth = Math.min(Math.max(dayDiff + 1, 1), monthLength);
+  const dayOfMonth = day - newMoonDay(kNow) + 1;
 
-  const monthName = isLeapMonth ? `闰${CHINESE_MONTHS[(chineseMonth - 1 + 12) % 12]}` : CHINESE_MONTHS[(chineseMonth - 1 + 12) % 12];
+  const baseMonthName = CHINESE_MONTHS[(chineseMonth - 1 + 12) % 12];
+  const monthName = isLeapMonth ? `闰${baseMonthName}` : baseMonthName;
 
   // CHINESE_DAYS already has correct names for 1-30 (e.g. 廿九 for 29, 三十 for 30)
   const dayName = CHINESE_DAYS[dayOfMonth] || `${dayOfMonth}日`;
   const displayDate = `${yearSB.display}年${monthName}${dayName}`;
-
-  const cnyDisplay = `${cnyDate.getFullYear()}-${String(cnyDate.getMonth() + 1).padStart(2, '0')}-${String(cnyDate.getDate()).padStart(2, '0')}`;
 
   return {
     year: lunarYear,
@@ -286,8 +272,8 @@ export const getChineseLunisolarDate = (date: Date): ChineseLunisolarDate => {
     monthStem: monthSB.stem,
     monthBranch: monthSB.branch,
     monthStemBranch: monthSB.display,
-    monthStemIndex: ((yearSB.stemIndex * 2 + chineseMonth + 1) % 10 + 10) % 10,
-    monthBranchIndex: ((chineseMonth + 1) % 12 + 12) % 12,
+    monthStemIndex: monthSB.stemIndex,
+    monthBranchIndex: monthSB.branchIndex,
     dayNumber: dayOfMonth,
     dayName,
     dayStem: daySB.stem,

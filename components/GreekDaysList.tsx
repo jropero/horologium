@@ -7,6 +7,8 @@ import { translateGreekUI } from '../utils/greekTranslations';
 
 interface GreekDaysListProps {
   startDate: Date;
+  lat?: number;
+  lng?: number;
 }
 
 // Moon phase emoji helper
@@ -22,21 +24,21 @@ const moonEmoji = (phase: number) =>
  * falls, their festival. Formerly the body of `GreekCalendarModal`; folded into
  * the Greek page so the deity is visible without opening a modal.
  */
-const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate }) => {
+const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) => {
   const { labels } = useCivilization();
 
   const nextDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(startDate);
       d.setDate(d.getDate() + i);
-      const { atticDate, moonPhase } = getAtticDateForDisplay(d);
+      const { atticDate, moonPhase } = getAtticDateForDisplay(d, lat, lng);
       const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
       const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
       const dailyDeity = getDailyAtticDeity(atticDate.dayOfMonth, atticDate.monthLength);
 
       return { atticDate, moonPhase, festival, defaultDeity, dailyDeity };
     });
-  }, [startDate]);
+  }, [startDate, lat, lng]);
 
   return (
     <div className="w-full flex flex-col">

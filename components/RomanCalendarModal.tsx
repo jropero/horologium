@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { X, CalendarDays } from 'lucide-react';
-import { getRomanDate, getNundinalLetter, LATIN_WEEKDAYS } from '../utils/romanTimeUtils';
+import { getRomanDate, getNundinalLetter, NUNDINAE_LETTER, LATIN_WEEKDAYS } from '../utils/romanTimeUtils';
 import { getRomanDayInfo } from '../utils/romanCalendarData';
 import { OVID_MONTH_ETYMOLOGIES } from '../utils/ovidFastiData';
 
@@ -20,7 +20,7 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
       const info = getRomanDayInfo(d);
 
       const nundinalLetter = getNundinalLetter(d);
-      const isMarketDay = nundinalLetter === 'C'; // Usando 'C' basado en nuestra config temporal
+      const isMarketDay = nundinalLetter === NUNDINAE_LETTER;
       const dayOfWeek = LATIN_WEEKDAYS[d.getDay()];
 
       return {

@@ -1,49 +1,31 @@
 // atticCalendarUtils.ts — Lunisolar Attic calendar engine
 // Maps Gregorian dates to Attic equivalents using real lunar phases.
-// The Noumenia (1st of month) is the first day after New Moon.
-// The Attic year begins with Hekatombaion at the first New Moon
-// after the summer solstice.
+// The day runs from sunset to sunset. The Noumenia (1st of month) begins at the
+// sunset when the new crescent is first visible. The Attic year begins with
+// Hekatombaion, the first month starting on or after the summer solstice.
+// Month boundaries are computed for the observer's location (default: Athens).
+// Shared engine: utils/lunarCivilCalendar.ts.
 
-import { getMoonPhase, summerSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
+import { getMoonPhase, summerSolsticeJDE } from './solar';
 import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
 import { translateGreekUI } from './greekTranslations';
 import { getOlympiadYear } from './greekEra';
+import {
+  getLunarYearStart, getLunarYearMonths, civilDayStart, civilDaysBetween,
+  positionInYear, daytimeOfCivilDay,
+} from './lunarCivilCalendar';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
-const SYNODIC_MONTH = 29.530588853;
+// Fallback observer for callers without a location (the Attic calendar was
+// Athens' civil calendar). The live clock, hero, day list and date picker pass
+// the user's coordinates instead.
+export const ATHENS_LAT = 37.9838;
+export const ATHENS_LNG = 23.7275;
 
-// ─── Julian Day helpers ───────────────────────────────────────────────────────
+// Moon age (days) at which the new crescent counts as visible (~38°N).
+const CRESCENT_DELAY = 1.5;
 
-const toJD  = (d: Date): number => d.getTime() / 86400000 + 2440587.5;
 const fromJD = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
-
-// Most recent new moon JDE on or before `jd`.
-const prevNewMoonJDE = (jd: number): number => {
-  let k = kForJDE(jd);
-  let nm = trueNewMoonJDE(k);
-  while (nm > jd) { k--; nm = trueNewMoonJDE(k); }
-  const nmNext = trueNewMoonJDE(k + 1);
-  if (nmNext <= jd) { k++; nm = nmNext; }
-  return nm;
-};
-
-// First new moon JDE strictly after `jd`.
-const nextNewMoonJDE = (jd: number): number => {
-  const k = kForJDE(jd);
-  for (let offset = 0; offset <= 2; offset++) {
-    const nm = trueNewMoonJDE(k + offset);
-    if (nm > jd) return nm;
-  }
-  return trueNewMoonJDE(k + 2);
-};
-
-// First new moon JDE on or after `jd`.
-const newMoonOnOrAfterJDE = (jd: number): number => {
-  let k = kForJDE(jd) - 1;
-  let nm = trueNewMoonJDE(k);
-  while (nm < jd) { k++; nm = trueNewMoonJDE(k); }
-  return nm;
-};
 
 // The 12 Attic months
 export const ATTIC_MONTHS = [
@@ -70,73 +52,35 @@ const GREEK_DAY_ORDINALS = [
   "ἕκτη", "ἑβδόμη", "ὀγδόη", "ἐνάτη", "δεκάτη"
 ];
 
-// Minimum moon age before first crescent is visible (~1.5 days, Athens ~38°N).
-const CRESCENT_DELAY = 1.5;
-
 // --- Attic year engine ---
 
-// Get the start of the Attic year (Hekatombaion 1) for a given Gregorian year.
-// Hekatombaion 1 = Noumenia (first crescent) after the summer solstice.
-// Uses the crescent criterion: find the first new moon whose crescent
-// (conjunction + CRESCENT_DELAY) falls on or after the summer solstice.
-export const getAtticYearStart = (gregorianYear: number): Date => {
-  const solsticeJD = summerSolsticeJDE(gregorianYear);
-  const nmJD = newMoonOnOrAfterJDE(solsticeJD - CRESCENT_DELAY);
-  return fromJD(nmJD);
+/** Sunset that begins Hekatombaion 1 of the Attic year anchored in `gregorianYear`. */
+export const getAtticYearStart = (
+  gregorianYear: number, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+): Date => getLunarYearStart('attic', CRESCENT_DELAY, fromJD(summerSolsticeJDE(gregorianYear)), lat, lng);
+
+const atticYearMonths = (anchor: number, lat: number, lng: number): Date[] =>
+  getLunarYearMonths('attic', CRESCENT_DELAY, getAtticYearStart(anchor, lat, lng), getAtticYearStart(anchor + 1, lat, lng), lat, lng);
+
+// Lunation index → month. In a 13-lunation year the 7th lunation is Poseideon II.
+// (Modern astronomical reconstruction — Athenian intercalation was decided ad hoc
+// by the archon, not by a fixed rule.)
+const monthForLunation = (lunation: number, monthCount: number) => {
+  const isIntercalaryYear = monthCount === 13;
+  if (isIntercalaryYear && lunation === 6) {
+    return { monthIndex: 5, isIntercalaryMonth: true, data: INTERCALARY_MONTH };
+  }
+  const monthIndex = Math.min(isIntercalaryYear && lunation > 6 ? lunation - 1 : lunation, 11);
+  return { monthIndex, isIntercalaryMonth: false, data: ATTIC_MONTHS[monthIndex] };
 };
 
-// Core: determine Attic month, day, and month length from a real date
-const getAtticMonthFromDate = (date: Date): {
-  monthIndex: number;
-  newMoon: Date;
-  monthLength: number;
-  isIntercalaryMonth: boolean;
-} => {
-  const year = date.getFullYear();
-
-  // Determine which Attic year we're in
-  let yearStart = getAtticYearStart(year);
-  if (date < yearStart) {
-    yearStart = getAtticYearStart(year - 1);
-  }
-
-  // Find the New Moon that starts our current month
-  const nmJD = prevNewMoonJDE(toJD(date));
-  const newMoon = fromJD(nmJD);
-
-  // Count lunations from year start to our New Moon
-  const daysSinceStart = Math.max(0, (newMoon.getTime() - yearStart.getTime()) / DAY_MS);
-  const lunationCount = Math.round(daysSinceStart / SYNODIC_MONTH);
-
-  // Find the next New Moon to get real month length
-  const nextNewMoon = fromJD(nextNewMoonJDE(nmJD));
-  const rawLength = Math.round((nextNewMoon.getTime() - newMoon.getTime()) / DAY_MS);
-  const monthLength = Math.max(29, Math.min(rawLength, 30));
-
-  // Detect intercalary year (13 lunations between solstices).
-  // Threshold of 370 d separates 12-lunation (~354 d) from 13-lunation (~384 d) years.
-  // This is a modern astronomical reconstruction — Athenian intercalation was decided
-  // ad hoc by the archon, not by a fixed rule. The Metonic cycle (7 intercalary months
-  // per 19 years) was known from 432 BC but its use in the civil calendar is disputed.
-  const nextYearStart = getAtticYearStart(yearStart.getFullYear() + 1);
-  const yearDays = (nextYearStart.getTime() - yearStart.getTime()) / DAY_MS;
-  const isIntercalaryYear = yearDays > 370;
-
-  let monthIndex: number;
-  let isIntercalaryMonth = false;
-
-  if (isIntercalaryYear && lunationCount === 6) {
-    // Lunation 6 in a 13-month year = Poseideon II
-    monthIndex = 5; // Display as Poseideon variant
-    isIntercalaryMonth = true;
-  } else if (isIntercalaryYear && lunationCount > 6) {
-    // After intercalary, shift back by 1
-    monthIndex = Math.min(lunationCount - 1, 11);
-  } else {
-    monthIndex = Math.min(lunationCount, 11);
-  }
-
-  return { monthIndex, newMoon, monthLength, isIntercalaryMonth };
+/** Attic year/lunation/day of the civil day containing `date`. */
+const locateAtticDay = (date: Date, lat: number, lng: number) => {
+  const dayStart = civilDayStart(date, lat, lng);
+  let anchor = dayStart.getFullYear();
+  if (dayStart.getTime() + 3 * 3600000 < getAtticYearStart(anchor, lat, lng).getTime()) anchor--;
+  const months = atticYearMonths(anchor, lat, lng);
+  return { anchor, months, ...positionInYear(months, dayStart) };
 };
 
 // --- Day formatting (3-decade system) ---
@@ -197,50 +141,20 @@ export interface AtticDateResult {
   decade: number;
   monthLength: number;
   isIntercalaryMonth: boolean;
+  /** Gregorian year in which this Attic year began (Hekatombaion 1). */
+  anchorGregYear: number;
 }
 
-export const getAtticDate = (date: Date, isAfterSunset: boolean = false): AtticDateResult => {
-  const { monthIndex, newMoon, monthLength, isIntercalaryMonth } = getAtticMonthFromDate(date);
-
-  // Calculate days since the new moon
-  const diffMs = date.getTime() - newMoon.getTime();
-  const diffDays = Math.floor(diffMs / DAY_MS);
-
-  // The day transition happens at sunset.
-  let dayOfMonth = diffDays + (isAfterSunset ? 1 : 0);
-
-  // Handle month boundaries
-  if (dayOfMonth <= 0) {
-    // Before Day 1 — use previous month
-    const prevMonth = getAtticMonthFromDate(new Date(newMoon.getTime() - DAY_MS));
-    const prevMonthData = isIntercalaryMonth ? INTERCALARY_MONTH : ATTIC_MONTHS[prevMonth.monthIndex];
-    const prevBoundedDay = Math.min(prevMonth.monthLength + dayOfMonth, prevMonth.monthLength);
-    const prevDayFormatted = formatAtticDay(prevBoundedDay, prevMonth.monthLength);
-    return {
-      short: `${prevDayFormatted.short}, ${prevMonthData.name}`,
-      full: `${prevDayFormatted.full}, μηνὸς ${prevMonthData.name}`,
-      spanishShort: `${prevDayFormatted.spanishShort}, mes de ${prevMonthData.name}`,
-      spanishFull: `${prevDayFormatted.spanishFull}, mes de ${prevMonthData.name} (${prevMonthData.latin})`,
-      monthName: prevMonthData.name,
-      dayOfMonth: prevBoundedDay,
-      monthIndex: prevMonth.monthIndex,
-      decade: prevBoundedDay <= 10 ? 1 : prevBoundedDay <= 20 ? 2 : 3,
-      monthLength: prevMonth.monthLength,
-      isIntercalaryMonth: prevMonth.isIntercalaryMonth
-    };
-  }
-
-  if (dayOfMonth > monthLength) {
-    dayOfMonth = monthLength;
-  }
-
-  const monthData = isIntercalaryMonth ? INTERCALARY_MONTH : ATTIC_MONTHS[monthIndex];
-  const boundedDay = Math.min(dayOfMonth, monthLength);
-  const dayFormatted = formatAtticDay(boundedDay, monthLength);
-
-  let decade = 1;
-  if (boundedDay > 10 && boundedDay <= 20) decade = 2;
-  if (boundedDay > 20) decade = 3;
+/**
+ * Attic date of the civil day (sunset → sunset) containing `date`, with month
+ * boundaries computed for the given location (default: Athens).
+ */
+export const getAtticDate = (
+  date: Date, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+): AtticDateResult => {
+  const { anchor, monthIndex: lunation, day, monthLength, monthCount } = locateAtticDay(date, lat, lng);
+  const { monthIndex, isIntercalaryMonth, data: monthData } = monthForLunation(lunation, monthCount);
+  const dayFormatted = formatAtticDay(day, monthLength);
 
   return {
     short: `${dayFormatted.short}, ${monthData.name}`,
@@ -248,21 +162,24 @@ export const getAtticDate = (date: Date, isAfterSunset: boolean = false): AtticD
     spanishShort: `${dayFormatted.spanishShort}, mes de ${monthData.name}`,
     spanishFull: `${dayFormatted.spanishFull}, mes de ${monthData.name} (${monthData.latin})`,
     monthName: monthData.name,
-    dayOfMonth: boundedDay,
+    dayOfMonth: day,
     monthIndex,
-    decade,
+    decade: day <= 10 ? 1 : day <= 20 ? 2 : 3,
     monthLength,
-    isIntercalaryMonth
+    isIntercalaryMonth,
+    anchorGregYear: anchor,
   };
 };
 
 // For the Greek calendar modal — get Attic date for any date
-export const getAtticDateForDisplay = (date: Date): {
+export const getAtticDateForDisplay = (
+  date: Date, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+): {
   atticDate: AtticDateResult;
   moonPhase: number;
 } => {
   return {
-    atticDate: getAtticDate(date),
+    atticDate: getAtticDate(date, lat, lng),
     moonPhase: getMoonPhase(date)
   };
 };
@@ -270,118 +187,35 @@ export const getAtticDateForDisplay = (date: Date): {
 // ─── Annual civil calendar (for the date picker) ───────────────────────────────
 
 /** Gregorian year that anchors the Attic year containing `date`. */
-export const getAtticYearAnchor = (date: Date): number => {
-  const y = date.getFullYear();
-  return date >= getAtticYearStart(y) ? y : y - 1;
-};
-
-const addLocalDays = (d: Date, n: number): Date => {
-  const out = new Date(d);
-  out.setDate(out.getDate() + n);
-  return out;
-};
-
-// Next conjunction strictly after `nmJD`, robust against JD→Date rounding
-// (the local `nextNewMoonJDE` can return the same instant when fed a JDE).
-const nextLunationJDE = (nmJD: number): number => {
-  let k = kForJDE(nmJD);
-  let nm = trueNewMoonJDE(k);
-  while (nm <= nmJD + 1) { k++; nm = trueNewMoonJDE(k); }
-  return nm;
-};
+export const getAtticYearAnchor = (
+  date: Date, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+): number => locateAtticDay(date, lat, lng).anchor;
 
 /**
  * Builds a full Attic civil year as months of days mapped to Gregorian dates.
- * Every generated Gregorian date sits at local noon so that the app's own
- * `getAtticDate` reports exactly the month/day shown in the picker.
+ * Each civil day (sunset → sunset) is represented by the noon of its daylight
+ * half, so `getAtticDate` reports exactly the month/day shown in the picker.
  */
-export const getAtticCalendarYear = (anchorGregYear: number): CivilCalendarYear => {
-  const yearStart = getAtticYearStart(anchorGregYear);
-  const nextYearStart = getAtticYearStart(anchorGregYear + 1);
-  const yearStartJD = toJD(yearStart);
-  const nextYearStartJD = toJD(nextYearStart);
-  const isIntercalaryYear = nextYearStartJD - yearStartJD > 370;
-
-  // Conjunction preceding the year start, used by getAtticDate's "before day 1"
-  // branch (a noon before the year's New Moon still belongs to the prior month).
-  const prevStartNmJD = (() => {
-    let k = kForJDE(yearStartJD);
-    let nm = trueNewMoonJDE(k);
-    while (nm > yearStartJD) { k--; nm = trueNewMoonJDE(k); }
-    return nm;
-  })();
-
-  // Ordered conjunctions: [prev, year start (lun 0), lun 1 … lun M].
-  const moons: { jd: number; lunation: number }[] = [
-    { jd: prevStartNmJD, lunation: -1 },
-    { jd: yearStartJD, lunation: 0 },
-  ];
-  let cursorJD = yearStartJD;
-  let lun = 0;
-  while (cursorJD < nextYearStartJD - 0.5 && moons.length < 18) {
-    cursorJD = nextLunationJDE(cursorJD);
-    lun++;
-    moons.push({ jd: cursorJD, lunation: lun });
-  }
-
-  const monthLengthAt = (i: number): number => {
-    const b = moons[i + 1]?.jd ?? nextYearStartJD;
-    return Math.max(29, Math.min(30, Math.round(b - moons[i].jd)));
-  };
-
-  const monthMetaForLunation = (l: number): { name: string; latin: string; isIntercalary: boolean } => {
-    if (l <= -1) return { name: ATTIC_MONTHS[11].name, latin: ATTIC_MONTHS[11].latin, isIntercalary: false };
-    if (isIntercalaryYear && l === 6) {
-      return { name: INTERCALARY_MONTH.name, latin: INTERCALARY_MONTH.latin, isIntercalary: true };
-    }
-    const idx = Math.min(isIntercalaryYear && l > 6 ? l - 1 : l, 11);
-    return { name: ATTIC_MONTHS[idx].name, latin: ATTIC_MONTHS[idx].latin, isIntercalary: false };
-  };
-
-  let totalMonths = 0;
-  for (let i = 1; i < moons.length; i++) {
-    if (moons[i].jd < nextYearStartJD - 0.5) totalMonths = moons[i].lunation + 1;
-  }
-
-  // Scan calendar days at local noon, replicating getAtticDate exactly.
-  const buckets = new Map<number, CivilCalendarDay[]>();
-  let i = 1; // moons pointer: current most-recent conjunction
-  const scanEnd = new Date(nextYearStart.getFullYear(), nextYearStart.getMonth(), nextYearStart.getDate(), 12, 0, 0, 0);
-
-  for (let g = addLocalDays(yearStart, 1); g.getTime() <= scanEnd.getTime(); g = addLocalDays(g, 1)) {
-    const noon = new Date(g.getFullYear(), g.getMonth(), g.getDate(), 12, 0, 0, 0);
-    const jd = toJD(noon);
-    while (i + 1 < moons.length && moons[i + 1].jd <= jd) i++;
-
-    const dayOfMonth = Math.floor(jd - moons[i].jd);
-    let lunation: number;
-    let day: number;
-
-    if (dayOfMonth <= 0) {
-      lunation = moons[i - 1]?.lunation ?? -1;
-      const prevLen = monthLengthAt(i - 1);
-      day = Math.min(prevLen + dayOfMonth, prevLen);
-    } else {
-      lunation = moons[i].lunation;
-      day = Math.min(dayOfMonth, monthLengthAt(i));
-    }
-
-    if (lunation < 0 || lunation >= totalMonths || day < 1) continue;
-    if (!buckets.has(lunation)) buckets.set(lunation, []);
-    buckets.get(lunation)!.push({ day, gregorian: noon });
-  }
+export const getAtticCalendarYear = (
+  anchorGregYear: number, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+): CivilCalendarYear => {
+  const starts = atticYearMonths(anchorGregYear, lat, lng);
+  const totalMonths = starts.length - 1;
 
   const months: CivilCalendarMonth[] = [];
   for (let m = 0; m < totalMonths; m++) {
-    const days = buckets.get(m);
-    if (!days || days.length === 0) continue;
-    const meta = monthMetaForLunation(m);
+    const { isIntercalaryMonth, data } = monthForLunation(m, totalMonths);
+    const length = civilDaysBetween(starts[m], starts[m + 1]);
+    const days: CivilCalendarDay[] = [];
+    for (let d = 1; d <= length; d++) {
+      days.push({ day: d, gregorian: daytimeOfCivilDay(new Date(starts[m].getTime() + (d - 1) * DAY_MS)) });
+    }
     months.push({
       key: `attic-${m}`,
-      name: meta.name,
-      latin: meta.latin,
-      translation: translateGreekUI(meta.name),
-      kind: meta.isIntercalary ? 'intercalary' : 'regular',
+      name: data.name,
+      latin: data.latin,
+      translation: translateGreekUI(data.name),
+      kind: isIntercalaryMonth ? 'intercalary' : 'regular',
       days,
     });
   }
@@ -391,7 +225,7 @@ export const getAtticCalendarYear = (anchorGregYear: number): CivilCalendarYear 
   return {
     anchorGregYear,
     yearLabel: `Ol. ${olympiad.olympiad} · año ${olympiad.year}`,
-    yearSubtitle: `${isIntercalaryYear ? 'Año intercalar · 13 meses' : 'Año de 12 meses'} · ${anchorGregYear}/${anchorGregYear + 1}`,
+    yearSubtitle: `${totalMonths === 13 ? 'Año intercalar · 13 meses' : 'Año de 12 meses'} · ${anchorGregYear}/${anchorGregYear + 1}`,
     months,
   };
 };

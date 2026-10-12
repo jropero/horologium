@@ -17,10 +17,10 @@
 //   Década 3: días 21-30
 //
 // PUNTO DE ANCLAJE (Época):
-//   El día 1 del mes de Thoth (1er mes del año) cae normalmente
-//   el 11 de septiembre gregoriano. En el año gregoriano que precede
-//   a un año bisiesto gregoriano, Thoth 1 cae el 12 de septiembre,
-//   porque el año anterior tuvo 6 epagómenos (getThoth1 encapsula esto).
+//   Thoth 1 = 29 de agosto juliano (30 tras un año de 6 epagómenos).
+//   En 1900–2098 eso es el 11 de septiembre gregoriano (12 en el año que
+//   precede a un bisiesto). Fuera de ese rango la deriva juliana lo mueve,
+//   por eso el cálculo se hace en JDN (ver ALEXANDRIAN_EPOCH_JDN).
 //
 //   La longitud del año (365 o 366 días) se deduce de la distancia entre
 //   dos Thoth 1 consecutivos — así no hay regla de bisiesto separada
@@ -120,33 +120,49 @@ export const EGYPTIAN_MONTHS: EgyptianMonth[] = [
 
 // --- Funciones auxiliares ---
 
-/**
- * Determina si un año gregoriano es bisiesto.
- * Regla: divisible por 4, excepto los siglos que no sean divisibles por 400.
- */
-const isGregorianLeapYear = (year: number): boolean => {
-  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+// El calendario alejandrino sigue la regla bisiesta JULIANA (6.º epagómeno en
+// el año alejandrino que precede a un año bisiesto juliano), por lo que su
+// relación con el calendario gregoriano deriva 3 días cada 400 años. Toda la
+// aritmética se hace en Número de Día Juliano (JDN) para ser válida en todo el
+// rango del selector (años 100–2100), no sólo en 1900–2099.
+//
+// Época: 1 Thoth del año 1 de la Era de los Mártires (Diocleciano) =
+// 29 ago 284 juliano = JDN 1825030. El año copto/alejandrino y cumple
+//   inicio(y) = 1825030 + 365·(y−1) + ⌊y/4⌋   (bisiesto si y mod 4 = 3).
+const ALEXANDRIAN_EPOCH_JDN = 1825030;
+/** Offset entre el año gregoriano en que empieza el año alejandrino y su número (2026 → 1743). */
+const GREG_TO_ALEX_YEAR = 283;
+const DAY_MS = 1000 * 60 * 60 * 24;
+const JDN_UNIX_EPOCH = 2440588; // JDN de 1970-01-01 (proléptico gregoriano)
+
+/** UTC-midnight Date for a proleptic Gregorian Y/M/D (safe for years 0–99). */
+const utcDate = (y: number, m: number, d: number): Date => {
+  const out = new Date(Date.UTC(2000, m, d));
+  out.setUTCFullYear(y, m, d);
+  return out;
 };
 
+const jdnFromYMD = (y: number, m: number, d: number): number =>
+  Math.round(utcDate(y, m, d).getTime() / DAY_MS) + JDN_UNIX_EPOCH;
+
+const dateFromJdn = (jdn: number): Date => new Date((jdn - JDN_UNIX_EPOCH) * DAY_MS);
+
+/** JDN of Thoth 1 of Alexandrian year y. */
+const alexYearStartJdn = (y: number): number =>
+  ALEXANDRIAN_EPOCH_JDN + 365 * (y - 1) + Math.floor(y / 4);
+
+/** Alexandrian year containing the given JDN. */
+const alexYearOfJdn = (jdn: number): number =>
+  Math.floor((4 * (jdn - ALEXANDRIAN_EPOCH_JDN) + 1463) / 1461);
+
 /**
- * Calcula la fecha gregoriana de Thoth 1 para el año alejandrino
- * que comienza en el año gregoriano dado.
- *
- * Regla:
- *   - Si (gregorianYear + 1) es bisiesto → Thoth 1 = 30 de agosto
- *   - En caso contrario → Thoth 1 = 29 de agosto
- *
- * Esto se debe a que el día epagómeno adicional del año alejandrino
- * ANTERIOR desplaza Thoth 1 un día hacia adelante.
+ * Fecha gregoriana (medianoche UTC) de Thoth 1 del año alejandrino que
+ * comienza en el año gregoriano dado. En 1900–2098 cae el 11 de septiembre
+ * (12 si el año gregoriano siguiente es bisiesto); antes de 1900 y desde 2099
+ * la deriva juliana la desplaza (p. ej. 28 ago en 139 d.C., 10 sep en 1800).
  */
-export const getThoth1 = (gregorianYear: number): Date => {
-  const nextYearIsLeap = isGregorianLeapYear(gregorianYear + 1);
-  // Thoth 1 = 29 de agosto (Julian) = 11 de septiembre (Gregoriano, 1900-2099).
-  // En años donde el siguiente es bisiesto, Thoth 1 = 30 de agosto (Julian) = 12 de septiembre.
-  // La diferencia de 13 días entre Julian y Gregoriano es correcta para el período 1900-2099.
-  const day = nextYearIsLeap ? 12 : 11;
-  return new Date(Date.UTC(gregorianYear, 8, day)); // UTC to avoid DST ±1h shift
-};
+export const getThoth1 = (gregorianYear: number): Date =>
+  dateFromJdn(alexYearStartJdn(gregorianYear - GREG_TO_ALEX_YEAR));
 
 // --- Función principal de conversión ---
 
@@ -182,27 +198,19 @@ export const getEgyptianDate = (gregorianDate: Date, isBeforeSunrise: boolean = 
     dateToUse.setDate(dateToUse.getDate() - 1);
   }
   
-  const year = dateToUse.getFullYear();
-  // Normalize to UTC midnight from local calendar date: eliminates DST ±1h error.
-  const dateUTCMid = new Date(Date.UTC(year, dateToUse.getMonth(), dateToUse.getDate()));
+  // JDN of the LOCAL calendar date (no DST / timezone effects).
+  const jdn = jdnFromYMD(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
 
-  // Paso 1: Determinar el año gregoriano en que comenzó el año alejandrino actual.
-  let startYear = year;
-  let thoth1 = getThoth1(startYear);
+  // Paso 1: año alejandrino que contiene la fecha y su Thoth 1.
+  const alexYear = alexYearOfJdn(jdn);
+  const yearStart = alexYearStartJdn(alexYear);
+  const startYear = alexYear + GREG_TO_ALEX_YEAR; // año gregoriano en que empezó
 
-  if (dateUTCMid < thoth1) {
-    startYear = year - 1;
-    thoth1 = getThoth1(startYear);
-  }
-
-  // Paso 2: Calcular el día del año alejandrino (1-indexed)
-  const diffMs = dateUTCMid.getTime() - thoth1.getTime();
-  const dayOfYear = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  // Paso 2: día del año alejandrino (1-indexed)
+  const dayOfYear = jdn - yearStart + 1;
 
   // La longitud del año se deduce de los dos Thoth 1 consecutivos.
-  // Esto es la única fuente de verdad — no hay regla de bisiesto separada.
-  const nextThoth1 = getThoth1(startYear + 1);
-  const totalDays = Math.round((nextThoth1.getTime() - thoth1.getTime()) / (1000 * 60 * 60 * 24));
+  const totalDays = alexYearStartJdn(alexYear + 1) - yearStart;
   const leapYear = totalDays === 366;
 
   // Paso 3: Convertir dayOfYear a mes/día
@@ -309,11 +317,13 @@ export const getSothicCycleYear = (
 export const getEgyptianCalendarYear = (anchorGregYear: number): CivilCalendarYear => {
   const thoth1 = getThoth1(anchorGregYear);
   const nextThoth1 = getThoth1(anchorGregYear + 1);
-  const totalDays = Math.round((nextThoth1.getTime() - thoth1.getTime()) / (1000 * 60 * 60 * 24));
+  const totalDays = Math.round((nextThoth1.getTime() - thoth1.getTime()) / DAY_MS);
   const isLeapYear = totalDays === 366;
 
-  // Local calendar date of Thoth 1 (getEgyptianDate normalizes on local Y/M/D).
-  const start = new Date(thoth1.getFullYear(), thoth1.getMonth(), thoth1.getDate(), 12, 0, 0, 0);
+  // getThoth1 returns UTC midnight; read it back with UTC getters so the local
+  // calendar date doesn't slip a day in timezones west of UTC.
+  const start = new Date(thoth1.getUTCFullYear(), thoth1.getUTCMonth(), thoth1.getUTCDate(), 12, 0, 0, 0);
+  start.setFullYear(thoth1.getUTCFullYear());
 
   const months: CivilCalendarMonth[] = [];
 

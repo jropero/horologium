@@ -3,6 +3,7 @@
  * Aligned with Roman/Greek seasonal hours but with Egyptian specifics.
  */
 
+import { Body, Observer, SearchRiseSet } from 'astronomy-engine';
 import { getSunTimes, getMoonPhase } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
 import { getEgyptianDate } from './egyptianCalendarUtils';
@@ -59,6 +60,23 @@ const getLatinMoonPhaseName = (phase: number): string => {
   if (phase < 0.72) return "Luna Decrecens";
   if (phase < 0.78) return "Luna Ultima";
   return "Luna Cornuta";
+};
+
+/**
+ * Local-noon Date of the Egyptian civil day containing `now`. The Egyptian day
+ * (and the planetary day) begins at SUNRISE, so between local midnight and
+ * sunrise it is still the previous calendar day. Every Egyptian date lookup
+ * (clock, hero, hemerology, time string) should go through this anchor so
+ * they agree on the day boundary.
+ */
+export const getEgyptianDayAnchor = (now: Date, lat: number, lng: number): Date => {
+  // Last sunrise at or before `now` (astronomy-engine searches backwards with a
+  // negative limit), taken as a date at the observer's mean local solar time so
+  // the result does not depend on the device timezone.
+  const rise = SearchRiseSet(Body.Sun, new Observer(lat, lng, 0), +1, new Date(now.getTime() + 1), -2);
+  const sunrise = rise ? rise.date : getSunTimes(now, lat, lng).sunrise;
+  const observerDate = new Date(sunrise.getTime() + lng * 240000);
+  return new Date(observerDate.getUTCFullYear(), observerDate.getUTCMonth(), observerDate.getUTCDate(), 12, 0, 0, 0);
 };
 
 interface SunEvent {
@@ -125,19 +143,18 @@ export const calculateEgyptianTime = (now: Date, lat: number, lng: number): Roma
   
   const moonPhase = getMoonPhase(now);
   
-  // Egyptian day starts at sunrise.
-  // Robust check: find today's sunrise.
-  const todaySunrise = points.find(p => p.type === 'sunrise' && p.time.getDate() === now.getDate())?.time;
-  const isBeforeSunrise = !isDay && todaySunrise && now < todaySunrise;
-  
-  const egyptianDate = getEgyptianDate(now, !!isBeforeSunrise);
+  // Egyptian day (and planetary day) starts at sunrise: one anchor date drives
+  // the civil date, the weekday and the planetary-hour sequence, so the
+  // Chaldean order runs on unbroken from day hours into the following night.
+  const dayAnchor = getEgyptianDayAnchor(now, lat, lng);
+  const egyptianDate = getEgyptianDate(dayAnchor);
 
   return {
     romanHour,
     isDay,
     hourName: `Hora ${romanHour}`,
     hourLengthMinutes,
-    sunrise: isDay ? baseTime : points.find(p => p.type === 'sunrise' && p.time < baseTime)?.time || new Date(baseTime.getTime() - 12 * 3600 * 1000),
+    sunrise: isDay ? baseTime : [...points].reverse().find(p => p.type === 'sunrise' && p.time < baseTime)?.time || new Date(baseTime.getTime() - 12 * 3600 * 1000),
     sunset: isDay ? endTime : baseTime,
     nextSunrise: nextSunriseDisplay,
     romanDateString: `${egyptianDate.dayOfMonth} de ${egyptianDate.monthName}`,
@@ -145,12 +162,12 @@ export const calculateEgyptianTime = (now: Date, lat: number, lng: number): Roma
     atticDate: undefined,
     moonPhase,
     moonPhaseLabel: getLatinMoonPhaseName(moonPhase),
-    planetaryRuler: getPlanetaryRuler(romanHour, isDay, now),
+    planetaryRuler: getPlanetaryRuler(romanHour, isDay, dayAnchor),
     civilDayPart,
     vigilia,
     nundinalLetter: '',
     isMarketDay: false,
-    dayOfWeek: ['Dies Solis', 'Dies Lunae', 'Dies Martis', 'Dies Mercurii', 'Dies Iovis', 'Dies Veneris', 'Dies Saturni'][now.getDay()],
+    dayOfWeek: ['Dies Solis', 'Dies Lunae', 'Dies Martis', 'Dies Mercurii', 'Dies Iovis', 'Dies Veneris', 'Dies Saturni'][dayAnchor.getDay()],
     indiction: 0,
     tutelaMensis: '', 
     zodiacSign: '' 

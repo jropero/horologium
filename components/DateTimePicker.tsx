@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface DateTimePickerProps {
@@ -35,11 +35,16 @@ interface WheelColumnProps {
   format?: (v: number) => string;
 }
 
+interface WheelColumnHandle {
+  /** The item currently centred in the wheel, including a scroll not yet committed. */
+  read: () => number;
+}
+
 /**
  * Scroll-snap wheel column. Pure DOM (no native control), so it renders
  * correctly inside the app's themed popup on Android WebView.
  */
-const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label, format }) => {
+const WheelColumn = forwardRef<WheelColumnHandle, WheelColumnProps>(({ items, value, onChange, label, format }, ref) => {
   const ITEM_H = 44;
   const listRef = useRef<HTMLDivElement>(null);
   const userScrolling = useRef(false);
@@ -62,13 +67,18 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
     []
   );
 
-  const commit = () => {
+  const centredItem = () => {
     const el = listRef.current;
-    if (!el) return;
-    const nearest = Math.round(el.scrollTop / ITEM_H);
-    const idx = Math.max(0, Math.min(items.length - 1, nearest));
-    const next = items[idx];
+    if (!el) return value;
+    const idx = Math.max(0, Math.min(items.length - 1, Math.round(el.scrollTop / ITEM_H)));
+    return items[idx];
+  };
+
+  useImperativeHandle(ref, () => ({ read: centredItem }));
+
+  const commit = () => {
     userScrolling.current = false;
+    const next = centredItem();
     if (next !== value) onChange(next);
   };
 
@@ -92,6 +102,9 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
             onScroll={handleScroll}
             className="h-full overflow-y-auto snap-y snap-mandatory overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
+            {/* One-row spacers so the first and last items can reach the centre bar;
+                item i is centred at scrollTop = i * ITEM_H. */}
+            <div aria-hidden="true" className="h-[44px] shrink-0" />
             {items.map((it) => (
               <div
                 key={it}
@@ -102,6 +115,7 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
                 {fmt(it)}
               </div>
             ))}
+            <div aria-hidden="true" className="h-[44px] shrink-0" />
           </div>
         </div>
         {/* Center selection bar */}
@@ -113,7 +127,7 @@ const WheelColumn: React.FC<WheelColumnProps> = ({ items, value, onChange, label
       <div className="mt-1.5 text-center font-serif text-sm text-gold-leaf tabular-nums">{fmt(value)}</div>
     </div>
   );
-};
+});
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm, onClose, onReturnToLive }) => {
   const [value, setValue] = useState<Date>(() => {
@@ -138,15 +152,28 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
     [view]
   );
 
+  const hourWheelRef = useRef<WheelColumnHandle>(null);
+  const minuteWheelRef = useRef<WheelColumnHandle>(null);
+
+  // Functional updates: a wheel commits 180 ms after its scroll settles, possibly
+  // with a handler from an older render, so never rebuild from a captured `value`
+  // (that would revert a day picked in the meantime).
   const setTime = (h: number) => {
-    setValue(new Date(value.getFullYear(), value.getMonth(), value.getDate(), h, value.getMinutes()));
+    setValue((v) => new Date(v.getFullYear(), v.getMonth(), v.getDate(), h, v.getMinutes()));
   };
   const setMinute = (m: number) => {
-    setValue(new Date(value.getFullYear(), value.getMonth(), value.getDate(), value.getHours(), m));
+    setValue((v) => new Date(v.getFullYear(), v.getMonth(), v.getDate(), v.getHours(), m));
   };
 
   const pickDay = (day: number) => {
-    setValue(clampYearDate(new Date(view.y, view.m, day, value.getHours(), value.getMinutes())));
+    setValue((v) => clampYearDate(new Date(view.y, view.m, day, v.getHours(), v.getMinutes())));
+  };
+
+  // Read the wheels directly so a scroll whose commit is still pending is not lost.
+  const confirm = () => {
+    const h = hourWheelRef.current?.read() ?? value.getHours();
+    const m = minuteWheelRef.current?.read() ?? value.getMinutes();
+    onConfirm(new Date(value.getFullYear(), value.getMonth(), value.getDate(), h, m));
   };
 
   const shiftMonth = (delta: number) => {
@@ -266,16 +293,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
 
           {/* Time wheels */}
           <div className="flex items-stretch gap-3 pt-1 border-t border-gold-dim/20">
-            <WheelColumn items={hours} value={value.getHours()} onChange={setTime} label="Hora" />
+            <WheelColumn ref={hourWheelRef} items={hours} value={value.getHours()} onChange={setTime} label="Hora" />
             <div className="flex items-center justify-center font-serif text-2xl text-gold-dim/50 pt-6">:</div>
-            <WheelColumn items={minutes} value={value.getMinutes()} onChange={setMinute} label="Minuto" />
+            <WheelColumn ref={minuteWheelRef} items={minutes} value={value.getMinutes()} onChange={setMinute} label="Minuto" />
           </div>
         </div>
 
         {/* Actions */}
         <div className="p-4 pt-0 flex flex-col gap-2 shrink-0">
           <button
-            onClick={() => onConfirm(value)}
+            onClick={confirm}
             className="w-full py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/40 text-gold-leaf font-serif text-sm uppercase tracking-widest hover:bg-gold-leaf/20 transition-all font-bold active:scale-[0.98]"
           >
             Viajar a esta fecha

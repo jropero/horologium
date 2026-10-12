@@ -39,6 +39,57 @@ const GreekMeanderBorder: React.FC = () => (
   />
 );
 
+// ─── Hoplite silhouette (black-figure style) ──────────────────────────────────
+// Local coords: feet on y=0, facing +x, crest top ≈ -111, spear tip ≈ -150.
+// The aspis is drawn as a full circle, as on Attic black-figure vases; the
+// incised details (rim, lambda, greaves) are thin strokes over the silhouette.
+
+const Hoplite: React.FC<{ fill: string; stroke: string; transform: string }> = ({ fill, stroke, transform }) => (
+  <g transform={transform} fill={fill} stroke={stroke} strokeWidth="0.9" strokeLinejoin="round">
+    {/* Dory (spear) behind the body, with leaf head and sauroter */}
+    <path d="M -16.9 1 L -15.1 1 L -4.2 -137 L -6 -137 Z" />
+    <path d="M -6.2 -136 Q -8.2 -142 -3.9 -151 Q -1.6 -142 -4 -136 Z" />
+    <path d="M -17.2 1 L -14.8 1 L -15.8 5 Z" />
+
+    {/* Chlamys (cloak) flowing behind */}
+    <path d="M -6 -80 C -14 -78 -18 -66 -20 -56 C -22 -48 -25 -42 -29 -35 Q -24 -36 -22 -33 Q -19 -37 -15 -35 Q -12 -39 -9 -39 L -9 -60 Z" />
+
+    {/* Legs with greaves */}
+    <path d="M -8 -44 L -1 -44 L -4 -25 Q -5 -18 -8 -10 L -8 -3 L -2 -1 L -2 0 L -14 0 L -13 -3 Q -16 -12 -12 -25 Z" />
+    <path d="M 1 -44 L 8 -44 Q 13 -34 13 -25 Q 12 -14 13 -4 L 20 -1 L 20 0 L 9 0 L 9 -5 Q 4 -15 6 -25 Q 4 -34 1 -44 Z" />
+
+    {/* Torso and pteryges (tasselled skirt) */}
+    <path d="M -10 -56 L 10 -56 L 9 -77 Q 0 -81 -9 -77 Z" />
+    <path d="M -11 -56 L 11 -56 L 13 -40 L 11 -37.5 L 9 -40 L 7 -37.5 L 5 -40 L 3 -37.5 L 1 -40 L -1 -37.5 L -3 -40 L -5 -37.5 L -7 -40 L -9 -37.5 L -11 -40 L -13 -37.5 Z" />
+
+    {/* Neck */}
+    <path d="M 2 -83 L 8 -83 L 8 -76 L 2 -76 Z" />
+
+    {/* Crest on its stalk */}
+    <path d="M 2 -96 L 5 -96 L 5 -102 L 2 -102 Z" />
+    <path d="M 13 -100 C 6 -103 -4 -103 -10 -97 C -12 -94 -14 -90 -15 -85 C -19 -93 -18 -104 -9 -109 C -1 -112 9 -110 14 -103 Z" />
+
+    {/* Corinthian helmet; the eye slit is a hole (evenodd) */}
+    <path
+      fillRule="evenodd"
+      d="M -3 -80 Q -5 -86 -3 -91 Q 1 -98 8 -97 Q 14 -96 14 -90 L 15 -86 L 13 -85 Q 14 -81 11 -78 L 6 -79 L 4 -84 L 1 -81 Z
+         M 8 -90.5 L 13 -90.5 L 13 -89 L 8.5 -88.8 Z"
+    />
+
+    {/* Aspis */}
+    <circle cx="7" cy="-60" r="21" />
+
+    {/* Incised details */}
+    <g fill="none" strokeWidth="0.6" opacity="0.8">
+      <circle cx="7" cy="-60" r="17.5" />
+      <path d="M -1 -48 L 7 -71 L 15 -48" strokeWidth="1.1" />
+      <path d="M -12 -24 Q -8 -22 -4 -24" />
+      <path d="M 6 -25 Q 10 -23 13 -25" />
+      <path d="M 11 -101.5 C 4 -104 -5 -103 -11 -98" />
+    </g>
+  </g>
+);
+
 // ─── Continuous moon-phase SVG ────────────────────────────────────────────────
 
 const TinyMoon: React.FC<{ phase: number; size?: number; dim?: boolean }> = ({
@@ -344,11 +395,11 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
   const [view, setView] = useState<ViewMode>('month');
 
   useEffect(() => {
-    const targetAtticDate = propAtticDate || getAtticDate(new Date());
+    const targetAtticDate = propAtticDate || getAtticDate(new Date(), currentLat, currentLng);
     const festival = getAtticFestivalInfo(targetAtticDate.monthIndex, targetAtticDate.dayOfMonth);
     const dailyDeity = getDailyAtticDeity(targetAtticDate.dayOfMonth, targetAtticDate.monthLength);
     setGreekInfo({ festival, dailyDeity, atticDate: targetAtticDate });
-  }, [propAtticDate]);
+  }, [propAtticDate, currentLat, currentLng]);
 
   const { isDay, dayProgress, moonPhase, moonSvgX, moonSvgY, moonVisible } = useMemo(() => {
     const date = currentDate ?? new Date();
@@ -523,6 +574,14 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 opacity={el.opacity}
               />
             ))}
+            {/* Hoplite on watch in the gap between the two building zones;
+                same day/night/weather palette as the buildings, drawn before
+                the ground so his feet sink into the hill line */}
+            <Hoplite
+              fill={skylineFill}
+              stroke={skylineStroke}
+              transform="translate(126 189.5) scale(0.33)"
+            />
             {/* Snow floor */}
             <path d="M 0 180 L 300 180 L 300 200 L 0 200 Z" fill={condition === 'snow' ? '#dde1e7' : 'var(--ink)'} />
             <path d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z" fill={condition === 'snow' ? '#dde1e7' : 'var(--ink)'} stroke={condition === 'snow' ? '#f0f4f8' : 'var(--gold-dim)'} strokeWidth="1" />
@@ -772,7 +831,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           {/* ── DAYS VIEW (7 following days — folded modal) ────────────────── */}
           {view === 'days' && (
             <div className="w-full flex flex-col" onClick={e => e.stopPropagation()}>
-              <GreekDaysList startDate={currentDate ?? new Date()} />
+              <GreekDaysList startDate={currentDate ?? new Date()} lat={currentLat} lng={currentLng} />
             </div>
           )}
 

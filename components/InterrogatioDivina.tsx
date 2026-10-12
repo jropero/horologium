@@ -52,7 +52,7 @@ const InterrogatioDivina: React.FC<InterrogatioDivinaProps> = ({ isOpen, onClose
                 onClick={e => e.stopPropagation()}
             >
                 {/* Aged Paper Texture Overlay */}
-                <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')]"></div>
+                <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('/assets/textures/aged-paper.png')]"></div>
 
                 {/* Header */}
                 <div className="p-4 border-b border-gold-leaf/30 flex justify-between items-center bg-stone-950/50 z-10">

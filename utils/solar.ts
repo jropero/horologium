@@ -30,24 +30,23 @@ function boundedMemo<T>(cache: Map<string, T>, key: string, max: number, compute
   return value;
 }
 
-// Local-midnight timestamp of the given date — the day key used by getSunTimes.
-const calendarDayMs = (date: Date): number => {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d.getTime();
-};
+// The calendar day is the device-local date of `date` (Y/M/D), but its window is
+// placed on the observer's mean local solar time: midnight of that Y/M/D at the
+// observer's longitude. Consecutive dates therefore tile the observer's days
+// exactly, with one sunrise and one sunset each, even when the device is in a
+// far-away timezone (e.g. a phone in Los Angeles showing Basel).
+const DAY_MS = 86400000;
+const observerMidnightMs = (date: Date, lng: number): number =>
+  Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - lng * 240000; // 4 min per degree
 
 const coordsKey = (lat: number, lng: number): string => `${lat.toFixed(4)},${lng.toFixed(4)}`;
 
 export const getSunTimes = (date: Date, lat: number, lng: number) =>
-  boundedMemo(_sunTimesCache, `${calendarDayMs(date)}|${coordsKey(lat, lng)}`, _SUN_TIMES_CACHE_MAX, () => {
-    // Normalize to local noon — anchors the search to the correct calendar day
-    const targetDate = new Date(date);
-    targetDate.setHours(12, 0, 0, 0);
-
-    // Sunrise search starts at local midnight so the event falls within the 1-day window
-    const midnight = new Date(date);
-    midnight.setHours(0, 0, 0, 0);
+  boundedMemo(_sunTimesCache, `${observerMidnightMs(date, lng)}|${coordsKey(lat, lng)}`, _SUN_TIMES_CACHE_MAX, () => {
+    // Sunrise search starts at the observer's local midnight, sunset at local noon,
+    // so each event falls within its 1-day window.
+    const midnight = new Date(observerMidnightMs(date, lng));
+    const targetDate = new Date(midnight.getTime() + DAY_MS / 2);
 
     const observer = new Observer(lat, lng, 0);
     const riseResult = SearchRiseSet(Body.Sun, observer, +1, midnight,     1);
@@ -58,9 +57,7 @@ export const getSunTimes = (date: Date, lat: number, lng: number) =>
       const eq = Equator(Body.Sun, targetDate, observer, true, true);
       const hz = Horizon(targetDate, observer, eq.ra, eq.dec, 'normal');
       if (hz.altitude > 0) {
-        const startOfDay = new Date(targetDate); startOfDay.setHours(0, 0, 0, 0);
-        const endOfDay   = new Date(targetDate); endOfDay.setHours(23, 59, 59, 999);
-        return { sunrise: startOfDay, sunset: endOfDay };
+        return { sunrise: midnight, sunset: new Date(midnight.getTime() + DAY_MS - 1) };
       }
       return { sunrise: targetDate, sunset: targetDate };
     }
