@@ -94,10 +94,11 @@ The sky scene of the Egyptian hero (`EgyptianCalendarInfo.tsx`, 16:9 box under t
 - `DefineStar` slots follow `egyptianAstronomy.ts`: Star1 = Sirius, Star2 = Algol. Their J2000 constants are exported from that file.
 - The Milky Way is re-projected every minute (it rotates with the sky), not only on location change.
 - `brightStarCatalog.ts` is a flat `[raDeg, decDeg, mag, …]` array, **sorted brightest first** (the draw loop `break`s at the magnitude limit). It was generated from d3-celestial `data/stars.6.json` (Yale BSC, BSD-3-Clause). It is a separate chunk (~20 KB gzip) loaded on mount via dynamic `import()`.
+- Dev aid: opening the app with `?mockplanets` replaces the real alt/az of the 5 planets with fixed on-screen values (`MOCK_PLANET_SKY` in `EgyptianStarMap.tsx`) so every pictogram can be inspected at once, at any time of day. It is opt-in and side-effect-free otherwise — it only overrides `snapshot.planets`, which nothing else consumes.
 
 ### Modes and day/night
 
-- Curated mode (default) draws the catalogue down to mag 4.5 at 0.85 opacity as a backdrop, so the view is never empty. Example: an October evening in Basel, when no Egyptian body is in the south view. On top come the Egyptian objects with labels: Sopdet (CSS-pulsed `.sopdet-glow` element in `index.css`), Ojo de Horus, Sah, Meskhetyu, Iah, Ra, and the planets (Sebeg, Seba-djai, Ḥeru-desher, Ḥeru-wepesh-tawy, Ḥeru-ka-pet).
+- Curated mode (default) draws the catalogue down to mag 4.5 at 0.85 opacity as a backdrop, so the view is never empty. Example: an October evening in Basel, when no Egyptian body is in the south view. On top come the Egyptian objects with labels: Sopdet (CSS-pulsed `.sopdet-glow` element in `index.css`), Ojo de Horus, Sah, Meskhetyu, Iah, Ra, and the five planets. Each planet gets a distinct pictogram via `drawPlanet()` — Djehuty (Mercury, small disc), Nit (Venus, four rays), Hor (Mars, red disc), Amun (Jupiter, banded disc), Sobek (Saturn, ringed disc) — keyed on `SkyPlanet.key`, so a body reads without its name. Names match `CIV_NAMES.aegyptus` in `PlanetaryPositions.tsx`.
 - Full mode draws all 2851 stars at full opacity.
 - `dayFactor` (0 night → 1 day) blends linearly within ±30 min of sunrise/sunset. The hero passes `getSunTimes()` for the day, and events are also tested shifted by ±24 h. The sky palette goes night → twilight → day. Stars and the Milky Way fade out; only the Sun, Moon and planets above the horizon remain by day. A dark scrim keeps the hero text readable by day.
 
