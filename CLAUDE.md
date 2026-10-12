@@ -33,21 +33,25 @@ The active civilization (`rome` | `hellas` | `aegyptus` | `babylonia` | `zhonggu
 
 ### Astronomical core
 
-`utils/solar.ts` implements Meeus/NOAA algorithms for sunrise/sunset and moon phase with no external dependencies. The moon phase is anchored to Jan 29, 2025 for current-era accuracy. All time calculations in the three `*TimeUtils` files depend on `getSunTimes` and `getMoonPhase` from this module.
+`utils/solar.ts` wraps `astronomy-engine` (sunrise/sunset via `SearchRiseSet`, moon phase via `MoonPhase`, conjunctions via `SearchMoonPhase`, equinoxes/solstices via `Seasons`). All `*TimeUtils` files depend on `getSunTimes` and `getMoonPhase` from this module. `getSunTimes(date)` takes the device-local Y/M/D of `date` but places the day window at the observer's mean solar midnight, so a device in a far-away timezone still gets exactly one sunrise and one sunset per day.
+
+**Day boundaries and planetary hours (all civilizations).** Planetary hours run continuously in Chaldean order and the planetary day begins at sunrise: night hours (also those after midnight) belong to the weekday of the preceding daylight. The weekday is taken at the observer's mean local solar time from the sunrise/sunset that opened the current 12-hour period, never from `now.getDay()`.
+
+**Observational lunar calendars (Babylonian, Attic)** share `utils/lunarCivilCalendar.ts`: the civil day runs sunset → sunset; a month begins at the first sunset when the Moon is at least `minAgeDays` old (Babylon 0.75 d, Athens 1.5 d), which guarantees 29/30-day months; the year begins with the first month starting on or after the spring equinox (Babylon) or summer solstice (Athens); month starts are computed for the user's coordinates (Attic falls back to Athens when no location is passed). Day N = N-th sunset counted from the month-start sunset. Date pickers represent each civil day by the noon of its daylight half.
 
 ### Data files (static)
 
 Heavy static datasets live in `utils/`:
 - Roman: `romanCalendarData.ts`, `romanHistoryData.ts`, `romanYearData.ts`, `romanProvinces.ts`
 - Hellenic: `atticCalendarData.ts`, `atticCalendarUtils.ts`, `greekRegions.ts`, `greekTranslations.ts`, `greekTransliteration.ts`, `sortesHomericae.ts`
-- Egyptian: `egyptianCalendarData.ts`, `egyptianCalendarUtils.ts`, `egyptianDeities.ts`, `egyptianFestivalsData.ts`, `egyptianHemerologyData.ts`, `egyptianWisdomData.ts`, `egyptianAstronomy.ts`, `egyptianRegions.ts`
+- Egyptian: `egyptianCalendarData.ts`, `egyptianCalendarUtils.ts`, `egyptianDeities.ts`, `egyptianFestivalsData.ts`, `egyptianHemerologyData.ts`, `egyptianWisdomData.ts`, `egyptianAstronomy.ts`, `egyptianRegions.ts`, `egyptianSkyMap.ts` (star-map positions), `brightStarCatalog.ts` (2851 stars ≤ mag 5.5, lazy-loaded)
 - Babylonian: `babylonianCalendarUtils.ts`, `babylonianLoreData.ts`, `babylonianSkylineGenerator.ts`, `babylonianWisdomData.ts`
 - Chinese: `chineseCalendarData.ts`, `chineseCalendarUtils.ts`, `chineseLunisolarUtils.ts`, `chineseTimeUtils.ts`
 - Shared: `sententiaeData.ts`, `apophthegmataData.ts`, `sortesVergilianae.ts`, `locations.ts`
 
 ### Procedural skyline
 
-Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks, ziggurats). `RomanClock` uses the first two (switching on civilization); `EgyptianClock` uses the third; `BabylonianCalendarInfo` uses the fourth inline. `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
+Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks, ziggurats). `RomanClock` uses the first two (switching on civilization); `EgyptianCalendarInfo` uses the third (over the `EgyptianStarMap` canvas); `BabylonianCalendarInfo` uses the fourth inline. `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
 
 ### Theming
 
@@ -67,13 +71,49 @@ Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoU
 
 ---
 
+## Egyptian Star Map — Implementation Notes
+
+The sky scene of the Egyptian hero (`EgyptianCalendarInfo.tsx`, 16:9 box under the lotus frieze) is a 360° draggable panorama rendered by `components/EgyptianStarMap.tsx` on a Canvas 2D. `EgyptianClock` does not use it.
+
+### Layering and pointer events
+
+- Stack inside the sky scene: `EgyptianStarMap` (`absolute inset-0 z-0`, owns the drag) → weather SVG → skyline SVG → title text. Every layer above the star map is `pointer-events-none`, so drags anywhere in the scene reach the canvas. Anything interactive added on top must opt back in with `pointer-events-auto`.
+- The canvas uses `touch-action: pan-y`: horizontal drags rotate the sky, vertical swipes still scroll the page. Do not change it to `none`, or the page can't be scrolled while a finger is on the hero.
+- The `horizon={0.9}` prop puts altitude 0° on the skyline's ground line (y=180 of its 300×200 viewBox). The compass (N/E/S/O) and the curated ↔ full-sky toggle sit at the top edge because the skyline covers the bottom. The toggle calls `stopPropagation` because the hero wrapper has an `onClick`.
+
+### Projection
+
+- x = azimuth, 6 px/° (2160px panorama, wraps), centred on south (180°) on load. y = altitude from the horizon line up to `ALT_MAX` = 72°.
+- The drag offset is kept in a ref (not state) and redraws are coalesced with `requestAnimationFrame`; there is a short fling inertia. Nothing is drawn while idle. A redraw happens only on drag, a new minute, a resize, or a mode change.
+- The unmount cleanup resets `frameRef` to `null`. React StrictMode re-runs effects, and a stale frame id would make `scheduleDraw` skip every future draw (blank canvas).
+
+### Data (`utils/egyptianSkyMap.ts`)
+
+- `computeSky(date, lat, lng)` is memoised per minute. It returns apparent alt/az for the Sun, the Moon (+ `getMoonPhase`), Sopdet/Sirius (`Body.Star1`) and Algol (`Body.Star2`, + `getAlgolPhase().isEclipsed`), plus the 5 planets via `Equator` + `Horizon`. It also returns Sah (Orion, 7 stars) and Meskhetyu (Big Dipper, 7 stars) with their line pairs, and the Milky Way (galactic plane b=0, sampled every 3° of l, weighted toward the galactic centre).
+- Fixed stars go through `Rotation_EQJ_HOR` + `HorizonFromVector`: J2000 in, precession/nutation/refraction handled. Don't pass J2000 RA/Dec straight to `Horizon()`: it expects equator-of-date coordinates, which puts stars about 0.3° off.
+- `DefineStar` slots follow `egyptianAstronomy.ts`: Star1 = Sirius, Star2 = Algol. Their J2000 constants are exported from that file.
+- The Milky Way is re-projected every minute (it rotates with the sky), not only on location change.
+- `brightStarCatalog.ts` is a flat `[raDeg, decDeg, mag, …]` array, **sorted brightest first** (the draw loop `break`s at the magnitude limit). It was generated from d3-celestial `data/stars.6.json` (Yale BSC, BSD-3-Clause). It is a separate chunk (~20 KB gzip) loaded on mount via dynamic `import()`.
+
+### Modes and day/night
+
+- Curated mode (default) draws the catalogue down to mag 4.5 at 0.85 opacity as a backdrop, so the view is never empty. Example: an October evening in Basel, when no Egyptian body is in the south view. On top come the Egyptian objects with labels: Sopdet (CSS-pulsed `.sopdet-glow` element in `index.css`), Ojo de Horus, Sah, Meskhetyu, Iah, Ra, and the planets (Sebeg, Seba-djai, Ḥeru-desher, Ḥeru-wepesh-tawy, Ḥeru-ka-pet).
+- Full mode draws all 2851 stars at full opacity.
+- `dayFactor` (0 night → 1 day) blends linearly within ±30 min of sunrise/sunset. The hero passes `getSunTimes()` for the day, and events are also tested shifted by ±24 h. The sky palette goes night → twilight → day. Stars and the Milky Way fade out; only the Sun, Moon and planets above the horizon remain by day. A dark scrim keeps the hero text readable by day.
+
+### Performance
+
+Measured in Chrome during a drag: about 1 ms JS per frame at desktop speed, ≤ 3 ms at 6× CPU throttle in full mode. Position maths takes about 1.5 ms per minute. WASM isn't worthwhile: the cost is canvas rasterisation, not JS. If a low-end Android device stutters, cap the canvas DPR at 2 or cache the Milky Way band in an offscreen canvas.
+
+---
+
 ## Babylonian Calendar — Implementation Notes
 
 ### Calendar system
 
 - **Era**: Seleucid Era (SE), epoch = 1 Nisannu SE 1 = 3–4 April 311 BCE (Julian). Code: `seYear = nisannuGregYear + 311` (Babylonian spring reckoning). Using `+ 312` would be the Macedonian autumn reckoning — wrong for this context.
 - **Months**: 12 lunisolar months, each 29 or 30 days (synodic). Month lengths alternate but are determined astronomically.
-- **Intercalation**: 7 intercalary months per 19-year Metonic cycle. The extra month is always **Addaru II** (after month 12) or occasionally **Ulūlu II** (after month 6). `babylonianCalendarUtils.ts` contains the lookup table.
+- **Intercalation**: 7 intercalary months per 19-year Metonic cycle. Historically the extra month was **Addaru II** (after month 12) or occasionally **Ulūlu II** (after month 6). The app does not use a lookup table: a year is intercalary when 13 crescent months fall between two Nisannu 1s (astronomical reconstruction), and the extra month is always shown as Addaru II.
 - **Month names and numbers** (important — "Warḫum N" means "Month N"):
   1. Nisannu · 2. Aiaru · 3. Simanu · 4. Dumuzu · 5. Abu · 6. Ulūlu
   7. Tašrītu · 8. Araḫsamnu · 9. Kislīmu · 10. Ṭebētu · 11. Šabāṭu · 12. Addaru
@@ -85,10 +125,9 @@ Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoU
 ### Key algorithms in `babylonianCalendarUtils.ts`
 
 - `getBabylonianDate(date, lat, lng)` is the main entry point — returns a `BabylonianDateInfo` object.
-- Month boundaries are computed from actual lunar conjunction (new moon) times, not a fixed calendar.
-- `getMoonPhase()` from `solar.ts` is reused; phase anchored to 29 Jan 2025 known new moon.
-- The Seleucid year starts with Nisannu, which begins on the first new moon after the vernal equinox.
-- Metonic intercalation: `isIntercalaryYear(seYear)` checks whether the SE year needs Addaru II.
+- Month boundaries come from real conjunctions + crescent sunset (`utils/lunarCivilCalendar.ts`), at the user's location; the civil day starts at sunset.
+- The Seleucid year starts with Nisannu, which begins at the first crescent sunset on or after the vernal equinox (`getNisannu1`).
+- Intercalation: `getBabylonianCalendarMeta` reports 13-month years (`isIntercalaryYear`, `intercalaryPositions` in the current 19-year cycle).
 
 ### Day events in `babylonianLoreData.ts`
 

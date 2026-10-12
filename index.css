@@ -384,3 +384,32 @@
   }
 }
 
+
+/* Sopdet (Sirius) glow on the Egyptian star map. The element itself is positioned
+   via an inline transform from EgyptianStarMap; the pulse lives on ::before. */
+.sopdet-glow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.sopdet-glow::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,216,255,0.75) 0%, rgba(184,216,255,0.22) 40%, rgba(184,216,255,0) 70%);
+  animation: sopdetPulse 3.2s ease-in-out infinite;
+}
+@keyframes sopdetPulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.65; }
+  50%      { transform: scale(1.25); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sopdet-glow::before { animation: none; }
+}

@@ -1,11 +1,10 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+export default defineConfig(() => {
     const isCapacitor = process.env.BUILD_TARGET === 'capacitor';
 
     return {
@@ -13,14 +12,14 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
-        allowedHosts: true,
+        allowedHosts: true as const,
       },
       plugins: [
         react(),
         VitePWA({
           registerType: 'autoUpdate',
           manifestFilename: 'manifest-v2.webmanifest',
-          includeAssets: ['assets/**', 'favicon.ico', 'apple-touch-icon.png', 'manifest-v2.webmanifest'],
+          includeAssets: ['assets/**', 'manifest-v2.webmanifest'],
           manifest: {
             name: 'Horologium Romanum',
             short_name: 'Horologium',
@@ -75,10 +74,6 @@ export default defineConfig(({ mode }) => {
           }
         })
       ],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),

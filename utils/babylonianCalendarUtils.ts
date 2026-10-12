@@ -2,7 +2,11 @@
 // Day starts at SUNSET (Babylonian civil convention).
 // Temporal hour math mirrors hellenicTimeUtils.ts (Meeus/NOAA solar engine).
 
-import { getSunTimes, getMoonPhase, springEquinoxJDE, trueNewMoonJDE, kForJDE } from './solar';
+import { getSunTimes, getMoonPhase, springEquinoxJDE } from './solar';
+import {
+  getLunarYearStart, getLunarYearMonths, civilDayStart, civilDaysBetween,
+  positionInYear, daytimeOfCivilDay,
+} from './lunarCivilCalendar';
 import { RomanTimeData, CivilDayPart } from '../types';
 import { BabylonianDate, BABYLONIAN_MONTHS, BABYLONIAN_MONTH_REGENTS } from '../types/babylonia';
 import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
@@ -47,37 +51,31 @@ const MONTH_REGENT_DESCS = [
   'Los Sebitti, los Siete dioses guerreros hijos de Anu que marchan al frente de Erra, rigen el duodécimo mes.',
 ];
 
-// ─── Julian Day helpers ───────────────────────────────────────────────────────
+// ─── Year engine (crescent months, sunset-to-sunset days) ─────────────────────
+// Nisannu 1 begins at the first sunset on or after the spring equinox at which
+// the new crescent is visible from the observer's location. Every later month
+// begins at the next crescent sunset (see utils/lunarCivilCalendar.ts).
 
-const toJD = (date: Date): number =>
-  date.getTime() / 86400000 + 2440587.5;
+const jdToDate = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
+const DAY_MS = 86400000;
 
-// First new moon whose crescent (first local sunset ≥ CRESCENT_MIN_AGE after conjunction)
-// falls on or after the spring equinox. Uses the observer's GPS location so that
-// e.g. a user in Reykjavik vs Auckland gets the astronomically correct sunset reference.
-export const getNisannu1JD = (gregYear: number, lat: number, lng: number): number => {
-  const equinoxJD = springEquinoxJDE(gregYear);
-  // Start ~35 days before equinox to catch the edge case where the previous lunation's
-  // crescent qualifies (new moon before equinox but crescent after).
-  const searchStart = equinoxJD - 35;
-  let k = kForJDE(searchStart) - 1;
-  for (let attempt = 0; attempt < 5; attempt++, k++) {
-    const conjJD = trueNewMoonJDE(k);
-    // Check up to 3 consecutive sunsets until we find one ≥ CRESCENT_MIN_AGE after conjunction.
-    for (let offset = 1; offset <= 3; offset++) {
-      const checkDate = new Date((conjJD - 2440587.5 + offset) * 86400000);
-      const { sunset } = getSunTimes(checkDate, lat, lng);
-      const sunsetJD = toJD(sunset);
-      if (sunsetJD - conjJD < CRESCENT_MIN_AGE) continue; // moon too young
-      if (sunsetJD >= equinoxJD) return conjJD;           // crescent after equinox → Nisannu
-      break;                                               // crescent before equinox → next lunation
-    }
-  }
-  // Fallback: first conjunction strictly after equinox (should not normally be reached)
-  let kf = kForJDE(equinoxJD) - 1;
-  let nm = trueNewMoonJDE(kf);
-  while (nm < equinoxJD) { kf++; nm = trueNewMoonJDE(kf); }
-  return nm;
+/** Sunset that begins Nisannu 1 of the Babylonian year anchored in `gregYear`. */
+export const getNisannu1 = (gregYear: number, lat: number, lng: number): Date =>
+  getLunarYearStart('bab', CRESCENT_MIN_AGE, jdToDate(springEquinoxJDE(gregYear)), lat, lng);
+
+const babYearMonths = (anchorGregYear: number, lat: number, lng: number): Date[] =>
+  getLunarYearMonths('bab', CRESCENT_MIN_AGE, getNisannu1(anchorGregYear, lat, lng), getNisannu1(anchorGregYear + 1, lat, lng), lat, lng);
+
+const monthsInYear = (anchorGregYear: number, lat: number, lng: number): number =>
+  Math.round(civilDaysBetween(getNisannu1(anchorGregYear, lat, lng), getNisannu1(anchorGregYear + 1, lat, lng)) / SYNODIC_MONTH);
+
+/** Babylonian year/month/day of the civil day containing `date`. */
+const locateBabylonianDay = (date: Date, lat: number, lng: number) => {
+  const dayStart = civilDayStart(date, lat, lng);
+  let anchor = dayStart.getFullYear();
+  if (dayStart.getTime() + 3 * 3600000 < getNisannu1(anchor, lat, lng).getTime()) anchor--;
+  const months = babYearMonths(anchor, lat, lng);
+  return { anchor, months, ...positionInYear(months, dayStart) };
 };
 
 // ─── Derived helpers ──────────────────────────────────────────────────────────
@@ -110,10 +108,16 @@ const getBabylonianMoonPhaseName = (phase: number): string => {
   return 'Qīštu';
 };
 
+// Weekday at the observer's mean local solar time (independent of device timezone).
+const observerWeekday = (t: Date, lng: number): number =>
+  new Date(t.getTime() + lng * 240000).getUTCDay();
+
+// `periodStart` = the sunrise (day) or sunset (night) that opened the current
+// 12-hour period; its local weekday is the planetary day.
 const getBabylonianPlanetaryRuler = (
-  currentHour: number, isDay: boolean, date: Date
+  currentHour: number, isDay: boolean, periodStart: Date, lng: number
 ): { name: string; nameEn: string } => {
-  const dayOfWeek = date.getDay();
+  const dayOfWeek = observerWeekday(periodStart, lng);
   const startIndex = DAY_START_INDEX[dayOfWeek];
   let hoursPassed = currentHour - 1;
   if (!isDay) hoursPassed += 12;
@@ -177,47 +181,25 @@ export interface BabylonianCalendarMeta {
 }
 
 export const getBabylonianCalendarMeta = (date: Date, lat: number, lng: number): BabylonianCalendarMeta => {
-  const gregYear = date.getFullYear();
+  const { anchor, months, monthLength } = locateBabylonianDay(date, lat, lng);
+  const seYear = anchor + 311;
 
-  let nisannu1JD = getNisannu1JD(gregYear, lat, lng);
-  const currentJD = toJD(date);
-  if (currentJD < nisannu1JD) nisannu1JD = getNisannu1JD(gregYear - 1, lat, lng);
+  const nisannu1Date = daytimeOfCivilDay(months[0]);
+  const springEquinoxDate = jdToDate(springEquinoxJDE(anchor));
+  const driftDays = Math.max(0, Math.round((months[0].getTime() - springEquinoxDate.getTime()) / DAY_MS));
 
-  const nisannu1Date = new Date((nisannu1JD - 2440587.5) * 86400000);
-  const nisannuGregYear = nisannu1Date.getFullYear();
-  const seYear = nisannuGregYear + 311;
-
-  const equinoxJD = springEquinoxJDE(nisannuGregYear);
-  const springEquinoxDate = new Date((equinoxJD - 2440587.5) * 86400000);
-  const driftDays = Math.max(0, Math.round(nisannu1JD - equinoxJD));
-
-  const nextNisannu1JD = getNisannu1JD(nisannuGregYear + 1, lat, lng);
-  const yearLengthMonths = (nextNisannu1JD - nisannu1JD) / SYNODIC_MONTH;
-  const isIntercalaryYear = yearLengthMonths > 12.5;
-
-  // Current month length (29 or 30 days)
-  const daysSinceNisannu = currentJD - nisannu1JD;
-  const monthsSinceNisannu = Math.floor(daysSinceNisannu / SYNODIC_MONTH);
-  const thisMonthStart = monthsSinceNisannu * SYNODIC_MONTH;
-  const nextMonthStart = (monthsSinceNisannu + 1) * SYNODIC_MONTH;
-  const monthLengthDays = Math.round(nextMonthStart) - Math.round(thisMonthStart);
+  const isIntercalaryYear = months.length - 1 === 13;
+  const nextYearIsIntercalary = monthsInYear(anchor + 1, lat, lng) === 13;
 
   // Metonic cycle position (1–19)
   const metonicPosition = ((seYear - 1) % 19) + 1;
 
   // Which positions in the current 19-year cycle are intercalary
-  const cycleStartSE = seYear - metonicPosition + 1;
+  const cycleStartAnchor = anchor - metonicPosition + 1;
   const intercalaryPositions: number[] = [];
   for (let pos = 1; pos <= 19; pos++) {
-    const checkGreg = (cycleStartSE + pos - 1) - 311;
-    const checkNisannu = getNisannu1JD(checkGreg, lat, lng);
-    const checkNext = getNisannu1JD(checkGreg + 1, lat, lng);
-    if ((checkNext - checkNisannu) / SYNODIC_MONTH > 12.5) intercalaryPositions.push(pos);
+    if (monthsInYear(cycleStartAnchor + pos - 1, lat, lng) === 13) intercalaryPositions.push(pos);
   }
-
-  // Is the immediately following Babylonian year intercalary?
-  const nextNisannu1JD2 = getNisannu1JD(nisannuGregYear + 2, lat, lng);
-  const nextYearIsIntercalary = (nextNisannu1JD2 - nextNisannu1JD) / SYNODIC_MONTH > 12.5;
 
   return {
     nisannu1Date,
@@ -225,7 +207,7 @@ export const getBabylonianCalendarMeta = (date: Date, lat: number, lng: number):
     driftDays,
     isIntercalaryYear,
     nextYearIsIntercalary,
-    monthLengthDays: Math.max(29, Math.min(30, monthLengthDays)),
+    monthLengthDays: monthLength,
     metonicPosition,
     intercalaryPositions,
     seYear,
@@ -266,49 +248,20 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
 
   const watchData = getWatch(temporalHour, isDay);
 
-  // Babylonian civil day starts at sunset. The "representative Gregorian date"
-  // for a Babylonian day is the date of its morning (sunrise portion). At night
-  // (after today's sunset OR before tomorrow's sunrise) the next sunrise anchors
-  // the JD so that midnight-to-sunrise hours show the same day as the afternoon.
-  // Must be computed before getBabylonianPlanetaryRuler so the correct weekday
-  // is used during the sunset-to-midnight window (when date.getDay() is still
-  // the previous Gregorian day but the Babylonian civil day has already advanced).
-  const calendarDate = isDay ? date : nextEvent.time; // nextEvent = next sunrise at night
-
+  // Planetary hours run continuously in Chaldean order and the planetary day
+  // begins at sunrise, so the night belongs to the weekday of the daylight
+  // that preceded it (currentEvent = that evening's sunset).
   const { name: planetaryRuler, nameEn: planetaryRulerEn } =
-    getBabylonianPlanetaryRuler(temporalHour, isDay, calendarDate);
+    getBabylonianPlanetaryRuler(temporalHour, isDay, currentEvent.time, lng);
 
   const moonPhase = getMoonPhase(date);
   const moonPhaseName = getBabylonianMoonPhaseName(moonPhase);
-  const gregYear = calendarDate.getFullYear();
 
-  // Find this Babylonian year's Nisannu 1
-  let nisannu1JD = getNisannu1JD(gregYear, lat, lng);
-  const currentJD = toJD(calendarDate);
-
-  if (currentJD < nisannu1JD) {
-    // Before this year's Nisannu — we're still in last year's Babylonian year
-    nisannu1JD = getNisannu1JD(gregYear - 1, lat, lng);
-  }
-
-  // SE year based on which Gregorian year Nisannu 1 falls in
-  const nisannuMs = (nisannu1JD - 2440587.5) * 86400000;
-  const nisannuGregYear = new Date(nisannuMs).getFullYear();
-  const seYear = nisannuGregYear + 311;
-
-  // Months & day within month
-  const daysSinceNisannu = currentJD - nisannu1JD;
-  const monthsSinceNisannu = Math.floor(daysSinceNisannu / SYNODIC_MONTH);
-  const dayInMonth = Math.floor(daysSinceNisannu % SYNODIC_MONTH) + 1;
-
-  // Intercalary year: next Nisannu more than 12.5 months away?
-  const nextNisannu1JD = getNisannu1JD(nisannuGregYear + 1, lat, lng);
-  const yearLengthMonths = (nextNisannu1JD - nisannu1JD) / SYNODIC_MONTH;
-  const isIntercalaryYear = yearLengthMonths > 12.5;
-  const totalMonths = isIntercalaryYear ? 13 : 12;
-
-  const monthIndex = Math.min(monthsSinceNisannu, totalMonths - 1);
-  const isIntercalary = isIntercalaryYear && monthIndex === 12;
+  // Lunisolar date: the civil day begins at sunset; month and year from the
+  // crescent-month engine.
+  const { anchor, monthIndex, day: dayInMonth, monthCount } = locateBabylonianDay(date, lat, lng);
+  const seYear = anchor + 311;
+  const isIntercalary = monthCount === 13 && monthIndex === 12;
   const monthName = isIntercalary ? 'Addaru II' : BABYLONIAN_MONTHS[monthIndex % 12];
 
   const regentIndex = monthIndex % 12;
@@ -319,7 +272,7 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
     seYear,
     monthName,
     monthIndex,
-    day: Math.max(1, Math.min(dayInMonth, 30)),
+    day: dayInMonth,
     isIntercalary,
     zodiacSign: getBabylonianZodiac(date),
     planetaryRuler,
@@ -397,8 +350,8 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
   const moonPhase = getMoonPhase(now);
   const moonPhaseLabel = getBabylonianMoonPhaseName(moonPhase);
 
-  const civilDate = isDay ? now : nextEvent.time;
-  const { name: planetaryRuler } = getBabylonianPlanetaryRuler(romanHour, isDay, civilDate);
+  // Night hours belong to the weekday of the preceding daylight (see getBabylonianDate).
+  const { name: planetaryRuler } = getBabylonianPlanetaryRuler(romanHour, isDay, currentEvent.time, lng);
 
   // Babylonian date string for romanDateString field
   const babDate = getBabylonianDate(now, lat, lng);
@@ -420,7 +373,7 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
     hourLengthMinutes,
     sunrise: isDay
       ? currentEvent.time
-      : (points.find(p => p.type === 'sunrise' && p.time < currentEvent.time)?.time
+      : ([...points].reverse().find(p => p.type === 'sunrise' && p.time < currentEvent.time)?.time
           ?? new Date(currentEvent.time.getTime() - 12 * 3600 * 1000)),
     sunset: isDay ? nextEvent.time : currentEvent.time,
     nextSunrise: nextSunriseDisplay,
@@ -433,7 +386,8 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
     vigilia,
     nundinalLetter: '',
     isMarketDay: false,
-    dayOfWeek: `Yūm ${planetaryRuler}`,
+    // The weekday is named after the ruler of its first daylight hour.
+    dayOfWeek: `Yūm ${PLANETARY_HOURS_AKK[DAY_START_INDEX[observerWeekday(currentEvent.time, lng)]]}`,
     indiction: 0,
     tutelaMensis: BABYLONIAN_MONTH_REGENTS[babDate.monthIndex % 12],
     zodiacSign: getBabylonianZodiac(now),
@@ -442,28 +396,20 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
 
 // ─── Annual civil calendar (for the date picker) ───────────────────────────────
 
-const jdToDate = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
-
-const addLocalDays = (d: Date, n: number): Date => {
-  const out = new Date(d);
-  out.setDate(out.getDate() + n);
-  return out;
-};
-
 /** Gregorian year that anchors the Babylonian year (Nisannu 1) containing `date`. */
 export const getBabylonianYearAnchor = (date: Date, lat: number, lng: number): number =>
-  getBabylonianDate(date, lat, lng).seYear - 311;
+  locateBabylonianDay(date, lat, lng).anchor;
 
 /**
  * Builds a full Babylonian civil year (Nisannu → next Nisannu) as months of days
- * mapped to Gregorian dates. Matches the arithmetic used by `getBabylonianDate`
- * when evaluated at local noon, so labels and selected dates stay consistent.
+ * mapped to Gregorian dates. Each civil day (sunset → sunset) is represented by
+ * the noon of its daylight half, so `getBabylonianDate` reports exactly the
+ * month/day shown in the picker.
  */
 export const getBabylonianCalendarYear = (anchorGregYear: number, lat: number, lng: number): CivilCalendarYear => {
-  const nisJD = getNisannu1JD(anchorGregYear, lat, lng);
-  const nextNisJD = getNisannu1JD(anchorGregYear + 1, lat, lng);
-  const isIntercalaryYear = (nextNisJD - nisJD) / SYNODIC_MONTH > 12.5;
-  const totalMonths = isIntercalaryYear ? 13 : 12;
+  const starts = babYearMonths(anchorGregYear, lat, lng);
+  const totalMonths = starts.length - 1;
+  const isIntercalaryYear = totalMonths === 13;
   const seYear = anchorGregYear + 311;
 
   const months: CivilCalendarMonth[] = [];
@@ -471,23 +417,11 @@ export const getBabylonianCalendarYear = (anchorGregYear: number, lat: number, l
   for (let m = 0; m < totalMonths; m++) {
     const isIntercalaryMonth = isIntercalaryYear && m === 12;
     const name = isIntercalaryMonth ? 'Addaru II' : BABYLONIAN_MONTHS[m % 12];
+    const length = civilDaysBetween(starts[m], starts[m + 1]);
     const days: CivilCalendarDay[] = [];
-
-    for (let d = 1; d <= 30; d++) {
-      const target = nisJD + m * SYNODIC_MONTH + (d - 1);
-      let g = jdToDate(target);
-      g.setHours(12, 0, 0, 0);
-      if (toJD(g) < target) g = addLocalDays(g, 1);
-      if (toJD(g) >= target + 1) g = addLocalDays(g, -1);
-
-      const monthsSince = Math.floor((toJD(g) - nisJD) / SYNODIC_MONTH);
-      if (monthsSince !== m) break;
-
-      const dayInMonth = Math.floor((toJD(g) - nisJD) % SYNODIC_MONTH) + 1;
-      days.push({ day: Math.max(1, Math.min(dayInMonth, 30)), gregorian: g });
+    for (let d = 1; d <= length; d++) {
+      days.push({ day: d, gregorian: daytimeOfCivilDay(new Date(starts[m].getTime() + (d - 1) * DAY_MS)) });
     }
-
-    if (days.length === 0) break;
 
     months.push({
       key: `bab-${m}`,

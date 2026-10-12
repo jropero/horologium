@@ -1,5 +1,9 @@
 import { chineseCalendarData, SolarTerm } from './chineseCalendarData';
+import { SearchSunLongitude } from 'astronomy-engine';
 import { getSolarLongitudeDeg } from './solar';
+
+const CST_OFFSET_MS = 8 * 3600000;
+const cstDayOf = (ms: number): number => Math.floor((ms + CST_OFFSET_MS) / 86400000);
 
 // Solar terms correspond to ecliptic longitudes at 15° intervals, starting from 315°:
 // Lìchūn (315°), Yǔshuǐ (330°), Jīngzhé (345°), Chūnfēn (0°), Qīngmíng (15°), Gǔyǔ (30°),
@@ -20,19 +24,11 @@ export const getChineseCalendarData = (date: Date): { term: SolarTerm; pentad: n
   const offset = ((solarLon - termStart) % 360 + 360) % 360;
   const pentad = Math.min(Math.floor(offset / 5) + 1, 3);
 
-  // Compute exact days until next term by scanning forward day by day
+  // Days until the next term, counted in CST (UTC+8) calendar days — the
+  // reckoning in which Chinese almanacs date the solar terms.
   const nextStart = ((termIndex + 1) * 15 + 315) % 360;
-  let daysUntilChange = 0;
-  for (let d = 0; d <= 20; d++) {
-    const check = new Date(date);
-    check.setDate(date.getDate() + d);
-    const checkLon = getSolarLongitudeDeg(check);
-    const diff = ((checkLon - nextStart) % 360 + 360) % 360;
-    if (diff < 15) {
-      daysUntilChange = d;
-      break;
-    }
-  }
+  const next = SearchSunLongitude(nextStart, date, 20);
+  const daysUntilChange = next ? cstDayOf(next.date.getTime()) - cstDayOf(date.getTime()) : 0;
 
   return { term, pentad, daysUntilChange };
 };

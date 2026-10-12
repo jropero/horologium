@@ -1,4 +1,5 @@
 import { ROMAN_YEAR_DATA, YearDayEntry } from './romanYearData';
+import { getRomanYearDataKey } from './romanTimeUtils';
 
 export type DayStatus = 'F' | 'N' | 'NP' | 'C' | 'EN';
 
@@ -387,9 +388,9 @@ const getDefaultStatusDescription = (status: DayStatus): string => {
 };
 
 export const getRomanDayInfo = (date: Date): RomanDayInfo => {
-    const month = date.getMonth();
-    const day = date.getDate(); // 1-31
-    const key = `${month}-${day}`;
+    // Julian date before 1582 and leap-year-aware February mapping
+    const key = getRomanYearDataKey(date);
+    const [month, day] = key.split('-').map(Number);
 
     // Look up in our extensive year database
     const entry = ROMAN_YEAR_DATA[key];

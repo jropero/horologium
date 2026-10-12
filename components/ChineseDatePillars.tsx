@@ -60,7 +60,7 @@ const ChineseDatePillars: React.FC<Props> = ({
       <div className="px-5 pt-4 pb-4 border-b border-gold-dim/20">
         <div className="text-center mb-4">
           <div className="text-3xl font-serif text-gold-leaf">
-            {isLeapMonth ? '闰' : ''}{monthName}&nbsp;&nbsp;{dayName}
+            {monthName}&nbsp;&nbsp;{dayName}
           </div>
           <div className="text-xs text-parchment/50 mt-1">
             {isLeapMonth ? 'Mes intercalar · ' : ''}{monthNumber}º mes lunar · Día {dayNumber}

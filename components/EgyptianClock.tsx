@@ -4,6 +4,7 @@ import { useCivilization } from '../contexts/CivilizationContext';
 import { getEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEgyptianMonthDeity } from '../utils/egyptianCalendarData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
+import { getEgyptianDayAnchor } from '../utils/egyptianTimeUtils';
 
 interface EgyptianClockProps {
   modernTime: Date;
@@ -21,13 +22,16 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
   loading,
   weather: _weather,
   onUpdateLocation: _onUpdateLocation,
-  currentLat: _currentLat,
-  currentLng: _currentLng,
+  currentLat,
+  currentLng,
 }) => {
   const { labels } = useCivilization();
 
+  // Egyptian day begins at sunrise (same anchor as calculateEgyptianTime).
+  const dayAnchorMs = getEgyptianDayAnchor(modernTime, currentLat, currentLng).getTime();
+
   const egyptianDateInfo = useMemo(() => {
-    const eDate = getEgyptianDate(modernTime);
+    const eDate = getEgyptianDate(new Date(dayAnchorMs));
     const deity = getEgyptianMonthDeity(eDate.monthIndex);
     const hemerology = getHemerologyForDate(modernTime, eDate.monthIndex, eDate.dayOfMonth);
 
@@ -51,7 +55,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
     }
 
     return { eDate, deity, hemerology, currentPrognosis, partName };
-  }, [modernTime.getDate(), romanTime.romanHour, romanTime.isDay]);
+  }, [dayAnchorMs, romanTime.romanHour, romanTime.isDay]);
 
   if (loading) {
     return (

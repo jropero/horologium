@@ -32,8 +32,15 @@ export const PLANETARY_HOURS_GREEK = [
 
 const DAY_START_INDEX = [3, 6, 2, 5, 1, 4, 0];
 
-export const getGreekPlanetaryRuler = (currentHour: number, isDay: boolean, date: Date): string => {
-  const dayOfWeek = date.getDay();
+// Weekday at the observer's mean local solar time (independent of device timezone).
+const observerWeekday = (t: Date, lng: number): number =>
+  new Date(t.getTime() + lng * 240000).getUTCDay();
+
+// Planetary hours run continuously in Chaldean order; the planetary day begins
+// at sunrise, so a night belongs to the weekday of the daylight before it.
+// `periodStart` = the sunrise (day) or sunset (night) that opened the current period.
+export const getGreekPlanetaryRuler = (currentHour: number, isDay: boolean, periodStart: Date, lng: number): string => {
+  const dayOfWeek = observerWeekday(periodStart, lng);
   const startIndex = DAY_START_INDEX[dayOfWeek];
   let hoursPassed = currentHour - 1;
   if (!isDay) hoursPassed += 12;
@@ -182,22 +189,18 @@ export const calculateHellenicTime = (now: Date, lat: number, lng: number): Roma
   const moonPhase = getMoonPhase(now);
   const moonPhaseLabel = getGreekMoonPhaseName(moonPhase);
   
-  // The Attic day starts at sunset.
-  // Use the real sunset time from the solar engine: when isDay is false,
-  // baseTime IS the sunset. We compare against today's sunset to determine
-  // if we've crossed into the next Attic day.
-  const todaySunset = isDay ? endTime : baseTime;
-  const isAfterSunset = now >= todaySunset && !isDay;
-  const atticDate = getAtticDate(now, isAfterSunset);
+  // The Attic day runs from sunset to sunset (handled by the Attic engine).
+  const atticDate = getAtticDate(now, lat, lng);
 
-  const olympiad = getOlympiadYear(now.getFullYear());
+  // Olympiad years begin with the Attic year (Hekatombaion, midsummer).
+  const olympiad = getOlympiadYear(atticDate.anchorGregYear);
 
   return {
     romanHour,
     isDay,
     hourName,
     hourLengthMinutes,
-    sunrise: isDay ? baseTime : points.find(p => p.type === 'sunrise' && p.time < baseTime)?.time || new Date(baseTime.getTime() - 12 * 3600 * 1000),
+    sunrise: isDay ? baseTime : [...points].reverse().find(p => p.type === 'sunrise' && p.time < baseTime)?.time || new Date(baseTime.getTime() - 12 * 3600 * 1000),
     sunset: isDay ? endTime : baseTime,
     nextSunrise: nextSunriseDisplay,
     romanDateString: `${atticDate.short} ${olympiad.label}`,
@@ -205,12 +208,12 @@ export const calculateHellenicTime = (now: Date, lat: number, lng: number): Roma
     atticDate,
     moonPhase,
     moonPhaseLabel,
-    planetaryRuler: getGreekPlanetaryRuler(romanHour, isDay, now),
+    planetaryRuler: getGreekPlanetaryRuler(romanHour, isDay, baseTime, lng),
     civilDayPart,
     vigilia,
     nundinalLetter: '', // Greeks didn't use nundinal letters
     isMarketDay: false,
-    dayOfWeek: GREEK_WEEKDAYS[now.getDay()],
+    dayOfWeek: GREEK_WEEKDAYS[observerWeekday(baseTime, lng)],
     indiction: 0,
     tutelaMensis: TUTELA_MENSIS_GREEK[now.getMonth()],
     zodiacSign: getGreekZodiacSign(now)
