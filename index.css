@@ -413,3 +413,26 @@
 @media (prefers-reduced-motion: reduce) {
   .sopdet-glow::before { animation: none; }
 }
+
+/* Mythological creatures on the Roman map (RomanMapCanvas). Each creature is a small
+   pre-drawn canvas; the idle motion is pure CSS, so no JS loop runs, and the layer
+   is unmounted below the zoom threshold. Duration/delay are set inline per creature. */
+.creature-bob,
+.creature-breathe {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 85%;
+}
+.creature-bob { animation-name: creatureBob; }
+.creature-breathe { animation-name: creatureBreathe; }
+@keyframes creatureBob {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50%      { transform: translateY(-2px) rotate(2.5deg); }
+}
+@keyframes creatureBreathe {
+  0%, 100% { transform: scale(1) rotate(-1deg); }
+  50%      { transform: scale(1.035) rotate(1deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .creature-bob, .creature-breathe { animation: none; }
+}

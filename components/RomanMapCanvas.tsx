@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getProvinceMeta, getRomanProvince, loadRomanMapData, RomanMapData } from '../utils/romanProvinces';
+import { CREATURES, CREATURE_ART_PX, MapCreature, paintCreature } from '../utils/romanMapCreatures';
 
 /**
  * Canvas map of the Roman Empire (AD 117) shown in the ProvinciaInfo modal.
@@ -26,6 +27,10 @@ const INITIAL_LNG = 15;        // scroll to the Mediterranean on open
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const REGIO_ZOOM = 2;          // below this, Italy gets one "Italia" label instead of 11 regiones
+const CREATURE_ZOOM = 3;       // mythological creatures exist only from this zoom on
+const CREATURE_FADE = 0.6;     // zoom range over which they fade from faint to full
+/** On-screen creature size in px: grows a little with zoom. */
+const creatureSize = (zoom: number) => 44 + 12 * (zoom - CREATURE_ZOOM);
 const MIN_CITIES = 50;         // cities shown at minimum zoom; all of them at MAX_ZOOM
 const HIT_RADIUS = 16;         // px, regardless of the drawn dot size
 const CLICK_SLOP = 6;          // px of pointer travel before a press stops counting as a tap
@@ -200,6 +205,9 @@ const readColors = () => {
 
 type Status = 'loading' | 'ready' | 'error';
 
+type Selection = { kind: 'city'; city: City } | { kind: 'creature'; creature: MapCreature };
+const selectionPoint = (s: Selection) => (s.kind === 'city' ? s.city : s.creature);
+
 const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, onLocationChange, onClose }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -217,6 +225,9 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
   const zoomFrameRef = useRef<number | null>(null);
   const pendingZoomRef = useRef<{ zoom: number; x: number; y: number } | null>(null);
   const hitsRef = useRef<{ city: City; x: number; y: number }[]>([]);
+  const creatureLayerRef = useRef<HTMLDivElement>(null);
+  const creatureElsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const creatureHitsRef = useRef<{ creature: MapCreature; x: number; y: number; r: number }[]>([]);
   const pointersRef = useRef(new Map<number, { x: number; y: number }>());
   const gestureRef = useRef<{ startX: number; startY: number; moved: boolean } | null>(null);
   const pinchRef = useRef<{ dist: number; zoom: number } | null>(null);
@@ -226,7 +237,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
   const [status, setStatus] = useState<Status>('loading');
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [zoom, setZoom] = useState(MIN_ZOOM); // mirrors zoomRef for the zoom buttons
-  const [selected, setSelected] = useState<City | null>(null);
+  const [selected, setSelected] = useState<Selection | null>(null);
   const selectedRef = useRef(selected);
   selectedRef.current = selected;
 
@@ -332,15 +343,34 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
       }
 
       const sel = selectedRef.current;
-      if (sel) {
+      if (sel?.kind === 'city') {
         ctx.strokeStyle = colors.goldLeaf;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(xOf(sel.lng), yOf(sel.lat), r + 4, 0, Math.PI * 2);
+        ctx.arc(xOf(sel.city.lng), yOf(sel.city.lat), r + 4, 0, Math.PI * 2);
         ctx.stroke();
       }
     }
     hitsRef.current = hits;
+
+    // Creatures: a DOM layer mounted only from CREATURE_ZOOM (its idle motion is CSS),
+    // positioned here like the location pulse.
+    const creatureHits: { creature: MapCreature; x: number; y: number; r: number }[] = [];
+    const layer = creatureLayerRef.current;
+    if (layer && z >= CREATURE_ZOOM) {
+      layer.style.opacity = String(0.25 + 0.75 * clamp((z - CREATURE_ZOOM) / CREATURE_FADE, 0, 1));
+      const size = creatureSize(z);
+      CREATURES.forEach((creature, i) => {
+        const el = creatureElsRef.current[i];
+        if (!el) return;
+        const x = xOf(creature.lng), y = yOf(creature.lat);
+        const onCanvas = y > -size && y < h + size;
+        el.style.visibility = onCanvas ? 'visible' : 'hidden';
+        el.style.transform = `translate(${x - CREATURE_ART_PX / 2}px, ${y - CREATURE_ART_PX / 2}px) scale(${size / CREATURE_ART_PX})`;
+        if (onCanvas) creatureHits.push({ creature, x, y, r: Math.max(HIT_RADIUS, size * 0.45) });
+      });
+    }
+    creatureHitsRef.current = creatureHits;
 
     // 9. Current location: crosshair here, pulse as a CSS-animated element.
     const ux = xOf(userRef.current.lng), uy = yOf(userRef.current.lat);
@@ -366,16 +396,18 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
       marker.style.transform = `translate(${ux}px, ${uy}px)`;
     }
 
-    // Keep the city card attached to its dot (it lives in the canvas wrapper, so horizontal scroll is free).
+    // Keep the card attached to its dot or creature (it lives in the canvas wrapper, so horizontal scroll is free).
     const card = cardRef.current;
     const sel = selectedRef.current;
     if (card && sel) {
-      const x = clamp(xOf(sel.lng), card.offsetWidth / 2 + 4, w - card.offsetWidth / 2 - 4);
-      const y = yOf(sel.lat);
-      const above = y - card.offsetHeight - 18 >= 0;
+      const p = selectionPoint(sel);
+      const gap = sel.kind === 'creature' ? creatureSize(z) / 2 + 2 : 14;
+      const x = clamp(xOf(p.lng), card.offsetWidth / 2 + 4, w - card.offsetWidth / 2 - 4);
+      const y = yOf(p.lat);
+      const above = y - card.offsetHeight - gap - 4 >= 0;
       card.style.left = `${x}px`;
       card.style.top = `${y}px`;
-      card.style.transform = above ? 'translate(-50%, calc(-100% - 14px))' : 'translate(-50%, 14px)';
+      card.style.transform = above ? `translate(-50%, calc(-100% - ${gap}px))` : `translate(-50%, ${gap}px)`;
     }
   }, []);
 
@@ -421,6 +453,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
     const margin = Math.max(0, (container.clientWidth - canvasSize().w) / 2);
     container.scrollLeft = margin + (lng - LNG_MIN) * s1 - (clientX - container.getBoundingClientRect().left);
     setZoom(z);
+    if (z < CREATURE_ZOOM && selectedRef.current?.kind === 'creature') setSelected(null);
   }, [applySize]);
 
   /** The zoom the map is heading to, including a request not yet applied this frame. */
@@ -501,8 +534,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
     return () => window.removeEventListener('keydown', onKey, true);
   }, []);
 
-  // Draw synchronously when the card opens so it never shows at its unpositioned origin.
-  useLayoutEffect(() => { draw(); }, [selected, latitude, longitude, draw]);
+  const creaturesShown = status === 'ready' && zoom >= CREATURE_ZOOM;
+
+  // Draw synchronously when the card opens (or the creature layer mounts) so nothing
+  // shows at its unpositioned origin.
+  useLayoutEffect(() => { draw(); }, [selected, latitude, longitude, creaturesShown, draw]);
 
   useEffect(() => {
     document.fonts?.ready.then(() => scheduleDraw());
@@ -521,11 +557,17 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
     const px = clientX - rect.left, py = clientY - rect.top;
-    let best: City | null = null;
-    let bestD = HIT_RADIUS * HIT_RADIUS;
+    // Distances are relative to each target's hit radius, so a tap on a creature's body
+    // beats a city dot at its edge, while a tap right on a dot still picks the city.
+    let best: Selection | null = null;
+    let bestD = 1;
     for (const { city, x, y } of hitsRef.current) {
-      const d = (x - px) ** 2 + (y - py) ** 2;
-      if (d <= bestD) { bestD = d; best = city; }
+      const d = ((x - px) ** 2 + (y - py) ** 2) / (HIT_RADIUS * HIT_RADIUS);
+      if (d <= bestD) { bestD = d; best = { kind: 'city', city }; }
+    }
+    for (const { creature, x, y, r } of creatureHitsRef.current) {
+      const d = ((x - px) ** 2 + (y - py) ** 2) / (r * r);
+      if (d <= bestD) { bestD = d; best = { kind: 'creature', creature }; }
     }
     setSelected(best);
   };
@@ -583,7 +625,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
     if (tap) tapAt(e.clientX, e.clientY);
   };
 
-  const province = selected ? getRomanProvince(selected.lat, selected.lng) : null;
+  const province = selected?.kind === 'city' ? getRomanProvince(selected.city.lat, selected.city.lng) : null;
 
   return (
     <div className="flex flex-col gap-2">
@@ -604,6 +646,25 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
             onPointerUp={e => endPointer(e, false)}
             onPointerCancel={e => endPointer(e, true)}
           />
+          {creaturesShown && (
+            <div ref={creatureLayerRef} className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+              {CREATURES.map((creature, i) => (
+                <div
+                  key={creature.key}
+                  ref={el => { creatureElsRef.current[i] = el; }}
+                  className="absolute left-0 top-0"
+                  style={{ width: CREATURE_ART_PX, height: CREATURE_ART_PX, transformOrigin: '50% 50%' }}
+                >
+                  <canvas
+                    ref={el => { if (el && !el.dataset.painted) { paintCreature(el, creature); el.dataset.painted = '1'; } }}
+                    className={`block ${creature.sea ? 'creature-bob' : 'creature-breathe'}`}
+                    // Staggered so the creatures never move in step.
+                    style={{ width: '100%', height: '100%', animationDuration: `${5 + (i % 4) * 0.9}s`, animationDelay: `${-i * 0.73}s` }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <div ref={markerRef} className="absolute left-0 top-0 pointer-events-none" style={{ display: 'none' }}>
             <span className="absolute -left-3 -top-3 w-6 h-6 rounded-full border-2 animate-ping" style={{ borderColor: MARKER }} />
           </div>
@@ -631,20 +692,30 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({ latitude, longitude, on
               className="absolute z-10 w-60 p-3 rounded-sm border border-gold-dim/60 bg-ink/95 shadow-2xl"
               style={{ left: 0, top: 0 }}
               role="dialog"
-              aria-label={selected.latin}
+              aria-label={selected.kind === 'city' ? selected.city.latin : selected.creature.name}
             >
-              <div className="font-serif text-xl font-bold text-gold-leaf leading-tight">{selected.latin}</div>
-              <div className="font-body italic text-base text-parchment/80 leading-snug">{selected.modern}</div>
-              <div className="font-body text-sm text-parchment/60 mt-1">
-                {selected.fortress ? 'Castra' : 'Urbs'}{province ? ` · ${province.name}` : ''}
-              </div>
-              <button
-                type="button"
-                onClick={() => { onLocationChange(selected.lat, selected.lng); onClose(); }}
-                className="mt-3 w-full font-serif text-xs uppercase tracking-[0.2em] px-3 py-2 rounded-sm border border-gold-leaf/60 text-gold-leaf hover:bg-gold-leaf/10"
-              >
-                Fijar como mi ubicación
-              </button>
+              {selected.kind === 'city' ? (
+                <>
+                  <div className="font-serif text-xl font-bold text-gold-leaf leading-tight">{selected.city.latin}</div>
+                  <div className="font-body italic text-base text-parchment/80 leading-snug">{selected.city.modern}</div>
+                  <div className="font-body text-sm text-parchment/60 mt-1">
+                    {selected.city.fortress ? 'Castra' : 'Urbs'}{province ? ` · ${province.name}` : ''}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { onLocationChange(selected.city.lat, selected.city.lng); onClose(); }}
+                    className="mt-3 w-full font-serif text-xs uppercase tracking-[0.2em] px-3 py-2 rounded-sm border border-gold-leaf/60 text-gold-leaf hover:bg-gold-leaf/10"
+                  >
+                    Fijar como mi ubicación
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="font-serif text-lg font-bold tracking-[0.12em] text-gold-leaf leading-tight">{selected.creature.name}</div>
+                  <div className="font-body italic text-base text-parchment/85 leading-snug mt-1">{selected.creature.desc}</div>
+                  <div className="font-body text-sm text-parchment/50 mt-1">{selected.creature.source}</div>
+                </>
+              )}
             </div>
           )}
         </div>
