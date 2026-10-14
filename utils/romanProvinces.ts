@@ -1,7 +1,7 @@
 // Roman provinces. Until the map has been opened once, lookups use the coarse
 // bounding boxes below; after that, point-in-polygon against the real province
-// boundaries of the klokantech/roman-empire dataset (fetched at runtime, never
-// bundled) — see loadRomanMapData().
+// boundaries of the klokantech/roman-empire dataset (bundled under
+// public/assets/roman-map/, loaded on demand) — see loadRomanMapData().
 
 export interface RomanProvince {
   name: string;
@@ -129,9 +129,11 @@ export const getProvinceMeta = (geoName: string): ProvinceMeta => {
   return GEO_PROVINCE_META[geoName] ?? { name: geoName, nameEs: geoName, desc: '' };
 };
 
-// --- GEOJSON DATA (fetched at runtime, cached per session) ---
+// --- GEOJSON DATA (bundled in public/assets/roman-map/, fetched on demand + cached per session) ---
 
-const DATA_BASE = 'https://raw.githubusercontent.com/klokantech/roman-empire/master/data/';
+// Same base as the rest of the app: '/r/' on the web, './' in the Capacitor build,
+// so the layers resolve to local files inside the APK and the Roman map works offline.
+const DATA_BASE = `${import.meta.env.BASE_URL}assets/roman-map/`;
 
 type Position = [number, number];
 interface Feature<G, P> { type: 'Feature'; properties: P; geometry: G }

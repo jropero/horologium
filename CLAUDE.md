@@ -48,6 +48,7 @@ Heavy static datasets live in `utils/`:
 - Babylonian: `babylonianCalendarUtils.ts`, `babylonianLoreData.ts`, `babylonianSkylineGenerator.ts`, `babylonianWisdomData.ts`
 - Chinese: `chineseCalendarData.ts`, `chineseCalendarUtils.ts`, `chineseLunisolarUtils.ts`, `chineseTimeUtils.ts`
 - Shared: `sententiaeData.ts`, `apophthegmataData.ts`, `sortesVergilianae.ts`, `locations.ts`
+- The Roman map (`components/RomanMapCanvas.tsx` + `utils/romanProvinces.ts`) draws the klokantech/roman-empire layers bundled under `public/assets/roman-map/` (provinces, labels, ~8 000 places, rivers, lakes, fortifications). `loadRomanMapData()` reads them from `${import.meta.env.BASE_URL}assets/roman-map/` — `/r/` on the web, `./` in the Android APK — so the map is fully offline.
 
 ### Procedural skyline
 
