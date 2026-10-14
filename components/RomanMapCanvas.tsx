@@ -20,9 +20,11 @@ import {
 
 /**
  * Canvas map of the Roman Empire (AD 117) shown in the ProvinciaInfo modal.
- * Plate carrée projection. The canvas keeps the geographic 55:35 aspect ratio and
+ * Plate carrée projection. The map wrapper keeps the geographic 55:35 aspect ratio and
  * is wider than a phone screen; its container scrolls horizontally with native
- * scrolling, while vertical pan (when zoomed) and zoom are handled here. Layers
+ * scrolling, while vertical pan (when zoomed) and zoom are handled here. The canvas
+ * itself only covers the visible strip plus OVERSCAN on each side and is re-centred
+ * when the scroll leaves that margin, so its cost doesn't grow with zoom. Layers
  * are fetched at runtime by loadRomanMapData() and turned into Path2D objects
  * once per session.
  */
@@ -51,6 +53,15 @@ const MIN_CITIES = 50; // cities shown at minimum zoom; all of them at MAX_ZOOM
 const HIT_RADIUS = 16; // px, regardless of the drawn dot size
 const CLICK_SLOP = 6; // px of pointer travel before a press stops counting as a tap
 const MAX_CANVAS_PIXELS = 16_000_000; // iOS Safari refuses larger canvases
+const OVERSCAN = 0.5; // canvas margin beyond the visible strip, per side, in viewport widths
+const CELL_DEG = 1; // spatial-index cell size
+const MAX_CITY_R = 5; // px; larger dots merge into blobs in dense regions
+const MAX_CITY_FONT = 16; // px; city names stay smaller than province labels
+const MAX_LABELS = 200; // per frame; collision avoidance usually stops well before
+const DEDUPE_ZOOM = 3; // above this, a dot whose centre falls inside a drawn dot is skipped
+
+/** Dot radius in px: grows with zoom, capped so neighbours stay distinct. */
+const cityRadius = (zoom: number) => Math.min(MAX_CITY_R, 1.6 + 0.35 * zoom);
 
 const SEA = "#3a6186";
 const RIVER = "rgba(58,97,134,0.8)";
@@ -88,6 +99,80 @@ interface Scene {
   labels: ProvinceLabel[];
   italia: { lng: number; lat: number } | null;
   cities: City[]; // most significant first
+  /** Indices into `cities` per CELL_DEG cell, ascending (= by rank). */
+  cityGrid: Int32Array[];
+}
+
+const GRID_COLS = Math.ceil(LNG_SPAN / CELL_DEG);
+const GRID_ROWS = Math.ceil(LAT_SPAN / CELL_DEG);
+const gridCol = (lng: number) =>
+  clamp(Math.floor((lng - LNG_MIN) / CELL_DEG), 0, GRID_COLS - 1);
+const gridRow = (lat: number) =>
+  clamp(Math.floor((LAT_MAX - lat) / CELL_DEG), 0, GRID_ROWS - 1);
+
+const buildCityGrid = (cities: City[]): Int32Array[] => {
+  const cells: number[][] = Array.from(
+    { length: GRID_COLS * GRID_ROWS },
+    () => [],
+  );
+  cities.forEach((c, i) =>
+    cells[gridRow(c.lat) * GRID_COLS + gridCol(c.lng)].push(i),
+  );
+  return cells.map((c) => Int32Array.from(c));
+};
+
+/**
+ * Screen-space bucket grid for collision tests: rectangles for labels, centres for dots.
+ * Built per frame; only the few cells a query touches are visited.
+ */
+class ScreenGrid {
+  private cells = new Map<number, number[]>();
+  constructor(private cell: number) {}
+  private key = (cx: number, cy: number) => cx * 65536 + cy;
+  private bucket(cx: number, cy: number) {
+    const k = this.key(cx, cy);
+    let b = this.cells.get(k);
+    if (!b) this.cells.set(k, (b = []));
+    return b;
+  }
+  /** True when the rect [x0,x1]×[y0,y1] intersects a stored rect. */
+  hitsRect(x0: number, y0: number, x1: number, y1: number) {
+    const c = this.cell;
+    for (let cx = Math.floor(x0 / c); cx <= Math.floor(x1 / c); cx++)
+      for (let cy = Math.floor(y0 / c); cy <= Math.floor(y1 / c); cy++) {
+        const b = this.cells.get(this.key(cx, cy));
+        if (!b) continue;
+        for (let i = 0; i < b.length; i += 4)
+          if (x0 < b[i + 2] && x1 > b[i] && y0 < b[i + 3] && y1 > b[i + 1])
+            return true;
+      }
+    return false;
+  }
+  addRect(x0: number, y0: number, x1: number, y1: number) {
+    const c = this.cell;
+    for (let cx = Math.floor(x0 / c); cx <= Math.floor(x1 / c); cx++)
+      for (let cy = Math.floor(y0 / c); cy <= Math.floor(y1 / c); cy++)
+        this.bucket(cx, cy).push(x0, y0, x1, y1);
+  }
+  /** True when a stored point lies closer than `d` (≤ cell size) to (x, y). */
+  hitsPoint(x: number, y: number, d: number) {
+    const cx = Math.floor(x / this.cell),
+      cy = Math.floor(y / this.cell);
+    for (let i = cx - 1; i <= cx + 1; i++)
+      for (let j = cy - 1; j <= cy + 1; j++) {
+        const b = this.cells.get(this.key(i, j));
+        if (!b) continue;
+        for (let k = 0; k < b.length; k += 2)
+          if ((b[k] - x) ** 2 + (b[k + 1] - y) ** 2 < d * d) return true;
+      }
+    return false;
+  }
+  addPoint(x: number, y: number) {
+    this.bucket(Math.floor(x / this.cell), Math.floor(y / this.cell)).push(
+      x,
+      y,
+    );
+  }
 }
 
 // Famous cities pinned to the top of the ranking, matched by name near these coordinates.
@@ -251,6 +336,7 @@ const buildScene = (data: RomanMapData): Scene => {
       }
     : null;
 
+  const cities = rankCities(data.places);
   return {
     provinces,
     lakes,
@@ -258,7 +344,8 @@ const buildScene = (data: RomanMapData): Scene => {
     fortifications,
     labels,
     italia,
-    cities: rankCities(data.places),
+    cities,
+    cityGrid: buildCityGrid(cities),
   };
 };
 
@@ -318,6 +405,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   const zoomRef = useRef(MIN_ZOOM);
   const panYRef = useRef(0); // px scrolled down from LAT_MAX (only non-zero when zoomed)
   const dprRef = useRef(1);
+  const viewWRef = useRef(0); // container (viewport) width
+  const canvasWRef = useRef(0); // canvas strip width, ≤ map width
+  const originXRef = useRef(0); // map x of the canvas strip's left edge
+  // City label widths per font px, indexed by city rank (NaN = not measured yet).
+  const labelWidthsRef = useRef(new Map<number, Float32Array>());
   const frameRef = useRef<number | null>(null);
   const zoomFrameRef = useRef<number | null>(null);
   const pendingZoomRef = useRef<{ zoom: number; x: number; y: number } | null>(
@@ -352,24 +444,48 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     h: baseHRef.current,
   });
 
+  /** Where the canvas strip should start (map px) so the visible part sits in its middle. */
+  const desiredOrigin = () => {
+    const container = containerRef.current;
+    if (!container) return 0;
+    const { w } = canvasSize();
+    const vw = viewWRef.current;
+    const margin = Math.max(0, (vw - w) / 2); // the wrapper is centred when narrower
+    return Math.round(
+      clamp(
+        container.scrollLeft - margin - OVERSCAN * vw,
+        0,
+        w - canvasWRef.current,
+      ),
+    );
+  };
+
   const draw = useCallback(() => {
     frameRef.current = null;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     const { w, h } = canvasSize();
+    const cw = canvasWRef.current;
     const s = scale();
     const z = zoomRef.current;
     const panY = panYRef.current;
     const dpr = dprRef.current;
     const colors = colorsRef.current;
+    // Everything below is in map px (the wrapper's coordinates); the canvas
+    // transform shifts by the strip origin.
+    const ox = desiredOrigin();
+    if (ox !== originXRef.current || !canvas.style.transform) {
+      originXRef.current = ox;
+      canvas.style.transform = `translateX(${ox}px)`;
+    }
     const xOf = (lng: number) => (lng - LNG_MIN) * s;
     const yOf = (lat: number) => (LAT_MAX - lat) * s - panY;
 
     // 1. Sea.
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(dpr, 0, 0, dpr, -dpr * ox, 0);
     ctx.fillStyle = SEA;
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(ox, 0, cw, h);
 
     const scene = sceneRef.current;
     const hits: { city: City; x: number; y: number }[] = [];
@@ -380,7 +496,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         0,
         0,
         -dpr * s,
-        -dpr * s * LNG_MIN,
+        -dpr * (s * LNG_MIN + ox),
         dpr * (LAT_MAX * s - panY),
       );
       ctx.lineJoin = "round";
@@ -407,7 +523,10 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       ctx.lineWidth = 0.9 / s;
       for (const p of scene.provinces) ctx.stroke(p);
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, -dpr * ox, 0);
+      // Canvas strip bounds in map px, widened by the tap radius.
+      const xMin = ox - HIT_RADIUS,
+        xMax = ox + cw + HIT_RADIUS;
 
       // 7. Province labels.
       const fontPx = Math.round(Math.min(18, 9 + 3 * (z - 1)));
@@ -416,12 +535,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       ctx.fillStyle = PROVINCE_LABEL;
       for (const l of scene.labels) {
         if (l.regio && z < REGIO_ZOOM) continue;
+        const x = xOf(l.lng);
+        if (x < ox - 400 || x > ox + cw + 400) continue; // wider than any label
         ctx.font = `${
           l.regio ? Math.round(fontPx * 0.8) : fontPx
         }px Cinzel, serif`;
         if (z < 3 && l.widthDeg * s < ctx.measureText(l.text).width * 0.5)
           continue;
-        ctx.fillText(l.text, xOf(l.lng), yOf(l.lat));
+        ctx.fillText(l.text, x, yOf(l.lat));
       }
       if (z < REGIO_ZOOM && scene.italia) {
         ctx.font = `${fontPx}px Cinzel, serif`;
@@ -429,16 +550,41 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       }
 
       // 8. Cities: filled circles for towns, hollow squares for legionary fortresses.
+      // The spatial index yields only the ranked-in cities near the strip, in rank order.
       const n = visibleCityCount(z, scene.cities.length);
-      const r = 1.6 + 0.35 * z;
+      const r = cityRadius(z);
+      const lng0 = xMin / s + LNG_MIN,
+        lng1 = xMax / s + LNG_MIN;
+      const latTop = LAT_MAX - (panY - HIT_RADIUS) / s,
+        latBottom = LAT_MAX - (panY + h + HIT_RADIUS) / s;
+      const candidates: number[] = [];
+      for (let row = gridRow(latTop); row <= gridRow(latBottom); row++)
+        for (let col = gridCol(lng0); col <= gridCol(lng1); col++) {
+          const cell = scene.cityGrid[row * GRID_COLS + col];
+          for (let k = 0; k < cell.length && cell[k] < n; k++)
+            candidates.push(cell[k]);
+        }
+      candidates.sort((a, b) => a - b);
+
+      // Close in, a lower-ranked dot whose centre falls inside a drawn dot is skipped
+      // (and so not tappable) until a closer zoom separates them; at MAX_ZOOM every city shows.
+      const dedupe = z > DEDUPE_ZOOM && z < MAX_ZOOM;
+      const dots = new ScreenGrid(Math.max(1, r));
+      const ranks: number[] = [];
       const towns = new Path2D();
       const forts = new Path2D();
-      for (let i = 0; i < n; i++) {
+      for (const i of candidates) {
         const city = scene.cities[i];
         const x = xOf(city.lng),
           y = yOf(city.lat);
-        if (y < -HIT_RADIUS || y > h + HIT_RADIUS) continue;
+        if (x < xMin || x > xMax || y < -HIT_RADIUS || y > h + HIT_RADIUS)
+          continue;
+        if (dedupe) {
+          if (dots.hitsPoint(x, y, r)) continue;
+          dots.addPoint(x, y);
+        }
         hits.push({ city, x, y });
+        ranks.push(i);
         if (city.fortress) forts.rect(x - r, y - r, r * 2, r * 2);
         else {
           towns.moveTo(x + r, y);
@@ -451,17 +597,51 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       ctx.lineWidth = 1.2;
       ctx.stroke(forts);
 
-      // Names for the most significant visible cities, with a parchment halo.
+      // Names for the most significant visible cities, with a parchment halo. Each
+      // name tries above, right, left, then below its dot and is dropped if all
+      // four would overlap a name already placed.
       const named = Math.min(hits.length, Math.round(16 * z * z));
-      ctx.font = `${Math.round(9 + z)}px Cinzel, serif`;
-      ctx.textBaseline = "bottom";
+      const cityFont = Math.round(Math.min(MAX_CITY_FONT, 9 + z));
+      ctx.font = `${cityFont}px Cinzel, serif`;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
       ctx.lineWidth = 3;
       ctx.strokeStyle = colors.parchment;
       ctx.fillStyle = colors.ink;
-      for (let i = 0; i < named; i++) {
-        const { city, x, y } = hits[i];
-        ctx.strokeText(city.latin, x, y - r - 2);
-        ctx.fillText(city.latin, x, y - r - 2);
+      let widths = labelWidthsRef.current.get(cityFont);
+      if (!widths) {
+        widths = new Float32Array(scene.cities.length).fill(NaN);
+        labelWidthsRef.current.set(cityFont, widths);
+      }
+      const placed = new ScreenGrid(64);
+      (window as any).__rects = []; // TEMP-DEBUG
+      const half = cityFont / 2;
+      const gap = r + 2;
+      for (let k = 0, shown = 0; k < named && shown < MAX_LABELS; k++) {
+        const { city, x, y } = hits[k];
+        const rank = ranks[k];
+        let tw = widths[rank];
+        if (Number.isNaN(tw))
+          tw = widths[rank] = ctx.measureText(city.latin).width;
+        const spots = [
+          [x - tw / 2, y - gap - half],
+          [x + gap + 1, y],
+          [x - gap - 1 - tw, y],
+          [x - tw / 2, y + gap + half],
+        ];
+        for (const [lx, cy] of spots) {
+          const x0 = lx - 2,
+            y0 = cy - half - 1,
+            x1 = lx + tw + 2,
+            y1 = cy + half + 1;
+          if (placed.hitsRect(x0, y0, x1, y1)) continue;
+          placed.addRect(x0, y0, x1, y1);
+          ((window as any).__rects ??= []).push([x0, y0, x1, y1]); // TEMP-DEBUG
+          ctx.strokeText(city.latin, lx, cy);
+          ctx.fillText(city.latin, lx, cy);
+          shown++;
+          break;
+        }
       }
 
       const sel = selectedRef.current;
@@ -474,6 +654,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       }
     }
     hitsRef.current = hits;
+    (window as any).__dbg = { hits, ox, cw, z, panY, s, n: scene && visibleCityCount(z, scene.cities.length), top: scene?.cities.slice(0, 5) }; // TEMP-DEBUG
 
     // Creatures: a DOM layer mounted only from CREATURE_ZOOM (its idle motion is CSS),
     // positioned here like the location pulse.
@@ -566,41 +747,56 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       frameRef.current = requestAnimationFrame(draw);
   }, [draw]);
 
-  /** Resizes the canvas for the current zoom and redraws at once (a resize clears the backing store). */
+  /** Draws now, dropping any frame already scheduled. */
+  const drawNow = useCallback(() => {
+    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    draw();
+  }, [draw]);
+
+  /**
+   * Sizes the wrapper to the map at the current zoom and the canvas to the visible
+   * strip plus overscan. The canvas backing store is only reallocated (which clears
+   * it) when its size changes, so callers must draw afterwards.
+   */
   const applySize = useCallback(() => {
     const container = containerRef.current,
       wrapper = wrapperRef.current,
       canvas = canvasRef.current;
     if (!container || !wrapper || !canvas) return;
     const { w, h } = canvasSize();
+    const vw = container.clientWidth;
+    const cw = Math.min(w, Math.ceil(vw * (1 + 2 * OVERSCAN)));
+    viewWRef.current = vw;
+    canvasWRef.current = cw;
     const dpr = Math.min(
       window.devicePixelRatio || 1,
       2,
-      Math.sqrt(MAX_CANVAS_PIXELS / (w * h)),
+      Math.sqrt(MAX_CANVAS_PIXELS / (cw * h)),
     );
     dprRef.current = dpr;
     wrapper.style.width = `${w}px`;
     wrapper.style.height = `${h}px`;
-    canvas.style.width = `${w}px`;
+    canvas.style.width = `${cw}px`;
     canvas.style.height = `${h}px`;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
+    const bw = Math.round(cw * dpr),
+      bh = Math.round(h * dpr);
+    if (canvas.width !== bw || canvas.height !== bh) {
+      canvas.width = bw;
+      canvas.height = bh;
+    }
     // Desktop: no scrollbar when the whole map fits.
-    container.style.scrollbarWidth =
-      w <= container.clientWidth ? "none" : "thin";
-    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
-    draw();
-  }, [draw]);
+    container.style.scrollbarWidth = w <= vw ? "none" : "thin";
+  }, []);
 
   /** Zooms keeping the map point under (clientX, clientY) fixed on screen. */
   const zoomAt = useCallback(
     (target: number, clientX: number, clientY: number) => {
       const container = containerRef.current,
-        canvas = canvasRef.current;
-      if (!container || !canvas) return;
+        wrapper = wrapperRef.current;
+      if (!container || !wrapper) return;
       const z = clamp(target, MIN_ZOOM, MAX_ZOOM);
       if (Math.abs(z - zoomRef.current) < 1e-3) return;
-      const rect = canvas.getBoundingClientRect();
+      const rect = wrapper.getBoundingClientRect();
       const px = clientX - rect.left,
         py = clientY - rect.top;
       const s0 = scale();
@@ -620,11 +816,12 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         margin +
         (lng - LNG_MIN) * s1 -
         (clientX - container.getBoundingClientRect().left);
+      drawNow(); // after the scroll, so the canvas strip lands under the viewport
       setZoom(z);
       if (z < CREATURE_ZOOM && selectedRef.current?.kind === "creature")
         setSelected(null);
     },
-    [applySize],
+    [applySize, drawNow],
   );
 
   /** The zoom the map is heading to, including a request not yet applied this frame. */
@@ -663,7 +860,24 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     const margin = Math.max(0, (container.clientWidth - canvasSize().w) / 2);
     container.scrollLeft =
       margin + (INITIAL_LNG - LNG_MIN) * scale() - container.clientWidth / 2;
-  }, [applySize]);
+    drawNow();
+  }, [applySize, drawNow]);
+
+  // Native horizontal scrolling moves the canvas strip with the map; re-centre it
+  // once the viewport has used up half of the overscan on either side.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const onScroll = () => {
+      if (
+        Math.abs(desiredOrigin() - originXRef.current) >
+        (OVERSCAN * viewWRef.current) / 2
+      )
+        scheduleDraw();
+    };
+    container.addEventListener("scroll", onScroll, { passive: true });
+    return () => container.removeEventListener("scroll", onScroll);
+  }, [scheduleDraw]);
 
   useEffect(() => {
     let cancelled = false;
@@ -692,10 +906,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         baseHRef.current * (zoomRef.current - 1),
       );
       applySize();
+      drawNow();
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [applySize]);
+  }, [applySize, drawNow]);
 
   // Wheel / trackpad pinch zooms; horizontal wheel deltas keep scrolling natively.
   useEffect(() => {
@@ -734,8 +949,17 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     draw();
   }, [selected, latitude, longitude, creaturesShown, draw]);
 
+  // Label widths measured with a fallback font are stale once Cinzel arrives.
   useEffect(() => {
-    document.fonts?.ready.then(() => scheduleDraw());
+    const fonts = document.fonts;
+    if (!fonts) return;
+    const refresh = () => {
+      labelWidthsRef.current.clear();
+      scheduleDraw();
+    };
+    fonts.ready.then(refresh);
+    fonts.addEventListener?.("loadingdone", refresh);
+    return () => fonts.removeEventListener?.("loadingdone", refresh);
   }, [scheduleDraw]);
 
   useEffect(
@@ -752,7 +976,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   );
 
   const tapAt = (clientX: number, clientY: number) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
+    const rect = wrapperRef.current?.getBoundingClientRect(); // hits are in map px
     if (!rect) return;
     const px = clientX - rect.left,
       py = clientY - rect.top;
@@ -873,10 +1097,15 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           } as React.CSSProperties
         }
       >
-        <div ref={wrapperRef} className="relative mx-auto">
+        {/* Sea background: shows only if a fast fling outruns the canvas strip for a frame. */}
+        <div
+          ref={wrapperRef}
+          className="relative mx-auto"
+          style={{ background: SEA }}
+        >
           <canvas
             ref={canvasRef}
-            className="block select-none cursor-grab active:cursor-grabbing"
+            className="absolute left-0 top-0 block select-none cursor-grab active:cursor-grabbing"
             role="img"
             aria-label="Mapa del Imperio Romano — toque una ciudad para elegirla como ubicación"
             onPointerDown={onPointerDown}
