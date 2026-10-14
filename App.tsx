@@ -366,7 +366,9 @@ const AppContent: React.FC = () => {
 
       <PlanetaryPositions currentDate={modernTime} />
 
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && <ProvinciaInfo latitude={latitude} longitude={longitude} />}
+      {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+        <ProvinciaInfo latitude={latitude} longitude={longitude} onUpdateLocation={handleUpdateLocation} />
+      )}
 
       {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
 
