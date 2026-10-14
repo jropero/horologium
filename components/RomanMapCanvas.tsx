@@ -149,6 +149,31 @@ function zoomAt(v: ViewState, offCx: number, offCy: number, factor: number, minS
   };
 }
 
+function clampPan(v: ViewState, w: number, h: number): ViewState {
+  const mapW = LNG_RANGE * v.scale;
+  const mapH = LAT_RANGE * v.scale;
+  let panX = v.panX;
+  let panY = v.panY;
+
+  if (mapW <= w) {
+    panX = 0;
+  } else {
+    const limit = (mapW - w) / 2;
+    panX = Math.max(-limit, Math.min(limit, panX));
+  }
+
+  if (mapH <= h) {
+    panY = 0;
+  } else {
+    const limit = (mapH - h) / 2;
+    panY = Math.max(-limit, Math.min(limit, panY));
+  }
+
+  return { ...v, panX, panY };
+}
+
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
 // ── Component ─────────────────────────────────────────────────────────────────
 interface RomanMapCanvasProps {
   userLat: number;
@@ -167,9 +192,20 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   const sizeRef      = useRef({ w: 0, h: 0 });
   const frameRef     = useRef<number | null>(null);
   const viewRef      = useRef<ViewState>({ scale: 0, panX: 0, panY: 0 }); // scale=0 = not yet initialised
-  // Pointer tracking for pan and pinch
+  // Pointer tracking
   const pointersRef  = useRef<Map<number, { x: number; y: number }>>(new Map());
-  const panStartRef  = useRef<{ x: number; y: number } | null>(null);
+  const dragRef      = useRef<{
+    id: number;
+    downX: number; downY: number;
+    lastX: number; lastY: number;
+    lastT: number;
+    vx: number; vy: number;
+  } | null>(null);
+  const inertiaRef   = useRef<number | null>(null);
+  const pinchRef     = useRef<{
+    aId: number; ax: number; ay: number;
+    bId: number; bx: number; by: number;
+  } | null>(null);
 
   const [selectedCity, setSelectedCity] = useState<(RomanCity & { cx: number; cy: number }) | null>(null);
   const [minScale, setMinScale] = useState(1);
@@ -331,10 +367,10 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       // Fit the full extent into the canvas, preserving geographic aspect ratio.
       // scale = px per degree; use the more constraining axis.
       const initScale = Math.min(width / LNG_RANGE, height / LAT_RANGE) * 0.96;
-      setMinScale(initScale * 0.45);
-      setMaxScale(initScale * 25);
+      setMinScale(initScale * 0.92);
+      setMaxScale(initScale * 8);
       if (viewRef.current.scale === 0) {
-        viewRef.current = { scale: initScale, panX: 0, panY: 0 };
+        viewRef.current = clampPan({ scale: initScale, panX: 0, panY: 0 }, width, height);
       }
       scheduleDraw();
     });
@@ -345,7 +381,9 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   // ── Cleanup ───────────────────────────────────────────────────────────────
   useEffect(() => () => {
     if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
     frameRef.current = null;
+    inertiaRef.current = null;
   }, []);
 
   // ── Escape key ────────────────────────────────────────────────────────────
@@ -370,82 +408,124 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   }
 
   // ── Pointer events ────────────────────────────────────────────────────────
+  const stopInertia = () => {
+    if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
+    inertiaRef.current = null;
+  };
+
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
     if (pointersRef.current.size === 1) {
-      panStartRef.current = { x: e.clientX, y: e.clientY };
+      stopInertia();
+      dragRef.current = {
+        id: e.pointerId,
+        downX: e.clientX, downY: e.clientY,
+        lastX: e.clientX, lastY: e.clientY,
+        lastT: e.timeStamp,
+        vx: 0, vy: 0,
+      };
+    } else if (pointersRef.current.size === 2) {
+      // Second finger down: switch to pinch, cancel single-finger drag/inertia
+      dragRef.current = null;
+      stopInertia();
+      const ids = [...pointersRef.current.keys()];
+      const posA = pointersRef.current.get(ids[0])!;
+      const posB = pointersRef.current.get(ids[1])!;
+      pinchRef.current = { aId: ids[0], ax: posA.x, ay: posA.y, bId: ids[1], bx: posB.x, by: posB.y };
     }
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    const prev = pointersRef.current.get(e.pointerId);
-    if (!prev) return;
-    const ptrs = pointersRef.current;
+    if (!pointersRef.current.has(e.pointerId)) return;
 
-    if (ptrs.size === 2) {
-      // Pinch-to-zoom
-      const [idA, idB] = [...ptrs.keys()];
-      const a = idA === e.pointerId ? { x: e.clientX, y: e.clientY } : ptrs.get(idA)!;
-      const b = idB === e.pointerId ? { x: e.clientX, y: e.clientY } : ptrs.get(idB)!;
-      const prevA = ptrs.get(idA)!;
-      const prevB = ptrs.get(idB)!;
-      const prevDist = Math.hypot(prevA.x - prevB.x, prevA.y - prevB.y);
-      const newDist  = Math.hypot(a.x - b.x, a.y - b.y);
+    if (pointersRef.current.size === 2 && pinchRef.current) {
+      const pinch = pinchRef.current;
+      const isA = pinch.aId === e.pointerId;
+      const curX = e.clientX, curY = e.clientY;
+      const otherX = isA ? pinch.bx : pinch.ax;
+      const otherY = isA ? pinch.by : pinch.ay;
+      const prevDist = Math.hypot(pinch.ax - pinch.bx, pinch.ay - pinch.by);
+      const newDist  = Math.hypot(curX - otherX, curY - otherY);
       if (prevDist > 0) {
         const rect = canvasRef.current!.getBoundingClientRect();
         const { w, h } = sizeRef.current;
-        const cx = (a.x + b.x) / 2 - rect.left;
-        const cy = (a.y + b.y) / 2 - rect.top;
-        viewRef.current = zoomAt(viewRef.current, cx - w / 2, cy - h / 2, newDist / prevDist, minScale, maxScale);
+        const midX = (curX + otherX) / 2 - rect.left;
+        const midY = (curY + otherY) / 2 - rect.top;
+        viewRef.current = clampPan(zoomAt(viewRef.current, midX - w / 2, midY - h / 2, newDist / prevDist, minScale, maxScale), w, h);
         scheduleDraw();
       }
-    } else if (ptrs.size === 1) {
-      // Pan
-      const dx = e.clientX - prev.x;
-      const dy = e.clientY - prev.y;
-      viewRef.current = {
-        ...viewRef.current,
-        panX: viewRef.current.panX + dx,
-        panY: viewRef.current.panY + dy,
-      };
+      // Re-snapshot the moved pointer's position
+      if (isA) { pinch.ax = curX; pinch.ay = curY; }
+      else      { pinch.bx = curX; pinch.by = curY; }
+    } else {
+      const drag = dragRef.current;
+      if (!drag || drag.id !== e.pointerId) return;
+      const dx = e.clientX - drag.lastX;
+      const dy = e.clientY - drag.lastY;
+      const dt = Math.max(1, e.timeStamp - drag.lastT);
+      drag.vx = lerp(drag.vx, dx / dt, 0.6);
+      drag.vy = lerp(drag.vy, dy / dt, 0.6);
+      drag.lastX = e.clientX;
+      drag.lastY = e.clientY;
+      drag.lastT = e.timeStamp;
+      const { w, h } = sizeRef.current;
+      viewRef.current = clampPan({ ...viewRef.current, panX: viewRef.current.panX + dx, panY: viewRef.current.panY + dy }, w, h);
       scheduleDraw();
     }
 
     pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    panStartRef.current = { x: e.clientX, y: e.clientY };
   };
 
   const onPointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    const start = panStartRef.current;
-    const prev  = pointersRef.current.get(e.pointerId);
     pointersRef.current.delete(e.pointerId);
+    pinchRef.current = null;
 
-    // Treat as click if barely moved
-    if (start && prev && pointersRef.current.size === 0) {
-      const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y);
-      if (moved < 6) {
-        const rect = canvasRef.current!.getBoundingClientRect();
-        const hit = hitTestCity(e.clientX - rect.left, e.clientY - rect.top);
-        if (hit) {
-          const { w, h } = sizeRef.current;
-          const [cx, cy] = project(hit.lat, hit.lng, viewRef.current, w, h);
-          setSelectedCity({ ...hit, cx, cy });
-        } else {
-          setSelectedCity(null);
-        }
+    const drag = dragRef.current;
+    if (!drag || drag.id !== e.pointerId) return;
+    dragRef.current = null;
+
+    const v = e.timeStamp - drag.lastT < 80 ? { vx: drag.vx, vy: drag.vy } : { vx: 0, vy: 0 };
+    const moved = Math.hypot(e.clientX - drag.downX, e.clientY - drag.downY);
+
+    if (moved < 6 && Math.abs(v.vx) < 0.05 && Math.abs(v.vy) < 0.05) {
+      // Tap: hit-test for a city
+      const rect = canvasRef.current!.getBoundingClientRect();
+      const hit = hitTestCity(e.clientX - rect.left, e.clientY - rect.top);
+      if (hit) {
+        const { w, h } = sizeRef.current;
+        const [cx, cy] = project(hit.lat, hit.lng, viewRef.current, w, h);
+        setSelectedCity({ ...hit, cx, cy });
+      } else {
+        setSelectedCity(null);
       }
+    } else if (Math.abs(v.vx) > 0.02 || Math.abs(v.vy) > 0.02) {
+      // Fling inertia
+      let { vx, vy } = v;
+      const step = () => {
+        vx *= 0.92; vy *= 0.92;
+        const { w: iw, h: ih } = sizeRef.current;
+        const next = clampPan({ ...viewRef.current, panX: viewRef.current.panX + vx * 16, panY: viewRef.current.panY + vy * 16 }, iw, ih);
+        if (next.panX === viewRef.current.panX) vx = 0;
+        if (next.panY === viewRef.current.panY) vy = 0;
+        viewRef.current = next;
+        scheduleDraw();
+        inertiaRef.current = (Math.abs(vx) > 0.02 || Math.abs(vy) > 0.02)
+          ? requestAnimationFrame(step) : null;
+      };
+      inertiaRef.current = requestAnimationFrame(step);
     }
-    panStartRef.current = null;
   };
 
   const onWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
     const rect = canvasRef.current!.getBoundingClientRect();
     const { w, h } = sizeRef.current;
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
     const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    viewRef.current = zoomAt(viewRef.current, cx - w / 2, cy - h / 2, factor, minScale, maxScale);
+    viewRef.current = clampPan(zoomAt(viewRef.current, cx - w / 2, cy - h / 2, factor, minScale, maxScale), w, h);
     scheduleDraw();
   };
 
@@ -481,7 +561,6 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   return (
     <div
       className="fixed inset-0 z-[200] flex flex-col bg-ink/95 backdrop-blur-sm"
-      style={{ touchAction: 'none' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-gold-dim/30 shrink-0 bg-ink/90">
