@@ -473,7 +473,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
   // Minoan/Aegean palette — keyed to the dusty kyanite blue of Knossian frescoes
   const skyGradient = (() => {
     if (!isDay) {
-      if (condition === 'cloudy' || condition === 'fog' || condition === 'rain' || condition === 'storm')
+      if (condition === 'cloudy' || condition === 'partly-cloudy' || condition === 'fog' || condition === 'rain' || condition === 'storm')
         return 'linear-gradient(to bottom, #060a10 0%, #0d1420 60%, #0f1208 100%)';
       // Deep Attic night: blue-slate, not Babylonian lapis
       return 'linear-gradient(to bottom, #030b18 0%, #071525 40%, #0e1e38 80%, #111630 100%)';
@@ -485,6 +485,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     if (condition === 'fog')   return 'linear-gradient(to bottom, #8aa8b8 0%, #b8cdd8 50%, #dce8ee 100%)';
     if (condition === 'snow')  return 'linear-gradient(to bottom, #7090a0 0%, #a0bcc8 40%, #d8e8ee 100%)';
     if (dayProgress < 0.75) {
+      if (condition === 'partly-cloudy') return 'linear-gradient(to bottom, #50688a 0%, #7d93b0 30%, #9fb3c8 70%, #c4d5e8 100%)';
       if (condition === 'cloudy') return 'linear-gradient(to bottom, #2a3d50 0%, #3a5568 30%, #527888 70%, #7a9aaa 100%)';
       if (condition === 'rain' || condition === 'storm') return 'linear-gradient(to bottom, #0d1a26 0%, #1a2e3e 40%, #111e2c 80%, #0a1218 100%)';
       // Pure Minoan fresco blue — the kyanite pigment of Knossos

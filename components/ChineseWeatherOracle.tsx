@@ -37,6 +37,16 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
     officialTitle: 'Maestro de las Nubes',
     dispatch: '雲師 informa: las nubes están siendo reordenadas según el nuevo protocolo del Ministerio del Cielo. Ni lluvia confirmada ni sol garantizado. Mantenga expectativas moderadas.',
   },
+  'partly-cloudy': {
+    chars: ['雲', '雲'],
+    charColor: 'text-slate-300',
+    charAnimation: 'drift-slow',
+    skyGradient: 'from-slate-800/90 via-stone-800/70 to-slate-900/90',
+    elementHanzi: '土', elementName: 'Tierra', elementColor: 'text-amber-300',
+    official: '雲師',
+    officialTitle: 'Maestro de las Nubes',
+    dispatch: '雲師 y 太陽星官 comparten el cielo por turnos. Las nubes cubren el sol de manera intermitente; el Ministerio del Cielo pide disculpas por la falta de decisión.',
+  },
   rain: {
     chars: ['雨', '雨', '雨', '雨', '雨', '雨', '雨', '雨'],
     charColor: 'text-blue-300',
