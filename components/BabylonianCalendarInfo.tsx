@@ -612,7 +612,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   const weatherParticles = useMemo(() => ({
     ...generateWeatherParticles(rainIntensity),
     stars: Array.from({ length: 60 }).map(() => ({
-      x: Math.random() * 300, y: Math.random() * 100,
+      x: Math.random() * 300, y: 20 + Math.random() * 170,
       r: Math.random() * 1.2 + 0.3, opacity: Math.random() * 0.7 + 0.3,
     })),
   }), [rainIntensity]);
@@ -621,11 +621,14 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
   const lore = getBabylonianLore(babData.monthName);
 
-  // Sin (moon god) — real sky position
-  const sinPos = !babData.isDay ? getMoonPosition(currentDate ?? new Date(), currentLat, currentLng) : null;
-  const sinVisible = sinPos !== null && sinPos.altitude >= 0;
-  const sinX = sinPos && sinVisible ? Math.max(14, Math.min(286, 150 + (sinPos.azimuth - 180) / 90 * 120)) : 150;
-  const sinY = sinPos && sinVisible ? Math.max(14, Math.min(165, 165 - sinPos.altitude / 90 * 150)) : 80;
+  // Sin (moon god) — real sky position. Shown by day and night whenever the
+  // Moon is above the horizon (a daytime Moon is a normal occurrence).
+  const sinPos = getMoonPosition(currentDate ?? new Date(), currentLat, currentLng);
+  const sinVisible = sinPos.altitude >= 0;
+  // Mapped into the same 300×200 frame as the ziggurat skyline, so the Moon
+  // sits on the real horizon: 0° altitude hugs the rooftops, 90° nears the top.
+  const sinX = Math.max(16, Math.min(284, 150 + (sinPos.azimuth - 180) / 90 * 120));
+  const sinY = Math.max(40, Math.min(175, 145 - (sinPos.altitude / 90) * 105));
   const condition = weather?.current.condition ?? 'clear';
 
   const skyGradient = (() => {
@@ -672,8 +675,10 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
           <div className="relative w-full overflow-hidden border border-blue-500/30 rounded-sm" style={{ aspectRatio: '16/9' }}>
             <div className="absolute inset-0 transition-all duration-2000" style={{ background: skyGradient }} />
 
-            {/* Stars + weather — full-coverage layer */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
+            {/* Stars + weather + Moon — same frame as the ziggurat skyline (bottom-anchored, xMidYMax meet),
+                so the Moon aligns with the horizon. Painted BEFORE the skyline, so it sits behind the
+                ziggurats, and before the text overlay, so it sits behind the hero text. */}
+            <svg className="absolute bottom-0 left-0 w-full pointer-events-none" viewBox="0 0 300 200" preserveAspectRatio="xMidYMax meet">
               {!babData.isDay && (
                 <g>
                   {weatherParticles.stars.map((s, i) => (
