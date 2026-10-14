@@ -10,6 +10,8 @@ const LAT_MIN = 19;
 const LAT_MAX = 62;
 const LNG_RANGE = LNG_MAX - LNG_MIN;
 const LAT_RANGE = LAT_MAX - LAT_MIN;
+const MID_LNG = (LNG_MIN + LNG_MAX) / 2;
+const MID_LAT = (LAT_MIN + LAT_MAX) / 2;
 
 // ── Colors ────────────────────────────────────────────────────────────────────
 const C_SEA     = '#8baab8';   // muted Roman sea blue
@@ -114,6 +116,7 @@ const DOT_RADIUS = 4;
 const HIT_RADIUS = 12; // 24px diameter at scale=1
 
 // ── View state ────────────────────────────────────────────────────────────────
+// scale = pixels per geographic degree (same for x and y → correct aspect ratio)
 interface ViewState {
   scale: number;
   panX: number;
@@ -121,23 +124,29 @@ interface ViewState {
 }
 
 function project(lat: number, lng: number, v: ViewState, w: number, h: number): [number, number] {
-  const bx = (lng - LNG_MIN) / LNG_RANGE * w;
-  const by = (LAT_MAX - lat) / LAT_RANGE * h;
-  return [bx * v.scale + v.panX, by * v.scale + v.panY];
+  return [
+    w / 2 + (lng - MID_LNG) * v.scale + v.panX,
+    h / 2 - (lat - MID_LAT) * v.scale + v.panY,
+  ];
 }
 
 function unproject(cx: number, cy: number, v: ViewState, w: number, h: number): [number, number] {
-  const bx = (cx - v.panX) / v.scale;
-  const by = (cy - v.panY) / v.scale;
-  const lng = bx / w * LNG_RANGE + LNG_MIN;
-  const lat = LAT_MAX - by / h * LAT_RANGE;
-  return [lat, lng];
+  return [
+    MID_LAT - (cy - h / 2 - v.panY) / v.scale,
+    (cx - w / 2 - v.panX) / v.scale + MID_LNG,
+  ];
 }
 
-function zoomAt(v: ViewState, cx: number, cy: number, factor: number, minScale: number, maxScale: number): ViewState {
+// Zoom keeping the geographic point under (cx, cy) fixed.
+// offCx = cx - w/2, offCy = cy - h/2 (offset from canvas centre).
+function zoomAt(v: ViewState, offCx: number, offCy: number, factor: number, minScale: number, maxScale: number): ViewState {
   const newScale = Math.max(minScale, Math.min(maxScale, v.scale * factor));
   const f = newScale / v.scale;
-  return { scale: newScale, panX: cx - (cx - v.panX) * f, panY: cy - (cy - v.panY) * f };
+  return {
+    scale: newScale,
+    panX: offCx * (1 - f) + v.panX * f,
+    panY: offCy * (1 - f) + v.panY * f,
+  };
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -157,14 +166,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   const canvasRef    = useRef<HTMLCanvasElement>(null);
   const sizeRef      = useRef({ w: 0, h: 0 });
   const frameRef     = useRef<number | null>(null);
-  const viewRef      = useRef<ViewState>({ scale: 1, panX: 0, panY: 0 });
+  const viewRef      = useRef<ViewState>({ scale: 0, panX: 0, panY: 0 }); // scale=0 = not yet initialised
   // Pointer tracking for pan and pinch
   const pointersRef  = useRef<Map<number, { x: number; y: number }>>(new Map());
   const panStartRef  = useRef<{ x: number; y: number } | null>(null);
 
   const [selectedCity, setSelectedCity] = useState<(RomanCity & { cx: number; cy: number }) | null>(null);
-  const [minScale, setMinScale] = useState(0.5);
-  const MAX_SCALE = 8;
+  const [minScale, setMinScale] = useState(1);
+  const [maxScale, setMaxScale] = useState(200);
 
   // ── Draw ─────────────────────────────────────────────────────────────────
   const draw = useCallback(() => {
@@ -222,22 +231,25 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
     // 3. Province fills (warm empire parchment)
     for (const prov of PROVINCES) {
-      drawPoly(prov.polygon, C_EMPIRE);
+      for (const ring of prov.polygons) drawPoly(ring, C_EMPIRE);
     }
 
     // 4. Province borders
+    const borderW = Math.max(0.5, Math.min(2.5, v.scale * 0.12));
     for (const prov of PROVINCES) {
-      drawPoly(prov.polygon, undefined, C_BORDER, Math.max(0.5, v.scale * 0.6));
+      for (const ring of prov.polygons) drawPoly(ring, undefined, C_BORDER, borderW);
     }
 
     // 5. Rivers
-    ctx.setLineDash([4 * v.scale, 3 * v.scale]);
-    for (const r of RIVERS) drawLine(r.pts, C_RIVER, Math.max(0.8, v.scale * 0.9));
+    const riverW = Math.max(0.8, Math.min(3, v.scale * 0.18));
+    ctx.setLineDash([Math.max(3, v.scale * 0.8), Math.max(2, v.scale * 0.6)]);
+    for (const r of RIVERS) drawLine(r.pts, C_RIVER, riverW);
     ctx.setLineDash([]);
 
     // 6. City dots and labels
-    const dotR = Math.max(2, Math.min(6, DOT_RADIUS * Math.sqrt(v.scale)));
-    ctx.font = `${Math.max(9, Math.min(13, 10 * Math.sqrt(v.scale)))}px Cinzel, Georgia, serif`;
+    const dotR = Math.max(2, Math.min(6, v.scale * 0.55));
+    const fontSize = Math.max(9, Math.min(13, v.scale * 1.8));
+    ctx.font = `${fontSize}px Cinzel, Georgia, serif`;
     ctx.textBaseline = 'middle';
 
     for (const city of ROMAN_CITIES) {
@@ -251,7 +263,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       ctx.fillStyle = isSelected ? C_USER : C_CITY_DOT;
       ctx.fill();
 
-      if (city.type === 'capital' || v.scale > 1.5 || (v.scale > 0.8 && city.type === 'major')) {
+      const showLabel = city.type === 'capital' || v.scale > 12 || (v.scale > 6 && city.type === 'major');
+      if (showLabel) {
         const label = city.name;
         const tw = ctx.measureText(label).width;
         const lx = cx + dotR + 3;
@@ -267,7 +280,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     // 7. User location marker
     const [ux, uy] = px(userLat, userLng);
     if (ux >= -20 && ux <= w + 20 && uy >= -20 && uy <= h + 20) {
-      const r = Math.max(5, 7 * Math.sqrt(v.scale));
+      const r = Math.max(5, Math.min(16, v.scale * 1.4));
       ctx.beginPath();
       ctx.arc(ux, uy, r, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(200,20,20,0.25)';
@@ -315,18 +328,13 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       canvas.width  = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
 
-      // Set initial view to centre the empire and fit to canvas
-      const mapAspect = LNG_RANGE / LAT_RANGE;
-      const canvasAspect = width / height;
-      const scale = canvasAspect > mapAspect ? height / LAT_RANGE : width / LNG_RANGE;
-      const ms = Math.max(0.3, Math.min(1, scale / (LNG_RANGE / width)));
-      setMinScale(ms * 0.4);
-      if (viewRef.current.scale === 1 && viewRef.current.panX === 0) {
-        // First render: fit map to canvas
-        const fitScale = canvasAspect > mapAspect
-          ? height / (LAT_RANGE / LNG_RANGE * width) * (width / LNG_RANGE)
-          : 1;
-        viewRef.current = { scale: Math.min(1, fitScale), panX: 0, panY: 0 };
+      // Fit the full extent into the canvas, preserving geographic aspect ratio.
+      // scale = px per degree; use the more constraining axis.
+      const initScale = Math.min(width / LNG_RANGE, height / LAT_RANGE) * 0.96;
+      setMinScale(initScale * 0.45);
+      setMaxScale(initScale * 25);
+      if (viewRef.current.scale === 0) {
+        viewRef.current = { scale: initScale, panX: 0, panY: 0 };
       }
       scheduleDraw();
     });
@@ -352,7 +360,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     const v = viewRef.current;
     const { w, h } = sizeRef.current;
     let best: RomanCity | null = null;
-    let bestDist2 = (HIT_RADIUS * v.scale + 4) ** 2;
+    let bestDist2 = (Math.max(HIT_RADIUS, v.scale * 1.5)) ** 2;
     for (const city of ROMAN_CITIES) {
       const [cx, cy] = project(city.lat, city.lng, v, w, h);
       const d2 = (cx - canvasX) ** 2 + (cy - canvasY) ** 2;
@@ -386,9 +394,10 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       const newDist  = Math.hypot(a.x - b.x, a.y - b.y);
       if (prevDist > 0) {
         const rect = canvasRef.current!.getBoundingClientRect();
+        const { w, h } = sizeRef.current;
         const cx = (a.x + b.x) / 2 - rect.left;
         const cy = (a.y + b.y) / 2 - rect.top;
-        viewRef.current = zoomAt(viewRef.current, cx, cy, newDist / prevDist, minScale, MAX_SCALE);
+        viewRef.current = zoomAt(viewRef.current, cx - w / 2, cy - h / 2, newDist / prevDist, minScale, maxScale);
         scheduleDraw();
       }
     } else if (ptrs.size === 1) {
@@ -432,10 +441,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
   const onWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
     const rect = canvasRef.current!.getBoundingClientRect();
+    const { w, h } = sizeRef.current;
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
     const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    viewRef.current = zoomAt(viewRef.current, cx, cy, factor, minScale, MAX_SCALE);
+    viewRef.current = zoomAt(viewRef.current, cx - w / 2, cy - h / 2, factor, minScale, maxScale);
     scheduleDraw();
   };
 
