@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { lazy, Suspense, useMemo, useState } from 'react';
 import { MapPin, Milestone } from 'lucide-react';
 import { getRomanProvince, getDistanceToRome } from '../utils/romanProvinces';
 import { getGreekRegion, getDistanceToAthens } from '../utils/greekRegions';
@@ -6,13 +6,17 @@ import { getEgyptianRegion, getDistanceToHeliopolis } from '../utils/egyptianReg
 import { toRoman } from '../utils/romanTimeUtils';
 import { useCivilization } from '../contexts/CivilizationContext';
 
+const RomanMapCanvas = lazy(() => import('./RomanMapCanvas'));
+
 interface ProvinciaInfoProps {
   latitude: number;
   longitude: number;
+  onUpdateLocation?: (lat: number, lng: number) => void;
 }
 
-const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) => {
+const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude, onUpdateLocation }) => {
   const { civilization, labels } = useCivilization();
+  const [mapOpen, setMapOpen] = useState(false);
 
   const province = useMemo(() => 
     civilization === 'rome' 
@@ -77,12 +81,16 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
         : null;
 
   return (
+    <>
     <div className="w-full max-w-2xl mx-auto mt-6 px-2 animate-fadeIn">
       <div
         className={`border p-6 shadow-2xl flex flex-col sm:flex-row gap-6 items-stretch relative overflow-hidden group ${
           civilization === 'aegyptus' ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md'
-        }`}
+        } ${civilization === 'rome' && onUpdateLocation ? 'cursor-pointer hover:border-gold-dim/70 transition-colors active:scale-[0.99]' : ''}`}
         style={civilization === 'aegyptus' ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
+        onClick={civilization === 'rome' && onUpdateLocation ? () => setMapOpen(true) : undefined}
+        role={civilization === 'rome' && onUpdateLocation ? 'button' : undefined}
+        aria-label={civilization === 'rome' && onUpdateLocation ? 'Aperire tabulam Imperii' : undefined}
       >
         {civilization !== 'aegyptus' && <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>}
 
@@ -130,6 +138,21 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude }) =>
 
       </div>
     </div>
+
+    {mapOpen && civilization === 'rome' && onUpdateLocation && (
+      <Suspense fallback={null}>
+        <RomanMapCanvas
+          userLat={latitude}
+          userLng={longitude}
+          onLocationChange={(lat, lng) => {
+            onUpdateLocation(lat, lng);
+            setMapOpen(false);
+          }}
+          onClose={() => setMapOpen(false)}
+        />
+      </Suspense>
+    )}
+  </>
   );
 };
 
