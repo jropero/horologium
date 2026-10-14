@@ -614,7 +614,6 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         labelWidthsRef.current.set(cityFont, widths);
       }
       const placed = new ScreenGrid(64);
-      (window as any).__rects = []; // TEMP-DEBUG
       const half = cityFont / 2;
       const gap = r + 2;
       for (let k = 0, shown = 0; k < named && shown < MAX_LABELS; k++) {
@@ -636,7 +635,6 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
             y1 = cy + half + 1;
           if (placed.hitsRect(x0, y0, x1, y1)) continue;
           placed.addRect(x0, y0, x1, y1);
-          ((window as any).__rects ??= []).push([x0, y0, x1, y1]); // TEMP-DEBUG
           ctx.strokeText(city.latin, lx, cy);
           ctx.fillText(city.latin, lx, cy);
           shown++;
@@ -654,7 +652,6 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       }
     }
     hitsRef.current = hits;
-    (window as any).__dbg = { hits, ox, cw, z, panY, s, n: scene && visibleCityCount(z, scene.cities.length), top: scene?.cities.slice(0, 5) }; // TEMP-DEBUG
 
     // Creatures: a DOM layer mounted only from CREATURE_ZOOM (its idle motion is CSS),
     // positioned here like the location pulse.
