@@ -182,7 +182,7 @@ export const loadRomanMapData = (): Promise<RomanMapData> => {
   pending = Promise.all([
     provincesCache ?? fetchJson<ProvincesGeoJSON>('provinces.geojson'),
     labelsCache ?? fetchJson<ProvinceLabelsGeoJSON>('provinces_label.geojson'),
-    placesCache ?? fetchJson<PlacesGeoJSON>('places_low.geojson'),
+    placesCache ?? fetchJson<PlacesGeoJSON>('places_medium.geojson'),
     riversCache ?? fetchJson<RiversGeoJSON>('10m_rivers_lake_centerlines.geojson'),
     lakesCache ?? fetchJson<LakesGeoJSON>('10m_lakes.geojson'),
     fortificationsCache ?? fetchJson<FortificationsGeoJSON>('fortifications.geojson'),
