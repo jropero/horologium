@@ -28,6 +28,14 @@ const WeatherIcon = ({ condition, className = "w-12 h-12" }: { condition: string
                     <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
                 </svg>
             );
+        case 'partly-cloudy':
+            return (
+                <svg viewBox="0 0 24 24" className={`${className} text-parchment`} fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="9" cy="7.5" r="3.25" stroke="#cfb53b" />
+                    <path d="M9 1.5v1.4M9 12.1v1.4M2.5 7.5H4M14 7.5h1.5M4.4 2.9l1 1M13.6 12.1l-1-1" stroke="#cfb53b" opacity="0.7" />
+                    <path d="M17.5 21c2.2 0 4-1.8 4-4 0-2.03-1.53-3.7-3.5-3.94-.23-2.72-2.52-4.85-5.29-4.85-2.77 0-5.06 2.13-5.29 4.85-1.97.24-3.5 1.91-3.5 3.94 0 2.2 1.8 4 4 4h9.58z" />
+                </svg>
+            );
         case 'cloudy':
         case 'fog':
             return (
@@ -298,6 +306,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                                 <span className="text-[10px] uppercase text-stone-500 tracking-widest">{labels.skyLabel}</span>
                                 <span className="text-parchment font-bold">
                                     {current.condition === 'clear' && 'Serenum'}
+                                    {current.condition === 'partly-cloudy' && 'Nubes Sparsae'}
                                     {current.condition === 'cloudy' && 'Nubilum'}
                                     {current.condition === 'rain' && 'Pluvia'}
                                     {current.condition === 'snow' && 'Nix'}

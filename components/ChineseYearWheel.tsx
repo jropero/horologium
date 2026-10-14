@@ -78,7 +78,7 @@ interface WheelWeatherProps {
 }
 
 const WheelWeatherOverlay: React.FC<WheelWeatherProps> = ({ condition, rain, snow }) => {
-  const showClouds = condition === 'cloudy';
+  const showClouds = condition === 'cloudy' || condition === 'partly-cloudy' || condition === 'rain' || condition === 'storm';
   const showRainClouds = condition === 'rain' || condition === 'storm';
   const showFog = condition === 'fog';
   const showRain = condition === 'rain' || condition === 'storm';
@@ -114,9 +114,9 @@ const WheelWeatherOverlay: React.FC<WheelWeatherProps> = ({ condition, rain, sno
           </g>
         )}
 
-        {/* Cloud-shaped puffs for cloudy */}
+        {/* Cloud-shaped puffs for cloudy / partly cloudy */}
         {showClouds && (
-          <g opacity={0.22} fill="#cbd5e1">
+          <g opacity={condition === 'partly-cloudy' ? 0.08 : condition === 'cloudy' ? 0.22 : 0.12} fill="#cbd5e1">
             {CLOUD_POSITIONS.map(([cx, cy, cls], i) => (
               <CloudShape key={i} cx={cx} cy={cy} cls={cls} />
             ))}

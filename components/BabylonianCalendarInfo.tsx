@@ -634,7 +634,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   const skyGradient = (() => {
     const p = babData.dayProgress;
     if (!babData.isDay) {
-      if (condition === 'cloudy' || condition === 'fog' || condition === 'rain' || condition === 'storm') {
+      if (condition === 'cloudy' || condition === 'partly-cloudy' || condition === 'fog' || condition === 'rain' || condition === 'storm') {
         return 'linear-gradient(to bottom, #0a0d14 0%, #111827 60%, #1c1008 100%)';
       }
       return 'linear-gradient(to bottom, #050208 0%, #0a0510 40%, #1a0a05 80%, #2a1005 100%)';
@@ -652,6 +652,9 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
         : 'linear-gradient(to bottom, #111827 0%, #1f2937 60%, #374151 100%)';
     }
     if (p < 0.75) {
+      if (condition === 'partly-cloudy') {
+        return 'linear-gradient(to bottom, #6a87a8 0%, #a8b8d0 30%, #c4a55a 70%, #fde68a 100%)';
+      }
       if (condition === 'cloudy') {
         return 'linear-gradient(to bottom, #374151 0%, #6b7280 30%, #c4a55a 70%, #fde68a 100%)';
       }

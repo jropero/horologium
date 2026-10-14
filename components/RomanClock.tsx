@@ -215,6 +215,9 @@ const RomanClock: React.FC<RomanClockProps> = ({
                       // Atardecer
                       return 'linear-gradient(to bottom, #1e3b70 0%, #29539b 40%, #fd746c 80%, var(--parchment) 100%)';
                     }
+                    if (weatherCond === 'partly-cloudy') {
+                      return 'linear-gradient(to bottom, #8aa3c2 0%, #cbd5e1 60%, var(--parchment) 100%)';
+                    }
                     if (weatherCond === 'cloudy') {
                       return 'linear-gradient(to bottom, #94a3b8 0%, #cbd5e1 60%, #e2e8f0 100%)';
                     }

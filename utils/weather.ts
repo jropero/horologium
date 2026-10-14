@@ -5,7 +5,7 @@ import { WeatherData, WeatherCondition, WeatherSnapshot } from '../types';
 const WEATHER_CODES: Record<number, { condition: WeatherCondition, description: string }> = {
     0: { condition: 'clear', description: 'Caelum Serenum' }, // Clear sky
     1: { condition: 'clear', description: 'Caelum Placitum' }, // Mainly clear
-    2: { condition: 'cloudy', description: 'Nubes Sparsae' }, // Partly cloudy
+    2: { condition: 'partly-cloudy', description: 'Nubes Sparsae' }, // Partly cloudy
     3: { condition: 'cloudy', description: 'Nubilum' }, // Overcast
     45: { condition: 'fog', description: 'Nebula' }, // Fog
     48: { condition: 'fog', description: 'Nebula Gelida' }, // Depositing rime fog

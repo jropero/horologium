@@ -144,6 +144,7 @@ const AppContent: React.FC = () => {
   const DEV_OPTIONS = [
     { code: null, label: 'Tiempo real' },
     { code: 0, label: 'Despejado' },
+    { code: 2, label: 'Parcialmente nublado' },
     { code: 3, label: 'Nublado' },
     { code: 45, label: 'Niebla' },
     { code: 61, label: 'Lluvia leve' },
@@ -154,7 +155,7 @@ const AppContent: React.FC = () => {
   ] as const;
 
   const DEV_CONDITION_MAP: Record<number, WeatherCondition> = {
-    0: 'clear', 3: 'cloudy', 45: 'fog', 61: 'rain', 65: 'rain', 82: 'rain', 95: 'storm', 99: 'storm', 73: 'snow',
+    0: 'clear', 2: 'partly-cloudy', 3: 'cloudy', 45: 'fog', 61: 'rain', 65: 'rain', 82: 'rain', 95: 'storm', 99: 'storm', 73: 'snow',
   };
   const effectiveWeather: WeatherData | null = useMemo(() => {
     if (devWeatherCode === null || !weather) return weather;

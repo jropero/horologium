@@ -47,6 +47,7 @@ export const TimePeriod = {
 
 export type WeatherCondition =
   | 'clear'
+  | 'partly-cloudy'
   | 'cloudy'
   | 'rain'
   | 'snow'

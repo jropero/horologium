@@ -22,8 +22,8 @@ const WeatherSvgEffects: React.FC<Props> = ({
 
   return (
     <>
-      {condition === 'cloudy' && (
-        <g opacity={cloudOpacity}>
+      {(condition === 'partly-cloudy' || condition === 'cloudy' || condition === 'rain' || condition === 'storm') && (
+        <g opacity={condition === 'partly-cloudy' ? cloudOpacity * 0.25 : condition === 'cloudy' ? cloudOpacity * 0.6 : cloudOpacity * 0.35}>
           <path d="M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z" fill="#94a3b8" className="anim-cloud-fast" />
           <path d="M -200 70 Q 80 50 150 70 T 350 90 T 500 70 L 500 -20 L -200 -20 Z" fill="#cbd5e1" opacity="0.6" className="anim-cloud-slow" />
         </g>
