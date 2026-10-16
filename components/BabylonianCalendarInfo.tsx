@@ -169,6 +169,7 @@ const DayStatusCard: React.FC<{
 const renderSinMoon = (phase: number) => {
   const r = 14;
   const normalizedPhase = (phase % 1 + 1) % 1;
+  const glowFactor = 1 - Math.abs(normalizedPhase - 0.5) * 2;
   const isWaxing = normalizedPhase <= 0.5;
   const sweep1 = isWaxing ? 1 : 0;
   const rx = Math.max(0.1, r * Math.abs(Math.cos(normalizedPhase * Math.PI * 2)));
@@ -192,14 +193,27 @@ const renderSinMoon = (phase: number) => {
           <stop offset="0%" stopColor="#1e293b" />
           <stop offset="100%" stopColor="#0a1020" />
         </radialGradient>
-        <filter id="bab-moon-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        <radialGradient id="bab-atmo-grad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#bfdbfe" stopOpacity={glowFactor * 0.7} />
+          <stop offset="55%" stopColor="#93c5fd" stopOpacity={glowFactor * 0.3} />
+          <stop offset="100%" stopColor="#bfdbfe" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="bab-corona" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#bfdbfe" stopOpacity="0" />
+          <stop offset="39%" stopColor="#bfdbfe" stopOpacity={glowFactor * 0.55} />
+          <stop offset="58%" stopColor="#93c5fd" stopOpacity={glowFactor * 0.22} />
+          <stop offset="100%" stopColor="#93c5fd" stopOpacity="0" />
+        </radialGradient>
+        <filter id="bab-atmo-blur" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="7" />
         </filter>
       </defs>
-      <circle cx="0" cy="0" r={r + 3} fill="rgba(147,197,253,0.08)" />
+      {glowFactor > 0.1 && (
+        <circle cx="0" cy="0" r={r + 28} fill="url(#bab-atmo-grad)" filter="url(#bab-atmo-blur)" />
+      )}
+      <circle cx="0" cy="0" r={r + 22} fill="url(#bab-corona)" />
       <circle cx="0" cy="0" r={r} fill="url(#bab-moon-dark)" />
-      <g clipPath={`url(#${maskId})`} filter="url(#bab-moon-glow)">
+      <g clipPath={`url(#${maskId})`}>
         <circle cx="0" cy="0" r={r} fill="url(#bab-moon-light)" />
       </g>
       <circle cx="0" cy="0" r={r} fill="none" stroke="#93c5fd" strokeWidth="0.5" opacity="0.5" />
@@ -623,12 +637,15 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
   // Sin (moon god) — real sky position. Shown by day and night whenever the
   // Moon is above the horizon (a daytime Moon is a normal occurrence).
+  // ?mockmoon=<phase> (0–1) pins the moon at center-sky for visual testing.
+  const mockMoonPhase = new URLSearchParams(window.location.search).get('mockmoon');
   const sinPos = getMoonPosition(currentDate ?? new Date(), currentLat, currentLng);
-  const sinVisible = sinPos.altitude >= 0;
+  const sinVisible = mockMoonPhase !== null || sinPos.altitude >= 0;
   // Mapped into the same 300×200 frame as the ziggurat skyline, so the Moon
   // sits on the real horizon: 0° altitude hugs the rooftops, 90° nears the top.
-  const sinX = Math.max(16, Math.min(284, 150 + (sinPos.azimuth - 180) / 90 * 120));
-  const sinY = Math.max(40, Math.min(175, 145 - (sinPos.altitude / 90) * 105));
+  const sinX = mockMoonPhase !== null ? 65 : Math.max(16, Math.min(284, 150 + (sinPos.azimuth - 180) / 90 * 120));
+  const sinY = mockMoonPhase !== null ? 115 : Math.max(40, Math.min(175, 145 - (sinPos.altitude / 90) * 105));
+  const sinPhase = mockMoonPhase !== null ? parseFloat(mockMoonPhase) : babData.moonPhase;
   const condition = weather?.current.condition ?? 'clear';
 
   const skyGradient = (() => {
@@ -691,7 +708,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
               )}
               {sinVisible && (
                 <g transform={`translate(${sinX}, ${sinY})`}>
-                  {renderSinMoon(babData.moonPhase)}
+                  {renderSinMoon(sinPhase)}
                 </g>
               )}
               <WeatherSvgEffects
