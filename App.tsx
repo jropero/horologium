@@ -169,6 +169,7 @@ const AppContent: React.FC = () => {
   };
 
   const effectiveWeather: WeatherData | null = useMemo(() => {
+    if (new URLSearchParams(window.location.search).get('offline') === '1') return OFFLINE_WEATHER;
     if (weatherError && !weather) return OFFLINE_WEATHER;
     if (devWeatherCode === null || !weather) return weather;
     return {

@@ -201,6 +201,40 @@
     100% { transform: translate(var(--drift), 800px); }
   }
 
+  /* Aurora borealis animations (offline mode) */
+  .anim-aurora-1 {
+    animation: auroraSway1 8s ease-in-out infinite;
+    transform-origin: 50% 0%;
+    will-change: transform, opacity;
+  }
+  .anim-aurora-2 {
+    animation: auroraSway2 11s ease-in-out infinite;
+    transform-origin: 50% 0%;
+    will-change: transform, opacity;
+  }
+  .anim-aurora-3 {
+    animation: auroraSway1 13s ease-in-out infinite reverse;
+    transform-origin: 50% 0%;
+    will-change: transform, opacity;
+  }
+  .anim-aurora-pulse {
+    animation: auroraPulse 5s ease-in-out infinite;
+  }
+  @keyframes auroraSway1 {
+    0%, 100% { transform: translateX(0)    skewX(0deg);    opacity: 0.70; }
+    25%       { transform: translateX(5px)  skewX(1.8deg);  opacity: 0.90; }
+    75%       { transform: translateX(-4px) skewX(-1.2deg); opacity: 0.60; }
+  }
+  @keyframes auroraSway2 {
+    0%, 100% { transform: translateX(0)    skewX(0deg);    opacity: 0.65; }
+    35%       { transform: translateX(-7px) skewX(-2deg);   opacity: 0.85; }
+    70%       { transform: translateX(5px)  skewX(1.5deg);  opacity: 0.55; }
+  }
+  @keyframes auroraPulse {
+    0%, 100% { opacity: 0.08; }
+    50%       { opacity: 0.20; }
+  }
+
   /* Chinese weather animations */
   .anim-float {
     animation: floatUpDown 4s ease-in-out infinite;
