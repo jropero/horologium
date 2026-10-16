@@ -167,6 +167,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
   };
 
   const weatherCond = weather?.current.condition ?? 'clear';
+  const isOffline = !!weather?.isOffline;
 
   if (loading) {
     return (
@@ -197,6 +198,11 @@ const RomanClock: React.FC<RomanClockProps> = ({
               className="absolute inset-0 transition-all duration-1000"
               style={{
                 background: (() => {
+                  if (isOffline) {
+                    return romanTime.isDay
+                      ? 'linear-gradient(to bottom, #1a3526 0%, #27503a 55%, #1e4030 100%)'
+                      : 'linear-gradient(to bottom, #030806 0%, #080f0a 65%, #0b1a0e 100%)';
+                  }
                   if (weatherCond === 'fog') {
                     return romanTime.isDay
                       ? 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)'
