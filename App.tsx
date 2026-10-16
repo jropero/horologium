@@ -138,7 +138,7 @@ const AppContent: React.FC = () => {
   }, [modernTime, latitude, longitude, loading, civilization]);
 
   // Weather Data — when time-traveling, load the weather recorded on that day/time.
-  const { weather } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
+  const { weather, error: weatherError } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
   const [devWeatherCode, setDevWeatherCode] = useState<number | null>(null);
 
   const DEV_OPTIONS = [
@@ -157,13 +157,26 @@ const AppContent: React.FC = () => {
   const DEV_CONDITION_MAP: Record<number, WeatherCondition> = {
     0: 'clear', 2: 'partly-cloudy', 3: 'cloudy', 45: 'fog', 61: 'rain', 65: 'rain', 82: 'rain', 95: 'storm', 99: 'storm', 73: 'snow',
   };
+  const OFFLINE_WEATHER: WeatherData = {
+    isOffline: true,
+    isHistorical: false,
+    historical: [],
+    current: {
+      condition: 'cloudy', code: 3, temperature: 15,
+      description: 'Offline', windSpeed: 0, windDirection: 0,
+      latinWindName: '', surfacePressure: 0, yearLabel: '',
+    },
+  };
+
   const effectiveWeather: WeatherData | null = useMemo(() => {
+    if (weatherError && !weather) return OFFLINE_WEATHER;
     if (devWeatherCode === null || !weather) return weather;
     return {
       ...weather,
       current: { ...weather.current, code: devWeatherCode, condition: DEV_CONDITION_MAP[devWeatherCode] ?? 'clear' },
     };
-  }, [weather, devWeatherCode]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [weather, weatherError, devWeatherCode]);
 
   const handleUpdateLocation = (lat: number, lng: number) => {
     setLoading(true);

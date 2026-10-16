@@ -374,6 +374,6 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
         return { current, historical, isHistorical };
     } catch (error) {
         console.error("Error al consultar Chronos:", error);
-        return null;
+        throw error;
     }
 };
