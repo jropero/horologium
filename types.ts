@@ -77,5 +77,7 @@ export interface WeatherData {
     historical: WeatherSnapshot[]; // Un array con los años pasados
     /** True when `current` is recorded weather for a time-travel date (not the present). */
     isHistorical?: boolean;
+    /** True when the weather fetch failed (e.g. offline). Effects use a green aura instead. */
+    isOffline?: boolean;
 }
 // --- END OF FILE horologium-main/types.ts ---

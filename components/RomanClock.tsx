@@ -290,6 +290,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
                       condition={weatherCond}
                       weatherParticles={weatherParticles}
                       fogGradientId="fog-ground-roman"
+                      offline={!!weather?.isOffline}
                     />
                   </g>
                 )}

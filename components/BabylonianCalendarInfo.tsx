@@ -717,6 +717,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 fogGradientId="fog-ground-bab"
                 cloudOpacity={0.7}
                 stormOpacity={0.65}
+                offline={!!weather?.isOffline}
               />
               {condition === 'storm' && (
                 <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />
