@@ -65,44 +65,44 @@ const WeatherSvgEffects: React.FC<Props> = ({
         {/* Ambient sky glow behind all strips */}
         <ellipse cx="150" cy="42" rx="155" ry="50" fill="#10b981" opacity="0.09" filter="url(#aurora-bg-blur)" />
 
-        {/* Strip 1 – green, x≈8→277 */}
+        {/* Strip 1 – green, x≈8→547 */}
         <path
-          d="M 8 0 C -10 58 28 118 5 175 L 274 175 C 292 118 254 58 277 0 Z"
+          d="M 8 0 C -10 58 28 118 5 175 L 544 175 C 562 118 524 58 547 0 Z"
           fill="url(#aurora-g1-o)"
-          opacity="0.32"
+          opacity="0.25"
           className="anim-aurora-1"
         />
 
-        {/* Strip 2 – teal, x≈65→334 */}
+        {/* Strip 2 – teal, x≈65→604 */}
         <path
-          d="M 65 0 C 80 58 48 118 68 175 L 332 175 C 350 118 320 58 334 0 Z"
+          d="M 65 0 C 80 58 48 118 68 175 L 602 175 C 620 118 590 58 604 0 Z"
           fill="url(#aurora-g2-o)"
-          opacity="0.32"
+          opacity="0.25"
           className="anim-aurora-2"
         />
 
-        {/* Strip 3 – purple→green, x≈120→394 */}
+        {/* Strip 3 – purple→green, x≈120→664 */}
         <path
-          d="M 120 0 C 105 58 140 118 115 175 L 390 175 C 407 118 372 58 394 0 Z"
+          d="M 120 0 C 105 58 140 118 115 175 L 660 175 C 677 118 642 58 664 0 Z"
           fill="url(#aurora-g3-o)"
-          opacity="0.36"
+          opacity="0.28"
           className="anim-aurora-3"
         />
 
-        {/* Strip 4 – green, x≈178→450 */}
+        {/* Strip 4 – green, x≈178→720 */}
         <path
-          d="M 178 0 C 160 58 196 118 172 175 L 447 175 C 464 118 430 58 450 0 Z"
+          d="M 178 0 C 160 58 196 118 172 175 L 717 175 C 734 118 700 58 720 0 Z"
           fill="url(#aurora-g1-o)"
-          opacity="0.30"
+          opacity="0.23"
           className="anim-aurora-2"
           style={{ animationDelay: '-2.5s' }}
         />
 
-        {/* Strip 5 – bright green, x≈238→514 */}
+        {/* Strip 5 – bright green, x≈238→784 */}
         <path
-          d="M 238 0 C 220 58 255 118 233 175 L 512 175 C 522 118 492 58 514 0 Z"
+          d="M 238 0 C 220 58 255 118 233 175 L 782 175 C 792 118 762 58 784 0 Z"
           fill="url(#aurora-g4-o)"
-          opacity="0.28"
+          opacity="0.22"
           className="anim-aurora-1"
           style={{ animationDelay: '-5s' }}
         />
