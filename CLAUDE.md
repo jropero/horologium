@@ -70,6 +70,14 @@ The Android native shell hides the status bar on startup. `SplashScreen.hide()` 
 
 Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoUpdate` strategy. Google Fonts are cached for 365 days via Workbox `CacheFirst`.
 
+### PlanetaryPositions component
+
+`components/PlanetaryPositions.tsx` is a shared panel used by Rome and Hellas that shows the full planetary-hour sequence for the current day. Key data structures:
+
+- **`HOUR_ADVICE`**: `Partial<Record<civilization, Record<PlanetKey, {classical, spa}>>>` — per-civilization, per-planet advisory texts for the current hour. Source: Vettius Valens *Anthologiarum libri I cap. 1* (Kroll ed.). Currently populated for `rome` (Latin) and `hellas` (Greek), with Spanish translation (`spa`). The advice block renders only for the current hour row (index 0 of `visibleSlots`).
+- **Parapegma section**: Astronomical rising/setting calendar correlating star events to weather predictions, with Spanish translations. Rendered below the hour list for Rome and Hellas.
+- Hour row layout: day/night icon + Roman numeral + planet symbol + planet name + (current hour only) classical advice italic + Spanish translation + start time. Non-current rows use reduced opacity.
+
 ---
 
 ## Egyptian Star Map — Implementation Notes
