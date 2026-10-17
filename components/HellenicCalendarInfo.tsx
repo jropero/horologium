@@ -639,7 +639,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
           {/* ── Deity / festival of the day (always visible) ─────────────── */}
           {deityName && (
-            <div className="w-full bg-sky-900/15 p-5 rounded-lg border-2 border-sky-500/25 shadow-sm relative overflow-hidden">
+            <div className="w-full bg-sky-900/15 p-5 rounded-lg border-2 border-sky-500/25 shadow-sm relative mt-4">
               {festival?.category && (
                 <div className="absolute -top-3 right-4 px-2 py-0.5 bg-sky-900/80 border border-sky-400/50 text-sky-300 text-[10px] uppercase tracking-[0.1em] rounded-sm backdrop-blur-md shadow-lg font-serif z-20">
                   {getCategoryBadge(festival.category)}
