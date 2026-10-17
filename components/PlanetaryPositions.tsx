@@ -23,6 +23,29 @@ const LATIN_TO_KEY: Record<string, PlanetKey> = {
   Sol: 'Sun', Venus: 'Venus', Mercurius: 'Mercury', Luna: 'Moon',
 };
 
+// Advice derived from Vettius Valens, Anthologiarum libri I cap. 1 (Kroll ed.)
+interface HourAdvice { classical: string; spa: string; }
+const HOUR_ADVICE: Partial<Record<string, Record<PlanetKey, HourAdvice>>> = {
+  rome: {
+    Sun:     { classical: 'Adi patronum. Hora regia et publica.',      spa: 'Acude al patrón. Hora real y pública.' },
+    Moon:    { classical: 'Iter, navigatio, res domesticae.',           spa: 'Viaje, navegación, asuntos del hogar.' },
+    Mars:    { classical: 'Apta armis et labori. Cave lites.',          spa: 'Apta para armas y trabajo. Evita pleitos.' },
+    Mercury: { classical: 'Mercatura et epistolae. Iter incipe.',       spa: 'Comercio y correspondencia. Inicia el viaje.' },
+    Jupiter: { classical: 'Pete iura et foedus. Hora fausta.',          spa: 'Busca justicia y acuerdos. Hora propicia.' },
+    Venus:   { classical: 'Amori, musicae, conviviis apta.',            spa: 'Apta para el amor, la música y los banquetes.' },
+    Saturn:  { classical: 'Cave incepta. Res abdita et agricultura.',   spa: 'Evita comienzos. Asuntos ocultos y labranza.' },
+  },
+  hellas: {
+    Sun:     { classical: 'Πρόσελθε ἡγεμόνι. Ὥρα βασιλική.',         spa: 'Acude al gobernante. Hora real.' },
+    Moon:    { classical: 'Πλοῦς, ξενιτεία, οἰκουρία.',               spa: 'Navegación, viaje al extranjero, vida doméstica.' },
+    Mars:    { classical: 'Ὥρα στρατείας καὶ πόνου σώματος.',         spa: 'Hora de campaña y esfuerzo físico.' },
+    Mercury: { classical: 'Ἐμπορίᾳ καὶ γράμμασιν εὐθεῖα.',           spa: 'Favorable al comercio y las letras.' },
+    Jupiter: { classical: 'Δίκας καὶ φιλίας μεγάλων ζήτει.',         spa: 'Busca justicia y amistad con personas influyentes.' },
+    Venus:   { classical: 'Ἔρωτι, μουσικῇ, εὐωχίᾳ ἀγαθή.',          spa: 'Buena para el amor, la música y los festines.' },
+    Saturn:  { classical: 'Ἄπρακτος ὥρα. Τὰ κρυφὰ πράττε.',         spa: 'Hora de inacción. Atiende asuntos ocultos.' },
+  },
+};
+
 const HOURS_TITLE: Record<string, string> = {
   rome:      'Horae Planetarvm',
   hellas:    'Ὧραι τῶν Πλανητῶν',
@@ -391,33 +414,44 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
           <div className="h-px flex-1 bg-gold-dim/20" />
         </div>
 
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col gap-1">
           {visibleSlots.map((h, i) => {
             if (!h) return null;
             const isCurrent = i === 0;
             const planet    = names[h.rulerKey];
             const sym       = SYMBOLS[h.rulerKey];
             const timeStr   = h.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            const advice    = HOUR_ADVICE[civilization]?.[h.rulerKey];
             return (
               <div
                 key={`${h.isDay}-${h.num}`}
-                className={`flex items-center gap-2 px-2 py-1.5 rounded-lg ${
+                className={`flex items-start gap-2 px-2 py-2 rounded-lg ${
                   isCurrent ? 'bg-gold-leaf/10 border border-gold-leaf/30' : 'border border-transparent'
                 }`}
               >
-                <span className={`text-xs w-4 text-center ${h.isDay ? 'text-amber-400/60' : 'text-sky-400/60'}`}>
+                <span className={`text-xs w-4 text-center mt-0.5 ${h.isDay ? 'text-amber-400' : 'text-sky-400'}`}>
                   {h.isDay ? '☀' : '☽'}
                 </span>
-                <span className={`font-serif text-xs w-7 text-right tabular-nums ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>
+                <span className={`font-serif text-xs w-7 text-right tabular-nums mt-0.5 ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim/80'}`}>
                   {toRomanNumeral(h.num)}
                 </span>
-                <span className={`text-base leading-none w-5 text-center ${isCurrent ? 'text-gold-leaf' : 'text-parchment/60'}`}>
+                <span className={`text-base leading-none w-5 text-center mt-0.5 ${isCurrent ? 'text-gold-leaf' : 'text-parchment/80'}`}>
                   {sym}
                 </span>
-                <span className={`font-serif text-xs flex-1 ${isCurrent ? 'text-parchment' : 'text-parchment/60'}`}>
-                  {planet}
-                </span>
-                <span className={`font-serif text-xs tabular-nums ${isCurrent ? 'text-gold-dim/80' : 'text-gold-dim/60'}`}>
+                <div className="flex flex-col flex-1 min-w-0 gap-0.5">
+                  <span className={`font-serif text-xs leading-snug ${isCurrent ? 'text-parchment' : 'text-parchment/80'}`}>
+                    {planet}
+                  </span>
+                  {isCurrent && advice && (<>
+                    <span className="font-serif text-xs italic leading-snug text-gold-dim">
+                      {advice.classical}
+                    </span>
+                    <span className="text-xs leading-snug text-parchment/90">
+                      {advice.spa}
+                    </span>
+                  </>)}
+                </div>
+                <span className={`font-serif text-xs tabular-nums shrink-0 mt-0.5 ${isCurrent ? 'text-gold-dim' : 'text-gold-dim/70'}`}>
                   {timeStr}
                 </span>
               </div>
