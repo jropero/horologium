@@ -45,7 +45,8 @@
 ### 🕰️ Cronometría y Astronomía Avanzada
 - **Temporis Exactio**: Cálculo en tiempo real de *Horae* (día) y *Vigiliae* (noche) basado en la latitud/longitud exacta.
 - **Ojo de Horus (Algol)**: Seguimiento en tiempo real de la estrella variable Algol (2.86 días), codificada como las acciones de Horus en el Papiro de El Cairo 86637.
-- **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo.
+- **Rector Horae**: Identificación del regente planetario de cada hora según el orden caldeo. La hora en curso muestra el consejo clásico (latín o griego) y su traducción al español, extraídos de *Anthologiarum libri* de Vettius Valens (s. II d.C.).
+- **Parapegma**: Calendario astronómico de ortos y ocasos de estrellas fijas con sus asociaciones meteorológicas, integrado en el panel de horas planetarias para Roma y Grecia.
 - **Nilómetro Histórico**: Modelo hidrológico mes a mes que recrea visualmente el ciclo anual del Nilo (desde la inundación máxima en Phaophi hasta el estiaje en Epiphi).
 - **Términos Solares Chinos**: Los 24 jié qì representados como ciclo de año con estado actual, siguiente término y pentagrama de la pentada actual.
 - **Viaje Temporal**: Selector de fecha que muestra el calendario anual completo de cada cultura y numera los años según su propia era —la Olimpiada griega, el ciclo sótico egipcio (orto helíaco de Sopdet) y la Era Seléucida babilónica—; Roma y China conservan el selector gregoriano.

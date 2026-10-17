@@ -45,7 +45,8 @@
 ### 🕰️ Chronometria et Astronomia Subtilis
 - **Temporis Exactio**: Computatio in praesenti *Horarum* (die) et *Vigiliarum* (nocte) secundum latitudinem et longitudinem exactam.
 - **Oculus Hori (Algol)**: Observatio in praesenti stellae variabilis Algol (2.86 dies), quemadmodum actiones Hori in Papyro Cairensi 86637 descriptae sunt.
-- **Rector Horae**: Agnitio domini planetarii uniuscuiusque horae secundum ordinem Chaldaeorum.
+- **Rector Horae**: Agnitio domini planetarii uniuscuiusque horae secundum ordinem Chaldaeorum. Hora praesens consilium classicum (Latine vel Graece) et interpretationem Hispanicam ex *Anthologiarum libris* Vetti Valentis (saec. II p.C.n.) ostendit.
+- **Parapegma**: Calendarium astronomicum ortuum occasuumque stellarum fixarum cum praedictionibus tempestatum, in tabella horarum planetariarum Romae et Helladi integrarum.
 - **Nilometrum Historicum**: Exemplar hydrologicum per singulos menses quod cyclum annuum Nili — ab inundatione maxima in Phaophi usque ad siccitatem in Epiphi — ante oculos ponit.
 - **Termini Solares Sinici**: XXIV jié qì ut cyclus anni repraesentantur cum statu praesenti, proximo termino et pentagrammate praesentis pentadis.
 - **Iter Temporis**: Selector diei qui calendarium annuum plenum cuiusque gentis ostendit et annos secundum propriam aeram numerat — Olympiadem Graecam, cyclum Soticum Aegyptium (ortum heliacum Sopdet) et Aeram Seleucidam Babylonicam; Roma et Zhongguo selectorem Gregorianum retinent.
