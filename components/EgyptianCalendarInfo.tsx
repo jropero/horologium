@@ -414,16 +414,15 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
           {/* Weather effects */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
-            {weatherCond !== 'clear' && (
-              <WeatherSvgEffects
-                condition={weatherCond}
-                weatherParticles={weatherParticles}
-                fogGradientId="fog-ground-egy-info"
-                cloudOpacity={0.7}
-                stormOpacity={0.65}
-                offline={!!weather?.isOffline}
-              />
-            )}
+            {/* Always mounted (also for 'clear') so the aurora can crossfade out */}
+            <WeatherSvgEffects
+              condition={weatherCond}
+              weatherParticles={weatherParticles}
+              fogGradientId="fog-ground-egy-info"
+              cloudOpacity={0.7}
+              stormOpacity={0.65}
+              offline={!!weather?.isOffline}
+            />
             {weatherCond === 'storm' && (
               <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />
             )}

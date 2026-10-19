@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { WeatherCondition } from '../types';
 import { WeatherParticles } from '../utils/weatherParticles';
+import AuroraSvg from './AuroraSvg';
+
+/** Crossfade between the aurora placeholder and the real weather effects. */
+const AURORA_FADE_MS = 1500;
 
 interface Props {
   condition: WeatherCondition;
@@ -9,7 +13,10 @@ interface Props {
   fogGradientId: string;
   cloudOpacity?: number;
   stormOpacity?: number;
-  /** When true (offline), renders cloud shapes in a greenish aura palette instead of gray. */
+  /**
+   * When true, renders an aurora borealis instead of the weather (no data: offline, failed or slow fetch).
+   * Turning it off crossfades the aurora out and the real effects in.
+   */
   offline?: boolean;
 }
 
@@ -21,100 +28,34 @@ const WeatherSvgEffects: React.FC<Props> = ({
   stormOpacity = 0.6,
   offline = false,
 }) => {
-  if (condition === 'clear') return null;
-
-  // Offline mode: northern lights aurora instead of clouds
-  if (offline) {
-    return (
-      <>
-        <defs>
-          <filter id="aurora-bg-blur">
-            <feGaussianBlur stdDeviation="8" />
-          </filter>
-          {/* Emerald green – peaks in the upper third */}
-          <linearGradient id="aurora-g1-o" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#34d399" stopOpacity="0" />
-            <stop offset="22%"  stopColor="#10b981" stopOpacity="0.70" />
-            <stop offset="55%"  stopColor="#059669" stopOpacity="0.28" />
-            <stop offset="100%" stopColor="#064e3b" stopOpacity="0" />
-          </linearGradient>
-          {/* Teal – peaks high, near the top edge */}
-          <linearGradient id="aurora-g2-o" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#a5f3fc" stopOpacity="0.15" />
-            <stop offset="12%"  stopColor="#22d3ee" stopOpacity="0.65" />
-            <stop offset="45%"  stopColor="#06b6d4" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#0c4a6e" stopOpacity="0" />
-          </linearGradient>
-          {/* Purple fringe – very top only, fades quickly */}
-          <linearGradient id="aurora-g3-o" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#e9d5ff" stopOpacity="0.20" />
-            <stop offset="10%"  stopColor="#a78bfa" stopOpacity="0.55" />
-            <stop offset="35%"  stopColor="#34d399" stopOpacity="0.30" />
-            <stop offset="70%"  stopColor="#059669" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#064e3b" stopOpacity="0" />
-          </linearGradient>
-          {/* Bright green – tallest band, provides the main glow column */}
-          <linearGradient id="aurora-g4-o" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#6ee7b7" stopOpacity="0" />
-            <stop offset="18%"  stopColor="#34d399" stopOpacity="0.72" />
-            <stop offset="62%"  stopColor="#10b981" stopOpacity="0.32" />
-            <stop offset="100%" stopColor="#064e3b" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-
-        {/* Ambient sky glow behind all strips */}
-        <ellipse cx="150" cy="42" rx="155" ry="50" fill="#10b981" opacity="0.09" filter="url(#aurora-bg-blur)" />
-
-        {/* Strip 1 – green, x≈8→547 */}
-        <path
-          d="M 8 0 C -10 58 28 118 5 175 L 544 175 C 562 118 524 58 547 0 Z"
-          fill="url(#aurora-g1-o)"
-          opacity="0.25"
-          className="anim-aurora-1"
-        />
-
-        {/* Strip 2 – teal, x≈65→604 */}
-        <path
-          d="M 65 0 C 80 58 48 118 68 175 L 602 175 C 620 118 590 58 604 0 Z"
-          fill="url(#aurora-g2-o)"
-          opacity="0.25"
-          className="anim-aurora-2"
-        />
-
-        {/* Strip 3 – purple→green, x≈120→664 */}
-        <path
-          d="M 120 0 C 105 58 140 118 115 175 L 660 175 C 677 118 642 58 664 0 Z"
-          fill="url(#aurora-g3-o)"
-          opacity="0.28"
-          className="anim-aurora-3"
-        />
-
-        {/* Strip 4 – green, x≈178→720 */}
-        <path
-          d="M 178 0 C 160 58 196 118 172 175 L 717 175 C 734 118 700 58 720 0 Z"
-          fill="url(#aurora-g1-o)"
-          opacity="0.23"
-          className="anim-aurora-2"
-          style={{ animationDelay: '-2.5s' }}
-        />
-
-        {/* Strip 5 – bright green, x≈238→784 */}
-        <path
-          d="M 238 0 C 220 58 255 118 233 175 L 782 175 C 792 118 762 58 784 0 Z"
-          fill="url(#aurora-g4-o)"
-          opacity="0.22"
-          className="anim-aurora-1"
-          style={{ animationDelay: '-5s' }}
-        />
-      </>
-    );
+  // Keep the aurora mounted for the fade-out after `offline` turns false. Derived during
+  // render (not in an effect) so there is no frame without either layer.
+  const [prevOffline, setPrevOffline] = useState(offline);
+  const [auroraLeaving, setAuroraLeaving] = useState(false);
+  if (prevOffline !== offline) {
+    setPrevOffline(offline);
+    setAuroraLeaving(!offline);
   }
+  useEffect(() => {
+    if (!auroraLeaving) return;
+    const t = setTimeout(() => setAuroraLeaving(false), AURORA_FADE_MS);
+    return () => clearTimeout(t);
+  }, [auroraLeaving]);
 
+  const fade = { animationDuration: `${AURORA_FADE_MS}ms` };
+  const aurora = (offline || auroraLeaving) && (
+    <AuroraSvg className={offline ? 'aurora-fade-in' : 'aurora-fade-out'} style={fade} />
+  );
+
+  const showEffects = !offline && condition !== 'clear';
   const cloudFill1 = '#94a3b8';
   const cloudFill2 = '#cbd5e1';
 
   return (
     <>
+      {aurora}
+      {showEffects && (
+      <g className={auroraLeaving ? 'aurora-fade-in' : undefined} style={auroraLeaving ? fade : undefined}>
       {(condition === 'partly-cloudy' || condition === 'cloudy' || condition === 'rain' || condition === 'storm') && (
         <g opacity={condition === 'partly-cloudy' ? cloudOpacity * 0.25 : condition === 'cloudy' ? cloudOpacity * 0.6 : cloudOpacity * 0.35}>
           <path d="M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z" fill={cloudFill1} className="anim-cloud-fast" />
@@ -182,6 +123,8 @@ const WeatherSvgEffects: React.FC<Props> = ({
             />
           ))}
         </g>
+      )}
+      </g>
       )}
     </>
   );

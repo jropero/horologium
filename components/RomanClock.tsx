@@ -198,11 +198,6 @@ const RomanClock: React.FC<RomanClockProps> = ({
               className="absolute inset-0 transition-all duration-1000"
               style={{
                 background: (() => {
-                  if (isOffline) {
-                    return romanTime.isDay
-                      ? 'linear-gradient(to bottom, #1a3526 0%, #27503a 55%, #1e4030 100%)'
-                      : 'linear-gradient(to bottom, #030806 0%, #080f0a 65%, #0b1a0e 100%)';
-                  }
                   if (weatherCond === 'fog') {
                     return romanTime.isDay
                       ? 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)'
@@ -239,6 +234,18 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 opacity: 1
               }}
             ></div>
+
+            {/* Offline / slow-fetch aurora sky — an opacity layer so it crossfades with the real sky
+                (gradients can't be transitioned). Matches AURORA_FADE_MS in WeatherSvgEffects. */}
+            <div
+              className="absolute inset-0 pointer-events-none transition-opacity duration-[1500ms]"
+              style={{
+                background: romanTime.isDay
+                  ? 'linear-gradient(to bottom, #1a3526 0%, #27503a 55%, #1e4030 100%)'
+                  : 'linear-gradient(to bottom, #030806 0%, #080f0a 65%, #0b1a0e 100%)',
+                opacity: isOffline ? 1 : 0,
+              }}
+            />
 
             {weatherCond === 'storm' && (
               <div className="absolute inset-0 bg-white opacity-0 anim-lightning pointer-events-none z-10" />
@@ -290,16 +297,15 @@ const RomanClock: React.FC<RomanClockProps> = ({
                 </g>
 
                 {/* CAPA 2.5: Efectos climáticos (Lluvia, Nieve, Nubes y Rayos) */}
-                {weatherCond !== 'clear' && (
-                  <g className="weather-effects pointer-events-none">
-                    <WeatherSvgEffects
-                      condition={weatherCond}
-                      weatherParticles={weatherParticles}
-                      fogGradientId="fog-ground-roman"
-                      offline={!!weather?.isOffline}
-                    />
-                  </g>
-                )}
+                {/* Always mounted (also for 'clear') so the aurora can crossfade out */}
+                <g className="weather-effects pointer-events-none">
+                  <WeatherSvgEffects
+                    condition={weatherCond}
+                    weatherParticles={weatherParticles}
+                    fogGradientId="fog-ground-roman"
+                    offline={isOffline}
+                  />
+                </g>
 
                 {/* CAPA 3: El suelo oscuro y el Skyline Procedural */}
                 <g className="city-skyline" style={weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}>
