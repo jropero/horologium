@@ -2,17 +2,24 @@ import { useState, useEffect } from 'react';
 import { WeatherData } from '../types';
 import { fetchWeather } from '../utils/weather';
 
+/** A first fetch still pending after this long is reported as `slow`. */
+const SLOW_FETCH_MS = 1000;
+
 /**
  * Loads weather for a location.
  *
  * @param date Optional target date. When provided (time travel), the weather
  *   reflects that specific historical day/time and is not polled. Omit it to
  *   track live weather, refreshed every 30 minutes.
+ * @returns `slow` is true while a fetch has been pending for over
+ *   SLOW_FETCH_MS and no weather has been loaded yet (callers show a
+ *   placeholder). It never turns on for fetches that finish faster.
  */
 export const useWeather = (lat: number, lng: number, date?: Date) => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [slowTimerFired, setSlowTimerFired] = useState(false);
 
     // Primitive key so a new Date object with the same instant does not refetch.
     const dateKey = date ? date.getTime() : null;
@@ -57,5 +64,18 @@ export const useWeather = (lat: number, lng: number, date?: Date) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lat, lng, dateKey]);
 
-    return { weather, loading, error };
+    const waitingForFirstData = loading && !weather;
+    useEffect(() => {
+        if (!waitingForFirstData) {
+            setSlowTimerFired(false);
+            return;
+        }
+        const t = setTimeout(() => setSlowTimerFired(true), SLOW_FETCH_MS);
+        return () => clearTimeout(t);
+    }, [waitingForFirstData]);
+
+    // Gate on the live condition too, so `slow` drops in the same render the data arrives.
+    const slow = slowTimerFired && waitingForFirstData;
+
+    return { weather, loading, error, slow };
 };
