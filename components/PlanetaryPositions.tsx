@@ -1,10 +1,15 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getSunTimes, getSolarLongitudeDeg } from '../utils/solar';
 import { getPlanetaryRuler } from '../utils/romanTimeUtils';
+import {
+  PlanetKey, CHRONOGRAPH_HOURS, QUALITY_LABEL, CIVIC_DAY_HOURS, CIVIC_NIGHT_HOURS, vigiliaOf,
+} from '../utils/romanHoursData';
 
-type PlanetKey = 'Moon' | 'Mercury' | 'Venus' | 'Sun' | 'Mars' | 'Jupiter' | 'Saturn';
+// Planetary hours are a Hellenistic invention (2nd–1st c. BCE; Cassius Dio 37.18–19
+// explains the Chaldean order). This panel is therefore shown only for Rome, Hellas
+// and — as a late import — China. Egypt and Babylon get their own hour panels.
 
 const SYMBOLS: Record<PlanetKey, string> = {
   Moon: '☽', Mercury: '☿', Venus: '♀', Sun: '☀', Mars: '♂', Jupiter: '♃', Saturn: '♄',
@@ -13,9 +18,13 @@ const SYMBOLS: Record<PlanetKey, string> = {
 const CIV_NAMES: Record<string, Record<PlanetKey, string>> = {
   rome:      { Moon: 'Luna',    Mercury: 'Mercurius', Venus: 'Venus',     Sun: 'Sol',    Mars: 'Mars',   Jupiter: 'Iuppiter', Saturn: 'Saturnus' },
   hellas:    { Moon: 'Σελήνη', Mercury: 'Ἑρμῆς',    Venus: 'Ἀφροδίτη', Sun: 'Ἥλιος', Mars: 'Ἄρης',  Jupiter: 'Ζεύς',     Saturn: 'Κρόνος'   },
-  aegyptus:  { Moon: 'Iah',     Mercury: 'Djehuty',   Venus: 'Nit',       Sun: 'Ra',     Mars: 'Hor',    Jupiter: 'Amun',     Saturn: 'Sobek'    },
-  babylonia: { Moon: 'Sin',     Mercury: 'Nabû',      Venus: 'Ištar',     Sun: 'Šamaš',  Mars: 'Nergal', Jupiter: 'Marduk',   Saturn: 'Ninurta'  },
   zhongguo:  { Moon: '太阴',    Mercury: '辰星',      Venus: '太白',      Sun: '太阳',   Mars: '荧惑',   Jupiter: '岁星',     Saturn: '镇星'     },
+};
+
+// Greek astronomical names of the planets, [Aristotle] De mundo 2, 392a
+// ("ὁ τοῦ Φαίνοντος ἅμα καὶ Κρόνου καλούμενος κύκλος…").
+const GREEK_STAR_NAMES: Partial<Record<PlanetKey, string>> = {
+  Saturn: 'Φαίνων', Jupiter: 'Φαέθων', Mars: 'Πυρόεις', Mercury: 'Στίλβων', Venus: 'Φωσφόρος',
 };
 
 const LATIN_TO_KEY: Record<string, PlanetKey> = {
@@ -23,35 +32,33 @@ const LATIN_TO_KEY: Record<string, PlanetKey> = {
   Sol: 'Sun', Venus: 'Venus', Mercurius: 'Mercury', Luna: 'Moon',
 };
 
-// Advice derived from Vettius Valens, Anthologiarum libri I cap. 1 (Kroll ed.)
-interface HourAdvice { classical: string; spa: string; }
-const HOUR_ADVICE: Partial<Record<string, Record<PlanetKey, HourAdvice>>> = {
-  rome: {
-    Sun:     { classical: 'Adi patronum. Hora regia et publica.',      spa: 'Acude al patrón. Hora real y pública.' },
-    Moon:    { classical: 'Iter, navigatio, res domesticae.',           spa: 'Viaje, navegación, asuntos del hogar.' },
-    Mars:    { classical: 'Apta armis et labori. Cave lites.',          spa: 'Apta para armas y trabajo. Evita pleitos.' },
-    Mercury: { classical: 'Mercatura et epistolae. Iter incipe.',       spa: 'Comercio y correspondencia. Inicia el viaje.' },
-    Jupiter: { classical: 'Pete iura et foedus. Hora fausta.',          spa: 'Busca justicia y acuerdos. Hora propicia.' },
-    Venus:   { classical: 'Amori, musicae, conviviis apta.',            spa: 'Apta para el amor, la música y los banquetes.' },
-    Saturn:  { classical: 'Cave incepta. Res abdita et agricultura.',   spa: 'Evita comienzos. Asuntos ocultos y labranza.' },
-  },
-  hellas: {
-    Sun:     { classical: 'Πρόσελθε ἡγεμόνι. Ὥρα βασιλική.',         spa: 'Acude al gobernante. Hora real.' },
-    Moon:    { classical: 'Πλοῦς, ξενιτεία, οἰκουρία.',               spa: 'Navegación, viaje al extranjero, vida doméstica.' },
-    Mars:    { classical: 'Ὥρα στρατείας καὶ πόνου σώματος.',         spa: 'Hora de campaña y esfuerzo físico.' },
-    Mercury: { classical: 'Ἐμπορίᾳ καὶ γράμμασιν εὐθεῖα.',           spa: 'Favorable al comercio y las letras.' },
-    Jupiter: { classical: 'Δίκας καὶ φιλίας μεγάλων ζήτει.',         spa: 'Busca justicia y amistad con personas influyentes.' },
-    Venus:   { classical: 'Ἔρωτι, μουσικῇ, εὐωχίᾳ ἀγαθή.',          spa: 'Buena para el amor, la música y los festines.' },
-    Saturn:  { classical: 'Ἄπρακτος ὥρα. Τὰ κρυφὰ πράττε.',         spa: 'Hora de inacción. Atiende asuntos ocultos.' },
-  },
+// Vettius Valens, Anthologiae I.1 "Περὶ τῆς τῶν ἀστέρων φύσεως", ed. Kroll 1908
+// (page.line). Verbatim excerpts, shortened with "…"; Kroll's editorial ⟨ ⟩ dropped.
+// Valens describes what each planet signifies in a nativity; the hour takes on the
+// nature of its ruler (Paulus Alexandrinus, Eisagogika 21, Περὶ τοῦ πολεύοντος καὶ
+// διέποντος). Spanish renderings are ours, from the Greek.
+interface HourAdvice { classical: string; spa: string; cite: string; }
+const VALENS: Record<PlanetKey, HourAdvice> = {
+  Sun:     { classical: 'σημαίνει … βασιλείαν, ἡγεμονίαν, νοῦν, φρόνησιν, μορφήν, κίνησιν, ὕψος τύχης',
+             spa: 'Significa realeza, mando, intelecto, prudencia, belleza, movimiento, altura de fortuna.', cite: 'Val. I.1, p. 1.5' },
+  Moon:    { classical: 'σημαίνει μὲν κατὰ γένεσιν ἀνθρώποις ζωήν, σῶμα, μητέρα, σύλληψιν',
+             spa: 'Significa, en el nacimiento de los hombres, la vida, el cuerpo, la madre, la concepción.', cite: 'Val. I.1, p. 1.15' },
+  Saturn:  { classical: 'ποιεῖ μὲν τοὺς ὑπ᾽ αὐτὸν γεννωμένους μικρολόγους, βασκάνους, πολυμερίμνους',
+             spa: 'Hace a los nacidos bajo él mezquinos, envidiosos, llenos de preocupaciones.', cite: 'Val. I.1, p. 2.1' },
+  Jupiter: { classical: 'σημαίνει τέκνωσιν, γονήν, ἐπιθυμίαν, ἔρωτας, … φιλίας μεγάλων ἀνδρῶν, εὐπορίας',
+             spa: 'Significa la procreación, la descendencia, el deseo, los amores, la amistad de grandes hombres, la prosperidad.', cite: 'Val. I.1, p. 2.24' },
+  Mars:    { classical: 'σημαίνει βίας, πολέμους, ἁρπαγάς, κραυγάς, ὕβρεις',
+             spa: 'Significa violencias, guerras, rapiñas, gritos, ultrajes.', cite: 'Val. I.1, p. 2.35' },
+  Venus:   { classical: 'ἐστὶ μὲν ἐπιθυμία καὶ ἔρως, σημαίνει δὲ μητέρα καὶ τροφόν',
+             spa: 'Es deseo y amor; significa la madre y la nodriza.', cite: 'Val. I.1, p. 3.16' },
+  Mercury: { classical: 'σημαίνει παιδείαν, γράμματα, ἔλεγχον, λόγον, ἀδελφότητα, ἑρμηνείαν',
+             spa: 'Significa la educación, las letras, la refutación, la razón, la fraternidad, la interpretación.', cite: 'Val. I.1, p. 4.4' },
 };
 
 const HOURS_TITLE: Record<string, string> = {
   rome:      'Horae Planetarvm',
   hellas:    'Ὧραι τῶν Πλανητῶν',
-  aegyptus:  'Usewet Netjeru',
-  babylonia: 'Ūmū Kayyāmānu',
-  zhongguo:  '時辰七曜',
+  zhongguo:  '七曜',
 };
 
 // ── Parapegma data ────────────────────────────────────────────────────
@@ -291,6 +298,7 @@ interface HourSlot {
   num: number;
   isDay: boolean;
   start: Date;
+  end: Date;
   rulerKey: PlanetKey;
 }
 
@@ -300,47 +308,62 @@ interface Props {
   lng: number;
 }
 
+/** The 24 planetary hours of the day opened by `sunrise`. */
+function buildPlanetaryDay(sunrise: Date, sunset: Date, nextSunrise: Date, lng: number): HourSlot[] {
+  const dayHourMs   = (sunset.getTime() - sunrise.getTime()) / 12;
+  const nightHourMs = (nextSunrise.getTime() - sunset.getTime()) / 12;
+  const slots: HourSlot[] = [];
+  for (let i = 0; i < 12; i++) {
+    const start = new Date(sunrise.getTime() + i * dayHourMs);
+    slots.push({ num: i + 1, isDay: true, start, end: new Date(start.getTime() + dayHourMs),
+      rulerKey: LATIN_TO_KEY[getPlanetaryRuler(i + 1, true, sunrise, lng)] ?? 'Sun' });
+  }
+  for (let i = 0; i < 12; i++) {
+    const start = new Date(sunset.getTime() + i * nightHourMs);
+    slots.push({ num: i + 1, isDay: false, start, end: new Date(start.getTime() + nightHourMs),
+      rulerKey: LATIN_TO_KEY[getPlanetaryRuler(i + 1, false, sunrise, lng)] ?? 'Moon' });
+  }
+  return slots;
+}
+
+const UI: Record<string, { all: string; fewer: string; gloss: [string, string]; dayLen: string; nightLen: string }> = {
+  rome:     { all: 'Omnes horae', fewer: 'Pauciores', gloss: ['todas las horas', 'menos'], dayLen: 'Hora diurna', nightLen: 'Hora nocturna' },
+  hellas:   { all: 'Πᾶσαι αἱ ὧραι', fewer: 'Ἐλάσσους', gloss: ['todas las horas', 'menos'], dayLen: 'Ἡμερινὴ ὥρα', nightLen: 'Νυκτερινὴ ὥρα' },
+  zhongguo: { all: '全部', fewer: '收起', gloss: ['todas las horas', 'menos'], dayLen: '晝時', nightLen: '夜時' },
+};
+
+const QUALITY_CLASS = {
+  B: 'text-emerald-300 border-emerald-400/40',
+  C: 'text-parchment/80 border-parchment/30',
+  N: 'text-rose-300 border-rose-400/40',
+} as const;
+
 const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   const { civilization } = useCivilization();
+  const [showAll, setShowAll] = useState(false);
 
   // ── Planetary hours ──────────────────────────────────────────────
-  const { slots, currentIdx } = useMemo<{ slots: HourSlot[]; currentIdx: number }>(() => {
+  // The current planetary day (sunrise → next sunrise) plus the next one, so the
+  // short list can run on past the next sunrise instead of wrapping back into
+  // hours that are already over.
+  const { today, upcoming, currentIdx } = useMemo<{ today: HourSlot[]; upcoming: HourSlot[]; currentIdx: number }>(() => {
     try {
       const msPerDay = 86400000;
-      const yesterday = new Date(currentDate.getTime() - msPerDay);
-      const tomorrow  = new Date(currentDate.getTime() + msPerDay);
-
-      const ySun  = getSunTimes(yesterday, lat, lng);
+      const ySun  = getSunTimes(new Date(currentDate.getTime() - msPerDay), lat, lng);
       const tSun  = getSunTimes(currentDate, lat, lng);
-      const tmSun = getSunTimes(tomorrow, lat, lng);
+      const tmSun = getSunTimes(new Date(currentDate.getTime() + msPerDay), lat, lng);
 
-      let dayStart: Date, daySunset: Date, dayEnd: Date;
-      if (currentDate >= tSun.sunrise) {
-        dayStart = tSun.sunrise; daySunset = tSun.sunset; dayEnd = tmSun.sunrise;
-      } else {
-        dayStart = ySun.sunrise; daySunset = ySun.sunset; dayEnd = tSun.sunrise;
-      }
+      const [rise, set, nextRise, nextSet, nextNextRise] = currentDate >= tSun.sunrise
+        ? [tSun.sunrise, tSun.sunset, tmSun.sunrise, tmSun.sunset,
+           getSunTimes(new Date(currentDate.getTime() + 2 * msPerDay), lat, lng).sunrise]
+        : [ySun.sunrise, ySun.sunset, tSun.sunrise, tSun.sunset, tmSun.sunrise];
 
-      const dayHourMs   = (daySunset.getTime() - dayStart.getTime())  / 12;
-      const nightHourMs = (dayEnd.getTime()    - daySunset.getTime()) / 12;
-
-      const slots: HourSlot[] = [];
-      for (let i = 0; i < 12; i++) {
-        const start = new Date(dayStart.getTime() + i * dayHourMs);
-        slots.push({ num: i + 1, isDay: true,  start, rulerKey: LATIN_TO_KEY[getPlanetaryRuler(i + 1, true,  dayStart, lng)] ?? 'Sun'  });
-      }
-      for (let i = 0; i < 12; i++) {
-        const start = new Date(daySunset.getTime() + i * nightHourMs);
-        slots.push({ num: i + 1, isDay: false, start, rulerKey: LATIN_TO_KEY[getPlanetaryRuler(i + 1, false, dayStart, lng)] ?? 'Moon' });
-      }
-
-      const idx = slots.findIndex((h, i) => {
-        const next = slots[i + 1];
-        return currentDate >= h.start && (!next || currentDate < next.start);
-      });
-      return { slots, currentIdx: Math.max(idx, 0) };
+      const today = buildPlanetaryDay(rise, set, nextRise, lng);
+      const upcoming = [...today, ...buildPlanetaryDay(nextRise, nextSet, nextNextRise, lng)];
+      const idx = today.findIndex(h => currentDate >= h.start && currentDate < h.end);
+      return { today, upcoming, currentIdx: Math.max(idx, 0) };
     } catch {
-      return { slots: [], currentIdx: 0 };
+      return { today: [], upcoming: [], currentIdx: 0 };
     }
   }, [Math.floor(currentDate.getTime() / 60000), lat, lng]);
 
@@ -357,10 +380,16 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   const names      = CIV_NAMES[civilization] ?? CIV_NAMES.rome;
   const hoursTitle = HOURS_TITLE[civilization] ?? 'Horae';
   const paraTitle  = civilization === 'hellas' ? 'Παραπήγμα' : 'Parapegma';
+  const ui         = UI[civilization] ?? UI.rome;
 
-  const visibleSlots = slots.length > 0
-    ? Array.from({ length: 8 }, (_, i) => slots[(currentIdx + i) % 24])
-    : [];
+  const visibleSlots = showAll ? today : upcoming.slice(currentIdx, currentIdx + 8);
+  const current      = today[currentIdx];
+  const progress     = current
+    ? Math.min(1, Math.max(0, (currentDate.getTime() - current.start.getTime()) / (current.end.getTime() - current.start.getTime())))
+    : 0;
+  const minutesOf = (s?: HourSlot) => s ? Math.round((s.end.getTime() - s.start.getTime()) / 60000) : 0;
+  const dayHourMin   = minutesOf(today[0]);
+  const nightHourMin = minutesOf(today[12]);
 
   const dayWord = (days: number, civ: string) => {
     if (days === 0) return civ === 'hellas' ? 'σήμερον' : 'hodie';
@@ -408,56 +437,128 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
 
       {/* ── Horae Planetarum ─────────────────────────────────────── */}
       <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
-        <div className="flex items-center justify-center gap-3 mb-3">
+        <div className="flex items-center justify-center gap-3 mb-1">
           <div className="h-px flex-1 bg-gold-dim/20" />
           <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">{hoursTitle}</span>
           <div className="h-px flex-1 bg-gold-dim/20" />
         </div>
 
+        {civilization === 'zhongguo' && (
+          <p className="text-center text-xs leading-snug text-parchment/70 mb-1 px-2">
+            七曜由《宿曜經》(759) 傳入唐代中國
+            <span className="block italic text-parchment/55">
+              La semana de los siete astros llegó a la China Tang con el Xiuyao jing (759 d.C.).
+            </span>
+          </p>
+        )}
+
+        {today.length > 0 && (
+          <div className="flex justify-center gap-4 mb-3 text-xs font-serif tabular-nums text-gold-dim/80">
+            <span><span className="text-amber-400">☀</span> {ui.dayLen} {dayHourMin}′</span>
+            <span><span className="text-sky-400">☽</span> {ui.nightLen} {nightHourMin}′</span>
+          </div>
+        )}
+
         <div className="flex flex-col gap-1">
           {visibleSlots.map((h, i) => {
             if (!h) return null;
-            const isCurrent = i === 0;
+            const isCurrent = h === current;
+            const isPast    = h.end <= currentDate;
             const planet    = names[h.rulerKey];
             const sym       = SYMBOLS[h.rulerKey];
             const timeStr   = h.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-            const advice    = HOUR_ADVICE[civilization]?.[h.rulerKey];
+            const chrono    = civilization === 'rome' ? CHRONOGRAPH_HOURS[h.rulerKey] : undefined;
+            const valens    = civilization === 'hellas' ? VALENS[h.rulerKey] : undefined;
+            const starName  = civilization === 'hellas' ? GREEK_STAR_NAMES[h.rulerKey] : undefined;
+            const civic     = civilization === 'rome'
+              ? (h.isDay ? CIVIC_DAY_HOURS : CIVIC_NIGHT_HOURS)[h.num - 1]
+              : undefined;
+            const vigilia   = civilization === 'rome' && !h.isDay ? vigiliaOf(h.num) : undefined;
             return (
               <div
-                key={`${h.isDay}-${h.num}`}
-                className={`flex items-start gap-2 px-2 py-2 rounded-lg ${
+                key={`${h.start.getTime()}-${i}`}
+                className={`flex flex-col px-2 py-2 rounded-lg ${
                   isCurrent ? 'bg-gold-leaf/10 border border-gold-leaf/30' : 'border border-transparent'
-                }`}
+                } ${isPast ? 'opacity-50' : ''}`}
               >
-                <span className={`text-xs w-4 text-center mt-0.5 ${h.isDay ? 'text-amber-400' : 'text-sky-400'}`}>
-                  {h.isDay ? '☀' : '☽'}
-                </span>
-                <span className={`font-serif text-xs w-7 text-right tabular-nums mt-0.5 ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim/80'}`}>
-                  {toRomanNumeral(h.num)}
-                </span>
-                <span className={`text-base leading-none w-5 text-center mt-0.5 ${isCurrent ? 'text-gold-leaf' : 'text-parchment/80'}`}>
-                  {sym}
-                </span>
-                <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-                  <span className={`font-serif text-xs leading-snug ${isCurrent ? 'text-parchment' : 'text-parchment/80'}`}>
-                    {planet}
+                <div className="flex items-start gap-2">
+                  <span className={`text-xs w-4 text-center mt-0.5 ${h.isDay ? 'text-amber-400' : 'text-sky-400'}`}>
+                    {h.isDay ? '☀' : '☽'}
                   </span>
-                  {isCurrent && advice && (<>
-                    <span className="font-serif text-xs italic leading-snug text-gold-dim">
-                      {advice.classical}
+                  <span className={`font-serif text-xs w-7 text-right tabular-nums mt-0.5 ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim/80'}`}>
+                    {toRomanNumeral(h.num)}
+                  </span>
+                  <span className={`text-base leading-none w-5 text-center mt-0.5 ${isCurrent ? 'text-gold-leaf' : 'text-parchment/80'}`}>
+                    {sym}
+                  </span>
+                  <div className="flex flex-col flex-1 min-w-0 gap-0.5">
+                    <span className={`font-serif text-xs leading-snug ${isCurrent ? 'text-parchment' : 'text-parchment/80'}`}>
+                      {planet}
+                      {starName && <span className="text-gold-dim/70"> · {starName}</span>}
                     </span>
-                    <span className="text-xs leading-snug text-parchment/90">
-                      {advice.spa}
+                    {isCurrent && chrono && (<>
+                      <span className="font-serif text-xs italic leading-snug text-gold-dim">{chrono.latin}</span>
+                      <span className="text-xs leading-snug text-parchment/90">{chrono.spa}</span>
+                      <span className="text-xs leading-tight text-parchment/50 italic">Chronographus a. 354</span>
+                    </>)}
+                    {isCurrent && valens && (<>
+                      <span className="font-serif text-xs italic leading-snug text-gold-dim">{valens.classical}</span>
+                      <span className="text-xs leading-snug text-parchment/90">{valens.spa}</span>
+                      <span className="text-xs leading-tight text-parchment/50 italic">{valens.cite}</span>
+                    </>)}
+                    {isCurrent && civic && (
+                      <span className="mt-1 pt-1 border-t border-gold-dim/15 flex flex-col gap-0.5">
+                        <span className="font-serif text-xs italic leading-snug text-gold-dim">
+                          {civic.latin}
+                          {vigilia && <span className="not-italic text-gold-dim/70"> · {vigilia.lat}</span>}
+                        </span>
+                        <span className="text-xs leading-snug text-parchment/80">
+                          {civic.spa}
+                          {vigilia && <span className="text-parchment/60"> · {vigilia.spa}</span>}
+                        </span>
+                        <span className="text-xs leading-tight text-parchment/50 italic">
+                          {civic.source}{vigilia ? ' · Veg. 3.8' : ''}
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                  {chrono && (
+                    <span
+                      title={`${QUALITY_LABEL[chrono.quality].lat} · ${QUALITY_LABEL[chrono.quality].spa}`}
+                      className={`font-serif text-xs w-5 h-5 shrink-0 mt-0.5 flex items-center justify-center rounded border ${QUALITY_CLASS[chrono.quality]}`}
+                    >
+                      {chrono.quality}
                     </span>
-                  </>)}
+                  )}
+                  <span className={`font-serif text-xs tabular-nums shrink-0 mt-0.5 ${isCurrent ? 'text-gold-dim' : 'text-gold-dim/70'}`}>
+                    {timeStr}
+                  </span>
                 </div>
-                <span className={`font-serif text-xs tabular-nums shrink-0 mt-0.5 ${isCurrent ? 'text-gold-dim' : 'text-gold-dim/70'}`}>
-                  {timeStr}
-                </span>
+                {isCurrent && chrono && (
+                  <span className="ml-[4.75rem] mt-1 text-xs font-serif text-parchment/60">
+                    Hora {QUALITY_LABEL[chrono.quality].lat} · <span className="italic">hora {QUALITY_LABEL[chrono.quality].spa}</span>
+                  </span>
+                )}
+                {isCurrent && (
+                  <div className="ml-[4.75rem] mt-1.5 h-1 rounded-full bg-gold-dim/15 overflow-hidden">
+                    <div className="h-full bg-gold-leaf/70 rounded-full" style={{ width: `${progress * 100}%` }} />
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
+
+        {today.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowAll(v => !v)}
+            className="mt-2 w-full flex flex-col items-center py-1.5 rounded-lg border border-gold-dim/20 hover:border-gold-dim/40 transition-colors"
+          >
+            <span className="font-serif text-xs uppercase tracking-[0.2em] text-gold-dim">{showAll ? ui.fewer : ui.all}</span>
+            <span className="text-xs italic text-parchment/55">{showAll ? ui.gloss[1] : ui.gloss[0]}</span>
+          </button>
+        )}
       </div>
     </div>
   );
