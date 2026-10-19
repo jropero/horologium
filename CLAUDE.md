@@ -77,6 +77,7 @@ Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoU
 - **`HOUR_ADVICE`**: `Partial<Record<civilization, Record<PlanetKey, {classical, spa}>>>` — per-civilization, per-planet advisory texts for the current hour. Source: Vettius Valens *Anthologiarum libri I cap. 1* (Kroll ed.). Currently populated for `rome` (Latin) and `hellas` (Greek), with Spanish translation (`spa`). The advice block renders only for the current hour row (index 0 of `visibleSlots`).
 - **Parapegma section**: Astronomical rising/setting calendar correlating star events to weather predictions, with Spanish translations. Rendered below the hour list for Rome and Hellas.
 - Hour row layout: day/night icon + Roman numeral + planet symbol + planet name + (current hour only) classical advice italic + Spanish translation + start time. Non-current rows use reduced opacity.
+- Babylonia has no `HOUR_ADVICE`; under each Akkadian deity name the row shows the Spanish planet name (`PLANET_ES`).
 
 ---
 
@@ -168,6 +169,20 @@ CSS variables are overridden in `[data-civ="babylonia"]` block in `index.css`:
 - `--roman-red`: `#818cf8` (indigo-400, secondary accent)
 
 Tailwind utility classes used in Babylonian components should use `blue-*` / `indigo-*` tones, **not** amber/orange (those belong to Egypt). Minimum font size: `text-xs` (12px) throughout.
+
+### Akkadian text and Spanish glosses
+
+Every Akkadian term or heading on the Babylonian page is shown with its Spanish translation below or beside it, in a smaller, lighter italic (`text-xs`). The Akkadian stays the prominent element and is never replaced. UI text is Spanish or Akkadian only, never English, and no font may be under 12px on this page.
+
+- **Sources.** Glosses are quoted from Spanish text already in the repo (`MONTH_REGENT_DESCS`, the month descriptions, `SPECIAL_DAYS`), or derived from mappings the code already makes (Akkadian planet → planet, hour number). Do not invent translations. If a term has no source, leave it unglossed and flag it.
+- **Hero exception.** The 16:9 hero carries no glosses, by the user's decision. Its month, hour, ruler and watch are glossed in the cards below it.
+- **Data:**
+  - `SPECIAL_DAYS` (in `BabylonianCalendarInfo.tsx`): `label` is the Akkadian name, `es` the gloss.
+  - `BabylonianLore`: `monthGloss` and `festivalDeityGloss?`.
+  - `BabylonianDate`: `planetaryRulerEs`, `hourNameEs`, `moonPhaseNameEs`.
+  - `BABYLONIAN_ZODIAC_ES` (in `types/babylonia.ts`): the tropical-sign equivalent of each Babylonian sign.
+- **Shared components.** On the Babylonian page their Latin headings are replaced by Akkadian + Spanish pairs: Controls, LocationSelector, LocationModal, WeatherModal, WeatherWidget and the mobile menu in `App.tsx`. The pairs come from `BABYLONIAN_UI_TERMS` in `utils/civLabels.ts` (e.g. Ašru · Lugar, Naṣāru ša ginê · Observación regular) and render through `components/GlossedTerm.tsx`, with the Akkadian at 14px and the gloss at 12px. Measurements with no Akkadian equivalent (Velocidad, Dirección, Presión) are shown in Spanish only. The footer gloss uses the optional label `footerMottoEs`.
+- **Day 7** is `Sebūtu` ("seventh day of the month"). **Day 21** is `Ūmu lemnu` (UD.ḪUL.GÁL, "evil day", glossed "Día funesto"), the label the hemerologies give it (Livingstone, CUSAS 25, 2013).
 
 ### `CuneiformBorder` SVG in `BabylonianCalendarInfo.tsx`
 

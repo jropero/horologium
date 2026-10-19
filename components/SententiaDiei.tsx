@@ -69,7 +69,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
           civilization === 'aegyptus' ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md hover:bg-ink/95'
         }`}
         style={civilization === 'aegyptus' ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
-        title="Click for a random quote"
+        title="Pulsa para ver otra cita al azar"
       >
         {civilization !== 'aegyptus' && <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>}
 
