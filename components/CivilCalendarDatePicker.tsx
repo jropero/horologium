@@ -56,6 +56,11 @@ const TITLES: Record<CivilPickerCivilization, string> = {
   babylonia: 'Warḫum Bābilim',
 };
 
+// Spanish gloss under the title, where the title is not already Spanish.
+const TITLE_GLOSSES: Partial<Record<CivilPickerCivilization, string>> = {
+  babylonia: 'Calendario babilonio',
+};
+
 const sameDate = (a: Date, b: Date): boolean =>
   a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 
@@ -156,7 +161,10 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
           <p className="font-serif text-lg sm:text-xl text-parchment font-bold tracking-wide mt-1">
             {TITLES[civilization]}
           </p>
-          <p className="text-[10px] text-parchment/60 font-serif mt-0.5 tracking-wide">
+          {TITLE_GLOSSES[civilization] && (
+            <p className="text-xs text-parchment/60 font-serif italic">{TITLE_GLOSSES[civilization]}</p>
+          )}
+          <p className="text-xs text-parchment/60 font-serif mt-0.5 tracking-wide">
             Elige un día del calendario anual · sin hora
           </p>
         </div>
@@ -175,7 +183,7 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
               {calendar.yearLabel}
             </div>
             {calendar.yearSubtitle && (
-              <div className="text-[10px] text-parchment/60 font-serif tracking-wide truncate">
+              <div className="text-xs text-parchment/60 font-serif tracking-wide truncate">
                 {calendar.yearSubtitle}
               </div>
             )}
@@ -210,17 +218,17 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
                     </span>
                   )}
                   {month.translation && (
-                    <span className="text-parchment/70 font-body text-[11px] italic truncate">
+                    <span className="text-parchment/70 font-body text-xs italic truncate">
                       {month.translation}
                     </span>
                   )}
                   {month.kind === 'intercalary' && (
-                    <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-400 uppercase tracking-widest">
+                    <span className="ml-auto text-xs px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-400 uppercase tracking-widest">
                       Intercalar
                     </span>
                   )}
                   {month.kind === 'epagomenal' && (
-                    <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-400 uppercase tracking-widest">
+                    <span className="ml-auto text-xs px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-400 uppercase tracking-widest">
                       Epagómenos
                     </span>
                   )}
@@ -279,7 +287,7 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
           )}
           <button
             onClick={onClose}
-            className="w-full text-center text-[10px] text-gold-dim/75 font-serif uppercase tracking-widest py-1.5 hover:text-gold-dim transition-colors"
+            className="w-full text-center text-xs text-gold-dim/75 font-serif uppercase tracking-widest py-1.5 hover:text-gold-dim transition-colors"
           >
             Cancelar
           </button>

@@ -27,6 +27,8 @@ import { LOCATIONS, getTimezoneForLocation } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import { CivilizationProvider, useCivilization } from './contexts/CivilizationContext';
+import GlossedTerm from './components/GlossedTerm';
+import { BABYLONIAN_UI_TERMS, GlossedTerm as Term } from './utils/civLabels';
 
 // Non-Roman civilizations are split into their own chunks, loaded on first switch
 const EgyptianClock = lazy(() => import('./components/EgyptianClock'));
@@ -80,7 +82,7 @@ const AppContent: React.FC = () => {
 
   // Determine current location name and timezone
   const currentLocation = LOCATIONS.find(loc => loc.id !== 'gps' && Math.abs(latitude - (loc.lat || 0)) < 0.001 && Math.abs(longitude - (loc.lng || 0)) < 0.001);
-  const currentLocationName = currentLocation ? currentLocation.name : 'GPS / Custom';
+  const currentLocationName = currentLocation ? currentLocation.name : 'GPS / Personalizada';
   const locationTimezone = getTimezoneForLocation(latitude, longitude);
 
   // Calculate today's sun times for display
@@ -138,7 +140,7 @@ const AppContent: React.FC = () => {
   }, [modernTime, latitude, longitude, loading, civilization]);
 
   // Weather Data — when time-traveling, load the weather recorded on that day/time.
-  const { weather, error: weatherError } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
+  const { weather, error: weatherError, slow: weatherSlow } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
   const [devWeatherCode, setDevWeatherCode] = useState<number | null>(null);
 
   const DEV_OPTIONS = [
@@ -171,13 +173,15 @@ const AppContent: React.FC = () => {
   const effectiveWeather: WeatherData | null = useMemo(() => {
     if (new URLSearchParams(window.location.search).get('offline') === '1') return OFFLINE_WEATHER;
     if (weatherError && !weather) return OFFLINE_WEATHER;
+    // Fetch pending > 1 s with nothing loaded yet: show the aurora placeholder.
+    if (weatherSlow) return OFFLINE_WEATHER;
     if (devWeatherCode === null || !weather) return weather;
     return {
       ...weather,
       current: { ...weather.current, code: devWeatherCode, condition: DEV_CONDITION_MAP[devWeatherCode] ?? 'clear' },
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weather, weatherError, devWeatherCode]);
+  }, [weather, weatherError, weatherSlow, devWeatherCode]);
 
   const handleUpdateLocation = (lat: number, lng: number) => {
     setLoading(true);
@@ -208,6 +212,11 @@ const AppContent: React.FC = () => {
     setIsTimeTraveling(false);
     setModernTime(new Date());
   };
+
+  // Mobile-menu headings: Latin, or Akkadian + Spanish gloss on the Babylonian page.
+  const menuHeading = (latin: string, term: Term) => civilization === 'babylonia'
+    ? <GlossedTerm term={term} align="start" className="font-serif text-sm uppercase tracking-widest text-gold-dim/70" glossClassName="text-gold-dim/60" />
+    : <span className="font-serif text-xs uppercase tracking-widest text-gold-dim/60">{latin}</span>;
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
@@ -242,7 +251,7 @@ const AppContent: React.FC = () => {
             >
               <MapPin className="w-4 h-4 shrink-0 text-gold-dim/70" />
               <span className="flex flex-col min-w-0">
-                <span className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60">Locus</span>
+                {menuHeading('Locus', BABYLONIAN_UI_TERMS.place)}
                 <span className="font-serif text-xs text-parchment/90 truncate">{currentLocationName}</span>
               </span>
             </button>
@@ -253,7 +262,7 @@ const AppContent: React.FC = () => {
             >
               <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
               <span className="flex flex-col min-w-0">
-                <span className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60">Caelum</span>
+                {menuHeading('Caelum', BABYLONIAN_UI_TERMS.sky)}
                 <span className="font-serif text-xs text-parchment/90 truncate">
                   {devWeatherCode === null ? 'Tiempo real' : DEV_OPTIONS.find(o => o.code === devWeatherCode)?.label ?? 'Tiempo real'}
                 </span>
@@ -266,7 +275,7 @@ const AppContent: React.FC = () => {
             >
               <Hourglass className={`w-4 h-4 shrink-0 ${isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'}`} />
               <span className="flex flex-col min-w-0">
-                <span className="font-serif text-[10px] uppercase tracking-widest text-gold-dim/60">Tempus</span>
+                {menuHeading('Tempus', BABYLONIAN_UI_TERMS.day)}
                 <span className={`font-serif text-xs truncate ${isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'}`}>
                   {isTimeTraveling ? 'Viajando' : 'Fecha actual'}
                 </span>
@@ -479,6 +488,9 @@ const AppContent: React.FC = () => {
 
       <footer className="mt-auto relative z-10 text-stone-400 font-serif text-xs tracking-widest pb-4">
         {labels.footerMotto}
+        {labels.footerMottoEs && (
+          <span className="block text-center text-xs italic tracking-normal text-stone-500 mt-0.5">{labels.footerMottoEs}</span>
+        )}
       </footer>
 
       <BottomNav />

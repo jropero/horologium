@@ -5,6 +5,8 @@ import { LOCATIONS } from '../utils/locations';
 import { Geolocation } from '@capacitor/geolocation';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
+import GlossedTerm from './GlossedTerm';
+import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
 
 interface WeatherModalProps {
     isOpen: boolean;
@@ -80,7 +82,9 @@ const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean; civili
                 {data.yearLabel}
             </span>
             {isCurrent && (
-                <span className="text-[10px] uppercase tracking-widest font-black px-1.5 py-0.5 border border-gold-leaf bg-gold-leaf/20 text-gold-leaf rounded">Hodie</span>
+                <span className="text-xs uppercase tracking-widest font-black px-1.5 py-0.5 border border-gold-leaf bg-gold-leaf/20 text-gold-leaf rounded">
+                    {civilization === 'babylonia' ? <GlossedTerm term={BAB.today} className="text-sm" /> : 'Hodie'}
+                </span>
             )}
         </div>
 
@@ -92,8 +96,8 @@ const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean; civili
                 </div>
                 {civilization === 'hellas' && data.greekDescription && (
                     <div className="flex items-baseline gap-2 mt-0.5 truncate">
-                         <span className="font-serif text-[10px] opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(data.greekDescription)}</span>
-                         <span className="text-roman-red font-body italic text-[10px] font-bold uppercase">{data.description}</span>
+                         <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(data.greekDescription)}</span>
+                         <span className="text-roman-red font-body italic text-xs font-bold uppercase">{data.description}</span>
                     </div>
                 )}
                 <div className="flex items-center gap-4 mt-1">
@@ -170,7 +174,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                     <div className="flex items-center gap-3 text-gold-leaf">
                         <CloudSun className="w-6 h-6" />
                         <h2 className="font-serif text-xl font-bold uppercase tracking-[0.3em]">
-                            Annales Coeli
+                            {civilization === 'babylonia' ? <GlossedTerm term={BAB.skyRecords} align="start" /> : 'Annales Coeli'}
                         </h2>
                     </div>
                     <button
@@ -185,18 +189,18 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                 {isTimeTraveling && (
                     <div className="relative z-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-amber-950/60 border-b border-amber-700/40 px-4 py-2 text-amber-300">
                         <Hourglass className="w-3.5 h-3.5 shrink-0" />
-                        <span className="font-serif text-[11px] uppercase tracking-[0.25em] font-bold">
+                        <span className="font-serif text-xs uppercase tracking-[0.25em] font-bold">
                             Viaje Temporal
                         </span>
                         {travelDate && (
                             <>
                                 <span className="text-amber-700/60">·</span>
-                                <span className="font-serif text-[11px] tabular-nums text-amber-400/90">
+                                <span className="font-serif text-xs tabular-nums text-amber-400/90">
                                     {travelDate.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                                 </span>
                             </>
                         )}
-                        <span className="ml-1 text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded border border-amber-700/40 text-amber-400/80">
+                        <span className="ml-1 text-xs uppercase tracking-widest px-1.5 py-0.5 rounded border border-amber-700/40 text-amber-400/80">
                             {weather.isHistorical ? 'Datos históricos' : 'Sin registro · actual'}
                         </span>
                     </div>
@@ -209,7 +213,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                     <div className="mb-8">
                         <div className="flex items-center gap-2 mb-3 text-gold-dim">
                             <Map className="w-4 h-4" />
-                            <span className="font-serif text-[10px] uppercase tracking-[0.2em] font-bold">Mutare Locum:</span>
+                            {civilization === 'babylonia'
+                                ? <GlossedTerm term={BAB.place} align="start" className="font-serif text-sm uppercase tracking-[0.2em] font-bold" />
+                                : <span className="font-serif text-xs uppercase tracking-[0.2em] font-bold">Mutare Locum:</span>}
                         </div>
                         <div className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar-thin">
                             {LOCATIONS.map((loc) => {
@@ -246,7 +252,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                             <div className="flex flex-col items-center md:items-start text-center md:text-left">
                                 <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">
-                                    {isTimeTraveling ? 'Status Temporis' : 'Status Praesens'}
+                                    {civilization === 'babylonia'
+                                        ? <GlossedTerm term={isTimeTraveling ? BAB.day : BAB.today} align="start" glossClassName="tracking-normal" />
+                                        : isTimeTraveling ? 'Status Temporis' : 'Status Praesens'}
                                 </span>
                                 <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
                                     {civilization === 'hellas' && current.greekDescription ? current.greekDescription : current.description}
@@ -258,13 +266,15 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                                     </div>
                                 )}
                                 <div className="flex items-center gap-3 mt-2">
-                                    <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">{labels.windLabel}:</span>
+                                    {civilization === 'babylonia'
+                                        ? <GlossedTerm term={BAB.wind} className="text-gold-dim font-serif text-sm tracking-widest uppercase" glossClassName="text-gold-dim" />
+                                        : <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">{labels.windLabel}:</span>}
                                     <div className="flex flex-col items-start leading-tight">
                                         <span className="text-parchment font-serif italic text-lg">{civilization === 'hellas' && current.greekWindName ? current.greekWindName : current.latinWindName}</span>
                                         {civilization === 'hellas' && current.greekWindName && (
                                             <>
-                                                <span className="font-serif text-[10px] opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(current.greekWindName)}</span>
-                                                <span className="text-roman-red font-body italic text-[11px] font-bold">{current.latinWindName}</span>
+                                                <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(current.greekWindName)}</span>
+                                                <span className="text-roman-red font-body italic text-xs font-bold">{current.latinWindName}</span>
                                             </>
                                         )}
                                     </div>
@@ -284,7 +294,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gold-dim/20">
                             <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
                                 <Wind className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">Velocitas</span>
+                                <span className="text-xs uppercase text-stone-500 tracking-widest">{civilization === 'babylonia' ? 'Velocidad' : 'Velocitas'}</span>
                                 <span className="text-parchment font-bold">{Math.round(current.windSpeed)} km/h</span>
                             </div>
                             <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
@@ -293,17 +303,19 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                                         <path d="M12 2 L16 22 L12 18 L8 22 Z" />
                                     </svg>
                                 </div>
-                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">Directio</span>
+                                <span className="text-xs uppercase text-stone-500 tracking-widest">{civilization === 'babylonia' ? 'Dirección' : 'Directio'}</span>
                                 <span className="text-parchment font-bold">{current.windDirection}°</span>
                             </div>
                             <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
                                 <Gauge className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">Pressio</span>
+                                <span className="text-xs uppercase text-stone-500 tracking-widest">{civilization === 'babylonia' ? 'Presión' : 'Pressio'}</span>
                                 <span className="text-parchment font-bold">{Math.round(current.surfacePressure)} hPa</span>
                             </div>
                             <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
                                 <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-[10px] uppercase text-stone-500 tracking-widest">{labels.skyLabel}</span>
+                                {civilization === 'babylonia'
+                                    ? <GlossedTerm term={BAB.sky} className="text-sm uppercase text-stone-500 tracking-widest" glossClassName="text-stone-500" />
+                                    : <span className="text-xs uppercase text-stone-500 tracking-widest">{labels.skyLabel}</span>}
                                 <span className="text-parchment font-bold">
                                     {current.condition === 'clear' && 'Serenum'}
                                     {current.condition === 'partly-cloudy' && 'Nubes Sparsae'}
@@ -319,7 +331,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                     {/* Historical Comparison */}
                     <div className="flex items-center gap-3 mb-6">
                         <History className="w-5 h-5 text-gold-dim" />
-                        <h4 className="font-serif text-lg text-gold-leaf uppercase tracking-[0.2em] font-bold">Memoria Mundi</h4>
+                        <h4 className="font-serif text-lg text-gold-leaf uppercase tracking-[0.2em] font-bold">
+                            {civilization === 'babylonia' ? <GlossedTerm term={BAB.formerDays} align="start" /> : 'Memoria Mundi'}
+                        </h4>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
