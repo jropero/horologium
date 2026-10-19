@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { WeatherData } from '../types';
 import { getBabylonianDate } from '../utils/babylonianCalendarUtils';
 import { getBabylonianLore } from '../utils/babylonianLoreData';
+import { BABYLONIAN_ZODIAC_ES } from '../types/babylonia';
 import WeatherWidget from './WeatherWidget';
 import WeatherModal from './WeatherModal';
 import { useCivilization } from '../contexts/CivilizationContext';
@@ -93,6 +94,9 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
           <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
             {babDate.monthName}
           </h2>
+          <p className="text-xs font-serif italic text-blue-200/70">
+            {babDate.isIntercalary ? 'Mes intercalar' : lore?.monthGloss}
+          </p>
           <p className="text-xs text-blue-300 uppercase tracking-[0.3em] mt-0.5">
             Era Seléucida {babDate.seYear} · Mes {babDate.monthIndex + 1}
           </p>
@@ -123,6 +127,9 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
                     Deidad del Mes
                   </div>
                   <div className="text-lg font-serif font-black text-parchment">{lore.festivalDeity}</div>
+                  {lore.festivalDeityGloss && (
+                    <div className="text-xs font-serif italic text-blue-200/70">{lore.festivalDeityGloss}</div>
+                  )}
                 </div>
               </div>
               <p className="text-xs font-serif text-parchment/80 italic leading-relaxed">
@@ -150,6 +157,11 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
               </div>
               <div className="text-xs text-blue-400 font-serif">
                 Signo zodiacal: <span className="text-blue-300 font-bold">{lore.zodiacSign}</span>
+                {lore.zodiacSign in BABYLONIAN_ZODIAC_ES && (
+                  <span className="italic text-blue-300/60">
+                    {' '}≈ {BABYLONIAN_ZODIAC_ES[lore.zodiacSign as keyof typeof BABYLONIAN_ZODIAC_ES]}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -157,14 +169,15 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
           {/* Current day stats */}
           <div className="grid grid-cols-2 gap-3 text-center">
             {[
-              { label: 'Hora temporal', value: babDate.hourName },
-              { label: 'Guardia',       value: babDate.watchName },
-              { label: 'Planeta rector',value: babDate.planetaryRuler },
-              { label: 'Fase lunar',    value: babDate.moonPhaseName },
-            ].map(({ label, value }) => (
+              { label: 'Hora temporal', value: babDate.hourName,       gloss: babDate.hourNameEs },
+              { label: 'Guardia',       value: babDate.watchName,      gloss: babDate.watchDesc },
+              { label: 'Planeta rector',value: babDate.planetaryRuler, gloss: babDate.planetaryRulerEs },
+              { label: 'Fase lunar',    value: babDate.moonPhaseName,  gloss: babDate.moonPhaseNameEs },
+            ].map(({ label, value, gloss }) => (
               <div key={label} className="bg-blue-900/15 border border-blue-500/20 rounded p-2">
                 <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">{label}</div>
-                <div className="text-xs font-serif text-parchment">{value}</div>
+                <div className="text-sm font-serif text-parchment">{value}</div>
+                <div className="text-xs font-serif italic text-blue-200/65">{gloss}</div>
               </div>
             ))}
           </div>

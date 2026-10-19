@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Map } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
 import { LOCATIONS } from '../utils/locations';
+import { useCivilization } from '../contexts/CivilizationContext';
+import GlossedTerm from './GlossedTerm';
+import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
 
 interface LocationSelectorProps {
   onUpdateLocation: (lat: number, lng: number) => void;
@@ -10,6 +13,7 @@ interface LocationSelectorProps {
 }
 const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, currentLat, currentLng }) => {
   const [loading, setLoading] = useState(false);
+  const { civilization } = useCivilization();
 
   const handleLocationSelect = async (loc: typeof LOCATIONS[0]) => {
     if (loc.id === 'gps') {
@@ -46,7 +50,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
             <Map className="w-6 h-6" />
           </div>
           <h3 className="font-serif text-lg md:text-xl text-gold-leaf uppercase tracking-[0.3em] font-bold">
-            Selectio Loci
+            {civilization === 'babylonia' ? <GlossedTerm term={BAB.place} /> : 'Selectio Loci'}
           </h3>
           <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold-dim to-transparent mt-2"></div>
         </div>

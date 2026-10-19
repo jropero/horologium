@@ -5,6 +5,7 @@ export interface CivLabels {
   appTitle: string;
   appSubtitle: string;
   footerMotto: string;
+  footerMottoEs?: string; // Spanish gloss of the motto (Babylonia only)
   loadingText: string;
 
   // Clock & Time
@@ -350,6 +351,7 @@ export const getBabylonianLabels = (): CivLabels => ({
   appTitle: 'BĒRU',
   appSubtitle: 'BĀBILIM',
   footerMotto: 'ENŪMA ELIŠ',
+  footerMottoEs: 'Cuando en lo alto',
   loadingText: 'Los astrónomos consultan las tablillas...',
 
   dayLabel: 'Ūmu',
@@ -412,3 +414,21 @@ export const getBabylonianLabels = (): CivLabels => ({
   civToggleZhongguo: '中国',
   civToggleBabylonia: 'Bābilim',
 });
+
+// Akkadian headings (with Spanish gloss) that replace the Latin headings of the shared
+// components on the Babylonian page. Vocabulary per Black, George & Postgate,
+// A Concise Dictionary of Akkadian (2000); naṣāru ša ginê ("regular watching") is the
+// ancient title of the Astronomical Diaries (Sachs & Hunger 1988–96).
+export interface GlossedTerm { akk: string; es: string }
+
+export const BABYLONIAN_UI_TERMS = {
+  place:      { akk: 'Ašru',            es: 'Lugar' },
+  latitude:   { akk: 'Iltānu · Šūtu',   es: 'Norte · Sur' },
+  longitude:  { akk: 'Šadû · Amurru',   es: 'Este · Oeste' },
+  sky:        { akk: 'Šamû',            es: 'Cielo' },
+  wind:       { akk: 'Šāru',            es: 'Viento' },
+  day:        { akk: 'Ūmu',             es: 'Día' },
+  today:      { akk: 'Ūmu annû',        es: 'Hoy' },
+  skyRecords: { akk: 'Naṣāru ša ginê',  es: 'Observación regular' },
+  formerDays: { akk: 'Ūmū pānûtu',      es: 'Días de antaño' },
+} satisfies Record<string, GlossedTerm>;

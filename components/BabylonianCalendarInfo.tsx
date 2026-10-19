@@ -66,19 +66,22 @@ const TinyMoon: React.FC<{ phase: number; size?: number; dim?: boolean }> = ({
 // ─── Special days ─────────────────────────────────────────────────────────────
 
 interface SpecialDay {
-  label: string;
-  akkadian: string;
+  label: string;   // Akkadian name
+  es: string;      // Spanish gloss
   dot: 'sapatu' | 'rest' | 'quarter' | 'new';
 }
 
+// Day 7: sebūtu, "seventh day (of the month)" (from the ordinal sebû).
+// Day 21: ūmu lemnu (UD.ḪUL.GÁL), "evil day", the hemerologies' label for it
+// (Livingstone, Hemerologies of Assyrian and Babylonian Scholars, CUSAS 25, 2013).
 const SPECIAL_DAYS: Record<number, SpecialDay> = {
-  1:  { label: 'Ittu ša Sîn',    akkadian: 'Luna nueva',                              dot: 'new'     },
-  7:  { label: 'Māšaltu erbē',   akkadian: 'Séptimo día',                             dot: 'quarter' },
-  14: { label: 'Ūm nūḥi',        akkadian: 'Día previo al Šapattu',                   dot: 'rest'    },
-  15: { label: 'Šapattu',        akkadian: 'Día de reposo del corazón de los dioses',  dot: 'sapatu'  },
-  19: { label: 'Ūm nūḥi libbi',  akkadian: 'Día de apaciguamiento de Ea',             dot: 'rest'    },
-  21: { label: 'Māšaltu ešra',   akkadian: 'Vigésimoprimero',                          dot: 'quarter' },
-  28: { label: 'Ūm nūḥi libbi',  akkadian: 'Día de apaciguamiento',                   dot: 'rest'    },
+  1:  { label: 'Ittu ša Sîn',    es: 'Luna nueva',                              dot: 'new'     },
+  7:  { label: 'Sebūtu',         es: 'Séptimo día',                             dot: 'quarter' },
+  14: { label: 'Ūm nūḥi',        es: 'Día previo al Šapattu',                   dot: 'rest'    },
+  15: { label: 'Šapattu',        es: 'Día de reposo del corazón de los dioses',  dot: 'sapatu'  },
+  19: { label: 'Ūm nūḥi libbi',  es: 'Día de apaciguamiento de Ea',             dot: 'rest'    },
+  21: { label: 'Ūmu lemnu',      es: 'Día funesto',                              dot: 'quarter' },
+  28: { label: 'Ūm nūḥi libbi',  es: 'Día de apaciguamiento',                   dot: 'rest'    },
 };
 
 const DOT_COLORS: Record<SpecialDay['dot'], string> = {
@@ -143,16 +146,19 @@ const DayStatusCard: React.FC<{
       {special && (
         <div className={`border-b border-blue-600/40 pb-2 w-full flex items-center justify-center gap-3`}>
           <span className="text-2xl filter drop-shadow-md">{SPECIAL_DAY_ICON[special.dot]}</span>
-          <h3 className={`font-serif text-lg uppercase tracking-[0.2em] font-bold ${theme.text}`}>
-            {special.label}
-          </h3>
+          <div className="flex flex-col items-center">
+            <h3 className={`font-serif text-lg uppercase tracking-[0.2em] font-bold ${theme.text}`}>
+              {special.label}
+            </h3>
+            <span className="text-xs font-serif italic text-blue-200/70">{special.es}</span>
+          </div>
         </div>
       )}
 
       {/* Day event — equivalent to Roman "Festum" */}
       {event && (
         <div className="mt-1 w-full animate-fadeIn">
-          <div className={`text-[10px] uppercase tracking-widest mb-2 flex items-center justify-center gap-2 ${EVENT_TYPE_COLORS[event.type] ?? theme.text}`}>
+          <div className={`text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2 ${EVENT_TYPE_COLORS[event.type] ?? theme.text}`}>
             <span>✧</span> {event.shortLabel} <span>✧</span>
           </div>
           <p className="font-serif text-sm text-parchment/85 leading-relaxed px-2">
@@ -290,8 +296,8 @@ const DayGrid: React.FC<{
 
               <div className="text-center mb-2 relative z-10 border-b border-blue-700/30 pb-2">
                 <PanelMoonSvg type={moonType} active={active} />
-                <h4 className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${active ? 'text-blue-300' : 'text-blue-500'}`}>{title}</h4>
-                <div className="text-[8px] font-serif italic text-blue-400/60 tracking-wide uppercase mt-0.5">{subtitle}</div>
+                <h4 className={`text-xs font-bold uppercase tracking-wide ${active ? 'text-blue-300' : 'text-blue-500'}`}>{title}</h4>
+                <div className="text-xs font-serif italic text-blue-400/60 mt-0.5">{subtitle}</div>
               </div>
 
               <div className="grid grid-cols-2 gap-1 justify-items-center relative z-10">
@@ -325,7 +331,7 @@ const DayGrid: React.FC<{
                       onClick={() => handleTap(day)}
                     >
                       <TinyMoon phase={phase} size={11} dim={isPast && !isToday} />
-                      <span className={`text-[10px] font-serif leading-none font-bold ${numClass}`}>{day}</span>
+                      <span className={`text-xs font-serif leading-none font-bold ${numClass}`}>{day}</span>
                     </button>
                   );
                 })}
@@ -355,7 +361,7 @@ const DayGrid: React.FC<{
             {selSpecial && (
               <div>
                 <span className="text-xs font-serif font-bold text-blue-300">{selSpecial.label}</span>
-                <p className="text-xs font-serif text-blue-100/90 mt-0.5 leading-snug">{selSpecial.akkadian}</p>
+                <p className="text-xs font-serif text-blue-100/90 mt-0.5 leading-snug">{selSpecial.es}</p>
               </div>
             )}
             {selEvent && (
@@ -378,13 +384,14 @@ const DayGrid: React.FC<{
       <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
         {([
           { cls: 'bg-sky-900/50 ring-1 ring-sky-400/50',     label: 'Cuartos lunares' },
-          { cls: 'bg-amber-500/25 ring-1 ring-amber-400/70', label: 'Šapattu' },
-          { cls: 'bg-indigo-900/40 ring-1 ring-indigo-400/50', label: 'Ūm nūḥi' },
+          { cls: 'bg-amber-500/25 ring-1 ring-amber-400/70', label: 'Šapattu', gloss: SPECIAL_DAYS[15].es },
+          { cls: 'bg-indigo-900/40 ring-1 ring-indigo-400/50', label: 'Ūm nūḥi', gloss: SPECIAL_DAYS[28].es },
           { cls: 'bg-emerald-900/35 ring-1 ring-emerald-500/50', label: 'Festival' },
-        ]).map(({ cls, label }) => (
+        ] as Array<{ cls: string; label: string; gloss?: string }>).map(({ cls, label, gloss }) => (
           <div key={label} className="flex items-center gap-1">
             <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
             <span className="text-xs text-blue-400 font-serif uppercase tracking-wide">{label}</span>
+            {gloss && <span className="text-xs text-blue-300/60 font-serif italic">· {gloss}</span>}
           </div>
         ))}
       </div>
@@ -407,7 +414,10 @@ const LuniSolarBar: React.FC<{ meta: BabylonianCalendarMeta }> = ({ meta }) => {
     <div className="w-full mt-3">
       <div className="flex items-center justify-between text-xs text-blue-400 font-serif uppercase tracking-wider mb-1">
         <span>Equinoccio vernal</span>
-        <span className="text-blue-300 font-bold">Nisannu I</span>
+        <span className="flex flex-col items-center">
+          <span className="text-blue-300 font-bold">Nisannu I</span>
+          <span className="normal-case tracking-normal italic text-blue-300/60">{getBabylonianLore('Nisannu')?.monthGloss}</span>
+        </span>
         <span>+30 días</span>
       </div>
 
@@ -474,7 +484,7 @@ const MetonicCycle: React.FC<{ meta: BabylonianCalendarMeta }> = ({ meta }) => {
         style={{ width: 28, height: 32 }}
       >
         <span className={`text-xs font-bold leading-none ${numCls}`}>{pos}</span>
-        {isIntercalary && <span className="text-[10px] text-indigo-400 leading-none mt-0.5">II</span>}
+        {isIntercalary && <span className="text-xs text-indigo-400 leading-none mt-0.5">II</span>}
         {isCurrent && (
           <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_4px_rgba(96,165,250,0.8)]" />
         )}
@@ -770,7 +780,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 </div>
                 <span
                   className="font-serif text-parchment/60 italic tracking-widest"
-                  style={{ fontSize: 'clamp(0.6rem, 2vw, 0.85rem)' }}
+                  style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)' }}
                 >
                   Warḫum {babData.monthIndex + 1}
                 </span>
@@ -784,13 +794,13 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
               </div>
               <div
                 className="font-serif text-parchment/75 italic mt-1"
-                style={{ fontSize: 'clamp(0.65rem, 2.2vw, 0.9rem)' }}
+                style={{ fontSize: 'clamp(0.75rem, 2.2vw, 0.9rem)' }}
               >
                 {babData.hourName}
               </div>
               <div
                 className="font-serif text-parchment/60 tracking-wide"
-                style={{ fontSize: 'clamp(0.6rem, 2vw, 0.8rem)' }}
+                style={{ fontSize: 'clamp(0.75rem, 2vw, 0.8rem)' }}
               >
                 {babData.planetaryRuler} · {babData.watchName}
               </div>
@@ -808,9 +818,14 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 </div>
                 <div className="flex items-center justify-center gap-3 mb-3">
                   <span className="text-3xl">{lore.icon}</span>
-                  <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
-                    {lore.festivalDeity}
-                  </h2>
+                  <div className="flex flex-col items-center">
+                    <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
+                      {lore.festivalDeity}
+                    </h2>
+                    {lore.festivalDeityGloss && (
+                      <span className="text-xs font-serif italic text-blue-200/70">{lore.festivalDeityGloss}</span>
+                    )}
+                  </div>
                 </div>
                 <p className="font-serif text-sm text-parchment/90 italic px-4 leading-relaxed">
                   "{lore.description}"
@@ -875,7 +890,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
             <div className="w-full flex flex-col gap-1">
               <div className="font-serif text-xs uppercase tracking-widest text-blue-400 flex items-center justify-center gap-3 border-y border-blue-700/30 py-2 bg-ink/20 mb-2">
                 <span>☾</span>
-                Warḫum: {meta.monthLengthDays} días lunares
+                <span>Warḫum <span className="normal-case italic text-blue-300/60">(mes)</span>: {meta.monthLengthDays} días lunares</span>
                 <span>☽</span>
               </div>
 
@@ -909,9 +924,9 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
           {/* Planetary ruler / watch / hour */}
           <div className="flex gap-4 w-full justify-center text-center">
             {[
-              { title: 'Planeta Rector', main: babData.planetaryRuler, sub: babData.planetaryRulerEn },
+              { title: 'Planeta Rector', main: babData.planetaryRuler, sub: babData.planetaryRulerEs },
               { title: 'Guardia',        main: babData.watchName,      sub: babData.watchDesc },
-              { title: 'Hora Temporal',  main: babData.hourName,       sub: null },
+              { title: 'Hora Temporal',  main: babData.hourName,       sub: babData.hourNameEs },
             ].map(({ title, main, sub }) => (
               <div key={title} className="flex-1 bg-blue-900/15 border border-blue-500/25 rounded p-3">
                 <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-1">{title}</div>

@@ -547,7 +547,7 @@ const BottomNav: React.FC = () => {
                   <Icon active={isActive} />
                 </div>
                 <span
-                  className={`text-[10px] lg:text-[11px] font-serif uppercase tracking-widest transition-all ${
+                  className={`text-xs font-serif uppercase tracking-wider transition-all ${
                     isActive ? "opacity-100 font-bold" : "opacity-80"
                   }`}
                 >

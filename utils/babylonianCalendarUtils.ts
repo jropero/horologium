@@ -23,6 +23,7 @@ const CRESCENT_MIN_AGE = 0.75;
 
 const PLANETARY_HOURS_AKK = ['Ninurta', 'Marduk', 'Nergal', 'Šamaš', 'Ištar', 'Nabû', 'Sîn'];
 const PLANETARY_HOURS_EN  = ['Saturn',  'Jupiter', 'Mars',  'Sun',   'Venus', 'Mercury', 'Moon'];
+const PLANETARY_HOURS_ES  = ['Saturno', 'Júpiter', 'Marte', 'Sol',   'Venus', 'Mercurio', 'Luna'];
 const DAY_START_INDEX = [3, 6, 2, 5, 1, 4, 0]; // Sun=0…Sat=6
 
 // ─── Akkadian ordinals ────────────────────────────────────────────────────────
@@ -108,6 +109,18 @@ const getBabylonianMoonPhaseName = (phase: number): string => {
   return 'Qīštu';
 };
 
+// Spanish name of the phase each range above stands for.
+const getBabylonianMoonPhaseNameEs = (phase: number): string => {
+  if (phase < 0.03 || phase > 0.97) return 'Luna nueva';
+  if (phase < 0.22) return 'Luna creciente';
+  if (phase < 0.28) return 'Cuarto creciente';
+  if (phase < 0.47) return 'Gibosa creciente';
+  if (phase < 0.53) return 'Luna llena';
+  if (phase < 0.72) return 'Gibosa menguante';
+  if (phase < 0.78) return 'Cuarto menguante';
+  return 'Luna menguante';
+};
+
 // Weekday at the observer's mean local solar time (independent of device timezone).
 const observerWeekday = (t: Date, lng: number): number =>
   new Date(t.getTime() + lng * 240000).getUTCDay();
@@ -116,13 +129,17 @@ const observerWeekday = (t: Date, lng: number): number =>
 // 12-hour period; its local weekday is the planetary day.
 const getBabylonianPlanetaryRuler = (
   currentHour: number, isDay: boolean, periodStart: Date, lng: number
-): { name: string; nameEn: string } => {
+): { name: string; nameEn: string; nameEs: string } => {
   const dayOfWeek = observerWeekday(periodStart, lng);
   const startIndex = DAY_START_INDEX[dayOfWeek];
   let hoursPassed = currentHour - 1;
   if (!isDay) hoursPassed += 12;
   const rulerIndex = (startIndex + hoursPassed) % 7;
-  return { name: PLANETARY_HOURS_AKK[rulerIndex], nameEn: PLANETARY_HOURS_EN[rulerIndex] };
+  return {
+    name: PLANETARY_HOURS_AKK[rulerIndex],
+    nameEn: PLANETARY_HOURS_EN[rulerIndex],
+    nameEs: PLANETARY_HOURS_ES[rulerIndex],
+  };
 };
 
 const getWatch = (hour: number, isDay: boolean): { watch: number; name: string; desc: string } => {
@@ -245,17 +262,19 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
   const hourName = isDay
     ? `Māšaltu ${AKKADIAN_ORDINALS[temporalHour - 1]}`
     : `Māšaltu ${AKKADIAN_ORDINALS[temporalHour - 1]} ša Mūši`;
+  const hourNameEs = isDay ? `Hora ${temporalHour}.ª` : `Hora ${temporalHour}.ª de la noche`;
 
   const watchData = getWatch(temporalHour, isDay);
 
   // Planetary hours run continuously in Chaldean order and the planetary day
   // begins at sunrise, so the night belongs to the weekday of the daylight
   // that preceded it (currentEvent = that evening's sunset).
-  const { name: planetaryRuler, nameEn: planetaryRulerEn } =
+  const { name: planetaryRuler, nameEn: planetaryRulerEn, nameEs: planetaryRulerEs } =
     getBabylonianPlanetaryRuler(temporalHour, isDay, currentEvent.time, lng);
 
   const moonPhase = getMoonPhase(date);
   const moonPhaseName = getBabylonianMoonPhaseName(moonPhase);
+  const moonPhaseNameEs = getBabylonianMoonPhaseNameEs(moonPhase);
 
   // Lunisolar date: the civil day begins at sunset; month and year from the
   // crescent-month engine.
@@ -277,14 +296,17 @@ export const getBabylonianDate = (date: Date, lat: number, lng: number): Babylon
     zodiacSign: getBabylonianZodiac(date),
     planetaryRuler,
     planetaryRulerEn,
+    planetaryRulerEs,
     watch: watchData.watch,
     watchName: watchData.name,
     watchDesc: watchData.desc,
     temporalHour,
     hourName,
+    hourNameEs,
     isDay,
     moonPhase,
     moonPhaseName,
+    moonPhaseNameEs,
     dayProgress,
     monthRegent,
     monthRegentDesc,

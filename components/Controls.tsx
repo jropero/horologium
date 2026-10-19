@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { MapPin, RefreshCw, Navigation } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
 import { useCivilization } from '../contexts/CivilizationContext';
+import GlossedTerm from './GlossedTerm';
+import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
 
 interface ControlsProps {
   latitude: number;
@@ -74,7 +76,8 @@ const Controls: React.FC<ControlsProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
               <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
-                <MapPin className="w-3 h-3" /> Latitudo
+                <MapPin className="w-3 h-3" />
+                {civilization === 'babylonia' ? <GlossedTerm term={BAB.latitude} align="start" className="text-sm" /> : 'Latitudo'}
               </label>
               <input
                 type="text"
@@ -85,7 +88,8 @@ const Controls: React.FC<ControlsProps> = ({
             </div>
             <div className="flex flex-col gap-2">
               <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
-                <MapPin className="w-3 h-3" /> Longitudo
+                <MapPin className="w-3 h-3" />
+                {civilization === 'babylonia' ? <GlossedTerm term={BAB.longitude} align="start" className="text-sm" /> : 'Longitudo'}
               </label>
               <input
                 type="text"

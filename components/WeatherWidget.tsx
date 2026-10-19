@@ -1,6 +1,8 @@
 import React from 'react';
 import { WeatherData } from '../types';
 import { useCivilization } from '../contexts/CivilizationContext';
+import GlossedTerm from './GlossedTerm';
+import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
 import { transliterateGreek } from '../utils/greekTransliteration';
 
 interface WeatherWidgetProps {
@@ -99,7 +101,9 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                 {renderIcon()}
             </div>
             <div className={`flex flex-col border-r justify-center pr-3 ${civilization === 'aegyptus' ? 'border-emerald-500/20' : 'border-gold-dim/30'}`}>
-                <span className={`font-serif text-xs uppercase tracking-widest leading-none mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>{labels.skyLabel}</span>
+                <span className={`font-serif text-xs uppercase tracking-widest leading-none mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>
+                    {civilization === 'babylonia' ? <GlossedTerm term={BAB.sky} align="start" className="text-sm" /> : labels.skyLabel}
+                </span>
                 <span className="text-parchment font-serif text-sm font-bold leading-tight">{displayDesc}</span>
                 {civilization === 'hellas' && greekDescription && (
                     <div className="flex flex-col mb-1">
@@ -116,7 +120,9 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
             {/* SECCIÓN DE VIENTO */}
             {displayWind && (
                 <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-                    <span className={`font-serif text-xs uppercase tracking-widest mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>{labels.windLabel}</span>
+                    <span className={`font-serif text-xs uppercase tracking-widest mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>
+                        {civilization === 'babylonia' ? <GlossedTerm term={BAB.wind} className="text-sm" /> : labels.windLabel}
+                    </span>
 
                     <div className="relative w-8 h-8 flex items-center justify-center mb-1">
                         {/* Rosa de los vientos de fondo */}
@@ -144,7 +150,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                         </svg>
                     </div>
 
-                    <span className="text-stone-300 font-serif text-[10px] text-center leading-tight">
+                    <span className="text-stone-300 font-serif text-xs text-center leading-tight">
                         {civilization === 'aegyptus' ? displayWind.split(' ')[0] : displayWind.split(' ')[0]}
                     </span>
                     {civilization === 'hellas' && greekWindName && (
@@ -161,7 +167,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
                     )}
 
                     {windSpeed !== undefined && (
-                        <span className="text-gold-dim font-serif text-[10px] mt-0.5 tracking-wider">
+                        <span className="text-gold-dim font-serif text-xs mt-0.5 tracking-wider">
                             {Math.round(windSpeed)} km/h
                         </span>
                     )}
