@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Menu, X, MapPin, CloudSun, Hourglass } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import PlanetaryPositions from './components/PlanetaryPositions';
+import EgyptianHours from './components/EgyptianHours';
+import BabylonianSkyDiary from './components/BabylonianSkyDiary';
 import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
@@ -388,7 +390,13 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      <PlanetaryPositions currentDate={modernTime} lat={latitude} lng={longitude} />
+      {civilization === 'aegyptus' ? (
+        <EgyptianHours currentDate={modernTime} lat={latitude} lng={longitude} />
+      ) : civilization === 'babylonia' ? (
+        <BabylonianSkyDiary currentDate={modernTime} lat={latitude} lng={longitude} />
+      ) : (
+        <PlanetaryPositions currentDate={modernTime} lat={latitude} lng={longitude} />
+      )}
 
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && <ProvinciaInfo latitude={latitude} longitude={longitude} onLocationChange={handleUpdateLocation} />}
 

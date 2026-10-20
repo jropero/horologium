@@ -142,22 +142,27 @@ const getBabylonianPlanetaryRuler = (
   };
 };
 
-const getWatch = (hour: number, isDay: boolean): { watch: number; name: string; desc: string } => {
+// Three watches (EN.NUN, maṣṣartu) of night and of day, each a third of its half and
+// so varying with the season. Names after M. P. Streck, "Tag, Tageszeiten",
+// RlA 13 §1.3 (night: barārītu "when the evening light glimmers", qablītu "the
+// middle one", šāt urri "that of the bright day"; day: maṣṣarti šēri / muṣlāli /
+// līlâti, "watch of the dawn / the siesta / the evening").
+export const getWatch = (hour: number, isDay: boolean): { watch: number; name: string; desc: string } => {
   if (isDay) {
-    if (hour <= 4) return { watch: 1, name: 'Ṣēru', desc: 'Guardia matutina' };
-    if (hour <= 8) return { watch: 2, name: 'Mušlālu', desc: 'Guardia del mediodía' };
-    return { watch: 3, name: 'Liwītu', desc: 'Guardia vespertina' };
+    if (hour <= 4) return { watch: 1, name: 'Maṣṣarti šēri', desc: 'Guardia del alba' };
+    if (hour <= 8) return { watch: 2, name: 'Maṣṣarti muṣlāli', desc: 'Guardia de la siesta' };
+    return { watch: 3, name: 'Maṣṣarti līlâti', desc: 'Guardia del atardecer' };
   }
-  if (hour <= 4) return { watch: 1, name: 'Maṣṣartu Ūli', desc: 'Primera guardia nocturna' };
-  if (hour <= 8) return { watch: 2, name: 'Maṣṣartu Qabli', desc: 'Guardia de medianoche' };
-  return { watch: 3, name: 'Maṣṣartu Arkītu', desc: 'Última guardia' };
+  if (hour <= 4) return { watch: 1, name: 'Barārītu', desc: 'Guardia vespertina' };
+  if (hour <= 8) return { watch: 2, name: 'Qablītu', desc: 'Guardia media' };
+  return { watch: 3, name: 'Šāt urri', desc: 'Guardia del alba' };
 };
 
 const getBabylonianCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
   if (isDay) {
     if (hourFloat < 1.0)  return { name: 'Šēr Ūmi',       desc: 'Alba' };
     if (hourFloat < 4.0)  return { name: 'Ina Āli šēri',  desc: 'Mañana' };
-    if (hourFloat < 6.5)  return { name: 'Mušlālu',       desc: 'Mediodía' };
+    if (hourFloat < 6.5)  return { name: 'Muṣlālu',       desc: 'Mediodía' };
     if (hourFloat < 10.0) return { name: 'Ina Āli kalāmi',desc: 'Tarde' };
     return                       { name: 'Erēb Šamši',    desc: 'Ocaso' };
   }
