@@ -70,14 +70,16 @@ The Android native shell hides the status bar on startup. `SplashScreen.hide()` 
 
 Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoUpdate` strategy. Google Fonts are cached for 365 days via Workbox `CacheFirst`.
 
-### PlanetaryPositions component
+### Hour panels (PlanetaryPositions, EgyptianHours, BabylonianSkyDiary)
 
-`components/PlanetaryPositions.tsx` is a shared panel used by Rome and Hellas that shows the full planetary-hour sequence for the current day. Key data structures:
+Planetary hours and the planetary week are Greco-Roman (Cassius Dio 37.18–19; Bultrighini & Stern 2021: no planetary week in Egypt or Mesopotamia before the 2nd c. CE). `App.tsx` therefore renders a different hour panel per civilization. **All sources behind these panels — verbatim texts, citations, URLs, open uncertainties and enhancement ideas — are in `docs/research/hours-and-planets-sources.md`. Read it before changing or extending this data.**
 
-- **`HOUR_ADVICE`**: `Partial<Record<civilization, Record<PlanetKey, {classical, spa}>>>` — per-civilization, per-planet advisory texts for the current hour. Source: Vettius Valens *Anthologiarum libri I cap. 1* (Kroll ed.). Currently populated for `rome` (Latin) and `hellas` (Greek), with Spanish translation (`spa`). The advice block renders only for the current hour row (index 0 of `visibleSlots`).
-- **Parapegma section**: Astronomical rising/setting calendar correlating star events to weather predictions, with Spanish translations. Rendered below the hour list for Rome and Hellas.
-- Hour row layout: day/night icon + Roman numeral + planet symbol + planet name + (current hour only) classical advice italic + Spanish translation + start time. Non-current rows use reduced opacity.
-- Babylonia has no `HOUR_ADVICE`; under each Akkadian deity name the row shows the Spanish planet name (`PLANET_ES`).
+- **`components/PlanetaryPositions.tsx`** — Rome, Hellas, Zhongguo. Builds the 24 hours of the current planetary day (sunrise → next sunrise) plus the next day, and lists the current hour and the next three (running on past sunrise into the next day). The current row has a progress bar; the header shows day/night hour length. Parapegma section above it (Rome, Hellas).
+  - Rome: `utils/romanHoursData.ts`. `CHRONOGRAPH_HOURS` = the Chronograph of 354 captions (verbatim "… utile est" clause + the omens for births, a runaway, the sick and theft + B/C/N rating, a badge on every row). `CIVIC_DAY_HOURS` = Martial 4.8 (hours I–X, XI–XII Censorinus' *suprema*); `CIVIC_NIGHT_HOURS` = Censorinus 24, mapped approximately onto night hours; `vigiliaOf` = Vegetius 3.8 (four watches of three hours).
+  - Hellas: `VALENS` = verbatim excerpts of Vettius Valens I.1 (Kroll 1908, page.line) with Spanish translation; `GREEK_STAR_NAMES` = Φαίνων, Φαέθων… ([Arist.] *De mundo* 392a).
+  - Zhongguo: a note that the 七曜 week came with the 宿曜经 (759).
+- **`components/EgyptianHours.tsx`** — Aegyptus. The 12 hour goddesses of the current half: night from the Amduat (Hornung), day from the Book of the Day (Müller-Roth 2008, lower confidence). Data in `utils/egyptianHoursData.ts`; transliterations only where verified.
+- **`components/BabylonianSkyDiary.tsx`** — Babylonia. Time since sunset/sunrise in bēru and UŠ, the watch (`getWatch` in `babylonianCalendarUtils.ts`, names after Streck, RlA "Tag"), and the five planets as in the Astronomical Diaries: logogram + Akkadian name, sign (Late Babylonian abbreviation, tropical like the rest of the app), ina NIM / ina ŠÚ, UŠ (station). No Diaries term for retrograde is attested, so it is Spanish only. Planet state comes from `utils/planetSkyState.ts` (ecliptic of date, elongation-based visibility, daily motion).
 
 ---
 
@@ -108,7 +110,7 @@ The sky scene of the Egyptian hero (`EgyptianCalendarInfo.tsx`, 16:9 box under t
 
 ### Modes and day/night
 
-- Curated mode (default) draws the catalogue down to mag 4.5 at 0.85 opacity as a backdrop, so the view is never empty. Example: an October evening in Basel, when no Egyptian body is in the south view. On top come the Egyptian objects with labels: Sopdet (CSS-pulsed `.sopdet-glow` element in `index.css`), Ojo de Horus, Sah, Meskhetyu, Iah, Ra, and the five planets. Each planet gets a distinct pictogram via `drawPlanet()` — Djehuty (Mercury, small disc), Nit (Venus, four rays), Hor (Mars, red disc), Amun (Jupiter, banded disc), Sobek (Saturn, ringed disc) — keyed on `SkyPlanet.key`, so a body reads without its name. Names match `CIV_NAMES.aegyptus` in `PlanetaryPositions.tsx`.
+- Curated mode (default) draws the catalogue down to mag 4.5 at 0.85 opacity as a backdrop, so the view is never empty. Example: an October evening in Basel, when no Egyptian body is in the south view. On top come the Egyptian objects with labels: Sopdet (CSS-pulsed `.sopdet-glow` element in `index.css`), Ojo de Horus, Sah, Meskhetyu, Iah, Ra, and the five planets. Each planet gets a distinct pictogram via `drawPlanet()` — Sebegu (Mercury, small disc), Seba-dja (Venus, four rays), Hor-desher (Mars, red disc), Hor-tash-tawy (Jupiter, banded disc), Hor-ka-pet (Saturn, ringed disc) — keyed on `SkyPlanet.key`, so a body reads without its name. These are the attested Egyptian planet names (astronomical ceilings, e.g. the Ramesseum), not deity substitutes; sources are in the `PLANETS` comment in `egyptianSkyMap.ts`.
 - Full mode draws all 2851 stars at full opacity.
 - `dayFactor` (0 night → 1 day) blends linearly within ±30 min of sunrise/sunset. The hero passes `getSunTimes()` for the day, and events are also tested shifted by ±24 h. The sky palette goes night → twilight → day. Stars and the Milky Way fade out; only the Sun, Moon and planets above the horizon remain by day. A dark scrim keeps the hero text readable by day.
 
