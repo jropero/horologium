@@ -80,13 +80,16 @@ const MESKHETYU: CatalogStar[] = [
 ];
 const MESKHETYU_LINES: [number, number][] = [[0, 1], [1, 2], [2, 3], [3, 0], [3, 4], [4, 5], [5, 6]];
 
-// Names match the familiar Egyptian deity set used by PlanetaryPositions.tsx.
+// Egyptian planet names from the astronomical ceilings (Ramesseum, Nelson & Hoelscher 1929;
+// LGG): Sbgw, (sbꜣ) ḏꜣ "the crosser", Ḥr-tꜣš-tꜣwj "Horus who bounds the Two Lands",
+// Ḥr-kꜣ-pt "Horus bull of the sky". Mars is Ḥr-dšr "red Horus", its Middle Kingdom and
+// Greco-Roman name (the Ramesseum calls it Ḥr-ꜣḫtj).
 const PLANETS: { body: Body; key: string; label: string; color: string; radius: number }[] = [
-  { body: Body.Mercury, key: 'mercury', label: 'Djehuty', color: '#d6c4b0', radius: 2.2 },
-  { body: Body.Venus,   key: 'venus',   label: 'Nit',     color: '#fff6dc', radius: 3.4 },
-  { body: Body.Mars,    key: 'mars',    label: 'Hor',     color: '#e0603a', radius: 2.6 },
-  { body: Body.Jupiter, key: 'jupiter', label: 'Amun',    color: '#f3e6c4', radius: 3.0 },
-  { body: Body.Saturn,  key: 'saturn',  label: 'Sobek',   color: '#dcc68c', radius: 2.6 },
+  { body: Body.Mercury, key: 'mercury', label: 'Sebegu', color: '#d6c4b0', radius: 2.2 },
+  { body: Body.Venus,   key: 'venus',   label: 'Seba-dja', color: '#fff6dc', radius: 3.4 },
+  { body: Body.Mars,    key: 'mars',    label: 'Hor-desher', color: '#e0603a', radius: 2.6 },
+  { body: Body.Jupiter, key: 'jupiter', label: 'Hor-tash-tawy', color: '#f3e6c4', radius: 3.0 },
+  { body: Body.Saturn,  key: 'saturn',  label: 'Hor-ka-pet', color: '#dcc68c', radius: 2.6 },
 ];
 
 // Galactic plane (b = 0) sampled every 3° of galactic longitude, converted once to

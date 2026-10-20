@@ -37,11 +37,11 @@ const BACKDROP_ALPHA = 0.85;
 // visible sky so all pictograms can be inspected regardless of the ephemeris.
 // Order matches PLANETS in utils/egyptianSkyMap.ts (Mercury…Saturn).
 const MOCK_PLANET_SKY: { alt: number; az: number }[] = [
-  { alt: 14, az: 128 }, // Djehuty (Mercury)
-  { alt: 26, az: 164 }, // Nit (Venus)
-  { alt: 42, az: 198 }, // Hor (Mars)
-  { alt: 30, az: 236 }, // Amun (Jupiter)
-  { alt: 54, az: 176 }, // Sobek (Saturn)
+  { alt: 14, az: 128 }, // Sebegu (Mercury)
+  { alt: 26, az: 164 }, // Seba-dja (Venus)
+  { alt: 42, az: 198 }, // Hor-desher (Mars)
+  { alt: 30, az: 236 }, // Hor-tash-tawy (Jupiter)
+  { alt: 54, az: 176 }, // Hor-ka-pet (Saturn)
 ];
 const wantsMockPlanets = () =>
   typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('mockplanets');
@@ -88,8 +88,8 @@ const LINE_COLOR = 'rgba(212,168,50,0.25)';
 
 /**
  * Distinct Egyptian planet pictograms, recovered from the pre-panorama SVG scene:
- * Nit (Venus) blazes with rays, Hor (Mars) is red, Amun (Jupiter) is banded and
- * Sobek (Saturn) wears a ring — so each body reads without its written name.
+ * Seba-dja (Venus) blazes with rays, Hor-desher (Mars) is red, Hor-tash-tawy (Jupiter)
+ * is banded and Hor-ka-pet (Saturn) wears a ring — so each body reads without its written name.
  */
 const drawPlanet = (
   ctx: CanvasRenderingContext2D,
@@ -103,7 +103,7 @@ const drawPlanet = (
   ctx.translate(x, y);
   switch (key) {
     case 'venus': {
-      // Nit — the brilliant one, with four rays.
+      // Seba-dja — the brilliant one, with four rays.
       ctx.fillStyle = 'rgba(255,255,255,0.10)';
       ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,0.16)';
@@ -121,7 +121,7 @@ const drawPlanet = (
       break;
     }
     case 'mars': {
-      // Hor — the red one.
+      // Hor-desher — the red one.
       ctx.fillStyle = 'rgba(255,64,64,0.10)';
       ctx.beginPath(); ctx.arc(0, 0, r * 2, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = 'rgba(224,48,48,0.22)';
@@ -134,7 +134,7 @@ const drawPlanet = (
       break;
     }
     case 'jupiter': {
-      // Amun — a banded disc.
+      // Hor-tash-tawy — a banded disc.
       ctx.fillStyle = 'rgba(255,255,240,0.08)';
       ctx.beginPath(); ctx.arc(0, 0, r * 2.2, 0, Math.PI * 2); ctx.fill();
       ctx.save();
@@ -154,7 +154,7 @@ const drawPlanet = (
       break;
     }
     case 'saturn': {
-      // Sobek — the ringed one.
+      // Hor-ka-pet — the ringed one.
       ctx.fillStyle = 'rgba(255,204,102,0.07)';
       ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
       const ringX = r * 2, ringY = r * 0.62;
@@ -169,7 +169,7 @@ const drawPlanet = (
       break;
     }
     default: {
-      // Djehuty (Mercury) — a small swift disc.
+      // Sebegu (Mercury) — a small swift disc.
       ctx.fillStyle = 'rgba(214,196,176,0.12)';
       ctx.beginPath(); ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = color;
@@ -380,7 +380,7 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       glow.style.transform = `translate(${sx}px, ${sy}px)`;
     }
 
-    // Planets: each body gets its own pictogram, labelled with its familiar name.
+    // Planets: each body gets its own pictogram, labelled with its Egyptian name.
     ctx.font = '11px Cinzel, serif';
     ctx.textAlign = 'center';
     for (const p of sky.planets) {
