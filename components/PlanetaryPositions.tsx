@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getSunTimes, getSolarLongitudeDeg } from '../utils/solar';
 import { getPlanetaryRuler } from '../utils/romanTimeUtils';
@@ -326,10 +326,10 @@ function buildPlanetaryDay(sunrise: Date, sunset: Date, nextSunrise: Date, lng: 
   return slots;
 }
 
-const UI: Record<string, { all: string; fewer: string; gloss: [string, string]; dayLen: string; nightLen: string }> = {
-  rome:     { all: 'Omnes horae', fewer: 'Pauciores', gloss: ['todas las horas', 'menos'], dayLen: 'Hora diurna', nightLen: 'Hora nocturna' },
-  hellas:   { all: 'Πᾶσαι αἱ ὧραι', fewer: 'Ἐλάσσους', gloss: ['todas las horas', 'menos'], dayLen: 'Ἡμερινὴ ὥρα', nightLen: 'Νυκτερινὴ ὥρα' },
-  zhongguo: { all: '全部', fewer: '收起', gloss: ['todas las horas', 'menos'], dayLen: '晝時', nightLen: '夜時' },
+const UI: Record<string, { dayLen: string; nightLen: string }> = {
+  rome:     { dayLen: 'Hora diurna', nightLen: 'Hora nocturna' },
+  hellas:   { dayLen: 'Ἡμερινὴ ὥρα', nightLen: 'Νυκτερινὴ ὥρα' },
+  zhongguo: { dayLen: '昼时', nightLen: '夜时' },
 };
 
 const QUALITY_CLASS = {
@@ -340,12 +340,11 @@ const QUALITY_CLASS = {
 
 const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   const { civilization } = useCivilization();
-  const [showAll, setShowAll] = useState(false);
 
   // ── Planetary hours ──────────────────────────────────────────────
   // The current planetary day (sunrise → next sunrise) plus the next one, so the
-  // short list can run on past the next sunrise instead of wrapping back into
-  // hours that are already over.
+  // list can run on past the next sunrise instead of wrapping back into hours that
+  // are already over.
   const { today, upcoming, currentIdx } = useMemo<{ today: HourSlot[]; upcoming: HourSlot[]; currentIdx: number }>(() => {
     try {
       const msPerDay = 86400000;
@@ -382,7 +381,8 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   const paraTitle  = civilization === 'hellas' ? 'Παραπήγμα' : 'Parapegma';
   const ui         = UI[civilization] ?? UI.rome;
 
-  const visibleSlots = showAll ? today : upcoming.slice(currentIdx, currentIdx + 8);
+  // The current hour and the next three.
+  const visibleSlots = upcoming.slice(currentIdx, currentIdx + 4);
   const current      = today[currentIdx];
   const progress     = current
     ? Math.min(1, Math.max(0, (currentDate.getTime() - current.start.getTime()) / (current.end.getTime() - current.start.getTime())))
@@ -445,7 +445,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
 
         {civilization === 'zhongguo' && (
           <p className="text-center text-xs leading-snug text-parchment/70 mb-1 px-2">
-            七曜由《宿曜經》(759) 傳入唐代中國
+            七曜由《宿曜经》(759) 传入唐代中国
             <span className="block italic text-parchment/55">
               La semana de los siete astros llegó a la China Tang con el Xiuyao jing (759 d.C.).
             </span>
@@ -463,7 +463,6 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
           {visibleSlots.map((h, i) => {
             if (!h) return null;
             const isCurrent = h === current;
-            const isPast    = h.end <= currentDate;
             const planet    = names[h.rulerKey];
             const sym       = SYMBOLS[h.rulerKey];
             const timeStr   = h.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -479,7 +478,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
                 key={`${h.start.getTime()}-${i}`}
                 className={`flex flex-col px-2 py-2 rounded-lg ${
                   isCurrent ? 'bg-gold-leaf/10 border border-gold-leaf/30' : 'border border-transparent'
-                } ${isPast ? 'opacity-50' : ''}`}
+                }`}
               >
                 <div className="flex items-start gap-2">
                   <span className={`text-xs w-4 text-center mt-0.5 ${h.isDay ? 'text-amber-400' : 'text-sky-400'}`}>
@@ -499,6 +498,8 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
                     {isCurrent && chrono && (<>
                       <span className="font-serif text-xs italic leading-snug text-gold-dim">{chrono.latin}</span>
                       <span className="text-xs leading-snug text-parchment/90">{chrono.spa}</span>
+                      <span className="font-serif text-xs italic leading-snug text-gold-dim/80 mt-1">{chrono.omens.latin}</span>
+                      <span className="text-xs leading-snug text-parchment/75">{chrono.omens.spa}</span>
                       <span className="text-xs leading-tight text-parchment/50 italic">Chronographus a. 354</span>
                     </>)}
                     {isCurrent && valens && (<>
@@ -549,16 +550,6 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
           })}
         </div>
 
-        {today.length > 0 && (
-          <button
-            type="button"
-            onClick={() => setShowAll(v => !v)}
-            className="mt-2 w-full flex flex-col items-center py-1.5 rounded-lg border border-gold-dim/20 hover:border-gold-dim/40 transition-colors"
-          >
-            <span className="font-serif text-xs uppercase tracking-[0.2em] text-gold-dim">{showAll ? ui.fewer : ui.all}</span>
-            <span className="text-xs italic text-parchment/55">{showAll ? ui.gloss[1] : ui.gloss[0]}</span>
-          </button>
-        )}
       </div>
     </div>
   );

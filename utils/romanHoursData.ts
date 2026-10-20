@@ -26,43 +26,75 @@ export interface ChronographHour {
   /** The "… utile est" (or, for Saturn, the general) clause of the caption, verbatim. */
   latin: string;
   spa: string;
+  /** The rest of the caption, verbatim: omens for those born, a runaway, the sick
+   *  and a theft ("qui nascentur … qui recesserit … qui decubuerit … furtum factum"). */
+  omens: { latin: string; spa: string };
 }
+
+// The second half of the captions comes in four wordings: Saturn and Mars (N, shared
+// below); Mercury ("cito convalescet"); Jupiter and Venus ("cito invenietur"); Sol and Luna.
+const OMENS_N = {
+  latin: 'Qui nascentur periculosi erunt; qui recesserit non invenietur; qui decubuerit periclitabitur; furtum factum non invenietur.',
+  spa: 'Los que nazcan correrán peligro; el fugitivo no será hallado; el que caiga enfermo peligrará; lo robado no aparecerá.',
+};
 
 export const CHRONOGRAPH_HOURS: Record<PlanetKey, ChronographHour> = {
   Saturn: {
     quality: 'N',
     latin: 'Omnia obscura laboriosaque fiunt.',
     spa: 'Todo resulta oscuro y trabajoso.',
+    omens: OMENS_N,
   },
   Jupiter: {
     quality: 'B',
     latin: 'Beneficium petere, cum potente colloqui, rationem reddere utile est.',
     spa: 'Conviene pedir un favor, hablar con un poderoso, rendir cuentas.',
+    omens: {
+      latin: 'Qui nascentur vitales erunt; qui recesserit cito invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      spa: 'Los que nazcan vivirán; el fugitivo será hallado pronto; el que caiga enfermo sanará; lo robado aparecerá.',
+    },
   },
   Mars: {
     quality: 'N',
     latin: 'Nomen militiae dare, arma militaria comparare utile est.',
     spa: 'Conviene alistarse en la milicia y procurarse armas.',
+    omens: OMENS_N,
   },
   Sun: {
     quality: 'C',
     latin: 'Viam navigium ingredi, navem in aquam deducere utile est.',
     spa: 'Conviene emprender camino o travesía y botar una nave.',
+    omens: {
+      latin: 'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      spa: 'Los que nazcan vivirán; el fugitivo será hallado; el que caiga enfermo sanará; lo robado aparecerá.',
+    },
   },
   Venus: {
     quality: 'B',
     latin: 'Sponsalia facere, pueros puellas in disciplina mittere utile est.',
     spa: 'Conviene celebrar esponsales y enviar a niños y niñas a la escuela.',
+    omens: {
+      latin: 'Qui nascentur vitales erunt; qui recesserit cito invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      spa: 'Los que nazcan vivirán; el fugitivo será hallado pronto; el que caiga enfermo sanará; lo robado aparecerá.',
+    },
   },
   Mercury: {
     quality: 'C',
     latin: 'Vilicum actorem institorem in negotio ponere utile est.',
     spa: 'Conviene poner al frente del negocio a un capataz, un administrador o un factor.',
+    omens: {
+      latin: 'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit cito convalescet; furtum factum invenietur.',
+      spa: 'Los que nazcan vivirán; el fugitivo será hallado; el que caiga enfermo sanará pronto; lo robado aparecerá.',
+    },
   },
   Moon: {
     quality: 'C',
     latin: 'Stercus in agro mittere, putea cisternas fabricare utile est.',
     spa: 'Conviene abonar el campo y construir pozos y cisternas.',
+    omens: {
+      latin: 'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      spa: 'Los que nazcan vivirán; el fugitivo será hallado; el que caiga enfermo sanará; lo robado aparecerá.',
+    },
   },
 };
 
