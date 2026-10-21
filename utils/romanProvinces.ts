@@ -133,7 +133,7 @@ export const getProvinceMeta = (geoName: string): ProvinceMeta => {
 
 // Same base as the rest of the app: '/r/' on the web, './' in the Capacitor build,
 // so the layers resolve to local files inside the APK and the Roman map works offline.
-const DATA_BASE = `${import.meta.env.BASE_URL}assets/roman-map/`;
+export const DATA_BASE = `${import.meta.env.BASE_URL}assets/roman-map/`;
 
 type Position = [number, number];
 interface Feature<G, P> { type: 'Feature'; properties: P; geometry: G }
@@ -326,7 +326,7 @@ const haversineKm = (lat1: number, lng1: number, lat2: number, lng2: number): nu
 };
 
 // 1 Roman mile (mille passus) ≈ 1.48 km
-const KM_PER_ROMAN_MILE = 1.48;
+export const KM_PER_ROMAN_MILE = 1.48;
 
 export const getDistanceToRome = (lat: number, lng: number): { km: number; romanMiles: number } => {
   const km = haversineKm(lat, lng, ROME_LAT, ROME_LNG);

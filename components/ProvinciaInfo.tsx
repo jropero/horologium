@@ -5,6 +5,7 @@ import { getRomanProvince, getDistanceToRome, getProvinceShapesVersion, subscrib
 import { getGreekRegion, getDistanceToAthens } from '../utils/greekRegions';
 import { getEgyptianRegion, getDistanceToHeliopolis } from '../utils/egyptianRegions';
 import { toRoman } from '../utils/romanTimeUtils';
+import { historicalYear } from '../utils/romanRoads';
 import { useCivilization } from '../contexts/CivilizationContext';
 
 const RomanMapCanvas = lazy(() => import('./RomanMapCanvas'));
@@ -13,9 +14,11 @@ interface ProvinciaInfoProps {
   latitude: number;
   longitude: number;
   onLocationChange: (lat: number, lng: number) => void;
+  /** The time-travel date; the map shows only the roads that existed then. Undefined when live. */
+  travelDate?: Date;
 }
 
-const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude, onLocationChange }) => {
+const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude, onLocationChange, travelDate }) => {
   const { civilization, labels } = useCivilization();
   const [mapOpen, setMapOpen] = useState(false);
   const canOpenMap = civilization === 'rome';
@@ -195,6 +198,7 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({ latitude, longitude, onLo
                 longitude={longitude}
                 onLocationChange={onLocationChange}
                 onClose={() => setMapOpen(false)}
+                year={travelDate ? historicalYear(travelDate) : undefined}
               />
             </Suspense>
           </div>
