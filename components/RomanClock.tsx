@@ -167,7 +167,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
   };
 
   const weatherCond = weather?.current.condition ?? 'clear';
-  const isOffline = !!weather?.isOffline;
+  const isOffline = !!weather?.isOffline || !!weather?.aurora;
 
   if (loading) {
     return (
