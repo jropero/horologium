@@ -9,8 +9,8 @@ interface DateTimePickerProps {
   onReturnToLive?: () => void;
 }
 
-const MIN_YEAR = 100;
-const MAX_YEAR = 2100;
+const MIN_YEAR = -1000;
+const MAX_YEAR = 3000;
 
 /** Week starts on Sunday, matching toLocaleDateString('es-ES') behaviour of the rest of the app. */
 const WEEKDAYS = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'];
@@ -139,6 +139,8 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
     y: clampYear(initialDate.getFullYear()),
     m: initialDate.getMonth(),
   }));
+  const [yearInput, setYearInput] = useState<string>(() => String(clampYear(initialDate.getFullYear())));
+  const [yearEditing, setYearEditing] = useState(false);
 
   const hours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
   const minutes = useMemo(() => Array.from({ length: 60 }, (_, i) => i), []);
@@ -146,7 +148,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
 
   const monthLabel = useMemo(
     () => {
-      const s = new Date(view.y, view.m, 1).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+      const s = new Date(view.y, view.m, 1).toLocaleDateString('es-ES', { month: 'long' });
       return s.charAt(0).toUpperCase() + s.slice(1);
     },
     [view]
@@ -155,8 +157,24 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
   const hourWheelRef = useRef<WheelColumnHandle>(null);
   const minuteWheelRef = useRef<WheelColumnHandle>(null);
 
-  // Functional updates: a wheel commits 180 ms after its scroll settles, possibly
-  // with a handler from an older render, so never rebuild from a captured `value`
+  useEffect(() => {
+    if (yearEditing) return;
+    setYearInput(String(view.y));
+  }, [view.y, yearEditing]);
+
+  const commitYear = (raw: string) => {
+    const parsed = parseInt(raw.replace(/[^-0-9]/g, ''), 10);
+    if (Number.isNaN(parsed)) {
+      setYearInput(String(view.y));
+      setYearEditing(false);
+      return;
+    }
+    const clamped = clampYear(parsed);
+    setView(v => ({ ...v, y: clamped }));
+    setValue(v => clampYearDate(new Date(clamped, v.getMonth(), v.getDate(), v.getHours(), v.getMinutes())));
+    setYearInput(String(clamped));
+    setYearEditing(false);
+  };
   // (that would revert a day picked in the meantime).
   const setTime = (h: number) => {
     setValue((v) => new Date(v.getFullYear(), v.getMonth(), v.getDate(), h, v.getMinutes()));
@@ -244,7 +262,42 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
               <ChevronLeft className="w-5 h-5" />
             </button>
             <div className="flex-1 text-center">
-              <div className="font-serif text-sm text-parchment font-bold tracking-wide capitalize">{monthLabel}</div>
+              <div className="font-serif text-sm text-parchment font-bold tracking-wide capitalize">
+                {monthLabel}{' '}
+                {yearEditing ? (
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    autoFocus
+                    value={yearInput}
+                    onChange={e => setYearInput(e.target.value)}
+                    onBlur={() => commitYear(yearInput)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        (e.target as HTMLInputElement).blur();
+                      }
+                      if (e.key === 'Escape') {
+                        e.preventDefault();
+                        setYearInput(String(view.y));
+                        setYearEditing(false);
+                      }
+                    }}
+                    className="w-16 text-center bg-black/30 border border-gold-leaf/40 rounded px-1 font-serif text-sm text-gold-leaf tabular-nums focus:outline-none"
+                  />
+                ) : (
+                  <button
+                    onClick={() => {
+                      setYearInput(String(view.y));
+                      setYearEditing(true);
+                    }}
+                    className="text-gold-leaf hover:underline underline-offset-2 tabular-nums"
+                    aria-label="Cambiar año"
+                  >
+                    {view.y}
+                  </button>
+                )}
+              </div>
             </div>
             <button
               onClick={() => shiftMonth(1)}
