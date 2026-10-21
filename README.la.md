@@ -40,6 +40,7 @@
 - **Prospectus Proceduralis**: Scaena viva quae templa Romana, acropoles Graecas, obeliscos Aegyptios vel ziggurata Babylonica secundum gentem activam modo procedurali gignit.
 - **Caela Astronomica**: Scaenae nocturnae secundum gentem cum veris positionibus stellarum et Lunae et effectibus tempestatum dynamicis (pluvia, nix, nebula).
 - **Tabula Stellarum Aegyptia (360°)**: Caelum capitis Aegyptii est prospectus totius horizontis qui digito trahi potest, ad locum et horam computatus (etiam in itinere temporis). Ostendit Sopdet (Sirium), Oculum Hori (Algol, in eclipsi obscuratum), Sah (Orionem), Meskhetyu (Ursam Maiorem), corpus Nut (Viam Lacteam), Iah (Lunam cum vera phase), Ra et quinque planetas, quorum quisque signo proprio distinguitur (Seba-dja radiis, Hor-desher rubore, Hor-tash-tawy fasciis, Hor-ka-pet anulo) et nomine Aegyptio. Globulus ad **caelum plenum** transit (2851 stellae usque ad magnitudinem 5.5); interdiu solum Sol et planetae manent, crepusculo transeunte.
+- **Tabula Imperii Romani**: In Roma, tabella provinciae aperit tabulam Imperii anno CXVII p.C.n. (provincias, circiter octo milia urbium, flumina, lacus, limitem). Tabula sine rete operatur, etiam in Android, et urbs tacta ut locus tuus eligitur. Stratum **Viae**, quod aperiri et claudi potest, omnes XIV DCCLXIX vias ex Itiner-e pingit. Viae maiores latiores sunt quam minores, coniecturales pallidiores, hypotheticae punctis notatae. Nomina Latina (*Via Appia*, *Via Egnatia*…) secundum cursum viae scribuntur. Via tacta tabellam Latinam aperit: tractum, genus, cursum, aetatem, conditorem, longitudinem in milibus passuum, itineraria antiqua et fontes. In itinere temporis solae viae datae quae tum exstabant ostenduntur, et viae aetatis ignotae pallidiores pinguntur. Tabella praeterea regulam *Iter per tempora* habet, qua saecula in sola tabula percurruntur.
 - **Accessibilitas WCAG AA**: Compositio ad summam legibilitatem aptata cum contrastibus probatis et typographia praestanti.
 
 ### 🕰️ Chronometria et Astronomia Subtilis
@@ -68,9 +69,11 @@
 - **Stilus**: Tailwind CSS 4 (machina summae celeritatis).
 - **Instrumentum Aedificandi**: Vite 6 cum sustentatione PWA.
 - **Mobile**: Capacitor 8 ad involucra nativa in Android.
-- **Geometria**: SVG viva ad horologium et scaenam proceduralem; Canvas 2D ad tabulam stellarum Aegyptiam.
+- **Geometria**: SVG viva ad horologium et scaenam proceduralem; Canvas 2D ad tabulam stellarum Aegyptiam et tabulam Imperii Romani.
 - **Calculus**: Algorithmi astronomici summae accurationis pro phasibus lunaribus et cyclis stellaribus ([astronomy-engine](https://github.com/cosinekitty/astronomy)).
 - **Data Stellarum**: Catalogus Stellarum Clararum Yalensis, per [d3-celestial](https://github.com/ofrohn/d3-celestial) (BSD-3-Clause).
+- **Tabula Romana**: Digital Atlas of the Roman Empire (DARE), per [klokantech/roman-empire](https://github.com/klokantech/roman-empire).
+- **Viae Romanae**: [Itiner-e](https://itiner-e.org/), editio stabilis MMXXIV (de Soto, Pažout, Brughmans et al., *Scientific Data* 2025, [doi:10.5281/zenodo.17122148](https://doi.org/10.5281/zenodo.17122148)), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Lineae per `scripts/buildRomanRoads.ts` simplificatae sunt.
 
 ## 🚀 Quomodo Instituatur
 
