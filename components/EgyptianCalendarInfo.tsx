@@ -421,7 +421,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
               fogGradientId="fog-ground-egy-info"
               cloudOpacity={0.7}
               stormOpacity={0.65}
-              offline={!!weather?.isOffline}
+              offline={!!(weather?.isOffline || weather?.aurora)}
             />
             {weatherCond === 'storm' && (
               <rect x="0" y="0" width="300" height="200" fill="#ffffff" opacity="0" className="anim-lightning" />

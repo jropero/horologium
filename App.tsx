@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
-import { Menu, X, MapPin, CloudSun, Hourglass } from 'lucide-react';
+import { Menu, X, MapPin, CloudSun, Hourglass, Sparkles } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import PlanetaryPositions from './components/PlanetaryPositions';
 import EgyptianHours from './components/EgyptianHours';
@@ -8,7 +8,7 @@ import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
 import SolarTimes from './components/SolarTimes';
-import { RomanTimeData, WeatherCondition, WeatherData } from './types';
+import { RomanTimeData, WeatherData } from './types';
 import { calculateRomanTime } from './utils/romanTimeUtils';
 import { calculateHellenicTime } from './utils/hellenicTimeUtils';
 import { calculateEgyptianTime } from './utils/egyptianTimeUtils';
@@ -25,12 +25,20 @@ import SortesVergilianae from './components/SortesVergilianae';
 import OvidianLore from './components/OvidianLore';
 import LocationModal from './components/LocationModal';
 import DateTimePicker from './components/DateTimePicker';
+import CustomWeatherModal from './components/CustomWeatherModal';
 import { LOCATIONS, getTimezoneForLocation } from './utils/locations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import { CivilizationProvider, useCivilization } from './contexts/CivilizationContext';
 import GlossedTerm from './components/GlossedTerm';
 import { BABYLONIAN_UI_TERMS, GlossedTerm as Term } from './utils/civLabels';
+import {
+  CustomWeatherConfig,
+  applyCustomWeather,
+  customWeatherLabel,
+  loadCustomWeather,
+  saveCustomWeather,
+} from './utils/customWeather';
 
 // Non-Roman civilizations are split into their own chunks, loaded on first switch
 const EgyptianClock = lazy(() => import('./components/EgyptianClock'));
@@ -75,7 +83,7 @@ const AppContent: React.FC = () => {
   const [romanTimeData, setRomanTimeData] = useState<RomanTimeData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
-  const [isWeatherSelectorOpen, setIsWeatherSelectorOpen] = useState<boolean>(false);
+  const [isCustomWeatherOpen, setIsCustomWeatherOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isTimeTraveling, setIsTimeTraveling] = useState<boolean>(() =>
     new URLSearchParams(window.location.search).has('date')
@@ -143,26 +151,17 @@ const AppContent: React.FC = () => {
 
   // Weather Data — when time-traveling, load the weather recorded on that day/time.
   const { weather, error: weatherError, slow: weatherSlow } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
-  const [devWeatherCode, setDevWeatherCode] = useState<number | null>(null);
 
-  const DEV_OPTIONS = [
-    { code: null, label: 'Tiempo real' },
-    { code: 0, label: 'Despejado' },
-    { code: 2, label: 'Parcialmente nublado' },
-    { code: 3, label: 'Nublado' },
-    { code: 45, label: 'Niebla' },
-    { code: 61, label: 'Lluvia leve' },
-    { code: 65, label: 'Lluvia intensa' },
-    { code: 82, label: 'Lluvia violenta' },
-    { code: 95, label: 'Tormenta' },
-    { code: 73, label: 'Nieve' },
-  ] as const;
+  // Custom sky chosen from the mobile menu (live weather, the aurora, or a preset
+  // with custom temperature and wind). Persisted so it survives a reload.
+  const [customWeather, setCustomWeather] = useState<CustomWeatherConfig>(() => loadCustomWeather());
+  useEffect(() => {
+    saveCustomWeather(customWeather);
+  }, [customWeather]);
 
-  const DEV_CONDITION_MAP: Record<number, WeatherCondition> = {
-    0: 'clear', 2: 'partly-cloudy', 3: 'cloudy', 45: 'fog', 61: 'rain', 65: 'rain', 82: 'rain', 95: 'storm', 99: 'storm', 73: 'snow',
-  };
   const OFFLINE_WEATHER: WeatherData = {
     isOffline: true,
+    aurora: true,
     isHistorical: false,
     historical: [],
     current: {
@@ -173,17 +172,21 @@ const AppContent: React.FC = () => {
   };
 
   const effectiveWeather: WeatherData | null = useMemo(() => {
-    if (new URLSearchParams(window.location.search).get('offline') === '1') return OFFLINE_WEATHER;
-    if (weatherError && !weather) return OFFLINE_WEATHER;
+    let base: WeatherData | null = weather;
+    if (new URLSearchParams(window.location.search).get('offline') === '1') base = OFFLINE_WEATHER;
+    else if (weatherError && !weather) base = OFFLINE_WEATHER;
     // Fetch pending > 1 s with nothing loaded yet: show the aurora placeholder.
-    if (weatherSlow) return OFFLINE_WEATHER;
-    if (devWeatherCode === null || !weather) return weather;
-    return {
-      ...weather,
-      current: { ...weather.current, code: devWeatherCode, condition: DEV_CONDITION_MAP[devWeatherCode] ?? 'clear' },
-    };
+    else if (weatherSlow) base = OFFLINE_WEATHER;
+    return applyCustomWeather(base, customWeather);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weather, weatherError, weatherSlow, devWeatherCode]);
+  }, [weather, weatherError, weatherSlow, customWeather]);
+
+  /** Turns the aurora on (custom sky) or back to the live weather. */
+  const toggleAurora = () => {
+    setCustomWeather(c => c.aurora
+      ? { ...c, mode: 'live', aurora: false, label: '' }
+      : { ...c, mode: 'custom', aurora: true, code: 0, label: '' });
+  };
 
   const handleUpdateLocation = (lat: number, lng: number) => {
     setLoading(true);
@@ -259,14 +262,28 @@ const AppContent: React.FC = () => {
             </button>
 
             <button
-              onClick={() => { setIsWeatherSelectorOpen(true); setIsMobileMenuOpen(false); }}
+              onClick={() => { setIsCustomWeatherOpen(true); setIsMobileMenuOpen(false); }}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
             >
               <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
               <span className="flex flex-col min-w-0">
                 {menuHeading('Caelum', BABYLONIAN_UI_TERMS.sky)}
-                <span className="font-serif text-xs text-parchment/90 truncate">
-                  {devWeatherCode === null ? 'Tiempo real' : DEV_OPTIONS.find(o => o.code === devWeatherCode)?.label ?? 'Tiempo real'}
+                <span className={`font-serif text-xs truncate ${customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'}`}>
+                  {customWeatherLabel(customWeather)}
+                </span>
+              </span>
+            </button>
+
+            <button
+              onClick={() => { toggleAurora(); setIsMobileMenuOpen(false); }}
+              aria-pressed={customWeather.aurora}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+            >
+              <Sparkles className={`w-4 h-4 shrink-0 ${customWeather.aurora ? 'text-emerald-300' : 'text-gold-dim/70'}`} />
+              <span className="flex flex-col min-w-0">
+                {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
+                <span className={`font-serif text-xs truncate ${customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'}`}>
+                  {customWeather.aurora ? 'Activada' : 'Desactivada'}
                 </span>
               </span>
             </button>
@@ -460,36 +477,13 @@ const AppContent: React.FC = () => {
       )}
       </Suspense>
 
-      {isWeatherSelectorOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-          onClick={() => setIsWeatherSelectorOpen(false)}
-        >
-          <div
-            className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-xs overflow-hidden"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="p-4 border-b border-gold-dim/30 text-center">
-              <h3 className="font-serif text-sm text-gold-leaf uppercase tracking-[0.3em] font-bold">Simular Tiempo</h3>
-            </div>
-            <div className="p-3 flex flex-col gap-1">
-              {DEV_OPTIONS.map(opt => (
-                <button
-                  key={opt.code ?? 'real'}
-                  onClick={() => { setDevWeatherCode(opt.code as number | null); setIsWeatherSelectorOpen(false); }}
-                  className={`w-full text-left px-4 py-2.5 rounded-lg font-serif text-sm uppercase tracking-widest transition-all border
-                    ${devWeatherCode === opt.code
-                      ? 'bg-gold-leaf text-ink border-gold-leaf font-bold'
-                      : 'text-parchment/80 border-gold-dim/20 hover:bg-gold-leaf/10 hover:border-gold-dim/50'
-                    }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <CustomWeatherModal
+        isOpen={isCustomWeatherOpen}
+        onClose={() => setIsCustomWeatherOpen(false)}
+        config={customWeather}
+        onApply={setCustomWeather}
+        liveWeather={weather}
+      />
 
       {/* Background vignette effect */}
       <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>

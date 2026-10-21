@@ -201,7 +201,7 @@ interface SnapshotInput {
 }
 
 /** Builds a complete WeatherSnapshot (WMO code + civilization flavourings) from raw values. */
-const buildSnapshot = ({
+export const buildWeatherSnapshot = ({
     temperature,
     code,
     windSpeed,
@@ -248,7 +248,7 @@ const snapshotFromHourly = (hourly: any, index: number, yearLabel: string): Weat
     const temperature = hourly.temperature_2m?.[index];
     const code = hourly.weather_code?.[index];
     if (temperature == null || code == null) return null;
-    return buildSnapshot({
+    return buildWeatherSnapshot({
         temperature,
         code,
         windSpeed: hourly.wind_speed_10m?.[index] ?? 0,
@@ -331,7 +331,7 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
             if (res.ok) {
                 const c = (await res.json()).current;
                 if (c && c.temperature_2m != null) {
-                    current = buildSnapshot({
+                    current = buildWeatherSnapshot({
                         temperature: c.temperature_2m,
                         code: c.weather_code,
                         windSpeed: c.wind_speed_10m ?? 0,
@@ -360,7 +360,7 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
             const year = HISTORICAL_YEARS[i];
             const daily = data.daily;
             if (daily && daily.weather_code?.[0] != null && daily.temperature_2m_mean?.[0] != null) {
-                historical.push(buildSnapshot({
+                historical.push(buildWeatherSnapshot({
                     temperature: daily.temperature_2m_mean[0],
                     code: daily.weather_code[0],
                     windSpeed: daily.wind_speed_10m_max?.[0] ?? 0,

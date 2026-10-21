@@ -79,5 +79,11 @@ export interface WeatherData {
     isHistorical?: boolean;
     /** True when the weather fetch failed (e.g. offline). Effects use a green aura instead. */
     isOffline?: boolean;
+    /**
+     * True when the sky shows the aurora borealis: either because there is no
+     * weather data (offline / failed / slow fetch) or because the user chose it
+     * as a custom sky from the mobile menu.
+     */
+    aurora?: boolean;
 }
 // --- END OF FILE horologium-main/types.ts ---
