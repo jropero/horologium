@@ -146,6 +146,57 @@ export const getRomanLabels = (): CivLabels => ({
   civToggleBabylonia: 'Babilonia',
 });
 
+/** Latin strings of the roads layer on the Roman map (RomanMapCanvas, Rome only). */
+const latinYear = (y: number) => (y < 0 ? `${-y} a. Chr. n.` : `${y} p. Chr. n.`);
+
+export const ROMAN_ROAD_LABELS = {
+  toggle: 'Viae',
+  toggleShow: 'Vias ostendere',
+  toggleHide: 'Vias celare',
+  loading: 'Viae parantur…',
+  error: 'Viae proferri non potuerunt.',
+  retry: 'Iterum',
+  unnamed: 'Via sine nomine tradito',
+  segment: 'Tractus',
+  typeLabel: 'Genus',
+  types: ['Via maior', 'Via minor'] as const, // Itiner-e "Main Road", "Secondary Road"
+  certaintyLabel: 'Cursus',
+  certainty: ['certus', 'coniecturalis', 'hypotheticus'] as const, // Certain, Conjectured, Hypothetical
+  aetas: 'Aetas',
+  aetasIgnota: 'ignota',
+  conditor: 'Conditor',
+  longitudo: 'Longitudo',
+  itineraria: 'Itineraria',
+  recentiora: 'Nomina recentiora',
+  fontes: 'Fontes',
+  legendMaior: 'maior',
+  legendMinor: 'minor',
+  legendHypothetica: 'hypothetica',
+  legendIgnota: 'aetatis ignotae',
+  latinYear,
+  yearRange: ([a, b]: [number, number]) =>
+    a === b ? latinYear(a)
+      : (a < 0) === (b < 0) ? `${Math.abs(a)}–${latinYear(b)}`
+        : `${latinYear(a)} – ${latinYear(b)}`,
+  from: (y: number) => `ab anno ${latinYear(y)}`,
+  fromErr: (y: number) => `fortasse iam ab anno ${latinYear(y)}`,
+  to: (y: number) => `usque ad annum ${latinYear(y)}`,
+  toErr: (y: number) => `fortasse usque ad annum ${latinYear(y)}`,
+  yearNote: (y: number) => `Anno ${latinYear(y)}: viae datae tantum quae tum exstabant.`,
+  // Time travel in the road card (moves only the roads layer, not the app's date).
+  iterTemporum: 'Iter per tempora',
+  annusViarum: 'Annus viarum',
+  omnesViae: 'Omnes viae',
+  adConditum: 'Ad annum conditum',
+  redire: 'Redire',
+  exstabat: 'Hoc anno exstabat.',
+  nondum: 'Nondum exstabat.',
+  iamNon: 'Iam non exstabat.',
+  incerta: 'Huius viae aetas ignota est.',
+  attribution: 'Viae: Itiner-e (de Soto, Pažout, Brughmans et al. 2025)',
+  modified: 'lineae simplificatae',
+};
+
 export const getHellenicLabels = (): CivLabels => ({
   appTitle: 'ΧΡΟΝΟΣ',
   appSubtitle: 'ΕΛΛΗΝΙΚΟΣ',

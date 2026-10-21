@@ -17,6 +17,14 @@ import {
   MapCreature,
   paintCreature,
 } from "../utils/romanMapCreatures";
+import {
+  loadRomanRoads,
+  roadExistence,
+  RomanRoad,
+} from "../utils/romanRoads";
+import { KM_PER_ROMAN_MILE } from "../utils/romanProvinces";
+import { toRoman } from "../utils/romanTimeUtils";
+import { ROMAN_ROAD_LABELS as RL } from "../utils/civLabels";
 
 /**
  * Canvas map of the Roman Empire (AD 117) shown in the ProvinciaInfo modal.
@@ -34,6 +42,8 @@ interface RomanMapCanvasProps {
   longitude: number;
   onLocationChange: (lat: number, lng: number) => void;
   onClose: () => void;
+  /** Historical year when time-travelling (roads are filtered by it); undefined when live. */
+  year?: number;
 }
 
 // Map window at zoom 1: 55° of longitude × 35° of latitude.
@@ -68,6 +78,23 @@ const RIVER = "rgba(58,97,134,0.8)";
 const FORTIFICATION = "rgba(196,120,24,0.95)";
 const PROVINCE_LABEL = "rgba(122,84,24,0.8)";
 const MARKER = "#d62828";
+const ROAD = "#7a2618";
+
+const ROAD_TILE_DEG = 5; // roads are grouped into tiles so only those near the strip are stroked
+/** Douglas–Peucker tolerance in degrees per level of detail; 0 = as bundled (0.001°). */
+const ROAD_LODS = [0.025, 0.008, 0.0025, 0];
+const ROAD_HIT = 10; // px
+const ROAD_LABEL_ZOOM = 2.5; // road names from this zoom on
+const MAX_ROAD_LABELS = 40; // per frame
+const ROAD_LABEL_SPACING = 360; // px of road between repeats of one name
+const ROADS_KEY = "romanMapRoads"; // localStorage: the layer toggle
+
+/** Coarsest level of detail whose tolerance stays under half a pixel at s px/°. */
+const roadLod = (s: number) => {
+  let i = 0;
+  while (i < ROAD_LODS.length - 1 && ROAD_LODS[i] * s > 0.5) i++;
+  return i;
+};
 
 const clamp = (v: number, lo: number, hi: number) =>
   Math.min(hi, Math.max(lo, v));
@@ -357,6 +384,352 @@ const getScene = (data: RomanMapData) => {
   return sceneCache.scene;
 };
 
+// --- Roads ---
+
+interface RoadTile {
+  roads: number[];
+  lngMin: number;
+  lngMax: number;
+  latMin: number;
+  latMax: number;
+}
+
+/** Consecutive segments of one named via joined into a single line, for its label. */
+interface RoadChain {
+  name: string;
+  pts: Float32Array; // [lng, lat, …]
+  lngMin: number;
+  lngMax: number;
+  latMin: number;
+  latMax: number;
+}
+
+interface RoadScene {
+  roads: RomanRoad[];
+  tiles: RoadTile[]; // each road belongs to the tile of its bbox centre; tile bboxes cover their roads
+  lods: (Float32Array[] | undefined)[][]; // [level][road], filled lazily
+  // Per year (null = live): 0 hidden, 1 shown, 2 shown faded (dataset gives no date).
+  year: number | null | undefined;
+  vis: Uint8Array;
+  paths: Map<number, Path2D | null>; // per level × tile × style, built lazily
+  chains: RoadChain[];
+}
+
+/** Style index: type (main first) × certainty × faded; drawn from the highest index down. */
+const roadStyle = (r: RomanRoad, faded: boolean) =>
+  r.type * 6 + r.certainty * 2 + (faded ? 1 : 0);
+const ROAD_STYLES = 12;
+
+const simplifyFlat = (pts: Float32Array, tol: number): Float32Array => {
+  const n = pts.length / 2;
+  if (n < 3) return pts;
+  const keep = new Uint8Array(n);
+  keep[0] = keep[n - 1] = 1;
+  const stack = [0, n - 1];
+  while (stack.length) {
+    const b = stack.pop()!,
+      a = stack.pop()!;
+    const ax = pts[2 * a],
+      ay = pts[2 * a + 1];
+    const dx = pts[2 * b] - ax,
+      dy = pts[2 * b + 1] - ay;
+    const len2 = dx * dx + dy * dy;
+    let best = -1,
+      bestD = tol * tol;
+    for (let i = a + 1; i < b; i++) {
+      const px = pts[2 * i] - ax,
+        py = pts[2 * i + 1] - ay;
+      const t = len2 ? clamp((px * dx + py * dy) / len2, 0, 1) : 0;
+      const d = (t * dx - px) ** 2 + (t * dy - py) ** 2;
+      if (d > bestD) {
+        bestD = d;
+        best = i;
+      }
+    }
+    if (best >= 0) stack.push(a, best, best, b);
+  }
+  const out = new Float32Array(keep.reduce((s, k) => s + k, 0) * 2);
+  for (let i = 0, j = 0; i < n; i++)
+    if (keep[i]) {
+      out[j++] = pts[2 * i];
+      out[j++] = pts[2 * i + 1];
+    }
+  return out;
+};
+
+const roadPoints = (scene: RoadScene, level: number, i: number) => {
+  const road = scene.roads[i];
+  if (!ROAD_LODS[level]) return road.parts;
+  return (scene.lods[level][i] ??= road.parts.map((p) =>
+    simplifyFlat(p, ROAD_LODS[level]),
+  ));
+};
+
+const buildRoadScene = (roads: RomanRoad[]): RoadScene => {
+  const byKey = new Map<number, RoadTile>();
+  roads.forEach((r, i) => {
+    const tx = Math.floor((r.lngMin + r.lngMax) / 2 / ROAD_TILE_DEG);
+    const ty = Math.floor((r.latMin + r.latMax) / 2 / ROAD_TILE_DEG);
+    const key = (tx + 100) * 1000 + ty + 100;
+    let tile = byKey.get(key);
+    if (!tile)
+      byKey.set(
+        key,
+        (tile = {
+          roads: [],
+          lngMin: Infinity,
+          lngMax: -Infinity,
+          latMin: Infinity,
+          latMax: -Infinity,
+        }),
+      );
+    tile.roads.push(i);
+    tile.lngMin = Math.min(tile.lngMin, r.lngMin);
+    tile.lngMax = Math.max(tile.lngMax, r.lngMax);
+    tile.latMin = Math.min(tile.latMin, r.latMin);
+    tile.latMax = Math.max(tile.latMax, r.latMax);
+  });
+  return {
+    roads,
+    tiles: [...byKey.values()],
+    lods: ROAD_LODS.map(() => []),
+    year: undefined,
+    vis: new Uint8Array(roads.length),
+    paths: new Map(),
+    chains: [],
+  };
+};
+
+/** Joins the visible segments of each named via end to end (≈ 1 km snapping), for labels. */
+const buildRoadChains = (scene: RoadScene): RoadChain[] => {
+  const byName = new Map<string, Float32Array[]>();
+  scene.roads.forEach((r, i) => {
+    if (!scene.vis[i]) return;
+    for (const name of r.viae) {
+      let list = byName.get(name);
+      if (!list) byName.set(name, (list = []));
+      list.push(...roadPoints(scene, 2, i));
+    }
+  });
+  const key = (x: number, y: number) =>
+    `${Math.round(x * 100)},${Math.round(y * 100)}`;
+  const chains: RoadChain[] = [];
+  byName.forEach((segs, name) => {
+    const ends = new Map<string, number[]>();
+    segs.forEach((p, i) => {
+      for (const k of [key(p[0], p[1]), key(p[p.length - 2], p[p.length - 1])])
+        (ends.get(k) ?? ends.set(k, []).get(k)!).push(i);
+    });
+    const used = new Uint8Array(segs.length);
+    /** Extends `line` (lng, lat pairs) at its end with unused segments sharing that end point. */
+    const extend = (line: number[]) => {
+      for (;;) {
+        const k = key(line[line.length - 2], line[line.length - 1]);
+        const next = ends.get(k)?.find((j) => !used[j]);
+        if (next === undefined) return;
+        used[next] = 1;
+        const p = segs[next];
+        const forward = key(p[0], p[1]) === k;
+        const n = p.length / 2;
+        for (let m = 1; m < n; m++) {
+          const q = forward ? m : n - 1 - m;
+          line.push(p[2 * q], p[2 * q + 1]);
+        }
+      }
+    };
+    const reverse = (line: number[]) => {
+      const out: number[] = [];
+      for (let m = line.length - 2; m >= 0; m -= 2) out.push(line[m], line[m + 1]);
+      return out;
+    };
+    segs.forEach((p, i) => {
+      if (used[i]) return;
+      used[i] = 1;
+      let line = Array.from(p);
+      extend(line);
+      line = reverse(line);
+      extend(line);
+      let lngMin = Infinity,
+        lngMax = -Infinity,
+        latMin = Infinity,
+        latMax = -Infinity;
+      for (let m = 0; m < line.length; m += 2) {
+        lngMin = Math.min(lngMin, line[m]);
+        lngMax = Math.max(lngMax, line[m]);
+        latMin = Math.min(latMin, line[m + 1]);
+        latMax = Math.max(latMax, line[m + 1]);
+      }
+      chains.push({
+        name,
+        pts: Float32Array.from(line),
+        lngMin,
+        lngMax,
+        latMin,
+        latMax,
+      });
+    });
+  });
+  // Longest first, so a long via claims its label room before a short side road.
+  return chains.sort((a, b) => b.pts.length - a.pts.length);
+};
+
+/** Recomputes visibility, paths and label chains when the year changes. */
+const setRoadYear = (scene: RoadScene, year: number | null) => {
+  if (scene.year === year) return;
+  scene.year = year;
+  scene.roads.forEach((r, i) => {
+    const e = year === null ? "yes" : roadExistence(r, year);
+    scene.vis[i] = e === "no" ? 0 : e === "yes" ? 1 : 2;
+  });
+  scene.paths.clear();
+  scene.chains = buildRoadChains(scene);
+};
+
+const getRoadPath = (
+  scene: RoadScene,
+  level: number,
+  tile: number,
+  style: number,
+): Path2D | null => {
+  const key = (level * scene.tiles.length + tile) * ROAD_STYLES + style;
+  let path = scene.paths.get(key);
+  if (path !== undefined) return path;
+  path = null;
+  for (const i of scene.tiles[tile].roads) {
+    const v = scene.vis[i];
+    if (!v || roadStyle(scene.roads[i], v === 2) !== style) continue;
+    path ??= new Path2D();
+    for (const part of roadPoints(scene, level, i)) {
+      path.moveTo(part[0], part[1]);
+      for (let k = 2; k < part.length; k += 2)
+        path.lineTo(part[k], part[k + 1]);
+    }
+  }
+  scene.paths.set(key, path);
+  return path;
+};
+
+/** The visible road nearest to (lng, lat) within tolDeg, from the bundled geometry. */
+const hitRoad = (
+  scene: RoadScene,
+  lng: number,
+  lat: number,
+  tolDeg: number,
+): RomanRoad | null => {
+  let best: RomanRoad | null = null;
+  let bestD = tolDeg * tolDeg;
+  const outside = (b: RoadTile | RomanRoad) =>
+    lng < b.lngMin - tolDeg ||
+    lng > b.lngMax + tolDeg ||
+    lat < b.latMin - tolDeg ||
+    lat > b.latMax + tolDeg;
+  for (const tile of scene.tiles) {
+    if (outside(tile)) continue;
+    for (const i of tile.roads) {
+      const road = scene.roads[i];
+      if (!scene.vis[i] || outside(road)) continue;
+      for (const p of road.parts)
+        for (let k = 2; k < p.length; k += 2) {
+          const ax = p[k - 2],
+            ay = p[k - 1],
+            dx = p[k] - ax,
+            dy = p[k + 1] - ay;
+          const len2 = dx * dx + dy * dy;
+          const t = len2
+            ? clamp(((lng - ax) * dx + (lat - ay) * dy) / len2, 0, 1)
+            : 0;
+          const d = (ax + t * dx - lng) ** 2 + (ay + t * dy - lat) ** 2;
+          if (d < bestD) {
+            bestD = d;
+            best = road;
+          }
+        }
+    }
+  }
+  return best;
+};
+
+let roadSceneCache: { roads: RomanRoad[]; scene: RoadScene } | null = null;
+const getRoadScene = (roads: RomanRoad[]) => {
+  if (roadSceneCache?.roads !== roads)
+    roadSceneCache = { roads, scene: buildRoadScene(roads) };
+  return roadSceneCache.scene;
+};
+
+/** Point and direction at arc length t along a screen polyline with cumulative lengths `cum`. */
+const alongAt = (
+  xs: Float32Array,
+  ys: Float32Array,
+  cum: Float32Array,
+  t: number,
+): [number, number, number] => {
+  let lo = 0,
+    hi = cum.length - 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (cum[mid] <= t) lo = mid;
+    else hi = mid;
+  }
+  const seg = cum[hi] - cum[lo] || 1;
+  const f = (t - cum[lo]) / seg;
+  const dx = xs[hi] - xs[lo],
+    dy = ys[hi] - ys[lo];
+  return [xs[lo] + f * dx, ys[lo] + f * dy, Math.atan2(dy, dx)];
+};
+
+interface Glyph {
+  ch: string;
+  x: number;
+  y: number;
+  a: number; // rotation, radians
+}
+
+/**
+ * Letters of a label centred at arc length t, upright (reversed on a westward line),
+ * or null where the line bends more than ~30° between letters or leaves `bounds`.
+ */
+const placeAlong = (
+  xs: Float32Array,
+  ys: Float32Array,
+  cum: Float32Array,
+  t: number,
+  chars: string[],
+  ws: number[],
+  tw: number,
+  fontPx: number,
+  [bx0, by0, bx1, by1]: [number, number, number, number],
+): { glyphs: Glyph[]; box: [number, number, number, number] } | null => {
+  const flip =
+    alongAt(xs, ys, cum, t + tw / 2)[0] < alongAt(xs, ys, cum, t - tw / 2)[0];
+  const glyphs: Glyph[] = [];
+  let x0 = Infinity,
+    y0 = Infinity,
+    x1 = -Infinity,
+    y1 = -Infinity;
+  let off = 0;
+  for (let i = 0; i < chars.length; i++) {
+    const at = flip ? t + tw / 2 - off - ws[i] / 2 : t - tw / 2 + off + ws[i] / 2;
+    off += ws[i];
+    const [x, y, dir] = alongAt(xs, ys, cum, at);
+    const a = flip ? dir + Math.PI : dir;
+    if (i) {
+      const turn = Math.abs(
+        ((a - glyphs[i - 1].a + 3 * Math.PI) % (2 * Math.PI)) - Math.PI,
+      );
+      if (turn > 0.5) return null;
+    }
+    if (x < bx0 || x > bx1 || y < by0 || y > by1) return null;
+    x0 = Math.min(x0, x - fontPx / 2);
+    x1 = Math.max(x1, x + fontPx / 2);
+    y0 = Math.min(y0, y - fontPx / 2);
+    y1 = Math.max(y1, y + fontPx / 2);
+    glyphs.push({ ch: chars[i], x, y, a });
+  }
+  return { glyphs, box: [x0, y0, x1, y1] };
+};
+
+const savedRoadsOn = () => localStorage.getItem(ROADS_KEY) !== "0";
+
 /** Visible city count grows geometrically from MIN_CITIES at zoom 1 to all at MAX_ZOOM. */
 const visibleCityCount = (zoom: number, total: number) =>
   Math.min(
@@ -383,15 +756,141 @@ type Status = "loading" | "ready" | "error";
 
 type Selection =
   | { kind: "city"; city: City }
-  | { kind: "creature"; creature: MapCreature };
+  | { kind: "creature"; creature: MapCreature }
+  // A road card sits at the tapped point; `related` = indices of the other segments of the same via.
+  | { kind: "road"; road: RomanRoad; related: number[]; lng: number; lat: number };
 const selectionPoint = (s: Selection) =>
-  s.kind === "city" ? s.city : s.creature;
+  s.kind === "city" ? s.city : s.kind === "creature" ? s.creature : s;
+
+/** "ab anno 46 p. Chr. n. (fortasse iam ab anno 45 p. Chr. n.); usque ad annum …" */
+const roadAetas = (r: RomanRoad) => {
+  const out: string[] = [];
+  if (r.from !== null)
+    out.push(RL.from(r.from) + (r.fromErr ? ` (${RL.fromErr(r.from - r.fromErr)})` : ""));
+  if (r.to !== null)
+    out.push(RL.to(r.to) + (r.toErr ? ` (${RL.toErr(r.to + r.toErr)})` : ""));
+  return out.length ? out.join("; ") : RL.aetasIgnota;
+};
+
+const roadLength = (m: number) => {
+  const miles = Math.max(1, Math.round(m / 1000 / KM_PER_ROMAN_MILE));
+  return `${toRoman(miles)} m. p. (${Math.max(1, Math.round(m / 1000))} km)`;
+};
+
+/** Info card of a tapped road segment: all text Latin, data values as Itiner-e gives them. */
+// Range of the card's year slider: from before the Via Appia (312 BCE) past the latest
+// end dates in the dataset (406, 725 CE). The slider runs on astronomical years
+// (0 = 1 BCE) so it has no gap; the label shows historical years.
+const SLIDER_MIN = -319;
+const SLIDER_MAX = 750;
+const toAstro = (y: number) => (y < 0 ? y + 1 : y);
+const toHistorical = (v: number) => (v <= 0 ? v - 1 : v);
+
+const RoadCard: React.FC<{
+  road: RomanRoad;
+  year: number | null;
+  onYear: (year: number | null) => void;
+  /** True while the card's slider, not the app's date, sets the year. */
+  ownYear: boolean;
+}> = ({ road, year, onYear, ownYear }) => {
+  const rows: [string, string][] = [
+    [RL.segment, road.segment.replace(/-/g, " – ")],
+    [RL.typeLabel, RL.types[road.type]],
+    [RL.certaintyLabel, RL.certainty[road.certainty]],
+    [RL.aetas, roadAetas(road)],
+  ];
+  if (road.conditor)
+    rows.push([
+      RL.conditor,
+      road.conditorYears
+        ? `${road.conditor} (${RL.yearRange(road.conditorYears)})`
+        : road.conditor,
+    ]);
+  rows.push([RL.longitudo, roadLength(road.lengthM)]);
+  if (road.itineraria.length) rows.push([RL.itineraria, road.itineraria.join(", ")]);
+  if (road.recentiora.length) rows.push([RL.recentiora, road.recentiora.join(", ")]);
+  if (road.fontes) rows.push([RL.fontes, road.fontes]);
+  const status = year === null ? null : roadExistence(road, year);
+  return (
+    <>
+      <div className="font-serif text-lg font-bold text-gold-leaf leading-tight">
+        {road.viae.length ? road.viae.join(" · ") : RL.unnamed}
+      </div>
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 font-body text-sm leading-snug">
+        {rows.map(([k, v]) => (
+          <React.Fragment key={k}>
+            <dt className="font-serif text-xs uppercase tracking-[0.12em] text-gold-dim/80 pt-0.5">
+              {k}
+            </dt>
+            <dd className="text-parchment/85">{v}</dd>
+          </React.Fragment>
+        ))}
+      </dl>
+
+      <div className="mt-3 pt-2 border-t border-gold-dim/30">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="font-serif text-xs uppercase tracking-[0.12em] text-gold-dim/80">
+            {RL.iterTemporum}
+          </span>
+          <span className="font-serif text-sm text-gold-leaf">
+            {year === null ? RL.omnesViae : RL.latinYear(year)}
+          </span>
+        </div>
+        <input
+          type="range"
+          min={SLIDER_MIN}
+          max={SLIDER_MAX}
+          step={1}
+          value={toAstro(clamp(year ?? SLIDER_MAX, toHistorical(SLIDER_MIN), SLIDER_MAX))}
+          onChange={(e) => onYear(toHistorical(Number(e.target.value)))}
+          aria-label={RL.annusViarum}
+          aria-valuetext={year === null ? RL.omnesViae : RL.latinYear(year)}
+          className="w-full mt-1 accent-[var(--gold-leaf)]"
+          // A horizontal drag here moves the year, not the map's native scroll.
+          style={{ touchAction: "none" }}
+        />
+        {year !== null && (
+          <div className="font-body italic text-sm text-parchment/75 leading-snug">
+            {status === "yes"
+              ? RL.exstabat
+              : status === "unknown"
+                ? RL.incerta
+                : road.from !== null && year < road.from - road.fromErr
+                  ? RL.nondum
+                  : RL.iamNon}
+          </div>
+        )}
+        <div className="mt-2 flex gap-2">
+          {road.from !== null && (
+            <button
+              type="button"
+              onClick={() => onYear(road.from)}
+              className="flex-1 font-serif text-xs uppercase tracking-[0.12em] px-2 py-1.5 rounded-sm border border-gold-leaf/60 text-gold-leaf hover:bg-gold-leaf/10"
+            >
+              {RL.adConditum}
+            </button>
+          )}
+          {ownYear && (
+            <button
+              type="button"
+              onClick={() => onYear(null)}
+              className="flex-1 font-serif text-xs uppercase tracking-[0.12em] px-2 py-1.5 rounded-sm border border-gold-dim/50 text-parchment/70 hover:bg-gold-leaf/10"
+            >
+              {RL.redire}
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
 
 const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   latitude,
   longitude,
   onLocationChange,
   onClose,
+  year,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -430,6 +929,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   const pinchRef = useRef<{ dist: number; zoom: number } | null>(null);
   const userRef = useRef({ lat: latitude, lng: longitude });
   userRef.current = { lat: latitude, lng: longitude };
+  // The road card's time slider overrides the app's date for the roads layer only.
+  const [cardYear, setCardYear] = useState<number | null>(null);
+  const roadsYear = cardYear ?? year ?? null;
+  const yearRef = useRef(roadsYear);
+  yearRef.current = roadsYear;
+  const roadSceneRef = useRef<RoadScene | null>(null);
+  // Road-name glyph widths per font (cleared with the city label widths when fonts load).
+  const glyphWidthsRef = useRef(new Map<string, Map<string, number>>());
 
   const [status, setStatus] = useState<Status>("loading");
   const [loadAttempt, setLoadAttempt] = useState(0);
@@ -437,6 +944,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   const [selected, setSelected] = useState<Selection | null>(null);
   const selectedRef = useRef(selected);
   selectedRef.current = selected;
+  const [roadsOn, setRoadsOn] = useState(savedRoadsOn);
+  const roadsOnRef = useRef(roadsOn);
+  roadsOnRef.current = roadsOn;
+  const [roadStatus, setRoadStatus] = useState<Status>("loading");
+  const [roadAttempt, setRoadAttempt] = useState(0);
 
   const scale = () => (baseHRef.current / LAT_SPAN) * zoomRef.current; // px per degree
   const canvasSize = () => ({
@@ -522,6 +1034,74 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       ctx.strokeStyle = colors.goldDim;
       ctx.lineWidth = 0.9 / s;
       for (const p of scene.provinces) ctx.stroke(p);
+
+      // 6b. Roads: only the tiles that reach the canvas strip, at the coarsest level
+      // of detail that stays sub-pixel. Main roads are wider, hypothetical ones dotted,
+      // conjectured ones lighter; when time-travelling, undated roads are faded.
+      const roadScene = roadsOnRef.current ? roadSceneRef.current : null;
+      const viewLng0 = ox / s + LNG_MIN,
+        viewLng1 = (ox + cw) / s + LNG_MIN;
+      const viewLatTop = LAT_MAX - panY / s,
+        viewLatBottom = LAT_MAX - (panY + h) / s;
+      if (roadScene) {
+        setRoadYear(roadScene, yearRef.current);
+        const level = roadLod(s);
+        const tiles: number[] = [];
+        roadScene.tiles.forEach((t, i) => {
+          if (
+            t.lngMax >= viewLng0 &&
+            t.lngMin <= viewLng1 &&
+            t.latMax >= viewLatBottom &&
+            t.latMin <= viewLatTop
+          )
+            tiles.push(i);
+        });
+        ctx.strokeStyle = ROAD;
+        // Secondary roads are a dense web at the widest view; they come in as you zoom.
+        const minorAlpha = clamp(0.4 + 0.3 * (z - 1), 0.4, 1);
+        for (let style = ROAD_STYLES - 1; style >= 0; style--) {
+          const main = style < 6,
+            certainty = Math.floor(style / 2) % 3,
+            faded = style % 2 === 1;
+          const width = main
+            ? Math.min(3, 1 + 0.15 * z)
+            : Math.min(1.8, 0.5 + 0.08 * z);
+          ctx.globalAlpha =
+            [0.95, 0.75, 0.75][certainty] *
+            (main ? 1 : minorAlpha) *
+            (faded ? 0.35 : 1);
+          ctx.lineWidth = width / s;
+          ctx.setLineDash(
+            certainty === 2 ? [0.01 / s, (width + 2.5) / s] : [],
+          );
+          for (const t of tiles) {
+            const path = getRoadPath(roadScene, level, t, style);
+            if (path) ctx.stroke(path);
+          }
+        }
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+
+        const sel = selectedRef.current;
+        if (sel?.kind === "road") {
+          ctx.strokeStyle = colors.goldLeaf;
+          const strokeRoad = (r: RomanRoad) => {
+            ctx.beginPath();
+            for (const p of r.parts) {
+              ctx.moveTo(p[0], p[1]);
+              for (let k = 2; k < p.length; k += 2) ctx.lineTo(p[k], p[k + 1]);
+            }
+            ctx.stroke();
+          };
+          ctx.globalAlpha = 0.6;
+          ctx.lineWidth = 2.5 / s;
+          for (const i of sel.related)
+            if (roadScene.vis[i]) strokeRoad(roadScene.roads[i]);
+          ctx.globalAlpha = 1;
+          ctx.lineWidth = 4 / s;
+          strokeRoad(sel.road);
+        }
+      }
 
       ctx.setTransform(dpr, 0, 0, dpr, -dpr * ox, 0);
       // Canvas strip bounds in map px, widened by the tap radius.
@@ -640,6 +1220,98 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           shown++;
           break;
         }
+      }
+
+      // 8b. Road names, letter by letter along the line, upright, after the city names
+      // and kept off them. A name repeats every ROAD_LABEL_SPACING px of its via and is
+      // skipped where the road bends too sharply or leaves the strip.
+      if (roadScene && z >= ROAD_LABEL_ZOOM) {
+        const fontPx = Math.round(clamp(9 + z, 12, 15)); // never under 12 px
+        const font = `italic ${fontPx}px "IM Fell English", serif`;
+        ctx.font = font;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        let glyphW = glyphWidthsRef.current.get(font);
+        if (!glyphW) glyphWidthsRef.current.set(font, (glyphW = new Map()));
+        const widthOf = (ch: string) => {
+          let w = glyphW!.get(ch);
+          if (w === undefined) glyphW!.set(ch, (w = ctx.measureText(ch).width));
+          return w;
+        };
+        const glyphs: Glyph[] = [];
+        let labelled = 0;
+        for (const chain of roadScene.chains) {
+          if (labelled >= MAX_ROAD_LABELS) break;
+          if (
+            chain.lngMax < viewLng0 ||
+            chain.lngMin > viewLng1 ||
+            chain.latMax < viewLatBottom ||
+            chain.latMin > viewLatTop
+          )
+            continue;
+          const chars = [...chain.name];
+          const ws = chars.map(widthOf);
+          const tw = ws.reduce((a, b) => a + b, 0);
+          const n = chain.pts.length / 2;
+          const xs = new Float32Array(n),
+            ys = new Float32Array(n),
+            cum = new Float32Array(n);
+          for (let k = 0; k < n; k++) {
+            xs[k] = xOf(chain.pts[2 * k]);
+            ys[k] = yOf(chain.pts[2 * k + 1]);
+            if (k)
+              cum[k] =
+                cum[k - 1] + Math.hypot(xs[k] - xs[k - 1], ys[k] - ys[k - 1]);
+          }
+          const total = cum[n - 1];
+          if (total < tw + 2 * fontPx) continue;
+          const count = Math.max(
+            1,
+            Math.floor(total / Math.max(ROAD_LABEL_SPACING, 2 * tw)),
+          );
+          // One label per slot of the line: its middle first, then positions stepping
+          // outwards (past a bend, a city name or the strip edge) while it fits the slot.
+          const step = Math.max(tw / 2, 40);
+          for (let c = 0; c < count && labelled < MAX_ROAD_LABELS; c++) {
+            const slot0 = (c * total) / count,
+              slot1 = ((c + 1) * total) / count;
+            for (const k of [0, 1, -1, 2, -2, 3, -3]) {
+              const t = (slot0 + slot1) / 2 + k * step;
+              if (t - tw / 2 < slot0 || t + tw / 2 > slot1) continue;
+              const label = placeAlong(xs, ys, cum, t, chars, ws, tw, fontPx, [
+                ox,
+                0,
+                ox + cw,
+                h,
+              ]);
+              if (!label || placed.hitsRect(...label.box)) continue;
+              placed.addRect(...label.box);
+              glyphs.push(...label.glyphs);
+              labelled++;
+              break;
+            }
+          }
+        }
+        // Halo pass, then letters, so no halo covers a neighbouring letter.
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = colors.parchment;
+        ctx.fillStyle = ROAD;
+        for (const pass of [0, 1])
+          for (const g of glyphs) {
+            const cos = Math.cos(g.a),
+              sin = Math.sin(g.a);
+            ctx.setTransform(
+              dpr * cos,
+              dpr * sin,
+              -dpr * sin,
+              dpr * cos,
+              dpr * (g.x - ox),
+              dpr * g.y,
+            );
+            if (pass) ctx.fillText(g.ch, 0, 0);
+            else ctx.strokeText(g.ch, 0, 0);
+          }
+        ctx.setTransform(dpr, 0, 0, dpr, -dpr * ox, 0);
       }
 
       const sel = selectedRef.current;
@@ -938,6 +1610,41 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     return () => window.removeEventListener("keydown", onKey, true);
   }, []);
 
+  // The roads file loads only while the layer is on (and once per session).
+  useEffect(() => {
+    localStorage.setItem(ROADS_KEY, roadsOn ? "1" : "0");
+    if (!roadsOn) {
+      if (selectedRef.current?.kind === "road") setSelected(null);
+      scheduleDraw();
+      return;
+    }
+    let cancelled = false;
+    setRoadStatus("loading");
+    loadRomanRoads()
+      .then((roads) => {
+        if (cancelled) return;
+        roadSceneRef.current = getRoadScene(roads);
+        setRoadStatus("ready");
+        scheduleDraw();
+      })
+      .catch(() => {
+        if (!cancelled) setRoadStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [roadsOn, roadAttempt, scheduleDraw]);
+
+  // A new app date can hide the selected road, and it replaces the card's own year.
+  useEffect(() => {
+    if (selectedRef.current?.kind === "road") setSelected(null);
+    setCardYear(null);
+  }, [year]);
+
+  useEffect(() => {
+    scheduleDraw();
+  }, [roadsYear, scheduleDraw]);
+
   const creaturesShown = status === "ready" && zoom >= CREATURE_ZOOM;
 
   // Draw synchronously when the card opens (or the creature layer mounts) so nothing
@@ -952,6 +1659,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     if (!fonts) return;
     const refresh = () => {
       labelWidthsRef.current.clear();
+      glyphWidthsRef.current.clear();
       scheduleDraw();
     };
     fonts.ready.then(refresh);
@@ -994,6 +1702,28 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         bestD = d;
         best = { kind: "creature", creature };
       }
+    }
+    // Roads come last: a tap near a city dot or a creature still picks those.
+    const roadScene = roadsOnRef.current ? roadSceneRef.current : null;
+    if (!best && roadScene) {
+      const s = scale();
+      const lng = px / s + LNG_MIN,
+        lat = LAT_MAX - (py + panYRef.current) / s;
+      const road = hitRoad(roadScene, lng, lat, ROAD_HIT / s);
+      if (road)
+        best = {
+          kind: "road",
+          road,
+          related: road.viae.length
+            ? roadScene.roads.flatMap((r, i) =>
+                r !== road && r.viae.some((v) => road.viae.includes(v))
+                  ? [i]
+                  : [],
+              )
+            : [],
+          lng,
+          lat,
+        };
     }
     setSelected(best);
   };
@@ -1184,16 +1914,29 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           {selected && (
             <div
               ref={cardRef}
-              className="absolute z-10 w-60 p-3 rounded-sm border border-gold-dim/60 bg-ink/95 shadow-2xl"
+              className={`absolute z-10 ${
+                selected.kind === "road"
+                  ? "w-72 max-h-[60%] overflow-y-auto overscroll-contain"
+                  : "w-60"
+              } p-3 rounded-sm border border-gold-dim/60 bg-ink/95 shadow-2xl`}
               style={{ left: 0, top: 0 }}
               role="dialog"
               aria-label={
                 selected.kind === "city"
                   ? selected.city.latin
-                  : selected.creature.name
+                  : selected.kind === "creature"
+                    ? selected.creature.name
+                    : selected.road.viae.join(" · ") || RL.unnamed
               }
             >
-              {selected.kind === "city" ? (
+              {selected.kind === "road" ? (
+                <RoadCard
+                  road={selected.road}
+                  year={roadsYear}
+                  onYear={setCardYear}
+                  ownYear={cardYear !== null}
+                />
+              ) : selected.kind === "city" ? (
                 <>
                   <div className="font-serif text-xl font-bold text-gold-leaf leading-tight">
                     {selected.city.latin}
@@ -1240,6 +1983,28 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           (DARE), vía klokantech/roman-empire
         </span>
         <div className="flex gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => setRoadsOn((v) => !v)}
+            aria-pressed={roadsOn}
+            title={roadsOn ? RL.toggleHide : RL.toggleShow}
+            className={`h-9 px-3 flex items-center gap-2 rounded-sm border font-serif text-xs uppercase tracking-[0.2em] ${
+              roadsOn
+                ? "border-gold-leaf/60 text-gold-leaf bg-gold-leaf/10"
+                : "border-gold-dim/50 text-parchment/60 hover:bg-gold-leaf/10"
+            }`}
+          >
+            <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
+              <path
+                d="M1 8 C5 8 6 2 15 2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+            {RL.toggle}
+          </button>
           {(
             [
               [1 / 1.5, "−", "Alejar", zoom <= MIN_ZOOM],
@@ -1260,6 +2025,87 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           ))}
         </div>
       </div>
+
+      {roadsOn && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 font-body italic text-sm text-parchment/60 leading-tight">
+          {roadStatus === "ready" ? (
+            <>
+              {(
+                [
+                  [RL.legendMaior, 3, 0.95, ""],
+                  [RL.legendMinor, 1.5, 0.75, ""],
+                  [RL.legendHypothetica, 2, 0.75, "0.01 4.5"],
+                  ...(roadsYear !== null
+                    ? ([[RL.legendIgnota, 3, 0.33, ""]] as const)
+                    : []),
+                ] as const
+              ).map(([label, width, opacity, dash]) => (
+                <span key={label} className="flex items-center gap-1.5">
+                  <svg width="28" height="8" viewBox="0 0 28 8" aria-hidden="true">
+                    <rect width="28" height="8" rx="1" fill={colorsRef.current.parchment} />
+                    <line
+                      x1="3"
+                      y1="4"
+                      x2="25"
+                      y2="4"
+                      stroke={ROAD}
+                      strokeOpacity={opacity}
+                      strokeWidth={width}
+                      strokeLinecap="round"
+                      strokeDasharray={dash || undefined}
+                    />
+                  </svg>
+                  {label}
+                </span>
+              ))}
+              {roadsYear !== null && <span>{RL.yearNote(roadsYear)}</span>}
+              {cardYear !== null && (
+                <button
+                  type="button"
+                  onClick={() => setCardYear(null)}
+                  className="not-italic font-serif text-xs uppercase tracking-[0.2em] px-2 py-1 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
+                >
+                  {RL.redire}
+                </button>
+              )}
+            </>
+          ) : roadStatus === "loading" ? (
+            <span>{RL.loading}</span>
+          ) : (
+            <span className="flex items-center gap-2">
+              {RL.error}
+              <button
+                type="button"
+                onClick={() => setRoadAttempt((n) => n + 1)}
+                className="not-italic font-serif text-xs uppercase tracking-[0.2em] px-2 py-1 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
+              >
+                {RL.retry}
+              </button>
+            </span>
+          )}
+          <span className="basis-full text-parchment/45">
+            {RL.attribution}, doi:{" "}
+            <a
+              href="https://doi.org/10.5281/zenodo.17122148"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gold-leaf"
+            >
+              10.5281/zenodo.17122148
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gold-leaf"
+            >
+              CC BY 4.0
+            </a>{" "}
+            · {RL.modified}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

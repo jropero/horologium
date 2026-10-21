@@ -41,6 +41,9 @@ export default defineConfig(() => {
           },
           workbox: {
             globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,json}'],
+            // roads.json (2.9 MB) is over Workbox's 2 MiB glob limit; it is precached through
+            // includeAssets like the other Roman map layers.
+            globIgnores: ['**/node_modules/**', 'assets/roman-map/roads.json'],
             runtimeCaching: [
               {
                 urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
