@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getSunTimes, getSolarLongitudeDeg } from '../utils/solar';
 import { getPlanetaryRuler } from '../utils/romanTimeUtils';
@@ -60,6 +60,31 @@ const HOURS_TITLE: Record<string, string> = {
   hellas:    'Ὧραι τῶν Πλανητῶν',
   zhongguo:  '七曜',
 };
+
+// ── Zhongguo: the seven luminaries of the 宿曜经 ─────────────────────────
+// T1299 juan 2, 七曜直日曆品 (docs/research/hours-and-planets-sources.md §6): the
+// luminary (日曜 … 土曜) and its day names in Sogdian (胡名), Persian (波斯名) and
+// Indian (天竺名). The foreign names are transliterations, kept in the traditional
+// characters of the source.
+interface Luminary { yao: string; es: string; hu: string; bosi: string; tianzhu: string; }
+const ZH_LUMINARIES: Record<PlanetKey, Luminary> = {
+  Sun:     { yao: '日曜', es: 'Sol',      hu: '蜜',   bosi: '曜森勿',   tianzhu: '阿儞底耶' },
+  Moon:    { yao: '月曜', es: 'Luna',     hu: '莫',   bosi: '婁禍森勿', tianzhu: '蘇摩' },
+  Mars:    { yao: '火曜', es: 'Marte',    hu: '雲漢', bosi: '勢森勿',   tianzhu: '盎哦囉迦' },
+  Mercury: { yao: '水曜', es: 'Mercurio', hu: '咥',   bosi: '掣森勿',   tianzhu: '部陀' },
+  Jupiter: { yao: '木曜', es: 'Júpiter',  hu: '鶻勿', bosi: '本森勿',   tianzhu: '勿哩訶娑跛底' },
+  Venus:   { yao: '金曜', es: 'Venus',    hu: '那歇', bosi: '數森勿',   tianzhu: '戌羯羅' },
+  Saturn:  { yao: '土曜', es: 'Saturno',  hu: '枳院', bosi: '翕森勿',   tianzhu: '賒乃以室折囉' },
+};
+
+// Plain-Spanish guide to the panel, opened with "¿Cómo leer este panel?".
+const ZH_HELP: { term: string; text: string }[] = [
+  { term: '七曜 · los siete astros', text: 'El Sol, la Luna y los cinco planetas visibles a simple vista. Los planetas llevan el nombre de un elemento (火 fuego, 水 agua, 木 madera, 金 metal, 土 tierra) y un nombre astronómico antiguo (荧惑, 辰星, 岁星, 太白, 镇星).' },
+  { term: 'Horas planetarias', text: 'Desde la salida del sol, el día se divide en 12 horas de día y 12 de noche. Son horas desiguales: su duración cambia con las estaciones. Cada hora está regida por un astro, en un orden fijo: Saturno, Júpiter, Marte, Sol, Venus, Mercurio, Luna, y vuelta a empezar.' },
+  { term: 'El astro del día', text: 'El astro de la primera hora da nombre a todo el día. Así nace la semana de siete días que aún usamos: domingo es el día del Sol, lunes el de la Luna, martes el de Marte…' },
+  { term: 'Un sistema importado', text: 'No es un invento chino sino helenístico. Llegó a la China Tang en el año 759 con el 宿曜经 (Xiuyao jing), traducido por el monje 不空 (Amoghavajra), que da también los nombres sogdianos, persas e indios de cada día.' },
+  { term: '时辰 · la hora china', text: 'La hora tradicional china era el 时辰, una doble hora de duración fija ligada a los doce animales. Es la que muestra el reloj de arriba.' },
+];
 
 // ── Parapegma data ────────────────────────────────────────────────────
 
@@ -340,6 +365,7 @@ const QUALITY_CLASS = {
 
 const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   const { civilization } = useCivilization();
+  const [showHelp, setShowHelp] = useState(false);
 
   // ── Planetary hours ──────────────────────────────────────────────
   // The current planetary day (sunrise → next sunrise) plus the next one, so the
@@ -435,22 +461,134 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
         </div>
       )}
 
+      {/* ── 七曜 (Zhongguo) ───────────────────────────────────────── */}
+      {civilization === 'zhongguo' && (
+        <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
+          <div className="flex items-center justify-center gap-3 mb-1">
+            <div className="h-px flex-1 bg-gold-dim/20" />
+            <span className="flex flex-col items-center leading-tight">
+              <span className="text-gold-dim text-base tracking-[0.3em] font-serif">{hoursTitle}</span>
+              <span className="text-xs italic text-parchment/60">Los siete astros</span>
+            </span>
+            <div className="h-px flex-1 bg-gold-dim/20" />
+          </div>
+          <p className="text-center text-xs leading-snug text-parchment/70 mt-1 px-2">
+            七曜由《宿曜经》(759) 传入唐代中国
+            <span className="block italic text-parchment/55">
+              Cada hora la rige uno de los siete astros. Este sistema llegó a la China Tang con el Xiuyao jing (759 d.C.).
+            </span>
+          </p>
+          <div className="mt-2 mb-3 text-center">
+            <button
+              type="button"
+              onClick={() => setShowHelp(v => !v)}
+              aria-expanded={showHelp}
+              className="text-xs font-serif text-gold-dim underline underline-offset-2 hover:text-gold-leaf"
+            >
+              {showHelp ? 'Cerrar explicación' : '¿Cómo leer este panel?'}
+            </button>
+          </div>
+          {showHelp && (
+            <dl className="mb-3 px-3 py-2 rounded-lg bg-parchment/5 border border-gold-dim/20 flex flex-col gap-2">
+              {ZH_HELP.map(h => (
+                <div key={h.term}>
+                  <dt className="font-serif text-sm text-gold-dim">{h.term}</dt>
+                  <dd className="text-xs text-parchment/80 leading-snug">{h.text}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          {today.length > 0 && (() => {
+            const dayKey = today[0].rulerKey;
+            const lum = ZH_LUMINARIES[dayKey];
+            return (<>
+              {/* The day and its ruler */}
+              <h3 className="mb-1.5 text-xs uppercase tracking-[0.2em] text-parchment/60 font-serif">El día de hoy</h3>
+              <div className="mb-4 px-3 py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/30 flex items-center gap-3">
+                <span className="text-2xl leading-none text-gold-leaf">{SYMBOLS[dayKey]}</span>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="font-serif text-lg text-parchment leading-snug">
+                    {lum.yao}日 <span className="text-gold-dim text-sm">· {names[dayKey]}</span>
+                  </span>
+                  <span className="text-xs italic text-parchment/70">{dayKey === 'Sun' ? 'Día del Sol' : dayKey === 'Moon' ? 'Día de la Luna' : `Día de ${lum.es}`}</span>
+                  <span className="mt-1 text-xs text-parchment/60 leading-snug">
+                    胡名 <span className="text-parchment/85">{lum.hu}</span> · 波斯名 <span className="text-parchment/85">{lum.bosi}</span> · 天竺名 <span className="text-parchment/85">{lum.tianzhu}</span>
+                  </span>
+                  <span className="text-xs italic text-parchment/50 leading-tight">nombre sogdiano · persa · indio del día (宿曜经)</span>
+                </div>
+              </div>
+
+              {/* Hour lengths */}
+              <h3 className="mb-1.5 text-xs uppercase tracking-[0.2em] text-parchment/60 font-serif">Las horas</h3>
+              <div className="grid grid-cols-2 gap-2 mb-2 text-center">
+                <div className="px-2 py-1.5 rounded-lg border border-gold-dim/20">
+                  <span className="block font-serif text-sm text-parchment"><span className="text-amber-400">☀</span> {ui.dayLen} {dayHourMin} min</span>
+                  <span className="block text-xs italic text-parchment/60">duración de una hora de día</span>
+                </div>
+                <div className="px-2 py-1.5 rounded-lg border border-gold-dim/20">
+                  <span className="block font-serif text-sm text-parchment"><span className="text-sky-400">☽</span> {ui.nightLen} {nightHourMin} min</span>
+                  <span className="block text-xs italic text-parchment/60">duración de una hora de noche</span>
+                </div>
+              </div>
+            </>);
+          })()}
+
+          {/* Current hour and the next three */}
+          <div className="flex flex-col gap-1">
+            {visibleSlots.map((h, i) => {
+              if (!h) return null;
+              const isCurrent = h === current;
+              const lum = ZH_LUMINARIES[h.rulerKey];
+              const fmt = (d: Date) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+              return (
+                <div
+                  key={`${h.start.getTime()}-${i}`}
+                  className={`flex flex-col px-2 py-2 rounded-lg ${
+                    isCurrent ? 'bg-gold-leaf/10 border border-gold-leaf/30' : 'border border-gold-dim/10'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xl leading-none w-6 text-center ${isCurrent ? 'text-gold-leaf' : 'text-parchment/75'}`}>
+                      {SYMBOLS[h.rulerKey]}
+                    </span>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className={`font-serif text-sm leading-snug ${isCurrent ? 'text-parchment' : 'text-parchment/85'}`}>
+                        {lum.yao} <span className="text-gold-dim/80">· {names[h.rulerKey]}</span>
+                      </span>
+                      <span className="text-xs italic text-parchment/60 leading-tight">{lum.es}</span>
+                    </div>
+                    <div className="flex flex-col items-end shrink-0">
+                      {isCurrent && (
+                        <span className="mb-0.5 px-1.5 rounded-full bg-gold-leaf/20 text-xs text-gold-leaf leading-tight">ahora</span>
+                      )}
+                      <span className="font-serif text-xs tabular-nums text-gold-dim">{fmt(h.start)}–{fmt(h.end)}</span>
+                      <span className="text-xs text-parchment/60 leading-tight">
+                        <span className={h.isDay ? 'text-amber-400' : 'text-sky-400'}>{h.isDay ? '☀' : '☽'}</span>{' '}
+                        hora {h.num} {h.isDay ? 'del día' : 'de la noche'}
+                      </span>
+                    </div>
+                  </div>
+                  {isCurrent && (
+                    <div className="ml-9 mt-1.5 h-1 rounded-full bg-gold-dim/15 overflow-hidden">
+                      <div className="h-full bg-gold-leaf/70 rounded-full" style={{ width: `${progress * 100}%` }} />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* ── Horae Planetarum ─────────────────────────────────────── */}
+      {civilization !== 'zhongguo' && (
       <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
         <div className="flex items-center justify-center gap-3 mb-1">
           <div className="h-px flex-1 bg-gold-dim/20" />
           <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">{hoursTitle}</span>
           <div className="h-px flex-1 bg-gold-dim/20" />
         </div>
-
-        {civilization === 'zhongguo' && (
-          <p className="text-center text-xs leading-snug text-parchment/70 mb-1 px-2">
-            七曜由《宿曜经》(759) 传入唐代中国
-            <span className="block italic text-parchment/55">
-              La semana de los siete astros llegó a la China Tang con el Xiuyao jing (759 d.C.).
-            </span>
-          </p>
-        )}
 
         {today.length > 0 && (
           <div className="flex justify-center gap-4 mb-3 text-xs font-serif tabular-nums text-gold-dim/80">
@@ -551,6 +689,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
         </div>
 
       </div>
+      )}
     </div>
   );
 };
