@@ -40,6 +40,7 @@
 - **Skyline Procedural**: Fondos dinámicos que generan templos romanos, acrópolis griegas, obeliscos egipcios o ziggurats babilónicos según la civilización activa.
 - **Cielos Astronómicos**: Escenas nocturnas por civilización con posiciones reales de estrellas y Luna y efectos meteorológicos dinámicos (lluvia, nieve, niebla).
 - **Mapa Estelar Egipcio (360°)**: El cielo del encabezado egipcio es un panorama arrastrable de todo el horizonte, calculado para la ubicación y la hora (también en el viaje temporal). Muestra Sopdet (Sirio), el Ojo de Horus (Algol, atenuado durante su eclipse), Sah (Orión), Meskhetyu (la Osa Mayor), el cuerpo de Nut (Vía Láctea), Iah (la Luna con su fase real), Ra y los cinco planetas, cada uno con un pictograma distintivo —Seba-dja radiante, Hor-desher rojo, Hor-tash-tawy con bandas, Hor-ka-pet con anillo— y su nombre egipcio. Un botón alterna con el **cielo completo** (2851 estrellas hasta magnitud 5.5); de día solo quedan el Sol y los planetas, con transición en el crepúsculo.
+- **Mapa del Imperio Romano**: En Roma, la tarjeta de la provincia abre un mapa del Imperio en el 117 d.C. (provincias, unas 8000 ciudades, ríos, lagos y limes) que funciona sin conexión, también en Android; al tocar una ciudad se elige como ubicación. La capa **Viae**, que se puede activar y desactivar, dibuja las 14 769 calzadas de Itiner-e. Las vías principales son más gruesas que las secundarias, las conjeturales más claras y las hipotéticas punteadas. Los nombres latinos (*Via Appia*, *Via Egnatia*…) aparecen a lo largo del trazado. Al tocar una calzada se abre una ficha en latín: tramo, tipo, certeza, datación, constructor, longitud en millas romanas, itinerarios antiguos y fuentes. En el viaje temporal solo se muestran las calzadas datadas que existían en esa fecha, y las no datadas aparecen atenuadas. La ficha incluye además un deslizador *Iter per tempora* para recorrer los siglos solo en el mapa.
 - **Accesibilidad WCAG AA**: Diseño optimizado para alta legibilidad con contrastes auditados y tipografía premium.
 
 ### 🕰️ Cronometría y Astronomía Avanzada
@@ -68,9 +69,11 @@
 - **Styling**: Tailwind CSS 4 (motor de alto rendimiento).
 - **Build Tool**: Vite 6 con soporte PWA.
 - **Mobile**: Capacitor 8 para empaquetado nativo en Android.
-- **Geometría**: SVG dinámicos para el reloj y el skyline procedimental; Canvas 2D para el mapa estelar egipcio.
+- **Geometría**: SVG dinámicos para el reloj y el skyline procedimental; Canvas 2D para el mapa estelar egipcio y el mapa del Imperio Romano.
 - **Cálculo**: Algoritmos astronómicos de precisión para fases lunares y ciclos estelares ([astronomy-engine](https://github.com/cosinekitty/astronomy)).
 - **Datos estelares**: Catálogo de Estrellas Brillantes de Yale, vía [d3-celestial](https://github.com/ofrohn/d3-celestial) (BSD-3-Clause).
+- **Mapa romano**: Digital Atlas of the Roman Empire (DARE), vía [klokantech/roman-empire](https://github.com/klokantech/roman-empire).
+- **Calzadas romanas**: [Itiner-e](https://itiner-e.org/), versión estática 2024 (de Soto, Pažout, Brughmans et al., *Scientific Data* 2025, [doi:10.5281/zenodo.17122148](https://doi.org/10.5281/zenodo.17122148)), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Los trazados se han simplificado con `scripts/buildRomanRoads.ts`.
 
 ## 🚀 Instalación y Desarrollo
 
