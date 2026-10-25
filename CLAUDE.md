@@ -18,6 +18,28 @@ npm run build && npx cap sync android   # Sync web assets to Android project
 npx cap open android                    # Open Android Studio
 ```
 
+## Hellenic festival data — sources and quality standards
+
+Festival data for the Hellas civilization lives in `utils/atticCalendarData.ts` (`getAtticFestivalInfo(monthIndex, dayOfMonth)`). Every festival entry has been cross-referenced against three scholarly sources:
+
+- H. W. Parke, *Festivals of the Athenians* (1977) — primary source
+- L. Deubner, *Attische Feste* (1932) — primary source
+- J. D. Mikalson, *The Sacred and Civil Calendar of the Athenian Year* (1975) — date attestation
+
+Research files live in `docs/research/`:
+- `hellenic-festivals-review-2026-10-25.md` — consolidated review report (77 findings, 6 categories)
+- `extracts/review/` — per-month comparison files (12 months)
+- `extracts/parke/`, `extracts/deubner/`, `extracts/mikalson/` — source extracts
+
+**Rules for editing festival entries:**
+1. **`aition` field is sourced, not invented.** Only add an aition if Parke, Deubner, or Mikalson explicitly discusses the myth or founding narrative. If no source gives one, leave the field empty.
+2. **Day numbers are often uncertain.** Many festivals have no fixed ancient day within their month. Mark uncertain days as approximate in `festivalDesc`; do not present them as fact.
+3. **Deity fields must match sources.** Check which deity is primary per the inscriptional and textual evidence; order matters (primary first).
+4. **Do not conflate separate festivals.** E.g. Munichia ≠ Brauronia; Rural Dionysia ≠ City Dionysia phallus-carts.
+5. Open items (17 missing festivals, 25 unsourced aitia, 16 minor issues) are catalogued in the review report — tackle them before adding new data in those months.
+
+---
+
 ## Architecture
 
 **Horologium Romanum** is a PWA + Android app that converts modern time into the temporal systems of five ancient civilizations using precise astronomical algorithms. No backend — all computation is client-side.
