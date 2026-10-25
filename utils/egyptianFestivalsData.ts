@@ -235,7 +235,12 @@ export const LUNAR_FESTIVALS: Record<number, Festival> = {
   1: {
     name: "Mover la Arena (hnp-sc) / Pedj-Shes (Estirar la Cuerda)",
     description: "Día de Luna Nueva (Psdntyw). En los Papiros de Illahun (Sesostris III) es el día para 'Mover la Arena'. También era el día prescriptivo para 'Estirar la Cuerda' y fundar templos (ej. Thutmose III, año 24).",
-    icon: "Ruler"
+    icon: "Ruler",
+    fonte: {
+      spell: "Capítulo CXXXIII",
+      excerpt: "«Rā surge en su horizonte y su séquito de dioses le sigue. El dios emerge de sus moradas ocultas, y el alimento cae del horizonte oriental del cielo a la voz de la diosa Nut... He aquí que eres esa Imagen de oro, y posees los esplendores de los discos del cielo; tú llegas siendo renovado cada día.»",
+      source: "Libro de los Muertos · Cap. CXXXIII (Papiro de Nu, BM 10,477, hoja 16) · Rúbrica: «Este capítulo se recitará en el Día del Mes.» Trad. según Budge (1898); cotejar con Faulkner (1972), Hechizo 133."
+    }
   },
   3: {
     name: "Festival de la Vestimenta (mnht)",
@@ -283,6 +288,63 @@ export const LUNAR_FESTIVALS: Record<number, Festival> = {
     icon: "Moon"
   }
 };
+
+/**
+ * HALL_OF_MAATI: Los 42 Evaluadores de la Sala de la Doble Maāti.
+ * Fuente: Capítulo CXXV, Confesión Negativa. Papiro de Nebseni (BM 9,900, hoja 30).
+ * Texto según Budge (1898), pp. 193–196. Traducción española de la edición.
+ */
+export interface MaatiAssessor {
+  num: number;
+  description: string;
+  origin: string;
+  sinDenied: string;
+}
+
+export const HALL_OF_MAATI: MaatiAssessor[] = [
+  { num: 1,  description: "Aquel de largos pasos",             origin: "Ânnu (Heliópolis)",        sinDenied: "No he cometido iniquidad" },
+  { num: 2,  description: "Aquel abrazado por la llama",        origin: "Kher-aba",                  sinDenied: "No he robado con violencia" },
+  { num: 3,  description: "La divina Nariz (Fenti)",            origin: "Khemennu (Hermópolis)",     sinDenied: "No he hecho violencia a ningún hombre" },
+  { num: 4,  description: "Aquel que devora las sombras",       origin: "Donde nace el Nilo",        sinDenied: "No he cometido robo" },
+  { num: 5,  description: "Neha-hau",                           origin: "Re-stau",                   sinDenied: "No he dado muerte a hombre ni mujer" },
+  { num: 6,  description: "El doble León",                      origin: "El cielo",                  sinDenied: "No he falsificado la medida del grano" },
+  { num: 7,  description: "Aquel cuyos ojos son como pedernal", origin: "Sekhem (Letópolis)",        sinDenied: "No he actuado con engaño" },
+  { num: 8,  description: "La Llama que retrocede",             origin: "—",                         sinDenied: "No he hurtado las cosas que pertenecen al dios" },
+  { num: 9,  description: "Aquel que rompe huesos",             origin: "Suten-henen (Heracleópolis)", sinDenied: "No he dicho falsedad" },
+  { num: 10, description: "Aquel que aviva la llama",           origin: "Het-ka-Ptah (Menfis)",      sinDenied: "No me he llevado alimentos" },
+  { num: 11, description: "Querti (las dos fuentes del Nilo)",  origin: "Amentet",                   sinDenied: "No he proferido palabras malvadas" },
+  { num: 12, description: "Aquel cuyos dientes brillan",        origin: "Ta-she (El Fayún)",         sinDenied: "No he atacado a ningún hombre" },
+  { num: 13, description: "Aquel que consume sangre",           origin: "La casa de la matanza",     sinDenied: "No he matado las bestias del dios" },
+  { num: 14, description: "Aquel que consume las entrañas",     origin: "La cámara mabet",           sinDenied: "No he actuado con doblez" },
+  { num: 15, description: "El dios de la Verdad y la Justicia", origin: "Ciudad de la doble Maāti",  sinDenied: "No he devastado las tierras labradas" },
+  { num: 16, description: "Aquel que camina hacia atrás",       origin: "Ciudad de Bast (Bubastis)", sinDenied: "Nunca he espiado para hacer daño" },
+  { num: 17, description: "Aati",                               origin: "Ânnu (Heliópolis)",         sinDenied: "No he puesto mi boca en movimiento contra nadie" },
+  { num: 18, description: "Aquel que es doblemente malvado",    origin: "Nomo de Ati",               sinDenied: "No me he dejado llevar por la ira sin causa" },
+  { num: 19, description: "La serpiente Uamemti",               origin: "La casa de la matanza",     sinDenied: "No he deshonrado a la esposa de ningún hombre" },
+  { num: 20, description: "Aquel que contempla lo que se trae", origin: "Templo de Amsu",            sinDenied: "No he pecado contra la pureza" },
+  { num: 21, description: "Jefe de los divinos Príncipes",      origin: "Ciudad de Nehatu",          sinDenied: "No he infundido miedo a ningún hombre" },
+  { num: 22, description: "Khemiu (el Destructor)",             origin: "Lago de Kaui",              sinDenied: "No he transgredido tiempos y estaciones sagrados" },
+  { num: 23, description: "Aquel que ordena la palabra",        origin: "Urit",                      sinDenied: "No he sido un hombre de ira" },
+  { num: 24, description: "El Niño",                            origin: "Lago de Heq-at",            sinDenied: "No me he cerrado a las palabras de verdad y justicia" },
+  { num: 25, description: "Aquel que dispone la palabra",       origin: "Ciudad de Unes",            sinDenied: "No he sembrado discordia" },
+  { num: 26, description: "Basti",                              origin: "La ciudad secreta",         sinDenied: "No he hecho llorar a ningún hombre" },
+  { num: 27, description: "Aquel de rostro vuelto hacia atrás", origin: "La Morada",                 sinDenied: "No he cometido actos de impureza" },
+  { num: 28, description: "La pierna de fuego",                 origin: "Akhekhu",                   sinDenied: "No me he devorado a mí mismo por la ira" },
+  { num: 29, description: "Kenemti",                            origin: "Ciudad de Kenemet",         sinDenied: "No he ultrajado a ningún hombre" },
+  { num: 30, description: "Aquel que trae su ofrenda",          origin: "Ciudad de Sau (Sais)",      sinDenied: "No he actuado con violencia" },
+  { num: 31, description: "El dios de los rostros",             origin: "Ciudad de Tchefet",         sinDenied: "No he juzgado con precipitación" },
+  { num: 32, description: "Aquel que da conocimiento",          origin: "Unth",                      sinDenied: "No me he vengado en el dios" },
+  { num: 33, description: "Señor de los dos cuernos",           origin: "Satiu",                     sinDenied: "No he multiplicado mis palabras en demasía" },
+  { num: 34, description: "Nefer-Tem",                          origin: "Het-ka-Ptah (Menfis)",      sinDenied: "No he obrado con engaño ni maldad" },
+  { num: 35, description: "Tem-Sep",                            origin: "Tattu (Busiris)",           sinDenied: "No he maldecido al rey" },
+  { num: 36, description: "Aquel cuyo corazón trabaja",         origin: "Ciudad de Tebti",           sinDenied: "No he ensuciado el agua" },
+  { num: 37, description: "Ahi de las aguas",                   origin: "Nu",                        sinDenied: "No he alzado mi voz con arrogancia" },
+  { num: 38, description: "Aquel que da mandatos a los hombres",origin: "Sau (?)",                   sinDenied: "No he maldecido al dios" },
+  { num: 39, description: "Neheb-nefert",                       origin: "Lago de Nefer (?)",         sinDenied: "No me he comportado con insolencia" },
+  { num: 40, description: "Neheb-kau",                          origin: "Tu ciudad",                 sinDenied: "No he buscado distinciones para mí" },
+  { num: 41, description: "Aquel cuya cabeza es santa",         origin: "Tus moradas",               sinDenied: "No he acrecentado mi riqueza más allá de lo que me pertenece" },
+  { num: 42, description: "Aquel que trae su propio brazo",     origin: "Aukert (el inframundo)",    sinDenied: "No he despreciado al dios de mi ciudad" },
+];
 
 /**
  * Recupera los festivales (civiles y lunares) para una fecha dada.

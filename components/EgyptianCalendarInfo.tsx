@@ -5,7 +5,7 @@ import React, { useState, useMemo } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
 import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
-import { getFestivalsForDate, getNextEgyptianFestivals, FestivalFonte as FestivalFonteData } from '../utils/egyptianFestivalsData';
+import { getFestivalsForDate, getNextEgyptianFestivals, FestivalFonte as FestivalFonteData, HALL_OF_MAATI } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
 import { getEgyptianDayAnchor } from '../utils/egyptianTimeUtils';
 import { getAlgolPhase, getAlgolDailyData, getLunarPhase, getSopdetHeliacalEvent, getSiriusDailyData } from '../utils/egyptianAstronomy';
@@ -318,6 +318,7 @@ interface EgyptianCalendarInfoProps {
 const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, currentDate = new Date(), lat, lng, weather }) => {
   const { civilization, labels } = useCivilization();
   const [showFestivals, setShowFestivals] = useState(false);
+  const [showMaati, setShowMaati] = useState(false);
   const [sopdetExpanded, setSopdetExpanded] = useState(false);
   const [algolExpanded, setAlgolExpanded] = useState(false);
   const [view, setView] = useState<ViewMode>('calendar');
@@ -1007,6 +1008,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
                           <span>{f.name}</span>
                         </div>
                         <p className="font-serif text-xs text-parchment/75 italic leading-relaxed">{f.description}</p>
+                        {f.fonte && <FestivalFontePanel fonte={f.fonte} />}
                       </div>
                     ))}
                   </div>
@@ -1017,9 +1019,85 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
           </div>
 
+        {/* ── Hall of Maāti button ──────────────────────────────────────── */}
+        <button
+          onClick={() => setShowMaati(true)}
+          className="w-full flex items-center justify-center gap-3 py-3 border-t font-serif text-[10px] uppercase tracking-[0.25em] font-bold transition-all"
+          style={{ borderColor: 'rgba(24,64,160,0.25)', color: 'rgba(212,168,50,0.55)' }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'rgba(212,168,50,0.85)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(212,168,50,0.55)')}
+        >
+          <span>𓀗</span>
+          <span>Sala de la Doble Maāti · 42 Evaluadores</span>
+          <span>𓀗</span>
+        </button>
+
         <LotusFreizeBorder id="lotus-btm" />
       </div>
     </div>
+
+    {/* ── Hall of Maāti Modal ──────────────────────────────────────────── */}
+    {showMaati && (
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md animate-fadeIn cursor-pointer"
+        style={{ background: 'rgba(12,8,4,0.90)' }}
+        onClick={() => setShowMaati(false)}
+      >
+        <div
+          className="w-full max-w-lg rounded-sm shadow-2xl overflow-hidden relative cursor-default flex flex-col"
+          style={{ background: '#080510', border: '4px solid rgba(24,64,160,0.55)', maxHeight: '85vh' }}
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="p-5 border-b text-center shrink-0" style={{ borderColor: 'rgba(24,64,160,0.30)', background: 'rgba(24,64,160,0.12)' }}>
+            <div className="text-2xl mb-1" style={{ color: 'rgba(212,168,50,0.85)' }}>𓀗 𓇋𓄿𓄿𓏏 𓀗</div>
+            <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
+              Sala de la Doble Maāti
+            </h2>
+            <p className="text-[9px] uppercase tracking-[0.3em] font-bold mt-1" style={{ color: 'rgba(212,168,50,0.50)' }}>
+              42 Evaluadores · Confesión Negativa · Capítulo CXXV
+            </p>
+            <p className="text-[9px] font-serif mt-2 text-parchment/40 italic">
+              Papiro de Nebseni (BM 9,900) · Recensión Tebana
+            </p>
+          </div>
+
+          {/* Preamble */}
+          <div className="px-5 pt-4 pb-2 shrink-0 border-b" style={{ borderColor: 'rgba(24,64,160,0.20)' }}>
+            <p className="font-serif text-[11px] text-parchment/65 italic leading-relaxed">
+              «Heme aquí; vengo a ti, mi Señor; me he traído a mí mismo para que pueda ver tus bellezas. Te conozco, y conozco tu nombre, y los nombres de los cuarenta y dos dioses que viven contigo en esta Sala de la Doble Maāti.»
+            </p>
+          </div>
+
+          {/* Assessors list */}
+          <div className="overflow-y-auto flex-1 p-4">
+            <div className="flex flex-col gap-1">
+              {HALL_OF_MAATI.map(a => (
+                <div key={a.num} className="flex gap-3 items-start py-2 border-b" style={{ borderColor: 'rgba(24,64,160,0.12)' }}>
+                  <div className="shrink-0 w-6 text-right font-serif text-[10px] font-bold pt-0.5" style={{ color: 'rgba(212,168,50,0.55)' }}>
+                    {a.num}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-serif text-[11px] font-bold text-parchment/90 leading-snug">{a.description}</div>
+                    <div className="text-[9px] text-parchment/40 mt-0.5 italic">{a.origin}</div>
+                    <div className="text-[10px] text-parchment/60 mt-1 font-serif italic leading-snug">{a.sinDenied}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <button
+            className="w-full p-3 border-t font-serif text-[10px] uppercase tracking-widest font-bold text-parchment/50 hover:text-parchment/80 transition-all shrink-0"
+            style={{ borderColor: 'rgba(24,64,160,0.30)', background: 'rgba(24,64,160,0.08)' }}
+            onClick={() => setShowMaati(false)}
+          >
+            Cerrar la Sala
+          </button>
+        </div>
+      </div>
+    )}
 
     {/* ── Next Festivals Modal ──────────────────────────────────────────── */}
     {showFestivals && (
