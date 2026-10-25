@@ -4,10 +4,17 @@
  * Referencias principales: Papiros de Illahun (Dinastía 12), Calendario de Medinet Habu (Dinastía 19/20) y Papiro Ebers.
  */
 
+export interface FestivalFonte {
+  spell: string;    // e.g. "Capítulo CXXX"
+  excerpt: string;  // Quote in Spanish
+  source: string;   // Citation
+}
+
 export interface Festival {
   name: string;
   description: string;
   icon?: string;
+  fonte?: FestivalFonte;
 }
 
 /**
@@ -175,12 +182,49 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     icon: "Ship"
   },
 
+  // II Peret (Mes 5) — último día
+  "5-30": {
+    name: "Meh Utchat — Plenitud del Ojo de Ra",
+    description: "II Peret 30. Último día del mes de Mekhir. El 'Ojo de Ra lleno en Heliópolis' (Utchat meh en Iunu). Dos capítulos independientes del Libro de los Muertos (Cap. CXL y Cap. CXXV) nombran explícitamente esta fecha como ocasión ritual, lo que la convierte en una de las más seguramente atestiguadas del calendario funerario. Se presentaban ofrendas ante un amuleto Utchat de lapislázuli o jaspe dorado mientras Ra aparecía en el horizonte.",
+    icon: "Eye",
+    fonte: {
+      spell: "Capítulo CXL",
+      excerpt: "«El Poder divino ha ascendido y resplandece en el horizonte, y el dios Tem ha surgido del perfume de cuanto de él emana. Los Khus brillan en el cielo y Het-benbenet se regocija, pues hay entre ellos una forma semejante a la suya; y hay gritos y clamores de júbilo en el santuario.»",
+      source: "Libro de los Muertos · Cap. CXL (Papiro de Lepsius) · Último día de II Peret (Mekhir). Corroborado por Cap. CXXV (Papiro de Nu, BM 10,477). Trad. según Budge (1898); cotejar con Faulkner (1972)."
+    }
+  },
+
   // Días Epagómenos (Mes -1)
-  "e-1": { name: "Nacimiento de Osiris", description: "Primer día epagómeno. Dedicado a Osiris (Pág. 48-49).", icon: "Crown" },
-  "e-2": { name: "Nacimiento de Horus", description: "Segundo día epagómeno. Dedicado a Horus.", icon: "Bird" },
-  "e-3": { name: "Nacimiento de Seth", description: "Tercer día epagómeno. Dedicado a Seth.", icon: "Flame" },
-  "e-4": { name: "Nacimiento de Isis", description: "Cuarto día epagómeno. Dedicado a Isis.", icon: "Sparkles" },
-  "e-5": { name: "Nacimiento de Neftis", description: "Quinto día epagómeno. Dedicado a Neftis.", icon: "Moon" }
+  "e-1": {
+    name: "Nacimiento de Osiris",
+    description: "Primer día epagómeno (Heriu Renpet 1). Los cinco días epagómenos nacieron cuando la diosa Nut ganó 1/72 parte de cada día de la luna al dios Thoth y los añadió al año de 360 días (Plutarco, Isis y Osiris, 12; Herodoto II.4). En el primero nació Osiris, señor del Occidente y juez de los muertos. Era día de gran carga ritual: el Libro de los Muertos dedica el Capítulo CXXX al «Cumpleaños de Osiris», y el hemerologio pSallier IV lo marca como día de potente actividad divina.",
+    icon: "Crown",
+    fonte: {
+      spell: "Capítulo CXXX",
+      excerpt: "«Los cielos se abren, la tierra se abre, el Oeste se abre, el Este se abre; la mitad sur del cielo se abre, la mitad norte del cielo se abre, las puertas se abren y los portones se lanzan de par en par ante Rā cuando surge en el horizonte.»",
+      source: "Libro de los Muertos · Cap. CXXX (Papiro de Nu, BM 10,477, hoja 17) · Rúbrica: «Este capítulo se recitará en el Cumpleaños de Osiris.» Trad. según Budge (1898); cotejar con Faulkner (1972), Hechizo 130."
+    }
+  },
+  "e-2": {
+    name: "Nacimiento de Horus el Grande",
+    description: "Segundo día epagómeno (Heriu Renpet 2). Nacimiento de Horus el Viejo (Haroeris), el dios halcón del cielo, cuya derecha es el sol y cuya izquierda es la luna. Distinto de Horus hijo de Osiris e Isis. En los textos de Dendera se describe como el «Horus de los dos horizontes» que nació antes de que el mundo fuera creado.",
+    icon: "Bird"
+  },
+  "e-3": {
+    name: "Nacimiento de Seth",
+    description: "Tercer día epagómeno (Heriu Renpet 3). Nacimiento de Seth (Sutekh), señor del desierto, las tormentas y el caos primordial. Seth nació rasgando el vientre de su madre Nut prematuramente. En el calendario hemerológico (pSallier IV), el tercer día epagómeno suele estar marcado como «malo» (dw). A pesar de su papel adversario, Seth era venerado en el Delta y como guardián de la barca solar contra Apofis.",
+    icon: "Flame"
+  },
+  "e-4": {
+    name: "Nacimiento de Isis",
+    description: "Cuarto día epagómeno (Heriu Renpet 4). Nacimiento de Isis (Aset), gran maga, madre de Horus y consorte de Osiris. El hemerologio la describe como protectora de los vivos y los muertos. En el culto ptolemaico de Filé, el cuarto día epagómeno se celebraba con lamentaciones rituales que anticipaban el luto por Osiris. Isis es la diosa del trono y de la magia solar-lunar.",
+    icon: "Sparkles"
+  },
+  "e-5": {
+    name: "Nacimiento de Neftis",
+    description: "Quinto y último día epagómeno (Heriu Renpet 5). Nacimiento de Neftis (Nebthet, «Señora del Castillo»), hermana de Isis y guardiana de los muertos. Junto a Isis llora a Osiris en las lamentaciones funerarias; sus brazos alados protegen el cuerpo del difunto. Tras los cinco días de nacimientos divinos, el ciclo anual se reinicia con Wep Renpet («Apertura del Año»), I Akhet 1.",
+    icon: "Moon"
+  }
 };
 
 /**

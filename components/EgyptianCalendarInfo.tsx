@@ -5,7 +5,7 @@ import React, { useState, useMemo } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
 import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
-import { getFestivalsForDate, getNextEgyptianFestivals } from '../utils/egyptianFestivalsData';
+import { getFestivalsForDate, getNextEgyptianFestivals, FestivalFonte as FestivalFonteData } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
 import { getEgyptianDayAnchor } from '../utils/egyptianTimeUtils';
 import { getAlgolPhase, getAlgolDailyData, getLunarPhase, getSopdetHeliacalEvent, getSiriusDailyData } from '../utils/egyptianAstronomy';
@@ -52,6 +52,33 @@ const FestivalIcon = ({ name, className }: { name?: string; className?: string }
     case 'Sunrise':      return <Sunrise {...props} />;
     default:             return null;
   }
+};
+
+// ─── Book of the Dead fonte quote (collapsible) ───────────────────────────────
+const FestivalFontePanel: React.FC<{ fonte: FestivalFonteData }> = ({ fonte }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-2 border-t" style={{ borderColor: 'rgba(24,64,160,0.25)' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between pt-2 text-left gap-2"
+      >
+        <span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: 'rgba(212,168,50,0.60)' }}>
+          𓂀 {fonte.spell}
+        </span>
+        <span className="text-parchment/40 text-[10px] shrink-0">{open ? '▴' : '▾'}</span>
+      </button>
+      {open && (
+        <div className="mt-2 pb-1">
+          <p className="font-serif text-xs text-parchment/85 italic leading-relaxed border-l-2 pl-3 py-1"
+             style={{ borderColor: 'rgba(212,168,50,0.40)' }}>
+            {fonte.excerpt}
+          </p>
+          <p className="text-[8px] text-parchment/35 mt-1.5 tracking-wider uppercase leading-relaxed">{fonte.source}</p>
+        </div>
+      )}
+    </div>
+  );
 };
 
 // ─── Temple lotus-papyrus frieze border ───────────────────────────────────────
@@ -964,6 +991,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
                           <span>{f.name}</span>
                         </div>
                         <p className="font-serif text-xs text-parchment/75 italic leading-relaxed">{f.description}</p>
+                        {f.fonte && <FestivalFontePanel fonte={f.fonte} />}
                       </div>
                     ))}
                     {lunarFestivals.map((f, i) => (
