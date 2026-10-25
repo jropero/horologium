@@ -207,6 +207,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
     const [info, setInfo] = useState<RomanDayInfo | null>(null);
     const [showFestivals, setShowFestivals] = useState(false);
     const [showStatusInfo, setShowStatusInfo] = useState(false);
+    const [fontesOpen, setFontesOpen] = useState(false);
     const [greekInfo, setGreekInfo] = useState<{ festival: AtticFestivalInfo | null; defaultDeity: AtticFestivalInfo; atticDate: AtticDateResult } | null>(null);
     const [activeSacrificeIdx, setActiveSacrificeIdx] = useState(0);
 
@@ -233,6 +234,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
         const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
         setGreekInfo({ festival, defaultDeity, atticDate });
         setActiveSacrificeIdx(0);
+        setFontesOpen(false);
     }, [currentDate, lat, lng]);
 
     if (!info && !greekInfo) return null;
@@ -334,21 +336,77 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                             </div>
                         )}
 
-                        {/* AITION OVIDIANO - FASTI */}
-                        {info.ovidExcerpt && (
-                            <div className="mt-5 p-4 bg-stone-900/80 border border-gold-dim/50 rounded-md relative z-10 flex flex-col items-start gap-3 shadow-inner w-full">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl filter drop-shadow-md">📜</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-bold text-stone-300">
-                                        Aition: Fastos de Ovidio
-                                    </span>
-                                </div>
-                                <p className="text-[12px] md:text-sm font-serif text-parchment/90 leading-relaxed text-left border-l-2 border-gold-leaf/50 pl-4 py-1 italic">
-                                    "{info.ovidExcerpt.text}"
-                                </p>
-                                <span className="text-[9px] md:text-[10px] text-gold-dim/70 self-end mt-1 uppercase tracking-widest font-bold">
-                                    — Liber {info.ovidExcerpt.book}, vv. {info.ovidExcerpt.lines}
-                                </span>
+                        {/* FONTES ANTIQUI */}
+                        {info.fontes && info.fontes.length > 0 && (
+                            <div
+                                className="w-full mt-4 border border-gold-dim/30 rounded-md overflow-hidden"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {/* Collapsed header — always visible */}
+                                <button
+                                    type="button"
+                                    className="w-full flex items-center justify-between px-3 py-2 bg-stone-900/60 hover:bg-stone-900/80 transition-colors cursor-pointer"
+                                    onClick={() => setFontesOpen(o => !o)}
+                                    aria-expanded={fontesOpen}
+                                >
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-gold-dim/70 flex-shrink-0">
+                                            Fontes Antiqui
+                                        </span>
+                                        {!fontesOpen && (
+                                            <span className="text-[10px] font-serif text-parchment/50 truncate">
+                                                · {info.fontes[0].author}, {info.fontes[0].work}{info.fontes[0].book ? ` ${info.fontes[0].book}` : ''}{info.fontes[0].lines ? `.${info.fontes[0].lines}` : ''}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <span
+                                        className="text-gold-dim/60 text-[11px] flex-shrink-0 ml-2 transition-transform duration-200"
+                                        style={{ display: 'inline-block', transform: fontesOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                                        aria-hidden="true"
+                                    >▾</span>
+                                </button>
+
+                                {/* Expanded body */}
+                                {fontesOpen && (
+                                    <div className="bg-stone-950/60 px-3 pt-3 pb-2 flex flex-col gap-3">
+                                        {info.fontes.map((fonte, idx) => {
+                                            const typeBadge = fonte.type !== 'description'
+                                                ? fonte.type.charAt(0).toUpperCase() + fonte.type.slice(1)
+                                                : null;
+                                            const citHeader = [
+                                                fonte.author,
+                                                fonte.work,
+                                                fonte.book ? `Lib. ${fonte.book}` : null,
+                                                fonte.lines ? `vv. ${fonte.lines}` : null,
+                                            ].filter(Boolean).join(' · ');
+                                            return (
+                                                <div key={idx} className={idx > 0 ? 'border-t border-gold-dim/20 pt-3' : ''}>
+                                                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                                                        <span className="text-[9px] font-serif uppercase tracking-[0.2em] text-gold-dim/60 leading-tight">
+                                                            {citHeader}
+                                                        </span>
+                                                        {typeBadge && (
+                                                            <span className="text-[8px] uppercase tracking-widest text-amber-700/70 border border-amber-700/30 px-1 py-0.5 rounded flex-shrink-0">
+                                                                {typeBadge}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    {fonte.textLa && (
+                                                        <p className="text-[11px] md:text-[12px] font-serif italic text-parchment/85 leading-relaxed mb-1.5 whitespace-pre-line">
+                                                            {fonte.textLa}
+                                                        </p>
+                                                    )}
+                                                    {fonte.textLa && (
+                                                        <div className="border-t border-gold-dim/15 my-1.5" />
+                                                    )}
+                                                    <p className="text-[10px] md:text-[11px] font-serif text-parchment/55 leading-relaxed italic">
+                                                        {fonte.textEs}
+                                                    </p>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         )}
 
