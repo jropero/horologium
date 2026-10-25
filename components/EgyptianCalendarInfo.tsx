@@ -5,7 +5,7 @@ import React, { useState, useMemo } from 'react';
 import { getEgyptianDate, EgyptianDateResult, formatEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getEpagomenalDayInfo } from '../utils/egyptianCalendarData';
 import { getEgyptianMonthDeity } from '../utils/egyptianDeities';
-import { getFestivalsForDate, getNextEgyptianFestivals, FestivalFonte as FestivalFonteData, HALL_OF_MAATI } from '../utils/egyptianFestivalsData';
+import { getFestivalsForDate, getNextEgyptianFestivals, FestivalFonte as FestivalFonteData, HALL_OF_MAATI, CIVIL_FESTIVALS } from '../utils/egyptianFestivalsData';
 import { getHemerologyForDate, Prognosis } from '../utils/egyptianHemerologyData';
 import { getEgyptianDayAnchor } from '../utils/egyptianTimeUtils';
 import { getAlgolPhase, getAlgolDailyData, getLunarPhase, getSopdetHeliacalEvent, getSiriusDailyData } from '../utils/egyptianAstronomy';
@@ -618,6 +618,9 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
               <p className="font-serif text-sm text-parchment/85 italic mt-3 leading-relaxed">
                 "{epagomenalInfo.description}"
               </p>
+              {CIVIL_FESTIVALS[`e-${egyptianDate.dayOfMonth}`]?.fonte && (
+                <FestivalFontePanel fonte={CIVIL_FESTIVALS[`e-${egyptianDate.dayOfMonth}`]!.fonte!} />
+              )}
             </div>
           )}
 
@@ -1054,17 +1057,17 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
             <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
               Sala de la Doble Maāti
             </h2>
-            <p className="text-[9px] uppercase tracking-[0.3em] font-bold mt-1" style={{ color: 'rgba(212,168,50,0.50)' }}>
+            <p className="text-xs uppercase tracking-[0.3em] font-bold mt-1" style={{ color: 'rgba(212,168,50,0.50)' }}>
               42 Evaluadores · Confesión Negativa · Capítulo CXXV
             </p>
-            <p className="text-[9px] font-serif mt-2 text-parchment/40 italic">
+            <p className="text-xs font-serif mt-2 text-parchment/40 italic">
               Papiro de Nebseni (BM 9,900) · Recensión Tebana
             </p>
           </div>
 
           {/* Preamble */}
           <div className="px-5 pt-4 pb-2 shrink-0 border-b" style={{ borderColor: 'rgba(24,64,160,0.20)' }}>
-            <p className="font-serif text-[11px] text-parchment/65 italic leading-relaxed">
+            <p className="font-serif text-xs text-parchment/65 italic leading-relaxed">
               «Heme aquí; vengo a ti, mi Señor; me he traído a mí mismo para que pueda ver tus bellezas. Te conozco, y conozco tu nombre, y los nombres de los cuarenta y dos dioses que viven contigo en esta Sala de la Doble Maāti.»
             </p>
           </div>
@@ -1074,13 +1077,13 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
             <div className="flex flex-col gap-1">
               {HALL_OF_MAATI.map(a => (
                 <div key={a.num} className="flex gap-3 items-start py-2 border-b" style={{ borderColor: 'rgba(24,64,160,0.12)' }}>
-                  <div className="shrink-0 w-6 text-right font-serif text-[10px] font-bold pt-0.5" style={{ color: 'rgba(212,168,50,0.55)' }}>
+                  <div className="shrink-0 w-6 text-right font-serif text-xs font-bold pt-0.5" style={{ color: 'rgba(212,168,50,0.55)' }}>
                     {a.num}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-serif text-[11px] font-bold text-parchment/90 leading-snug">{a.description}</div>
-                    <div className="text-[9px] text-parchment/40 mt-0.5 italic">{a.origin}</div>
-                    <div className="text-[10px] text-parchment/60 mt-1 font-serif italic leading-snug">{a.sinDenied}</div>
+                    <div className="font-serif text-xs font-bold text-parchment/90 leading-snug">{a.description}</div>
+                    <div className="text-xs text-parchment/40 mt-0.5 italic">{a.origin}</div>
+                    <div className="text-xs text-parchment/60 mt-1 font-serif italic leading-snug">{a.sinDenied}</div>
                   </div>
                 </div>
               ))}
@@ -1089,7 +1092,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({ onClick, cu
 
           {/* Footer */}
           <button
-            className="w-full p-3 border-t font-serif text-[10px] uppercase tracking-widest font-bold text-parchment/50 hover:text-parchment/80 transition-all shrink-0"
+            className="w-full p-3 border-t font-serif text-xs uppercase tracking-widest font-bold text-parchment/50 hover:text-parchment/80 transition-all shrink-0"
             style={{ borderColor: 'rgba(24,64,160,0.30)', background: 'rgba(24,64,160,0.08)' }}
             onClick={() => setShowMaati(false)}
           >

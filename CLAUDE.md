@@ -18,6 +18,86 @@ npm run build && npx cap sync android   # Sync web assets to Android project
 npx cap open android                    # Open Android Studio
 ```
 
+## Egyptian festival data — sources and quality standards
+
+Festival data for the Aegyptus civilization lives in `utils/egyptianFestivalsData.ts`. Two collections:
+
+- **`CIVIL_FESTIVALS`**: keyed `"month-day"` (0-based month, e.g. `"3-1"` = I Peret day 1) plus epagomenal keys `"e-1"` … `"e-5"`. 27 entries as of 2026-10-25.
+- **`LUNAR_FESTIVALS`**: array of festivals tied to lunar phases (new moon, full moon), not civil dates.
+
+Each `Festival` entry has `name`, `description`, optional `icon`, and optional `fonte: FestivalFonte` for a Book of the Dead quote.
+
+```ts
+interface FestivalFonte {
+  spell: string;    // "Capítulo CXXX"
+  excerpt: string;  // verbatim excerpt in Spanish
+  source: string;   // edition and papyrus citation
+}
+```
+
+`HALL_OF_MAATI` (array of 42 `MaatiAssessor` entries) comes from Ch. CXXV, Papiro de Nebseni (BM 9,900). It drives the Hall of Maāti modal in `EgyptianCalendarInfo.tsx`. Minimum font size in that modal: **12px** (`text-xs`); never use `text-[8px]`, `text-[9px]`, `text-[10px]`, or `text-[11px]` inside it.
+
+Sources cross-referenced for festival entries:
+- S. El-Sabban, *Temple Festival Calendars of Ancient Egypt* (2000) — primary civil festival reference
+- C. J. Bleeker, *Egyptian Festivals* (1967) — ritual interpretation
+- A. von Lieven, *Grundriss des Laufes der Sterne* (2007) — astronomical calendar
+- E. A. Wallis Budge, *The Book of the Dead* (1898), Theban Recension — `fonte` quotes; papyri Ani (BM 10,470), Nu (BM 10,477), Nebseni (BM 9,900)
+
+Research files live in `docs/research/`:
+- `egypt-festivals-review-2026-10-25.md` — consolidated review report
+- `extracts/egypt-by-month.md` — unified civil-month reference from all sources
+- `extracts/book-of-the-dead/extract.md` — BoD spells cross-referenced to calendar dates
+
+**Rules for editing festival entries:**
+1. **`fonte` field is sourced, not invented.** Only add a `FestivalFonte` if Budge's Theban Recension explicitly links the spell to a date or rite. Cite the chapter number and papyrus.
+2. **Epagomenal days** (`"e-1"` … `"e-5"`) have their base text from `getEpagomenalDayInfo()` in `egyptianCalendarData.ts`. The `fonte` from `CIVIL_FESTIVALS["e-N"]` is surfaced separately in the epagomenal card in `EgyptianCalendarInfo.tsx` — both paths must be kept consistent.
+3. **Do not invent festivals.** Every entry must trace to El-Sabban or Bleeker. Open items are catalogued in the review report.
+4. **Key format**: civil keys are `"${monthIndex}-${day}"` with 0-based month (I Akhet = 0 … IV Shomu = 11). Epagomenal keys are `"e-${1..5}"`.
+
+---
+
+## How to run a festival scholarly review
+
+Use this procedure whenever festival data needs a quality pass — for any civilization. It has been run for Rome (2026-10-25), Hellas (2026-10-25), and Aegyptus (2026-10-25).
+
+### Phase pipeline
+
+Run phases sequentially; each agent's output feeds the next.
+
+**Phase 0 — Read current app data**
+Spawn an agent to read the relevant data file(s) and produce a structured list of every festival entry: key, name, description, deity, sources cited (if any). This is the baseline.
+
+**Phase 1 — Source extraction**
+For each primary source PDF in `docs/research/` (or user-supplied), spawn one agent per source to extract festival/calendar data month by month. Save output to `docs/research/extracts/<source>/`. Use consistent month headings so Phase 2 can diff them.
+
+**Phase 2 — Month-by-month comparison**
+One agent compares the app baseline (Phase 0) against all source extracts (Phase 1) for each month. Output: `docs/research/extracts/review/month-N.md` per month with MATCH / WRONG / MISSING / EXTRA annotation per entry.
+
+**Phase 3 — Consolidated review report**
+Aggregate all month files into a single `docs/research/<civ>-festivals-review-<date>.md`. Categorise findings:
+- `WRONG_DATE` — attested date differs from app
+- `WRONG_DEITY` — wrong deity assigned
+- `WRONG_RITUAL` — ritual description contradicts sources
+- `INVENTED_AITION` / `INVENTED` — no source supports the claim
+- `MISSING` — festival in sources but not in app
+- `MINOR` — wording, uncertainty markers, secondary sources
+
+Assign severity: HIGH (factual error), MEDIUM (sourcing issue), MINOR/LOW (wording).
+
+**Phase 4 — Apply corrections**
+Apply HIGH and MEDIUM findings first in one pass, then MINOR/LOW in a second pass. For each change, cite the source inline in the data file comment or field. Commit each pass separately.
+
+### Book of the Dead cross-reference (Aegyptus only)
+After Phase 4, run a separate agent to read `docs/research/extracts/book-of-the-dead/extract.md` and map each BoD spell to its calendar date. For spells that map unambiguously, add a `fonte: FestivalFonte` to the corresponding `CIVIL_FESTIVALS` or `LUNAR_FESTIVALS` entry. Save the extract file before this step.
+
+### Output files to commit
+- `docs/research/extracts/<source>/*.md` — raw extracts
+- `docs/research/extracts/review/*.md` — month comparisons (optional, useful for audit trail)
+- `docs/research/<civ>-festivals-review-<date>.md` — consolidated report
+- The corrected data file (`romanYearData.ts`, `atticCalendarData.ts`, `egyptianFestivalsData.ts`, etc.)
+
+---
+
 ## Hellenic festival data — sources and quality standards
 
 Festival data for the Hellas civilization lives in `utils/atticCalendarData.ts` (`getAtticFestivalInfo(monthIndex, dayOfMonth)`). Every festival entry has been cross-referenced against three scholarly sources:
@@ -37,6 +117,34 @@ Research files live in `docs/research/`:
 3. **Deity fields must match sources.** Check which deity is primary per the inscriptional and textual evidence; order matters (primary first).
 4. **Do not conflate separate festivals.** E.g. Munichia ≠ Brauronia; Rural Dionysia ≠ City Dionysia phallus-carts.
 5. Open items (17 missing festivals, 25 unsourced aitia, 16 minor issues) are catalogued in the review report — tackle them before adding new data in those months.
+
+---
+
+## Roman festival data — sources and quality standards
+
+Roman calendar day data lives in `utils/romanYearData.ts` (`ROMAN_YEAR_DATA`). Keys are `"month-day"` (0-based month). Each entry is a `YearDayEntry`:
+
+```ts
+interface YearDayEntry {
+  status: string;        // "F" | "C" | "N" | "NP" | "EN" | "FP" | "QRCF" | "QRCI" | "COMP"
+  statusFull: string;    // Latin expansion of status abbreviation
+  deity?: string;        // primary deity or deities
+  deityDesc?: string;    // description of the deity's role
+  festivalName?: string; // name of the festival if any
+  festivalDesc?: string; // description of the festival
+}
+```
+
+Sources cross-referenced (134 corrections applied 2026-10-25):
+- H. H. Scullard, *Festivals and Ceremonies of the Roman Republic* (1981) — primary reference
+- W. W. Fowler, *The Roman Festivals of the Period of the Republic* (1899) — secondary
+
+A consolidated review was completed 2026-10-25 in two passes (93 HIGH+MEDIUM + 41 MINOR/LOW corrections). No separate review report file was kept; changes are traceable via git log commits 7de5d30 and e64745e.
+
+**Rules for editing entries:**
+1. `status` codes follow Mommsen's *Fasti*. Do not invent new codes.
+2. `festivalDesc` must be sourced. If Scullard or Fowler gives no description, leave the field empty rather than paraphrasing encyclopaedias.
+3. Deity order: primary deity first. Joint cults (e.g. Jupiter Optimus Maximus) are not split.
 
 ---
 

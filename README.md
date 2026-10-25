@@ -30,7 +30,7 @@
 ### 🌍 Civilizaciones (Multimodal)
 - **Rome (Fasti Romani)**: Sistema clásico con Calendas, Nonas e Idus (incluido el *bis sextum* de los años bisiestos y el calendario juliano para fechas anteriores a 1582), ciclo de nundinas y año *Ab Urbe Condita*.
 - **Hellas (Chronos)**: Calendario Ático completo con meses lunares (el día empieza al ocaso y cada mes con la primera luna creciente visible desde tu ubicación), sistema de tres décadas visuales, festivales con mitos fundacionales (Aition) validados contra fuentes académicas (Parke 1977, Deubner 1932, Mikalson 1975), y alertas de días nefastos (Apaphrades).
-- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, festivales sagrados, **salida helíaca de Sopdet** (Sirio) y **Nilómetro dinámico** con niveles históricos.
+- **Aegyptus (Horus)**: Calendario Alejandrino/Copto con estaciones (Akhet, Peret, Shemu), hemerología "Buenos/Malos", ciclo de Algol (Ojo de Horus), entronización de Apis, 27 festivales del calendario civil y lunar validados contra fuentes académicas (El-Sabban 2000, Bleeker 1967, von Lieven 2007), **salida helíaca de Sopdet** (Sirio) y **Nilómetro dinámico** con niveles históricos. Cada fiesta incluye un panel desplegable con el capítulo correspondiente del **Libro de los Muertos** (Recensión Tebana, papiro de Ani, Nu y Nebseni) cuando la fuente lo permite; la **Sala de la Doble Maāti** presenta los 42 Evaluadores de la Confesión Negativa (Capítulo CXXV, papiro de Nebseni).
 - **Babylonia (Ishtar)**: Calendario lunisolar babilónico con Era Seléucida, meses Nisannu–Addaru que empiezan al ocaso con la primera luna creciente visible desde tu ubicación, ciclo metónico de intercalación, guardia nocturna (maṣṣartu), días sagrados (Šapaṭu/día 15) y friso decorativo de la Puerta de Ishtar. Los términos y encabezados acadios (días, meses, deidades, planetas, guardias, horas) llevan su traducción al español en letra menor.
 - **Zhongguo (中国)**: Calendario lunisolar chino con los 24 Términos Solares (二十四节气), las Doce Ramas Terrestres (地支) como marco de horas, el ciclo sexagesimal (干支) del año, el mes y el día lunares (calculados en hora de China, UTC+8), el zodíaco de los 12 animales y la rueda del ciclo sexagenario del año.
 
@@ -55,6 +55,7 @@
 
 ### 🔮 Sabiduría y Adivinación Antigua
 - **Hemerología Egipcia**: Sistema de días "Buenos y Malos" (*Nefer* y *Aha*) basado en el Papiro de El Cairo 86637.
+- **Libro de los Muertos**: Los festivales egipcios del calendario civil y lunar enlazan con el capítulo pertinente de la Recensión Tebana (papiro de Ani, Nu, Nebseni). La **Sala de la Doble Maāti** presenta los 42 Evaluadores de la Confesión Negativa (Capítulo CXXV).
 - **Sortes Vergilianae**: Herramienta de adivinación clásica integrada utilizando fragmentos de la Eneida.
 - **Sententiae & Apophthegmata**: Sabiduría diaria en Latín, Griego y Egipcio Antiguo, con transliteraciones y traducciones.
 
