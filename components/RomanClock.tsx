@@ -167,6 +167,7 @@ const RomanClock: React.FC<RomanClockProps> = ({
   };
 
   const weatherCond = weather?.current.condition ?? 'clear';
+  const windGusts = weather?.current.windGusts ?? 0;
   const isOffline = !!weather?.isOffline || !!weather?.aurora;
 
   if (loading) {
@@ -303,6 +304,8 @@ const RomanClock: React.FC<RomanClockProps> = ({
                     condition={weatherCond}
                     weatherParticles={weatherParticles}
                     fogGradientId="fog-ground-roman"
+                    rainIntensity={rainIntensity}
+                    windGusts={windGusts}
                     offline={isOffline}
                   />
                 </g>

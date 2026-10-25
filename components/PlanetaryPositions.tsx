@@ -314,7 +314,7 @@ function computeParapegmaEvents(currentDate: Date, civilization: string): ParaEv
   return events
     .filter(e => e.days > 0)
     .sort((a, b) => a.date.getTime() - b.date.getTime())
-    .slice(0, 5);
+    .slice(0, 1);
 }
 
 // ── Component ─────────────────────────────────────────────────────────

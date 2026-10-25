@@ -552,6 +552,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               fogGradientId="fog-ground-hel"
               cloudOpacity={0.7}
               stormOpacity={0.65}
+              rainIntensity={rainIntensity}
+              windGusts={weather?.current.windGusts ?? 0}
               offline={!!(weather?.isOffline || weather?.aurora)}
             />
             {condition === 'storm' && (

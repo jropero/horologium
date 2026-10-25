@@ -201,6 +201,36 @@
     100% { transform: translate(var(--drift), 800px); }
   }
 
+  .anim-cloud-bg {
+    animation: driftBg 32s ease-in-out infinite;
+    will-change: transform;
+  }
+  .anim-mist {
+    animation: mistPulse var(--md, 5s) ease-in-out infinite;
+    will-change: opacity, transform;
+    transform-origin: 50% 50%;
+  }
+  .anim-wind {
+    animation: windStreak var(--wd, 1.8s) ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes driftBg {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(45px); }
+  }
+  @keyframes mistPulse {
+    0%, 100% { opacity: var(--mb, 0.35); transform: scaleX(1); }
+    40%       { opacity: calc(var(--mb, 0.35) * 0.55); transform: scaleX(1.04); }
+    70%       { opacity: calc(var(--mb, 0.35) * 0.85); transform: scaleX(0.97); }
+  }
+  @keyframes windStreak {
+    0%   { transform: translateX(var(--ws, -400px)); opacity: 0; }
+    10%  { opacity: var(--wo, 0.4); }
+    80%  { opacity: var(--wo, 0.4); }
+    100% { transform: translateX(var(--we, 600px)); opacity: 0; }
+  }
+
   /* Aurora borealis (offline / slow fetch) — see components/AuroraSvg.tsx.
      Per-curtain sway: --dur, --ax (px), --sk (deg). Skew pivots on the curtain's
      lower edge so the tops lean like a hanging curtain. */
@@ -283,6 +313,12 @@
   @keyframes nileCausticC {
     0%, 100% { transform: translateX(-2px);   opacity: 0.08; }
     50%      { transform: translateX(3.5px);  opacity: 0.15; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-wind, .anim-mist {
+    animation: none;
   }
 }
 
