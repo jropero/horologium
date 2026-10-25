@@ -166,7 +166,7 @@ const AppContent: React.FC = () => {
     historical: [],
     current: {
       condition: 'cloudy', code: 3, temperature: 15,
-      description: 'Offline', windSpeed: 0, windDirection: 0,
+      description: 'Offline', windSpeed: 0, windGusts: 0, windDirection: 0,
       latinWindName: '', surfacePressure: 0, yearLabel: '',
     },
   };

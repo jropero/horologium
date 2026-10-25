@@ -195,6 +195,7 @@ interface SnapshotInput {
     temperature: number;
     code: number;
     windSpeed: number;
+    windGusts: number;
     windDirection: number;
     surfacePressure: number;
     yearLabel: string;
@@ -205,6 +206,7 @@ export const buildWeatherSnapshot = ({
     temperature,
     code,
     windSpeed,
+    windGusts,
     windDirection,
     surfacePressure,
     yearLabel,
@@ -219,6 +221,7 @@ export const buildWeatherSnapshot = ({
         chineseDescription: getChineseWeatherDesc(code),
         code,
         windSpeed,
+        windGusts,
         windDirection,
         latinWindName: getLatinWindName(windDirection),
         greekWindName: getGreekWindName(windDirection),
@@ -229,7 +232,7 @@ export const buildWeatherSnapshot = ({
     };
 };
 
-const HOURLY_VARS = 'temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure';
+const HOURLY_VARS = 'temperature_2m,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,surface_pressure';
 
 /** Index of the hourly row matching the target wall-clock hour, else the first usable row. */
 const pickHourlyIndex = (hourly: any, target: Date): number => {
@@ -252,6 +255,7 @@ const snapshotFromHourly = (hourly: any, index: number, yearLabel: string): Weat
         temperature,
         code,
         windSpeed: hourly.wind_speed_10m?.[index] ?? 0,
+        windGusts: hourly.wind_gusts_10m?.[index] ?? 0,
         windDirection: hourly.wind_direction_10m?.[index] ?? 0,
         surfacePressure: hourly.surface_pressure?.[index] ?? 1013,
         yearLabel,
@@ -326,7 +330,7 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
         }
 
         if (!current) {
-            const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure`;
+            const currentUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,surface_pressure`;
             const res = await fetch(currentUrl);
             if (res.ok) {
                 const c = (await res.json()).current;
@@ -335,6 +339,7 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
                         temperature: c.temperature_2m,
                         code: c.weather_code,
                         windSpeed: c.wind_speed_10m ?? 0,
+                        windGusts: c.wind_gusts_10m ?? 0,
                         windDirection: c.wind_direction_10m ?? 0,
                         surfacePressure: c.surface_pressure ?? 1013,
                         yearLabel: 'Hodie',
@@ -348,7 +353,7 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
         // --- Historical comparison: same day across HISTORICAL_YEARS ---
         const historicalUrls = HISTORICAL_YEARS.map(year => {
             const dateStr = `${year}-${month}-${day}`;
-            return `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}&start_date=${dateStr}&end_date=${dateStr}&daily=weather_code,temperature_2m_mean,wind_speed_10m_max,wind_direction_10m_dominant&timezone=auto`;
+            return `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lng}&start_date=${dateStr}&end_date=${dateStr}&daily=weather_code,temperature_2m_mean,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant&timezone=auto`;
         });
 
         const responses = await Promise.all(historicalUrls.map(url => fetch(url)));
@@ -364,6 +369,7 @@ export const fetchWeather = async (lat: number, lng: number, targetDate?: Date):
                     temperature: daily.temperature_2m_mean[0],
                     code: daily.weather_code[0],
                     windSpeed: daily.wind_speed_10m_max?.[0] ?? 0,
+                    windGusts: daily.wind_gusts_10m_max?.[0] ?? 0,
                     windDirection: daily.wind_direction_10m_dominant?.[0] ?? 0,
                     surfacePressure: 1013,
                     yearLabel: getRomanYear(year),

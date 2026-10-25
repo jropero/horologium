@@ -44,7 +44,7 @@ const TERMS = {
 // Plain-Spanish guide to the panel, opened with "¿Cómo leer este panel?". Facts as in
 // the header comment and docs/research/hours-and-planets-sources.md §5.
 const HELP: { term: string; text: string }[] = [
-  { term: 'Naṣāru ša ginê', text: 'Título antiguo de los Diarios Astronómicos: desde el siglo VII a. C. los astrónomos de Babilonia anotaban cada noche lo que veían en el cielo. Este panel muestra lo que habrían anotado ahora.' },
+  { term: 'Naṣāru ša ginê', text: 'Título antiguo de los Diarios Astronómicos: desde el siglo VII a. C. los astrónomos de Babilonia compilaban cada mes lo que habían observado en el cielo. Este panel muestra lo que los Diarios registrarían esta noche.' },
   { term: 'bēru y UŠ', text: 'Así medían el tiempo. El día (de puesta a puesta de sol) tenía 12 bēru, "dobles horas"; cada bēru tenía 30 UŠ de 4 minutos. La hora se contaba desde la puesta o la salida del sol.' },
   { term: 'Maṣṣartu · guardia', text: 'La noche y el día se dividían en tres guardias cada uno, que cambian de duración con las estaciones.' },
   { term: 'Planetas', text: 'Los cinco planetas visibles a simple vista, con su nombre en los Diarios y en el orden en que estos los listan: Júpiter, Venus, Mercurio, Saturno, Marte.' },
@@ -111,7 +111,7 @@ const BabylonianSkyDiary: React.FC<Props> = ({ currentDate, lat, lng }) => {
           <div className="h-px flex-1 bg-gold-dim/20" />
         </div>
         <p className="-mt-1 mb-2 text-center text-xs italic text-parchment/65">
-          Lo que un astrónomo de Babilonia anotaría ahora en su diario del cielo
+          Lo que los Diarios Astronómicos registrarían esta noche
         </p>
         <div className="mb-3 text-center">
           <button

@@ -144,6 +144,7 @@ export const applyCustomWeather = (
         temperature: config.temperature,
         code: config.code,
         windSpeed: config.windSpeed,
+        windGusts: 0,
         windDirection: config.windDirection,
         surfacePressure: source?.surfacePressure ?? 1013,
         yearLabel: source?.yearLabel ?? 'Hodie',
