@@ -58,7 +58,7 @@ Research files live in `docs/research/`:
 
 ## How to run a festival scholarly review
 
-Use this procedure whenever festival data needs a quality pass — for any civilization. It has been run for Rome (2026-10-25), Hellas (2026-10-25), and Aegyptus (2026-10-25).
+Use this procedure whenever festival data needs a quality pass — for any civilization. It has been run for Rome (2026-10-25), Hellas (2026-10-25), Aegyptus (2026-10-25), and Babylonia (2026-10-25).
 
 ### Phase pipeline
 
@@ -89,6 +89,9 @@ Apply HIGH and MEDIUM findings first in one pass, then MINOR/LOW in a second pas
 
 ### Book of the Dead cross-reference (Aegyptus only)
 After Phase 4, run a separate agent to read `docs/research/extracts/book-of-the-dead/extract.md` and map each BoD spell to its calendar date. For spells that map unambiguously, add a `fonte: FestivalFonte` to the corresponding `CIVIL_FESTIVALS` or `LUNAR_FESTIVALS` entry. Save the extract file before this step.
+
+### Primary text fonte pass (Babylonia only)
+After Phase 4, add `fonte: BabylonianFonte` entries to `dayEvents` in `babylonianLoreData.ts`. Only add a fonte where a verbatim primary-text passage (Akkadian ritual tablet, Sumerian poem, creation epic) is directly linked to the rite of that day. Sources already used: King 1902 (Enūma Eliš), Thureau-Dangin 1921 (Akītu tablets), Rogers 1908 (Descent of Ištar), Jacobsen 1976 (sacred marriage hymns), Abusch 2016 (Maqlu). Future pass: Sachs & Hunger *Astronomical Diaries* (attested diary entries) for `BabylonianSkyDiary` component.
 
 ### Output files to commit
 - `docs/research/extracts/<source>/*.md` — raw extracts
@@ -145,6 +148,54 @@ A consolidated review was completed 2026-10-25 in two passes (93 HIGH+MEDIUM + 4
 1. `status` codes follow Mommsen's *Fasti*. Do not invent new codes.
 2. `festivalDesc` must be sourced. If Scullard or Fowler gives no description, leave the field empty rather than paraphrasing encyclopaedias.
 3. Deity order: primary deity first. Joint cults (e.g. Jupiter Optimus Maximus) are not split.
+
+---
+
+## Babylonian festival data — sources and quality standards
+
+Festival day-event data lives in `utils/babylonianLoreData.ts` as `BABYLONIAN_MONTH_LORE` — an array of 12 `BabylonianLore` entries (one per month). Each month entry has an optional `dayEvents: Record<number, BabylonianDayEvent>` keyed by day number (1–30).
+
+```ts
+interface BabylonianFonte {
+  title: string;    // e.g. "Enūma Eliš · Tablilla IV"
+  excerpt: string;  // verbatim excerpt in Spanish
+  source: string;   // edition and line citation
+}
+
+interface BabylonianDayEvent {
+  shortLabel: string;  // 1–3 word label shown in day grid dot tooltip
+  description: string; // full ritual description shown in tap panel
+  type: 'akitu' | 'procession' | 'mourning' | 'marriage' | 'ritual' | 'festival' | 'astronomy';
+  fonte?: BabylonianFonte; // optional primary-text quote panel (collapsible)
+}
+```
+
+Sources cross-referenced for day events (scholarly review completed 2026-10-25, 8 HIGH + 6 MEDIUM corrections, 7 missing entries added):
+- M. E. Cohen, *The Cultic Calendars of the Ancient Near East*. CDL Press, 1993 — primary day-level reference
+- M. J. H. Linssen, *The Cults of Uruk and Babylon*. Cuneiform Monographs 25, Brill, 2004 — Hellenistic ritual series
+- F. Thureau-Dangin, *Rituels Accadiens*. Ernest Leroux, 1921 — primary Akītu tablet (DT.109, MNB.1848)
+- T. Jacobsen, *The Treasures of Darkness*. Yale UP, 1976 — mythological/theological background
+
+Sources used for `fonte` excerpts:
+- L. W. King, *The Seven Tablets of Creation*. London, 1902 — Enūma Eliš (Nisannu 4, Kislīmu 4)
+- Thureau-Dangin 1921, DT.109+MNB.1848 ll. 414–450 — King's humiliation ritual (Nisannu 5)
+- R. W. Rogers, *Religion of Babylonia and Assyria*. Eaton & Mains, 1908 — Descent of Ištar (Duʾūzu 27)
+- Jacobsen 1976 — sacred marriage hymn of Inanna (Ulūlu 3)
+- T. Abusch, *The Magical Ceremony Maqlû*. SBL Press, 2016 — Maqlu Tablet I (Abu 28)
+
+Research files:
+- `docs/research/babylon-festivals-review-2026-10-25.md` — consolidated review report
+- `docs/research/extracts/babylon/{cohen,linssen,thureau-dangin,jacobsen}/extract.md` — source extracts
+
+UI features built on this data:
+- **DayGrid** in `BabylonianCalendarInfo.tsx`: days with `dayEvent` show a green dot; tap to expand description + optional `BabylonianFontePanel` (collapsible, 𒀭 DINGIR prefix, lapis-blue palette)
+- **Próximos Festivales modal**: `getNextBabylonianFestivals(monthIndex, day, count)` in `babylonianLoreData.ts` walks `BABYLONIAN_MONTH_LORE` day by day and returns the next N upcoming events (approximates 30 days/month for distance)
+
+**Rules for editing day events:**
+1. **`fonte` is sourced, not invented.** Only add a `BabylonianFonte` if a verbatim cuneiform text passage is directly linked to the rite of that specific day. Cite edition and line numbers.
+2. **Uncertain days must be flagged.** Many month-level rites have no attested day number. Mark them as approximate in `description` — do not silently assign a day.
+3. **Do not conflate city traditions.** Uruk and Babylon often held parallel rites; check Cohen and Linssen separately. Note the city in `description`.
+4. **Minimum font size: `text-xs` (12px)** throughout the Babylonian page. Never use sub-12px classes.
 
 ---
 
