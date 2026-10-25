@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getBabylonianDate, getBabylonianCalendarMeta, BabylonianCalendarMeta } from '../utils/babylonianCalendarUtils';
-import { getBabylonianLore, BabylonianDayEvent } from '../utils/babylonianLoreData';
+import { getBabylonianLore, BabylonianDayEvent, getNextBabylonianFestivals } from '../utils/babylonianLoreData';
 import { generateBabylonianSkyline } from '../utils/babylonianSkylineGenerator';
 import { BabylonianDate } from '../types/babylonia';
 import { WeatherData } from '../types';
@@ -252,7 +252,8 @@ const DayGrid: React.FC<{
   today: number;
   monthLen: number;
   dayEvents?: Record<number, BabylonianDayEvent>;
-}> = ({ today, monthLen, dayEvents }) => {
+  onShowFestivals: () => void;
+}> = ({ today, monthLen, dayEvents, onShowFestivals }) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   const handleTap = (day: number) => {
@@ -395,6 +396,14 @@ const DayGrid: React.FC<{
           </div>
         ))}
       </div>
+
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); onShowFestivals(); }}
+        className="mt-3 w-full py-1.5 text-xs font-serif font-bold uppercase tracking-widest text-blue-400/70 border border-blue-600/30 rounded hover:border-blue-400/50 hover:text-blue-300 transition-all"
+      >
+        𒀭 Ver Próximos Festivales
+      </button>
     </div>
   );
 };
@@ -620,6 +629,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   const [babData, setBabData] = useState<BabylonianDate | null>(null);
   const [meta, setMeta]      = useState<BabylonianCalendarMeta | null>(null);
   const [view, setView]      = useState<ViewMode>('month');
+  const [showFestivals, setShowFestivals] = useState(false);
 
   useEffect(() => {
     const date = currentDate ?? new Date();
@@ -900,6 +910,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 today={babData.day}
                 monthLen={meta.monthLengthDays}
                 dayEvents={lore?.dayEvents}
+                onShowFestivals={() => setShowFestivals(true)}
               />
 
               <div className="border-t border-blue-700/30 pt-3 mt-1">
@@ -942,6 +953,68 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
         <CuneiformBorder id="cun-btm" />
       </div>
+
+      {/* ── Próximos Festivales modal ───────────────────────────────────────── */}
+      {showFestivals && babData && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(6,14,34,0.88)' }}
+          onClick={() => setShowFestivals(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded shadow-2xl overflow-hidden relative cursor-default"
+            style={{ background: '#060e1c', border: '3px solid rgba(96,165,250,0.35)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="p-5 border-b text-center" style={{ borderColor: 'rgba(96,165,250,0.20)', background: 'rgba(96,165,250,0.06)' }}>
+              <div className="text-3xl mb-2">𒀭</div>
+              <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
+                Próximos Festivales
+              </h2>
+              <p className="text-xs uppercase tracking-[0.3em] font-bold mt-1 text-blue-400/60">
+                Calendario Sacro Babilónico
+              </p>
+            </div>
+
+            {/* List */}
+            <div className="p-5 flex flex-col gap-5 max-h-[60vh] overflow-y-auto">
+              {getNextBabylonianFestivals(babData.monthIndex, babData.day, 5).map((f, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="flex flex-col gap-1">
+                      <h4 className="font-serif text-base font-bold text-parchment flex items-center gap-2">
+                        <span>{f.monthIcon}</span>
+                        <span>{f.shortLabel}</span>
+                      </h4>
+                      <span className="text-xs font-bold uppercase tracking-widest text-blue-400/60">
+                        Día {f.day} de {f.monthName}
+                      </span>
+                    </div>
+                    <div className="p-2 rounded text-right shrink-0" style={{ background: 'rgba(96,165,250,0.10)', border: '1px solid rgba(96,165,250,0.25)' }}>
+                      <div className="text-base font-black text-blue-300 leading-none">{f.daysRemaining}</div>
+                      <div className="text-xs text-parchment/40 font-serif">días</div>
+                    </div>
+                  </div>
+                  <p className="font-serif text-xs text-parchment/70 leading-relaxed italic border-l-2 pl-3 py-1"
+                     style={{ borderColor: 'rgba(96,165,250,0.30)' }}>
+                    {f.description.split('(')[0].trim()}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <button
+              className="w-full p-4 border-t font-serif text-xs uppercase tracking-widest font-bold text-blue-400/60 hover:text-blue-300 transition-all"
+              style={{ borderColor: 'rgba(96,165,250,0.20)', background: 'rgba(96,165,250,0.04)' }}
+              onClick={() => setShowFestivals(false)}
+            >
+              Cerrar Calendario Sacro
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
