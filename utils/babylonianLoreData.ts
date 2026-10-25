@@ -27,15 +27,16 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     monthRegent: BABYLONIAN_MONTH_REGENTS[0],
     festivalDeity: 'Marduk',
     festivalDeityGloss: 'rey de los dioses de Babilonia y señor de los destinos',
-    description: 'El inicio del año sagrado — el Akītu de primavera se celebra en Babilonia durante once días. La estatua de Marduk parte del Esagila en gran procesión hacia el Bīt Akitu extramuros; en la cuarta noche los sacerdotes recitan el Enūma Eliš ante el dios. El rey es humillado ante Marduk, entrega su cetro y confiesa sus faltas; el día 8.º recupera su poder soberano para otro año.',
-    festival: 'Akītu (Año Nuevo) — procesión de Marduk al Bīt Akitu; recitación del Enūma Eliš la noche del 4.º día; humillación y reinvestidura del rey ante Marduk el día 8.º.',
+    description: 'El inicio del año sagrado — el Akītu de primavera se celebra en Babilonia durante once días. En la cuarta noche los sacerdotes recitan el Enūma Eliš ante Marduk. El quinto día, el Esagila es purificado al amanecer, Nabû llega desde Borsippa y el rey es humillado ante Bēl: depone su cetro y confiesa sus faltas; Marduk le devuelve la investidura. El día 8.º la gran procesión parte del Esagila hacia el Bīt Akitu extramuros; el día 11.º Marduk retorna y fija los destinos del año en el parak šīmāti.',
+    festival: 'Akītu (Año Nuevo) — recitación del Enūma Eliš la noche del 4.º día; purificación del Esagila, llegada de Nabû y humillación-reinvestidura del rey el día 5.º; gran procesión de Marduk al Bīt Akitu el día 8.º; retorno y fijación de los destinos en el parak šīmāti el día 11.º.',
     zodiacSign: 'Agru',
     icon: '🌿',
     dayEvents: {
-      1:  { shortLabel: 'Akītu comienza', description: 'El Akītu del año nuevo da inicio. La estatua de Marduk abandona el Esagila y parte en procesión hacia el Bīt Akitu extramuros de Babilonia.', type: 'akitu' },
-      4:  { shortLabel: 'Enūma Eliš', description: 'En la noche del cuarto día, los sacerdotes recitan el Enūma Eliš — el poema de la creación — ante Marduk. El rey es humillado: depone su cetro y confiesa sus pecados ante el dios.', type: 'ritual' },
-      8:  { shortLabel: 'Gran procesión', description: 'La gran procesión de Marduk regresa del Bīt Akitu al Esagila. El rey recupera su cetro y es reinvestido de autoridad real para el año venidero.', type: 'procession' },
-      11: { shortLabel: 'Akītu concluye', description: 'El Akītu de once días concluye. Los destinos del año son fijados en la Asamblea de los Dioses en el templo Upuruppuu de Babylon.', type: 'akitu' },
+      1:  { shortLabel: 'Akītu comienza', description: 'El Akītu del año nuevo da inicio con la apertura ritual de las puertas del Esagila (pīt bābi). El sumo sacerdote (urigallu) entra al patio del gran templo; se realizan ofrendas regulares. La festividad de once días queda oficialmente inaugurada. (Çağirgan, Festivals 1; AB 244 rev. 30 — Linssen pp. 79, 90)', type: 'akitu' },
+      4:  { shortLabel: 'Enūma Eliš', description: 'En la noche del cuarto día, los sacerdotes recitan el Enūma Eliš — el poema de la creación — ante Marduk. El épico narra la victoria de Marduk sobre Tiamat y su ascenso a rey de los dioses. (T-D, DT.15 col. VI, líneas 280–284)', type: 'ritual' },
+      5:  { shortLabel: 'Humillación del rey', description: 'Cuatro bēru antes del amanecer el urigallu purifica el Esagila; un carnero blanco (immeru peṣû) es decapitado y su cuerpo arrojado al Éufrates. Nabû llega desde el Ezida de Borsippa. El urigallu retira el cetro (ḫaṭṭu), el círculo dorado (manšaltu) y la espada del rey; le golpea la mejilla; el rey se arrodilla y confiesa su inocencia ante Bēl; el sacerdote le asegura el apoyo divino y le devuelve las insignias. Marduk y Nabû se reúnen en el santuario Upšukkannakku. (T-D, DT.109 + MNB.1848, líneas 414–450, pp. 144–145; Linssen RAcc. pp. 81–82)', type: 'ritual' },
+      8:  { shortLabel: 'Gran procesión', description: 'La gran procesión de Marduk parte del Esagila en siete etapas solemnes: del santuario entre los cortinajes → al trono estelar → al parak šīmāti → a la calle procesional → a la barca → al Bīt Akitu extramuros de Babilonia. El rey encabeza el cortejo. (T-D p. 147; Linssen pp. 83–85, SBH VIII; diario astronómico no. −204)', type: 'procession' },
+      11: { shortLabel: 'Akītu concluye', description: 'Marduk retorna triunfalmente al Esagila desde el Bīt Akitu. Al pasar por el parak šīmāti (Santuario de los Destinos), Marduk fija los destinos del año venidero. En el adytu, Marduk desposa a Zarpanītu en la fiesta del ḥadaššūtu. El Akītu de once días concluye. (T-D p. 148, Nbk. n°15, II, 57; Linssen pp. 83–85, SBH VIII)', type: 'akitu' },
     },
   },
   {
@@ -50,8 +51,9 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     dayEvents: {
       2:  { shortLabel: 'Boda de Nabû', description: 'Nabû parte del Ezida de Borsippa hacia Babilonia. Entra en el Ebursaba como desposado y se une a Nana, la diosa: «como la luna brillante ilumina la oscuridad.»', type: 'marriage' },
       6:  { shortLabel: 'Exposición de Nabû', description: 'La estatua de Nabû es llevada al jardín del templo para ser mostrada públicamente a los fieles, resplandeciente tras su boda con Nana.', type: 'procession' },
-      7:  { shortLabel: 'Coronación de Nabû', description: 'Nabû llega al Eanna de Uruk y asume la corona de Anu como rey de los dioses: «porque ha tomado el reinado de Anu… viste la corona de Anu y [la palma de dátiles].»', type: 'ritual' },
+      7:  { shortLabel: 'Coronación de Nabû', description: 'Nabû asume la corona de Anu como rey de los dioses: «porque ha tomado el reinado de Anu… viste la corona de Anu y [la palma de dátiles].» El ritual está atestiguado en Babilonia (Emeurur, jardín de Anu — Linssen, SBH VIII, II, 23ff.) y posiblemente también en el Eanna de Uruk (Cohen p. 311). Ciudad exacta incierta.', type: 'ritual' },
       13: { shortLabel: 'E-ma de Ištar', description: 'En Asiria, el e-ma de Ištar se celebra en el Bīt Akitu. Aššur, Ninlil, Ninurta y Adad asisten al banquete del Akitu. Mesa preparada, ovejas sacrificadas, carne cocida ofrendada.', type: 'festival' },
+      17: { shortLabel: 'Procesión de Nanāja', description: 'La diosa Nanāja (Ištar en su aspecto nupcial) procesiona desde el Euršaba hasta el «jardín de la Montaña» en Babilonia. El rito sigue al matrimonio de Nabû y Ninkali del día 2. (Linssen, SBH VIII, II, 27–28, pp. 68, 90)', type: 'procession' },
     },
   },
   {
@@ -84,7 +86,7 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
       11: { shortLabel: 'Intercambio de diosas', description: 'Las hijas del Esagila (Silluštab y KA.TUN-na) van al Ezida: «En Dumuzi las noches son cortas; para alargar las noches las hijas del Esagila van al Ezida — el Ezida es la Casa de la Noche.» Rito del solsticio de verano.', type: 'ritual' },
       26: { shortLabel: 'Día del grito', description: '«El día 26 es el día del clamor.» En Asiria comienza la exposición ritual de la estatua de Dumuzi; el lamento colectivo se extiende por Nínive, Asur y Cala.', type: 'mourning' },
       27: { shortLabel: 'Dumuzi apresado', description: '«El día 27 es cuando él es capturado.» La estatua de Dumuzi yace sobre un féretro. En Uruk, el sacerdote kalu susurra encantaciones al oído del ídolo de madera para intentar revivirlo.', type: 'mourning' },
-      28: { shortLabel: 'Día de Tammuz', description: '«El día 28 es el Día de Tammuz.» En Arbela la exposición dura hasta el 29. Un texto neoasirio describe: el cadáver del dios «asciende a las regiones superiores» cuando se empapa su imagen en cerveza.', type: 'mourning' },
+      28: { shortLabel: 'Día del Aprisco', description: '«El día 28 es el Día del Aprisco» (*u₄ TÚG.si₄*) — el redil donde los demonios galla capturaron a Dumuzi. En Arbela la exposición del dios sobre el féretro dura hasta el 29. Un texto neoasirio describe que el dios «asciende a las regiones superiores» cuando se empapa su imagen en cerveza. (Cohen p. 316–317, LKU 51 obv. 28–31)', type: 'mourning' },
     },
   },
   {
@@ -98,8 +100,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     zodiacSign: 'Urgula',
     icon: '🔥',
     dayEvents: {
-      1:  { shortLabel: 'Ab/pum se abre', description: 'El montículo sagrado (ab/pum) se abre sobre la puerta del Inframundo. Los difuntos regresan al mundo de los vivos; sus familias encienden antorchas y braseros en los umbrales para guiarlos. Los sacerdotes realizan ofrendas especiales a los Anunnaki.', type: 'ritual' },
-      16: { shortLabel: 'Certámenes de Gilgameš', description: 'Comienzan nueve días de carreras a pie, luchas y certámenes atléticos en honor de Gilgameš. Los competidores representan la búsqueda del héroe en el Bosque de los Cedros: el que vence encarna a Gilgameš triunfante.', type: 'festival' },
+      1:  { shortLabel: 'Ab/pum se abre', description: 'El montículo sagrado (ab/pum) se abre y los difuntos regresan al mundo de los vivos; las familias encienden antorchas y braseros en los umbrales para guiarlos. El día de apertura dentro del mes no está directamente citado en los textos cuneiformes; la asignación al día 1 es una inferencia razonable pero aproximada. (Cohen pp. 319–321)', type: 'ritual' },
+      16: { shortLabel: 'Certámenes de Gilgameš', description: 'Durante nueve días se celebran carreras a pie, luchas y certámenes atléticos en honor de Gilgameš «en cada barrio de la ciudad» (Astrolabio B). El día de inicio no está explícitamente citado; el día 16 es aproximado. (Cohen p. 319, Astrolabio B)', type: 'festival' },
       28: { shortLabel: 'Maqlu — exorcismo', description: 'La noche del día 28, el exorcista (āšipu) recita el ciclo ritual completo del Maqlu: nueve tablillas de conjuros para expulsar a las brujas que regresan del Sheol junto a los muertos. Se queman figuras de barro que representan a las brujas.', type: 'ritual' },
     },
   },
@@ -109,13 +111,13 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     monthRegent: BABYLONIAN_MONTH_REGENTS[5],
     festivalDeity: 'Ištar',
     festivalDeityGloss: 'señora del amor, la guerra y el planeta Venus',
-    description: '«La obra de las diosas» (gipir Ištarāte) — las estatuas de las diosas son llevadas al río sagrado para su lustración y purificación anual. En todo el país los templos celebran ritos de consagración. El día 3, Nabû abandona su morada y las puertas del Esagila se abren para Bēl y Nabû; en Uruk se celebra un matrimonio sagrado entre Anu y Antu. El día 17, el Akītu de Ištar de Arbela se celebra en Milkiya.',
-    festival: '«Obra de las diosas» — lustración de estatuas divinas en el río sagrado; asamblea de los dioses en el Eturnunna el día 3.º; matrimonio sagrado de Anu y Antu en Uruk; Akītu de Ištar de Arbela el día 17.º.',
+    description: '«La obra de las diosas» (gipir Ištarāte) — las estatuas de las diosas son llevadas al río sagrado para su lustración y purificación anual. En todo el país los templos celebran ritos de consagración. El día 3, en el Eanna de Uruk, Ištar celebra su matrimonio sagrado (*ḥadaššūtu*); también se realizan ceremonias de vestimenta para Anu. «Todo el mes de Ulūlu está consagrado a Ištar» (K 3753, I, 9). El día 17, el Akītu de Ištar de Arbela se celebra en Milkiya.',
+    festival: '«Obra de las diosas» — lustración de estatuas divinas en el río sagrado; matrimonio sagrado de Ištar (*ḥadaššūtu*) en el Eanna de Uruk el día 3.º; Akītu de Ištar de Arbela el día 17.º.',
     zodiacSign: 'Širu',
     icon: '💫',
     dayEvents: {
-      1:  { shortLabel: 'Lustración de las diosas', description: '«La obra de las diosas» (gipir Ištarāte) da inicio. Las estatuas de las grandes diosas son transportadas en procesión hasta el río sagrado, donde son bañadas y purificadas con agua corriente antes de retornar a sus templos consagradas para el nuevo año.', type: 'procession' },
-      3:  { shortLabel: 'Matrimonio de Anu y Antu', description: 'Nabû abandona su morada y las puertas del Esagila se abren para Bēl y Nabû. En el Eanna de Uruk, Anu y Antu celebran su matrimonio sagrado en el Eturnunna: las estatuas comparten el lecho divino mientras los sacerdotes recitan himnos nupciales.', type: 'marriage' },
+      1:  { shortLabel: 'Lustración de las diosas', description: '«La obra de las diosas» (gipir Ištarāte) da inicio. Las estatuas de las grandes diosas son transportadas en procesión hasta el río sagrado para su purificación anual. Cohen (p. 323) señala que el primer día datado es el 2; el día 1 como inicio es una inferencia aproximada no directamente citada.', type: 'procession' },
+      3:  { shortLabel: 'Matrimonio sagrado de Ištar', description: 'En el Eanna de Uruk, Ištar celebra su matrimonio sagrado (*ḥadaššūtu*): «todo el mes de Ulūlu está consagrado a Ištar» (K 3753, I, 9). También se realizan ritos de vestimenta para Anu. Las estatuas comparten el lecho divino mientras los sacerdotes recitan himnos nupciales. (Cohen pp. 323–324, K 3753; Linssen pp. 70–71)', type: 'marriage' },
       17: { shortLabel: 'Akītu de Ištar de Arbela', description: 'El Akītu de Ištar de Arbela se celebra en el santuario de Milkiya, extramuros de la ciudad. El rey acompaña la procesión de la diosa; las profetisas (raggintu) de Arbela proclaman oráculos en nombre de Ištar la guerrera.', type: 'akitu' },
     },
   },
@@ -131,7 +133,7 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     icon: '⚖️',
     dayEvents: {
       3:  { shortLabel: 'Preparación de Bēl', description: 'Los sacerdotes visten a la estatua de Bēl-Marduk con sus ropas de festival. El Esagila es decorado con guirnaldas de lana teñida y ofrendas de oro. Se preparan las barcas procesionales para transportar a los dioses al Bīt Akitu.', type: 'ritual' },
-      8:  { shortLabel: 'Segundo Akītu', description: 'La gran puerta del Esagila se abre. Los cantores recitan el Enūma Eliš ante Marduk por segunda vez en el año. La procesión de Bēl parte hacia el Bīt Akitu otoñal; en Uruk, Anu reside siete días en el Bīt Akitu antes de su retorno triunfal.', type: 'akitu' },
+      8:  { shortLabel: 'Segundo Akītu', description: 'La gran puerta del Esagila se abre. La procesión de Bēl parte hacia el Bīt Akitu otoñal; en Uruk, Anu reside siete días en el Bīt Akitu antes de su retorno triunfal. Los cantores recitan el Enūma Eliš ante Marduk (atestiguado a través de una tablilla Lambert no publicada, citada por Cohen p. 328; incierto para Tašrītu específicamente). (Cohen pp. 328–329; Linssen pp. 78, 90, BM 32206+)', type: 'akitu' },
       27: { shortLabel: 'Festival del Montículo', description: 'En Nippur, el festival del Montículo Sagrado (dūru) reúne a las comunidades para realizar ofrendas a los antepasados de Enlil. Los difuntos de linajes nobles son honrados con banquetes funerarios; sus nombres son recitados ante el dios.', type: 'festival' },
     },
   },
@@ -146,8 +148,9 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     zodiacSign: 'Zuqaqīpu',
     icon: '🌱',
     dayEvents: {
-      1:  { shortLabel: 'Akītu de la siembra', description: 'El Akītu de la estación de la siembra (a-ki-tu ur) da inicio. Los agricultores llevan el arado al campo en procesión; sacerdotes de Adad bendicen los bueyes y los canales de riego. El Inspector de los Canales del Cielo — el propio Adad — es invocado para traer lluvias fértiles.', type: 'akitu' },
-      18: { shortLabel: 'Disputa Azada–Arado', description: 'Los cantores recitan la «Disputa de la Azada y el Arado» en sumerio ante los dioses. El debate literario entre los dos instrumentos decide cuál es más valioso para la civilización. Al concluir, el arado es descolgado del campo y guardado en el granero hasta el año siguiente.', type: 'ritual' },
+      1:  { shortLabel: 'Akītu de la siembra', description: 'El Akītu de la estación de la siembra (a-ki-tu ur) se celebra este mes. Los sacerdotes de Adad bendicen los bueyes y los canales de riego. El día 1 como apertura es una inferencia; los textos confirman el festival a nivel de mes pero no asignan un día específico de inicio. (Cohen p. 331, Astrolabio B)', type: 'akitu' },
+      5:  { shortLabel: 'Procesión de Mīšaru', description: 'El dios de la justicia Mīšaru procesiona desde el Eḫenunna (templo de Adad) hacia el templo de Adad principal en Uruk y Babilonia. La ceremonia evoca el papel de la justicia divina en la apertura de la temporada de siembra. (Cohen p. 332, BM 121206 vii; Linssen, TU 39 rev. 26; K 3753 pp. 68, 89)', type: 'procession' },
+      18: { shortLabel: 'Brasero de Šamaš', description: 'Festival del brasero (*kinūnu*) de Šamaš en Babilonia: ofrendas en varios templos y procesión de los Hijos de Bēl (*mārī Bēl*) hasta el Enamḫe, templo de Adad en Babilonia. La «Disputa de la Azada y el Arado» es una tradición del mes entero (Astrolabio B), no un rito específico del día 18. (Linssen, BRM 4,25; SBH VII, pp. 64, 69, 90)', type: 'festival' },
     },
   },
   {
@@ -163,6 +166,7 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     dayEvents: {
       1:  { shortLabel: 'Kinunu — día 1', description: 'Primer día del Festival del Brasero (Kinunu) en el Eanna de Uruk. Al anochecer se encienden braseros en cada capilla del complejo; los sacerdotes alimentan los fuegos con maderas aromáticas. El humo perfumado asciende a los dioses del firmamento.', type: 'festival' },
       2:  { shortLabel: 'Kinunu — día 2', description: 'Segundo día del Kinunu. Las carreras a pie rodean el perímetro del templo rememorando la persecución del pájaro Anzû por Ninurta. Los victoriosos reciben guirnaldas de lana teñida en los colores del dios.', type: 'festival' },
+      4:  { shortLabel: 'Rito de Marduk y Zarpanītu', description: 'En Babilonia, ceremonia solemne para Marduk y Zarpanītu en el Esagila: un esclavo montado en toro y el visir de Ea, Usmû, procesionan desde la celda del Esagila al templo del Akitu y regresan el mismo día. Los cantores (nāru) recitan el Enūma Eliš ante Bēl; se ofrendan lamentaciones y se presentan los kettle-drums de Bēl y Bēltīja. También llegan por barca ramas de palmera (libbi gišimmari) al carpa junto al templo de Ea. (Linssen, BM 32206+; SBH VII; BRM 4,25; BM 78076, pp. 69, 81, 91, 118)', type: 'ritual' },
       6:  { shortLabel: 'Kinunu — día 6', description: 'Día 6 del Kinunu: los braseros se renuevan con aceite fresco. Se realizan ofrendas nocturnas adicionales a Nergal, señor del Inframundo, para que proteja a los vivos durante el mes más frío.', type: 'festival' },
       7:  { shortLabel: 'Kinunu — día 7', description: 'Día 7 del Kinunu. El sacerdote šangû inspecciona personalmente los braseros de los grandes dioses del Eanna. Se ofrecen dátiles, cerveza y carne asada a Nergal y Ereshkigal en representación de los dioses del mundo inferior.', type: 'festival' },
       14: { shortLabel: 'Kinunu — día 14', description: 'Día 14 del Kinunu. Los braseros arden toda la noche; guardias del templo los vigilan. Las listas de préstamos y contratos del año son revisadas ante los dioses para su sanción divina.', type: 'festival' },
@@ -181,7 +185,8 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     icon: '❄️',
     dayEvents: {
       3:  { shortLabel: 'Intercambio de diosas', description: 'Las hijas del Esagila van al Ezida y viceversa en el rito que «alarga el día» tras el solsticio de invierno. Este espejo del rito de Duʾūzu (que acortaba las noches) restaura el equilibrio cósmico: «el Ezida es la Casa de la Noche — las diosas traen su luz para alargar el día.»', type: 'ritual' },
-      16: { shortLabel: 'Akītu de Ištar', description: 'El Akītu de Ištar ilumina el Emagmaš de Uruk. «El rey es vestido de ropas puras»: investido nuevamente ante la diosa guerrera. Los adivinos (bārû) examinan los presagios celestes para el año venidero en el Festival Nabru; sus tablillas son depositadas en el archivo del Esagila.', type: 'akitu' },
+      16: { shortLabel: 'Vigilia nocturna de Anu', description: 'En el templo Rēš de Uruk, vigilia nocturna ante Anu y Antu: el cetro y el zapato-lámpara descienden al Gran Patio; Papsukkal, Nusku y Usmû se sientan en el atrio; se porta la antorcha ritual (gizillû) por los templos y se encienden pilas de leña en las puertas. La vigilia dura toda la noche. (Linssen, TU 41, pp. 59, 68, 89, 122–124). Nota: en Asiria, el «despertar» de Ištar en el Emagmaš de Asur es un festival distinto atestiguado en Cohen/Livingstone (ABRT 1 7ff.); el Emagmaš es asiriio, no está en Uruk.', type: 'ritual' },
+      17: { shortLabel: 'Fin de la vigilia de Anu', description: 'Al amanecer concluye la vigilia nocturna de Anu en el Rēš de Uruk: la ceremonia šalām bīti («buen funcionamiento del templo») se realiza en las puertas y la vigilia queda formalmente clausurada con la apertura de las puertas al día. (Linssen, TU 41, pp. 122–124)', type: 'ritual' },
     },
   },
   {
@@ -190,12 +195,12 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     monthRegent: BABYLONIAN_MONTH_REGENTS[10],
     festivalDeity: 'Nabû',
     description: '«En Šabāṭu es el matrimonio de los dioses» — Bēl desposa a Beltiya; Nabû desposa a Tašmētu. Este mes abre el tramo más intenso del año litúrgico: el período Šabāṭu–Addaru–Nisannu. Desde el día 16, durante ocho días se recitan ante Aššur en el Bīt Dagan grandes lamentaciones sumerias, himnos y plegarias luilla; los peregrinos acuden desde todo el reino.',
-    festival: 'Matrimonio sagrado de Bēl–Beltiya y Nabû–Tašmētu; ocho días de lamentaciones y cantos ante Aššur en el Bīt Dagan desde el día 16.º; «mes del banquete de Enlil» en Nippur.',
+    festival: 'Matrimonio sagrado de Bēl–Beltiya y Nabû–Tašmētu; lamentaciones y cantos ante Aššur en el Bīt Dagan desde el día 16.º hasta el día 10 de Addaru; «mes del banquete de Enlil» en Nippur.',
     zodiacSign: 'Gula',
     icon: '💍',
     dayEvents: {
-      7:  { shortLabel: 'Matrimonio sagrado', description: 'Bēl desposa a Beltiya, su esposa divina; simultáneamente Nabû desposa a Tašmētu en el Ezida de Borsippa. El rito del hieros gamos une a los dioses del panteón en alianza: las estatuas son colocadas juntas en el lecho sagrado del adytu mientras los cantores recitan himnos nupciales.', type: 'marriage' },
-      16: { shortLabel: 'Lamentaciones ante Aššur', description: 'Comienzan ocho días de lamentaciones sumerias (ershemma) en el Bīt Dagan de Asur. Los cantores (kalû) recitan himnos luilla mientras los peregrinos de todo el reino velan ante la imagen de Aššur. Las plegarias invocan la protección del dios para el reino ante las incertidumbres del año por venir.', type: 'mourning' },
+      7:  { shortLabel: 'Matrimonio sagrado', description: 'Bēl desposa a Beltiya; Nabû desposa a Tašmētu en el Ezida de Borsippa. El rito del hieros gamos une a los dioses del panteón. Las estatuas son colocadas juntas en el lecho sagrado mientras los cantores recitan himnos nupciales. El matrimonio en este mes está atestiguado (Cohen p. 337, carta de Nergal-šarrani a Esarhadón, ABL 65); el día 7 específico no tiene respaldo textual directo — es aproximado.', type: 'marriage' },
+      16: { shortLabel: 'Lamentaciones ante Aššur', description: 'Comienzan días de lamentaciones sumerias (ershemma) en el Bīt Dagan de Asur, que continúan hasta el día 10 de Addaru. Los cantores (kalû) recitan himnos luilla mientras los peregrinos velan ante la imagen de Aššur. (Cohen pp. 338–341, Van Driel, A 125 = Aššur 124ff.; BM 121206 vii)', type: 'mourning' },
     },
   },
   {
@@ -211,6 +216,7 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
     icon: '🌾',
     dayEvents: {
       6:  { shortLabel: 'Gran procesión de los dioses', description: 'Las estatuas de todos los grandes dioses del panteón parten en solemne procesión por las calles de Babilonia. El desfile sirve como despedida simbólica del año que cierra: los dioses «revisan» su ciudad antes del Akītu de primavera.', type: 'procession' },
+      8:  { shortLabel: 'Ceremonia de Antu', description: 'Ceremonia especial para Antu (consorte de Anu) en Uruk. El rito está atestiguado mediante la venta de un prebendario datada el 8 de Addaru (McEwan, Priest and Temple, 171; K.3753 ii; OECT 9, 40, 42, 44–45). (Linssen pp. 62, 89)', type: 'ritual' },
       17: { shortLabel: 'Festival garratu', description: 'El festival garratu honra la cosecha antes del nuevo año. Se realizan ofrendas masivas de cebada, dátiles y cerveza a Ea, señor de la sabiduría y las aguas dulces. Los astrónomos del Esagila presentan sus cálculos al rey: si el próximo Nisannu llega antes del equinoccio de primavera, se proclama el mes intercalar Addaru II.', type: 'festival' },
       18: { shortLabel: 'Garratu — segundo día', description: 'Segundo día del garratu: banquetes en los patios de los grandes templos; los granjeros traen ofrendas de las primicias de la cosecha. En las tablillas astronómicas, los escribas registran la posición de la luna y el sol para confirmar o descartar el mes intercalar.', type: 'astronomy' },
     },
