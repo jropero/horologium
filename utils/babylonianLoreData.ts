@@ -225,3 +225,34 @@ export const BABYLONIAN_MONTH_LORE: BabylonianLore[] = [
 
 export const getBabylonianLore = (monthName: string): BabylonianLore | undefined =>
   BABYLONIAN_MONTH_LORE.find(l => l.monthName === monthName || monthName.startsWith(l.monthName));
+
+export interface BabylonianUpcomingFestival {
+  shortLabel: string;
+  description: string;
+  type: BabylonianDayEvent['type'];
+  monthName: string;
+  monthIcon: string;
+  day: number;
+  daysRemaining: number;
+}
+
+export function getNextBabylonianFestivals(monthIndex: number, day: number, count = 5): BabylonianUpcomingFestival[] {
+  const results: BabylonianUpcomingFestival[] = [];
+  let m = monthIndex;
+  let d = day + 1;
+  for (let i = 0; i < 370 && results.length < count; i++) {
+    if (d > 30) { d = 1; m = (m + 1) % 12; }
+    const lore = BABYLONIAN_MONTH_LORE[m];
+    if (lore.dayEvents?.[d]) {
+      results.push({
+        ...lore.dayEvents[d],
+        monthName: lore.monthName,
+        monthIcon: lore.icon,
+        day: d,
+        daysRemaining: i + 1,
+      });
+    }
+    d++;
+  }
+  return results;
+}
