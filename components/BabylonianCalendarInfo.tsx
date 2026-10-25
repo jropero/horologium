@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { getBabylonianDate, getBabylonianCalendarMeta, BabylonianCalendarMeta } from '../utils/babylonianCalendarUtils';
-import { getBabylonianLore, BabylonianDayEvent, getNextBabylonianFestivals } from '../utils/babylonianLoreData';
+import { getBabylonianLore, BabylonianDayEvent, BabylonianFonte, getNextBabylonianFestivals } from '../utils/babylonianLoreData';
 import { generateBabylonianSkyline } from '../utils/babylonianSkylineGenerator';
 import { BabylonianDate } from '../types/babylonia';
 import { WeatherData } from '../types';
@@ -60,6 +60,33 @@ const TinyMoon: React.FC<{ phase: number; size?: number; dim?: boolean }> = ({
       <circle cx={cx} cy={cy} r={r} fill={darkColor} />
       <path d={d} fill={litColor} />
     </svg>
+  );
+};
+
+// ─── Primary text quote (collapsible) ────────────────────────────────────────
+const BabylonianFontePanel: React.FC<{ fonte: BabylonianFonte }> = ({ fonte }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-2 border-t" style={{ borderColor: 'rgba(96,165,250,0.20)' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between pt-2 text-left gap-2"
+      >
+        <span className="text-xs font-bold uppercase tracking-widest text-blue-400/70">
+          𒀭 {fonte.title}
+        </span>
+        <span className="text-blue-500/60 text-xs shrink-0">{open ? '▴' : '▾'}</span>
+      </button>
+      {open && (
+        <div className="mt-2 pb-1">
+          <p className="font-serif text-xs text-parchment/85 italic leading-relaxed border-l-2 pl-3 py-1"
+             style={{ borderColor: 'rgba(96,165,250,0.35)' }}>
+            {fonte.excerpt}
+          </p>
+          <p className="text-xs text-blue-400/40 mt-1.5 tracking-wider uppercase leading-relaxed">{fonte.source}</p>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -371,6 +398,7 @@ const DayGrid: React.FC<{
                   {selEvent.shortLabel}
                 </span>
                 <p className="text-xs font-serif text-blue-100/90 mt-0.5 leading-snug">{selEvent.description}</p>
+                {selEvent.fonte && <BabylonianFontePanel fonte={selEvent.fonte} />}
               </div>
             )}
           </div>
@@ -1000,6 +1028,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                      style={{ borderColor: 'rgba(96,165,250,0.30)' }}>
                     {f.description.split('(')[0].trim()}
                   </p>
+                  {f.fonte && <BabylonianFontePanel fonte={f.fonte} />}
                 </div>
               ))}
             </div>
