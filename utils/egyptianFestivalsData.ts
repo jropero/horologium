@@ -31,11 +31,21 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     description: "I Akhet 19. El festival que daba nombre al primer mes en el calendario grecorromano, atestiguado en Medinet Habu bajo Ramsés III.",
     icon: "Feather"
   },
+  "0-20": {
+    name: "Fiesta de la Embriaguez de Hathor",
+    description: "I Akhet 20. 'Fiesta de la Embriaguez de la Señora de Dendera' (Dendera Cal. 1 y 2). La barca de Hathor es remada; procesión de la diosa al techo del templo y unión con el disco solar. Conectada con el mito en que Hathor/Sejmet fue apaciguada con cerveza y música para detener la destrucción de la humanidad. Total: 5 días de fiesta (Bleeker p. 244). Atestiguada en el Reino Medio (papiros de Illahun) y la época ptolemaica (Dendera, Edfu).",
+    icon: "Music"
+  },
+  "0-22": {
+    name: "Gran Procesión de Osiris",
+    description: "I Akhet 22. Una de las atestaciones más sólidas del mes: confirmada en el Reino Medio (papiros de Illahun) y en el Reino Nuevo (Medinet Habu, entrada 705). La estatua de Osiris era llevada en solemne procesión. Deidad principal: Osiris / Amón-Re.",
+    icon: "Crown"
+  },
 
   // II Akhet (Mes 1)
-  "1-15": {
-    name: "Inicio de la Fiesta de Opet",
-    description: "II Akhet 15. En la época de Thutmose III, la fiesta de Amón coincidía con Opet y comenzaba el día 15, aunque luego se movió al día 19 bajo Ramsés II.",
+  "1-19": {
+    name: "Fiesta de Opet (Inicio)",
+    description: "II Akhet 19. Primera jornada del gran festival de Amón en Opet, según el Calendario de Festividades de Medinet Habu bajo Ramsés III (Lista 29, entrada 743). Los tres barcos divinos de Amón, Mut y Jonsu procesionan desde Karnak hasta el templo de Luxor. Duración: 24 días (hasta III Akhet 12) bajo Ramsés III; 11 días bajo Tutmosis III. En el santuario interior de Luxor se renovaba la legitimidad divina del faraón. Bleeker interpreta el rito central como un posible *hieros gamos* entre Amón y su harén divino (p. 187). La víspera del festival (II Akhet 18) está atestiguada en MH 725.",
     icon: "Ship"
   },
 
@@ -52,10 +62,40 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     description: "IV Akhet 1. Atestiguado en la lista de cantantes de Illahun y Medinet Habu. También atestiguado como inicio del festival de Khoiak/Neheb-Kau.",
     icon: "Crown"
   },
-  "3-4": {
-    name: "Masticación de Cebollas para Bastet",
-    description: "IV Akhet 4. Festividad específica listada en el Calendario de Festivales de Medinet Habu (Lista 62).",
+  "3-20": {
+    name: "Purificación de la Enéada (Inicio del Ciclo de Sokar)",
+    description: "IV Akhet 20. Inicio del ciclo de 10 días de Sokar. 'Purificación de la Enéada' (Medinet Habu, entrada 932). Deidad principal: Ptah-Sokar-Osiris con su Enéada. Fuente: El-Sabban (2000), Ch. 5; Bleeker (1967), p. 70.",
+    icon: "Droplets"
+  },
+  "3-21": {
+    name: "Apertura de la Ventana del Santuario de Sokar",
+    description: "IV Akhet 21. Día de la apertura de la ventana en el santuario de Sokar. Primer rito formal del ciclo de 10 días que culmina con el levantamiento del pilar Djed. Fuente: Calendario de Festividades de Ramsés III, Medinet Habu (JEOL 7, pp. 336–337); Bleeker (1967).",
     icon: "Eye"
+  },
+  "3-22": {
+    name: "Rotura de la Tierra (ḫbf tꜣ)",
+    description: "IV Akhet 22. Día del festival de 'Rotura de la Tierra' (*ḫbf tꜣ*). El rey demarca con un pico el terreno sagrado; rito conectado con la fundación de templos y el inicio de la labranza. El Libro de los Muertos (1:21–22) alude a este acto junto al emplazamiento de la barca de Sokar sobre su trineo. Fuente: Calendario de Ramsés III (Medinet Habu); texto de Khoiak de Dendera (ed. Loret); Bleeker (1967).",
+    icon: "Pickaxe"
+  },
+  "3-23": {
+    name: "Procesión en el Santuario de Sokar",
+    description: "IV Akhet 23. Día de la procesión interna en el santuario de Sokar. Tercer rito del ciclo decenario; preparaciones para la gran procesión de la barca *ḥnw* del día 26. Fuente: Calendario de Ramsés III, Medinet Habu (JEOL 7, pp. 336–337); Bleeker (1967).",
+    icon: "Anchor"
+  },
+  "3-24": {
+    name: "Colocación de Sokar 'entre los suyos'",
+    description: "IV Akhet 24. Día de la colocación de Sokar 'en medio de los difuntos' (*m-qꜣb*). Cuarto rito del ciclo: el dios es presentado ante los muertos a quienes protege como divinidad ctónica. Fuente: Calendario de Ramsés III, Medinet Habu (JEOL 7, pp. 336–337); Bleeker (1967).",
+    icon: "Crown"
+  },
+  "3-25": {
+    name: "Festival Nḏrj.t — Guirnaldas de Cebollas",
+    description: "IV Akhet 25. El festival *Nḏrj.t*: se trenzan guirnaldas de cebollas que se portarán en la procesión del día 26. La cebolla era símbolo de fertilidad (Kees); su conexión con Sokar sugiere que el dios era invocado como promotor de la fecundidad de la tierra. Distinto de la 'Masticación de Cebollas para Bastet' (IV Peret 4). Fuente: Bleeker (1967), p. 73; Medinet Habu.",
+    icon: "Leaf"
+  },
+  "3-26": {
+    name: "Fiesta de Sokar (Día Principal)",
+    description: "IV Akhet 26. Festival principal del ciclo de Sokar. La sagrada barca *ḥnw* — la más antigua de las barcas divinas — es llevada en procesión solemne: el faraón y ocho pares de sacerdotes, príncipes y cortesanos la siguen tomando una cuerda; se porta el emblema de Nefertem y el halcón de Horus en un alto estandarte. En Edfu (ptolemaico) se inmola al asno salvaje de Seth y se da muerte a Apofis. Según Bleeker, la fecha coincidía con el solsticio de invierno en el calendario ptolemaico (p. 70), aunque esto es una coincidencia calendárica, no el origen del festival. Atestiguado desde el Reino Medio (Illahun) hasta la época ptolemaica (Esna, Edfu, Dendera). Fuentes: Bleeker (1967); El-Sabban (2000), MH Lista 47, entrada 1025.",
+    icon: "Anchor"
   },
   "3-30": {
     name: "Levantamiento del Pilar Djed",
@@ -70,8 +110,8 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     icon: "Sprout"
   },
   "4-30": {
-    name: "Periplous (Navegación) de Mut",
-    description: "I Peret 30. Ostracon BM 29560 y Papiro Turín 68. La diosa Mut era llevada en navegación sagrada.",
+    name: "Fiesta de Hathor, Señora de Agny",
+    description: "I Peret 30. Atestiguado en el calendario de Esna (época ptolemaica): 'Fiesta de Hathor, Señora de Agny'. Atestiguación limitada a un único templo. Fuente: El-Sabban (2000), Ch. 6 (Esna).",
     icon: "Sailboat"
   },
 
@@ -80,6 +120,11 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     name: "Navegación de Anubis",
     description: "II Peret 1. Listado en el Calendario de Medinet Habu (Lista 59) como el Festival de la Navegación del dios Anubis.",
     icon: "Ship"
+  },
+  "5-21": {
+    name: "Fiesta de la Victoria",
+    description: "II Peret 21. 'Fiesta de la Victoria en todo el país' (Edfu Cal. 3: Hathor; Edfu Cal. 2: Horus; Esna: Heqa; Dendera Cal. 2). La diosa Hathor navega hacia Pakhet. En Edfu el día lleva el nombre del mes ('Mekhir'). Comienza la siembra de los jardines divinos. La convergencia de cuatro templos ptolemaicos indica que para la época ptolemaica esta festividad tenía alcance panegipció. Fuente: El-Sabban (2000), Ch. 6.",
+    icon: "Star"
   },
 
   // III Peret (Mes 6)
@@ -94,6 +139,11 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     name: "Pequeña Quema (Rokeh Nedjes)",
     description: "IV Peret 1. Papiro de Illahun 10069 (Reino Medio). Marca el octavo mes del calendario civil de entonces.",
     icon: "Flame"
+  },
+  "7-4": {
+    name: "Masticación de Cebollas para Bastet",
+    description: "IV Peret 4. Atestiguado en el Calendario de Festividades de Medinet Habu bajo Ramsés III (entrada 1373). La deidad principal es Amón-Re con su Enéada. Distinto del festival *Nḏrj.t* de guirnaldas de cebollas en IV Akhet 25, que pertenece al ciclo de Sokar. Fuente: El-Sabban (2000), Ch. 5.",
+    icon: "Eye"
   },
   "7-25": {
     name: "Fiesta Weresh",
@@ -123,18 +173,6 @@ export const CIVIL_FESTIVALS: Record<string, Festival> = {
     name: "Cruce del Río (Hermosa Fiesta del Valle)",
     description: "II Shemu 25. Documentado en Ostracon Cairo CG 25538 bajo Seti II. Amón cruzaba el río hacia la orilla occidental.",
     icon: "Ship"
-  },
-
-  // IV Shemu (Mes 11)
-  "11-9": {
-    name: "Unión con el Disco Solar",
-    description: "IV Shemu 9. Ceremonia en Esna (época grecorromana) conectada teológicamente con Wep Renpet y el dios Re-Horakhty.",
-    icon: "Sun"
-  },
-  "11-24": {
-    name: "Fiesta de Ptah-al-sur-de-su-muro",
-    description: "IV Shemu 24. Documentado en un grafito de Saqqara en el año 34 de Ramsés II. Borchardt y Casperson demostraron que coincidía con una luna llena.",
-    icon: "Hammer"
   },
 
   // Días Epagómenos (Mes -1)
@@ -217,11 +255,12 @@ export function getFestivalsForDate(monthIndex: number, dayOfMonth: number, luna
   // --- RANGOS ESPECIALES ATESTIGUADOS EN EL LIBRO ---
 
   // Mes 1 (II Akhet), Días 16 al 30 (y hasta III Akhet 12): Continuación del Festival de Opet
-  // El día 15 ya tiene entrada fija en CIVIL_FESTIVALS; este rango evita duplicación.
-  if ((monthIndex === 1 && dayOfMonth >= 16) || (monthIndex === 2 && dayOfMonth <= 12)) {
+  // El día 19 tiene entrada fija en CIVIL_FESTIVALS como inicio oficial (MH Lista 29, entrada 743).
+  // Este rango cubre los días de duración del festival sin duplicar la entrada inaugural.
+  if ((monthIndex === 1 && dayOfMonth >= 16 && dayOfMonth !== 19) || (monthIndex === 2 && dayOfMonth <= 12)) {
     civilFestivals.push({
       name: "Días del Festival de Opet",
-      description: "Bajo Thutmose III comenzaba el día 15, pero bajo Ramsés II se desplazó al 19 y duraba casi un mes (hasta III Akhet 12).",
+      description: "El festival de Opet duraba 24 días bajo Ramsés III (II Akhet 19 – III Akhet 12). Bajo Tutmosis III, 11 días.",
       icon: "Ship"
     });
   }
