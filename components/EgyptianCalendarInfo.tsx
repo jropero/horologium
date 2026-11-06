@@ -953,15 +953,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
             {/* Layers: star map (z-0, owns horizontal drag) → skyline → weather → text.
               Everything above the star map is pointer-events:none so drags reach it. */}
             {sunTimes ? (
-              <EgyptianStarMap
-                date={currentDate}
-                lat={lat!}
-                lng={lng!}
-                isDay={!isNight}
-                sunrise={sunTimes.sunrise}
-                sunset={sunTimes.sunset}
-                horizon={0.9}
-              />
+              <EgyptianStarMap date={currentDate} lat={lat!} lng={lng!} horizon={0.9} />
             ) : (
               <div
                 className="absolute inset-0"
