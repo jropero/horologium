@@ -232,6 +232,8 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
     );
   };
 
+  const statusLabel = isTimeTraveling ? 'Status Temporis' : 'Status Praesens';
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
@@ -309,11 +311,13 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
               )}
             </div>
             <div className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar-thin">
-              {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
               {LOCATIONS.map(loc => {
                 const active = isLocActive(loc);
                 const Icon = loc.icon;
                 const isGps = loc.id === 'gps';
+                const inactiveLocClass = isGps
+                  ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20'
+                  : 'bg-gold-leaf/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:bg-gold-leaf/10';
 
                 return (
                   <button
@@ -326,9 +330,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                                             ${
                                               active
                                                 ? 'bg-gold-leaf text-ink border-gold-leaf shadow-lg'
-                                                : isGps
-                                                ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20'
-                                                : 'bg-gold-leaf/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:bg-gold-leaf/10'
+                                                : inactiveLocClass
                                             }
                                             ${isLocLoading && isGps ? 'animate-pulse' : ''}
                                         `}
@@ -352,10 +354,8 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                       align="start"
                       glossClassName="tracking-normal"
                     />
-                  ) : isTimeTraveling ? (
-                    'Status Temporis'
                   ) : (
-                    'Status Praesens'
+                    statusLabel
                   )}
                 </span>
                 <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">

@@ -28,19 +28,14 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     windSpeed,
   } = weather.current;
 
+  const fallbackDesc =
+    civilization === 'aegyptus' && egyptianDescription ? egyptianDescription : description;
   const displayDesc =
-    civilization === 'hellas' && greekDescription
-      ? greekDescription
-      : civilization === 'aegyptus' && egyptianDescription
-      ? egyptianDescription
-      : description;
+    civilization === 'hellas' && greekDescription ? greekDescription : fallbackDesc;
 
-  const displayWind =
-    civilization === 'hellas' && greekWindName
-      ? greekWindName
-      : civilization === 'aegyptus' && egyptianWindName
-      ? egyptianWindName
-      : latinWindName;
+  const fallbackWind =
+    civilization === 'aegyptus' && egyptianWindName ? egyptianWindName : latinWindName;
+  const displayWind = civilization === 'hellas' && greekWindName ? greekWindName : fallbackWind;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const renderIcon = () => {
@@ -147,6 +142,9 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     }
   };
 
+  const hoverBorderClass =
+    civilization === 'aegyptus' ? 'hover:border-emerald-500' : 'hover:border-gold-leaf';
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
@@ -154,13 +152,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
       className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border p-2 rounded shadow-lg transition-all
             ${civilization === 'aegyptus' ? 'border-emerald-500/30' : 'border-gold-dim'}
             ${
-              onClick
-                ? `cursor-pointer hover:bg-white/5 group/weather ${
-                    civilization === 'aegyptus'
-                      ? 'hover:border-emerald-500'
-                      : 'hover:border-gold-leaf'
-                  }`
-                : ''
+              onClick ? `cursor-pointer hover:bg-white/5 group/weather ${hoverBorderClass}` : ''
             } ${className}`}
     >
       <div

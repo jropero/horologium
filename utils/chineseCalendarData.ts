@@ -16,7 +16,7 @@ export type CustomType =
   | 'Protección'
   | 'Costumbre Agrícola'
   | 'Protección / Salud'
-  | 'Tradición Culinaria'
+  | TYPE_CULINARY_TRADITION
   | 'Costumbre Culinaria / Médica'
   | 'Rito Estacional'
   | 'Celebración de las Minorías (Dong)'
@@ -51,6 +51,8 @@ export interface SolarTerm {
   customs: ChineseCustom[];
   traditionalFoods: string[];
 }
+
+const TYPE_CULINARY_TRADITION = 'Tradición Culinaria';
 
 export const chineseCalendarData: SolarTerm[] = [
   // Primavera (1-6)
@@ -333,7 +335,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           "El primer día de verano se honra probando 'las tres novedades' de la estación: cerezas, ciruelas verdes y productos del trigo recién cosechado. Es una acción de gracias ante la abundancia que comienza, compartida primero con los ancestros y luego con la familia.",
         icon: '🍒',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
     ],
     traditionalFoods: ['Arroz de cinco colores (五色饭)', 'Huevos duros', 'Sopa de ciruelas'],
@@ -401,7 +403,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'La ciruela verde, amarga e intensa, se hierve con vino de arroz o azúcar para obtener una bebida que equilibra el calor sin enfriar en exceso. El aroma agridulce del 青梅酒 marca el inicio de los monzones y aparece en escena desde los tiempos del Romance de los Tres Reinos.',
         icon: '🫒',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '打泥仗 Da Ni Zhan (Batalla de Barro)',
@@ -435,7 +437,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           "El día más largo del año se celebra con fideos elaborados del trigo recién cosechado, servidos fríos con pepino y salsa de sésamo. 'Comer fideos en el solsticio' es dicho popular en toda la China septentrional; el refresco de los fideos fríos compensa el yang extremo del día.",
         icon: '🍜',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '祭神祭祖 Ji Shen Ji Zu (Ofrendas al Cielo y los Ancestros)',
@@ -486,7 +488,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'El arroz molido en el mismo día de su cosecha tiene un sabor y una fragancia que ningún envase conserva. Compartirlo con la familia y ofrendar los primeros granos a los ancestros en el altar doméstico honra el ciclo de la tierra que vuelve a entregar sus frutos.',
         icon: '🍚',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '赏荷 Shang He (Contemplar el Loto)',
@@ -614,7 +616,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           "El pato es el alimento prescrito para 处暑: su naturaleza 'fría' en la clasificación de la TCM contrarresta el calor residual del verano. El pato viejo estofado durante horas con jengibre, hierbas medicinales y vino de arroz es el plato por excelencia de esta transición estacional.",
         icon: '🦆',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '开渔节 Kai Yu Jie (Festival de la Pesca)',
@@ -651,7 +653,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'El té cosechado en 白露 tiene carácter propio: el frío nocturno que deposita el rocío concentra los aceites de la hoja, dando una infusión más fragante y menos astringente que el té de primavera. Los catadores lo buscan específicamente y se elabora en cantidades limitadas.',
         icon: '🍵',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '吃龙眼 Chi Longyan (Comer Ojo de Dragón)',
@@ -759,7 +761,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'El cangrejo peludo de pelo dorado (大闸蟹) alcanza en 寒露 su plenitud: las hembras repletas de huevas naranjas, los machos de crema blanca. Se sirve al vapor, acompañado de vinagre de Zhenjiang y jengibre fresco para neutralizar su naturaleza fría según la TCM.',
         icon: '🦀',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
     ],
     traditionalFoods: [
@@ -794,7 +796,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           "El refrán popular es preciso: 'come caqui en 霜降 y no sufrirás de nariz en invierno'. El caqui madurado por la escarcha es más dulce y concentrado; según la TCM, lubrica los pulmones y calienta el estómago, preparando el cuerpo para la estación fría.",
         icon: '🍅',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '赏红叶 Shang Hong Ye (Contemplar las Hojas Rojas)',
@@ -856,7 +858,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'Las empanadillas (饺子) tienen forma de oreja, y la tradición dice que comerlas en 立冬 protege las orejas del congelamiento invernal. El relleno caliente de carne y verdura es también el reconfortante inicio del largo invierno septentrional, reunión familiar obligada.',
         icon: '🥟',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
     ],
     traditionalFoods: [
@@ -902,7 +904,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'En el suroeste de China, los pueblos Tujia golpean arroz glutinoso cocido en grandes morteros de piedra hasta hacerlo masa densa y elástica. Las 糍粑 resultantes se ofrendan al dios del búfalo de agua que labró los campos durante el año y luego se comparten en familia.',
         icon: '🍡',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
     ],
     traditionalFoods: [
@@ -977,7 +979,7 @@ export const chineseCalendarData: SolarTerm[] = [
         description:
           'La noche más larga del año convoca a la familia en torno a la mesa. Al norte, empanadillas (饺子) rellenas de carne y col; al sur, 汤圆, bolitas de arroz glutinoso con pasta de sésamo o flor de osmanto. Ambas redondas, ambas símbolo de reunión y plenitud.',
         icon: '🥣',
-        type: 'Tradición Culinaria',
+        type: TYPE_CULINARY_TRADITION,
       },
       {
         title: '数九九 Shu Jiu Jiu (Contar los Nueve Nueves)',

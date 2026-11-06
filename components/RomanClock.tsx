@@ -42,7 +42,6 @@ function RomanClock({
   const modernDate = modernTime.getDate();
   const modernMonth = modernTime.getMonth();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const stars = useMemo(() => {
     const starData = [];
     for (let i = 0; i < 50; i++) {
@@ -221,6 +220,53 @@ function RomanClock({
     }
     return 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)';
   };
+
+  let calendarWidgetContent: React.ReactNode = null;
+  if (civilization === 'rome') {
+    calendarWidgetContent = (
+      <>
+        <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
+          <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
+          <span className="opacity-40 text-xs">|</span>
+          <span>{romanTime.romanDateString}</span>
+          {romanTime.isMarketDay && (
+            <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
+          )}
+        </div>
+        <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80 text-center w-full">
+          {romanTime.romanDateFull}
+        </div>
+        <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1 w-full">
+          <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">
+            {romanTime.nundinalLetter}
+          </span>
+          <span>{romanTime.moonPhaseLabel}</span>
+          <span className="text-gold-dim">•</span>
+          <span>Sol in {romanTime.zodiacSign}</span>
+        </div>
+      </>
+    );
+  } else if (romanTime.atticDate) {
+    calendarWidgetContent = (
+      <>
+        <div className="text-sky-400 font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
+          <span className="text-lg">☾</span>
+          <span>{romanTime.atticDate.monthName}</span>
+        </div>
+        <div className="text-gold-dim font-serif text-[10px] tracking-widest uppercase opacity-80">
+          {transliterateGreek(romanTime.atticDate.monthName)}
+        </div>
+        <div className="text-parchment font-serif text-xs italic mt-1 font-bold">
+          {romanTime.atticDate.spanishShort}
+        </div>
+        <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1.5 w-full">
+          <span>{romanTime.moonPhaseLabel}</span>
+          <span className="text-sky-400/40">•</span>
+          <span className="text-sky-300">{translateGreekUI(romanTime.zodiacSign)}</span>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -797,49 +843,7 @@ function RomanClock({
               } transition-all group relative`}
               title={civilization === 'rome' ? 'Ver Calendario' : undefined}
             >
-              {civilization === 'rome' ? (
-                <>
-                  <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
-                    <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
-                    <span className="opacity-40 text-xs">|</span>
-                    <span>{romanTime.romanDateString}</span>
-                    {romanTime.isMarketDay && (
-                      <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
-                    )}
-                  </div>
-                  <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80 text-center w-full">
-                    {romanTime.romanDateFull}
-                  </div>
-                  <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1 w-full">
-                    <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">
-                      {romanTime.nundinalLetter}
-                    </span>
-                    <span>{romanTime.moonPhaseLabel}</span>
-                    <span className="text-gold-dim">•</span>
-                    <span>Sol in {romanTime.zodiacSign}</span>
-                  </div>
-                </>
-              ) : romanTime.atticDate ? (
-                <>
-                  <div className="text-sky-400 font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
-                    <span className="text-lg">☾</span>
-                    <span>{romanTime.atticDate.monthName}</span>
-                  </div>
-                  <div className="text-gold-dim font-serif text-[10px] tracking-widest uppercase opacity-80">
-                    {transliterateGreek(romanTime.atticDate.monthName)}
-                  </div>
-                  <div className="text-parchment font-serif text-xs italic mt-1 font-bold">
-                    {romanTime.atticDate.spanishShort}
-                  </div>
-                  <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1.5 w-full">
-                    <span>{romanTime.moonPhaseLabel}</span>
-                    <span className="text-sky-400/40">•</span>
-                    <span className="text-sky-300">
-                      {translateGreekUI(romanTime.zodiacSign)}
-                    </span>
-                  </div>
-                </>
-              ) : null}
+              {calendarWidgetContent}
             </div>
           </div>
         </div>

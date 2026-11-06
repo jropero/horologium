@@ -305,9 +305,10 @@ const roads = features.map(f => {
     });
   }
 
+  const segmentCode = p.Segment_s === 'Conjectured' ? 1 : 2;
   return [
     p.Type === 'Main Road' ? 0 : 1,
-    p.Segment_s === 'Certain' ? 0 : p.Segment_s === 'Conjectured' ? 1 : 2,
+    p.Segment_s === 'Certain' ? 0 : segmentCode,
     from,
     fromErr,
     to,

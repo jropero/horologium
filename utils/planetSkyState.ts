@@ -80,7 +80,6 @@ export const getPlanetSkyStates = (date: Date, lat: number, lng: number): Planet
   const halfDay = new Date(date.getTime() - 43200000);
   const nextHalf = new Date(date.getTime() + 43200000);
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   const states = (Object.keys(BODIES) as NakedEyePlanet[]).map((k): PlanetSkyState => {
     const body = BODIES[k];
     const longitude = eclipticLongitudeOfDate(body, date);
@@ -88,12 +87,8 @@ export const getPlanetSkyStates = (date: Date, lat: number, lng: number): Planet
       eclipticLongitudeOfDate(body, nextHalf) - eclipticLongitudeOfDate(body, halfDay);
     if (dailyMotion > 180) dailyMotion -= 360;
     if (dailyMotion < -180) dailyMotion += 360;
-    const motion =
-      Math.abs(dailyMotion) < STATIONARY_SPEED[k]
-        ? 'stationary'
-        : dailyMotion < 0
-        ? 'retrograde'
-        : 'direct';
+    const movingMotion = dailyMotion < 0 ? 'retrograde' : 'direct';
+    const motion = Math.abs(dailyMotion) < STATIONARY_SPEED[k] ? 'stationary' : movingMotion;
     const el = Elongation(body, date);
     return {
       key: k,

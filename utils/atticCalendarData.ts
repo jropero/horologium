@@ -24,6 +24,10 @@ export interface AtticFestivalInfo {
   aition?: string; // Mito fundacional que justifica el ritual
 }
 
+const CAT_CIVIC = 'Cívico y Patriótico' as const;
+const CAT_PURIF = 'Purificación y Expiación' as const;
+const FESTIVAL_DIA_SAGRADO = 'Día Sagrado';
+
 // Keyed by "monthIndex-dayOfMonth" (monthIndex 0-11, dayOfMonth 1-30)
 // This record is now deprecated in favor of the programmatic getAtticFestivalInfo
 // but we keep the comment for reference if needed.
@@ -56,7 +60,7 @@ export const getAtticFestivalInfo = (
         deity: 'Atenea y Zeus Phratrios',
         deityDesc: 'Diosa de la ciudad y protector de las fratrías (+ Eirene desde 374 a.C.).',
         festivalDesc: 'Conmemora la unificación del Ática por Teseo.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Fylobasileis (Reyes de las tribus)',
         aition:
           'Conmemora el Synoikismos atribuido a Teseo, la unificación de los demos del Ática (Tucídides 2.15).',
@@ -68,7 +72,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Diosa protectora de la ciudad.',
         festivalDesc:
           'El mayor festival de Atenas. Gran procesión para entregar el nuevo Peplos a la diosa, acompañado de hecatombes de vacas y competiciones atléticas.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Toda la ciudad, Kanephoroi, Ergastinai, Epheboi, Metecos',
         pannychisDesc:
           'Vigilia nocturna con coros de doncellas y danzas. Se encendía el fuego del altar mediante una carrera de antorchas desde el altar de Eros.',
@@ -107,7 +111,7 @@ export const getAtticFestivalInfo = (
         // "metecos" corrected to "nothoi (hijos de ciudadano y extranjera)" per both Parke and Deubner.
         festivalDesc:
           'Festival de sacrificio y banquete en el gimnasio de Kynosarges. Abierto a los nothoi (hijos de ciudadano y extranjera) junto con ciudadanos. Práctica singular: el buey era levantado entero sobre el altar antes del degüello. Doce Parasitoi participaban del sacrificio.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Ciudadanos, Nothoi (hijos de ciudadano y extranjera), doce Parasitoi',
         // White-dog etymology aition omitted — not in Parke 1977 or Deubner 1932.
         aition:
@@ -139,7 +143,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Cazadora y protectora en batalla.',
         festivalDesc:
           'Conmemoración de la victoria de Maratón. Se sacrificaban 500 cabras anuales en cumplimiento de un voto. El día 6 fue elegido porque Artemisa ya tenía culto en esa fecha mensual (Apolo, su hermano, nacía el 7).',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Polemarchos, Epheboi',
         aition:
           'Antes de Maratón se prometió una cabra por cada persa muerto. Al morir más de 6.400 enemigos, la deuda era imposible de saldar de golpe; se renegoció en 500 cabras anuales.',
@@ -151,7 +155,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'El que acude en ayuda al grito de guerra.',
         festivalDesc:
           'Acción de gracias militar que marcaba el fin de la temporada de campañas.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Ciudadanos y Militares',
         aition:
           "El nombre significa 'correr a ayudar al oír un grito'. El mito asocia el festival con la llegada del héroe Ión en auxilio de Atenas; Parke lo considera una racionalización aetiológica tardía.",
@@ -290,7 +294,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Héroe mítico de Atenas.',
         festivalDesc:
           'Fiesta del héroe, con banquetes, entrega de comida a los pobres y competiciones atléticas y militares.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         aition:
           "En el 475 a.C., el general Cimón conquistó Esciros y encontró un esqueleto gigante con espada que creyeron ser Teseo. Se celebra comiendo 'athara' (papilla de leche) en honor al héroe.",
       };
@@ -316,7 +320,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Diosas de la fertilidad.',
         festivalDesc:
           'Día de luto y ayuno total: las mujeres no comen, se sientan en el suelo imitando a Deméter en su duelo, e intercambian insultos rituales (aischrologia). Los ritos eran secretos; Heródoto (2.171) afirmó conocerlos pero se negó a revelarlos.',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         participants: 'Mujeres casadas',
         isApaphrades: true,
         aition:
@@ -401,7 +405,7 @@ export const getAtticFestivalInfo = (
         // Parke says only: prayers to moderate storm violence; no ritual details preserved.
         festivalDesc:
           'Festival homónimo del mes (día aproximado; no se conserva la fecha exacta). Oraciones a Zeus para moderar la violencia de las tormentas invernales; ningún detalle ritual específico ha sobrevivido en las fuentes.',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         aition:
           "El nombre Maimaktes significa 'el furioso'. Zeus recibía este epíteto porque el mes de noviembre traía las peores tormentas del Egeo, hundiendo barcos y arruinando cosechas tardías.",
       };
@@ -412,7 +416,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Zeus el Apacible (en su aspecto ctónico).',
         festivalDesc:
           'Procesión purificatoria. Se paseaba el Dion Koidion (Vellón de Zeus) por la ciudad para absorber las impurezas acumuladas.',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         // Fleece origin corrected: Deubner explicitly states it came from a Zeus Meilichios sacrifice,
         // not from the Maimakteria ram. The caduceus (kērykeion) headed the procession.
         ritualOffering: {
@@ -434,7 +438,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Dios del mar y los terremotos.',
         festivalDesc:
           'Festival estatal del mes dedicado a Poseidón (día tentativo; apenas documentado). Ningún ritual específico se ha conservado en las fuentes.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
       };
     // Rural Dionysia: no fixed date. Parke: "not tied to a single date"; Mikalson: UNCERTAIN.
     // Day 19 is a conventional placeholder; each deme chose its own date.
@@ -569,7 +573,7 @@ export const getAtticFestivalInfo = (
         // Added: celebrated outside the city near the Ilissos.
         festivalDesc:
           'El mayor festival de Zeus. Holocausto de víctimas o pasteles con forma de animal para apaciguar al dios. Se celebraba fuera de la ciudad, junto al Iliso (Tucídides 1.126).',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         participants: 'Toda la población',
         ritualOffering: {
           item: 'Víctimas animales o, para los más pobres, pasteles horneados con forma de ovejas o cerdos',
@@ -608,7 +612,7 @@ export const getAtticFestivalInfo = (
         // The Mysteries-latecomer aition was misassigned here — it belongs to Boedromion 18.
         festivalDesc:
           'Festival de Asclepio en su santuario contiguo al teatro de Dioniso. Sacrificio y probable banquete sagrado. El culto llegó a Atenas en 420/19 a.C.; el santuario fue posiblemente organizado por Sófocles (Parke).',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
       };
     if (dayOfMonth === 9)
       return {
@@ -649,7 +653,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Dios supremo.',
         festivalDesc:
           'Festival de clausura inmediatamente tras las Dionisias (ca. día 17). Posiblemente vinculado a la antigua tribu de Pandion.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         // "psychological brake" aition removed — both sources agree nothing is known about Pandia's content.
       };
   }
@@ -663,7 +667,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Dioses purificadores.',
         festivalDesc:
           'Procesión de doncellas llevando ramas de olivo (hiketeria) atadas con lana blanca al santuario Delphinion.',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         participants: 'Doncellas atenienses',
         aition:
           'Las muchachas llevan ramas de olivo con lana blanca porque Teseo hizo esa misma ofrenda de súplica antes de embarcar hacia Creta. Parke considera este vínculo teseico una racionalización secundaria del rito original (una supplicación femenina comunitaria a Artemisa).',
@@ -689,7 +693,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Dios supremo.',
         festivalDesc:
           'Festival espectacular de la caballería ateniense en honor al inmenso templo de Zeus en el Ilisos.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Caballería Ateniense',
         agonDesc:
           "Competición militar conocida como 'Anthippasia': las tribus realizaban elaborados simulacros de cargas de caballería enfrentándose unas a otras en el Hipódromo.",
@@ -711,7 +715,7 @@ export const getAtticFestivalInfo = (
         // Added fig-branches alongside squill: both Parke and Deubner specify both implements.
         festivalDesc:
           'Purificación violenta de la ciudad mediante dos chivos expiatorios humanos (Pharmakoi), golpeados con ramas de higuera y cebollas silvestres (escila) y expulsados.',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         // Magical-disinfectant aition removed — not in Parke or Deubner.
         aition:
           "Dos pharmakoi (uno 'para los hombres' con collar de higos negros, otro 'para las mujeres' con higos blancos) eran golpeados y conducidos fuera de la ciudad. El día 6 era el día de purificación; el día 7 el de la ofrenda del thargelos.",
@@ -724,7 +728,7 @@ export const getAtticFestivalInfo = (
         // "coros masculinos" corrected: competition included men's AND boys' choirs.
         festivalDesc:
           'Ofrenda de una olla con el primer grano (Thargelos). Gran competición de coros de hombres y niños de las tribus.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         agonDesc:
           'Concurso musical entre las diez tribus, que presentaban coros de 50 hombres y 50 niños cantando himnos a Apolo.',
         economyDesc:
@@ -738,7 +742,7 @@ export const getAtticFestivalInfo = (
         // Added: dual procession structure (Athenian + Thracian simultaneously) — attested by both sources.
         festivalDesc:
           'Carrera de antorchas a caballo de noche en el Pireo. Doble procesión simultánea: una oficial ateniense desde el Pritaneo, otra de la comunidad tracia del Pireo.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Tracios residentes y Atenienses',
         pannychisDesc:
           'Vigilia nocturna (Pannychis) con carrera de antorchas a caballo en el Pireo.',
@@ -755,7 +759,7 @@ export const getAtticFestivalInfo = (
         // Added: the two Loutrides who performed the washing, and the Peplotheke.
         festivalDesc:
           'Día nefasto. La estatua de la diosa era despojada, todos los santuarios de Atenas cerrados con cuerdas, y la estatua procesionada (cubierta, sin mostrarse al público) hasta el mar de Falero para su lavado. Las Loutrides (Plyntrides) realizaban el lavado; la Peplotheke limpiaba el peplos.',
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         participants: 'Praxiergidai, Epheboi, Loutrides',
         isApaphrades: true,
         aition:
@@ -799,7 +803,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Protector de la ciudad.',
         festivalDesc:
           "Extraño rito antiguo donde se mataba a un buey de trabajo y luego el hacha ejecutora era llevada a juicio por 'asesinato'.",
-        category: 'Purificación y Expiación',
+        category: CAT_PURIF,
         participants: 'Sacerdotes Bouphonia',
         aition:
           'El sacerdote huye y se juzga al hacha porque el primer hombre que sacrificó un buey (Sopatro) huyó aterrado por la culpa. Al no poder castigar al hombre, se juzgó al arma.',
@@ -813,7 +817,7 @@ export const getAtticFestivalInfo = (
         deityDesc: 'Zeus Salvador, protector de la ciudad.',
         festivalDesc:
           'Sacrificio oficial de fin de año a Zeus Soter en la Stoa de Zeus del Ágora. Lo realizaba el Rey Arconte y el Consejo saliente en nombre del estado. Celebración modesta e institucional que cerraba el año cívico.',
-        category: 'Cívico y Patriótico',
+        category: CAT_CIVIC,
         participants: 'Rey Arconte, Consejo saliente',
         // Pan and torch-race removed: Parke places Pan's torch-race tentatively in Boedromion.
         // "Great closing festival" description removed — the day-30 event was a small official rite.
@@ -832,7 +836,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
   const monthDeities: Record<number, AtticFestivalInfo> = {
     // Hekatombaion (Jul-Aug): Parke pp. 29-50
     0: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Mes de Atenea: las Panateneas (día 28) la honran como patrona de la ciudad con procesión del peplo, sacrificio y juegos panhelénicos; la Sinoikia (días 15–16) celebra la unión del Ática.',
       deity: 'Ἀθηνᾶ',
@@ -841,7 +845,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Metageitnion (Aug-Sep): Parke pp. 51-52. Apollo names the month (Metageitnios cult) but Heracleia is the main attested festival.
     1: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Mes que toma su nombre del culto a Apolo Metageitnios; la Heracleia en Kynosarges era el festival de mayor entidad, dedicado a Heracles.',
       deity: 'Ἀπόλλων',
@@ -850,7 +854,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Boedromion (Sep-Oct): Parke p. 53, pp. 55-72. Patron is Apollo Boedromios (etymological); Eleusinian Mysteries of Demeter dominate the calendar.
     2: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         "Mes de Apolo Boedromio, 'el que socorre al grito de guerra' (día 7). Los Misterios Eleusinos de Deméter y Perséfone (días 15–20) dominan el calendario ritual del mes.",
       deity: 'Ἀπόλλων',
@@ -859,7 +863,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Pyanepsion (Oct-Nov): Parke pp. 73-94; Deubner pp. 197-201. Apollo names the month (Pyanopsia day 7); Demeter dominates calendar (Proerosia, Stenia, Thesmophoria).
     3: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Mes que toma su nombre de la Pyanopsia (día 7), festival de Apolo. Deméter preside también este mes con la Proerosia (día 5), la Stenia (día 9) y las Thesmophoria (días 11–13).',
       deity: 'Ἀπόλλων',
@@ -868,7 +872,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Maimakterion (Nov-Dec): Parke pp. 95-96. Zeus of storms (not king), propitiated in Maimakteria and Pompaia.
     4: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Maimakteria: plegarias para propiciar a Zeus tormentoso; Pompaia (última decena): procesión purificatoria con el Dion Koidion —piel de oveja sagrada de Zeus— y el caduceo, dedicada a Zeus Meilichios.',
       deity: 'Ζεύς',
@@ -877,7 +881,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Poseideon (Dec-Jan): Parke pp. 97-103. Poseidon names the month; main festivals are Dionysiac (Haloa, Rural Dionysia).
     5: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Mes de Poseidón, el de menor navegación del año; los festivales principales son la Haloa (día 26, Deméter y Dioniso en Eleusis) y las Dionisias Rurales en los demos del Ática.',
       deity: 'Ποσειδῶν',
@@ -886,7 +890,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Gamelion (Jan-Feb): Parke pp. 104-106. Hera as marriage goddess; the month name means 'month of weddings'. Lenaia (Dionysus day 12) also prominent.
     6: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Mes nupcial por excelencia: el Hieros Gamos (día 26) celebra la boda sagrada de Zeus y Hera; la Lenaia (día 12) honra a Dioniso con concursos dramáticos en el Lenaion.',
       deity: 'Ἥρα',
@@ -895,7 +899,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Anthesterion (Feb-Mar): Parke pp. 107-116. Dionysus correct; description must include funerary Chytroi aspect, not just wine.
     7: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Antesteria (días 11–13): Pithoigia (primera cata del vino nuevo), Choes (procesión de Dioniso en carro-nave e Hieros Gamos de la Basilinna con el dios), Chutroi (ofrendas a los difuntos; día de mal agüero, santuarios cerrados).',
       deity: 'Διόνυσος',
@@ -904,7 +908,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Elaphebolion (Mar-Apr): Parke pp. 125-136; Deubner pp. 138-142, 209-210. Dionysus dominates (City Dionysia days 9-13); Artemis etymological only (Elaphebolia already minor by classical period).
     8: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Grandes Dionisias (días 9–13): pompe, sacrificio de bueyes y concursos trágicos y cómicos en honor de Dioniso Eleutereo; Elafebolia (Artemis): ofrendas de tortas con forma de ciervo; Pandia (Zeus) al cierre del mes.',
       deity: 'Διόνυσος',
@@ -913,7 +917,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Mounichion (Apr-May): Parke pp. 137-145; Deubner pp. 201-202, 204-207. Artemis Munichia (headland goddess, not moon goddess).
     9: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Delfinia (día 6): procesión de doncellas suplicantes al Delfinio; Muniquia (día 16, luna llena): pompe con tortas encendidas (anfifones) y sacrificio de cabra a Artemis Muniquia en el Pireo; Olimpieia (día 19): Zeus Olímpico.',
       deity: 'Ἄρτεμις',
@@ -922,7 +926,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Thargelion (May-Jun): Parke pp. 146-155; Deubner pp. 17-22, 179-198. Apollo as harvest/ancestral deity, NOT sun god. Month named after Thargelia.
     10: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Targelia (días 6–7): purificación por farmakos y ofrenda de primicias de la cosecha a Apolo; Plinterias (día 25): baño ritual del xoanon de Atenea Polias en el mar; Bendidia (día 20): procesión nocturna con carrera de antorchas en honor de Bendis.',
       deity: 'Ἀπόλλων',
@@ -931,7 +935,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     },
     // Skirophorion (Jun-Jul): Parke pp. 156-169; Deubner pp. 9-17, 40-50, 158-174. Both Athena and Demeter share the Skira rite; "goddess of strategy" has no basis here.
     11: {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc:
         'Esquiras (día 12): procesión con parasol sagrado desde la Acrópolis hasta el Esquiro y rito femenino de Deméter en el Tesmoforion; Dipolias/Bufonia (día 14): sacrificio de buey a Zeus Polieo y juicio ritual del hacha.',
       deity: 'Ἀθηνᾶ καὶ Δημήτηρ',
@@ -941,7 +945,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
   };
   return (
     monthDeities[monthIndex] || {
-      festivalName: 'Día Sagrado',
+      festivalName: FESTIVAL_DIA_SAGRADO,
       festivalDesc: 'Dedicado al padre de los dioses.',
       deity: 'Ζεύς',
       deityDesc: 'Padre de los dioses.',
@@ -1094,9 +1098,9 @@ export const getCategoryBadge = (category?: string): string => {
       return '🌾 Agrario y Fertilidad';
     case 'Mistérico y Ctónico':
       return '🏺 Mistérico y Ctónico';
-    case 'Cívico y Patriótico':
+    case CAT_CIVIC:
       return '🏃 Cívico y Atlético';
-    case 'Purificación y Expiación':
+    case CAT_PURIF:
       return '🔥 Purificación (Miasma)';
     case 'Familiar y Social':
       return '🍷 Familiar y Social';

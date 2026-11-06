@@ -556,13 +556,14 @@ const setRoadYear = (scene: RoadScene, year: number | null) => {
   scene.year = year;
   scene.roads.forEach((r, i) => {
     const e = year === null ? 'yes' : roadExistence(r, year);
-    scene.vis[i] = e === 'no' ? 0 : e === 'yes' ? 1 : 2;
+    if (e === 'no') scene.vis[i] = 0;
+    else if (e === 'yes') scene.vis[i] = 1;
+    else scene.vis[i] = 2;
   });
   scene.paths.clear();
   scene.chains = buildRoadChains(scene);
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const getRoadPath = (
   scene: RoadScene,
   level: number,
@@ -588,7 +589,6 @@ const getRoadPath = (
 };
 
 /** The visible road nearest to (lng, lat) within tolDeg, from the bundled geometry. */
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const hitRoad = (
   scene: RoadScene,
   lng: number,
@@ -665,7 +665,6 @@ interface Glyph {
  * Letters of a label centred at arc length t, upright (reversed on a westward line),
  * or null where the line bends more than ~30° between letters or leaves `bounds`.
  */
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const placeAlong = (
   xs: Float32Array,
   ys: Float32Array,
@@ -733,8 +732,11 @@ type Selection =
   | { kind: 'creature'; creature: MapCreature }
   // A road card sits at the tapped point; `related` = indices of the other segments of the same via.
   | { kind: 'road'; road: RomanRoad; related: number[]; lng: number; lat: number };
-const selectionPoint = (s: Selection) =>
-  s.kind === 'city' ? s.city : s.kind === 'creature' ? s.creature : s;
+const selectionPoint = (s: Selection) => {
+  if (s.kind === 'city') return s.city;
+  if (s.kind === 'creature') return s.creature;
+  return s;
+};
 
 /** "ab anno 46 p. Chr. n. (fortasse iam ab anno 45 p. Chr. n.); usque ad annum …" */
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -786,6 +788,13 @@ const RoadCard: React.FC<{
   if (road.recentiora.length) rows.push([RL.recentiora, road.recentiora.join(', ')]);
   if (road.fontes) rows.push([RL.fontes, road.fontes]);
   const status = year === null ? null : roadExistence(road, year);
+  const roadStatusLabel = (() => {
+    if (status === 'yes') return RL.exstabat;
+    if (status === 'unknown') return RL.incerta;
+    if (road.from !== null && year !== null && year < road.from - road.fromErr)
+      return RL.nondum;
+    return RL.iamNon;
+  })();
   return (
     <>
       <div className="font-serif text-lg font-bold text-gold-leaf leading-tight">
@@ -826,13 +835,7 @@ const RoadCard: React.FC<{
         />
         {year !== null && (
           <div className="font-body italic text-sm text-parchment/75 leading-snug">
-            {status === 'yes'
-              ? RL.exstabat
-              : status === 'unknown'
-              ? RL.incerta
-              : road.from !== null && year < road.from - road.fromErr
-              ? RL.nondum
-              : RL.iamNon}
+            {roadStatusLabel}
           </div>
         )}
         <div className="mt-2 flex gap-2">
@@ -1364,6 +1367,7 @@ function RomanMapCanvas({
         ? `translate(-50%, calc(-100% - ${gap}px))`
         : `translate(-50%, ${gap}px)`;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scheduleDraw = useCallback(() => {
@@ -1409,6 +1413,7 @@ function RomanMapCanvas({
     }
     // Desktop: no scrollbar when the whole map fits.
     container.style.scrollbarWidth = w <= vw ? 'none' : 'thin';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** Zooms keeping the map point under (clientX, clientY) fixed on screen. */
@@ -1437,6 +1442,7 @@ function RomanMapCanvas({
       setZoom(z);
       if (z < CREATURE_ZOOM && selectedRef.current?.kind === 'creature') setSelected(null);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [applySize, drawNow],
   );
 
@@ -1477,6 +1483,7 @@ function RomanMapCanvas({
     container.scrollLeft =
       margin + (INITIAL_LNG - LNG_MIN) * scale() - container.clientWidth / 2;
     drawNow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applySize, drawNow]);
 
   // Native horizontal scrolling moves the canvas strip with the map; re-centre it
@@ -1490,6 +1497,7 @@ function RomanMapCanvas({
     };
     container.addEventListener('scroll', onScroll, { passive: true });
     return () => container.removeEventListener('scroll', onScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scheduleDraw]);
 
   useEffect(() => {
@@ -1845,13 +1853,11 @@ function RomanMapCanvas({
               } p-3 rounded-sm border border-gold-dim/60 bg-ink/95 shadow-2xl`}
               style={{ left: 0, top: 0 }}
               role="dialog"
-              aria-label={
-                selected.kind === 'city'
-                  ? selected.city.latin
-                  : selected.kind === 'creature'
-                  ? selected.creature.name
-                  : selected.road.viae.join(' · ') || RL.unnamed
-              }
+              aria-label={(() => {
+                if (selected.kind === 'city') return selected.city.latin;
+                if (selected.kind === 'creature') return selected.creature.name;
+                return selected.road.viae.join(' · ') || RL.unnamed;
+              })()}
             >
               {selected.kind === 'road' ? (
                 <RoadCard
@@ -1860,7 +1866,8 @@ function RomanMapCanvas({
                   onYear={setCardYear}
                   ownYear={cardYear !== null}
                 />
-              ) : selected.kind === 'city' ? (
+              ) : // eslint-disable-next-line sonarjs/no-nested-conditional
+              selected.kind === 'city' ? (
                 <>
                   <div className="font-serif text-xl font-bold text-gold-leaf leading-tight">
                     {selected.city.latin}
@@ -1994,7 +2001,8 @@ function RomanMapCanvas({
                 </button>
               )}
             </>
-          ) : roadStatus === 'loading' ? (
+          ) : // eslint-disable-next-line sonarjs/no-nested-conditional
+          roadStatus === 'loading' ? (
             <span>{RL.loading}</span>
           ) : (
             <span className="flex items-center gap-2">
