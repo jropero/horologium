@@ -90,6 +90,9 @@ const WeatherSvgEffects: React.FC<Props> = ({
   const showEffects = !offline && condition !== 'clear';
   const cloudFill1 = '#94a3b8';
   const cloudFill2 = '#cbd5e1';
+  const farBgCloudOpacity = condition === 'cloudy' ? 0.22 : 0.15;
+  const midBandConditionOpacity =
+    condition === 'cloudy' ? cloudOpacity * 0.6 : cloudOpacity * 0.35;
   const mistGradientId = `${fogGradientId}-mist`;
 
   return (
@@ -107,11 +110,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
             <>
               {/* Far background cloud layers — only when windy */}
               {windStreaks.length > 0 && (
-                <g
-                  opacity={
-                    condition === 'partly-cloudy' ? 0.1 : condition === 'cloudy' ? 0.22 : 0.15
-                  }
-                >
+                <g opacity={condition === 'partly-cloudy' ? 0.1 : farBgCloudOpacity}>
                   <path
                     d="M -200 35 Q 0 15 100 40 T 300 25 T 500 38 L 500 -20 L -200 -20 Z"
                     fill="#8fa3b8"
@@ -128,11 +127,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
               {/* Mid cloud band — always shown */}
               <g
                 opacity={
-                  condition === 'partly-cloudy'
-                    ? cloudOpacity * 0.25
-                    : condition === 'cloudy'
-                    ? cloudOpacity * 0.6
-                    : cloudOpacity * 0.35
+                  condition === 'partly-cloudy' ? cloudOpacity * 0.25 : midBandConditionOpacity
                 }
               >
                 <path

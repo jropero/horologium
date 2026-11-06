@@ -16,19 +16,14 @@ interface GreekDaysListProps {
 }
 
 // Moon phase emoji helper
-// eslint-disable-next-line sonarjs/cognitive-complexity
-const moonEmoji = (phase: number) =>
-  phase < 0.03 || phase > 0.97
-    ? '🌑'
-    : phase < 0.28
-    ? '🌒'
-    : phase < 0.47
-    ? '🌓'
-    : phase < 0.53
-    ? '🌕'
-    : phase < 0.78
-    ? '🌗'
-    : '🌘';
+const moonEmoji = (phase: number) => {
+  if (phase < 0.03 || phase > 0.97) return '🌑';
+  if (phase < 0.28) return '🌒';
+  if (phase < 0.47) return '🌓';
+  if (phase < 0.53) return '🌕';
+  if (phase < 0.78) return '🌗';
+  return '🌘';
+};
 
 /**
  * The seven following Attic days with their god (Θεὸς τῆς Ἡμέρας) and, when one
@@ -70,6 +65,17 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
           const isNewMonth =
             idx > 0 && day.atticDate.monthName !== nextDays[idx - 1].atticDate.monthName;
 
+          let rowClass: string;
+          if (isToday) {
+            rowClass = 'bg-gold-leaf/10 border-l-4 border-l-gold-leaf';
+          } else if (isSacredDay) {
+            rowClass = 'bg-amber-950/20 border-l-4 border-l-amber-500/50';
+          } else if (hasFestival) {
+            rowClass = 'bg-sky-950/20 border-l-4 border-l-sky-400/60';
+          } else {
+            rowClass = 'border-l-4 border-l-transparent hover:bg-white/[0.02]';
+          }
+
           return (
             <React.Fragment key={idx}>
               {/* Month boundary marker */}
@@ -84,16 +90,7 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
               )}
 
               <div
-                className={`flex items-start gap-4 px-1 py-5 border-b border-gold-dim/10 transition-all text-left
-                  ${
-                    isToday
-                      ? 'bg-gold-leaf/10 border-l-4 border-l-gold-leaf'
-                      : isSacredDay
-                      ? 'bg-amber-950/20 border-l-4 border-l-amber-500/50'
-                      : hasFestival
-                      ? 'bg-sky-950/20 border-l-4 border-l-sky-400/60'
-                      : 'border-l-4 border-l-transparent hover:bg-white/[0.02]'
-                  }`}
+                className={`flex items-start gap-4 px-1 py-5 border-b border-gold-dim/10 transition-all text-left ${rowClass}`}
               >
                 {/* LEFT: Day number + moon */}
                 <div className="flex flex-col items-center w-14 shrink-0 pt-1">

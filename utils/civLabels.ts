@@ -176,12 +176,11 @@ export const ROMAN_ROAD_LABELS = {
   legendHypothetica: 'hypothetica',
   legendIgnota: 'aetatis ignotae',
   latinYear,
-  yearRange: ([a, b]: [number, number]) =>
-    a === b
-      ? latinYear(a)
-      : a < 0 === b < 0
-      ? `${Math.abs(a)}–${latinYear(b)}`
-      : `${latinYear(a)} – ${latinYear(b)}`,
+  yearRange: ([a, b]: [number, number]) => {
+    if (a === b) return latinYear(a);
+    const sameSide = a < 0 === b < 0;
+    return sameSide ? `${Math.abs(a)}–${latinYear(b)}` : `${latinYear(a)} – ${latinYear(b)}`;
+  },
   from: (y: number) => `ab anno ${latinYear(y)}`,
   fromErr: (y: number) => `fortasse iam ab anno ${latinYear(y)}`,
   to: (y: number) => `usque ad annum ${latinYear(y)}`,

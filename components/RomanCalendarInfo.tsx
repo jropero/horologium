@@ -361,6 +361,35 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
 
   // Roman mode
   if (civilization === 'rome' && info) {
+    let sacBoxClsMulti =
+      'bg-stone-950/90 border-2 border-roman-red/40 shadow-[0_0_20px_rgba(183,28,28,0.2)]';
+    if (isApril)
+      sacBoxClsMulti =
+        'bg-roman-red/15 border-2 border-roman-red/50 shadow-[0_0_25px_rgba(183,28,28,0.35)]';
+    else if (isFloralia)
+      sacBoxClsMulti =
+        'bg-emerald-900/20 border-2 border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.15)]';
+    else if (isLemuria)
+      sacBoxClsMulti =
+        'bg-indigo-950/40 border-2 border-indigo-500/50 shadow-[0_0_25px_rgba(99,102,241,0.25)]';
+    else if (isJune)
+      sacBoxClsMulti =
+        'bg-orange-950/20 border-2 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.2)]';
+
+    let sacBoxClsSingle = 'bg-stone-900/60 border border-stone-500/30';
+    if (isApril)
+      sacBoxClsSingle =
+        'bg-roman-red/15 border border-roman-red/50 shadow-[0_0_20px_rgba(183,28,28,0.25)]';
+    else if (isFloralia)
+      sacBoxClsSingle =
+        'bg-emerald-900/20 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]';
+    else if (isLemuria)
+      sacBoxClsSingle =
+        'bg-indigo-950/40 border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.25)]';
+    else if (isJune)
+      sacBoxClsSingle =
+        'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]';
+
     return (
       <div className="w-full max-w-md mx-auto mt-6 mb-6">
         <div
@@ -603,17 +632,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
             {hasMultipleSacrifices ? (
               <div
                 role="presentation"
-                className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-4 w-full animate-fadeIn ${
-                  isApril
-                    ? 'bg-roman-red/15 border-2 border-roman-red/50 shadow-[0_0_25px_rgba(183,28,28,0.35)]'
-                    : isFloralia
-                    ? 'bg-emerald-900/20 border-2 border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
-                    : isLemuria
-                    ? 'bg-indigo-950/40 border-2 border-indigo-500/50 shadow-[0_0_25px_rgba(99,102,241,0.25)]'
-                    : isJune
-                    ? 'bg-orange-950/20 border-2 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.2)]'
-                    : 'bg-stone-950/90 border-2 border-roman-red/40 shadow-[0_0_20px_rgba(183,28,28,0.2)]'
-                }`}
+                className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-4 w-full animate-fadeIn ${sacBoxClsMulti}`}
                 onClick={e => e.stopPropagation()}
                 onKeyDown={e => e.stopPropagation()}
               >
@@ -719,17 +738,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
               sacrifice && (
                 <div
                   role="presentation"
-                  className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg ${
-                    isApril
-                      ? 'bg-roman-red/15 border border-roman-red/50 shadow-[0_0_20px_rgba(183,28,28,0.25)]'
-                      : isFloralia
-                      ? 'bg-emerald-900/20 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
-                      : isLemuria
-                      ? 'bg-indigo-950/40 border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.25)]'
-                      : isJune
-                      ? 'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]'
-                      : 'bg-stone-900/60 border border-stone-500/30'
-                  }`}
+                  className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg ${sacBoxClsSingle}`}
                   onClick={e => e.stopPropagation()}
                   onKeyDown={e => e.stopPropagation()}
                 >

@@ -47,7 +47,10 @@ function getHemerologySimple(monthIndex, dayOfMonth) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 
-  const getP = val => (val > 0.6 ? 'nefer' : val > 0.2 ? 'aha' : 'nefer');
+  const getP = val => {
+    if (val > 0.6) return 'nefer';
+    return val > 0.2 ? 'aha' : 'nefer';
+  };
 
   return {
     morning: getP(hash(seed)),
@@ -134,13 +137,13 @@ badDays.slice(0, 15).forEach(day => {
     'Mesore',
   ];
   const mName = day.monthIndex === -1 ? 'Epagomenal' : mNames[day.monthIndex];
+  const partMidOrNight = day.part === 'midday' ? 'Mediodía' : 'Noche';
+  const partName = day.part === 'morning' ? 'Mañana' : partMidOrNight;
   console.log(
     `${day.date.toISOString().replace('T', ' ').slice(0, 16)} | Eg: ${
       day.dayOfMonth
     } ${mName} | Suerte: ${day.hem.morning === 'nefer' ? '☀️' : '🦂'}${
       day.hem.midday === 'nefer' ? '☀️' : '🦂'
-    }${day.hem.evening === 'nefer' ? '☀️' : '🦂'} | Eclipse en momento ${
-      day.part === 'morning' ? 'Mañana' : day.part === 'midday' ? 'Mediodía' : 'Noche'
-    }`,
+    }${day.hem.evening === 'nefer' ? '☀️' : '🦂'} | Eclipse en momento ${partName}`,
   );
 });

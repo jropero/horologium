@@ -27,16 +27,15 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   const [egyptianWisdom, setEgyptianWisdom] = useState<EgyptianWisdom | null>(null);
   const [babylonianWisdom, setBabylonianWisdom] = useState<BabylonianWisdom | null>(null);
 
+  const dateKey = currentDate.toDateString();
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSententia(getSententiaOfTheDay(currentDate));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setApophthegma(getApophthegmaOfTheDay(currentDate));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEgyptianWisdom(getEgyptianWisdomOfTheDay(currentDate));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBabylonianWisdom(getBabylonianWisdomOfTheDay(currentDate));
-  }, [currentDate.toDateString()]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateKey]); // currentDate object ref changes every render; dateKey re-runs only on actual date change
 
   const handleRandomize = () => {
     if (civilization === 'rome') {
@@ -55,33 +54,26 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   };
 
   const isBab = civilization === 'babylonia';
-  const quoteText =
-    civilization === 'rome'
-      ? sententia?.latin
-      : civilization === 'hellas'
-      ? apophthegma?.greek
-      : isBab
-      ? babylonianWisdom?.text
-      : egyptianWisdom?.text;
-  const quoteAuthor =
-    civilization === 'rome'
-      ? sententia?.author
-      : civilization === 'hellas'
-      ? apophthegma?.author
-      : isBab
-      ? babylonianWisdom?.author
-      : egyptianWisdom?.author;
-  const quoteTranslation =
-    civilization === 'rome'
-      ? sententia?.translation
-      : civilization === 'hellas'
-      ? apophthegma?.translation
-      : undefined;
-  const quoteSource = isBab
-    ? babylonianWisdom?.source
-    : civilization === 'aegyptus'
-    ? egyptianWisdom?.source
-    : undefined;
+
+  let quoteText: string | undefined;
+  if (civilization === 'rome') quoteText = sententia?.latin;
+  else if (civilization === 'hellas') quoteText = apophthegma?.greek;
+  else if (isBab) quoteText = babylonianWisdom?.text;
+  else quoteText = egyptianWisdom?.text;
+
+  let quoteAuthor: string | undefined;
+  if (civilization === 'rome') quoteAuthor = sententia?.author;
+  else if (civilization === 'hellas') quoteAuthor = apophthegma?.author;
+  else if (isBab) quoteAuthor = babylonianWisdom?.author;
+  else quoteAuthor = egyptianWisdom?.author;
+
+  let quoteTranslation: string | undefined;
+  if (civilization === 'rome') quoteTranslation = sententia?.translation;
+  else if (civilization === 'hellas') quoteTranslation = apophthegma?.translation;
+
+  let quoteSource: string | undefined;
+  if (isBab) quoteSource = babylonianWisdom?.source;
+  else if (civilization === 'aegyptus') quoteSource = egyptianWisdom?.source;
   const quoteAkkadian = isBab ? babylonianWisdom?.akkadian : undefined;
   const quoteTransliteration =
     civilization === 'hellas' && quoteText ? transliterateGreek(quoteText) : null;

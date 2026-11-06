@@ -140,13 +140,14 @@ export default [
 
       // sonarjs: cognitive complexity gate
       'sonarjs/cognitive-complexity': ['error', 5],
-      // JSX conditional rendering with ternaries is idiomatic React — warn only
-      'sonarjs/no-nested-conditional': 'warn',
+      'sonarjs/no-nested-conditional': 'error',
       // Data files legitimately repeat strings (festival names, deity names, etc.)
-      'sonarjs/no-duplicate-string': ['warn', { threshold: 10 }],
-      'sonarjs/no-identical-functions': 'warn',
-      'sonarjs/no-collapsible-if': 'warn',
-      'sonarjs/todo-tag': 'warn',
+      'sonarjs/no-duplicate-string': ['error', { threshold: 10 }],
+      'sonarjs/no-identical-functions': 'error',
+      'sonarjs/no-collapsible-if': 'error',
+      'sonarjs/todo-tag': 'error',
+      // react-hooks/exhaustive-deps is 'warn' in recommended — promote to error
+      'react-hooks/exhaustive-deps': 'error',
       // Math.random() is intentional for seeded procedural rendering (skylines, etc.)
       'sonarjs/pseudo-random': 'off',
 

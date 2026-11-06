@@ -104,16 +104,16 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
             const isToday = idx === 0;
             const hasFestival = !!day.info.festivalName;
 
+            let dayCls = 'border-gold-dim/30 bg-ink/40';
+            if (isToday)
+              dayCls =
+                'border-gold-leaf bg-gold-leaf/15 shadow-[0_0_15px_rgba(207,181,59,0.2)]';
+            else if (hasFestival) dayCls = 'border-amber-600/60 bg-amber-900/30';
+
             return (
               <div
                 key={idx}
-                className={`p-4 sm:p-5 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${
-                  isToday
-                    ? 'border-gold-leaf bg-gold-leaf/15 shadow-[0_0_15px_rgba(207,181,59,0.2)]'
-                    : hasFestival
-                    ? 'border-amber-600/60 bg-amber-900/30'
-                    : 'border-gold-dim/30 bg-ink/40'
-                }`}
+                className={`p-4 sm:p-5 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${dayCls}`}
               >
                 {/* Fecha Gregoriana (Izquierda) */}
                 <div className="flex sm:flex-col items-center sm:items-start sm:w-24 shrink-0 gap-2 sm:gap-1 border-b sm:border-b-0 sm:border-r border-gold-dim/40 pb-3 sm:pb-0 sm:pr-4">

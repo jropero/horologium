@@ -132,18 +132,17 @@ const AppContent: React.FC = () => {
 
   // Recalculate time when location, minute, or civilization changes
   useEffect(() => {
-    // eslint-disable-next-line sonarjs/cognitive-complexity
     const updateTime = () => {
-      const data =
-        civilization === 'rome'
-          ? calculateRomanTime(modernTime, latitude, longitude)
-          : civilization === 'hellas'
-          ? calculateHellenicTime(modernTime, latitude, longitude)
-          : civilization === 'aegyptus'
-          ? calculateEgyptianTime(modernTime, latitude, longitude)
-          : civilization === 'babylonia'
-          ? calculateBabylonianTime(modernTime, latitude, longitude)
-          : calculateRomanTime(modernTime, latitude, longitude);
+      let data;
+      if (civilization === 'hellas') {
+        data = calculateHellenicTime(modernTime, latitude, longitude);
+      } else if (civilization === 'aegyptus') {
+        data = calculateEgyptianTime(modernTime, latitude, longitude);
+      } else if (civilization === 'babylonia') {
+        data = calculateBabylonianTime(modernTime, latitude, longitude);
+      } else {
+        data = calculateRomanTime(modernTime, latitude, longitude);
+      }
       setRomanTimeData(data);
 
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
@@ -259,6 +258,59 @@ const AppContent: React.FC = () => {
         {latin}
       </span>
     );
+
+  let clockComponent = null;
+  if (romanTimeData) {
+    if (civilization === 'aegyptus') {
+      clockComponent = (
+        <EgyptianClock
+          modernTime={modernTime}
+          romanTime={romanTimeData}
+          loading={loading}
+          weather={effectiveWeather}
+          onUpdateLocation={handleUpdateLocation}
+          currentLat={latitude}
+          currentLng={longitude}
+        />
+      );
+    } else if (civilization === 'zhongguo') {
+      clockComponent = <ChineseClock modernTime={modernTime} weather={effectiveWeather} />;
+    } else if (civilization === 'babylonia') {
+      clockComponent = (
+        <BabylonianClock
+          modernTime={modernTime}
+          loading={loading}
+          weather={effectiveWeather}
+          onUpdateLocation={handleUpdateLocation}
+          currentLat={latitude}
+          currentLng={longitude}
+          isTimeTraveling={isTimeTraveling}
+        />
+      );
+    } else {
+      clockComponent = (
+        <RomanClock
+          modernTime={modernTime}
+          romanTime={romanTimeData}
+          loading={loading}
+          weather={effectiveWeather}
+          onUpdateLocation={handleUpdateLocation}
+          currentLat={latitude}
+          currentLng={longitude}
+          isTimeTraveling={isTimeTraveling}
+        />
+      );
+    }
+  }
+
+  let hourPanel;
+  if (civilization === 'aegyptus') {
+    hourPanel = <EgyptianHours currentDate={modernTime} lat={latitude} lng={longitude} />;
+  } else if (civilization === 'babylonia') {
+    hourPanel = <BabylonianSkyDiary currentDate={modernTime} lat={latitude} lng={longitude} />;
+  } else {
+    hourPanel = <PlanetaryPositions currentDate={modernTime} lat={latitude} lng={longitude} />;
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
@@ -438,44 +490,9 @@ const AppContent: React.FC = () => {
         </Suspense>
       )}
 
-      {romanTimeData && (
+      {clockComponent && (
         <div className="w-full max-w-2xl mx-auto">
-          <Suspense fallback={null}>
-            {civilization === 'aegyptus' ? (
-              <EgyptianClock
-                modernTime={modernTime}
-                romanTime={romanTimeData}
-                loading={loading}
-                weather={effectiveWeather}
-                onUpdateLocation={handleUpdateLocation}
-                currentLat={latitude}
-                currentLng={longitude}
-              />
-            ) : civilization === 'zhongguo' ? (
-              <ChineseClock modernTime={modernTime} weather={effectiveWeather} />
-            ) : civilization === 'babylonia' ? (
-              <BabylonianClock
-                modernTime={modernTime}
-                loading={loading}
-                weather={effectiveWeather}
-                onUpdateLocation={handleUpdateLocation}
-                currentLat={latitude}
-                currentLng={longitude}
-                isTimeTraveling={isTimeTraveling}
-              />
-            ) : (
-              <RomanClock
-                modernTime={modernTime}
-                romanTime={romanTimeData}
-                loading={loading}
-                weather={effectiveWeather}
-                onUpdateLocation={handleUpdateLocation}
-                currentLat={latitude}
-                currentLng={longitude}
-                isTimeTraveling={isTimeTraveling}
-              />
-            )}
-          </Suspense>
+          <Suspense fallback={null}>{clockComponent}</Suspense>
         </div>
       )}
 
@@ -495,13 +512,7 @@ const AppContent: React.FC = () => {
           />
         )}
 
-      {civilization === 'aegyptus' ? (
-        <EgyptianHours currentDate={modernTime} lat={latitude} lng={longitude} />
-      ) : civilization === 'babylonia' ? (
-        <BabylonianSkyDiary currentDate={modernTime} lat={latitude} lng={longitude} />
-      ) : (
-        <PlanetaryPositions currentDate={modernTime} lat={latitude} lng={longitude} />
-      )}
+      {hourPanel}
 
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
         <ProvinciaInfo

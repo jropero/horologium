@@ -45,7 +45,7 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({
 
         if (hem.morning === 'nefer' && hem.midday === 'nefer' && hem.evening === 'nefer') {
           // Día excepcionalmente bueno
-          // Solo si no hay eclipse de Algol en TODO el día
+          // Solo si no hay eclipse de Algol en todo el día
           const eclipsesNear = getAlgolEclipses(checkDate, 1, 1);
           const hasEclipseThatDay = eclipsesNear.some(
             e =>

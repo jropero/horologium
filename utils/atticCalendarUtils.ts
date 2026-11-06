@@ -226,6 +226,9 @@ export const getAtticDate = (
   } = monthForLunation(lunation, monthCount);
   const dayFormatted = formatAtticDay(day, monthLength);
 
+  const decadeIfNotFirst = day <= 20 ? 2 : 3;
+  const decade = day <= 10 ? 1 : decadeIfNotFirst;
+
   return {
     short: `${dayFormatted.short}, ${monthData.name}`,
     full: `${dayFormatted.full}, μηνὸς ${monthData.name}`,
@@ -234,7 +237,7 @@ export const getAtticDate = (
     monthName: monthData.name,
     dayOfMonth: day,
     monthIndex,
-    decade: day <= 10 ? 1 : day <= 20 ? 2 : 3,
+    decade,
     monthLength,
     isIntercalaryMonth,
     anchorGregYear: anchor,

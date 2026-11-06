@@ -606,6 +606,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   // The current planetary day (sunrise → next sunrise) plus the next one, so the
   // list can run on past the next sunrise instead of wrapping back into hours that
   // are already over.
+  const minuteTick = Math.floor(currentDate.getTime() / 60000);
   const { today, upcoming, currentIdx } = useMemo<{
     today: HourSlot[];
     upcoming: HourSlot[];
@@ -635,10 +636,12 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
     } catch {
       return { today: [], upcoming: [], currentIdx: 0 };
     }
-    // eslint-disable-next-line react-hooks/use-memo
-  }, [Math.floor(currentDate.getTime() / 60000), lat, lng]);
+    // minuteTick is a throttled proxy for currentDate (re-runs once per minute, not per ms)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minuteTick, lat, lng]);
 
   // ── Parapegma ────────────────────────────────────────────────────
+  const dayTick = Math.floor(currentDate.getTime() / 86400000);
   const paraEvents = useMemo<ParaEvent[]>(() => {
     if (civilization !== 'rome' && civilization !== 'hellas') return [];
     try {
@@ -646,8 +649,9 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
     } catch {
       return [];
     }
-    // eslint-disable-next-line react-hooks/use-memo
-  }, [Math.floor(currentDate.getTime() / 86400000), civilization]);
+    // dayTick is a throttled proxy for currentDate (re-runs once per day)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayTick, civilization]);
 
   const names = CIV_NAMES[civilization] ?? CIV_NAMES.rome;
   const hoursTitle = HOURS_TITLE[civilization] ?? 'Horae';
@@ -776,6 +780,10 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
             (() => {
               const dayKey = today[0].rulerKey;
               const lum = ZH_LUMINARIES[dayKey];
+              let dayLabel: string;
+              if (dayKey === 'Sun') dayLabel = 'Día del Sol';
+              else if (dayKey === 'Moon') dayLabel = 'Día de la Luna';
+              else dayLabel = `Día de ${lum.es}`;
               return (
                 <>
                   {/* The day and its ruler */}
@@ -791,13 +799,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
                         {lum.yao}日{' '}
                         <span className="text-gold-dim text-sm">· {names[dayKey]}</span>
                       </span>
-                      <span className="text-xs italic text-parchment/70">
-                        {dayKey === 'Sun'
-                          ? 'Día del Sol'
-                          : dayKey === 'Moon'
-                          ? 'Día de la Luna'
-                          : `Día de ${lum.es}`}
-                      </span>
+                      <span className="text-xs italic text-parchment/70">{dayLabel}</span>
                       <span className="mt-1 text-xs text-parchment/60 leading-snug">
                         胡名 <span className="text-parchment/85">{lum.hu}</span> · 波斯名{' '}
                         <span className="text-parchment/85">{lum.bosi}</span> · 天竺名{' '}
@@ -945,10 +947,8 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
               const valens = civilization === 'hellas' ? VALENS[h.rulerKey] : undefined;
               const starName =
                 civilization === 'hellas' ? GREEK_STAR_NAMES[h.rulerKey] : undefined;
-              const civic =
-                civilization === 'rome'
-                  ? (h.isDay ? CIVIC_DAY_HOURS : CIVIC_NIGHT_HOURS)[h.num - 1]
-                  : undefined;
+              const civicHours = h.isDay ? CIVIC_DAY_HOURS : CIVIC_NIGHT_HOURS;
+              const civic = civilization === 'rome' ? civicHours[h.num - 1] : undefined;
               const vigilia =
                 civilization === 'rome' && !h.isDay ? vigiliaOf(h.num) : undefined;
               return (

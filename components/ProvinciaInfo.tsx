@@ -50,6 +50,9 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({
 
   const province = useMemo(
     () => (civilization === 'rome' ? getRomanProvince(latitude, longitude) : null),
+    // provinceShapesVersion is a version counter from useSyncExternalStore; it forces re-run
+    // when real province boundaries finish loading, though it isn't used directly in the callback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [latitude, longitude, civilization, provinceShapesVersion],
   );
 
@@ -99,40 +102,36 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({
     [latitude, longitude, civilization],
   );
 
-  const regionName =
-    civilization === 'rome'
-      ? province?.name
-      : civilization === 'hellas'
-      ? greekRegion?.name
-      : egyptianRegion?.name;
+  let regionName: string | undefined;
+  if (civilization === 'rome') regionName = province?.name;
+  else if (civilization === 'hellas') regionName = greekRegion?.name;
+  else regionName = egyptianRegion?.name;
 
-  const regionDesc =
-    civilization === 'rome'
-      ? province?.desc
-      : civilization === 'hellas'
-      ? greekRegion?.desc
-      : egyptianRegion?.desc;
+  let regionDesc: string | undefined;
+  if (civilization === 'rome') regionDesc = province?.desc;
+  else if (civilization === 'hellas') regionDesc = greekRegion?.desc;
+  else regionDesc = egyptianRegion?.desc;
 
-  const distanceDisplay =
-    civilization === 'rome' && distance
-      ? {
-          value: toRoman(distance.romanMiles),
-          detail: `${distance.romanMiles.toLocaleString()} ${labels.distanceFromLabel}`,
-          km: distance.km,
-        }
-      : civilization === 'hellas' && greekDistance
-      ? {
-          value: `${greekDistance.stadia.toLocaleString()}`,
-          detail: labels.distanceFromLabel,
-          km: greekDistance.km,
-        }
-      : civilization === 'aegyptus' && egyptianDistance
-      ? {
-          value: `${egyptianDistance.iteru.toLocaleString()}`,
-          detail: labels.distanceFromLabel,
-          km: egyptianDistance.km,
-        }
-      : null;
+  let distanceDisplay: { value: string; detail: string; km: number } | null = null;
+  if (civilization === 'rome' && distance) {
+    distanceDisplay = {
+      value: toRoman(distance.romanMiles),
+      detail: `${distance.romanMiles.toLocaleString()} ${labels.distanceFromLabel}`,
+      km: distance.km,
+    };
+  } else if (civilization === 'hellas' && greekDistance) {
+    distanceDisplay = {
+      value: `${greekDistance.stadia.toLocaleString()}`,
+      detail: labels.distanceFromLabel,
+      km: greekDistance.km,
+    };
+  } else if (civilization === 'aegyptus' && egyptianDistance) {
+    distanceDisplay = {
+      value: `${egyptianDistance.iteru.toLocaleString()}`,
+      detail: labels.distanceFromLabel,
+      km: egyptianDistance.km,
+    };
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-6 px-2 animate-fadeIn">

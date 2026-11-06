@@ -137,7 +137,9 @@ const TinyMoon: React.FC<{ phase: number; size?: number; dim?: boolean }> = ({
   const termRx = r * (1 - norm * 2);
   const absTerm = Math.abs(termRx) || 0.01;
   const outerSweep = isWaxing ? 1 : 0;
-  const innerSweep = isWaxing ? (termRx > 0 ? 0 : 1) : termRx > 0 ? 1 : 0;
+  const waxingInner = termRx > 0 ? 0 : 1;
+  const waningInner = termRx > 0 ? 1 : 0;
+  const innerSweep = isWaxing ? waxingInner : waningInner;
 
   const d = `M ${cx} ${topY} A ${r} ${r} 0 0 ${outerSweep} ${cx} ${botY} A ${absTerm} ${r} 0 0 ${innerSweep} ${cx} ${topY} Z`;
 
@@ -219,6 +221,11 @@ const DayGrid: React.FC<{
 
   const selFest = selectedDay !== null ? getAtticFestivalInfo(monthIndex, selectedDay) : null;
   const selHoly = selectedDay !== null ? getDailyAtticDeity(selectedDay, monthLen) : null;
+
+  const hasSelection = selectedDay !== null && (selFest || selHoly);
+  let infoPanelClass = 'border-sky-800/30 bg-transparent py-2 px-3';
+  if (hasSelection && selFest) infoPanelClass = 'border-sky-500/40 bg-sky-900/20 p-3';
+  else if (hasSelection) infoPanelClass = 'border-amber-500/40 bg-amber-900/15 p-3';
 
   return (
     <div>
@@ -310,82 +317,81 @@ const DayGrid: React.FC<{
       </div>
 
       {/* Info panel */}
-      <div
-        className={`mt-3 rounded-lg border transition-all ${
-          selectedDay !== null && (selFest || selHoly)
-            ? selFest
-              ? 'border-sky-500/40 bg-sky-900/20 p-3'
-              : 'border-amber-500/40 bg-amber-900/15 p-3'
-            : 'border-sky-800/30 bg-transparent py-2 px-3'
-        }`}
-      >
-        {selectedDay !== null && (selFest || selHoly) ? (
-          <div className="flex flex-col gap-2 text-left animate-fadeIn">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-serif font-bold text-sky-400 uppercase tracking-wider">
-                Ἡμέρα {selectedDay}
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedDay(null)}
-                className="text-sky-500 hover:text-sky-300 text-xs leading-none px-1"
-                aria-label="Cerrar"
-              >
-                ✕
-              </button>
+      <div className={`mt-3 rounded-lg border transition-all ${infoPanelClass}`}>
+        {(() => {
+          if (!hasSelection) {
+            if (selectedDay !== null)
+              return (
+                <p className="text-xs font-serif text-sky-400/50 text-center">
+                  Sin celebración registrada para este día.
+                </p>
+              );
+            return (
+              <p className="text-xs font-serif text-sky-400/50 text-center">
+                Toca un día para ver su significado
+              </p>
+            );
+          }
+          return (
+            <div className="flex flex-col gap-2 text-left animate-fadeIn">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-serif font-bold text-sky-400 uppercase tracking-wider">
+                  Ἡμέρα {selectedDay}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedDay(null)}
+                  className="text-sky-500 hover:text-sky-300 text-xs leading-none px-1"
+                  aria-label="Cerrar"
+                >
+                  ✕
+                </button>
+              </div>
+              {selFest ? (
+                <div>
+                  <span className="text-xs font-serif font-bold text-sky-300">
+                    {selFest.festivalName}
+                  </span>
+                  {selFest.festivalDayName && (
+                    <span className="ml-2 text-xs uppercase tracking-widest text-sky-400/70">
+                      {selFest.festivalDayName}
+                    </span>
+                  )}
+                  <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">
+                    {selFest.festivalDesc}
+                  </p>
+                  {selFest.deity && (
+                    <span className="text-xs text-gold-dim font-serif mt-1 block">
+                      Deidad: {selFest.deity}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <span className="text-xs font-serif font-bold text-amber-300">
+                    {selHoly!.festivalName}
+                  </span>
+                  <span className="ml-2 text-xs uppercase tracking-widest text-amber-400/70">
+                    Día Sagrado
+                  </span>
+                  <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">
+                    {selHoly!.festivalDesc}
+                  </p>
+                  {selHoly!.deity && (
+                    <span className="text-xs text-gold-dim font-serif mt-1 block">
+                      Deidad: {selHoly!.deity}
+                    </span>
+                  )}
+                </div>
+              )}
+              {selFest && selHoly && (
+                <span className="text-xs font-serif text-amber-400/80 leading-snug">
+                  También hoy: {selHoly.festivalName} — {selHoly.deity}
+                </span>
+              )}
             </div>
-            {selFest ? (
-              <div>
-                <span className="text-xs font-serif font-bold text-sky-300">
-                  {selFest.festivalName}
-                </span>
-                {selFest.festivalDayName && (
-                  <span className="ml-2 text-xs uppercase tracking-widest text-sky-400/70">
-                    {selFest.festivalDayName}
-                  </span>
-                )}
-                <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">
-                  {selFest.festivalDesc}
-                </p>
-                {selFest.deity && (
-                  <span className="text-xs text-gold-dim font-serif mt-1 block">
-                    Deidad: {selFest.deity}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <div>
-                <span className="text-xs font-serif font-bold text-amber-300">
-                  {selHoly!.festivalName}
-                </span>
-                <span className="ml-2 text-xs uppercase tracking-widest text-amber-400/70">
-                  Día Sagrado
-                </span>
-                <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">
-                  {selHoly!.festivalDesc}
-                </p>
-                {selHoly!.deity && (
-                  <span className="text-xs text-gold-dim font-serif mt-1 block">
-                    Deidad: {selHoly!.deity}
-                  </span>
-                )}
-              </div>
-            )}
-            {selFest && selHoly && (
-              <span className="text-xs font-serif text-amber-400/80 leading-snug">
-                También hoy: {selHoly.festivalName} — {selHoly.deity}
-              </span>
-            )}
-          </div>
-        ) : selectedDay !== null ? (
-          <p className="text-xs font-serif text-sky-400/50 text-center">
-            Sin celebración registrada para este día.
-          </p>
-        ) : (
-          <p className="text-xs font-serif text-sky-400/50 text-center">
-            Toca un día para ver su significado
-          </p>
-        )}
+          );
+        })()}
       </div>
 
       {/* Legend */}
@@ -420,6 +426,11 @@ interface HellenicCalendarInfoProps {
 }
 
 type ViewMode = 'month' | 'festivals' | 'days';
+const VIEW_LABELS: Record<ViewMode, string> = {
+  month: '☽ Mes',
+  festivals: '🏛️ Fiestas',
+  days: '🕯️ 7 Ἡμέρες',
+};
 
 const DECADE_LABELS: Record<number, { title: string; subtitle: string }> = {
   1: { title: 'Ἱστάμενος', subtitle: 'Creciente' },
@@ -626,20 +637,15 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     return 'linear-gradient(to bottom, #0a1828 0%, #183050 30%, #2a5878 60%, #4888a8 100%)';
   })();
 
-  const skylineFill = !isDay
-    ? 'rgba(18,45,95,0.92)'
-    : condition === 'snow'
-    ? 'rgba(55,80,110,0.88)'
-    : condition === 'fog'
-    ? 'rgba(130,155,175,0.75)'
-    : 'rgba(215,228,240,0.95)';
-  const skylineStroke = !isDay
-    ? 'rgba(70,130,200,0.55)'
-    : condition === 'snow'
-    ? 'rgba(140,180,210,0.50)'
-    : condition === 'fog'
-    ? 'rgba(120,148,168,0.38)'
-    : 'rgba(80,128,162,0.38)';
+  let skylineFill = 'rgba(215,228,240,0.95)';
+  if (!isDay) skylineFill = 'rgba(18,45,95,0.92)';
+  else if (condition === 'snow') skylineFill = 'rgba(55,80,110,0.88)';
+  else if (condition === 'fog') skylineFill = 'rgba(130,155,175,0.75)';
+
+  let skylineStroke = 'rgba(80,128,162,0.38)';
+  if (!isDay) skylineStroke = 'rgba(70,130,200,0.55)';
+  else if (condition === 'snow') skylineStroke = 'rgba(140,180,210,0.50)';
+  else if (condition === 'fog') skylineStroke = 'rgba(120,148,168,0.38)';
 
   const decadeLabel = DECADE_LABELS[atticDate.decade] ?? DECADE_LABELS[1];
   const nextFests = getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 5);
@@ -951,7 +957,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                       : 'text-sky-500 hover:text-sky-300 hover:bg-sky-900/20'
                   }`}
               >
-                {v === 'month' ? '☽ Mes' : v === 'festivals' ? '🏛️ Fiestas' : '🕯️ 7 Ἡμέρες'}
+                {VIEW_LABELS[v]}
               </button>
             ))}
           </div>

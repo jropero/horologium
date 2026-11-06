@@ -92,6 +92,11 @@ const LocationModal: React.FC<LocationModalProps> = ({
               const active = isActive(loc);
               const Icon = loc.icon;
               const isGps = loc.id === 'gps';
+              const inactiveContainerClass = isGps
+                ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20 hover:border-roman-red'
+                : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10';
+              const inactiveIconBg = isGps ? 'bg-roman-red/20' : 'bg-white/5';
+              const inactiveIconColor = isGps ? 'text-roman-red' : 'text-gold-leaf';
 
               return (
                 <button
@@ -104,9 +109,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
                     ${
                       active
                         ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.4)] scale-[1.02]'
-                        : isGps
-                        ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20 hover:border-roman-red'
-                        : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10'
+                        : inactiveContainerClass
                     }
                     ${loading && isGps ? 'animate-pulse' : ''}
                   `}
@@ -114,13 +117,11 @@ const LocationModal: React.FC<LocationModalProps> = ({
                   <div
                     className={`
                     p-2 rounded-full transition-colors duration-300
-                    ${active ? 'bg-ink/10' : isGps ? 'bg-roman-red/20' : 'bg-white/5'}
+                    ${active ? 'bg-ink/10' : inactiveIconBg}
                   `}
                   >
                     <Icon
-                      className={`w-5 h-5 ${
-                        active ? 'text-roman-red' : isGps ? 'text-roman-red' : 'text-gold-leaf'
-                      }`}
+                      className={`w-5 h-5 ${active ? 'text-roman-red' : inactiveIconColor}`}
                     />
                   </div>
 

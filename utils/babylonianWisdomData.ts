@@ -12,68 +12,70 @@ export interface BabylonianWisdom {
   source: string; // Referencia específica (tablilla, línea)
 }
 
+const AUTHOR_GILGAMESH = 'Epopeya de Gilgamesh';
+
 export const BABYLONIAN_WISDOM: BabylonianWisdom[] = [
   // === Epopeya de Gilgamesh ===
   {
     id: 1,
     text: 'El que lo vio todo, el que exploró los confines de todas las tierras; el que todo lo conoció y fue hecho en sabiduría perfecta.',
     akkadian: 'ša nagba īmuru išdi mātāti',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla I, vv. 1–2',
   },
   {
     id: 2,
     text: 'Cuando los dioses crearon a la humanidad le asignaron la muerte; la vida la retuvieron en sus propias manos.',
     akkadian: 'inūma ilū ibnu awīlūtam, mūtam išīmū ana awīlūtim, balāṭam ina qātišunu iṣṣabtu',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla X (versión paleo-babilónica, Šiduri)',
   },
   {
     id: 3,
     text: 'Gilgamesh, ¿a dónde corres sin descanso? La vida que buscas no la encontrarás.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla X, vv. 1–3 (Uta-napišti)',
   },
   {
     id: 4,
     text: 'De día y de noche, sé alegre. Que tu vientre esté lleno; que tu corazón sea feliz. Que la fiesta sea tu gozo día y noche.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla X (Šiduri, versión paleo-babilónica)',
   },
   {
     id: 5,
     text: 'Por Enkidu, su amigo, Gilgamesh lloró con amargura mientras corría por la estepa, lleno de terror ante la muerte.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla IX, vv. 1–3',
   },
   {
     id: 6,
     text: 'El hombre que ha visto el abismo y el que vive en la cumbre del mundo: al final, ambos beben de la misma copa.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla X (reflexión de Uta-napišti)',
   },
   {
     id: 7,
     text: 'Con el alba apareció desde el horizonte una nube negra. Adad tronó en su interior y los dioses mensajeros iban con él.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla XI, vv. 96–98 (relato del Diluvio)',
   },
   {
     id: 8,
     text: 'Enkidu, tú que eras la hachas en mi costado, el escudo de mi brazo, mi espada, mi cinto festivo: en tu presencia mi mente encontraba reposo.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla VIII, vv. 1–5 (lamento de Gilgamesh)',
   },
   {
     id: 9,
     text: 'El hambre y la fatiga conoce quien vive en la ciudad; no siente la lluvia libre como la gacela.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla I (descripción de Enkidu)',
   },
   {
     id: 10,
     text: 'A los dos tercios era divino, a un tercio humano. La forma de su cuerpo era perfecta más allá de lo que puede describirse.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla I, vv. 48–49',
   },
 
@@ -263,25 +265,25 @@ export const BABYLONIAN_WISDOM: BabylonianWisdom[] = [
   {
     id: 38,
     text: 'Cuando el barquero Urshanabi te dé paso sobre las Aguas de la Muerte, lava tus sucias manos; que la nobleza de lo divino esté contigo.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla X, vv. 174–177',
   },
   {
     id: 39,
     text: 'Así que Gilgamesh, seis días y siete noches estuvo de pie y no doblegó sus rodillas. Pero el sueño, como una niebla, sopló sobre él.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla XI, vv. 196–199 (prueba de Uta-napišti)',
   },
   {
     id: 40,
     text: 'Encontré aquello que buscaba; ahora lo he perdido. La serpiente lo arrebató. ¿A quién encontraré ahora para que me lleve al mar?',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla XI, vv. 301–304 (lamento de Gilgamesh)',
   },
   {
     id: 41,
     text: 'En el fondo del mar hay una planta parecida a un espino; sus espinas son como las de la rosa y picarán tus manos. Pero si la consigues, encontrarás la vida.',
-    author: 'Epopeya de Gilgamesh',
+    author: AUTHOR_GILGAMESH,
     source: 'Tablilla XI, vv. 266–270 (Uta-napišti sobre la planta de la vida)',
   },
 

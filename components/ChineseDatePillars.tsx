@@ -121,17 +121,16 @@ const ChineseDatePillars: React.FC<Props> = ({
                   const day = xunIdx * 10 + i + 1;
                   const isCurrent = day === dayNumber;
                   const filled = day < dayNumber;
+                  let barClass: string;
+                  if (isCurrent) {
+                    barClass = 'h-2.5 bg-gold-leaf';
+                  } else if (filled) {
+                    barClass = 'h-1.5 bg-gold-dim/50';
+                  } else {
+                    barClass = 'h-1.5 bg-parchment/10';
+                  }
                   return (
-                    <div
-                      key={i}
-                      className={`flex-1 rounded-full transition-all ${
-                        isCurrent
-                          ? 'h-2.5 bg-gold-leaf'
-                          : filled
-                          ? 'h-1.5 bg-gold-dim/50'
-                          : 'h-1.5 bg-parchment/10'
-                      }`}
-                    />
+                    <div key={i} className={`flex-1 rounded-full transition-all ${barClass}`} />
                   );
                 })}
               </div>

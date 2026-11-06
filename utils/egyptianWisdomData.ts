@@ -9,68 +9,72 @@ export interface EgyptianWisdom {
   source: string;
 }
 
+const AUTHOR_PTAHHOTEP = 'Visir Ptahhotep';
+const SOURCE_PTAHHOTEP = 'Las Instrucciones de Ptahhotep';
+const AUTHOR_AMENEMOPE = 'Escriba Amenemope';
+
 export const EGYPTIAN_WISDOM: EgyptianWisdom[] = [
   // === Instrucciones de Ptahhotep (Reino Antiguo, Dinastía V) ===
   {
     id: 1,
     text: 'No te enorgullezcas de tu saber, ni te confíes porque seas sabio. Consulta al ignorante tanto como al instruido, pues no hay límite para el arte y ningún artesano alcanza la perfección absoluta.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 2,
     text: 'Si encuentras a un adversario en su momento de ira, un sabio superior a ti, dobla tus brazos y dobla tu espalda. No te opongas a él y mostrarás tu dominio.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 3,
     text: 'La justicia (Maat) es grande y su valor perdura. No ha sido alterada desde los tiempos de Osiris. El que quebranta las leyes será castigado.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 4,
     text: 'Sigue a tu corazón el tiempo que vivas. No hagas más de lo que se te manda; no acortes el tiempo de seguir al corazón, pues a los dioses les ofende la tristeza.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 5,
     text: 'El que escucha es el que prospera. Que el que escucha se convierta en un hombre que es escuchado.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
 
   // === Instrucciones de Amenemope (Imperio Nuevo, Dinastía XX) ===
   {
     id: 6,
     text: 'Mejor es el pan con un corazón feliz, que la riqueza con aflicción.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope',
   },
   {
     id: 7,
     text: 'No cambies los linderos de los campos, ni alteres la cuerda de medir; no codicies la tierra de una viuda.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope',
   },
   {
     id: 8,
     text: 'El hombre verdaderamente silencioso se mantiene apartado. Es como un árbol que crece en un jardín: florece y duplica su cosecha.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope',
   },
   {
     id: 9,
     text: 'No rías ante el ciego ni te burles del enano. No arruines los planes del cojo. El hombre es arcilla y paja, y el Dios es su Gran Constructor.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope',
   },
   {
     id: 10,
     text: 'No pases la noche temiendo el mañana. Al amanecer, ¿qué es el mañana? El hombre ignora cómo será el mañana, pues el Dios es quien traza el destino.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope',
   },
 
@@ -144,93 +148,93 @@ export const EGYPTIAN_WISDOM: EgyptianWisdom[] = [
   {
     id: 21,
     text: 'Si eres un hombre que preside, escucha en calma las palabras del suplicante. No lo rechaces antes de que haya aliviado su corazón de lo que quería decirte.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 22,
     text: 'Qué dura y penosa es la condición del que tiene el corazón vacío. El hombre de buen corazón es como un jardín en flor.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 23,
     text: 'Si quieres que tu conducta sea buena y preservarte de toda clase de mal, guárdate de la codicia. Es una enfermedad grave e incurable.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 24,
     text: 'No dejes que tu corazón se ensoberbezca por tu saber. Habla tanto con el ignorante como con el sabio, pues los límites del arte no pueden alcanzarse y ningún artesano llega a dominar plenamente su habilidad.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 25,
     text: 'Si eres un hombre de confianza enviado por un superior a otro superior, sé exactamente tal como te envían. Realiza la misión tal como te la encargó.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 26,
     text: 'El amor al trabajo es duradero; el hombre que conoce su oficio en todas sus dimensiones puede sentarse entre los grandes.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
   {
     id: 27,
     text: 'No seas codicioso al repartir tu comida, ni avaro con tus amigos. La generosidad del corazón es el ornamento del hombre de bien.',
-    author: 'Visir Ptahhotep',
-    source: 'Las Instrucciones de Ptahhotep',
+    author: AUTHOR_PTAHHOTEP,
+    source: SOURCE_PTAHHOTEP,
   },
 
   // === Más de las Instrucciones de Amenemope ===
   {
     id: 28,
     text: 'No te sientes a hablar con el hombre colérico ni te acerques a él en conversación. Porque la violencia se precipita de su boca como el fuego sobre la hierba.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 9',
   },
   {
     id: 29,
     text: 'Guárdate de robar al pobre y de oprimir al débil. No alargues tu mano hacia el bien del anciano, ni toques la palabra del rey.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 2',
   },
   {
     id: 30,
     text: 'El hombre verdaderamente silencioso se mantiene apartado del camino del mal. Es como el oro puro que ha sido sometido a la prueba del fuego.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 9',
   },
   {
     id: 31,
     text: 'No saludes al poderoso con interés en tu corazón, ni busques su conversación buscando ventaja. Habla con él según tu corazón sin doblez.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 10',
   },
   {
     id: 32,
     text: 'No duermas mientras que un oficial está de pie; tu alma odia a aquel que duerme cuando debe estar vigilante.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 26',
   },
   {
     id: 33,
     text: 'No codicides los bienes del hombre pequeño, ni tengas hambre de su pan. La riqueza del hombre pequeño tapa la garganta del grande.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 7',
   },
   {
     id: 34,
     text: 'No te fijes en el granero del hombre codicioso; no desees su trigo. El hombre que vive del trabajo de sus manos tiene más tranquilidad.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 6',
   },
   {
     id: 35,
     text: 'Pon tus asuntos en manos de los dioses y tu serenidad los asombrará.',
-    author: 'Escriba Amenemope',
+    author: AUTHOR_AMENEMOPE,
     source: 'Instrucciones de Amenemope, Capítulo 22',
   },
 
