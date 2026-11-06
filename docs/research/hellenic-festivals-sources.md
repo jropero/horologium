@@ -155,3 +155,15 @@ Low priority to add but it is a real gap.
   PDF: `~/Downloads/Kalligeneia_ Fertility and Feminine Focus on an Athenian Bell Kra.pdf`
 - Foley, H. P., *The Homeric Hymn to Demeter: Translation, Commentary, and
   Interpretative Essays* (Princeton UP, 1994).
+
+---
+
+## `getDefaultAtticDeity` — month patron for Pyanepsion (monthIndex 3)
+
+**Question (2026-11-06):** Is Apollo the correct month patron for Pyanepsion?
+
+**Sources checked:**
+- Parke pp. 73–94: The Pyanopsia (day 7) is explicitly Apollo's festival and gives the month its name ("the 7th of the month was the day specially devoted to the worship of Apollo… the *Pyanepsia* — a festival of Apollo which gave its name to the month", p. 75). However, Parke notes Apollo "may have been observed for many centuries without any very specific deity as patron" before Apollo acquired the festival in the sixth century BCE (p. 80). The Thesmophoria (Demeter) is "of much greater importance and extent" and fills the middle of the month (p. 82).
+- Deubner pp. 197–201: Apollo is the deity of the Pyanopsia; the bean-dish and Eiresione procession are "pre-Apolline in origin" but firmly Apolline by the classical period. Demeter (Proerosia day 5, Stenia day 9, Thesmophoria days 11–13) and Athena together far outweigh Apollo's single day.
+
+**Decision:** Apollo retained as patron because the month is named after his festival (Pyanopsia). Description updated to reference the Pyanopsia etymology and note Demeter's prominence across the month. Neither source assigns a single overall patron to the month.

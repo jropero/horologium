@@ -600,7 +600,7 @@ export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
     0: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la protectora de la ciudad.", deity: "Ἀθηνᾶ", deityDesc: "Protectora de Atenas, diosa de la sabiduría." },
     1: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios de la luz.", deity: "Ἀπόλλων", deityDesc: "Dios de la luz, la música y la profecía." },
     2: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la diosa de la cosecha.", deity: "Δημήτηρ", deityDesc: "Diosa de la cosecha y la tierra cultivada." },
-    3: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios de la verdad.", deity: "Ἀπόλλων", deityDesc: "Dios de la verdad y la curación." },
+    3: { festivalName: "Día Sagrado", festivalDesc: "Mes que toma su nombre de la Pyanopsia (día 7), festival de Apolo. Deméter preside también este mes con la Proerosia (día 5), la Stenia (día 9) y las Thesmophoria (días 11–13).", deity: "Ἀπόλλων", deityDesc: "Apolo da nombre al mes por su festival de la Pyanopsia; Deméter domina el calendario festivo del mes con tres ritos agrarios." },
     4: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al rey de los dioses.", deity: "Ζεύς", deityDesc: "Padre de los dioses, señor del Olimpo." },
     5: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios del mar.", deity: "Ποσειδῶν", deityDesc: "Dios de los mares y las aguas." },
     6: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la reina de los dioses.", deity: "Ἥρα", deityDesc: "Reina de los dioses, protectora del matrimonio." },
