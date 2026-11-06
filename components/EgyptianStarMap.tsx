@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { computeSky, projectCatalog, SkySnapshot } from '../utils/egyptianSkyMap';
+import { getSunAltitude } from '../utils/solar';
 
 /**
  * 360° draggable sky panorama drawn as the bottom layer of the Egyptian hero
@@ -13,9 +14,6 @@ interface EgyptianStarMapProps {
   date: Date;
   lat: number;
   lng: number;
-  isDay: boolean;
-  sunrise: Date;
-  sunset: Date;
   /** Horizon line as a fraction of the canvas height (from the top). */
   horizon?: number;
 }
@@ -26,8 +24,6 @@ const PX_PER_DEG = 6; // 360° → 2160px panorama
 const ALT_MAX = 72; // altitude shown at the top edge of the canvas
 const COMPASS_PX = 16; // compass band along the top edge
 const INITIAL_AZIMUTH = 180; // observer faces south on load
-const TWILIGHT_MIN = 30; // blend window around sunrise / sunset
-const DAY_MS = 24 * 3600 * 1000;
 // Curated mode keeps a faint backdrop of the brighter catalogue stars so the view
 // is never empty when the Egyptian bodies are all below the horizon or off-view.
 const BACKDROP_MAG_LIMIT = 4.5;
@@ -62,23 +58,10 @@ const mixRgb = (a: RGB, b: RGB, t: number): string =>
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const wrap360 = (deg: number) => ((deg % 360) + 360) % 360;
 
-/** 0 = full night, 1 = full day, blended linearly within ±30 min of sunrise/sunset. */
-const getDayFactor = (now: Date, isDay: boolean, sunrise: Date, sunset: Date): number => {
-  const t = now.getTime();
-  // romanTime only carries the current day/night boundaries, so also test the
-  // same events shifted by a day (e.g. tomorrow's sunrise during the night).
-  const nearest = (e: Date) =>
-    [e.getTime() - DAY_MS, e.getTime(), e.getTime() + DAY_MS].reduce(
-      (best, c) => (Math.abs(c - t) < Math.abs(best - t) ? c : best),
-      e.getTime(),
-    );
-  const win = TWILIGHT_MIN * 60000;
-  const dRise = t - nearest(sunrise);
-  if (Math.abs(dRise) <= win) return clamp01((dRise + win) / (2 * win));
-  const dSet = t - nearest(sunset);
-  if (Math.abs(dSet) <= win) return clamp01(1 - (dSet + win) / (2 * win));
-  return isDay ? 1 : 0;
-};
+/** 0 = full night, 0.5 = horizon, 1 = full day — based on real sun altitude.
+ *  Civil twilight boundary (-6°) maps to 0; +6° above horizon maps to 1. */
+const getDayFactor = (now: Date, lat: number, lng: number): number =>
+  clamp01((getSunAltitude(now, lat, lng) + 6) / 12);
 
 const starColor = (mag: number) => {
   // Bright stars white with a blue tint, dim stars blue-grey.
@@ -223,15 +206,7 @@ const drawPlanet = (
   ctx.restore();
 };
 
-const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({
-  date,
-  lat,
-  lng,
-  isDay,
-  sunrise,
-  sunset,
-  horizon = 1,
-}) => {
+const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, horizon = 1 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sopdetGlowRef = useRef<HTMLDivElement>(null);
@@ -264,7 +239,7 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [catalog, minuteKey, lat, lng],
   );
-  const dayFactor = getDayFactor(date, isDay, sunrise, sunset);
+  const dayFactor = getDayFactor(date, lat, lng);
 
   useEffect(() => {
     let cancelled = false;
