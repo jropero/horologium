@@ -1,6 +1,11 @@
 import React, { useMemo } from 'react';
 import { X, CalendarDays } from 'lucide-react';
-import { getRomanDate, getNundinalLetter, NUNDINAE_LETTER, LATIN_WEEKDAYS } from '../utils/romanTimeUtils';
+import {
+  getRomanDate,
+  getNundinalLetter,
+  NUNDINAE_LETTER,
+  LATIN_WEEKDAYS,
+} from '../utils/romanTimeUtils';
 import { getRomanDayInfo } from '../utils/romanCalendarData';
 import { OVID_MONTH_ETYMOLOGIES } from '../utils/ovidFastiData';
 
@@ -10,7 +15,11 @@ interface RomanCalendarModalProps {
   startDate: Date;
 }
 
-const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose, startDate }) => {
+const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
+  isOpen,
+  onClose,
+  startDate,
+}) => {
   // Generar solo los próximos 7 días (una semana)
   const nextDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
@@ -29,7 +38,7 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
         dayOfWeek,
         nundinalLetter,
         isMarketDay,
-        info
+        info,
       };
     });
   }, [startDate]);
@@ -42,17 +51,16 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
   if (!isOpen) return null;
 
   return (
-    // Fondo oscuro clickeable para cerrar fácilmente en móvil tocando fuera
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
-      {/* Contenedor principal de la modal (detiene el clic para no cerrar si tocas dentro) */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col relative overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
-
         {/* Header del Modal */}
         <div className="bg-ink p-3 sm:p-4 border-b border-gold-dim/50 flex justify-between items-center sticky top-0 z-10 shadow-md">
           <div className="flex items-center gap-2 sm:gap-3 text-gold-leaf">
@@ -80,15 +88,15 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
           {/* Epic 1: Ovid Etymology Banner */}
           {ovidMonthInfo && (
             <div className="mb-6 p-4 bg-gold-dim/5 border border-gold-dim/20 rounded-lg text-center relative">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-ink px-3 text-[10px] text-gold-dim uppercase tracking-[0.2em] font-bold">
-                    Etimología: Fastos
-                </div>
-                <p className="text-xs sm:text-sm font-serif italic text-parchment/70 leading-relaxed">
-                    "{ovidMonthInfo.text}"
-                </p>
-                <div className="mt-2 text-[9px] text-gold-dim/50 uppercase tracking-widest">
-                    — Ovidio, {ovidMonthInfo.reference}
-                </div>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-ink px-3 text-[10px] text-gold-dim uppercase tracking-[0.2em] font-bold">
+                Etimología: Fastos
+              </div>
+              <p className="text-xs sm:text-sm font-serif italic text-parchment/70 leading-relaxed">
+                &quot;{ovidMonthInfo.text}&quot;
+              </p>
+              <div className="mt-2 text-[9px] text-gold-dim/50 uppercase tracking-widest">
+                — Ovidio, {ovidMonthInfo.reference}
+              </div>
             </div>
           )}
 
@@ -99,19 +107,27 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
             return (
               <div
                 key={idx}
-                className={`p-4 sm:p-5 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${isToday
-                  ? 'border-gold-leaf bg-gold-leaf/15 shadow-[0_0_15px_rgba(207,181,59,0.2)]'
-                  : hasFestival
+                className={`p-4 sm:p-5 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${
+                  isToday
+                    ? 'border-gold-leaf bg-gold-leaf/15 shadow-[0_0_15px_rgba(207,181,59,0.2)]'
+                    : hasFestival
                     ? 'border-amber-600/60 bg-amber-900/30'
                     : 'border-gold-dim/30 bg-ink/40'
-                  }`}
+                }`}
               >
                 {/* Fecha Gregoriana (Izquierda) */}
                 <div className="flex sm:flex-col items-center sm:items-start sm:w-24 shrink-0 gap-2 sm:gap-1 border-b sm:border-b-0 sm:border-r border-gold-dim/40 pb-3 sm:pb-0 sm:pr-4">
                   <span className="text-parchment font-body text-base font-bold uppercase tracking-tight">
-                    {day.gregorianDate.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })}
+                    {day.gregorianDate.toLocaleDateString('es-ES', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                   </span>
-                  {isToday && <span className="text-gold-leaf text-xs uppercase tracking-[0.2em] font-black border border-gold-leaf/40 px-1.5 rounded-sm bg-gold-leaf/10">Hodie</span>}
+                  {isToday && (
+                    <span className="text-gold-leaf text-xs uppercase tracking-[0.2em] font-black border border-gold-leaf/40 px-1.5 rounded-sm bg-gold-leaf/10">
+                      Hodie
+                    </span>
+                  )}
                 </div>
 
                 {/* Info Romana (Derecha) */}
@@ -122,7 +138,10 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
                       {day.dayOfWeek}
                     </span>
                     <div className="flex items-center gap-3">
-                      <span className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-ink/10 uppercase font-bold text-gold-leaf shadow-sm" title="Littera Nundinalis">
+                      <span
+                        className="text-[11px] px-2 py-0.5 border border-gold-dim/50 rounded-sm bg-ink/10 uppercase font-bold text-gold-leaf shadow-sm"
+                        title="Littera Nundinalis"
+                      >
                         {day.nundinalLetter}
                       </span>
                       {day.isMarketDay && (
@@ -137,30 +156,38 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({ isOpen, onClose
                     <h3 className="font-serif text-base sm:text-lg font-bold text-parchment leading-tight drop-shadow-sm">
                       {day.romanShort}
                     </h3>
-                    <span className={`font-serif text-xs font-bold px-2 py-1 rounded shrink-0 shadow-sm border ${['N', 'NP'].includes(day.info.status)
-                      ? 'border-roman-red bg-roman-red/30 text-parchment'
-                      : 'border-blue-500 bg-blue-900/50 text-blue-200'
-                      }`}>
+                    <span
+                      className={`font-serif text-xs font-bold px-2 py-1 rounded shrink-0 shadow-sm border ${
+                        ['N', 'NP'].includes(day.info.status)
+                          ? 'border-roman-red bg-roman-red/30 text-parchment'
+                          : 'border-blue-500 bg-blue-900/50 text-blue-200'
+                      }`}
+                    >
                       {day.info.status}
                     </span>
                   </div>
 
                   {hasFestival && (
                     <div className="text-festival font-serif text-sm sm:text-base uppercase tracking-[0.2em] mt-2 font-black flex items-center gap-2 drop-shadow-md">
-                      <span className="text-lg">✧</span> {day.info.festivalName} <span className="text-lg">✧</span>
+                      <span className="text-lg">✧</span> {day.info.festivalName}{' '}
+                      <span className="text-lg">✧</span>
                     </div>
                   )}
 
                   <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-2 italic flex items-center gap-2">
-                    <span className="text-gold-dim not-italic uppercase tracking-widest text-[10px] font-bold">Deus:</span>
-                    <span className="text-parchment font-bold tracking-wide">{day.info.god}</span>
+                    <span className="text-gold-dim not-italic uppercase tracking-widest text-[10px] font-bold">
+                      Deus:
+                    </span>
+                    <span className="text-parchment font-bold tracking-wide">
+                      {day.info.god}
+                    </span>
                   </div>
 
                   {/* Descripción de la fiesta */}
                   {hasFestival && day.info.description && (
                     <div className="mt-3 pt-3 border-t border-gold-dim/40">
                       <p className="font-serif text-xs sm:text-sm text-parchment leading-relaxed text-justify opacity-90 italic">
-                        "{day.info.description}"
+                        &quot;{day.info.description}&quot;
                       </p>
                     </div>
                   )}

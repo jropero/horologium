@@ -1,4 +1,14 @@
-import { DefineStar, SearchRiseSet, SearchAltitude, SearchHourAngle, AngleBetween, Body, Observer, Equator, Horizon } from 'astronomy-engine';
+import {
+  DefineStar,
+  SearchRiseSet,
+  SearchAltitude,
+  SearchHourAngle,
+  AngleBetween,
+  Body,
+  Observer,
+  Equator,
+  Horizon,
+} from 'astronomy-engine';
 import { getMoonPhase } from './solar';
 
 /** Apparent altitude of a DefineStar slot, using equator-of-date coordinates
@@ -26,15 +36,15 @@ export interface AlgolState {
 /**
  * Calculates the phase of Algol based on the astronomical ephemeris.
  * While the Egyptians recorded a period of 2.85 days, the true modern period
- * is 2.867328 days. We use the real period and a known modern epoch (T0) 
+ * is 2.867328 days. We use the real period and a known modern epoch (T0)
  * to calculate the exact position today.
  */
 const ALGOL_T0 = 2452253.567; // JD of known primary minimum
-const ALGOL_P  = 2.867328;    // orbital period in days
+const ALGOL_P = 2.867328; // orbital period in days
 const ALGOL_ECLIPSE_HW = 0.075; // half-width of eclipse window as fraction of period
 
 // Algol (Beta Persei): RA 3h 8m 10.1s, Dec +40° 57' 20", ~92.8 ly
-export const ALGOL_RA_H    = 3.13614;
+export const ALGOL_RA_H = 3.13614;
 export const ALGOL_DEC_DEG = 40.9556;
 export const ALGOL_DIST_LY = 92.8;
 
@@ -45,20 +55,20 @@ export const getAlgolPhase = (date: Date): AlgolState => {
   const cycles = (jd - ALGOL_T0) / ALGOL_P;
   let phase = cycles % 1;
   if (phase < 0) phase += 1;
-  const isEclipsed = phase >= (1 - ALGOL_ECLIPSE_HW) || phase <= ALGOL_ECLIPSE_HW;
+  const isEclipsed = phase >= 1 - ALGOL_ECLIPSE_HW || phase <= ALGOL_ECLIPSE_HW;
   return {
     phase,
     isEclipsed,
     stateText: isEclipsed
-      ? "El Ojo de Horus se oscurece (Mínimo estelar)"
-      : "El Ojo de Horus brilla con fuerza"
+      ? 'El Ojo de Horus se oscurece (Mínimo estelar)'
+      : 'El Ojo de Horus brilla con fuerza',
   };
 };
 
 export interface AlgolDailyData {
-  phase: number;              // 0.0–1.0 within the 2.867-day cycle
+  phase: number; // 0.0–1.0 within the 2.867-day cycle
   nextMinimumInHours: number; // hours until next eclipse minimum
-  lastMinimumAgoHours: number;// hours since last eclipse minimum
+  lastMinimumAgoHours: number; // hours since last eclipse minimum
   estimatedMagnitude: number; // 2.1 (bright) to 3.4 (at minimum)
   isEclipsing: boolean;
   periodDays: number;
@@ -80,7 +90,7 @@ export const getAlgolDailyData = (date: Date, lat: number, lng: number): AlgolDa
 
   const nextCycleN = Math.ceil(cycles);
   const lastCycleN = Math.floor(cycles);
-  const nextMinimumInHours  = (ALGOL_T0 + nextCycleN * ALGOL_P - jd) * 24;
+  const nextMinimumInHours = (ALGOL_T0 + nextCycleN * ALGOL_P - jd) * 24;
   const lastMinimumAgoHours = (jd - (ALGOL_T0 + lastCycleN * ALGOL_P)) * 24;
 
   const distFromMin = Math.min(phase, 1 - phase);
@@ -88,7 +98,7 @@ export const getAlgolDailyData = (date: Date, lat: number, lng: number): AlgolDa
   let estimatedMagnitude: number;
   if (isEclipsing) {
     const t = distFromMin / ALGOL_ECLIPSE_HW;
-    estimatedMagnitude = 2.1 + 1.3 * Math.cos(t * Math.PI / 2);
+    estimatedMagnitude = 2.1 + 1.3 * Math.cos((t * Math.PI) / 2);
   } else {
     estimatedMagnitude = 2.1;
   }
@@ -101,9 +111,9 @@ export const getAlgolDailyData = (date: Date, lat: number, lng: number): AlgolDa
   midnight.setHours(0, 0, 0, 0);
 
   const riseResult = SearchRiseSet(Body.Star2, observer, +1, midnight, 1);
-  const setResult  = SearchRiseSet(Body.Star2, observer, -1, midnight, 1);
-  const riseTime   = riseResult?.date ?? null;
-  const setTime    = setResult?.date  ?? null;
+  const setResult = SearchRiseSet(Body.Star2, observer, -1, midnight, 1);
+  const riseTime = riseResult?.date ?? null;
+  const setTime = setResult?.date ?? null;
   // Real meridian transit (the rise/set midpoint is the LOWER culmination
   // whenever the star sets before it rises within the day).
   const transitTime = nextTransit(Body.Star2, observer, midnight);
@@ -111,8 +121,18 @@ export const getAlgolDailyData = (date: Date, lat: number, lng: number): AlgolDa
   const tonightMidnight = new Date(midnight.getTime() + DAY_MS);
   const altitudeAtMidnight = starAltitude(Body.Star2, tonightMidnight, observer);
 
-  return { phase, nextMinimumInHours, lastMinimumAgoHours, estimatedMagnitude, isEclipsing, periodDays: ALGOL_P,
-           riseTime, setTime, transitTime, altitudeAtMidnight };
+  return {
+    phase,
+    nextMinimumInHours,
+    lastMinimumAgoHours,
+    estimatedMagnitude,
+    isEclipsing,
+    periodDays: ALGOL_P,
+    riseTime,
+    setTime,
+    transitTime,
+    altitudeAtMidnight,
+  };
 };
 
 /**
@@ -130,7 +150,11 @@ export interface AlgolEclipse {
 /**
  * Gets a list of past and future Algol eclipses relative to the given date.
  */
-export const getAlgolEclipses = (currentDate: Date, pastCount: number, futureCount: number): AlgolEclipse[] => {
+export const getAlgolEclipses = (
+  currentDate: Date,
+  pastCount: number,
+  futureCount: number,
+): AlgolEclipse[] => {
   const DAY_MS = 1000 * 60 * 60 * 24;
   const J1970 = 2440587.5;
   const jdCurrent = currentDate.getTime() / DAY_MS + J1970;
@@ -143,7 +167,7 @@ export const getAlgolEclipses = (currentDate: Date, pastCount: number, futureCou
     const eclipseTime = (eclipseJD - J1970) * DAY_MS;
     eclipses.push({
       date: new Date(eclipseTime),
-      isPast: eclipseTime <= currentDate.getTime()
+      isPast: eclipseTime <= currentDate.getTime(),
     });
   }
 
@@ -157,7 +181,7 @@ export const isAlgolEclipsed = (date: Date): boolean => {
   const cycles = (jd - ALGOL_T0) / ALGOL_P;
   let phase = cycles % 1;
   if (phase < 0) phase += 1;
-  return phase >= (1 - ALGOL_ECLIPSE_HW) || phase <= ALGOL_ECLIPSE_HW;
+  return phase >= 1 - ALGOL_ECLIPSE_HW || phase <= ALGOL_ECLIPSE_HW;
 };
 
 // ── Sopdet (Sirius) heliacal rising ───────────────────────────────────────────
@@ -180,8 +204,8 @@ let _sopdetCache: { key: string; result: SopdetEvent } | null = null;
 // −ARCUS_VISIONIS (Sirius, mag −1.5: arcus visionis ≈ 8°, Schaefer 1987).
 // Heliacal setting: last evening the star sets within THRESHOLD minutes after sunset.
 const THRESHOLD_MIN = 60;
-const VIS_STAR_ALT = 2;     // degrees above the horizon (extinction margin)
-const ARCUS_VISIONIS = 8;   // Sun depression below the horizon, degrees
+const VIS_STAR_ALT = 2; // degrees above the horizon (extinction margin)
+const ARCUS_VISIONIS = 8; // Sun depression below the horizon, degrees
 const DAY_MS = 86400000;
 
 const sunAltitude = (date: Date, observer: Observer): number => {
@@ -189,11 +213,13 @@ const sunAltitude = (date: Date, observer: Observer): number => {
   return Horizon(date, observer, eq.ra, eq.dec, 'normal').altitude;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function findHeliacalRising(year: number, observer: Observer): Date | null {
   // Sirius heliacal rising at inhabited latitudes falls between June and October
   let d = new Date(year, 5, 1);
   for (let i = 0; i < 160; i++) {
-    const midnight = new Date(d); midnight.setHours(0, 0, 0, 0);
+    const midnight = new Date(d);
+    midnight.setHours(0, 0, 0, 0);
     const t = SearchAltitude(Body.Star1, observer, +1, midnight, 1, VIS_STAR_ALT);
     if (t) {
       const sunAlt = sunAltitude(t.date, observer);
@@ -206,12 +232,14 @@ function findHeliacalRising(year: number, observer: Observer): Date | null {
   return null;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function findHeliacalSetting(year: number, observer: Observer): Date | null {
   // Heliacal setting (last visibility before disappearing into Sun's glare): April–July
   let d = new Date(year, 3, 1);
   for (let i = 0; i < 120; i++) {
-    const noon = new Date(d); noon.setHours(12, 0, 0, 0);
-    const ss = SearchRiseSet(Body.Sun,   observer, -1, noon, 1);
+    const noon = new Date(d);
+    noon.setHours(12, 0, 0, 0);
+    const ss = SearchRiseSet(Body.Sun, observer, -1, noon, 1);
     const ts = SearchRiseSet(Body.Star1, observer, -1, noon, 1);
     if (ss && ts) {
       const diff = (ts.date.getTime() - ss.date.getTime()) / 60000;
@@ -227,9 +255,9 @@ function findHeliacalSetting(year: number, observer: Observer): Date | null {
 export interface SiriusDailyData {
   riseTime: Date | null;
   setTime: Date | null;
-  transitTime: Date | null;   // midpoint of rise/set, approximate meridian transit
+  transitTime: Date | null; // midpoint of rise/set, approximate meridian transit
   altitudeAtMidnight: number; // degrees above horizon at local midnight (negative = below)
-  elongation: number;         // angular separation from the Sun in degrees
+  elongation: number; // angular separation from the Sun in degrees
 }
 
 // Sirius rise/set/transit are stable within a (calendar day, coordinates) pair,
@@ -249,10 +277,10 @@ export const getSiriusDailyData = (date: Date, lat: number, lng: number): Sirius
   const observer = new Observer(lat, lng, 0);
 
   const riseResult = SearchRiseSet(Body.Star1, observer, +1, midnight, 1);
-  const setResult  = SearchRiseSet(Body.Star1, observer, -1, midnight, 1);
+  const setResult = SearchRiseSet(Body.Star1, observer, -1, midnight, 1);
 
   const riseTime = riseResult?.date ?? null;
-  const setTime  = setResult?.date ?? null;
+  const setTime = setResult?.date ?? null;
 
   // Real meridian transit (the rise/set midpoint is the LOWER culmination
   // whenever the star sets before it rises within the day, e.g. in March).
@@ -263,11 +291,17 @@ export const getSiriusDailyData = (date: Date, lat: number, lng: number): Sirius
   const altitudeAtMidnight = starAltitude(Body.Star1, tonightMidnight, observer);
 
   // Angular separation from the Sun, both in the same (of-date) frame
-  const sunEq  = Equator(Body.Sun,   date, observer, true, true);
+  const sunEq = Equator(Body.Sun, date, observer, true, true);
   const starEq = Equator(Body.Star1, date, observer, true, true);
   const elongation = AngleBetween(sunEq.vec, starEq.vec);
 
-  const result: SiriusDailyData = { riseTime, setTime, transitTime, altitudeAtMidnight, elongation };
+  const result: SiriusDailyData = {
+    riseTime,
+    setTime,
+    transitTime,
+    altitudeAtMidnight,
+    elongation,
+  };
   if (_siriusCache.size >= _SIRIUS_CACHE_MAX) {
     const oldest = _siriusCache.keys().next().value;
     if (oldest !== undefined) _siriusCache.delete(oldest);
@@ -284,16 +318,26 @@ export const getSopdetHeliacalEvent = (date: Date, lat: number, lng: number): So
   DefineStar(Body.Star1, SIRIUS_RA_H, SIRIUS_DEC_DEG, SIRIUS_DIST_LY);
   const observer = new Observer(lat, lng, 0);
 
-  const rising  = findHeliacalRising(year,  observer) ?? findHeliacalRising(year - 1, observer) ?? new Date(year, 6, 19);
-  const setting = findHeliacalSetting(year, observer) ?? findHeliacalSetting(year - 1, observer) ?? new Date(year, 5, 1);
+  const rising =
+    findHeliacalRising(year, observer) ??
+    findHeliacalRising(year - 1, observer) ??
+    new Date(year, 6, 19);
+  const setting =
+    findHeliacalSetting(year, observer) ??
+    findHeliacalSetting(year - 1, observer) ??
+    new Date(year, 5, 1);
 
-  const today = new Date(date); today.setHours(0, 0, 0, 0);
-  const risingDay  = new Date(rising);  risingDay.setHours(0, 0, 0, 0);
-  const settingDay = new Date(setting); settingDay.setHours(0, 0, 0, 0);
+  const today = new Date(date);
+  today.setHours(0, 0, 0, 0);
+  const risingDay = new Date(rising);
+  risingDay.setHours(0, 0, 0, 0);
+  const settingDay = new Date(setting);
+  settingDay.setHours(0, 0, 0, 0);
 
   const daysSinceRising = Math.floor((today.getTime() - risingDay.getTime()) / DAY_MS);
   // Invisible window: setting (≈June) → rising (≈July), both within same year, setting < rising
-  const phase: 'visible' | 'invisible' = (today >= settingDay && today < risingDay) ? 'invisible' : 'visible';
+  const phase: 'visible' | 'invisible' =
+    today >= settingDay && today < risingDay ? 'invisible' : 'visible';
 
   const result: SopdetEvent = { rising, setting, daysSinceRising, phase };
   _sopdetCache = { key: cacheKey, result };

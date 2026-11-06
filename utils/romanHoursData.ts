@@ -34,7 +34,8 @@ export interface ChronographHour {
 // The second half of the captions comes in four wordings: Saturn and Mars (N, shared
 // below); Mercury ("cito convalescet"); Jupiter and Venus ("cito invenietur"); Sol and Luna.
 const OMENS_N = {
-  latin: 'Qui nascentur periculosi erunt; qui recesserit non invenietur; qui decubuerit periclitabitur; furtum factum non invenietur.',
+  latin:
+    'Qui nascentur periculosi erunt; qui recesserit non invenietur; qui decubuerit periclitabitur; furtum factum non invenietur.',
   spa: 'Los que nazcan correrán peligro; el fugitivo no será hallado; el que caiga enfermo peligrará; lo robado no aparecerá.',
 };
 
@@ -50,7 +51,8 @@ export const CHRONOGRAPH_HOURS: Record<PlanetKey, ChronographHour> = {
     latin: 'Beneficium petere, cum potente colloqui, rationem reddere utile est.',
     spa: 'Conviene pedir un favor, hablar con un poderoso, rendir cuentas.',
     omens: {
-      latin: 'Qui nascentur vitales erunt; qui recesserit cito invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      latin:
+        'Qui nascentur vitales erunt; qui recesserit cito invenietur; qui decubuerit convalescet; furtum factum invenietur.',
       spa: 'Los que nazcan vivirán; el fugitivo será hallado pronto; el que caiga enfermo sanará; lo robado aparecerá.',
     },
   },
@@ -65,7 +67,8 @@ export const CHRONOGRAPH_HOURS: Record<PlanetKey, ChronographHour> = {
     latin: 'Viam navigium ingredi, navem in aquam deducere utile est.',
     spa: 'Conviene emprender camino o travesía y botar una nave.',
     omens: {
-      latin: 'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      latin:
+        'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit convalescet; furtum factum invenietur.',
       spa: 'Los que nazcan vivirán; el fugitivo será hallado; el que caiga enfermo sanará; lo robado aparecerá.',
     },
   },
@@ -74,7 +77,8 @@ export const CHRONOGRAPH_HOURS: Record<PlanetKey, ChronographHour> = {
     latin: 'Sponsalia facere, pueros puellas in disciplina mittere utile est.',
     spa: 'Conviene celebrar esponsales y enviar a niños y niñas a la escuela.',
     omens: {
-      latin: 'Qui nascentur vitales erunt; qui recesserit cito invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      latin:
+        'Qui nascentur vitales erunt; qui recesserit cito invenietur; qui decubuerit convalescet; furtum factum invenietur.',
       spa: 'Los que nazcan vivirán; el fugitivo será hallado pronto; el que caiga enfermo sanará; lo robado aparecerá.',
     },
   },
@@ -83,7 +87,8 @@ export const CHRONOGRAPH_HOURS: Record<PlanetKey, ChronographHour> = {
     latin: 'Vilicum actorem institorem in negotio ponere utile est.',
     spa: 'Conviene poner al frente del negocio a un capataz, un administrador o un factor.',
     omens: {
-      latin: 'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit cito convalescet; furtum factum invenietur.',
+      latin:
+        'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit cito convalescet; furtum factum invenietur.',
       spa: 'Los que nazcan vivirán; el fugitivo será hallado; el que caiga enfermo sanará pronto; lo robado aparecerá.',
     },
   },
@@ -92,16 +97,17 @@ export const CHRONOGRAPH_HOURS: Record<PlanetKey, ChronographHour> = {
     latin: 'Stercus in agro mittere, putea cisternas fabricare utile est.',
     spa: 'Conviene abonar el campo y construir pozos y cisternas.',
     omens: {
-      latin: 'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit convalescet; furtum factum invenietur.',
+      latin:
+        'Qui nascentur vitales erunt; qui recesserit invenietur; qui decubuerit convalescet; furtum factum invenietur.',
       spa: 'Los que nazcan vivirán; el fugitivo será hallado; el que caiga enfermo sanará; lo robado aparecerá.',
     },
   },
 };
 
 export const QUALITY_LABEL: Record<HourQuality, { lat: string; spa: string }> = {
-  B: { lat: 'bona',     spa: 'buena' },
+  B: { lat: 'bona', spa: 'buena' },
   C: { lat: 'communis', spa: 'común' },
-  N: { lat: 'noxia',    spa: 'nociva' },
+  N: { lat: 'noxia', spa: 'nociva' },
 };
 
 export interface CivicHour {
@@ -116,34 +122,90 @@ const CENS = 'Censorinus 24';
 // Day hours I–XII. Martial 4.8 covers I–X; XI–XII are Censorinus' "suprema",
 // the last part of the day "ad solem occasum usque".
 export const CIVIC_DAY_HOURS: CivicHour[] = [
-  { latin: 'Prima salutantes atque altera conterit hora',     spa: 'La primera y la segunda hora las gastan los que saludan al patrón', source: MARTIAL },
-  { latin: 'Prima salutantes atque altera conterit hora',     spa: 'La primera y la segunda hora las gastan los que saludan al patrón', source: MARTIAL },
-  { latin: 'Exercet raucos tertia causidicos',                spa: 'La tercera hace trabajar a los roncos abogados',                     source: MARTIAL },
-  { latin: 'In quintam varios extendit Roma labores',         spa: 'Roma prolonga sus diversas tareas hasta la quinta',                  source: MARTIAL },
-  { latin: 'In quintam varios extendit Roma labores',         spa: 'Roma prolonga sus diversas tareas hasta la quinta',                  source: MARTIAL },
-  { latin: 'Sexta quies lassis',                              spa: 'La sexta es descanso para los cansados',                             source: MARTIAL },
-  { latin: 'Septima finis erit',                              spa: 'La séptima será el fin de los negocios',                             source: MARTIAL },
-  { latin: 'Sufficit in nonam nitidis octava palaestris',     spa: 'La octava, hasta la novena, basta para las relucientes palestras',   source: MARTIAL },
-  { latin: 'Imperat extructos frangere nona toros',           spa: 'La novena ordena hundir los lechos del banquete',                    source: MARTIAL },
-  { latin: 'Hora libellorum decuma est',                      spa: 'La décima es la hora de los libritos (del poeta)',                   source: MARTIAL },
-  { latin: 'Suprema, ad solem occasum usque',                 spa: 'La última parte del día, hasta la puesta del sol',                   source: CENS },
-  { latin: 'Suprema, ad solem occasum usque',                 spa: 'La última parte del día, hasta la puesta del sol',                   source: CENS },
+  {
+    latin: 'Prima salutantes atque altera conterit hora',
+    spa: 'La primera y la segunda hora las gastan los que saludan al patrón',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Prima salutantes atque altera conterit hora',
+    spa: 'La primera y la segunda hora las gastan los que saludan al patrón',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Exercet raucos tertia causidicos',
+    spa: 'La tercera hace trabajar a los roncos abogados',
+    source: MARTIAL,
+  },
+  {
+    latin: 'In quintam varios extendit Roma labores',
+    spa: 'Roma prolonga sus diversas tareas hasta la quinta',
+    source: MARTIAL,
+  },
+  {
+    latin: 'In quintam varios extendit Roma labores',
+    spa: 'Roma prolonga sus diversas tareas hasta la quinta',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Sexta quies lassis',
+    spa: 'La sexta es descanso para los cansados',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Septima finis erit',
+    spa: 'La séptima será el fin de los negocios',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Sufficit in nonam nitidis octava palaestris',
+    spa: 'La octava, hasta la novena, basta para las relucientes palestras',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Imperat extructos frangere nona toros',
+    spa: 'La novena ordena hundir los lechos del banquete',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Hora libellorum decuma est',
+    spa: 'La décima es la hora de los libritos (del poeta)',
+    source: MARTIAL,
+  },
+  {
+    latin: 'Suprema, ad solem occasum usque',
+    spa: 'La última parte del día, hasta la puesta del sol',
+    source: CENS,
+  },
+  {
+    latin: 'Suprema, ad solem occasum usque',
+    spa: 'La última parte del día, hasta la puesta del sol',
+    source: CENS,
+  },
 ];
 
 // Night hours I–XII, approximate placement of Censorinus' sequence.
 export const CIVIC_NIGHT_HOURS: CivicHour[] = [
-  { latin: 'Vespera',                          spa: 'El atardecer, antes de que salga el lucero de la tarde', source: CENS },
-  { latin: 'Crepusculum',                      spa: 'El crepúsculo: no se sabe si es noche o día',           source: CENS },
-  { latin: 'Luminibus accensis',               spa: 'Con las luces encendidas («prima face»)',                source: CENS },
-  { latin: 'Concubium, cum itum est cubitum',  spa: 'La hora de acostarse',                                   source: CENS },
-  { latin: 'Intempesta nox',                   spa: 'Noche cerrada, en que nada es oportuno hacer',          source: CENS },
-  { latin: 'Ad mediam noctem',                 spa: 'Hacia la medianoche',                                    source: CENS },
-  { latin: 'De media nocte',                   spa: 'Pasada la medianoche, inicio del día romano',            source: CENS },
-  { latin: 'Gallicinium',                      spa: 'Cuando los gallos empiezan a cantar',                    source: CENS },
-  { latin: 'Gallicinium',                      spa: 'Cuando los gallos empiezan a cantar',                    source: CENS },
-  { latin: 'Conticinium',                      spa: 'Cuando los gallos han callado',                          source: CENS },
-  { latin: 'Ante lucem',                       spa: 'Antes de la luz',                                        source: CENS },
-  { latin: 'Diluculum',                        spa: 'El alba: ya hay luz, aunque el sol no ha salido',        source: CENS },
+  {
+    latin: 'Vespera',
+    spa: 'El atardecer, antes de que salga el lucero de la tarde',
+    source: CENS,
+  },
+  { latin: 'Crepusculum', spa: 'El crepúsculo: no se sabe si es noche o día', source: CENS },
+  { latin: 'Luminibus accensis', spa: 'Con las luces encendidas («prima face»)', source: CENS },
+  { latin: 'Concubium, cum itum est cubitum', spa: 'La hora de acostarse', source: CENS },
+  {
+    latin: 'Intempesta nox',
+    spa: 'Noche cerrada, en que nada es oportuno hacer',
+    source: CENS,
+  },
+  { latin: 'Ad mediam noctem', spa: 'Hacia la medianoche', source: CENS },
+  { latin: 'De media nocte', spa: 'Pasada la medianoche, inicio del día romano', source: CENS },
+  { latin: 'Gallicinium', spa: 'Cuando los gallos empiezan a cantar', source: CENS },
+  { latin: 'Gallicinium', spa: 'Cuando los gallos empiezan a cantar', source: CENS },
+  { latin: 'Conticinium', spa: 'Cuando los gallos han callado', source: CENS },
+  { latin: 'Ante lucem', spa: 'Antes de la luz', source: CENS },
+  { latin: 'Diluculum', spa: 'El alba: ya hay luz, aunque el sol no ha salido', source: CENS },
 ];
 
 const VIGILIA_ORD = ['prima', 'secunda', 'tertia', 'quarta'];

@@ -18,12 +18,13 @@ const Controls: React.FC<ControlsProps> = ({
   onUpdateLocation,
   onRefreshTime,
 }) => {
-  const { civilization, setCivilization, labels } = useCivilization();
+  const { civilization, labels } = useCivilization();
   const [latInput, setLatInput] = useState(latitude.toString());
   const [lngInput, setLngInput] = useState(longitude.toString());
 
-  // Sync state when props change (e.g. on mount from localStorage or geolocation update)
+  // Sync controlled inputs when props change (geolocation / localStorage restore)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLatInput(latitude.toString());
     setLngInput(longitude.toString());
   }, [latitude, longitude]);
@@ -42,22 +43,21 @@ const Controls: React.FC<ControlsProps> = ({
       // Pedimos ubicación con caché y más tiempo de espera
       const position = await Geolocation.getCurrentPosition({
         enableHighAccuracy: false,
-        timeout: 30000,       // Le damos 30 segundos máximo para pensar
-        maximumAge: 3600000   // Puede usar una ubicación de hace 1 hora (instantáneo)
+        timeout: 30000, // Le damos 30 segundos máximo para pensar
+        maximumAge: 3600000, // Puede usar una ubicación de hace 1 hora (instantáneo)
       });
 
       setLatInput(position.coords.latitude.toFixed(4));
       setLngInput(position.coords.longitude.toFixed(4));
       onUpdateLocation(position.coords.latitude, position.coords.longitude);
     } catch (error: any) {
-      alert("Locus deprehendi non potuit: " + error.message);
+      alert('Locus deprehendi non potuit: ' + error.message);
     }
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 mb-8 px-2 animate-fadeIn">
       <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
-
         {/* Decorative background hatch */}
         <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
 
@@ -77,24 +77,32 @@ const Controls: React.FC<ControlsProps> = ({
             <div className="flex flex-col gap-2">
               <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
                 <MapPin className="w-3 h-3" />
-                {civilization === 'babylonia' ? <GlossedTerm term={BAB.latitude} align="start" className="text-sm" /> : 'Latitudo'}
+                {civilization === 'babylonia' ? (
+                  <GlossedTerm term={BAB.latitude} align="start" className="text-sm" />
+                ) : (
+                  'Latitudo'
+                )}
               </label>
               <input
                 type="text"
                 value={latInput}
-                onChange={(e) => setLatInput(e.target.value)}
+                onChange={e => setLatInput(e.target.value)}
                 className="w-full bg-white/5 border border-gold-dim/30 rounded-lg py-3 px-4 font-serif text-lg text-parchment focus:outline-none focus:border-gold-leaf focus:bg-white/10 transition-all text-center"
               />
             </div>
             <div className="flex flex-col gap-2">
               <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
                 <MapPin className="w-3 h-3" />
-                {civilization === 'babylonia' ? <GlossedTerm term={BAB.longitude} align="start" className="text-sm" /> : 'Longitudo'}
+                {civilization === 'babylonia' ? (
+                  <GlossedTerm term={BAB.longitude} align="start" className="text-sm" />
+                ) : (
+                  'Longitudo'
+                )}
               </label>
               <input
                 type="text"
                 value={lngInput}
-                onChange={(e) => setLngInput(e.target.value)}
+                onChange={e => setLngInput(e.target.value)}
                 className="w-full bg-white/5 border border-gold-dim/30 rounded-lg py-3 px-4 font-serif text-lg text-parchment focus:outline-none focus:border-gold-leaf focus:bg-white/10 transition-all text-center"
               />
             </div>
@@ -120,9 +128,7 @@ const Controls: React.FC<ControlsProps> = ({
         </div>
 
         <div className="mt-8 text-center">
-          <p className="font-body italic text-sm text-parchment">
-            {labels.controlsFooter}
-          </p>
+          <p className="font-body italic text-sm text-parchment">{labels.controlsFooter}</p>
         </div>
       </div>
     </div>

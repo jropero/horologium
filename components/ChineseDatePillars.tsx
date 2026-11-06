@@ -21,12 +21,40 @@ interface Props {
 // Indexed by branch index (0=子…11=亥), same order as SHICHEN_DATA
 const ANIMAL_EMOJI = SHICHEN_DATA.map(s => s.animalEmoji);
 
-const ELEMENT_STYLE: Record<string, { text: string; dimText: string; bg: string; border: string }> = {
-  '木': { text: 'text-emerald-400', dimText: 'text-emerald-300/60', bg: 'bg-emerald-900/20', border: 'border-emerald-500/25' },
-  '火': { text: 'text-red-400',     dimText: 'text-red-300/60',     bg: 'bg-red-900/20',     border: 'border-red-500/25'     },
-  '土': { text: 'text-amber-400',   dimText: 'text-amber-300/60',   bg: 'bg-amber-900/20',   border: 'border-amber-500/25'   },
-  '金': { text: 'text-yellow-400',  dimText: 'text-yellow-300/60',  bg: 'bg-yellow-900/20',  border: 'border-yellow-500/25'  },
-  '水': { text: 'text-cyan-400',    dimText: 'text-cyan-300/60',    bg: 'bg-cyan-900/20',    border: 'border-cyan-500/25'    },
+const ELEMENT_STYLE: Record<
+  string,
+  { text: string; dimText: string; bg: string; border: string }
+> = {
+  木: {
+    text: 'text-emerald-400',
+    dimText: 'text-emerald-300/60',
+    bg: 'bg-emerald-900/20',
+    border: 'border-emerald-500/25',
+  },
+  火: {
+    text: 'text-red-400',
+    dimText: 'text-red-300/60',
+    bg: 'bg-red-900/20',
+    border: 'border-red-500/25',
+  },
+  土: {
+    text: 'text-amber-400',
+    dimText: 'text-amber-300/60',
+    bg: 'bg-amber-900/20',
+    border: 'border-amber-500/25',
+  },
+  金: {
+    text: 'text-yellow-400',
+    dimText: 'text-yellow-300/60',
+    bg: 'bg-yellow-900/20',
+    border: 'border-yellow-500/25',
+  },
+  水: {
+    text: 'text-cyan-400',
+    dimText: 'text-cyan-300/60',
+    bg: 'bg-cyan-900/20',
+    border: 'border-cyan-500/25',
+  },
 };
 
 const XUN: [string, string][] = [
@@ -36,24 +64,36 @@ const XUN: [string, string][] = [
 ];
 
 const ChineseDatePillars: React.FC<Props> = ({
-  yearStemIndex, yearBranchIndex,
-  monthStemIndex, monthBranchIndex,
-  dayStemIndex, dayBranchIndex,
-  monthName, monthNumber, dayName, dayNumber,
-  lunarNewYear, isLeapYear, isLeapMonth,
+  yearStemIndex,
+  yearBranchIndex,
+  monthStemIndex,
+  monthBranchIndex,
+  dayStemIndex,
+  dayBranchIndex,
+  monthName,
+  monthNumber,
+  dayName,
+  dayNumber,
+  lunarNewYear,
+  isLeapYear,
+  isLeapMonth,
 }) => {
   const pillars = [
-    { label: '年', subLabel: 'AÑO', stemIdx: yearStemIndex,  branchIdx: yearBranchIndex  },
+    { label: '年', subLabel: 'AÑO', stemIdx: yearStemIndex, branchIdx: yearBranchIndex },
     { label: '月', subLabel: 'MES', stemIdx: monthStemIndex, branchIdx: monthBranchIndex },
-    { label: '日', subLabel: 'DÍA', stemIdx: dayStemIndex,   branchIdx: dayBranchIndex   },
+    { label: '日', subLabel: 'DÍA', stemIdx: dayStemIndex, branchIdx: dayBranchIndex },
   ];
 
   return (
     <div className="w-full bg-ink/90 border border-gold-leaf/30 rounded-lg shadow-xl overflow-hidden">
       {/* Header */}
       <div className="text-center pt-4 pb-3 px-4 border-b border-gold-leaf/20">
-        <div className="text-gold-leaf font-serif text-sm uppercase tracking-[0.3em]">农历 · 天干地支</div>
-        <div className="text-parchment/50 text-xs uppercase tracking-widest mt-0.5">Calendario Lunar · Ciclo Sexagenario</div>
+        <div className="text-gold-leaf font-serif text-sm uppercase tracking-[0.3em]">
+          农历 · 天干地支
+        </div>
+        <div className="text-parchment/50 text-xs uppercase tracking-widest mt-0.5">
+          Calendario Lunar · Ciclo Sexagenario
+        </div>
       </div>
 
       {/* Date + xún progress */}
@@ -63,7 +103,8 @@ const ChineseDatePillars: React.FC<Props> = ({
             {monthName}&nbsp;&nbsp;{dayName}
           </div>
           <div className="text-xs text-parchment/50 mt-1">
-            {isLeapMonth ? 'Mes intercalar · ' : ''}{monthNumber}º mes lunar · Día {dayNumber}
+            {isLeapMonth ? 'Mes intercalar · ' : ''}
+            {monthNumber}º mes lunar · Día {dayNumber}
           </div>
         </div>
 
@@ -84,9 +125,11 @@ const ChineseDatePillars: React.FC<Props> = ({
                     <div
                       key={i}
                       className={`flex-1 rounded-full transition-all ${
-                        isCurrent ? 'h-2.5 bg-gold-leaf' :
-                        filled    ? 'h-1.5 bg-gold-dim/50' :
-                                    'h-1.5 bg-parchment/10'
+                        isCurrent
+                          ? 'h-2.5 bg-gold-leaf'
+                          : filled
+                          ? 'h-1.5 bg-gold-dim/50'
+                          : 'h-1.5 bg-parchment/10'
                       }`}
                     />
                   );
@@ -100,14 +143,19 @@ const ChineseDatePillars: React.FC<Props> = ({
       {/* Three pillars — 年柱 月柱 日柱 */}
       <div className="grid grid-cols-3 divide-x divide-gold-dim/15">
         {pillars.map(({ label, subLabel, stemIdx, branchIdx }) => {
-          const stem   = STEMS[stemIdx];
+          const stem = STEMS[stemIdx];
           const branch = BRANCHES[branchIdx];
-          const style  = ELEMENT_STYLE[stem.elementHanzi] ?? ELEMENT_STYLE['木'];
-          const emoji  = ANIMAL_EMOJI[branchIdx] ?? '';
+          const style = ELEMENT_STYLE[stem.elementHanzi] ?? ELEMENT_STYLE['木'];
+          const emoji = ANIMAL_EMOJI[branchIdx] ?? '';
 
           return (
-            <div key={label} className={`flex flex-col items-center py-5 px-1 gap-1 ${style.bg}`}>
-              <span className="text-xs text-parchment/40 uppercase tracking-widest mb-1">{subLabel}</span>
+            <div
+              key={label}
+              className={`flex flex-col items-center py-5 px-1 gap-1 ${style.bg}`}
+            >
+              <span className="text-xs text-parchment/40 uppercase tracking-widest mb-1">
+                {subLabel}
+              </span>
 
               {/* Stem — large, element-colored */}
               <span className={`text-4xl font-serif font-bold leading-none ${style.text}`}>

@@ -4,71 +4,148 @@ import { getSunTimes, getMoonPhase } from './solar';
 import { RomanTimeData, CivilDayPart } from '../types';
 
 export const LATIN_HOURS_DAY = [
-  "Prima Hora", "Secunda Hora", "Tertia Hora", "Quarta Hora",
-  "Quinta Hora", "Sexta Hora", "Septima Hora", "Octava Hora",
-  "Nona Hora", "Decima Hora", "Undecima Hora", "Duodecima Hora"
+  'Prima Hora',
+  'Secunda Hora',
+  'Tertia Hora',
+  'Quarta Hora',
+  'Quinta Hora',
+  'Sexta Hora',
+  'Septima Hora',
+  'Octava Hora',
+  'Nona Hora',
+  'Decima Hora',
+  'Undecima Hora',
+  'Duodecima Hora',
 ];
 
 export const LATIN_HOURS_NIGHT_FULL = [
-  "Prima Hora Noctis", "Secunda Hora Noctis", "Tertia Hora Noctis", "Quarta Hora Noctis",
-  "Quinta Hora Noctis", "Sexta Hora Noctis", "Septima Hora Noctis", "Octava Hora Noctis",
-  "Nona Hora Noctis", "Decima Hora Noctis", "Undecima Hora Noctis", "Duodecima Hora Noctis"
+  'Prima Hora Noctis',
+  'Secunda Hora Noctis',
+  'Tertia Hora Noctis',
+  'Quarta Hora Noctis',
+  'Quinta Hora Noctis',
+  'Sexta Hora Noctis',
+  'Septima Hora Noctis',
+  'Octava Hora Noctis',
+  'Nona Hora Noctis',
+  'Decima Hora Noctis',
+  'Undecima Hora Noctis',
+  'Duodecima Hora Noctis',
 ];
 
 export const MONTH_NAMES_LATIN = [
-  "Ianuarius", "Februarius", "Martius", "Aprilis", "Maius", "Iunius",
-  "Iulius", "Augustus", "September", "October", "November", "December"
+  'Ianuarius',
+  'Februarius',
+  'Martius',
+  'Aprilis',
+  'Maius',
+  'Iunius',
+  'Iulius',
+  'Augustus',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export const LATIN_WEEKDAYS = [
-  "Dies Solis", "Dies Lunae", "Dies Martis", "Dies Mercurii", "Dies Iovis", "Dies Veneris", "Dies Saturni"
+  'Dies Solis',
+  'Dies Lunae',
+  'Dies Martis',
+  'Dies Mercurii',
+  'Dies Iovis',
+  'Dies Veneris',
+  'Dies Saturni',
 ];
 
 const MONTH_ABBREVS = [
-  "Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  'Ian',
+  'Feb',
+  'Mar',
+  'Apr',
+  'Mai',
+  'Iun',
+  'Iul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 
 const MONTH_NAMES_ACCUSATIVE = [
-  "Ianuarias", "Februarias", "Martias", "Apriles", "Maias", "Iunias",
-  "Iulias", "Augustas", "Septembres", "Octobres", "Novembres", "Decembres"
+  'Ianuarias',
+  'Februarias',
+  'Martias',
+  'Apriles',
+  'Maias',
+  'Iunias',
+  'Iulias',
+  'Augustas',
+  'Septembres',
+  'Octobres',
+  'Novembres',
+  'Decembres',
 ];
 
 const MONTH_NAMES_ABLATIVE = [
-  "Ianuariis", "Februariis", "Martiis", "Aprilibus", "Maiis", "Iuniis",
-  "Iuliis", "Augustis", "Septembribus", "Octobribus", "Novembribus", "Decembribus"
+  'Ianuariis',
+  'Februariis',
+  'Martiis',
+  'Aprilibus',
+  'Maiis',
+  'Iuniis',
+  'Iuliis',
+  'Augustis',
+  'Septembribus',
+  'Octobribus',
+  'Novembribus',
+  'Decembribus',
 ];
 
 const LATIN_ORDINALS: { [key: number]: string } = {
-  2: "pridie",
-  3: "tertium",
-  4: "quartum",
-  5: "quintum",
-  6: "sextum",
-  7: "septimum",
-  8: "octavum",
-  9: "nonum",
-  10: "decimum",
-  11: "undecimum",
-  12: "duodecimum",
-  13: "tertium decimum",
-  14: "quartum decimum",
-  15: "quintum decimum",
-  16: "sextum decimum",
-  17: "septimum decimum",
-  18: "duodevicesimum",
-  19: "undevicesimum"
+  2: 'pridie',
+  3: 'tertium',
+  4: 'quartum',
+  5: 'quintum',
+  6: 'sextum',
+  7: 'septimum',
+  8: 'octavum',
+  9: 'nonum',
+  10: 'decimum',
+  11: 'undecimum',
+  12: 'duodecimum',
+  13: 'tertium decimum',
+  14: 'quartum decimum',
+  15: 'quintum decimum',
+  16: 'sextum decimum',
+  17: 'septimum decimum',
+  18: 'duodevicesimum',
+  19: 'undevicesimum',
 };
 
 export const PLANETARY_HOURS_ORDER = [
-  "Saturnus", "Iuppiter", "Mars", "Sol", "Venus", "Mercurius", "Luna"
+  'Saturnus',
+  'Iuppiter',
+  'Mars',
+  'Sol',
+  'Venus',
+  'Mercurius',
+  'Luna',
 ];
 
 const DAY_START_INDEX = [3, 6, 2, 5, 1, 4, 0];
 
 // `date` is the sunrise that opened the planetary day; with `lng` its weekday is
 // taken at the observer's mean local solar time (independent of device timezone).
-export const getPlanetaryRuler = (currentRomanHour: number, isDay: boolean, date: Date, lng?: number): string => {
-  const dayOfWeek = lng === undefined ? date.getDay() : new Date(date.getTime() + lng * 240000).getUTCDay();
+export const getPlanetaryRuler = (
+  currentRomanHour: number,
+  isDay: boolean,
+  date: Date,
+  lng?: number,
+): string => {
+  const dayOfWeek =
+    lng === undefined ? date.getDay() : new Date(date.getTime() + lng * 240000).getUTCDay();
   const startIndex = DAY_START_INDEX[dayOfWeek];
   let hoursPassed = currentRomanHour - 1;
   if (!isDay) hoursPassed += 12;
@@ -77,7 +154,21 @@ export const getPlanetaryRuler = (currentRomanHour: number, isDay: boolean, date
 };
 
 export const toRoman = (num: number): string => {
-  const lookup: { [key: string]: number } = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+  const lookup: { [key: string]: number } = {
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
+  };
   let roman = '';
   for (const i in lookup) {
     while (num >= lookup[i]) {
@@ -93,8 +184,18 @@ export const toRoman = (num: number): string => {
 // Nota: La correspondencia mes-deidad es una convención moderna aproximada, ya que en la antigüedad
 // la tutela aplicaba a los signos zodiacales (ej. Júpiter rige Sagitario, no julio directamente).
 const TUTELA_MENSIS = [
-  "Iuno", "Neptunus", "Minerva", "Venus", "Apollo", "Mercurius",
-  "Iuppiter", "Ceres", "Vulcanus", "Mars", "Diana", "Vesta"
+  'Iuno',
+  'Neptunus',
+  'Minerva',
+  'Venus',
+  'Apollo',
+  'Mercurius',
+  'Iuppiter',
+  'Ceres',
+  'Vulcanus',
+  'Mars',
+  'Diana',
+  'Vesta',
 ];
 
 // NUEVO: Calcular la Indicción (Ciclo de 15 años)
@@ -105,21 +206,22 @@ export const getIndiction = (year: number): number => {
 };
 
 // Calculado con declinación en caso Ablativo ("Sol in...")
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const getZodiacSign = (date: Date): string => {
   const d = date.getDate();
   const m = date.getMonth(); // 0-11
-  if ((m === 2 && d >= 21) || (m === 3 && d <= 19)) return "Ariete";      // Aries
-  if ((m === 3 && d >= 20) || (m === 4 && d <= 20)) return "Tauro";       // Taurus
-  if ((m === 4 && d >= 21) || (m === 5 && d <= 20)) return "Geminis";     // Gemini (Abl. pl.)
-  if ((m === 5 && d >= 21) || (m === 6 && d <= 22)) return "Cancro";      // Cancer
-  if ((m === 6 && d >= 23) || (m === 7 && d <= 22)) return "Leone";       // Leo
-  if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return "Virgine";     // Virgo
-  if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return "Libra";       // Libra
-  if ((m === 9 && d >= 23) || (m === 10 && d <= 21)) return "Scorpione";  // Scorpio
-  if ((m === 10 && d >= 22) || (m === 11 && d <= 21)) return "Sagittario";// Sagittarius
-  if ((m === 11 && d >= 22) || (m === 0 && d <= 19)) return "Capricorno"; // Capricornus
-  if ((m === 0 && d >= 20) || (m === 1 && d <= 18)) return "Aquario";     // Aquarius
-  return "Piscibus";                                                      // Pisces (Abl. pl.)
+  if ((m === 2 && d >= 21) || (m === 3 && d <= 19)) return 'Ariete'; // Aries
+  if ((m === 3 && d >= 20) || (m === 4 && d <= 20)) return 'Tauro'; // Taurus
+  if ((m === 4 && d >= 21) || (m === 5 && d <= 20)) return 'Geminis'; // Gemini (Abl. pl.)
+  if ((m === 5 && d >= 21) || (m === 6 && d <= 22)) return 'Cancro'; // Cancer
+  if ((m === 6 && d >= 23) || (m === 7 && d <= 22)) return 'Leone'; // Leo
+  if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return 'Virgine'; // Virgo
+  if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return 'Libra'; // Libra
+  if ((m === 9 && d >= 23) || (m === 10 && d <= 21)) return 'Scorpione'; // Scorpio
+  if ((m === 10 && d >= 22) || (m === 11 && d <= 21)) return 'Sagittario'; // Sagittarius
+  if ((m === 11 && d >= 22) || (m === 0 && d <= 19)) return 'Capricorno'; // Capricornus
+  if ((m === 0 && d >= 20) || (m === 1 && d <= 18)) return 'Aquario'; // Aquarius
+  return 'Piscibus'; // Pisces (Abl. pl.)
 };
 
 // ── Civil date in the calendar the Romans actually used ───────────────────────
@@ -129,7 +231,7 @@ export const getZodiacSign = (date: Date): string => {
 export interface CivilDateParts {
   year: number;
   month: number; // 0-11
-  day: number;   // 1-31
+  day: number; // 1-31
   isJulian: boolean;
 }
 
@@ -139,8 +241,15 @@ const gregorianToJDN = (y: number, m1: number, d: number): number => {
   const a = Math.floor((14 - m1) / 12);
   const yy = y + 4800 - a;
   const mm = m1 + 12 * a - 3;
-  return d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4)
-    - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+  return (
+    d +
+    Math.floor((153 * mm + 2) / 5) +
+    365 * yy +
+    Math.floor(yy / 4) -
+    Math.floor(yy / 100) +
+    Math.floor(yy / 400) -
+    32045
+  );
 };
 
 const jdnToJulian = (jdn: number): { year: number; month: number; day: number } => {
@@ -157,7 +266,9 @@ const jdnToJulian = (jdn: number): { year: number; month: number; day: number } 
 
 /** Local civil date parts, converted to the Julian calendar before 1582-10-15. */
 export const getCivilDateParts = (date: Date): CivilDateParts => {
-  const y = date.getFullYear(), m = date.getMonth(), d = date.getDate();
+  const y = date.getFullYear(),
+    m = date.getMonth(),
+    d = date.getDate();
   const jdn = gregorianToJDN(y, m + 1, d);
   if (jdn >= GREGORIAN_REFORM_JDN) return { year: y, month: m, day: d, isJulian: false };
   return { ...jdnToJulian(jdn), isJulian: true };
@@ -180,6 +291,7 @@ const daysInCivilMonth = (parts: CivilDateParts): number => {
  * entry), and 25-29 Feb take the entries of the common-year days 24-28
  * (so Regifugium falls on 25 Feb and Equirria on 28 Feb).
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const getRomanYearDataKey = (date: Date): string => {
   const p = getCivilDateParts(date);
   if (p.month === 1 && isCivilLeapYear(p)) {
@@ -194,6 +306,7 @@ export interface RomanDateResult {
   full: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const getRomanDate = (date: Date): RomanDateResult => {
   const civil = getCivilDateParts(date);
   const { month, year } = civil;
@@ -205,11 +318,9 @@ export const getRomanDate = (date: Date): RomanDateResult => {
   const nonesDate = isMarchMayJulyOct ? 7 : 5;
   const idesDate = isMarchMayJulyOct ? 15 : 13;
 
-
-
-  let romanString = "";
-  let fullLatinString = "";
-  let refName = "";
+  let romanString: string;
+  let fullLatinString: string;
+  let refName: string;
 
   if (day === 1) {
     romanString = `Kalendis ${MONTH_ABBREVS[month]}`;
@@ -251,7 +362,7 @@ export const getRomanDate = (date: Date): RomanDateResult => {
       lastDayOfMonth = 28;
       if (day > 24) day -= 1;
     }
-    const daysBefore = (lastDayOfMonth - day) + 1 + 1;
+    const daysBefore = lastDayOfMonth - day + 1 + 1;
     const nextMonthIdx = (month + 1) % 12;
     refName = `Kal ${MONTH_ABBREVS[nextMonthIdx]}`;
 
@@ -266,26 +377,29 @@ export const getRomanDate = (date: Date): RomanDateResult => {
 
   return {
     short: `${romanString} anno ${toRoman(aucYear)} A.U.C.`,
-    full: `${fullLatinString} anno ab urbe condita ${toRoman(aucYear)}, Indictione ${toRoman(indiction)}`
+    full: `${fullLatinString} anno ab urbe condita ${toRoman(aucYear)}, Indictione ${toRoman(
+      indiction,
+    )}`,
   };
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const getLatinMoonPhaseName = (phase: number): string => {
-  if (phase < 0.03 || phase > 0.97) return "Novilunium";
-  if (phase < 0.22) return "Luna Corniculata";
-  if (phase < 0.28) return "Prima Quadra";
-  if (phase < 0.47) return "Gibbosa crescens";
-  if (phase < 0.53) return "Plenilunium";
-  if (phase < 0.72) return "Gibbosa decrescens";
-  if (phase < 0.78) return "Ultima Quadra";
-  return "Luna Corniculata";
+  if (phase < 0.03 || phase > 0.97) return 'Novilunium';
+  if (phase < 0.22) return 'Luna Corniculata';
+  if (phase < 0.28) return 'Prima Quadra';
+  if (phase < 0.47) return 'Gibbosa crescens';
+  if (phase < 0.53) return 'Plenilunium';
+  if (phase < 0.72) return 'Gibbosa decrescens';
+  if (phase < 0.78) return 'Ultima Quadra';
+  return 'Luna Corniculata';
 };
 
-const getVigilia = (romanHour: number): { name: string, desc: string } => {
-  if (romanHour <= 3) return { name: "Prima Vigilia", desc: "Primera Guardia" };
-  if (romanHour <= 6) return { name: "Secunda Vigilia", desc: "Segunda Guardia" };
-  if (romanHour <= 9) return { name: "Tertia Vigilia", desc: "Tercera Guardia" };
-  return { name: "Quarta Vigilia", desc: "Cuarta Guardia" };
+const getVigilia = (romanHour: number): { name: string; desc: string } => {
+  if (romanHour <= 3) return { name: 'Prima Vigilia', desc: 'Primera Guardia' };
+  if (romanHour <= 6) return { name: 'Secunda Vigilia', desc: 'Segunda Guardia' };
+  if (romanHour <= 9) return { name: 'Tertia Vigilia', desc: 'Tercera Guardia' };
+  return { name: 'Quarta Vigilia', desc: 'Cuarta Guardia' };
 };
 
 /** Nundinal letter that marks the market day (nundinae) in this app's cycle. */
@@ -298,33 +412,34 @@ export const getNundinalLetter = (date: Date): string => {
   utcMidnight.setUTCFullYear(date.getFullYear(), date.getMonth(), date.getDate());
   const daysSinceEpoch = Math.round(utcMidnight.getTime() / (1000 * 60 * 60 * 24));
   // Usamos módulo 8 para ciclar entre 0 y 7. El (+ 8) asegura que no haya negativos.
-  const nundinalIndex = (daysSinceEpoch % 8 + 8) % 8;
+  const nundinalIndex = ((daysSinceEpoch % 8) + 8) % 8;
   const nundinalLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   return nundinalLetters[nundinalIndex];
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const getCivilDayPart = (isDay: boolean, hourFloat: number): CivilDayPart => {
   // División civil del día romano según Varrón (De Lingua Latina VI) y Censorino (De Die Natali XXIV)
   // hourFloat va de 0.0 (inicio del período) a 12.0 (final del período)
   if (isDay) {
     // DÍA: 12 horas solares desde el amanecer (ortus solis) hasta la puesta (solis occasus)
-    if (hourFloat < 2.5)  return { name: "Mane", desc: "Mañana temprana" };
-    if (hourFloat < 5.5)  return { name: "Ad Meridiem", desc: "Hacia el mediodía" };
-    if (hourFloat < 6.5)  return { name: "Meridies", desc: "Mediodía" };
-    if (hourFloat < 10.5) return { name: "De Meridie", desc: "Después del mediodía" };
-    return { name: "Suprema", desc: "Última hora de luz" };
+    if (hourFloat < 2.5) return { name: 'Mane', desc: 'Mañana temprana' };
+    if (hourFloat < 5.5) return { name: 'Ad Meridiem', desc: 'Hacia el mediodía' };
+    if (hourFloat < 6.5) return { name: 'Meridies', desc: 'Mediodía' };
+    if (hourFloat < 10.5) return { name: 'De Meridie', desc: 'Después del mediodía' };
+    return { name: 'Suprema', desc: 'Última hora de luz' };
   } else {
     // NOCHE: 12 horas solares desde la puesta (solis occasus) hasta el amanecer (ortus solis)
-    if (hourFloat < 1.5)  return { name: "Vespera", desc: "Anochecer" };
-    if (hourFloat < 2.5)  return { name: "Crepusculum", desc: "Crepúsculo" };
-    if (hourFloat < 3.5)  return { name: "Prima fax", desc: "Encendido de antorchas" };
-    if (hourFloat < 5.0)  return { name: "Concubia nox", desc: "Hora de dormir" };
-    if (hourFloat < 5.8)  return { name: "Intempesta nox", desc: "Noche profunda y muerta" };
-    if (hourFloat < 6.2)  return { name: "Media nox", desc: "Medianoche" };
-    if (hourFloat < 8.0)  return { name: "De media nocte", desc: "Tras la medianoche" };
-    if (hourFloat < 9.5)  return { name: "Gallicinium", desc: "Canto del gallo" };
-    if (hourFloat < 11.0) return { name: "Conticinium", desc: "Silencio (el gallo calla)" };
-    return { name: "Diluculum", desc: "Primer resplandor del alba" };
+    if (hourFloat < 1.5) return { name: 'Vespera', desc: 'Anochecer' };
+    if (hourFloat < 2.5) return { name: 'Crepusculum', desc: 'Crepúsculo' };
+    if (hourFloat < 3.5) return { name: 'Prima fax', desc: 'Encendido de antorchas' };
+    if (hourFloat < 5.0) return { name: 'Concubia nox', desc: 'Hora de dormir' };
+    if (hourFloat < 5.8) return { name: 'Intempesta nox', desc: 'Noche profunda y muerta' };
+    if (hourFloat < 6.2) return { name: 'Media nox', desc: 'Medianoche' };
+    if (hourFloat < 8.0) return { name: 'De media nocte', desc: 'Tras la medianoche' };
+    if (hourFloat < 9.5) return { name: 'Gallicinium', desc: 'Canto del gallo' };
+    if (hourFloat < 11.0) return { name: 'Conticinium', desc: 'Silencio (el gallo calla)' };
+    return { name: 'Diluculum', desc: 'Primer resplandor del alba' };
   }
 };
 
@@ -333,6 +448,7 @@ interface SunEvent {
   type: 'sunrise' | 'sunset';
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTimeData => {
   const points: SunEvent[] = [];
 
@@ -361,11 +477,17 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
 
   if (!found) {
     if (now < points[0].time) {
-      currentEvent = { time: new Date(points[0].time.getTime() - 12 * 60 * 60 * 1000), type: points[0].type === 'sunrise' ? 'sunset' : 'sunrise' };
+      currentEvent = {
+        time: new Date(points[0].time.getTime() - 12 * 60 * 60 * 1000),
+        type: points[0].type === 'sunrise' ? 'sunset' : 'sunrise',
+      };
       nextEvent = points[0];
     } else {
       currentEvent = points[points.length - 1];
-      nextEvent = { time: new Date(points[points.length - 1].time.getTime() + 12 * 60 * 60 * 1000), type: points[points.length - 1].type === 'sunrise' ? 'sunset' : 'sunrise' };
+      nextEvent = {
+        time: new Date(points[points.length - 1].time.getTime() + 12 * 60 * 60 * 1000),
+        type: points[points.length - 1].type === 'sunrise' ? 'sunset' : 'sunrise',
+      };
     }
   }
 
@@ -377,17 +499,19 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
   // that opened this planetary day (by night, the sunrise before this sunset).
   const prevSunrise = isDay
     ? baseTime
-    : [...points].reverse().find(p => p.type === 'sunrise' && p.time < baseTime)?.time
-      || new Date(baseTime.getTime() - 12 * 3600 * 1000);
+    : [...points].reverse().find(p => p.type === 'sunrise' && p.time < baseTime)?.time ||
+      new Date(baseTime.getTime() - 12 * 3600 * 1000);
 
   let nextSunriseDisplay = endTime;
   if (isDay) {
-    const nextSr = points.find((p, idx) => idx > points.indexOf(nextEvent) && p.type === 'sunrise');
+    const nextSr = points.find(
+      (p, idx) => idx > points.indexOf(nextEvent) && p.type === 'sunrise',
+    );
     if (nextSr) nextSunriseDisplay = nextSr.time;
   }
 
   const durationMs = endTime.getTime() - baseTime.getTime();
-  const hourLengthMinutes = (durationMs / 1000 / 60) / 12;
+  const hourLengthMinutes = durationMs / 1000 / 60 / 12;
 
   const elapsedMs = now.getTime() - baseTime.getTime();
   const elapsedMinutes = elapsedMs / 1000 / 60;
@@ -434,7 +558,7 @@ export const calculateRomanTime = (now: Date, lat: number, lng: number): RomanTi
     dayOfWeek: LATIN_WEEKDAYS[now.getDay()],
     indiction: getIndiction(getCivilDateParts(now).year),
     tutelaMensis: TUTELA_MENSIS[now.getMonth()],
-    zodiacSign: getZodiacSign(now)
+    zodiacSign: getZodiacSign(now),
   };
 };
 // --- END OF FILE horologium-main/utils/romanTimeUtils.ts ---

@@ -52,6 +52,7 @@ const CivilCalendarDatePicker = lazy(() => import('./components/CivilCalendarDat
 const DEFAULT_LAT = 47.5632;
 const DEFAULT_LNG = 7.5744;
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const AppContent: React.FC = () => {
   const { civilization, labels } = useCivilization();
   const [modernTime, setModernTime] = useState<Date>(() => {
@@ -86,17 +87,24 @@ const AppContent: React.FC = () => {
   const [isCustomWeatherOpen, setIsCustomWeatherOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isTimeTraveling, setIsTimeTraveling] = useState<boolean>(() =>
-    new URLSearchParams(window.location.search).has('date')
+    new URLSearchParams(window.location.search).has('date'),
   );
   const [travelModalOpen, setTravelModalOpen] = useState<boolean>(false);
 
   // Determine current location name and timezone
-  const currentLocation = LOCATIONS.find(loc => loc.id !== 'gps' && Math.abs(latitude - (loc.lat || 0)) < 0.001 && Math.abs(longitude - (loc.lng || 0)) < 0.001);
+  const currentLocation = LOCATIONS.find(
+    loc =>
+      loc.id !== 'gps' &&
+      Math.abs(latitude - (loc.lat || 0)) < 0.001 &&
+      Math.abs(longitude - (loc.lng || 0)) < 0.001,
+  );
   const currentLocationName = currentLocation ? currentLocation.name : 'GPS / Personalizada';
   const locationTimezone = getTimezoneForLocation(latitude, longitude);
 
   // Calculate today's sun times for display
-  const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date, sunset: Date } | null>(null);
+  const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date; sunset: Date } | null>(
+    null,
+  );
 
   // --- Configuración inicial de Android (Status Bar) ---
   useEffect(() => {
@@ -106,7 +114,7 @@ const AppContent: React.FC = () => {
         await StatusBar.hide();
         await StatusBar.setOverlaysWebView({ overlay: true });
       } catch (e) {
-        console.warn("StatusBar no disponible en web", e);
+        console.warn('StatusBar no disponible en web', e);
       }
     };
     setupNativeApp();
@@ -124,16 +132,18 @@ const AppContent: React.FC = () => {
 
   // Recalculate time when location, minute, or civilization changes
   useEffect(() => {
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     const updateTime = () => {
-      const data = civilization === 'rome'
-        ? calculateRomanTime(modernTime, latitude, longitude)
-        : civilization === 'hellas'
+      const data =
+        civilization === 'rome'
+          ? calculateRomanTime(modernTime, latitude, longitude)
+          : civilization === 'hellas'
           ? calculateHellenicTime(modernTime, latitude, longitude)
           : civilization === 'aegyptus'
-            ? calculateEgyptianTime(modernTime, latitude, longitude)
-            : civilization === 'babylonia'
-              ? calculateBabylonianTime(modernTime, latitude, longitude)
-              : calculateRomanTime(modernTime, latitude, longitude);
+          ? calculateEgyptianTime(modernTime, latitude, longitude)
+          : civilization === 'babylonia'
+          ? calculateBabylonianTime(modernTime, latitude, longitude)
+          : calculateRomanTime(modernTime, latitude, longitude);
       setRomanTimeData(data);
 
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
@@ -150,11 +160,17 @@ const AppContent: React.FC = () => {
   }, [modernTime, latitude, longitude, loading, civilization]);
 
   // Weather Data — when time-traveling, load the weather recorded on that day/time.
-  const { weather, error: weatherError, slow: weatherSlow } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
+  const {
+    weather,
+    error: weatherError,
+    slow: weatherSlow,
+  } = useWeather(latitude, longitude, isTimeTraveling ? modernTime : undefined);
 
   // Custom sky chosen from the mobile menu (live weather, the aurora, or a preset
   // with custom temperature and wind). Persisted so it survives a reload.
-  const [customWeather, setCustomWeather] = useState<CustomWeatherConfig>(() => loadCustomWeather());
+  const [customWeather, setCustomWeather] = useState<CustomWeatherConfig>(() =>
+    loadCustomWeather(),
+  );
   useEffect(() => {
     saveCustomWeather(customWeather);
   }, [customWeather]);
@@ -165,27 +181,38 @@ const AppContent: React.FC = () => {
     isHistorical: false,
     historical: [],
     current: {
-      condition: 'cloudy', code: 3, temperature: 15,
-      description: 'Offline', windSpeed: 0, windGusts: 0, windDirection: 0,
-      latinWindName: '', surfacePressure: 0, yearLabel: '',
+      condition: 'cloudy',
+      code: 3,
+      temperature: 15,
+      description: 'Offline',
+      windSpeed: 0,
+      windGusts: 0,
+      windDirection: 0,
+      latinWindName: '',
+      surfacePressure: 0,
+      yearLabel: '',
     },
   };
 
   const effectiveWeather: WeatherData | null = useMemo(() => {
     let base: WeatherData | null = weather;
-    if (new URLSearchParams(window.location.search).get('offline') === '1') base = OFFLINE_WEATHER;
-    else if (weatherError && !weather) base = OFFLINE_WEATHER;
-    // Fetch pending > 1 s with nothing loaded yet: show the aurora placeholder.
-    else if (weatherSlow) base = OFFLINE_WEATHER;
+    if (
+      new URLSearchParams(window.location.search).get('offline') === '1' ||
+      (weatherError && !weather) ||
+      weatherSlow
+    )
+      base = OFFLINE_WEATHER;
     return applyCustomWeather(base, customWeather);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weather, weatherError, weatherSlow, customWeather]);
 
   /** Turns the aurora on (custom sky) or back to the live weather. */
   const toggleAurora = () => {
-    setCustomWeather(c => c.aurora
-      ? { ...c, mode: 'live', aurora: false, label: '' }
-      : { ...c, mode: 'custom', aurora: true, code: 0, label: '' });
+    setCustomWeather(c =>
+      c.aurora
+        ? { ...c, mode: 'live', aurora: false, label: '' }
+        : { ...c, mode: 'custom', aurora: true, code: 0, label: '' },
+    );
   };
 
   const handleUpdateLocation = (lat: number, lng: number) => {
@@ -219,13 +246,22 @@ const AppContent: React.FC = () => {
   };
 
   // Mobile-menu headings: Latin, or Akkadian + Spanish gloss on the Babylonian page.
-  const menuHeading = (latin: string, term: Term) => civilization === 'babylonia'
-    ? <GlossedTerm term={term} align="start" className="font-serif text-sm uppercase tracking-widest text-gold-dim/70" glossClassName="text-gold-dim/60" />
-    : <span className="font-serif text-xs uppercase tracking-widest text-gold-dim/60">{latin}</span>;
+  const menuHeading = (latin: string, term: Term) =>
+    civilization === 'babylonia' ? (
+      <GlossedTerm
+        term={term}
+        align="start"
+        className="font-serif text-sm uppercase tracking-widest text-gold-dim/70"
+        glossClassName="text-gold-dim/60"
+      />
+    ) : (
+      <span className="font-serif text-xs uppercase tracking-widest text-gold-dim/60">
+        {latin}
+      </span>
+    );
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
-      
       {/* Mobile menu — burger button with dropdown (location, weather, date) */}
       <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end">
         {isMobileMenuOpen && (
@@ -251,51 +287,85 @@ const AppContent: React.FC = () => {
         {isMobileMenuOpen && (
           <div className="mt-2 w-52 bg-ink/95 border border-gold-dim/30 rounded-xl shadow-2xl overflow-hidden backdrop-blur-md animate-fadeIn">
             <button
-              onClick={() => { setIsLocationModalOpen(true); setIsMobileMenuOpen(false); }}
+              onClick={() => {
+                setIsLocationModalOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
             >
               <MapPin className="w-4 h-4 shrink-0 text-gold-dim/70" />
               <span className="flex flex-col min-w-0">
                 {menuHeading('Locus', BABYLONIAN_UI_TERMS.place)}
-                <span className="font-serif text-xs text-parchment/90 truncate">{currentLocationName}</span>
+                <span className="font-serif text-xs text-parchment/90 truncate">
+                  {currentLocationName}
+                </span>
               </span>
             </button>
 
             <button
-              onClick={() => { setIsCustomWeatherOpen(true); setIsMobileMenuOpen(false); }}
+              onClick={() => {
+                setIsCustomWeatherOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
             >
               <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
               <span className="flex flex-col min-w-0">
                 {menuHeading('Caelum', BABYLONIAN_UI_TERMS.sky)}
-                <span className={`font-serif text-xs truncate ${customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'}`}>
+                <span
+                  className={`font-serif text-xs truncate ${
+                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
+                  }`}
+                >
                   {customWeatherLabel(customWeather)}
                 </span>
               </span>
             </button>
 
             <button
-              onClick={() => { toggleAurora(); setIsMobileMenuOpen(false); }}
+              onClick={() => {
+                toggleAurora();
+                setIsMobileMenuOpen(false);
+              }}
               aria-pressed={customWeather.aurora}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
             >
-              <Sparkles className={`w-4 h-4 shrink-0 ${customWeather.aurora ? 'text-emerald-300' : 'text-gold-dim/70'}`} />
+              <Sparkles
+                className={`w-4 h-4 shrink-0 ${
+                  customWeather.aurora ? 'text-emerald-300' : 'text-gold-dim/70'
+                }`}
+              />
               <span className="flex flex-col min-w-0">
                 {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
-                <span className={`font-serif text-xs truncate ${customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'}`}>
+                <span
+                  className={`font-serif text-xs truncate ${
+                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
+                  }`}
+                >
                   {customWeather.aurora ? 'Activada' : 'Desactivada'}
                 </span>
               </span>
             </button>
 
             <button
-              onClick={() => { openTravelModal(); setIsMobileMenuOpen(false); }}
+              onClick={() => {
+                openTravelModal();
+                setIsMobileMenuOpen(false);
+              }}
               className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
             >
-              <Hourglass className={`w-4 h-4 shrink-0 ${isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'}`} />
+              <Hourglass
+                className={`w-4 h-4 shrink-0 ${
+                  isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'
+                }`}
+              />
               <span className="flex flex-col min-w-0">
                 {menuHeading('Tempus', BABYLONIAN_UI_TERMS.day)}
-                <span className={`font-serif text-xs truncate ${isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'}`}>
+                <span
+                  className={`font-serif text-xs truncate ${
+                    isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'
+                  }`}
+                >
                   {isTimeTraveling ? 'Viajando' : 'Fecha actual'}
                 </span>
               </span>
@@ -306,21 +376,31 @@ const AppContent: React.FC = () => {
 
       <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
-          {labels.appTitle} <span className="text-gold-dim font-normal text-xl md:text-2xl">{labels.appSubtitle}</span>
+          {labels.appTitle}{' '}
+          <span className="text-gold-dim font-normal text-xl md:text-2xl">
+            {labels.appSubtitle}
+          </span>
         </h1>
       </header>
 
       {isTimeTraveling && (
         <div className="w-full max-w-xl mx-auto mt-2 flex items-center justify-between gap-2 bg-amber-950/50 border border-amber-700/40 rounded-lg px-3 py-1.5 text-xs z-10">
           <span className="font-serif text-amber-400/90 truncate">
-            ⏳ {modernTime.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+            ⏳{' '}
+            {modernTime.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
           </span>
           <div className="flex items-center gap-2 shrink-0">
-            <button onClick={openTravelModal} className="text-amber-400/70 hover:text-amber-300 font-serif underline underline-offset-2 transition-colors">
+            <button
+              onClick={openTravelModal}
+              className="text-amber-400/70 hover:text-amber-300 font-serif underline underline-offset-2 transition-colors"
+            >
               Cambiar
             </button>
             <span className="text-amber-700/50">·</span>
-            <button onClick={returnToLive} className="text-amber-400 hover:text-amber-200 font-serif font-bold transition-colors">
+            <button
+              onClick={returnToLive}
+              className="text-amber-400 hover:text-amber-200 font-serif font-bold transition-colors"
+            >
               Volver al presente
             </button>
           </div>
@@ -338,7 +418,12 @@ const AppContent: React.FC = () => {
       )}
       {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
         <Suspense fallback={null}>
-          <EgyptianCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} weather={effectiveWeather} />
+          <EgyptianCalendarInfo
+            currentDate={modernTime}
+            lat={latitude}
+            lng={longitude}
+            weather={effectiveWeather}
+          />
         </Suspense>
       )}
 
@@ -356,40 +441,40 @@ const AppContent: React.FC = () => {
       {romanTimeData && (
         <div className="w-full max-w-2xl mx-auto">
           <Suspense fallback={null}>
-          {civilization === 'aegyptus' ? (
-            <EgyptianClock
-              modernTime={modernTime}
-              romanTime={romanTimeData}
-              loading={loading}
-              weather={effectiveWeather}
-              onUpdateLocation={handleUpdateLocation}
-              currentLat={latitude}
-              currentLng={longitude}
-            />
-          ) : civilization === 'zhongguo' ? (
-            <ChineseClock modernTime={modernTime} weather={effectiveWeather} />
-          ) : civilization === 'babylonia' ? (
-            <BabylonianClock
-              modernTime={modernTime}
-              loading={loading}
-              weather={effectiveWeather}
-              onUpdateLocation={handleUpdateLocation}
-              currentLat={latitude}
-              currentLng={longitude}
-              isTimeTraveling={isTimeTraveling}
-            />
-          ) : (
-            <RomanClock
-              modernTime={modernTime}
-              romanTime={romanTimeData}
-              loading={loading}
-              weather={effectiveWeather}
-              onUpdateLocation={handleUpdateLocation}
-              currentLat={latitude}
-              currentLng={longitude}
-              isTimeTraveling={isTimeTraveling}
-            />
-          )}
+            {civilization === 'aegyptus' ? (
+              <EgyptianClock
+                modernTime={modernTime}
+                romanTime={romanTimeData}
+                loading={loading}
+                weather={effectiveWeather}
+                onUpdateLocation={handleUpdateLocation}
+                currentLat={latitude}
+                currentLng={longitude}
+              />
+            ) : civilization === 'zhongguo' ? (
+              <ChineseClock modernTime={modernTime} weather={effectiveWeather} />
+            ) : civilization === 'babylonia' ? (
+              <BabylonianClock
+                modernTime={modernTime}
+                loading={loading}
+                weather={effectiveWeather}
+                onUpdateLocation={handleUpdateLocation}
+                currentLat={latitude}
+                currentLng={longitude}
+                isTimeTraveling={isTimeTraveling}
+              />
+            ) : (
+              <RomanClock
+                modernTime={modernTime}
+                romanTime={romanTimeData}
+                loading={loading}
+                weather={effectiveWeather}
+                onUpdateLocation={handleUpdateLocation}
+                currentLat={latitude}
+                currentLng={longitude}
+                isTimeTraveling={isTimeTraveling}
+              />
+            )}
           </Suspense>
         </div>
       )}
@@ -398,14 +483,17 @@ const AppContent: React.FC = () => {
         <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
       ) : null}
 
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && todaysSunTimes && romanTimeData && (
-        <SolarTimes
-          sunrise={todaysSunTimes.sunrise}
-          sunset={todaysSunTimes.sunset}
-          currentHourLength={romanTimeData.hourLengthMinutes}
-          timezone={locationTimezone}
-        />
-      )}
+      {civilization !== 'zhongguo' &&
+        civilization !== 'babylonia' &&
+        todaysSunTimes &&
+        romanTimeData && (
+          <SolarTimes
+            sunrise={todaysSunTimes.sunrise}
+            sunset={todaysSunTimes.sunset}
+            currentHourLength={romanTimeData.hourLengthMinutes}
+            timezone={locationTimezone}
+          />
+        )}
 
       {civilization === 'aegyptus' ? (
         <EgyptianHours currentDate={modernTime} lat={latitude} lng={longitude} />
@@ -415,13 +503,22 @@ const AppContent: React.FC = () => {
         <PlanetaryPositions currentDate={modernTime} lat={latitude} lng={longitude} />
       )}
 
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && <ProvinciaInfo latitude={latitude} longitude={longitude} onLocationChange={handleUpdateLocation} travelDate={isTimeTraveling ? modernTime : undefined} />}
+      {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+        <ProvinciaInfo
+          latitude={latitude}
+          longitude={longitude}
+          onLocationChange={handleUpdateLocation}
+          travelDate={isTimeTraveling ? modernTime : undefined}
+        />
+      )}
 
       {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
 
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
-      
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && <OvidianLore modernTime={modernTime} />}
+
+      {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+        <OvidianLore modernTime={modernTime} />
+      )}
 
       {civilization === 'rome' && (
         <EclipseForecast currentDate={modernTime} latitude={latitude} longitude={longitude} />
@@ -455,26 +552,41 @@ const AppContent: React.FC = () => {
       />
 
       <Suspense fallback={null}>
-      {travelModalOpen && (
-        civilization === 'hellas' || civilization === 'aegyptus' || civilization === 'babylonia' ? (
-          <CivilCalendarDatePicker
-            civilization={civilization}
-            initialDate={modernTime}
-            lat={latitude}
-            lng={longitude}
-            onConfirm={applyTravelDate}
-            onClose={() => setTravelModalOpen(false)}
-            onReturnToLive={isTimeTraveling ? () => { returnToLive(); setTravelModalOpen(false); } : undefined}
-          />
-        ) : (
-          <DateTimePicker
-            initialDate={modernTime}
-            onConfirm={applyTravelDate}
-            onClose={() => setTravelModalOpen(false)}
-            onReturnToLive={isTimeTraveling ? () => { returnToLive(); setTravelModalOpen(false); } : undefined}
-          />
-        )
-      )}
+        {travelModalOpen &&
+          (civilization === 'hellas' ||
+          civilization === 'aegyptus' ||
+          civilization === 'babylonia' ? (
+            <CivilCalendarDatePicker
+              civilization={civilization}
+              initialDate={modernTime}
+              lat={latitude}
+              lng={longitude}
+              onConfirm={applyTravelDate}
+              onClose={() => setTravelModalOpen(false)}
+              onReturnToLive={
+                isTimeTraveling
+                  ? () => {
+                      returnToLive();
+                      setTravelModalOpen(false);
+                    }
+                  : undefined
+              }
+            />
+          ) : (
+            <DateTimePicker
+              initialDate={modernTime}
+              onConfirm={applyTravelDate}
+              onClose={() => setTravelModalOpen(false)}
+              onReturnToLive={
+                isTimeTraveling
+                  ? () => {
+                      returnToLive();
+                      setTravelModalOpen(false);
+                    }
+                  : undefined
+              }
+            />
+          ))}
       </Suspense>
 
       <CustomWeatherModal
@@ -491,7 +603,9 @@ const AppContent: React.FC = () => {
       <footer className="mt-auto relative z-10 text-stone-400 font-serif text-xs tracking-widest pb-4">
         {labels.footerMotto}
         {labels.footerMottoEs && (
-          <span className="block text-center text-xs italic tracking-normal text-stone-500 mt-0.5">{labels.footerMottoEs}</span>
+          <span className="block text-center text-xs italic tracking-normal text-stone-500 mt-0.5">
+            {labels.footerMottoEs}
+          </span>
         )}
       </footer>
 

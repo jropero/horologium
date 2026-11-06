@@ -7,12 +7,20 @@
 // Shared engine: utils/lunarCivilCalendar.ts.
 
 import { getMoonPhase, summerSolsticeJDE } from './solar';
-import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
+import type {
+  CivilCalendarYear,
+  CivilCalendarMonth,
+  CivilCalendarDay,
+} from '../types/civilCalendar';
 import { translateGreekUI } from './greekTranslations';
 import { getOlympiadYear } from './greekEra';
 import {
-  getLunarYearStart, getLunarYearMonths, civilDayStart, civilDaysBetween,
-  positionInYear, daytimeOfCivilDay,
+  getLunarYearStart,
+  getLunarYearMonths,
+  civilDayStart,
+  civilDaysBetween,
+  positionInYear,
+  daytimeOfCivilDay,
 } from './lunarCivilCalendar';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
@@ -29,38 +37,67 @@ const fromJD = (jd: number): Date => new Date((jd - 2440587.5) * 86400000);
 
 // The 12 Attic months
 export const ATTIC_MONTHS = [
-  { name: "Ἑκατομβαιών", latin: "Hekatombaion", approxGreg: "Jul-Ago" },
-  { name: "Μεταγειτνιών", latin: "Metageitnion", approxGreg: "Ago-Sep" },
-  { name: "Βοηδρομιών", latin: "Boedromion", approxGreg: "Sep-Oct" },
-  { name: "Πυανεψιών", latin: "Pyanepsion", approxGreg: "Oct-Nov" },
-  { name: "Μαιμακτηριών", latin: "Maimakterion", approxGreg: "Nov-Dic" },
-  { name: "Ποσειδεών", latin: "Poseideon", approxGreg: "Dic-Ene" },
-  { name: "Γαμηλιών", latin: "Gamelion", approxGreg: "Ene-Feb" },
-  { name: "Ἀνθεστηριών", latin: "Anthesterion", approxGreg: "Feb-Mar" },
-  { name: "Ἐλαφηβολιών", latin: "Elaphebolion", approxGreg: "Mar-Abr" },
-  { name: "Μουνυχιών", latin: "Mounichion", approxGreg: "Abr-May" },
-  { name: "Θαργηλιών", latin: "Thargelion", approxGreg: "May-Jun" },
-  { name: "Σκιροφοριών", latin: "Skirophorion", approxGreg: "Jun-Jul" }
+  { name: 'Ἑκατομβαιών', latin: 'Hekatombaion', approxGreg: 'Jul-Ago' },
+  { name: 'Μεταγειτνιών', latin: 'Metageitnion', approxGreg: 'Ago-Sep' },
+  { name: 'Βοηδρομιών', latin: 'Boedromion', approxGreg: 'Sep-Oct' },
+  { name: 'Πυανεψιών', latin: 'Pyanepsion', approxGreg: 'Oct-Nov' },
+  { name: 'Μαιμακτηριών', latin: 'Maimakterion', approxGreg: 'Nov-Dic' },
+  { name: 'Ποσειδεών', latin: 'Poseideon', approxGreg: 'Dic-Ene' },
+  { name: 'Γαμηλιών', latin: 'Gamelion', approxGreg: 'Ene-Feb' },
+  { name: 'Ἀνθεστηριών', latin: 'Anthesterion', approxGreg: 'Feb-Mar' },
+  { name: 'Ἐλαφηβολιών', latin: 'Elaphebolion', approxGreg: 'Mar-Abr' },
+  { name: 'Μουνυχιών', latin: 'Mounichion', approxGreg: 'Abr-May' },
+  { name: 'Θαργηλιών', latin: 'Thargelion', approxGreg: 'May-Jun' },
+  { name: 'Σκιροφοριών', latin: 'Skirophorion', approxGreg: 'Jun-Jul' },
 ];
 
 // Intercalary month (inserted after Poseideon in 13-lunation years)
-export const INTERCALARY_MONTH = { name: "Ποσειδεών Βʹ", latin: "Poseideon II", approxGreg: "Ene" };
+export const INTERCALARY_MONTH = {
+  name: 'Ποσειδεών Βʹ',
+  latin: 'Poseideon II',
+  approxGreg: 'Ene',
+};
 
 // Greek ordinal day names
 const GREEK_DAY_ORDINALS = [
-  "", "πρώτη", "δευτέρα", "τρίτη", "τετάρτη", "πέμπτη",
-  "ἕκτη", "ἑβδόμη", "ὀγδόη", "ἐνάτη", "δεκάτη"
+  '',
+  'πρώτη',
+  'δευτέρα',
+  'τρίτη',
+  'τετάρτη',
+  'πέμπτη',
+  'ἕκτη',
+  'ἑβδόμη',
+  'ὀγδόη',
+  'ἐνάτη',
+  'δεκάτη',
 ];
 
 // --- Attic year engine ---
 
 /** Sunset that begins Hekatombaion 1 of the Attic year anchored in `gregorianYear`. */
 export const getAtticYearStart = (
-  gregorianYear: number, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
-): Date => getLunarYearStart('attic', CRESCENT_DELAY, fromJD(summerSolsticeJDE(gregorianYear)), lat, lng);
+  gregorianYear: number,
+  lat: number = ATHENS_LAT,
+  lng: number = ATHENS_LNG,
+): Date =>
+  getLunarYearStart(
+    'attic',
+    CRESCENT_DELAY,
+    fromJD(summerSolsticeJDE(gregorianYear)),
+    lat,
+    lng,
+  );
 
 const atticYearMonths = (anchor: number, lat: number, lng: number): Date[] =>
-  getLunarYearMonths('attic', CRESCENT_DELAY, getAtticYearStart(anchor, lat, lng), getAtticYearStart(anchor + 1, lat, lng), lat, lng);
+  getLunarYearMonths(
+    'attic',
+    CRESCENT_DELAY,
+    getAtticYearStart(anchor, lat, lng),
+    getAtticYearStart(anchor + 1, lat, lng),
+    lat,
+    lng,
+  );
 
 // Lunation index → month. In a 13-lunation year the 7th lunation is Poseideon II.
 // (Modern astronomical reconstruction — Athenian intercalation was decided ad hoc
@@ -78,16 +115,26 @@ const monthForLunation = (lunation: number, monthCount: number) => {
 const locateAtticDay = (date: Date, lat: number, lng: number) => {
   const dayStart = civilDayStart(date, lat, lng);
   let anchor = dayStart.getFullYear();
-  if (dayStart.getTime() + 3 * 3600000 < getAtticYearStart(anchor, lat, lng).getTime()) anchor--;
+  if (dayStart.getTime() + 3 * 3600000 < getAtticYearStart(anchor, lat, lng).getTime())
+    anchor--;
   const months = atticYearMonths(anchor, lat, lng);
   return { anchor, months, ...positionInYear(months, dayStart) };
 };
 
 // --- Day formatting (3-decade system) ---
 
-const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: string; full: string; spanishShort: string; spanishFull: string } => {
+const formatAtticDay = (
+  dayOfMonth: number,
+  monthLength: number,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+): { short: string; full: string; spanishShort: string; spanishFull: string } => {
   if (dayOfMonth === 1) {
-    return { short: "Νουμηνία", full: "Νουμηνία", spanishShort: "Día 1 (Novilunio)", spanishFull: "Luna Nueva" };
+    return {
+      short: 'Νουμηνία',
+      full: 'Νουμηνία',
+      spanishShort: 'Día 1 (Novilunio)',
+      spanishFull: 'Luna Nueva',
+    };
   }
 
   if (dayOfMonth <= 10) {
@@ -96,13 +143,18 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
       short: `${ordinal} ἱσταμένου`,
       full: `Ἡμέρα ${ordinal} τοῦ μηνὸς ἱσταμένου`,
       spanishShort: `Día ${dayOfMonth} creciente`,
-      spanishFull: `Día ${dayOfMonth} de la luna creciente`
+      spanishFull: `Día ${dayOfMonth} de la luna creciente`,
     };
   }
 
   if (dayOfMonth <= 20) {
     if (dayOfMonth === 20) {
-      return { short: `εἰκάς`, full: `εἰκάς`, spanishShort: `Día 20 (Eikas)`, spanishFull: `Día 20 (la vigésima)` };
+      return {
+        short: `εἰκάς`,
+        full: `εἰκάς`,
+        spanishShort: `Día 20 (Eikas)`,
+        spanishFull: `Día 20 (la vigésima)`,
+      };
     }
     const dayInDecade = dayOfMonth - 10;
     const ordinal = GREEK_DAY_ORDINALS[dayInDecade] || dayInDecade.toString();
@@ -110,21 +162,27 @@ const formatAtticDay = (dayOfMonth: number, monthLength: number): { short: strin
       short: `${ordinal} μεσοῦντος`,
       full: `Ἡμέρα ${ordinal} ἐπὶ δέκα`,
       spanishShort: `Día ${dayOfMonth} (mes central)`,
-      spanishFull: `Día ${dayOfMonth}, mitad del mes`
+      spanishFull: `Día ${dayOfMonth}, mitad del mes`,
     };
   }
 
   if (dayOfMonth === monthLength) {
-    return { short: "ἕνη καὶ νέα", full: "Ἕνη καὶ Νέα", spanishShort: "Mes viejo y nuevo", spanishFull: "Último día (vieja y nueva luna)" };
+    return {
+      short: 'ἕνη καὶ νέα',
+      full: 'Ἕνη καὶ Νέα',
+      spanishShort: 'Mes viejo y nuevo',
+      spanishFull: 'Último día (vieja y nueva luna)',
+    };
   }
-  
+
   const theoreticalDaysFromEnd = 30 - dayOfMonth + 1;
-  const ordinal = GREEK_DAY_ORDINALS[theoreticalDaysFromEnd] || theoreticalDaysFromEnd.toString();
+  const ordinal =
+    GREEK_DAY_ORDINALS[theoreticalDaysFromEnd] || theoreticalDaysFromEnd.toString();
   return {
     short: `${ordinal} φθίνοντος`,
     full: `${ordinal} φθίνοντος`,
     spanishShort: `Día ${theoreticalDaysFromEnd} desde el fin`,
-    spanishFull: `Día ${theoreticalDaysFromEnd} desde el fin del mes`
+    spanishFull: `Día ${theoreticalDaysFromEnd} desde el fin del mes`,
   };
 };
 
@@ -150,10 +208,22 @@ export interface AtticDateResult {
  * boundaries computed for the given location (default: Athens).
  */
 export const getAtticDate = (
-  date: Date, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+  date: Date,
+  lat: number = ATHENS_LAT,
+  lng: number = ATHENS_LNG,
 ): AtticDateResult => {
-  const { anchor, monthIndex: lunation, day, monthLength, monthCount } = locateAtticDay(date, lat, lng);
-  const { monthIndex, isIntercalaryMonth, data: monthData } = monthForLunation(lunation, monthCount);
+  const {
+    anchor,
+    monthIndex: lunation,
+    day,
+    monthLength,
+    monthCount,
+  } = locateAtticDay(date, lat, lng);
+  const {
+    monthIndex,
+    isIntercalaryMonth,
+    data: monthData,
+  } = monthForLunation(lunation, monthCount);
   const dayFormatted = formatAtticDay(day, monthLength);
 
   return {
@@ -173,14 +243,16 @@ export const getAtticDate = (
 
 // For the Greek calendar modal — get Attic date for any date
 export const getAtticDateForDisplay = (
-  date: Date, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+  date: Date,
+  lat: number = ATHENS_LAT,
+  lng: number = ATHENS_LNG,
 ): {
   atticDate: AtticDateResult;
   moonPhase: number;
 } => {
   return {
     atticDate: getAtticDate(date, lat, lng),
-    moonPhase: getMoonPhase(date)
+    moonPhase: getMoonPhase(date),
   };
 };
 
@@ -188,7 +260,9 @@ export const getAtticDateForDisplay = (
 
 /** Gregorian year that anchors the Attic year containing `date`. */
 export const getAtticYearAnchor = (
-  date: Date, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+  date: Date,
+  lat: number = ATHENS_LAT,
+  lng: number = ATHENS_LNG,
 ): number => locateAtticDay(date, lat, lng).anchor;
 
 /**
@@ -197,7 +271,10 @@ export const getAtticYearAnchor = (
  * half, so `getAtticDate` reports exactly the month/day shown in the picker.
  */
 export const getAtticCalendarYear = (
-  anchorGregYear: number, lat: number = ATHENS_LAT, lng: number = ATHENS_LNG
+  anchorGregYear: number,
+  lat: number = ATHENS_LAT,
+  lng: number = ATHENS_LNG,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): CivilCalendarYear => {
   const starts = atticYearMonths(anchorGregYear, lat, lng);
   const totalMonths = starts.length - 1;
@@ -208,7 +285,10 @@ export const getAtticCalendarYear = (
     const length = civilDaysBetween(starts[m], starts[m + 1]);
     const days: CivilCalendarDay[] = [];
     for (let d = 1; d <= length; d++) {
-      days.push({ day: d, gregorian: daytimeOfCivilDay(new Date(starts[m].getTime() + (d - 1) * DAY_MS)) });
+      days.push({
+        day: d,
+        gregorian: daytimeOfCivilDay(new Date(starts[m].getTime() + (d - 1) * DAY_MS)),
+      });
     }
     months.push({
       key: `attic-${m}`,
@@ -225,7 +305,9 @@ export const getAtticCalendarYear = (
   return {
     anchorGregYear,
     yearLabel: `Ol. ${olympiad.olympiad} · año ${olympiad.year}`,
-    yearSubtitle: `${totalMonths === 13 ? 'Año intercalar · 13 meses' : 'Año de 12 meses'} · ${anchorGregYear}/${anchorGregYear + 1}`,
+    yearSubtitle: `${
+      totalMonths === 13 ? 'Año intercalar · 13 meses' : 'Año de 12 meses'
+    } · ${anchorGregYear}/${anchorGregYear + 1}`,
     months,
   };
 };

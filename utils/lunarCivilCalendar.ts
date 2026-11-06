@@ -63,8 +63,7 @@ const crescentSunset = (conj: Date, obs: Observer, minAgeDays: number): Date => 
   return ss ?? new Date(conj.getTime() + (minAgeDays + 0.5) * DAY_MS); // polar fallback
 };
 
-const nextConjunction = (after: Date): Date =>
-  SearchMoonPhase(0, after, 40)!.date;
+const nextConjunction = (after: Date): Date => SearchMoonPhase(0, after, 40)!.date;
 
 // ── Year starts and month lists (memoised) ───────────────────────────────────
 
@@ -89,7 +88,11 @@ const remember = <T>(cache: Map<string, T>, key: string, value: T): T => {
  * `minAgeDays` is the Moon age at which the crescent counts as visible.
  */
 export const getLunarYearStart = (
-  tag: string, minAgeDays: number, seasonalPoint: Date, lat: number, lng: number
+  tag: string,
+  minAgeDays: number,
+  seasonalPoint: Date,
+  lat: number,
+  lng: number,
 ): Date => {
   const key = `${tag}|${minAgeDays}|${seasonalPoint.getTime()}|${coordKey(lat, lng)}`;
   const hit = yearStartCache.get(key);
@@ -112,7 +115,12 @@ export const getLunarYearStart = (
  * followed by `nextYearStart` itself as the closing boundary.
  */
 export const getLunarYearMonths = (
-  tag: string, minAgeDays: number, yearStart: Date, nextYearStart: Date, lat: number, lng: number
+  tag: string,
+  minAgeDays: number,
+  yearStart: Date,
+  nextYearStart: Date,
+  lat: number,
+  lng: number,
 ): Date[] => {
   const key = `${tag}|${minAgeDays}|${yearStart.getTime()}|${coordKey(lat, lng)}`;
   const hit = yearMonthsCache.get(key);
@@ -137,11 +145,11 @@ export const civilDaysBetween = (fromSunset: Date, toSunset: Date): number =>
   Math.round((toSunset.getTime() - fromSunset.getTime()) / DAY_MS);
 
 export interface LunarCivilPosition {
-  monthIndex: number;   // 0-based lunation within the year
-  day: number;          // 1-based day of month
-  monthLength: number;  // 29 or 30
-  monthCount: number;   // 12 or 13
-  dayStart: Date;       // sunset that began this civil day
+  monthIndex: number; // 0-based lunation within the year
+  day: number; // 1-based day of month
+  monthLength: number; // 29 or 30
+  monthCount: number; // 12 or 13
+  dayStart: Date; // sunset that began this civil day
 }
 
 /** Locates `dayStart` (a civil-day-start sunset) within a month list. */

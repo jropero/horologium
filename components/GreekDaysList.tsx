@@ -1,6 +1,10 @@
 import React, { useMemo } from 'react';
 import { getAtticDateForDisplay } from '../utils/atticCalendarUtils';
-import { getAtticFestivalInfo, getDefaultAtticDeity, getDailyAtticDeity } from '../utils/atticCalendarData';
+import {
+  getAtticFestivalInfo,
+  getDefaultAtticDeity,
+  getDailyAtticDeity,
+} from '../utils/atticCalendarData';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
@@ -12,12 +16,19 @@ interface GreekDaysListProps {
 }
 
 // Moon phase emoji helper
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const moonEmoji = (phase: number) =>
-  phase < 0.03 || phase > 0.97 ? '🌑' :
-  phase < 0.28 ? '🌒' :
-  phase < 0.47 ? '🌓' :
-  phase < 0.53 ? '🌕' :
-  phase < 0.78 ? '🌗' : '🌘';
+  phase < 0.03 || phase > 0.97
+    ? '🌑'
+    : phase < 0.28
+    ? '🌒'
+    : phase < 0.47
+    ? '🌓'
+    : phase < 0.53
+    ? '🌕'
+    : phase < 0.78
+    ? '🌗'
+    : '🌘';
 
 /**
  * The seven following Attic days with their god (Θεὸς τῆς Ἡμέρας) and, when one
@@ -47,6 +58,7 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
       </div>
 
       <div className="flex flex-col">
+        {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
         {nextDays.map((day, idx) => {
           const isToday = idx === 0;
           const hasFestival = !!day.festival?.festivalName;
@@ -55,7 +67,8 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
           const deityDesc = day.festival?.festivalDesc || day.dailyDeity?.deityDesc || '';
 
           // Detect month boundary
-          const isNewMonth = idx > 0 && day.atticDate.monthName !== nextDays[idx - 1].atticDate.monthName;
+          const isNewMonth =
+            idx > 0 && day.atticDate.monthName !== nextDays[idx - 1].atticDate.monthName;
 
           return (
             <React.Fragment key={idx}>
@@ -72,18 +85,23 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
 
               <div
                 className={`flex items-start gap-4 px-1 py-5 border-b border-gold-dim/10 transition-all text-left
-                  ${isToday
-                    ? 'bg-gold-leaf/10 border-l-4 border-l-gold-leaf'
-                    : isSacredDay
+                  ${
+                    isToday
+                      ? 'bg-gold-leaf/10 border-l-4 border-l-gold-leaf'
+                      : isSacredDay
                       ? 'bg-amber-950/20 border-l-4 border-l-amber-500/50'
                       : hasFestival
-                        ? 'bg-sky-950/20 border-l-4 border-l-sky-400/60'
-                        : 'border-l-4 border-l-transparent hover:bg-white/[0.02]'
+                      ? 'bg-sky-950/20 border-l-4 border-l-sky-400/60'
+                      : 'border-l-4 border-l-transparent hover:bg-white/[0.02]'
                   }`}
               >
                 {/* LEFT: Day number + moon */}
                 <div className="flex flex-col items-center w-14 shrink-0 pt-1">
-                  <span className={`font-serif text-2xl font-black leading-none ${isToday ? 'text-gold-leaf' : 'text-parchment/80'}`}>
+                  <span
+                    className={`font-serif text-2xl font-black leading-none ${
+                      isToday ? 'text-gold-leaf' : 'text-parchment/80'
+                    }`}
+                  >
                     {day.atticDate.dayOfMonth}
                   </span>
                   <span className="text-xl mt-1">{moonEmoji(day.moonPhase)}</span>
@@ -94,7 +112,9 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                   )}
                   {isSacredDay && !isToday && (
                     <span className="text-[7px] text-amber-500/80 font-bold uppercase tracking-widest mt-2 border border-amber-500/30 px-1 py-0.5 rounded leading-none text-center">
-                      Día<br/>Sagrado
+                      Día
+                      <br />
+                      Sagrado
                     </span>
                   )}
                 </div>
@@ -103,7 +123,11 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                 <div className="flex-1 min-w-0">
                   {/* Day name (Attic) */}
                   <div className="flex items-baseline gap-3 flex-wrap">
-                    <h3 className={`font-serif text-lg sm:text-xl font-bold leading-tight ${isToday ? 'text-parchment' : 'text-parchment/90'}`}>
+                    <h3
+                      className={`font-serif text-lg sm:text-xl font-bold leading-tight ${
+                        isToday ? 'text-parchment' : 'text-parchment/90'
+                      }`}
+                    >
                       {day.atticDate.short}
                     </h3>
                     <span className="text-gold-dim font-body text-xs sm:text-sm italic">
@@ -112,13 +136,27 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                   </div>
 
                   {/* Deity line - MORE PROMINENT */}
-                  <div className={`mt-2 p-3 rounded border transition-all ${isSacredDay ? 'bg-amber-950/30 border-amber-500/30 shadow-[inset_0_0_10px_rgba(245,158,11,0.1)]' : 'bg-white/5 border-white/10'}`}>
+                  <div
+                    className={`mt-2 p-3 rounded border transition-all ${
+                      isSacredDay
+                        ? 'bg-amber-950/30 border-amber-500/30 shadow-[inset_0_0_10px_rgba(245,158,11,0.1)]'
+                        : 'bg-white/5 border-white/10'
+                    }`}
+                  >
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-gold-dim text-[10px] uppercase tracking-widest font-black">Θεός:</span>
-                      <span className={`font-serif text-base sm:text-lg font-black tracking-wide ${isSacredDay ? 'text-gold-leaf' : 'text-parchment'}`}>
+                      <span className="text-gold-dim text-[10px] uppercase tracking-widest font-black">
+                        Θεός:
+                      </span>
+                      <span
+                        className={`font-serif text-base sm:text-lg font-black tracking-wide ${
+                          isSacredDay ? 'text-gold-leaf' : 'text-parchment'
+                        }`}
+                      >
                         {deity}
                       </span>
-                      <span className="text-gold-dim/50 text-xs font-serif">({transliterateGreek(deity)})</span>
+                      <span className="text-gold-dim/50 text-xs font-serif">
+                        ({transliterateGreek(deity)})
+                      </span>
                     </div>
                     <div className="text-sky-400 font-serif text-sm font-bold italic mt-1 flex items-center gap-2">
                       <span className="w-4 h-px bg-sky-400/30" />
@@ -127,8 +165,12 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
 
                     {/* Deity description */}
                     {deityDesc && (
-                      <p className={`font-serif text-xs sm:text-sm italic mt-2 leading-relaxed ${isSacredDay ? 'text-parchment/90' : 'text-parchment/60'}`}>
-                        "{deityDesc}"
+                      <p
+                        className={`font-serif text-xs sm:text-sm italic mt-2 leading-relaxed ${
+                          isSacredDay ? 'text-parchment/90' : 'text-parchment/60'
+                        }`}
+                      >
+                        &quot;{deityDesc}&quot;
                       </p>
                     )}
                   </div>
@@ -167,7 +209,7 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                       {/* Festival description */}
                       {day.festival!.festivalDesc && (
                         <p className="font-serif text-sm sm:text-base text-parchment/80 italic leading-relaxed bg-white/5 p-3 rounded border border-white/5">
-                          "{day.festival!.festivalDesc}"
+                          &quot;{day.festival!.festivalDesc}&quot;
                         </p>
                       )}
 
@@ -177,8 +219,12 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                           <div className="flex items-center gap-2 p-2 bg-amber-950/20 border border-amber-500/20 rounded">
                             <span className="text-xl">{day.festival!.ritualOffering.icon}</span>
                             <div className="flex flex-col">
-                              <span className="text-[9px] uppercase font-bold text-amber-500/60">Ofrenda</span>
-                              <span className="text-amber-100/80">{day.festival!.ritualOffering.item}</span>
+                              <span className="text-[9px] uppercase font-bold text-amber-500/60">
+                                Ofrenda
+                              </span>
+                              <span className="text-amber-100/80">
+                                {day.festival!.ritualOffering.item}
+                              </span>
                             </div>
                           </div>
                         )}
@@ -186,8 +232,12 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                           <div className="flex items-center gap-2 p-2 bg-indigo-950/20 border border-indigo-500/20 rounded">
                             <span className="text-xl animate-pulse">🕯️</span>
                             <div className="flex flex-col">
-                              <span className="text-[9px] uppercase font-bold text-indigo-400/60">Vigilia</span>
-                              <span className="text-indigo-100/80">{day.festival!.pannychisDesc}</span>
+                              <span className="text-[9px] uppercase font-bold text-indigo-400/60">
+                                Vigilia
+                              </span>
+                              <span className="text-indigo-100/80">
+                                {day.festival!.pannychisDesc}
+                              </span>
                             </div>
                           </div>
                         )}
@@ -195,8 +245,12 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                           <div className="flex items-center gap-2 p-2 bg-emerald-950/20 border border-emerald-500/20 rounded">
                             <span className="text-xl">🌿</span>
                             <div className="flex flex-col">
-                              <span className="text-[9px] uppercase font-bold text-emerald-400/60">Competición</span>
-                              <span className="text-emerald-100/80">{day.festival!.agonDesc}</span>
+                              <span className="text-[9px] uppercase font-bold text-emerald-400/60">
+                                Competición
+                              </span>
+                              <span className="text-emerald-100/80">
+                                {day.festival!.agonDesc}
+                              </span>
                             </div>
                           </div>
                         )}

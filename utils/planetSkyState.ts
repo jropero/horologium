@@ -5,7 +5,12 @@
 // stands still or runs backwards.
 
 import {
-  Body, GeoVector, Rotation_EQJ_ECT, RotateVector, SphereFromVector, Elongation,
+  Body,
+  GeoVector,
+  Rotation_EQJ_ECT,
+  RotateVector,
+  SphereFromVector,
+  Elongation,
 } from 'astronomy-engine';
 import { getPlanetPosition } from './solar';
 
@@ -32,19 +37,31 @@ export interface PlanetSkyState {
 }
 
 const BODIES: Record<NakedEyePlanet, Body> = {
-  Mercury: Body.Mercury, Venus: Body.Venus, Mars: Body.Mars, Jupiter: Body.Jupiter, Saturn: Body.Saturn,
+  Mercury: Body.Mercury,
+  Venus: Body.Venus,
+  Mars: Body.Mars,
+  Jupiter: Body.Jupiter,
+  Saturn: Body.Saturn,
 };
 
 // Smallest elongation at which each planet can be seen in twilight. These are
 // rough naked-eye limits (the true arcus visionis also depends on the angle of
 // the ecliptic and on brightness), enough to tell "visible" from "in the glare".
 const MIN_ELONGATION: Record<NakedEyePlanet, number> = {
-  Mercury: 10, Venus: 6, Mars: 14, Jupiter: 11, Saturn: 13,
+  Mercury: 10,
+  Venus: 6,
+  Mars: 14,
+  Jupiter: 11,
+  Saturn: 13,
 };
 
 // Below this daily speed (°/day) the planet is treated as standing still.
 const STATIONARY_SPEED: Record<NakedEyePlanet, number> = {
-  Mercury: 0.15, Venus: 0.05, Mars: 0.03, Jupiter: 0.01, Saturn: 0.006,
+  Mercury: 0.15,
+  Venus: 0.05,
+  Mars: 0.03,
+  Jupiter: 0.01,
+  Saturn: 0.006,
 };
 
 const eclipticLongitudeOfDate = (body: Body, date: Date): number => {
@@ -63,15 +80,20 @@ export const getPlanetSkyStates = (date: Date, lat: number, lng: number): Planet
   const halfDay = new Date(date.getTime() - 43200000);
   const nextHalf = new Date(date.getTime() + 43200000);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const states = (Object.keys(BODIES) as NakedEyePlanet[]).map((k): PlanetSkyState => {
     const body = BODIES[k];
     const longitude = eclipticLongitudeOfDate(body, date);
-    let dailyMotion = eclipticLongitudeOfDate(body, nextHalf) - eclipticLongitudeOfDate(body, halfDay);
+    let dailyMotion =
+      eclipticLongitudeOfDate(body, nextHalf) - eclipticLongitudeOfDate(body, halfDay);
     if (dailyMotion > 180) dailyMotion -= 360;
     if (dailyMotion < -180) dailyMotion += 360;
-    const motion = Math.abs(dailyMotion) < STATIONARY_SPEED[k]
-      ? 'stationary'
-      : dailyMotion < 0 ? 'retrograde' : 'direct';
+    const motion =
+      Math.abs(dailyMotion) < STATIONARY_SPEED[k]
+        ? 'stationary'
+        : dailyMotion < 0
+        ? 'retrograde'
+        : 'direct';
     const el = Elongation(body, date);
     return {
       key: k,

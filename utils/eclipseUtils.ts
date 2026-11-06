@@ -1,8 +1,12 @@
 import {
-  SearchLunarEclipse, NextLunarEclipse,
-  SearchLocalSolarEclipse, NextLocalSolarEclipse,
-  SearchGlobalSolarEclipse, NextGlobalSolarEclipse,
-  Observer, EclipseKind,
+  SearchLunarEclipse,
+  NextLunarEclipse,
+  SearchLocalSolarEclipse,
+  NextLocalSolarEclipse,
+  SearchGlobalSolarEclipse,
+  NextGlobalSolarEclipse,
+  Observer,
+  EclipseKind,
 } from 'astronomy-engine';
 
 export interface EclipseEvent {
@@ -25,6 +29,7 @@ export const getUpcomingEclipses = (
   lat: number | null,
   lng: number | null,
   count: number = 6,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): EclipseEvent[] => {
   const lunar: EclipseEvent[] = [];
   const solar: EclipseEvent[] = [];
@@ -38,29 +43,32 @@ export const getUpcomingEclipses = (
         type: 'lunar',
         kind: info.kind,
         peak: info.peak.date,
-        sdTotal:   info.sd_total   > 0 ? info.sd_total   : undefined,
+        sdTotal: info.sd_total > 0 ? info.sd_total : undefined,
         sdPartial: info.sd_partial > 0 ? info.sd_partial : undefined,
       });
       info = NextLunarEclipse(info.peak);
     }
-  } catch { /* skip on out-of-range input */ }
+  } catch {
+    /* skip on out-of-range input */
+  }
 
   // ── Solar eclipses ────────────────────────────────────────────────────────
   try {
     if (lat !== null && lng !== null) {
       const observer = new Observer(lat, lng, 0);
       let info = SearchLocalSolarEclipse(startDate, observer);
-      for (let i = 0; i < need * 2; i++) { // extra iterations to fill after filtering
+      for (let i = 0; i < need * 2; i++) {
+        // extra iterations to fill after filtering
         if (info.obscuration >= 0.01) {
           solar.push({
             type: 'solar',
             kind: info.kind,
-            peak:         info.peak.time.date,
+            peak: info.peak.time.date,
             partialBegin: info.partial_begin.time.date,
-            partialEnd:   info.partial_end.time.date,
-            totalBegin:   info.total_begin?.time.date,
-            totalEnd:     info.total_end?.time.date,
-            obscuration:  info.obscuration,
+            partialEnd: info.partial_end.time.date,
+            totalBegin: info.total_begin?.time.date,
+            totalEnd: info.total_end?.time.date,
+            obscuration: info.obscuration,
           });
           if (solar.length >= need) break;
         }
@@ -71,14 +79,16 @@ export const getUpcomingEclipses = (
       for (let i = 0; i < need; i++) {
         solar.push({
           type: 'solar',
-          kind:        info.kind as EclipseKind,
-          peak:        info.peak.date,
+          kind: info.kind as EclipseKind,
+          peak: info.peak.date,
           obscuration: info.obscuration,
         });
         info = NextGlobalSolarEclipse(info.peak);
       }
     }
-  } catch { /* skip on out-of-range input */ }
+  } catch {
+    /* skip on out-of-range input */
+  }
 
   return [...lunar, ...solar]
     .sort((a, b) => a.peak.getTime() - b.peak.getTime())

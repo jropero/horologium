@@ -1,6 +1,9 @@
 import {
-  SearchMoonQuarter, NextMoonQuarter,
-  SearchLunarApsis, NextLunarApsis, ApsisKind,
+  SearchMoonQuarter,
+  NextMoonQuarter,
+  SearchLunarApsis,
+  NextLunarApsis,
+  ApsisKind,
   SearchMaxElongation,
   SearchRelativeLongitude,
   Body,
@@ -8,26 +11,32 @@ import {
 import { getUpcomingEclipses } from './eclipseUtils';
 
 export type AstroEventType =
-  | 'moon-new' | 'moon-fq' | 'moon-full' | 'moon-lq'
-  | 'moon-perigee' | 'moon-apogee'
+  | 'moon-new'
+  | 'moon-fq'
+  | 'moon-full'
+  | 'moon-lq'
+  | 'moon-perigee'
+  | 'moon-apogee'
   | 'elongation'
   | 'opposition'
-  | 'eclipse-lunar' | 'eclipse-solar';
+  | 'eclipse-lunar'
+  | 'eclipse-solar';
 
 export interface AstroEvent {
   type: AstroEventType;
   time: Date;
-  body?: string;           // 'Mercurius' | 'Venus' | 'Martis' | 'Iovis' | 'Saturni'
+  body?: string; // 'Mercurius' | 'Venus' | 'Martis' | 'Iovis' | 'Saturni'
   elongationDeg?: number;
-  elongationDir?: string;  // 'morning' | 'evening'
+  elongationDir?: string; // 'morning' | 'evening'
   distKm?: number;
-  eclipseKind?: string;    // 'total' | 'partial' | 'annular' | 'penumbral'
+  eclipseKind?: string; // 'total' | 'partial' | 'annular' | 'penumbral'
   obscuration?: number;
   sdTotal?: number;
 }
 
 const PHASE_TYPES: AstroEventType[] = ['moon-new', 'moon-fq', 'moon-full', 'moon-lq'];
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function getAstronomicalEvents(
   startDate: Date,
   lat: number | null,
@@ -43,7 +52,9 @@ export function getAstronomicalEvents(
       events.push({ type: PHASE_TYPES[mq.quarter]!, time: mq.time.date });
       mq = NextMoonQuarter(mq);
     }
-  } catch { /* skip on out-of-range */ }
+  } catch {
+    /* skip on out-of-range */
+  }
 
   // Lunar apsides (~2 per month)
   try {
@@ -56,12 +67,14 @@ export function getAstronomicalEvents(
       });
       ap = NextLunarApsis(ap);
     }
-  } catch { /* skip */ }
+  } catch {
+    /* skip */
+  }
 
   // Greatest elongation of inner planets (if within 30 days)
   for (const [body, name] of [
     [Body.Mercury, 'Mercurius'],
-    [Body.Venus,   'Venus'],
+    [Body.Venus, 'Venus'],
   ] as [Body, string][]) {
     try {
       const el = SearchMaxElongation(body, startDate);
@@ -74,21 +87,25 @@ export function getAstronomicalEvents(
           elongationDir: el.visibility,
         });
       }
-    } catch { /* skip */ }
+    } catch {
+      /* skip */
+    }
   }
 
   // Outer planet oppositions (if within 30 days — infrequent but spectacular)
   for (const [body, name] of [
-    [Body.Mars,    'Martis'],
+    [Body.Mars, 'Martis'],
     [Body.Jupiter, 'Iovis'],
-    [Body.Saturn,  'Saturni'],
+    [Body.Saturn, 'Saturni'],
   ] as [Body, string][]) {
     try {
       const t = SearchRelativeLongitude(body, 180.0, startDate);
       if (t.date <= end) {
         events.push({ type: 'opposition', time: t.date, body: name });
       }
-    } catch { /* skip */ }
+    } catch {
+      /* skip */
+    }
   }
 
   // Eclipses visible in the 30-day window
@@ -105,7 +122,9 @@ export function getAstronomicalEvents(
         });
       }
     }
-  } catch { /* skip */ }
+  } catch {
+    /* skip */
+  }
 
   return events.sort((a, b) => a.time.getTime() - b.time.getTime());
 }

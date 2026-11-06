@@ -33,7 +33,11 @@
 //   • Shemu (𓈙𓈗𓅓𓅱) — Cosecha (meses 9-12)
 // ══════════════════════════════════════════════════════════════════════════
 
-import type { CivilCalendarYear, CivilCalendarMonth, CivilCalendarDay } from '../types/civilCalendar';
+import type {
+  CivilCalendarYear,
+  CivilCalendarMonth,
+  CivilCalendarDay,
+} from '../types/civilCalendar';
 
 // --- Interfaces ---
 
@@ -104,18 +108,18 @@ export const EGYPTIAN_SEASONS: EgyptianSeason[] = [
 // --- Datos de los 12 meses ---
 
 export const EGYPTIAN_MONTHS: EgyptianMonth[] = [
-  { name: 'Thoth',     monthHieroglyphs: '𓁟𓇳𓎛𓏏𓏤',         seasonIndex: 0, monthInSeason: 1 },
-  { name: 'Phaophi',   monthHieroglyphs: '𓉐𓈖𓇋𓊪𓏏𓊒',       seasonIndex: 0, monthInSeason: 2 },
-  { name: 'Athyr',     monthHieroglyphs: '𓉗𓅃𓇳',            seasonIndex: 0, monthInSeason: 3 },
-  { name: 'Choiak',    monthHieroglyphs: '𓂓𓇳𓂓',            seasonIndex: 0, monthInSeason: 4 },
-  { name: 'Tybi',      monthHieroglyphs: '𓇿𓂝𓎛𓏏',          seasonIndex: 1, monthInSeason: 1 },
-  { name: 'Mechir',    monthHieroglyphs: '𓉐𓈖𓉐𓐍𓂋𓅱',       seasonIndex: 1, monthInSeason: 2 },
-  { name: 'Phamenoth', monthHieroglyphs: '𓉐𓈖𓇋𓏠𓈖𓊵',       seasonIndex: 1, monthInSeason: 3 },
-  { name: 'Pharmuthi', monthHieroglyphs: '𓉐𓈖𓂋𓈖𓆙𓏏',       seasonIndex: 1, monthInSeason: 4 },
-  { name: 'Pachon',    monthHieroglyphs: '𓉐𓈖𓐍𓈖𓇳𓅱',       seasonIndex: 2, monthInSeason: 1 },
-  { name: 'Payni',     monthHieroglyphs: '𓉐𓈖𓇋𓈖𓏏',        seasonIndex: 2, monthInSeason: 2 },
-  { name: 'Epiphi',    monthHieroglyphs: '𓇋𓊪𓇋𓊪',          seasonIndex: 2, monthInSeason: 3 },
-  { name: 'Mesore',    monthHieroglyphs: '𓄟𓅱𓏏𓇳',          seasonIndex: 2, monthInSeason: 4 },
+  { name: 'Thoth', monthHieroglyphs: '𓁟𓇳𓎛𓏏𓏤', seasonIndex: 0, monthInSeason: 1 },
+  { name: 'Phaophi', monthHieroglyphs: '𓉐𓈖𓇋𓊪𓏏𓊒', seasonIndex: 0, monthInSeason: 2 },
+  { name: 'Athyr', monthHieroglyphs: '𓉗𓅃𓇳', seasonIndex: 0, monthInSeason: 3 },
+  { name: 'Choiak', monthHieroglyphs: '𓂓𓇳𓂓', seasonIndex: 0, monthInSeason: 4 },
+  { name: 'Tybi', monthHieroglyphs: '𓇿𓂝𓎛𓏏', seasonIndex: 1, monthInSeason: 1 },
+  { name: 'Mechir', monthHieroglyphs: '𓉐𓈖𓉐𓐍𓂋𓅱', seasonIndex: 1, monthInSeason: 2 },
+  { name: 'Phamenoth', monthHieroglyphs: '𓉐𓈖𓇋𓏠𓈖𓊵', seasonIndex: 1, monthInSeason: 3 },
+  { name: 'Pharmuthi', monthHieroglyphs: '𓉐𓈖𓂋𓈖𓆙𓏏', seasonIndex: 1, monthInSeason: 4 },
+  { name: 'Pachon', monthHieroglyphs: '𓉐𓈖𓐍𓈖𓇳𓅱', seasonIndex: 2, monthInSeason: 1 },
+  { name: 'Payni', monthHieroglyphs: '𓉐𓈖𓇋𓈖𓏏', seasonIndex: 2, monthInSeason: 2 },
+  { name: 'Epiphi', monthHieroglyphs: '𓇋𓊪𓇋𓊪', seasonIndex: 2, monthInSeason: 3 },
+  { name: 'Mesore', monthHieroglyphs: '𓄟𓅱𓏏𓇳', seasonIndex: 2, monthInSeason: 4 },
 ];
 
 // --- Funciones auxiliares ---
@@ -187,17 +191,20 @@ export const getThoth1 = (gregorianYear: number): Date =>
  */
 /**
  * Convierte una fecha gregoriana al calendario alejandrino.
- * 
+ *
  * NOTA: El día egipcio comienza al AMANECER. El parámetro isBeforeSunrise
  * permite ajustar la fecha si estamos en la madrugada antes de la salida del sol.
  */
-export const getEgyptianDate = (gregorianDate: Date, isBeforeSunrise: boolean = false): EgyptianDateResult => {
+export const getEgyptianDate = (
+  gregorianDate: Date,
+  isBeforeSunrise: boolean = false,
+): EgyptianDateResult => {
   let dateToUse = new Date(gregorianDate);
   if (isBeforeSunrise) {
     // Si es antes del amanecer, técnicamente aún es el día anterior en el sistema egipcio
     dateToUse.setDate(dateToUse.getDate() - 1);
   }
-  
+
   // JDN of the LOCAL calendar date (no DST / timezone effects).
   const jdn = jdnFromYMD(dateToUse.getFullYear(), dateToUse.getMonth(), dateToUse.getDate());
 
@@ -314,6 +321,7 @@ export const getSothicCycleYear = (
  * dates. The year runs Thoth 1 → next Thoth 1 (365 or 366 days), and every
  * generated date sits at local noon for consistency with the app display.
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const getEgyptianCalendarYear = (anchorGregYear: number): CivilCalendarYear => {
   const thoth1 = getThoth1(anchorGregYear);
   const nextThoth1 = getThoth1(anchorGregYear + 1);
@@ -322,7 +330,15 @@ export const getEgyptianCalendarYear = (anchorGregYear: number): CivilCalendarYe
 
   // getThoth1 returns UTC midnight; read it back with UTC getters so the local
   // calendar date doesn't slip a day in timezones west of UTC.
-  const start = new Date(thoth1.getUTCFullYear(), thoth1.getUTCMonth(), thoth1.getUTCDate(), 12, 0, 0, 0);
+  const start = new Date(
+    thoth1.getUTCFullYear(),
+    thoth1.getUTCMonth(),
+    thoth1.getUTCDate(),
+    12,
+    0,
+    0,
+    0,
+  );
   start.setFullYear(thoth1.getUTCFullYear());
 
   const months: CivilCalendarMonth[] = [];
@@ -362,7 +378,9 @@ export const getEgyptianCalendarYear = (anchorGregYear: number): CivilCalendarYe
   return {
     anchorGregYear,
     yearLabel: getSothicCycleYear(anchorGregYear).label,
-    yearSubtitle: `${isLeapYear ? 'Año bisiesto · 6 epagómenos' : 'Año de 5 epagómenos'} · ${anchorGregYear} d.C.`,
+    yearSubtitle: `${
+      isLeapYear ? 'Año bisiesto · 6 epagómenos' : 'Año de 5 epagómenos'
+    } · ${anchorGregYear} d.C.`,
     months,
   };
 };

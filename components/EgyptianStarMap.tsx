@@ -22,11 +22,11 @@ interface EgyptianStarMapProps {
 
 type SkyMode = 'curated' | 'full';
 
-const PX_PER_DEG = 6;          // 360° → 2160px panorama
-const ALT_MAX = 72;            // altitude shown at the top edge of the canvas
-const COMPASS_PX = 16;         // compass band along the top edge
-const INITIAL_AZIMUTH = 180;   // observer faces south on load
-const TWILIGHT_MIN = 30;       // blend window around sunrise / sunset
+const PX_PER_DEG = 6; // 360° → 2160px panorama
+const ALT_MAX = 72; // altitude shown at the top edge of the canvas
+const COMPASS_PX = 16; // compass band along the top edge
+const INITIAL_AZIMUTH = 180; // observer faces south on load
+const TWILIGHT_MIN = 30; // blend window around sunrise / sunset
 const DAY_MS = 24 * 3600 * 1000;
 // Curated mode keeps a faint backdrop of the brighter catalogue stars so the view
 // is never empty when the Egyptian bodies are all below the horizon or off-view.
@@ -44,7 +44,8 @@ const MOCK_PLANET_SKY: { alt: number; az: number }[] = [
   { alt: 54, az: 176 }, // Hor-ka-pet (Saturn)
 ];
 const wantsMockPlanets = () =>
-  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('mockplanets');
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).has('mockplanets');
 
 // Sky palettes: [zenith, middle, horizon] as RGB.
 type RGB = [number, number, number];
@@ -55,7 +56,9 @@ const DAY_SKY = ['#173a78', '#4f6e96', '#d4883c'].map(hex);
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const mixRgb = (a: RGB, b: RGB, t: number): string =>
-  `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(lerp(a[2], b[2], t))})`;
+  `rgb(${Math.round(lerp(a[0], b[0], t))},${Math.round(lerp(a[1], b[1], t))},${Math.round(
+    lerp(a[2], b[2], t),
+  )})`;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const wrap360 = (deg: number) => ((deg % 360) + 360) % 360;
 
@@ -65,8 +68,10 @@ const getDayFactor = (now: Date, isDay: boolean, sunrise: Date, sunset: Date): n
   // romanTime only carries the current day/night boundaries, so also test the
   // same events shifted by a day (e.g. tomorrow's sunrise during the night).
   const nearest = (e: Date) =>
-    [e.getTime() - DAY_MS, e.getTime(), e.getTime() + DAY_MS].reduce((best, c) =>
-      Math.abs(c - t) < Math.abs(best - t) ? c : best);
+    [e.getTime() - DAY_MS, e.getTime(), e.getTime() + DAY_MS].reduce(
+      (best, c) => (Math.abs(c - t) < Math.abs(best - t) ? c : best),
+      e.getTime(),
+    );
   const win = TWILIGHT_MIN * 60000;
   const dRise = t - nearest(sunrise);
   if (Math.abs(dRise) <= win) return clamp01((dRise + win) / (2 * win));
@@ -105,44 +110,67 @@ const drawPlanet = (
     case 'venus': {
       // Seba-dja — the brilliant one, with four rays.
       ctx.fillStyle = 'rgba(255,255,255,0.10)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,0.16)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 1.7, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 1.7, 0, Math.PI * 2);
+      ctx.fill();
       ctx.strokeStyle = 'rgba(255,255,255,0.55)';
       ctx.lineWidth = 1;
-      for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]] as const) {
+      for (const [dx, dy] of [
+        [0, -1],
+        [0, 1],
+        [-1, 0],
+        [1, 0],
+      ] as const) {
         ctx.beginPath();
         ctx.moveTo(dx * (r + 1.5), dy * (r + 1.5));
         ctx.lineTo(dx * r * 2.7, dy * r * 2.7);
         ctx.stroke();
       }
       ctx.fillStyle = color;
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
       break;
     }
     case 'mars': {
       // Hor-desher — the red one.
       ctx.fillStyle = 'rgba(255,64,64,0.10)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 2, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = 'rgba(224,48,48,0.22)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 1.35, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 1.35, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = color;
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
       ctx.strokeStyle = 'rgba(255,128,128,0.5)';
       ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.stroke();
       break;
     }
     case 'jupiter': {
       // Hor-tash-tawy — a banded disc.
       ctx.fillStyle = 'rgba(255,255,240,0.08)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 2.2, 0, Math.PI * 2);
+      ctx.fill();
       ctx.save();
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.clip();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.clip();
       ctx.fillStyle = color;
       ctx.fillRect(-r, -r, r * 2, r * 2);
       ctx.fillStyle = 'rgba(192,112,48,0.40)';
-      ctx.fillRect(-r, -r * 0.85, r * 2, r * 0.30);
+      ctx.fillRect(-r, -r * 0.85, r * 2, r * 0.3);
       ctx.fillStyle = 'rgba(200,112,48,0.65)';
       ctx.fillRect(-r, -r * 0.45, r * 2, r * 0.32);
       ctx.fillStyle = 'rgba(160,80,32,0.50)';
@@ -150,37 +178,60 @@ const drawPlanet = (
       ctx.restore();
       ctx.strokeStyle = 'rgba(255,255,240,0.45)';
       ctx.lineWidth = 0.6;
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.stroke();
       break;
     }
     case 'saturn': {
       // Hor-ka-pet — the ringed one.
       ctx.fillStyle = 'rgba(255,204,102,0.07)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
-      const ringX = r * 2, ringY = r * 0.62;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2);
+      ctx.fill();
+      const ringX = r * 2,
+        ringY = r * 0.62;
       ctx.strokeStyle = 'rgba(200,160,64,0.5)';
       ctx.lineWidth = 1.2;
-      ctx.beginPath(); ctx.ellipse(0, 0, ringX, ringY, 0, Math.PI, Math.PI * 2); ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, 0, ringX, ringY, 0, Math.PI, Math.PI * 2);
+      ctx.stroke();
       ctx.fillStyle = '#f0e8c0';
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
       ctx.strokeStyle = 'rgba(212,170,68,0.9)';
       ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.ellipse(0, 0, ringX, ringY, 0, 0, Math.PI); ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, 0, ringX, ringY, 0, 0, Math.PI);
+      ctx.stroke();
       break;
     }
     default: {
       // Sebegu (Mercury) — a small swift disc.
       ctx.fillStyle = 'rgba(214,196,176,0.12)';
-      ctx.beginPath(); ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 1.8, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = color;
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
       break;
     }
   }
   ctx.restore();
 };
 
-const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay, sunrise, sunset, horizon = 1 }) => {
+const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({
+  date,
+  lat,
+  lng,
+  isDay,
+  sunrise,
+  sunset,
+  horizon = 1,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sopdetGlowRef = useRef<HTMLDivElement>(null);
@@ -188,7 +239,9 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
   const sizeRef = useRef({ w: 0, h: 0 });
   const frameRef = useRef<number | null>(null);
   const inertiaRef = useRef<number | null>(null);
-  const dragRef = useRef<{ id: number; lastX: number; lastT: number; velocity: number } | null>(null);
+  const dragRef = useRef<{ id: number; lastX: number; lastT: number; velocity: number } | null>(
+    null,
+  );
 
   const [mode, setMode] = useState<SkyMode>('curated');
   const [catalog, setCatalog] = useState<readonly number[] | null>(null);
@@ -204,19 +257,26 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       }));
     }
     return snapshot;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minuteKey, lat, lng]);
   const catalogStars = useMemo(
     () => (catalog ? projectCatalog(catalog, date, lat, lng) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [catalog, minuteKey, lat, lng],
   );
   const dayFactor = getDayFactor(date, isDay, sunrise, sunset);
 
   useEffect(() => {
     let cancelled = false;
-    import('../utils/brightStarCatalog').then(m => { if (!cancelled) setCatalog(m.BRIGHT_STARS); });
-    return () => { cancelled = true; };
+    import('../utils/brightStarCatalog').then(m => {
+      if (!cancelled) setCatalog(m.BRIGHT_STARS);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const draw = useCallback(() => {
     frameRef.current = null;
     const canvas = canvasRef.current;
@@ -232,13 +292,16 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
     const centerAz = centerAzRef.current;
     const xFor = (az: number) => (wrap360(az - centerAz + 180) - 180) * PX_PER_DEG + w / 2;
     const yFor = (alt: number) => horizonY - alt * pxPerAlt;
-    const onScreen = (x: number, y: number, m = 40) => x > -m && x < w + m && y > -m && y < horizonY + 2;
+    const onScreen = (x: number, y: number, m = 40) =>
+      x > -m && x < w + m && y > -m && y < horizonY + 2;
     const nightAlpha = clamp01(1 - dayFactor * 1.6);
 
     // Sky gradient: night → twilight → day.
-    const stops = [0, 1, 2].map(i => dayFactor <= 0.5
-      ? mixRgb(NIGHT_SKY[i], TWILIGHT_SKY[i], dayFactor * 2)
-      : mixRgb(TWILIGHT_SKY[i], DAY_SKY[i], (dayFactor - 0.5) * 2));
+    const stops = [0, 1, 2].map(i =>
+      dayFactor <= 0.5
+        ? mixRgb(NIGHT_SKY[i], TWILIGHT_SKY[i], dayFactor * 2)
+        : mixRgb(TWILIGHT_SKY[i], DAY_SKY[i], (dayFactor - 0.5) * 2),
+    );
     const grad = ctx.createLinearGradient(0, 0, 0, horizonY);
     grad.addColorStop(0, stops[0]);
     grad.addColorStop(0.55, stops[1]);
@@ -263,15 +326,23 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       // Nut's body — the Milky Way as a soft band along the galactic plane.
       ctx.lineCap = 'round';
       const mw = sky.milkyWay;
-      for (const [width, alpha] of [[16, 0.07], [9, 0.09], [4, 0.12]] as const) {
+      for (const [width, alpha] of [
+        [16, 0.07],
+        [9, 0.09],
+        [4, 0.12],
+      ] as const) {
         ctx.lineWidth = width * pxPerAlt;
         for (let i = 1; i < mw.length; i++) {
-          const a = mw[i - 1], b = mw[i];
+          const a = mw[i - 1],
+            b = mw[i];
           if (a.alt < -8 && b.alt < -8) continue;
-          const xa = xFor(a.az), xb = xFor(b.az);
+          const xa = xFor(a.az),
+            xb = xFor(b.az);
           if (Math.abs(xa - xb) > 30 * PX_PER_DEG) continue; // wrap seam / near zenith
           if (Math.max(xa, xb) < -200 || Math.min(xa, xb) > w + 200) continue;
-          ctx.strokeStyle = `rgba(180,200,255,${(alpha * (a.weight + b.weight) / 2).toFixed(3)})`;
+          ctx.strokeStyle = `rgba(180,200,255,${((alpha * (a.weight + b.weight)) / 2).toFixed(
+            3,
+          )})`;
           ctx.beginPath();
           ctx.moveTo(xa, yFor(a.alt));
           ctx.lineTo(xb, yFor(b.alt));
@@ -313,7 +384,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
         ctx.strokeStyle = LINE_COLOR;
         ctx.lineWidth = 1;
         for (const [i, j] of ast.lines) {
-          const a = pts[i], b = pts[j];
+          const a = pts[i],
+            b = pts[j];
           if (a.s.alt < 0 && b.s.alt < 0) continue;
           if (Math.abs(a.x - b.x) > w) continue;
           ctx.beginPath();
@@ -321,10 +393,14 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
           ctx.lineTo(b.x, b.y);
           ctx.stroke();
         }
-        let visible = 0, sx = 0, minY = Infinity;
+        let visible = 0,
+          sx = 0,
+          minY = Infinity;
         for (const { x, y, s } of pts) {
           if (s.alt < 0 || !onScreen(x, y)) continue;
-          visible++; sx += x; minY = Math.min(minY, y);
+          visible++;
+          sx += x;
+          minY = Math.min(minY, y);
           ctx.fillStyle = 'rgba(212,168,50,0.35)';
           ctx.beginPath();
           ctx.arc(x, y, starRadius(s.mag) + 2.2, 0, Math.PI * 2);
@@ -341,7 +417,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       }
 
       // Eye of Horus — Algol, dimmed and desaturated at eclipse minimum.
-      const ax = xFor(sky.algol.az), ay = yFor(sky.algol.alt);
+      const ax = xFor(sky.algol.az),
+        ay = yFor(sky.algol.alt);
       if (sky.algol.alt > 0 && onScreen(ax, ay)) {
         const eclipsed = sky.algol.eclipsed;
         ctx.globalAlpha = nightAlpha * (eclipsed ? 0.45 : 1);
@@ -359,7 +436,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       }
 
       // Sopdet — Sirius. The pulsing glow is a CSS-animated element positioned below.
-      const sx = xFor(sky.sopdet.az), sy = yFor(sky.sopdet.alt);
+      const sx = xFor(sky.sopdet.az),
+        sy = yFor(sky.sopdet.alt);
       if (sky.sopdet.alt > 0 && onScreen(sx, sy)) {
         ctx.fillStyle = '#b8d8ff';
         ctx.beginPath();
@@ -373,7 +451,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
 
     const glow = sopdetGlowRef.current;
     if (glow) {
-      const sx = xFor(sky.sopdet.az), sy = yFor(sky.sopdet.alt);
+      const sx = xFor(sky.sopdet.az),
+        sy = yFor(sky.sopdet.alt);
       const show = nightAlpha > 0 && sky.sopdet.alt > 0 && onScreen(sx, sy);
       glow.style.display = show ? 'block' : 'none';
       glow.style.opacity = String(nightAlpha);
@@ -384,7 +463,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
     ctx.font = '11px Cinzel, serif';
     ctx.textAlign = 'center';
     for (const p of sky.planets) {
-      const x = xFor(p.az), y = yFor(p.alt);
+      const x = xFor(p.az),
+        y = yFor(p.alt);
       if (p.alt <= 0 || !onScreen(x, y)) continue;
       const r = p.radius * 1.6;
       drawPlanet(ctx, p.key, x, y, r, p.color);
@@ -393,7 +473,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
     }
 
     // Iah — the Moon, lit limb turned toward the Sun.
-    const mx = xFor(sky.moon.az), my = yFor(sky.moon.alt);
+    const mx = xFor(sky.moon.az),
+      my = yFor(sky.moon.alt);
     if (sky.moon.alt > 0 && onScreen(mx, my)) {
       const r = 7;
       const dxSun = (wrap360(sky.sun.az - sky.moon.az + 180) - 180) * PX_PER_DEG;
@@ -413,7 +494,16 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       ctx.beginPath();
       ctx.arc(0, 0, r, -Math.PI / 2, Math.PI / 2, false);
       // Terminator: bulges toward the lit side for a crescent, away for gibbous.
-      ctx.ellipse(0, 0, Math.max(0.01, r * Math.abs(c)), r, 0, Math.PI / 2, -Math.PI / 2, c > 0);
+      ctx.ellipse(
+        0,
+        0,
+        Math.max(0.01, r * Math.abs(c)),
+        r,
+        0,
+        Math.PI / 2,
+        -Math.PI / 2,
+        c > 0,
+      );
       ctx.fill();
       ctx.restore();
       ctx.fillStyle = dayFactor > 0.6 ? 'rgba(255,240,210,0.85)' : GOLD_LABEL;
@@ -421,7 +511,8 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
     }
 
     // Ra — the Sun.
-    const sunX = xFor(sky.sun.az), sunY = yFor(sky.sun.alt);
+    const sunX = xFor(sky.sun.az),
+      sunY = yFor(sky.sun.alt);
     if (sky.sun.alt > -1 && onScreen(sunX, sunY, 60)) {
       const halo = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 46);
       halo.addColorStop(0, 'rgba(255,214,130,0.85)');
@@ -465,11 +556,14 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
     if (frameRef.current === null) frameRef.current = requestAnimationFrame(draw);
   }, [draw]);
 
-  useEffect(() => { scheduleDraw(); }, [scheduleDraw]);
+  useEffect(() => {
+    scheduleDraw();
+  }, [scheduleDraw]);
 
   // Track container size and keep the canvas backing store at device resolution.
   useEffect(() => {
-    const container = containerRef.current, canvas = canvasRef.current;
+    const container = containerRef.current,
+      canvas = canvasRef.current;
     if (!container || !canvas) return;
     const ro = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
@@ -488,14 +582,17 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
     document.fonts?.ready.then(() => scheduleDraw());
   }, [scheduleDraw]);
 
-  useEffect(() => () => {
-    // Reset the refs too: StrictMode re-runs effects, and a stale frame id would
-    // make scheduleDraw think a frame is still pending.
-    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
-    if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
-    frameRef.current = null;
-    inertiaRef.current = null;
-  }, []);
+  useEffect(
+    () => () => {
+      // Reset the refs too: StrictMode re-runs effects, and a stale frame id would
+      // make scheduleDraw think a frame is still pending.
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
+      frameRef.current = null;
+      inertiaRef.current = null;
+    },
+    [],
+  );
 
   const stopInertia = () => {
     if (inertiaRef.current !== null) cancelAnimationFrame(inertiaRef.current);
@@ -556,11 +653,20 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, isDay
       <div ref={sopdetGlowRef} className="sopdet-glow" style={{ display: 'none' }} />
       <button
         type="button"
-        onClick={e => { e.stopPropagation(); setMode(m => (m === 'curated' ? 'full' : 'curated')); }}
+        onClick={e => {
+          e.stopPropagation();
+          setMode(m => (m === 'curated' ? 'full' : 'curated'));
+        }}
         className="absolute top-2 right-2 z-[4] pointer-events-auto w-8 h-8 flex items-center justify-center rounded-sm text-base leading-none transition-opacity opacity-60 hover:opacity-100 focus-visible:opacity-100"
-        style={{ background: 'rgba(12,8,4,0.6)', border: '1px solid rgba(24,64,160,0.55)', color: 'rgba(212,168,50,0.9)' }}
+        style={{
+          background: 'rgba(12,8,4,0.6)',
+          border: '1px solid rgba(24,64,160,0.55)',
+          color: 'rgba(212,168,50,0.9)',
+        }}
         title={mode === 'curated' ? 'Mostrar el cielo completo' : 'Mostrar el cielo egipcio'}
-        aria-label={mode === 'curated' ? 'Mostrar el cielo completo' : 'Mostrar el cielo egipcio'}
+        aria-label={
+          mode === 'curated' ? 'Mostrar el cielo completo' : 'Mostrar el cielo egipcio'
+        }
         aria-pressed={mode === 'full'}
       >
         {mode === 'curated' ? '𓇼' : '𓂀'}

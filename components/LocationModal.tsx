@@ -14,25 +14,31 @@ interface LocationModalProps {
   currentLng: number;
 }
 
-const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onUpdateLocation, currentLat, currentLng }) => {
+const LocationModal: React.FC<LocationModalProps> = ({
+  isOpen,
+  onClose,
+  onUpdateLocation,
+  currentLat,
+  currentLng,
+}) => {
   const [loading, setLoading] = useState(false);
   const { civilization } = useCivilization();
 
   if (!isOpen) return null;
 
-  const handleLocationSelect = async (loc: typeof LOCATIONS[0]) => {
+  const handleLocationSelect = async (loc: (typeof LOCATIONS)[0]) => {
     if (loc.id === 'gps') {
       setLoading(true);
       try {
         const position = await Geolocation.getCurrentPosition({
           enableHighAccuracy: false,
           timeout: 10000,
-          maximumAge: 3600000
+          maximumAge: 3600000,
         });
         onUpdateLocation(position.coords.latitude, position.coords.longitude);
         onClose();
       } catch (error: any) {
-        alert("Locus deprehendi non potuit: " + error.message);
+        alert('Locus deprehendi non potuit: ' + error.message);
       } finally {
         setLoading(false);
       }
@@ -42,17 +48,22 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onUpdate
     }
   };
 
-  const isActive = (loc: typeof LOCATIONS[0]) => {
-    if (loc.id === 'gps') return false; 
-    return Math.abs(currentLat - (loc.lat || 0)) < 0.001 && Math.abs(currentLng - (loc.lng || 0)) < 0.001;
+  const isActive = (loc: (typeof LOCATIONS)[0]) => {
+    if (loc.id === 'gps') return false;
+    return (
+      Math.abs(currentLat - (loc.lat || 0)) < 0.001 &&
+      Math.abs(currentLng - (loc.lng || 0)) < 0.001
+    );
   };
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
-      <div 
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      <div
         className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col relative overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
@@ -76,7 +87,8 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onUpdate
 
         <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {LOCATIONS.map((loc) => {
+            {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
+            {LOCATIONS.map(loc => {
               const active = isActive(loc);
               const Icon = loc.icon;
               const isGps = loc.id === 'gps';
@@ -89,21 +101,29 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onUpdate
                   className={`
                     relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg transition-all duration-300
                     font-serif border group
-                    ${active
-                      ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.4)] scale-[1.02]'
-                      : isGps 
+                    ${
+                      active
+                        ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.4)] scale-[1.02]'
+                        : isGps
                         ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20 hover:border-roman-red'
-                        : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10'}
+                        : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10'
+                    }
                     ${loading && isGps ? 'animate-pulse' : ''}
                   `}
                 >
-                  <div className={`
+                  <div
+                    className={`
                     p-2 rounded-full transition-colors duration-300
                     ${active ? 'bg-ink/10' : isGps ? 'bg-roman-red/20' : 'bg-white/5'}
-                  `}>
-                    <Icon className={`w-5 h-5 ${active ? 'text-roman-red' : isGps ? 'text-roman-red' : 'text-gold-leaf'}`} />
+                  `}
+                  >
+                    <Icon
+                      className={`w-5 h-5 ${
+                        active ? 'text-roman-red' : isGps ? 'text-roman-red' : 'text-gold-leaf'
+                      }`}
+                    />
                   </div>
-                  
+
                   <span className="text-sm md:text-base uppercase tracking-widest font-bold text-center">
                     {loc.name}
                   </span>
@@ -115,10 +135,10 @@ const LocationModal: React.FC<LocationModalProps> = ({ isOpen, onClose, onUpdate
               );
             })}
           </div>
-          
+
           <div className="mt-8 text-center">
             <p className="font-body text-parchment/40 italic text-sm">
-              "Ubi bene, ibi patria" — Donde se está bien, allí está la patria.
+              &quot;Ubi bene, ibi patria&quot; — Donde se está bien, allí está la patria.
             </p>
           </div>
         </div>
