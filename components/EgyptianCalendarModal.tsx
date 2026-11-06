@@ -11,7 +11,7 @@ const DecadeProgress: React.FC<{ dayOfMonth: number; isEpagomenal: boolean }> = 
   if (isEpagomenal) return null;
   return (
     <div className="w-full mt-3 pt-3 border-t border-gold-dim/20">
-      <div className="flex justify-between items-center text-[9px] sm:text-[10px] text-gold-dim uppercase tracking-widest mb-1 font-bold">
+      <div className="flex justify-between items-center text-xs sm:text-xs text-gold-dim uppercase tracking-widest mb-1 font-bold">
         <span>Déc. I (1)</span>
         <span>Déc. II (11)</span>
         <span>Déc. III (21-30)</span>
@@ -122,13 +122,13 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                         {day.egyptianDate.monthHieroglyphs}
                       </span>
                       {season && (
-                        <span className="text-parchment/80 font-body text-[11px] italic mt-0.5">
+                        <span className="text-parchment/80 font-body text-xs italic mt-0.5">
                           {season.name} ({season.translation}) {season.hieroglyphic}
                         </span>
                       )}
                     </div>
                     {!isEpag && (
-                      <span className="text-[11px] px-2 py-0.5 border border-emerald-500/50 rounded-sm bg-emerald-500/10 text-emerald-400 font-serif self-start mt-1">
+                      <span className="text-xs px-2 py-0.5 border border-emerald-500/50 rounded-sm bg-emerald-500/10 text-emerald-400 font-serif self-start mt-1">
                         Déc. {day.egyptianDate.decade}
                       </span>
                     )}
@@ -169,11 +169,11 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   {/* Deity */}
                   <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex flex-col gap-1">
                     <div className="flex items-center gap-2 flex-wrap text-sm">
-                      <span className="text-gold-dim uppercase tracking-widest text-[10px] font-black">Netjer:</span>
+                      <span className="text-gold-dim uppercase tracking-widest text-xs font-black">Netjer:</span>
                       <span className="text-parchment font-bold tracking-wide">
                         {day.deity.deity}
                       </span>
-                      <span className="text-gold-dim text-[10px] font-bold">{day.deity.deityHieroglyphic}</span>
+                      <span className="text-gold-dim text-xs font-bold">{day.deity.deityHieroglyphic}</span>
                     </div>
                     <div className="text-emerald-500 font-bold font-body italic text-sm">
                       {day.deity.domain}
@@ -194,7 +194,7 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                     <div className="mt-3 pt-3 border-t border-roman-red/30">
                       <div className="bg-roman-red/10 border border-roman-red/20 p-2 rounded flex items-center gap-2 shadow-inner">
                         <span className="text-sm animate-pulse">✨</span>
-                        <p className="text-[10px] font-serif font-bold text-roman-red leading-tight">
+                        <p className="text-xs font-serif font-bold text-roman-red leading-tight">
                           Algol en eclipse. El Ojo de Horus se oscurece.
                         </p>
                       </div>

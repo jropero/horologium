@@ -204,8 +204,8 @@ const DayGrid: React.FC<{
 
               <div className="text-center mb-2 relative z-10 border-b border-sky-700/30 pb-2">
                 <PanelMoonSvg type={moonType} active={active} />
-                <h4 className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${active ? 'text-sky-300' : 'text-sky-500'}`}>{title}</h4>
-                <div className="text-[8px] font-serif italic text-sky-400/60 tracking-wide uppercase mt-0.5">{subtitle}</div>
+                <h4 className={`text-xs sm:text-xs font-bold uppercase tracking-widest ${active ? 'text-sky-300' : 'text-sky-500'}`}>{title}</h4>
+                <div className="text-xs font-serif italic text-sky-400/60 tracking-wide uppercase mt-0.5">{subtitle}</div>
               </div>
 
               <div className="grid grid-cols-2 gap-1 justify-items-center relative z-10">
@@ -237,7 +237,7 @@ const DayGrid: React.FC<{
                       onClick={() => setSelectedDay(prev => prev === day ? null : day)}
                     >
                       <TinyMoon phase={(day - 1) / monthLen} size={11} dim={isPast && !isToday} />
-                      <span className={`text-[10px] font-serif leading-none font-bold ${numClass}`}>{day}</span>
+                      <span className={`text-xs font-serif leading-none font-bold ${numClass}`}>{day}</span>
                     </button>
                   );
                 })}
@@ -270,25 +270,25 @@ const DayGrid: React.FC<{
               <div>
                 <span className="text-xs font-serif font-bold text-sky-300">{selFest.festivalName}</span>
                 {selFest.festivalDayName && (
-                  <span className="ml-2 text-[10px] uppercase tracking-widest text-sky-400/70">{selFest.festivalDayName}</span>
+                  <span className="ml-2 text-xs uppercase tracking-widest text-sky-400/70">{selFest.festivalDayName}</span>
                 )}
                 <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">{selFest.festivalDesc}</p>
                 {selFest.deity && (
-                  <span className="text-[10px] text-gold-dim font-serif mt-1 block">Deidad: {selFest.deity}</span>
+                  <span className="text-xs text-gold-dim font-serif mt-1 block">Deidad: {selFest.deity}</span>
                 )}
               </div>
             ) : (
               <div>
                 <span className="text-xs font-serif font-bold text-amber-300">{selHoly!.festivalName}</span>
-                <span className="ml-2 text-[10px] uppercase tracking-widest text-amber-400/70">Día Sagrado</span>
+                <span className="ml-2 text-xs uppercase tracking-widest text-amber-400/70">Día Sagrado</span>
                 <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">{selHoly!.festivalDesc}</p>
                 {selHoly!.deity && (
-                  <span className="text-[10px] text-gold-dim font-serif mt-1 block">Deidad: {selHoly!.deity}</span>
+                  <span className="text-xs text-gold-dim font-serif mt-1 block">Deidad: {selHoly!.deity}</span>
                 )}
               </div>
             )}
             {selFest && selHoly && (
-              <span className="text-[10px] font-serif text-amber-400/80 leading-snug">
+              <span className="text-xs font-serif text-amber-400/80 leading-snug">
                 También hoy: {selHoly.festivalName} — {selHoly.deity}
               </span>
             )}
@@ -614,7 +614,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               </span>
               <span
                 className="font-serif text-sky-200/80 italic tracking-widest"
-                style={{ fontSize: 'clamp(0.6rem,2vw,0.85rem)' }}
+                style={{ fontSize: 'clamp(0.75rem,2vw,0.85rem)' }}
               >
                 {translateGreekUI(atticDate.monthName)}
               </span>
@@ -623,13 +623,13 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
             {/* Day name only — strip ", MonthName" suffix to avoid repetition */}
             <div
               className="font-serif text-white/80 font-bold mt-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
-              style={{ fontSize: 'clamp(0.65rem,2.3vw,0.95rem)', letterSpacing: '0.12em' }}
+              style={{ fontSize: 'clamp(0.75rem,2.3vw,0.95rem)', letterSpacing: '0.12em' }}
             >
               {atticDate.short.split(',')[0].trim()}
             </div>
             <div
               className="font-serif text-parchment/70 italic drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
-              style={{ fontSize: 'clamp(0.6rem,1.8vw,0.85rem)' }}
+              style={{ fontSize: 'clamp(0.75rem,1.8vw,0.85rem)' }}
             >
               {atticDate.spanishShort.split(',')[0].trim()}
             </div>
@@ -643,7 +643,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           {deityName && (
             <div className="w-full bg-sky-900/15 p-5 rounded-lg border-2 border-sky-500/25 shadow-sm relative mt-4">
               {festival?.category && (
-                <div className="absolute -top-3 right-4 px-2 py-0.5 bg-sky-900/80 border border-sky-400/50 text-sky-300 text-[10px] uppercase tracking-[0.1em] rounded-sm backdrop-blur-md shadow-lg font-serif z-20">
+                <div className="absolute -top-3 right-4 px-2 py-0.5 bg-sky-900/80 border border-sky-400/50 text-sky-300 text-xs uppercase tracking-[0.1em] rounded-sm backdrop-blur-md shadow-lg font-serif z-20">
                   {getCategoryBadge(festival.category)}
                 </div>
               )}
@@ -671,7 +671,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight relative z-10 mt-1">
                 {deityName}
               </h2>
-              <div className="font-serif text-[10px] text-sky-300/70 tracking-widest uppercase mb-1 relative z-10">
+              <div className="font-serif text-xs text-sky-300/70 tracking-widest uppercase mb-1 relative z-10">
                 {transliterateGreek(deityName)}
               </div>
 
@@ -687,7 +687,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
               {festival?.participants && (
                 <div className="mt-4 pt-3 border-t border-sky-800/30 w-full text-center relative z-10 flex flex-col items-center">
-                  <span className="text-sky-400/60 text-[9px] uppercase tracking-[0.2em] mb-1 font-bold">Participantes:</span>
+                  <span className="text-sky-400/60 text-xs uppercase tracking-[0.2em] mb-1 font-bold">Participantes:</span>
                   <span className="text-xs font-serif text-sky-200 font-bold">{festival.participants}</span>
                 </div>
               )}
@@ -696,7 +696,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 <div className="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-md relative z-10 flex items-start gap-3 shadow-sm">
                   <span className="text-2xl">{festival.ritualOffering.icon}</span>
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-amber-500 mb-0.5">Ofrenda Tradicional</span>
+                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-amber-500 mb-0.5">Ofrenda Tradicional</span>
                     <span className="text-xs font-serif text-amber-100/90 leading-snug">{festival.ritualOffering.item}</span>
                   </div>
                 </div>
@@ -706,8 +706,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 <div className="mt-3 p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
                   <span className="text-xl animate-pulse">🕯️</span>
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-indigo-400 mb-0.5">Pannychis (Vigilia Sagrada)</span>
-                    <span className="text-[11px] font-serif text-indigo-200/80 leading-snug italic">{festival.pannychisDesc}</span>
+                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-indigo-400 mb-0.5">Pannychis (Vigilia Sagrada)</span>
+                    <span className="text-xs font-serif text-indigo-200/80 leading-snug italic">{festival.pannychisDesc}</span>
                   </div>
                 </div>
               )}
@@ -716,8 +716,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 <div className="mt-3 p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
                   <span className="text-xl">🌿</span>
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-emerald-400 mb-0.5">Agōn (Competición)</span>
-                    <span className="text-[11px] font-serif text-emerald-100/80 leading-snug">{festival.agonDesc}</span>
+                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-emerald-400 mb-0.5">Agōn (Competición)</span>
+                    <span className="text-xs font-serif text-emerald-100/80 leading-snug">{festival.agonDesc}</span>
                   </div>
                 </div>
               )}
@@ -726,8 +726,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 <div className="mt-3 p-3 bg-yellow-950/30 border border-yellow-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
                   <span className="text-xl">🪙</span>
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-serif uppercase tracking-[0.15em] font-bold text-yellow-500 mb-0.5">El Precio de la Piedad</span>
-                    <span className="text-[11px] font-serif text-yellow-100/80 leading-snug italic">{festival.economyDesc}</span>
+                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-yellow-500 mb-0.5">El Precio de la Piedad</span>
+                    <span className="text-xs font-serif text-yellow-100/80 leading-snug italic">{festival.economyDesc}</span>
                   </div>
                 </div>
               )}
@@ -736,7 +736,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 <div className="mt-4 p-4 bg-stone-900/80 border border-stone-700/50 rounded-md relative z-10 flex flex-col items-start gap-2 shadow-inner">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">📜</span>
-                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-bold text-stone-300">Aition: El Mito Fundacional</span>
+                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-bold text-stone-300">Aition: El Mito Fundacional</span>
                   </div>
                   <p className="text-[12px] font-serif text-stone-400/90 leading-relaxed text-left border-l-2 border-stone-600/50 pl-3 italic">
                     {festival.aition}
@@ -791,13 +791,13 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                     <span className="text-4xl filter drop-shadow-[0_0_10px_rgba(225,29,72,0.8)] animate-bounce">{apaphrades.icon}</span>
                     <div className="text-left flex flex-col">
                       <span className="text-base font-serif uppercase tracking-[0.15em] font-black text-rose-500 leading-none mb-1">Apaphrades Hemera</span>
-                      <span className="text-[10px] font-serif text-rose-300/80 tracking-widest uppercase">(Día Nefasto y Prohibido)</span>
+                      <span className="text-xs font-serif text-rose-300/80 tracking-widest uppercase">(Día Nefasto y Prohibido)</span>
                     </div>
                   </div>
                   <p className="text-xs sm:text-sm font-serif text-rose-200/90 leading-relaxed text-left italic">{apaphrades.reason}</p>
                   {apaphrades.instruction && (
                     <div className="bg-rose-900/30 border border-rose-500/40 rounded p-3 mt-2 shadow-inner">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-400 mb-1.5 flex items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-rose-400 mb-1.5 flex items-center gap-2">
                         <span className="text-rose-500 animate-pulse">⚠️</span> Instrucción de Supervivencia:
                       </span>
                       <p className="font-serif text-xs text-rose-100/90 leading-snug text-left">"{apaphrades.instruction}"</p>
@@ -853,7 +853,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex flex-col gap-0.5 text-left">
                       <h4 className="text-gold-leaf font-serif text-base font-bold leading-tight">{f.name}</h4>
-                      <span className="text-[10px] text-sky-400/60 font-bold uppercase tracking-widest">{f.date}</span>
+                      <span className="text-xs text-sky-400/60 font-bold uppercase tracking-widest">{f.date}</span>
                     </div>
                     <div className="bg-sky-400/10 border border-sky-400/30 rounded px-2 py-1 text-right ml-2 shrink-0">
                       <div className="text-sm text-sky-400 font-black leading-none">{f.daysRemaining}</div>
@@ -865,25 +865,25 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                   </p>
                   <div className="flex flex-col gap-1.5 pl-3">
                     {f.fullFestival?.ritualOffering && (
-                      <div className="text-[10px] font-serif text-amber-200/70 flex items-center gap-2">
+                      <div className="text-xs font-serif text-amber-200/70 flex items-center gap-2">
                         <span>{f.fullFestival.ritualOffering.icon}</span>
                         <span><b className="text-amber-500/80 uppercase tracking-tighter">Ofrenda:</b> {f.fullFestival.ritualOffering.item}</span>
                       </div>
                     )}
                     {f.fullFestival?.pannychisDesc && (
-                      <div className="text-[10px] font-serif text-indigo-200/70 flex items-center gap-2">
+                      <div className="text-xs font-serif text-indigo-200/70 flex items-center gap-2">
                         <span className="animate-pulse">🕯️</span>
                         <span><b className="text-indigo-400/80 uppercase tracking-tighter">Vigilia:</b> {f.fullFestival.pannychisDesc}</span>
                       </div>
                     )}
                     {f.fullFestival?.agonDesc && (
-                      <div className="text-[10px] font-serif text-emerald-200/70 flex items-center gap-2">
+                      <div className="text-xs font-serif text-emerald-200/70 flex items-center gap-2">
                         <span>🌿</span>
                         <span><b className="text-emerald-400/80 uppercase tracking-tighter">Agōn:</b> {f.fullFestival.agonDesc}</span>
                       </div>
                     )}
                     {f.fullFestival?.aition && (
-                      <div className="text-[10px] font-serif text-stone-300/70 flex items-start gap-2 bg-stone-900/40 p-2 rounded mt-1 border-l-2 border-stone-600/50">
+                      <div className="text-xs font-serif text-stone-300/70 flex items-start gap-2 bg-stone-900/40 p-2 rounded mt-1 border-l-2 border-stone-600/50">
                         <span>📜</span>
                         <span><b className="text-stone-300 uppercase tracking-tighter">Aition:</b> {f.fullFestival.aition}</span>
                       </div>
