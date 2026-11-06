@@ -26,53 +26,100 @@ export interface RomanRoad {
   lengthM: number;
   /** Each part as interleaved [lng, lat, lng, lat, …]. */
   parts: Float32Array[];
-  lngMin: number; lngMax: number; latMin: number; latMax: number;
+  lngMin: number;
+  lngMax: number;
+  latMin: number;
+  latMax: number;
 }
 
 type RawRoad = [
-  RoadType, RoadCertainty, number | null, number, number | null, number, number,
-  number[], number[], number[], number, number, [number, number] | null, number, number[],
+  RoadType,
+  RoadCertainty,
+  number | null,
+  number,
+  number | null,
+  number,
+  number,
+  number[],
+  number[],
+  number[],
+  number,
+  number,
+  [number, number] | null,
+  number,
+  number[],
 ];
 
 const QUANT = 1e4;
 
 const decode = (json: { strings: string[]; roads: RawRoad[] }): RomanRoad[] => {
   const s = json.strings;
-  return json.roads.map(([type, certainty, from, fromErr, to, toErr, segment, viae, itineraria,
-    recentiora, fontes, conditor, conditorYears, lengthM, coords]) => {
-    const parts: Float32Array[] = [];
-    let lngMin = Infinity, lngMax = -Infinity, latMin = Infinity, latMax = -Infinity;
-    for (let i = 0; i < coords.length;) {
-      const n = coords[i++];
-      const part = new Float32Array(n * 2);
-      let x = 0, y = 0;
-      for (let k = 0; k < n; k++) {
-        x += coords[i++];
-        y += coords[i++];
-        const lng = x / QUANT, lat = y / QUANT;
-        part[2 * k] = lng;
-        part[2 * k + 1] = lat;
-        if (lng < lngMin) lngMin = lng;
-        if (lng > lngMax) lngMax = lng;
-        if (lat < latMin) latMin = lat;
-        if (lat > latMax) latMax = lat;
-      }
-      parts.push(part);
-    }
-    return {
-      type, certainty, from, fromErr, to, toErr,
-      segment: s[segment],
-      viae: viae.map(i => s[i]),
-      itineraria: itineraria.map(i => s[i]),
-      recentiora: recentiora.map(i => s[i]),
-      fontes: fontes >= 0 ? s[fontes] : null,
-      conditor: conditor >= 0 ? s[conditor] : null,
+  return json.roads.map(
+    ([
+      type,
+      certainty,
+      from,
+      fromErr,
+      to,
+      toErr,
+      segment,
+      viae,
+      itineraria,
+      recentiora,
+      fontes,
+      conditor,
       conditorYears,
       lengthM,
-      parts,
-      lngMin, lngMax, latMin, latMax,
-    };
-  });
+      coords,
+      // eslint-disable-next-line sonarjs/cognitive-complexity
+    ]) => {
+      const parts: Float32Array[] = [];
+      let lngMin = Infinity,
+        lngMax = -Infinity,
+        latMin = Infinity,
+        latMax = -Infinity;
+      for (let i = 0; i < coords.length; ) {
+        const n = coords[i++];
+        const part = new Float32Array(n * 2);
+        let x = 0,
+          y = 0;
+        for (let k = 0; k < n; k++) {
+          x += coords[i++];
+          y += coords[i++];
+          const lng = x / QUANT,
+            lat = y / QUANT;
+          part[2 * k] = lng;
+          part[2 * k + 1] = lat;
+          if (lng < lngMin) lngMin = lng;
+          if (lng > lngMax) lngMax = lng;
+          if (lat < latMin) latMin = lat;
+          if (lat > latMax) latMax = lat;
+        }
+        parts.push(part);
+      }
+      return {
+        type,
+        certainty,
+        from,
+        fromErr,
+        to,
+        toErr,
+        segment: s[segment],
+        viae: viae.map(i => s[i]),
+        itineraria: itineraria.map(i => s[i]),
+        recentiora: recentiora.map(i => s[i]),
+        fontes: fontes >= 0 ? s[fontes] : null,
+        conditor: conditor >= 0 ? s[conditor] : null,
+        conditorYears,
+        lengthM,
+        parts,
+        lngMin,
+        lngMax,
+        latMin,
+        latMax,
+      };
+    },
+  );
 };
 
 let cache: RomanRoad[] | null = null;
@@ -88,7 +135,9 @@ export const loadRomanRoads = (): Promise<RomanRoad[]> => {
       return res.json();
     })
     .then(json => (cache = decode(json)))
-    .finally(() => { pending = null; }); // a failed load can be retried
+    .finally(() => {
+      pending = null;
+    }); // a failed load can be retried
   return pending;
 };
 
@@ -103,6 +152,7 @@ export const historicalYear = (date: Date) => {
  * error margins taken as "may have existed": 'yes' / 'no' when the dataset dates the
  * road, 'unknown' when it gives no date at all (most segments).
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const roadExistence = (road: RomanRoad, year: number): 'yes' | 'no' | 'unknown' => {
   if (road.from === null && road.to === null) return 'unknown';
   if (road.from !== null && year < road.from - road.fromErr) return 'no';

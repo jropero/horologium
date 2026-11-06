@@ -1,4 +1,10 @@
-import { getSolarLongitudeDeg, prevNewMoonJDE, winterSolsticeJDE, trueNewMoonJDE, kForJDE } from './solar';
+import {
+  getSolarLongitudeDeg,
+  prevNewMoonJDE,
+  winterSolsticeJDE,
+  trueNewMoonJDE,
+  kForJDE,
+} from './solar';
 
 const DAY_MS = 86400000;
 // The Chinese calendar is reckoned in China Standard Time (UTC+8): new-moon
@@ -22,9 +28,35 @@ const MAJOR_TERM_ANGLES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 // ---- Static Data ----
 
 const HEAVENLY_STEMS = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-const EARTHLY_BRANCHES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+const EARTHLY_BRANCHES = [
+  '子',
+  '丑',
+  '寅',
+  '卯',
+  '辰',
+  '巳',
+  '午',
+  '未',
+  '申',
+  '酉',
+  '戌',
+  '亥',
+];
 const ZODIAC_ANIMALS = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
-const CHINESE_MONTHS = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月'];
+const CHINESE_MONTHS = [
+  '正月',
+  '二月',
+  '三月',
+  '四月',
+  '五月',
+  '六月',
+  '七月',
+  '八月',
+  '九月',
+  '十月',
+  '冬月',
+  '腊月',
+];
 
 export interface StemInfo {
   hanzi: string;
@@ -46,37 +78,215 @@ export interface BranchInfo {
 }
 
 export const STEMS: StemInfo[] = [
-  { hanzi: '甲', pinyin: 'jiǎ', elementHanzi: '木', elementEs: 'Madera', yin: false, color: 'text-emerald-400' },
-  { hanzi: '乙', pinyin: 'yǐ', elementHanzi: '木', elementEs: 'Madera', yin: true, color: 'text-emerald-400' },
-  { hanzi: '丙', pinyin: 'bǐng', elementHanzi: '火', elementEs: 'Fuego', yin: false, color: 'text-red-400' },
-  { hanzi: '丁', pinyin: 'dīng', elementHanzi: '火', elementEs: 'Fuego', yin: true, color: 'text-red-400' },
-  { hanzi: '戊', pinyin: 'wù', elementHanzi: '土', elementEs: 'Tierra', yin: false, color: 'text-amber-400' },
-  { hanzi: '己', pinyin: 'jǐ', elementHanzi: '土', elementEs: 'Tierra', yin: true, color: 'text-amber-400' },
-  { hanzi: '庚', pinyin: 'gēng', elementHanzi: '金', elementEs: 'Metal', yin: false, color: 'text-yellow-400' },
-  { hanzi: '辛', pinyin: 'xīn', elementHanzi: '金', elementEs: 'Metal', yin: true, color: 'text-yellow-400' },
-  { hanzi: '壬', pinyin: 'rén', elementHanzi: '水', elementEs: 'Agua', yin: false, color: 'text-cyan-400' },
-  { hanzi: '癸', pinyin: 'guǐ', elementHanzi: '水', elementEs: 'Agua', yin: true, color: 'text-cyan-400' },
+  {
+    hanzi: '甲',
+    pinyin: 'jiǎ',
+    elementHanzi: '木',
+    elementEs: 'Madera',
+    yin: false,
+    color: 'text-emerald-400',
+  },
+  {
+    hanzi: '乙',
+    pinyin: 'yǐ',
+    elementHanzi: '木',
+    elementEs: 'Madera',
+    yin: true,
+    color: 'text-emerald-400',
+  },
+  {
+    hanzi: '丙',
+    pinyin: 'bǐng',
+    elementHanzi: '火',
+    elementEs: 'Fuego',
+    yin: false,
+    color: 'text-red-400',
+  },
+  {
+    hanzi: '丁',
+    pinyin: 'dīng',
+    elementHanzi: '火',
+    elementEs: 'Fuego',
+    yin: true,
+    color: 'text-red-400',
+  },
+  {
+    hanzi: '戊',
+    pinyin: 'wù',
+    elementHanzi: '土',
+    elementEs: 'Tierra',
+    yin: false,
+    color: 'text-amber-400',
+  },
+  {
+    hanzi: '己',
+    pinyin: 'jǐ',
+    elementHanzi: '土',
+    elementEs: 'Tierra',
+    yin: true,
+    color: 'text-amber-400',
+  },
+  {
+    hanzi: '庚',
+    pinyin: 'gēng',
+    elementHanzi: '金',
+    elementEs: 'Metal',
+    yin: false,
+    color: 'text-yellow-400',
+  },
+  {
+    hanzi: '辛',
+    pinyin: 'xīn',
+    elementHanzi: '金',
+    elementEs: 'Metal',
+    yin: true,
+    color: 'text-yellow-400',
+  },
+  {
+    hanzi: '壬',
+    pinyin: 'rén',
+    elementHanzi: '水',
+    elementEs: 'Agua',
+    yin: false,
+    color: 'text-cyan-400',
+  },
+  {
+    hanzi: '癸',
+    pinyin: 'guǐ',
+    elementHanzi: '水',
+    elementEs: 'Agua',
+    yin: true,
+    color: 'text-cyan-400',
+  },
 ];
 
 export const BRANCHES: BranchInfo[] = [
-  { hanzi: '子', pinyin: 'zǐ', animal: '鼠', animalEs: 'Rata', elementHanzi: '水', elementEs: 'Agua', color: 'text-cyan-400' },
-  { hanzi: '丑', pinyin: 'chǒu', animal: '牛', animalEs: 'Buey', elementHanzi: '土', elementEs: 'Tierra', color: 'text-amber-400' },
-  { hanzi: '寅', pinyin: 'yín', animal: '虎', animalEs: 'Tigre', elementHanzi: '木', elementEs: 'Madera', color: 'text-emerald-400' },
-  { hanzi: '卯', pinyin: 'mǎo', animal: '兔', animalEs: 'Conejo', elementHanzi: '木', elementEs: 'Madera', color: 'text-emerald-400' },
-  { hanzi: '辰', pinyin: 'chén', animal: '龙', animalEs: 'Dragón', elementHanzi: '土', elementEs: 'Tierra', color: 'text-amber-400' },
-  { hanzi: '巳', pinyin: 'sì', animal: '蛇', animalEs: 'Serpiente', elementHanzi: '火', elementEs: 'Fuego', color: 'text-red-400' },
-  { hanzi: '午', pinyin: 'wǔ', animal: '马', animalEs: 'Caballo', elementHanzi: '火', elementEs: 'Fuego', color: 'text-red-400' },
-  { hanzi: '未', pinyin: 'wèi', animal: '羊', animalEs: 'Cabra', elementHanzi: '土', elementEs: 'Tierra', color: 'text-amber-400' },
-  { hanzi: '申', pinyin: 'shēn', animal: '猴', animalEs: 'Mono', elementHanzi: '金', elementEs: 'Metal', color: 'text-yellow-400' },
-  { hanzi: '酉', pinyin: 'yǒu', animal: '鸡', animalEs: 'Gallo', elementHanzi: '金', elementEs: 'Metal', color: 'text-yellow-400' },
-  { hanzi: '戌', pinyin: 'xū', animal: '狗', animalEs: 'Perro', elementHanzi: '土', elementEs: 'Tierra', color: 'text-amber-400' },
-  { hanzi: '亥', pinyin: 'hài', animal: '猪', animalEs: 'Cerdo', elementHanzi: '水', elementEs: 'Agua', color: 'text-cyan-400' },
+  {
+    hanzi: '子',
+    pinyin: 'zǐ',
+    animal: '鼠',
+    animalEs: 'Rata',
+    elementHanzi: '水',
+    elementEs: 'Agua',
+    color: 'text-cyan-400',
+  },
+  {
+    hanzi: '丑',
+    pinyin: 'chǒu',
+    animal: '牛',
+    animalEs: 'Buey',
+    elementHanzi: '土',
+    elementEs: 'Tierra',
+    color: 'text-amber-400',
+  },
+  {
+    hanzi: '寅',
+    pinyin: 'yín',
+    animal: '虎',
+    animalEs: 'Tigre',
+    elementHanzi: '木',
+    elementEs: 'Madera',
+    color: 'text-emerald-400',
+  },
+  {
+    hanzi: '卯',
+    pinyin: 'mǎo',
+    animal: '兔',
+    animalEs: 'Conejo',
+    elementHanzi: '木',
+    elementEs: 'Madera',
+    color: 'text-emerald-400',
+  },
+  {
+    hanzi: '辰',
+    pinyin: 'chén',
+    animal: '龙',
+    animalEs: 'Dragón',
+    elementHanzi: '土',
+    elementEs: 'Tierra',
+    color: 'text-amber-400',
+  },
+  {
+    hanzi: '巳',
+    pinyin: 'sì',
+    animal: '蛇',
+    animalEs: 'Serpiente',
+    elementHanzi: '火',
+    elementEs: 'Fuego',
+    color: 'text-red-400',
+  },
+  {
+    hanzi: '午',
+    pinyin: 'wǔ',
+    animal: '马',
+    animalEs: 'Caballo',
+    elementHanzi: '火',
+    elementEs: 'Fuego',
+    color: 'text-red-400',
+  },
+  {
+    hanzi: '未',
+    pinyin: 'wèi',
+    animal: '羊',
+    animalEs: 'Cabra',
+    elementHanzi: '土',
+    elementEs: 'Tierra',
+    color: 'text-amber-400',
+  },
+  {
+    hanzi: '申',
+    pinyin: 'shēn',
+    animal: '猴',
+    animalEs: 'Mono',
+    elementHanzi: '金',
+    elementEs: 'Metal',
+    color: 'text-yellow-400',
+  },
+  {
+    hanzi: '酉',
+    pinyin: 'yǒu',
+    animal: '鸡',
+    animalEs: 'Gallo',
+    elementHanzi: '金',
+    elementEs: 'Metal',
+    color: 'text-yellow-400',
+  },
+  {
+    hanzi: '戌',
+    pinyin: 'xū',
+    animal: '狗',
+    animalEs: 'Perro',
+    elementHanzi: '土',
+    elementEs: 'Tierra',
+    color: 'text-amber-400',
+  },
+  {
+    hanzi: '亥',
+    pinyin: 'hài',
+    animal: '猪',
+    animalEs: 'Cerdo',
+    elementHanzi: '水',
+    elementEs: 'Agua',
+    color: 'text-cyan-400',
+  },
 ];
 
 // Chinese day names: 初一 through 三十
 const SIMP = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
 const CHINESE_DAYS = (() => {
-  const d: string[] = ['', '初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十'];
+  const d: string[] = [
+    '',
+    '初一',
+    '初二',
+    '初三',
+    '初四',
+    '初五',
+    '初六',
+    '初七',
+    '初八',
+    '初九',
+    '初十',
+  ];
   for (let i = 11; i <= 19; i++) d.push(`十${SIMP[i - 11]}`);
   d.push('二十');
   for (let i = 21; i <= 29; i++) d.push(`廿${SIMP[i - 21]}`);
@@ -140,16 +350,25 @@ const lunationOnOrBefore = (day: number): number => {
 const monthContainsMajorTerm = (startDay: number, endDay: number): boolean => {
   const startLon = getSolarLongitudeDeg(new Date(cstDayStartMs(startDay)));
   const endLon = getSolarLongitudeDeg(new Date(cstDayStartMs(endDay)));
-  const diff = ((endLon - startLon) % 360 + 360) % 360;
+  const diff = (((endLon - startLon) % 360) + 360) % 360;
   for (const angle of MAJOR_TERM_ANGLES) {
-    const angleDist = ((angle - startLon) % 360 + 360) % 360;
+    const angleDist = (((angle - startLon) % 360) + 360) % 360;
     if (angleDist < diff) return true;
   }
   return false;
 };
 
-interface MonthLabel { k: number; month: number; leap: boolean }
-interface SuiLayout { k11: number; kNext11: number; months: MonthLabel[]; kNewYear: number }
+interface MonthLabel {
+  k: number;
+  month: number;
+  leap: boolean;
+}
+interface SuiLayout {
+  k11: number;
+  kNext11: number;
+  months: MonthLabel[];
+  kNewYear: number;
+}
 
 /**
  * Layout of the 岁 (sui) from month 11 of Gregorian year y (the month containing the
@@ -172,7 +391,7 @@ const getSui = (y: number): SuiLayout => {
       leapDone = true;
       continue;
     }
-    m = m % 12 + 1;
+    m = (m % 12) + 1;
     months.push({ k, month: m, leap: false });
   }
   const kNewYear = months.find(x => x.month === 1 && !x.leap)!.k;
@@ -187,41 +406,41 @@ const newYearK = (Y: number): number => getSui(Y - 1).kNewYear;
 // --- Public API ---
 
 export const getYearStemBranch = (year: number) => {
-  const stemIdx = ((year - 4) % 10 + 10) % 10;
-  const branchIdx = ((year - 4) % 12 + 12) % 12;
+  const stemIdx = (((year - 4) % 10) + 10) % 10;
+  const branchIdx = (((year - 4) % 12) + 12) % 12;
   return {
     stem: HEAVENLY_STEMS[stemIdx],
     branch: EARTHLY_BRANCHES[branchIdx],
     animal: ZODIAC_ANIMALS[branchIdx],
     stemIndex: stemIdx,
     branchIndex: branchIdx,
-    display: `${HEAVENLY_STEMS[stemIdx]}${EARTHLY_BRANCHES[branchIdx]}`
+    display: `${HEAVENLY_STEMS[stemIdx]}${EARTHLY_BRANCHES[branchIdx]}`,
   };
 };
 
 const getMonthStemBranch = (yearStemIndex: number, chineseMonth: number) => {
-  const stemIdx = ((yearStemIndex * 2 + chineseMonth + 1) % 10 + 10) % 10;
-  const branchIdx = ((chineseMonth + 1) % 12 + 12) % 12;
+  const stemIdx = (((yearStemIndex * 2 + chineseMonth + 1) % 10) + 10) % 10;
+  const branchIdx = (((chineseMonth + 1) % 12) + 12) % 12;
   return {
     stem: HEAVENLY_STEMS[stemIdx],
     branch: EARTHLY_BRANCHES[branchIdx],
     stemIndex: stemIdx,
     branchIndex: branchIdx,
-    display: `${HEAVENLY_STEMS[stemIdx]}${EARTHLY_BRANCHES[branchIdx]}`
+    display: `${HEAVENLY_STEMS[stemIdx]}${EARTHLY_BRANCHES[branchIdx]}`,
   };
 };
 
 const getDayStemBranch = (cstDay: number) => {
   // JDN of the CST civil date; day index = (JDN + 49) mod 60, 0 = 甲子.
   // Check: 2000-01-01 (JDN 2451545) = 54 = 戊午.
-  const cycle = ((cstDay + 2440588 + 49) % 60 + 60) % 60;
+  const cycle = (((cstDay + 2440588 + 49) % 60) + 60) % 60;
   const stem = HEAVENLY_STEMS[cycle % 10];
   const branch = EARTHLY_BRANCHES[cycle % 12];
   return {
     stem,
     branch,
     display: `${stem}${branch}`,
-    cycleNumber: cycle
+    cycleNumber: cycle,
   };
 };
 
@@ -284,6 +503,6 @@ export const getChineseLunisolarDate = (date: Date): ChineseLunisolarDate => {
     isLeapMonth,
     isLeapYear,
     lunarNewYear: cnyDisplay,
-    displayDate
+    displayDate,
   };
 };

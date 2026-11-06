@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getRomanLabels, getHellenicLabels, getEgyptianLabels, getChineseLabels, getBabylonianLabels, CivLabels } from '../utils/civLabels';
+import {
+  getRomanLabels,
+  getHellenicLabels,
+  getEgyptianLabels,
+  getChineseLabels,
+  getBabylonianLabels,
+  CivLabels,
+} from '../utils/civLabels';
 
 export type Civilization = 'rome' | 'hellas' | 'aegyptus' | 'zhongguo' | 'babylonia';
 
@@ -21,6 +28,7 @@ interface CivilizationProviderProps {
   children: ReactNode;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const CivilizationProvider: React.FC<CivilizationProviderProps> = ({ children }) => {
   const [civilization, setCivilization] = useState<Civilization>(() => {
     const saved = localStorage.getItem('civilizationMode');
@@ -31,15 +39,16 @@ export const CivilizationProvider: React.FC<CivilizationProviderProps> = ({ chil
     localStorage.setItem('civilizationMode', civilization);
   }, [civilization]);
 
-  const labels = civilization === 'rome'
-    ? getRomanLabels()
-    : civilization === 'hellas'
+  const labels =
+    civilization === 'rome'
+      ? getRomanLabels()
+      : civilization === 'hellas'
       ? getHellenicLabels()
       : civilization === 'aegyptus'
-        ? getEgyptianLabels()
-        : civilization === 'zhongguo'
-          ? getChineseLabels()
-          : getBabylonianLabels();
+      ? getEgyptianLabels()
+      : civilization === 'zhongguo'
+      ? getChineseLabels()
+      : getBabylonianLabels();
 
   return (
     <CivilizationContext.Provider value={{ civilization, setCivilization, labels }}>

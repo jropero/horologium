@@ -26,49 +26,87 @@ export interface EgyptianHour {
 }
 
 export const NIGHT_HOURS: EgyptianHour[] = [
-  { translit: 'Wšmt-ḥꜣwt-ḫftjw=s', name: 'La que aplasta las frentes de sus enemigos',
-    ra: 'Ra entra por el horizonte occidental; los babuinos lo saludan.' },
-  { name: 'La sabia que protege a su señor',
-    ra: 'La barca navega por las aguas de Wernes, tierra de la fertilidad.' },
-  { name: 'La que corta los ba',
-    ra: 'Ra atraviesa las aguas de Osiris.' },
-  { name: 'La grande que está en la Duat',
-    ra: 'En el desierto de Sokar la barca se vuelve serpiente y es remolcada por la arena.' },
-  { name: 'La guía que está en medio de su barca',
-    ra: 'La barca es remolcada sobre la caverna de Sokar y el túmulo de Osiris.' },
-  { name: 'La que llega y da lo justo',
-    ra: 'El ba de Ra se une a su cuerpo, protegido por la serpiente Mehen.' },
-  { name: 'La que rechaza a Hiu y decapita al de rostro terrible',
-    ra: 'Apofis es atado; la magia de Isis deja avanzar la barca.' },
-  { name: 'Señora de la noche profunda',
-    ra: 'Ra abre con su voz cinco puertas; los muertos reciben ropas nuevas.' },
-  { name: 'La que adora y protege a su señor',
-    ra: 'Doce remeros impulsan la barca; los muertos reciben pan y cerveza.' },
-  { name: 'La furiosa que degüella a los traidores',
-    ra: 'Guardias armados velan contra Apofis; Horus rescata a los ahogados.' },
-  { name: 'La estrellada, señora de la barca, que rechaza al rebelde cuando sale',
-    ra: 'Los ojos de Ra son sanados; los enemigos arden.' },
-  { translit: 'Ptrt-nfrw-nb=s', name: 'La que contempla la perfección de su señor',
-    ra: 'Ra renace como Jepri en el horizonte oriental.' },
+  {
+    translit: 'Wšmt-ḥꜣwt-ḫftjw=s',
+    name: 'La que aplasta las frentes de sus enemigos',
+    ra: 'Ra entra por el horizonte occidental; los babuinos lo saludan.',
+  },
+  {
+    name: 'La sabia que protege a su señor',
+    ra: 'La barca navega por las aguas de Wernes, tierra de la fertilidad.',
+  },
+  { name: 'La que corta los ba', ra: 'Ra atraviesa las aguas de Osiris.' },
+  {
+    name: 'La grande que está en la Duat',
+    ra: 'En el desierto de Sokar la barca se vuelve serpiente y es remolcada por la arena.',
+  },
+  {
+    name: 'La guía que está en medio de su barca',
+    ra: 'La barca es remolcada sobre la caverna de Sokar y el túmulo de Osiris.',
+  },
+  {
+    name: 'La que llega y da lo justo',
+    ra: 'El ba de Ra se une a su cuerpo, protegido por la serpiente Mehen.',
+  },
+  {
+    name: 'La que rechaza a Hiu y decapita al de rostro terrible',
+    ra: 'Apofis es atado; la magia de Isis deja avanzar la barca.',
+  },
+  {
+    name: 'Señora de la noche profunda',
+    ra: 'Ra abre con su voz cinco puertas; los muertos reciben ropas nuevas.',
+  },
+  {
+    name: 'La que adora y protege a su señor',
+    ra: 'Doce remeros impulsan la barca; los muertos reciben pan y cerveza.',
+  },
+  {
+    name: 'La furiosa que degüella a los traidores',
+    ra: 'Guardias armados velan contra Apofis; Horus rescata a los ahogados.',
+  },
+  {
+    name: 'La estrellada, señora de la barca, que rechaza al rebelde cuando sale',
+    ra: 'Los ojos de Ra son sanados; los enemigos arden.',
+  },
+  {
+    translit: 'Ptrt-nfrw-nb=s',
+    name: 'La que contempla la perfección de su señor',
+    ra: 'Ra renace como Jepri en el horizonte oriental.',
+  },
 ];
 
 export const DAY_HOURS: EgyptianHour[] = [
-  { translit: 'S-ḫꜥ-nfrw-n-Rꜥ', name: 'La que hace aparecer la belleza de Ra',
-    ra: 'Ra sale por el horizonte oriental.' },
-  { name: 'La que ahuyenta la oscuridad',          ra: 'Ra asciende; lo acompaña Hu, la palabra creadora.' },
-  { name: 'La que alegra los ba de los dioses',    ra: 'Ra navega por el cielo; lo acompaña Sia, el entendimiento.' },
-  { name: 'Luz de la salida',                      ra: 'Ra sigue subiendo en su barca diurna.' },
-  { name: 'La hora de la diosa Igeret',            ra: 'Ra se acerca a lo más alto del cielo.' },
-  { name: 'La que se alza apresando a Seth',       ra: 'Ra en el cenit; su barca vence a Apofis.' },
-  { name: 'La que ensancha el corazón',            ra: 'Ra empieza a descender; lo acompaña Horus.' },
-  { name: 'Devenir y llegar a ser',                ra: 'Los dioses se alegran de la caída de Apofis.' },
-  { name: 'Hora de la travesía al Campo de Juncos', ra: 'Ra cruza hacia Sejet-Iaru; lo acompaña Isis.' },
-  { name: 'Bajar a la barca Sektet para cruzar',   ra: 'Ra pasa a su barca vespertina.' },
-  { name: 'La que dispone las cuerdas de remolque', ra: 'Se preparan las sogas para llevar a Ra al ocaso.' },
-  { name: 'Ocaso de este dios en el Occidente',    ra: 'Ra se pone por el horizonte occidental.' },
+  {
+    translit: 'S-ḫꜥ-nfrw-n-Rꜥ',
+    name: 'La que hace aparecer la belleza de Ra',
+    ra: 'Ra sale por el horizonte oriental.',
+  },
+  {
+    name: 'La que ahuyenta la oscuridad',
+    ra: 'Ra asciende; lo acompaña Hu, la palabra creadora.',
+  },
+  {
+    name: 'La que alegra los ba de los dioses',
+    ra: 'Ra navega por el cielo; lo acompaña Sia, el entendimiento.',
+  },
+  { name: 'Luz de la salida', ra: 'Ra sigue subiendo en su barca diurna.' },
+  { name: 'La hora de la diosa Igeret', ra: 'Ra se acerca a lo más alto del cielo.' },
+  { name: 'La que se alza apresando a Seth', ra: 'Ra en el cenit; su barca vence a Apofis.' },
+  { name: 'La que ensancha el corazón', ra: 'Ra empieza a descender; lo acompaña Horus.' },
+  { name: 'Devenir y llegar a ser', ra: 'Los dioses se alegran de la caída de Apofis.' },
+  {
+    name: 'Hora de la travesía al Campo de Juncos',
+    ra: 'Ra cruza hacia Sejet-Iaru; lo acompaña Isis.',
+  },
+  { name: 'Bajar a la barca Sektet para cruzar', ra: 'Ra pasa a su barca vespertina.' },
+  {
+    name: 'La que dispone las cuerdas de remolque',
+    ra: 'Se preparan las sogas para llevar a Ra al ocaso.',
+  },
+  { name: 'Ocaso de este dios en el Occidente', ra: 'Ra se pone por el horizonte occidental.' },
 ];
 
 export const HOURS_HEADING = {
-  day:   { translit: 'wnwt nt hrw', es: 'Las horas del día' },
+  day: { translit: 'wnwt nt hrw', es: 'Las horas del día' },
   night: { translit: 'wnwt nt grḥ', es: 'Las horas de la noche' },
 };

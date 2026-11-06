@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getSententiaOfTheDay, SENTENTIAE, Sententia } from '../utils/sententiaeData';
 import { getApophthegmaOfTheDay, APOPHTHEGMATA, Apophthegma } from '../utils/apophthegmataData';
-import { getEgyptianWisdomOfTheDay, EGYPTIAN_WISDOM, EgyptianWisdom } from '../utils/egyptianWisdomData';
-import { getBabylonianWisdomOfTheDay, BABYLONIAN_WISDOM, BabylonianWisdom } from '../utils/babylonianWisdomData';
+import {
+  getEgyptianWisdomOfTheDay,
+  EGYPTIAN_WISDOM,
+  EgyptianWisdom,
+} from '../utils/egyptianWisdomData';
+import {
+  getBabylonianWisdomOfTheDay,
+  BABYLONIAN_WISDOM,
+  BabylonianWisdom,
+} from '../utils/babylonianWisdomData';
 import { Feather, RefreshCw } from 'lucide-react';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
@@ -11,6 +19,7 @@ interface SententiaDieiProps {
   currentDate: Date;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   const { civilization, labels } = useCivilization();
   const [sententia, setSententia] = useState<Sententia | null>(null);
@@ -19,9 +28,13 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   const [babylonianWisdom, setBabylonianWisdom] = useState<BabylonianWisdom | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSententia(getSententiaOfTheDay(currentDate));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setApophthegma(getApophthegmaOfTheDay(currentDate));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEgyptianWisdom(getEgyptianWisdomOfTheDay(currentDate));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBabylonianWisdom(getBabylonianWisdomOfTheDay(currentDate));
   }, [currentDate.toDateString()]);
 
@@ -42,43 +55,70 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   };
 
   const isBab = civilization === 'babylonia';
-  const quoteText = civilization === 'rome' ? sententia?.latin
-    : civilization === 'hellas' ? apophthegma?.greek
-    : isBab ? babylonianWisdom?.text
-    : egyptianWisdom?.text;
-  const quoteAuthor = civilization === 'rome' ? sententia?.author
-    : civilization === 'hellas' ? apophthegma?.author
-    : isBab ? babylonianWisdom?.author
-    : egyptianWisdom?.author;
-  const quoteTranslation = civilization === 'rome' ? sententia?.translation
-    : civilization === 'hellas' ? apophthegma?.translation
-    : undefined;
-  const quoteSource = isBab ? babylonianWisdom?.source
-    : civilization === 'aegyptus' ? egyptianWisdom?.source
+  const quoteText =
+    civilization === 'rome'
+      ? sententia?.latin
+      : civilization === 'hellas'
+      ? apophthegma?.greek
+      : isBab
+      ? babylonianWisdom?.text
+      : egyptianWisdom?.text;
+  const quoteAuthor =
+    civilization === 'rome'
+      ? sententia?.author
+      : civilization === 'hellas'
+      ? apophthegma?.author
+      : isBab
+      ? babylonianWisdom?.author
+      : egyptianWisdom?.author;
+  const quoteTranslation =
+    civilization === 'rome'
+      ? sententia?.translation
+      : civilization === 'hellas'
+      ? apophthegma?.translation
+      : undefined;
+  const quoteSource = isBab
+    ? babylonianWisdom?.source
+    : civilization === 'aegyptus'
+    ? egyptianWisdom?.source
     : undefined;
   const quoteAkkadian = isBab ? babylonianWisdom?.akkadian : undefined;
-  const quoteTransliteration = civilization === 'hellas' && quoteText ? transliterateGreek(quoteText) : null;
+  const quoteTransliteration =
+    civilization === 'hellas' && quoteText ? transliterateGreek(quoteText) : null;
 
   if (!quoteText) return null;
 
   return (
     <div className="w-full max-w-2xl mx-auto my-6 px-4">
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         onClick={handleRandomize}
         className={`relative border p-8 shadow-2xl group cursor-pointer transition-all duration-300 active:scale-[0.98] overflow-hidden ${
-          civilization === 'aegyptus' ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md hover:bg-ink/95'
+          civilization === 'aegyptus'
+            ? ''
+            : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md hover:bg-ink/95'
         }`}
-        style={civilization === 'aegyptus' ? { background: '#0c0804', borderColor: 'rgba(24,64,160,0.45)', borderRadius: '2px' } : undefined}
+        style={
+          civilization === 'aegyptus'
+            ? {
+                background: '#0c0804',
+                borderColor: 'rgba(24,64,160,0.45)',
+                borderRadius: '2px',
+              }
+            : undefined
+        }
         title="Pulsa para ver otra cita al azar"
       >
-        {civilization !== 'aegyptus' && <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>}
+        {civilization !== 'aegyptus' && (
+          <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+        )}
 
         {/* Corner ornaments */}
         <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
         <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
         <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
         <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
-        
+
         {/* Cabecera / Título */}
         <div className="flex flex-col items-center justify-center mb-6">
           <Feather className="text-gold-leaf/80 w-6 h-6 mb-2 group-hover:rotate-12 transition-transform" />
@@ -91,7 +131,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         {/* Cita (Texto Principal) */}
         <div className="text-center px-4 mb-4 flex flex-col gap-2">
           <p className="font-serif italic text-2xl md:text-4xl text-parchment leading-relaxed drop-shadow-glow">
-            "{quoteText}"
+            &quot;{quoteText}&quot;
           </p>
           {quoteTransliteration && (
             <p className="font-serif text-sm md:text-base text-gold-dim tracking-widest uppercase">
@@ -122,9 +162,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
             </p>
           )}
           {quoteSource && (
-            <p className="font-serif italic text-sm text-gold-dim/90 mt-2">
-              — {quoteSource} —
-            </p>
+            <p className="font-serif italic text-sm text-gold-dim/90 mt-2">— {quoteSource} —</p>
           )}
         </div>
 

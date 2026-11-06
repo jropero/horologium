@@ -9,61 +9,61 @@ export interface CivLabels {
   loadingText: string;
 
   // Clock & Time
-  dayLabel: string;       // Dies / Ἡμέρα
-  nightLabel: string;     // Nox / Νύξ
+  dayLabel: string; // Dies / Ἡμέρα
+  nightLabel: string; // Nox / Νύξ
   civilDayPartLabel: string; // "Pars Diei Civilis" / "Μέρος τῆς Ἡμέρας"
   planetaryRulerLabel: string; // "Rector Horae" / "Ἄρχων Ὥρας"
-  monthTutelaLabel: string;   // "Tutela Mensis" / "Προστάτης Μηνός"
+  monthTutelaLabel: string; // "Tutela Mensis" / "Προστάτης Μηνός"
 
   // Solar
-  sunriseLabel: string;   // Ortus Solis / Ἀνατολὴ Ἡλίου
-  sunsetLabel: string;    // Occasus Solis / Δύσις Ἡλίου
+  sunriseLabel: string; // Ortus Solis / Ἀνατολὴ Ἡλίου
+  sunsetLabel: string; // Occasus Solis / Δύσις Ἡλίου
   hourLengthLabel: string; // Longitudo Horae / Μῆκος Ὥρας
-  minuteUnit: string;     // minuta / λεπτά
+  minuteUnit: string; // minuta / λεπτά
 
   // Weather
-  skyLabel: string;       // Caelum / Οὐρανός
-  windLabel: string;      // Ventus / Ἄνεμος
+  skyLabel: string; // Caelum / Οὐρανός
+  windLabel: string; // Ventus / Ἄνεμος
 
   // Calendar
-  calendarTitle: string;       // Fasti Romani / Ἡμερολόγιον Ἀττικόν
-  calendarSubtitle: string;    // Dies VII Sequentes
-  todayLabel: string;          // Hodie / Σήμερον
-  godOfDayTitle: string;       // Deus Hodiernus / Θεὸς τῆς Ἡμέρας
-  festivalLabel: string;       // Festum / Ἑορτή
-  calendarInfoTitle: string;   // "Memoria Rerum Gestarum" / "Μνήμη Πράξεων"
+  calendarTitle: string; // Fasti Romani / Ἡμερολόγιον Ἀττικόν
+  calendarSubtitle: string; // Dies VII Sequentes
+  todayLabel: string; // Hodie / Σήμερον
+  godOfDayTitle: string; // Deus Hodiernus / Θεὸς τῆς Ἡμέρας
+  festivalLabel: string; // Festum / Ἑορτή
+  calendarInfoTitle: string; // "Memoria Rerum Gestarum" / "Μνήμη Πράξεων"
 
   // Quotes
-  quoteTitle: string;     // Sententia Diei / Ἀπόφθεγμα τῆς Ἡμέρας
+  quoteTitle: string; // Sententia Diei / Ἀπόφθεγμα τῆς Ἡμέρας
 
   // Oracle
-  oracleTitle: string;       // Sortes Vergilianae / Κλῆροι Ὁμηρικοί
-  oracleSubtitle: string;    // Oraculum Poeticum / Χρησμὸς Ποιητικός
-  oracleOpenBook: string;    // Librum Aperire / Βιβλίον Ἀνοῖξαι
+  oracleTitle: string; // Sortes Vergilianae / Κλῆροι Ὁμηρικοί
+  oracleSubtitle: string; // Oraculum Poeticum / Χρησμὸς Ποιητικός
+  oracleOpenBook: string; // Librum Aperire / Βιβλίον Ἀνοῖξαι
   oracleConsultAgain: string; // Iterum Consulere / Πάλιν Ἐρωτῆσαι
-  oracleConsulting: string;   // Fata consuluntur... / Οἱ Μοῖραι σκοποῦσι...
-  oraclePrompt: string;       // Description text
+  oracleConsulting: string; // Fata consuluntur... / Οἱ Μοῖραι σκοποῦσι...
+  oraclePrompt: string; // Description text
 
   // Province / Region
-  regionTitle: string;     // Provincia Romana / Ἑλληνικὴ Χώρα
-  regionFallback: string;  // Extra Fines Imperii / Ἐκτὸς τοῦ Ἑλληνικοῦ Κόσμου
+  regionTitle: string; // Provincia Romana / Ἑλληνικὴ Χώρα
+  regionFallback: string; // Extra Fines Imperii / Ἐκτὸς τοῦ Ἑλληνικοῦ Κόσμου
   regionFallbackDesc: string;
-  distanceTitle: string;   // Miliarium Aureum / Βωμὸς τῶν Δώδεκα Θεῶν
-  distanceUnit: string;    // m.p. (milia passuum) / στάδια
+  distanceTitle: string; // Miliarium Aureum / Βωμὸς τῶν Δώδεκα Θεῶν
+  distanceUnit: string; // m.p. (milia passuum) / στάδια
   distanceFromLabel: string; // "ab Roma" / "ἀπ' Ἀθηνῶν"
 
   // Controls
-  controlsTitle: string;   // GUBERNACULA / ΚΥΒΕΡΝΗΤΗΡΙΑ
-  computeBtn: string;      // Computare / Ὑπολογίσαι
-  findMeBtn: string;       // Invenire Me / Εὑρεῖν Με
+  controlsTitle: string; // GUBERNACULA / ΚΥΒΕΡΝΗΤΗΡΙΑ
+  computeBtn: string; // Computare / Ὑπολογίσαι
+  findMeBtn: string; // Invenire Me / Εὑρεῖν Με
   controlsFooter: string;
 
   // Info Section
-  infoTitle: string;         // De Temporibus Romanorum / Περὶ τοῦ Ἑλληνικοῦ Χρόνου
-  infoFirstLetter: string;   // "R" / "Ο"
+  infoTitle: string; // De Temporibus Romanorum / Περὶ τοῦ Ἑλληνικοῦ Χρόνου
+  infoFirstLetter: string; // "R" / "Ο"
   infoParagraph1: string;
   infoParagraph2: string;
-  infoBottomMotto: string;   // Tempus Fugit • Memento Mori / Πάντα ῥεῖ • Γνῶθι σεαυτόν
+  infoBottomMotto: string; // Tempus Fugit • Memento Mori / Πάντα ῥεῖ • Γνῶθι σεαυτόν
   infoBottomMottoEs?: string; // Spanish translation (omit for Latin)
 
   // Civilization-specific extras
@@ -135,8 +135,10 @@ export const getRomanLabels = (): CivLabels => ({
 
   infoTitle: 'De Temporibus Romanorum',
   infoFirstLetter: 'R',
-  infoParagraph1: 'omani antiqui diem non sicut nos metiebantur. Dies illorum ab ortu solis incipiebat et ad occasum finiebatur, semper in duodecim partes aequales, quas horas vocabant, divisus.',
-  infoParagraph2: 'Quare, ut solis iter per caelum cum anni temporibus variat, ita et horae longitudo. Hieme, hora quadraginta quinque minuta tantum esse potest; aestate, ad septuaginta quinque extenditur.',
+  infoParagraph1:
+    'omani antiqui diem non sicut nos metiebantur. Dies illorum ab ortu solis incipiebat et ad occasum finiebatur, semper in duodecim partes aequales, quas horas vocabant, divisus.',
+  infoParagraph2:
+    'Quare, ut solis iter per caelum cum anni temporibus variat, ita et horae longitudo. Hieme, hora quadraginta quinque minuta tantum esse potest; aestate, ad septuaginta quinque extenditur.',
   infoBottomMotto: 'Tempus Fugit • Memento Mori',
 
   civToggleRome: 'Roma',
@@ -175,9 +177,11 @@ export const ROMAN_ROAD_LABELS = {
   legendIgnota: 'aetatis ignotae',
   latinYear,
   yearRange: ([a, b]: [number, number]) =>
-    a === b ? latinYear(a)
-      : (a < 0) === (b < 0) ? `${Math.abs(a)}–${latinYear(b)}`
-        : `${latinYear(a)} – ${latinYear(b)}`,
+    a === b
+      ? latinYear(a)
+      : a < 0 === b < 0
+      ? `${Math.abs(a)}–${latinYear(b)}`
+      : `${latinYear(a)} – ${latinYear(b)}`,
   from: (y: number) => `ab anno ${latinYear(y)}`,
   fromErr: (y: number) => `fortasse iam ab anno ${latinYear(y)}`,
   to: (y: number) => `usque ad annum ${latinYear(y)}`,
@@ -243,7 +247,7 @@ export const getHellenicLabels = (): CivLabels => ({
   regionFallbackDesc: 'Más allá de las fronteras del mundo helénico.',
   distanceTitle: 'Βωμὸς τῶν Δώδεκα Θεῶν',
   distanceUnit: 'στάδια',
-  distanceFromLabel: 'στάδια ἀπ\' Ἀθηνῶν',
+  distanceFromLabel: "στάδια ἀπ' Ἀθηνῶν",
 
   controlsTitle: 'ΚΥΒΕΡΝΗΤΗΡΙΑ',
   computeBtn: 'Ὑπολογίσαι',
@@ -252,8 +256,10 @@ export const getHellenicLabels = (): CivLabels => ({
 
   infoTitle: 'Περὶ τοῦ Ἑλληνικοῦ Χρόνου',
   infoFirstLetter: 'Ο',
-  infoParagraph1: 'ἱ Ἕλληνες τῆς ἀρχαιότητος τὴν ἡμέραν ὡσαύτως ἐμέτρουν. Ἡ ἡμέρα αὐτοῖς ἀπὸ ἀνατολῆς ἡλίου ἤρχετο καὶ εἰς δύσιν ἐτελεύτα, ἀεὶ εἰς δώδεκα μέρη ἴσα, ἃ ὥρας ἐκάλουν, διῃρημένη.',
-  infoParagraph2: 'Ὅθεν, ὥσπερ ἡ τοῦ ἡλίου πορεία κατὰ τὰς ὥρας τοῦ ἔτους μεταβάλλεται, οὕτω καὶ τὸ τῆς ὥρας μῆκος. Χειμῶνος μὲν ὥρα τεσσαράκοντα πέντε λεπτὰ μόνον εἶναι δύναται· θέρους δὲ εἰς ἑβδομήκοντα πέντε ἐκτείνεται.',
+  infoParagraph1:
+    'ἱ Ἕλληνες τῆς ἀρχαιότητος τὴν ἡμέραν ὡσαύτως ἐμέτρουν. Ἡ ἡμέρα αὐτοῖς ἀπὸ ἀνατολῆς ἡλίου ἤρχετο καὶ εἰς δύσιν ἐτελεύτα, ἀεὶ εἰς δώδεκα μέρη ἴσα, ἃ ὥρας ἐκάλουν, διῃρημένη.',
+  infoParagraph2:
+    'Ὅθεν, ὥσπερ ἡ τοῦ ἡλίου πορεία κατὰ τὰς ὥρας τοῦ ἔτους μεταβάλλεται, οὕτω καὶ τὸ τῆς ὥρας μῆκος. Χειμῶνος μὲν ὥρα τεσσαράκοντα πέντε λεπτὰ μόνον εἶναι δύναται· θέρους δὲ εἰς ἑβδομήκοντα πέντε ἐκτείνεται.',
   infoBottomMotto: 'Πάντα Ῥεῖ • Γνῶθι Σεαυτόν',
   infoBottomMottoEs: 'Todo Fluye • Conócete a Ti Mismo',
 
@@ -319,8 +325,10 @@ export const getEgyptianLabels = (): CivLabels => ({
 
   infoTitle: 'Sha en Kemet',
   infoFirstLetter: 'K',
-  infoParagraph1: 'emet, la Tierra Negra, medía el tiempo con la precisión de sus sacerdotes-astrónomos. El año egipcio constaba de 12 meses de 30 días, organizados en tres décadas de 10 días, más 5 días epagómenos al final.',
-  infoParagraph2: 'Las tres estaciones —Akhet (Inundación), Peret (Siembra) y Shemu (Cosecha)— marcaban el ritmo de la vida junto al Nilo. El día comenzaba al amanecer, dividido en 12 horas diurnas y 12 nocturnas de duración variable.',
+  infoParagraph1:
+    'emet, la Tierra Negra, medía el tiempo con la precisión de sus sacerdotes-astrónomos. El año egipcio constaba de 12 meses de 30 días, organizados en tres décadas de 10 días, más 5 días epagómenos al final.',
+  infoParagraph2:
+    'Las tres estaciones —Akhet (Inundación), Peret (Siembra) y Shemu (Cosecha)— marcaban el ritmo de la vida junto al Nilo. El día comenzaba al amanecer, dividido en 12 horas diurnas y 12 nocturnas de duración variable.',
   infoBottomMotto: 'Ankh Udja Seneb • Maat Kheru',
   infoBottomMottoEs: 'Vida, Prosperidad, Salud • Justo de Voz',
 
@@ -386,8 +394,10 @@ export const getChineseLabels = (): CivLabels => ({
 
   infoTitle: '节气与自然',
   infoFirstLetter: '中国',
-  infoParagraph1: 'China observó el sol durante milenios y dividió su trayectoria anual en veinticuatro puntos precisos: las Divisiones Estacionales (二十四节气). Cada una abarca quince grados de la eclíptica y dura aproximadamente quince días. A su vez, cada división se subdivide en tres pentadas (候, hòu) de cinco días, cada una asociada a un fenómeno natural: el canto de un pájaro, la floración de una planta, el despertar de un insecto.',
-  infoParagraph2: 'Este sistema no es un simple calendario agrícola. Es una cosmología viva: la creencia de que el ser humano (人, rén), el cielo (天, tiān) y la tierra (地, dì) forman una unidad inseparable. Cada pentada es una instrucción sobre cómo vivir en armonía con el pulso del universo — qué comer, qué sembrar, cómo cuidar el cuerpo y el espíritu según el aliento (气, qì) que domina ese momento del año.',
+  infoParagraph1:
+    'China observó el sol durante milenios y dividió su trayectoria anual en veinticuatro puntos precisos: las Divisiones Estacionales (二十四节气). Cada una abarca quince grados de la eclíptica y dura aproximadamente quince días. A su vez, cada división se subdivide en tres pentadas (候, hòu) de cinco días, cada una asociada a un fenómeno natural: el canto de un pájaro, la floración de una planta, el despertar de un insecto.',
+  infoParagraph2:
+    'Este sistema no es un simple calendario agrícola. Es una cosmología viva: la creencia de que el ser humano (人, rén), el cielo (天, tiān) y la tierra (地, dì) forman una unidad inseparable. Cada pentada es una instrucción sobre cómo vivir en armonía con el pulso del universo — qué comer, qué sembrar, cómo cuidar el cuerpo y el espíritu según el aliento (气, qì) que domina ese momento del año.',
   infoBottomMotto: '天人合一 • 顺应天时',
   infoBottomMottoEs: 'Cielo, Tierra y Hombre son Uno • Sigue el Ritmo del Cielo',
 
@@ -438,7 +448,8 @@ export const getBabylonianLabels = (): CivLabels => ({
   oracleOpenBook: 'Abrir la Tablilla',
   oracleConsultAgain: 'Consultar de Nuevo',
   oracleConsulting: 'Los kalû-sacerdotes consultan...',
-  oraclePrompt: 'Los astrónomos del Esagila observan el cielo y revelan los presagios escritos en las tablillas de arcilla.',
+  oraclePrompt:
+    'Los astrónomos del Esagila observan el cielo y revelan los presagios escritos en las tablillas de arcilla.',
 
   regionTitle: 'Región de Babilonia',
   regionFallback: 'Más Allá de los Ríos',
@@ -454,8 +465,10 @@ export const getBabylonianLabels = (): CivLabels => ({
 
   infoTitle: 'Sobre el Tiempo Babilonio',
   infoFirstLetter: 'B',
-  infoParagraph1: 'abilonia, la gran ciudad del Éufrates, fue la cuna del tiempo medido. Sus astrónomos-sacerdotes inventaron el zodíaco de doce signos, los planetas de la semana y el sistema sexagesimal que aún usamos: 60 segundos, 60 minutos, 360 grados.',
-  infoParagraph2: 'El calendario lunisolar babilonio sincronizaba la luna con las estaciones mediante meses intercalares proclamados por decreto real. Cada nuevo mes comenzaba con la primera crescent de luna visible — el dios Sîn anunciaba el inicio del Warḫum sagrado.',
+  infoParagraph1:
+    'abilonia, la gran ciudad del Éufrates, fue la cuna del tiempo medido. Sus astrónomos-sacerdotes inventaron el zodíaco de doce signos, los planetas de la semana y el sistema sexagesimal que aún usamos: 60 segundos, 60 minutos, 360 grados.',
+  infoParagraph2:
+    'El calendario lunisolar babilonio sincronizaba la luna con las estaciones mediante meses intercalares proclamados por decreto real. Cada nuevo mes comenzaba con la primera crescent de luna visible — el dios Sîn anunciaba el inicio del Warḫum sagrado.',
   infoBottomMotto: 'Enūma Eliš • Ina Šamê Rabûti',
   infoBottomMottoEs: 'Cuando en lo Alto • Bajo los Grandes Cielos',
 
@@ -470,16 +483,19 @@ export const getBabylonianLabels = (): CivLabels => ({
 // components on the Babylonian page. Vocabulary per Black, George & Postgate,
 // A Concise Dictionary of Akkadian (2000); naṣāru ša ginê ("regular watching") is the
 // ancient title of the Astronomical Diaries (Sachs & Hunger 1988–96).
-export interface GlossedTerm { akk: string; es: string }
+export interface GlossedTerm {
+  akk: string;
+  es: string;
+}
 
 export const BABYLONIAN_UI_TERMS = {
-  place:      { akk: 'Ašru',            es: 'Lugar' },
-  latitude:   { akk: 'Iltānu · Šūtu',   es: 'Norte · Sur' },
-  longitude:  { akk: 'Šadû · Amurru',   es: 'Este · Oeste' },
-  sky:        { akk: 'Šamû',            es: 'Cielo' },
-  wind:       { akk: 'Šāru',            es: 'Viento' },
-  day:        { akk: 'Ūmu',             es: 'Día' },
-  today:      { akk: 'Ūmu annû',        es: 'Hoy' },
-  skyRecords: { akk: 'Naṣāru ša ginê',  es: 'Observación regular' },
-  formerDays: { akk: 'Ūmū pānûtu',      es: 'Días de antaño' },
+  place: { akk: 'Ašru', es: 'Lugar' },
+  latitude: { akk: 'Iltānu · Šūtu', es: 'Norte · Sur' },
+  longitude: { akk: 'Šadû · Amurru', es: 'Este · Oeste' },
+  sky: { akk: 'Šamû', es: 'Cielo' },
+  wind: { akk: 'Šāru', es: 'Viento' },
+  day: { akk: 'Ūmu', es: 'Día' },
+  today: { akk: 'Ūmu annû', es: 'Hoy' },
+  skyRecords: { akk: 'Naṣāru ša ginê', es: 'Observación regular' },
+  formerDays: { akk: 'Ūmū pānûtu', es: 'Días de antaño' },
 } satisfies Record<string, GlossedTerm>;

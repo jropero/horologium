@@ -16,7 +16,8 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const input = process.argv[2];
-if (!input) throw new Error('usage: npx tsx scripts/buildRomanRoads.ts <itinere_roads.geojson>');
+if (!input)
+  throw new Error('usage: npx tsx scripts/buildRomanRoads.ts <itinere_roads.geojson>');
 const OUT = fileURLToPath(new URL('../public/assets/roman-map/roads.json', import.meta.url));
 
 // ≈ 110 m, 0.7 px at the map's MAX_ZOOM; finer than the dataset's own accuracy
@@ -27,14 +28,20 @@ const QUANT = 1e4; // coordinates stored as integer 1e-4° deltas
 interface Props {
   Name: string;
   Type: 'Main Road' | 'Secondary Road';
-  Lower_Date: number; Low_Date_E: number; Upper_Date: number; Up_Date_E: number;
+  Lower_Date: number;
+  Low_Date_E: number;
+  Upper_Date: number;
+  Up_Date_E: number;
   Bibliograp: string | null;
   Cons_per_e: string | null;
   Itinerary: string | null;
   Segment_s: 'Certain' | 'Conjectured' | 'Hypothetical';
   Shape_Leng: number;
 }
-interface Feature { properties: Props; geometry: { type: 'MultiLineString'; coordinates: number[][][] } }
+interface Feature {
+  properties: Props;
+  geometry: { type: 'MultiLineString'; coordinates: number[][][] };
+}
 
 // --- EPSG:3395 (World Mercator, WGS84 ellipsoid) → lng/lat ---
 const A = 6378137;
@@ -46,9 +53,10 @@ const toLngLat = (x: number, y: number): [number, number] => {
     const es = E * Math.sin(phi);
     phi = Math.PI / 2 - 2 * Math.atan(t * ((1 - es) / (1 + es)) ** (E / 2));
   }
-  return [(x / A) * 180 / Math.PI, phi * 180 / Math.PI];
+  return [((x / A) * 180) / Math.PI, (phi * 180) / Math.PI];
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const simplify = (pts: [number, number][], tol: number): [number, number][] => {
   if (pts.length < 3) return pts;
   const keep = new Uint8Array(pts.length);
@@ -56,16 +64,26 @@ const simplify = (pts: [number, number][], tol: number): [number, number][] => {
   const stack: [number, number][] = [[0, pts.length - 1]];
   while (stack.length) {
     const [a, b] = stack.pop()!;
-    const [ax, ay] = pts[a], [bx, by] = pts[b];
-    const dx = bx - ax, dy = by - ay, len2 = dx * dx + dy * dy;
-    let best = -1, bestD = tol * tol;
+    const [ax, ay] = pts[a],
+      [bx, by] = pts[b];
+    const dx = bx - ax,
+      dy = by - ay,
+      len2 = dx * dx + dy * dy;
+    let best = -1,
+      bestD = tol * tol;
     for (let i = a + 1; i < b; i++) {
       const [px, py] = pts[i];
       const t = len2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2)) : 0;
       const d = (ax + t * dx - px) ** 2 + (ay + t * dy - py) ** 2;
-      if (d > bestD) { bestD = d; best = i; }
+      if (d > bestD) {
+        bestD = d;
+        best = i;
+      }
     }
-    if (best >= 0) { keep[best] = 1; stack.push([a, best], [best, b]); }
+    if (best >= 0) {
+      keep[best] = 1;
+      stack.push([a, best], [best, b]);
+    }
   }
   return pts.filter((_, i) => keep[i]);
 };
@@ -76,7 +94,8 @@ const simplify = (pts: [number, number][], tol: number): [number, number][] => {
 // modern road names ("Watling Street", "Limesweg", "Incense Road") → shown in the card
 // only as nomina recentiora, never as a map label, and not translated.
 const ROAD_NAME = /^(Via|Strata) /;
-const ITINERARIUM = /^(Tabula Peutingeriana|Itinerarium |Stadiasmus Patarensis|Ravennatis|Procopius|Eusebius)/;
+const ITINERARIUM =
+  /^(Tabula Peutingeriana|Itinerarium |Stadiasmus Patarensis|Ravennatis|Procopius|Eusebius)/;
 // Spelling variants of the same works in the dataset, unified to the standard Latin title.
 const ITINERARIUM_FIX: Record<string, string> = {
   'Itinerarium Burdigalensee': 'Itinerarium Burdigalense',
@@ -95,36 +114,87 @@ const ROAD_NAME_FIX: Record<string, string> = { 'Via Popillia Capua-Rhegium': 'V
 // ("Tetrarchy", "Ptolemaic", "Severan", "Julio-Claudian", "Late Republic"…) are not
 // translated: such a segment shows only its dates.
 const CONDITOR: Record<string, string> = {
-  'Claudius': 'Claudius', 'Hadrian': 'Hadrianus', 'Trajan': 'Traianus', 'Caracalla': 'Caracalla',
-  'Septimius Severus': 'Septimius Severus', 'Septimius Severus Caracalla': 'Septimius Severus, Caracalla', 'Augustus': 'Augustus', 'Manius Aquilius': 'Manius Aquillius',
-  'Vespasian': 'Vespasianus', 'Vespasianus': 'Vespasianus', 'Maximinus Thrax': 'Maximinus Thrax',
-  'Maximinus': 'Maximinus', 'Severus Alexander': 'Severus Alexander', 'Marcus Aurelius': 'Marcus Aurelius',
-  'Domitian': 'Domitianus', 'Nero': 'Nero', 'Gnaeus Egnatius': 'Gnaeus Egnatius',
-  'Philip the Arab': 'Philippus Arabs', 'Philipp the Arab': 'Philippus Arabs', 'Philip the Arabian': 'Philippus Arabs',
-  'Geta': 'Geta', 'Nerva': 'Nerva', 'Publius Popillius Laenas': 'Publius Popillius Laenas',
-  'Gordian III': 'Gordianus III', 'Titus': 'Titus', 'Constantine': 'Constantinus', 'Constantin': 'Constantinus',
-  'Constantine I': 'Constantinus I', 'Constantine II': 'Constantinus II', 'Constantine the Great': 'Constantinus Magnus',
-  'Decius': 'Decius', 'Lucius Cornelius Scipio Asiaticus': 'Lucius Cornelius Scipio Asiaticus',
-  'Gaius Laelius': 'Gaius Laelius', 'Spurius Postumius Albinus Magnus': 'Spurius Postumius Albinus Magnus',
-  'Antoninus Pius': 'Antoninus Pius', 'Drusus': 'Drusus', 'Carus': 'Carus', 'Carinus': 'Carinus',
-  'Numerian': 'Numerianus', 'Pertinax': 'Pertinax', 'Macrinus': 'Macrinus', 'Diadumenianus': 'Diadumenianus',
-  'Tiberius': 'Tiberius', 'Gnaeus Domitius Ahenobarbus': 'Gnaeus Domitius Ahenobarbus',
-  'Elagabalus': 'Elagabalus', 'Elagabal': 'Elagabalus', 'Gaius Aurelius Cotta': 'Gaius Aurelius Cotta',
-  'Appius Claudius Caecus': 'Appius Claudius Caecus', 'Marcus Aemilius Lepidus': 'Marcus Aemilius Lepidus',
-  'Theodosius I': 'Theodosius I', 'Valerian': 'Valerianus', 'Valerianus': 'Valerianus',
-  'Diocletian': 'Diocletianus', 'Maximian': 'Maximianus', 'Florian': 'Florianus', 'Postumus': 'Postumus',
-  'Marcus Valerius Messalla': 'Marcus Valerius Messalla', 'Probus': 'Probus',
-  'Marcus Aemilius Scaurus': 'Marcus Aemilius Scaurus', 'Trebonianus Gallus': 'Trebonianus Gallus',
-  'Volusianus': 'Volusianus', 'Aurelian': 'Aurelianus', 'Commodus': 'Commodus', 'Galerius': 'Galerius',
-  'Gaius Flaminius Nepos': 'Gaius Flaminius', 'Licinius': 'Licinius', 'Titus Annius Rufus': 'Titus Annius Rufus',
+  Claudius: 'Claudius',
+  Hadrian: 'Hadrianus',
+  Trajan: 'Traianus',
+  Caracalla: 'Caracalla',
+  'Septimius Severus': 'Septimius Severus',
+  'Septimius Severus Caracalla': 'Septimius Severus, Caracalla',
+  Augustus: 'Augustus',
+  'Manius Aquilius': 'Manius Aquillius',
+  Vespasian: 'Vespasianus',
+  Vespasianus: 'Vespasianus',
+  'Maximinus Thrax': 'Maximinus Thrax',
+  Maximinus: 'Maximinus',
+  'Severus Alexander': 'Severus Alexander',
+  'Marcus Aurelius': 'Marcus Aurelius',
+  Domitian: 'Domitianus',
+  Nero: 'Nero',
+  'Gnaeus Egnatius': 'Gnaeus Egnatius',
+  'Philip the Arab': 'Philippus Arabs',
+  'Philipp the Arab': 'Philippus Arabs',
+  'Philip the Arabian': 'Philippus Arabs',
+  Geta: 'Geta',
+  Nerva: 'Nerva',
+  'Publius Popillius Laenas': 'Publius Popillius Laenas',
+  'Gordian III': 'Gordianus III',
+  Titus: 'Titus',
+  Constantine: 'Constantinus',
+  Constantin: 'Constantinus',
+  'Constantine I': 'Constantinus I',
+  'Constantine II': 'Constantinus II',
+  'Constantine the Great': 'Constantinus Magnus',
+  Decius: 'Decius',
+  'Lucius Cornelius Scipio Asiaticus': 'Lucius Cornelius Scipio Asiaticus',
+  'Gaius Laelius': 'Gaius Laelius',
+  'Spurius Postumius Albinus Magnus': 'Spurius Postumius Albinus Magnus',
+  'Antoninus Pius': 'Antoninus Pius',
+  Drusus: 'Drusus',
+  Carus: 'Carus',
+  Carinus: 'Carinus',
+  Numerian: 'Numerianus',
+  Pertinax: 'Pertinax',
+  Macrinus: 'Macrinus',
+  Diadumenianus: 'Diadumenianus',
+  Tiberius: 'Tiberius',
+  'Gnaeus Domitius Ahenobarbus': 'Gnaeus Domitius Ahenobarbus',
+  Elagabalus: 'Elagabalus',
+  Elagabal: 'Elagabalus',
+  'Gaius Aurelius Cotta': 'Gaius Aurelius Cotta',
+  'Appius Claudius Caecus': 'Appius Claudius Caecus',
+  'Marcus Aemilius Lepidus': 'Marcus Aemilius Lepidus',
+  'Theodosius I': 'Theodosius I',
+  Valerian: 'Valerianus',
+  Valerianus: 'Valerianus',
+  Diocletian: 'Diocletianus',
+  Maximian: 'Maximianus',
+  Florian: 'Florianus',
+  Postumus: 'Postumus',
+  'Marcus Valerius Messalla': 'Marcus Valerius Messalla',
+  Probus: 'Probus',
+  'Marcus Aemilius Scaurus': 'Marcus Aemilius Scaurus',
+  'Trebonianus Gallus': 'Trebonianus Gallus',
+  Volusianus: 'Volusianus',
+  Aurelian: 'Aurelianus',
+  Commodus: 'Commodus',
+  Galerius: 'Galerius',
+  'Gaius Flaminius Nepos': 'Gaius Flaminius',
+  Licinius: 'Licinius',
+  'Titus Annius Rufus': 'Titus Annius Rufus',
   'Lucius Caecilius Metellus Calvus': 'Lucius Caecilius Metellus Calvus',
   'Lucius Caecilius Metellus Diadematus': 'Lucius Caecilius Metellus Diadematus',
-  'Julian': 'Iulianus', 'Jovian': 'Iovianus', 'Gallus': 'Gallus', 'Gallienus': 'Gallienus',
-  'Lucius Verus': 'Lucius Verus', 'Julius Caesar': 'Gaius Iulius Caesar',
-  'Marcus Valerius Maximus': 'Marcus Valerius Maximus', 'Titus Quintius Flaminius': 'Titus Quinctius Flamininus',
+  Julian: 'Iulianus',
+  Jovian: 'Iovianus',
+  Gallus: 'Gallus',
+  Gallienus: 'Gallienus',
+  'Lucius Verus': 'Lucius Verus',
+  'Julius Caesar': 'Gaius Iulius Caesar',
+  'Marcus Valerius Maximus': 'Marcus Valerius Maximus',
+  'Titus Quintius Flaminius': 'Titus Quinctius Flamininus',
 };
 
 /** "Septimius Severus and Caracalla" → "Septimius Severus et Caracalla"; null if any part is unmapped. */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const latinConditor = (name: string): string | null => {
   const parts = name.split(/( and | or |-)/);
   const out: string[] = [];
@@ -168,15 +238,27 @@ const strings: string[] = [];
 const stringIdx = new Map<string, number>();
 const str = (s: string) => {
   let i = stringIdx.get(s);
-  if (i === undefined) { i = strings.length; strings.push(s); stringIdx.set(s, i); }
+  if (i === undefined) {
+    i = strings.length;
+    strings.push(s);
+    stringIdx.set(s, i);
+  }
   return i;
 };
 
-let points = 0, unmappedConditor = 0, dated = 0;
+let points = 0,
+  unmappedConditor = 0,
+  dated = 0;
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const roads = features.map(f => {
   const p = f.properties;
-  const viae: number[] = [], itineraria: number[] = [], recentiora: number[] = [];
-  for (const raw of (p.Itinerary ?? '').split(/[,?]/).map(s => s.trim()).filter(Boolean)) {
+  const viae: number[] = [],
+    itineraria: number[] = [],
+    recentiora: number[] = [];
+  for (const raw of (p.Itinerary ?? '')
+    .split(/[,?]/)
+    .map(s => s.trim())
+    .filter(Boolean)) {
     if (ROAD_NAME.test(raw)) viae.push(str(ROAD_NAME_FIX[raw] ?? raw));
     else {
       const it = ITINERARIUM_FIX[raw] ?? raw;
@@ -187,38 +269,53 @@ const roads = features.map(f => {
 
   // Dating: Lower/Upper_Date (+ error margins) when given, else the start of the
   // Cons_per_e period. 9999 = unknown in this export (the docs say 0).
-  const cons = p.Cons_per_e ? (DATE_FIX[p.Cons_per_e] ?? p.Cons_per_e) : null;
-  const consMatch = cons?.match(/^(.*?)\s*(?:\((.*)\))?\s*$/);
+  const cons = p.Cons_per_e ? DATE_FIX[p.Cons_per_e] ?? p.Cons_per_e : null;
+  // eslint-disable-next-line sonarjs/super-linear-regex
+  const consMatch = cons?.match(/^(.*?)\s*(?:\(([^)]*)\))?\s*$/);
   const consYears = consMatch?.[2] ? parseYears(consMatch[2]) : null;
   const conditor = consMatch ? latinConditor(consMatch[1]) : null;
   if (cons && !conditor) unmappedConditor++;
-  let from: number | null = null, fromErr = 0;
-  if (known(p.Lower_Date)) { from = p.Lower_Date; fromErr = known(p.Low_Date_E) ? p.Low_Date_E : 0; }
-  else if (consYears) from = consYears[0];
+  let from: number | null = null,
+    fromErr = 0;
+  if (known(p.Lower_Date)) {
+    from = p.Lower_Date;
+    fromErr = known(p.Low_Date_E) ? p.Low_Date_E : 0;
+  } else if (consYears) from = consYears[0];
   const to = known(p.Upper_Date) ? p.Upper_Date : null;
   const toErr = to !== null && known(p.Up_Date_E) ? p.Up_Date_E : 0;
   if (from !== null || to !== null) dated++;
 
   const coords: number[] = [];
   for (const line of f.geometry.coordinates) {
-    const pts = simplify(line.map(([x, y]) => toLngLat(x, y)), SIMPLIFY_DEG);
+    const pts = simplify(
+      line.map(([x, y]) => toLngLat(x, y)),
+      SIMPLIFY_DEG,
+    );
     points += pts.length;
     // Parts are separated by a length prefix: [n, x0, y0, dx1, dy1, …].
     coords.push(pts.length);
-    let px = 0, py = 0;
+    let px = 0,
+      py = 0;
     pts.forEach(([lng, lat], i) => {
-      const x = Math.round(lng * QUANT), y = Math.round(lat * QUANT);
+      const x = Math.round(lng * QUANT),
+        y = Math.round(lat * QUANT);
       coords.push(i ? x - px : x, i ? y - py : y);
-      px = x; py = y;
+      px = x;
+      py = y;
     });
   }
 
   return [
     p.Type === 'Main Road' ? 0 : 1,
     p.Segment_s === 'Certain' ? 0 : p.Segment_s === 'Conjectured' ? 1 : 2,
-    from, fromErr, to, toErr,
+    from,
+    fromErr,
+    to,
+    toErr,
     str(p.Name),
-    viae, itineraria, recentiora,
+    viae,
+    itineraria,
+    recentiora,
     p.Bibliograp ? str(p.Bibliograp) : -1,
     conditor ? str(conditor) : -1,
     consYears && conditor ? consYears : null,
@@ -228,11 +325,34 @@ const roads = features.map(f => {
 });
 
 const out = {
-  source: 'Itiner-e static version 2024 (de Soto, Pažout, Brughmans et al. 2025), doi:10.5281/zenodo.17122148, CC BY 4.0. Simplified by scripts/buildRomanRoads.ts.',
-  fields: ['type', 'certainty', 'from', 'fromErr', 'to', 'toErr', 'segment', 'viae', 'itineraria', 'recentiora', 'fontes', 'conditor', 'conditorYears', 'lengthM', 'coords'],
+  source:
+    'Itiner-e static version 2024 (de Soto, Pažout, Brughmans et al. 2025), doi:10.5281/zenodo.17122148, CC BY 4.0. Simplified by scripts/buildRomanRoads.ts.',
+  fields: [
+    'type',
+    'certainty',
+    'from',
+    'fromErr',
+    'to',
+    'toErr',
+    'segment',
+    'viae',
+    'itineraria',
+    'recentiora',
+    'fontes',
+    'conditor',
+    'conditorYears',
+    'lengthM',
+    'coords',
+  ],
   strings,
   roads,
 };
 const json = JSON.stringify(out);
 writeFileSync(OUT, json);
-console.log(`${roads.length} roads, ${points} points, ${dated} dated, ${unmappedConditor} builders left untranslated, ${(json.length / 1e6).toFixed(2)} MB → ${OUT}`);
+console.log(
+  `${
+    roads.length
+  } roads, ${points} points, ${dated} dated, ${unmappedConditor} builders left untranslated, ${(
+    json.length / 1e6
+  ).toFixed(2)} MB → ${OUT}`,
+);

@@ -1,13 +1,20 @@
 // EgyptianCalendarModal.tsx — 7-day Alexandrian calendar modal
 import React, { useMemo } from 'react';
 import { X, CalendarDays } from 'lucide-react';
-import { getEgyptianDate, EgyptianDateResult, EGYPTIAN_SEASONS } from '../utils/egyptianCalendarUtils';
-import { getEgyptianMonthDeity, getEpagomenalDayInfo, getEgyptianFestivalInfo } from '../utils/egyptianCalendarData';
+import { getEgyptianDate, EGYPTIAN_SEASONS } from '../utils/egyptianCalendarUtils';
+import {
+  getEgyptianMonthDeity,
+  getEpagomenalDayInfo,
+  getEgyptianFestivalInfo,
+} from '../utils/egyptianCalendarData';
 import { getAlgolPhase } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
 
 // Decade progress bar for each day card
-const DecadeProgress: React.FC<{ dayOfMonth: number; isEpagomenal: boolean }> = ({ dayOfMonth, isEpagomenal }) => {
+const DecadeProgress: React.FC<{ dayOfMonth: number; isEpagomenal: boolean }> = ({
+  dayOfMonth,
+  isEpagomenal,
+}) => {
   if (isEpagomenal) return null;
   return (
     <div className="w-full mt-3 pt-3 border-t border-gold-dim/20">
@@ -32,7 +39,11 @@ interface EgyptianCalendarModalProps {
   startDate: Date;
 }
 
-const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, onClose, startDate }) => {
+const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
+  isOpen,
+  onClose,
+  startDate,
+}) => {
   const { labels } = useCivilization();
 
   const nextDays = useMemo(() => {
@@ -41,8 +52,12 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
       d.setDate(d.getDate() + i);
       const egyptianDate = getEgyptianDate(d);
       const deity = getEgyptianMonthDeity(egyptianDate.monthIndex);
-      const epagomenalInfo = egyptianDate.isEpagomenal ? getEpagomenalDayInfo(egyptianDate.dayOfMonth) : null;
-      const festival = !egyptianDate.isEpagomenal ? getEgyptianFestivalInfo(egyptianDate.monthIndex, egyptianDate.dayOfMonth) : null;
+      const epagomenalInfo = egyptianDate.isEpagomenal
+        ? getEpagomenalDayInfo(egyptianDate.dayOfMonth)
+        : null;
+      const festival = !egyptianDate.isEpagomenal
+        ? getEgyptianFestivalInfo(egyptianDate.monthIndex, egyptianDate.dayOfMonth)
+        : null;
       const algol = getAlgolPhase(d);
 
       return { gregorianDate: d, egyptianDate, deity, epagomenalInfo, festival, algol };
@@ -53,10 +68,16 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
+      onKeyDown={e => {
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
+      }}
     >
       <div
+        role="presentation"
         className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col relative overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
@@ -83,11 +104,14 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
             {labels.calendarSubtitle}
           </div>
 
+          {/* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-conditional */}
           {nextDays.map((day, idx) => {
             const isToday = idx === 0;
             const hasFestival = !!day.festival?.festivalName;
             const isEpag = day.egyptianDate.isEpagomenal;
-            const season = isEpag ? null : EGYPTIAN_SEASONS[Math.floor(day.egyptianDate.monthIndex / 4)];
+            const season = isEpag
+              ? null
+              : EGYPTIAN_SEASONS[Math.floor(day.egyptianDate.monthIndex / 4)];
 
             return (
               <div
@@ -96,18 +120,25 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   isToday
                     ? 'border-emerald-500 bg-emerald-500/15 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
                     : isEpag
-                      ? 'border-amber-600/60 bg-amber-900/30'
-                      : hasFestival
-                        ? 'border-emerald-600/40 bg-emerald-900/20'
-                        : 'border-gold-dim/30 bg-ink/40'
+                    ? 'border-amber-600/60 bg-amber-900/30'
+                    : hasFestival
+                    ? 'border-emerald-600/40 bg-emerald-900/20'
+                    : 'border-gold-dim/30 bg-ink/40'
                 }`}
               >
                 {/* Gregorian date (left) */}
                 <div className="flex sm:flex-col items-center sm:items-start sm:w-24 shrink-0 gap-2 sm:gap-1 border-b sm:border-b-0 sm:border-r border-gold-dim/40 pb-3 sm:pb-0 sm:pr-4">
                   <span className="text-parchment font-body text-base font-bold uppercase tracking-tight">
-                    {day.gregorianDate.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })}
+                    {day.gregorianDate.toLocaleDateString('es-ES', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                   </span>
-                  {isToday && <span className="text-emerald-400 text-xs uppercase tracking-[0.2em] font-black border border-emerald-500/40 px-1.5 rounded-sm bg-emerald-500/10">{labels.todayLabel}</span>}
+                  {isToday && (
+                    <span className="text-emerald-400 text-xs uppercase tracking-[0.2em] font-black border border-emerald-500/40 px-1.5 rounded-sm bg-emerald-500/10">
+                      {labels.todayLabel}
+                    </span>
+                  )}
                 </div>
 
                 {/* Egyptian date info (right) */}
@@ -116,7 +147,9 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex flex-col">
                       <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
-                        {day.egyptianDate.isEpagomenal ? 'Epagomenai' : day.egyptianDate.monthName}
+                        {day.egyptianDate.isEpagomenal
+                          ? 'Epagomenai'
+                          : day.egyptianDate.monthName}
                       </span>
                       <span className="text-gold-leaf/80 font-serif text-base uppercase tracking-widest mt-0.5 font-bold drop-shadow-sm">
                         {day.egyptianDate.monthHieroglyphs}
@@ -161,7 +194,8 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   {hasFestival && (
                     <div className="flex flex-col mt-2">
                       <div className="text-emerald-400 font-serif text-sm sm:text-base uppercase tracking-[0.2em] font-black flex items-center gap-2 drop-shadow-md">
-                        <span className="text-lg">𓊹</span> {day.festival!.festivalName} <span className="text-lg">𓊹</span>
+                        <span className="text-lg">𓊹</span> {day.festival!.festivalName}{' '}
+                        <span className="text-lg">𓊹</span>
                       </div>
                     </div>
                   )}
@@ -169,11 +203,15 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   {/* Deity */}
                   <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex flex-col gap-1">
                     <div className="flex items-center gap-2 flex-wrap text-sm">
-                      <span className="text-gold-dim uppercase tracking-widest text-xs font-black">Netjer:</span>
+                      <span className="text-gold-dim uppercase tracking-widest text-xs font-black">
+                        Netjer:
+                      </span>
                       <span className="text-parchment font-bold tracking-wide">
                         {day.deity.deity}
                       </span>
-                      <span className="text-gold-dim text-xs font-bold">{day.deity.deityHieroglyphic}</span>
+                      <span className="text-gold-dim text-xs font-bold">
+                        {day.deity.deityHieroglyphic}
+                      </span>
                     </div>
                     <div className="text-emerald-500 font-bold font-body italic text-sm">
                       {day.deity.domain}
@@ -181,10 +219,13 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                   </div>
 
                   {/* Festival or Epagomenal description */}
-                  {(day.festival?.description || (isEpag && day.epagomenalInfo?.description)) && (
+                  {(day.festival?.description ||
+                    (isEpag && day.epagomenalInfo?.description)) && (
                     <div className="mt-3 pt-3 border-t border-gold-dim/30">
                       <p className="font-serif text-xs sm:text-sm text-parchment leading-relaxed text-justify opacity-90 italic">
-                        "{day.festival?.description || day.epagomenalInfo?.description}"
+                        {'"'}
+                        {day.festival?.description || day.epagomenalInfo?.description}
+                        {'"'}
                       </p>
                     </div>
                   )}
@@ -201,11 +242,15 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({ isOpen, o
                     </div>
                   )}
 
-                  <DecadeProgress dayOfMonth={day.egyptianDate.dayOfMonth} isEpagomenal={isEpag} />
+                  <DecadeProgress
+                    dayOfMonth={day.egyptianDate.dayOfMonth}
+                    isEpagomenal={isEpag}
+                  />
                 </div>
               </div>
             );
           })}
+          {/* eslint-enable sonarjs/cognitive-complexity, sonarjs/no-nested-conditional */}
         </div>
       </div>
     </div>

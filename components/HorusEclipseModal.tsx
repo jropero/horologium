@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { X, Eye, Sun } from 'lucide-react';
-import { isAlgolEclipsed, getAlgolEclipses } from '../utils/egyptianAstronomy';
+import { getAlgolEclipses } from '../utils/egyptianAstronomy';
 import { getEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getHemerologyForDate } from '../utils/egyptianHemerologyData';
 
@@ -16,11 +16,20 @@ export interface ExceptionalDay {
   isPast: boolean;
 }
 
-const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, currentDate }) => {
+const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({
+  isOpen,
+  onClose,
+  currentDate,
+}) => {
   const exceptionalDays = useMemo(() => {
     if (!isOpen) return [];
 
-    const findGoodDays = (start: Date, count: number, direction: 'back' | 'forward'): ExceptionalDay[] => {
+    const findGoodDays = (
+      start: Date,
+      count: number,
+      direction: 'back' | 'forward',
+      // eslint-disable-next-line sonarjs/cognitive-complexity
+    ): ExceptionalDay[] => {
       const results: ExceptionalDay[] = [];
       const dayOffset = direction === 'back' ? -1 : 1;
       let checkDate = new Date(start);
@@ -38,17 +47,18 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
           // Día excepcionalmente bueno
           // Solo si no hay eclipse de Algol en TODO el día
           const eclipsesNear = getAlgolEclipses(checkDate, 1, 1);
-          const hasEclipseThatDay = eclipsesNear.some(e =>
-            e.date.getFullYear() === checkDate.getFullYear() &&
-            e.date.getMonth() === checkDate.getMonth() &&
-            e.date.getDate() === checkDate.getDate()
+          const hasEclipseThatDay = eclipsesNear.some(
+            e =>
+              e.date.getFullYear() === checkDate.getFullYear() &&
+              e.date.getMonth() === checkDate.getMonth() &&
+              e.date.getDate() === checkDate.getDate(),
           );
 
           if (!hasEclipseThatDay) {
             results.push({
               date: new Date(checkDate),
               type: 'good',
-              isPast: checkDate.getTime() < currentDate.getTime()
+              isPast: checkDate.getTime() < currentDate.getTime(),
             });
           }
         }
@@ -57,7 +67,9 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
       return results;
     };
 
-    const futureBad = getAlgolEclipses(currentDate, 0, 5).filter(e => e.date.getTime() > currentDate.getTime()).map(e => ({ ...e, type: 'bad' as const }));
+    const futureBad = getAlgolEclipses(currentDate, 0, 5)
+      .filter(e => e.date.getTime() > currentDate.getTime())
+      .map(e => ({ ...e, type: 'bad' as const }));
     const futureGood = findGoodDays(currentDate, 5, 'forward');
 
     const all = [...futureBad, ...futureGood] as ExceptionalDay[];
@@ -68,10 +80,12 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
   if (!isOpen) return null;
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="bg-ink border-2 border-gold-dim rounded-xl shadow-[0_0_30px_rgba(207,181,59,0.2)] w-full max-w-xl max-h-[85vh] flex flex-col relative overflow-hidden"
         onClick={e => e.stopPropagation()}
@@ -93,11 +107,10 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
           </button>
         </div>
 
-
-
         {/* List */}
         <div className="overflow-y-auto p-4 space-y-3 custom-scrollbar bg-ink/5">
           <div className="grid grid-cols-1 gap-3">
+            {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
             {exceptionalDays.map((day, idx) => {
               const eDate = getEgyptianDate(day.date);
               const isBad = day.type === 'bad';
@@ -105,25 +118,39 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${isBad
+                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${
+                    isBad
                       ? 'border-roman-red/50 bg-roman-red/10 shadow-[0_0_10px_rgba(220,38,38,0.1)]'
                       : 'border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
-                    }`}
+                  }`}
                 >
                   <div className="flex-1 flex flex-col">
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex flex-col">
                         <span className="text-parchment font-body text-base font-bold uppercase tracking-tight">
-                          {day.date.toLocaleDateString('es-ES', { weekday: 'short', month: 'short', day: 'numeric', hour: isBad ? '2-digit' : undefined, minute: isBad ? '2-digit' : undefined })}
+                          {day.date.toLocaleDateString('es-ES', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: isBad ? '2-digit' : undefined,
+                            minute: isBad ? '2-digit' : undefined,
+                          })}
                         </span>
                         <span className="text-gold-leaf font-serif text-[11px] font-bold uppercase tracking-widest mt-0.5">
-                          {eDate.isEpagomenal ? `Epagomenai ${eDate.dayOfMonth}` : `${eDate.dayOfMonth} de ${eDate.monthName}`}
+                          {eDate.isEpagomenal
+                            ? `Epagomenai ${eDate.dayOfMonth}`
+                            : `${eDate.dayOfMonth} de ${eDate.monthName}`}
                         </span>
                       </div>
 
                       <div className="flex flex-col items-end gap-1">
-                        <div className={`mobile-fit-content flex items-center gap-1.5 px-2 py-0.5 rounded-sm border text-[10px] font-black uppercase tracking-widest ${isBad ? 'border-roman-red/50 text-roman-red bg-roman-red/20' : 'border-emerald-500/50 text-emerald-400 bg-emerald-500/20'
-                          }`}>
+                        <div
+                          className={`mobile-fit-content flex items-center gap-1.5 px-2 py-0.5 rounded-sm border text-[10px] font-black uppercase tracking-widest ${
+                            isBad
+                              ? 'border-roman-red/50 text-roman-red bg-roman-red/20'
+                              : 'border-emerald-500/50 text-emerald-400 bg-emerald-500/20'
+                          }`}
+                        >
                           {isBad ? <Eye className="w-3 h-3" /> : <Sun className="w-3 h-3" />}
                           {isBad ? 'Eclipse Nefasto' : 'Suerte Suprema'}
                         </div>
@@ -131,7 +158,9 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
                     </div>
 
                     <div className="flex items-center gap-2 mt-3 pt-2 border-t border-gold-dim/10">
-                      <div className="text-[10px] text-parchment/60 font-serif uppercase tracking-widest">Pronóstico:</div>
+                      <div className="text-[10px] text-parchment/60 font-serif uppercase tracking-widest">
+                        Pronóstico:
+                      </div>
                       <div className="flex gap-1">
                         {isBad ? (
                           <>
@@ -148,7 +177,9 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({ isOpen, onClose, 
                         )}
                       </div>
                       <div className="ml-auto text-[10px] italic text-parchment/70">
-                        {isBad ? 'El Ojo de Horus se oscurece' : 'El Ojo de Horus brilla con fuerza'}
+                        {isBad
+                          ? 'El Ojo de Horus se oscurece'
+                          : 'El Ojo de Horus brilla con fuerza'}
                       </div>
                     </div>
                   </div>

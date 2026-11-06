@@ -1,0 +1,42 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "theme",
+          "utility",
+          "variant",
+          "apply",
+          "config",
+          "plugin",
+          "source",
+          "tailwind",
+          "layer"
+        ]
+      }
+    ],
+    "declaration-no-important": true,
+    "at-rule-prelude-no-invalid": [
+      true,
+      {
+        "ignoreAtRules": [
+          "apply",
+          "theme",
+          "utility",
+          "variant",
+          "config",
+          "plugin",
+          "source",
+          "tailwind",
+          "layer"
+        ]
+      }
+    ],
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "keyframes-name-pattern": null,
+    "no-descending-specificity": null
+  }
+}

@@ -11,22 +11,26 @@ interface LocationSelectorProps {
   currentLat: number;
   currentLng: number;
 }
-const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, currentLat, currentLng }) => {
+const LocationSelector: React.FC<LocationSelectorProps> = ({
+  onUpdateLocation,
+  currentLat,
+  currentLng,
+}) => {
   const [loading, setLoading] = useState(false);
   const { civilization } = useCivilization();
 
-  const handleLocationSelect = async (loc: typeof LOCATIONS[0]) => {
+  const handleLocationSelect = async (loc: (typeof LOCATIONS)[0]) => {
     if (loc.id === 'gps') {
       setLoading(true);
       try {
         const position = await Geolocation.getCurrentPosition({
           enableHighAccuracy: false,
           timeout: 10000,
-          maximumAge: 3600000
+          maximumAge: 3600000,
         });
         onUpdateLocation(position.coords.latitude, position.coords.longitude);
       } catch (error: any) {
-        alert("Locus deprehendi non potuit: " + error.message);
+        alert('Locus deprehendi non potuit: ' + error.message);
       } finally {
         setLoading(false);
       }
@@ -35,15 +39,17 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
     }
   };
 
-  const isActive = (loc: typeof LOCATIONS[0]) => {
-    if (loc.id === 'gps') return false; 
-    return Math.abs(currentLat - (loc.lat || 0)) < 0.001 && Math.abs(currentLng - (loc.lng || 0)) < 0.001;
+  const isActive = (loc: (typeof LOCATIONS)[0]) => {
+    if (loc.id === 'gps') return false;
+    return (
+      Math.abs(currentLat - (loc.lat || 0)) < 0.001 &&
+      Math.abs(currentLng - (loc.lng || 0)) < 0.001
+    );
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 mb-12 px-2 animate-fadeIn">
       <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
-        
         {/* Header decoration */}
         <div className="flex flex-col items-center mb-6">
           <div className="text-gold-leaf/40 mb-2">
@@ -56,7 +62,8 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {LOCATIONS.map((loc) => {
+          {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
+          {LOCATIONS.map(loc => {
             const active = isActive(loc);
             const Icon = loc.icon;
             const isGps = loc.id === 'gps';
@@ -69,21 +76,29 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
                 className={`
                   relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg transition-all duration-500
                   font-serif border group
-                  ${active
-                    ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.4)] scale-[1.02]'
-                    : isGps 
+                  ${
+                    active
+                      ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.4)] scale-[1.02]'
+                      : isGps
                       ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20 hover:border-roman-red'
-                      : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10'}
+                      : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10'
+                  }
                   ${loading && isGps ? 'animate-pulse' : ''}
                 `}
               >
-                <div className={`
+                <div
+                  className={`
                   p-2 rounded-full transition-colors duration-300
                   ${active ? 'bg-ink/10' : isGps ? 'bg-roman-red/20' : 'bg-white/5'}
-                `}>
-                  <Icon className={`w-5 h-5 ${active ? 'text-roman-red' : isGps ? 'text-roman-red' : 'text-gold-leaf'}`} />
+                `}
+                >
+                  <Icon
+                    className={`w-5 h-5 ${
+                      active ? 'text-roman-red' : isGps ? 'text-roman-red' : 'text-gold-leaf'
+                    }`}
+                  />
                 </div>
-                
+
                 <span className="text-sm md:text-base uppercase tracking-widest font-bold">
                   {loc.name}
                 </span>
@@ -95,11 +110,11 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ onUpdateLocation, c
             );
           })}
         </div>
-        
+
         <div className="mt-6 text-center">
-            <p className="font-body text-parchment/40 italic text-sm">
-                "Ubi bene, ibi patria" — Donde se está bien, allí está la patria.
-            </p>
+          <p className="font-body text-parchment/40 italic text-sm">
+            &quot;Ubi bene, ibi patria&quot; — Donde se está bien, allí está la patria.
+          </p>
         </div>
       </div>
     </div>

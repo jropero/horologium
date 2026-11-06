@@ -1,4 +1,11 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface DateTimePickerProps {
@@ -44,92 +51,102 @@ interface WheelColumnHandle {
  * Scroll-snap wheel column. Pure DOM (no native control), so it renders
  * correctly inside the app's themed popup on Android WebView.
  */
-const WheelColumn = forwardRef<WheelColumnHandle, WheelColumnProps>(({ items, value, onChange, label, format }, ref) => {
-  const ITEM_H = 44;
-  const listRef = useRef<HTMLDivElement>(null);
-  const userScrolling = useRef(false);
-  const commitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+const WheelColumn = forwardRef<WheelColumnHandle, WheelColumnProps>(
+  ({ items, value, onChange, label, format }, ref) => {
+    const ITEM_H = 44;
+    const listRef = useRef<HTMLDivElement>(null);
+    const userScrolling = useRef(false);
+    const commitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Keep the wheel centered on `value` when it changes outside of user scrolls.
-  useEffect(() => {
-    const el = listRef.current;
-    if (!el || userScrolling.current) return;
-    const idx = items.indexOf(value);
-    if (idx >= 0 && el.scrollTop !== idx * ITEM_H) {
-      el.scrollTop = idx * ITEM_H;
-    }
-  }, [value, items]);
+    // Keep the wheel centered on `value` when it changes outside of user scrolls.
+    useEffect(() => {
+      const el = listRef.current;
+      if (!el || userScrolling.current) return;
+      const idx = items.indexOf(value);
+      if (idx >= 0 && el.scrollTop !== idx * ITEM_H) {
+        el.scrollTop = idx * ITEM_H;
+      }
+    }, [value, items]);
 
-  useEffect(
-    () => () => {
+    useEffect(
+      () => () => {
+        if (commitTimer.current) clearTimeout(commitTimer.current);
+      },
+      [],
+    );
+
+    const centredItem = () => {
+      const el = listRef.current;
+      if (!el) return value;
+      const idx = Math.max(0, Math.min(items.length - 1, Math.round(el.scrollTop / ITEM_H)));
+      return items[idx];
+    };
+
+    useImperativeHandle(ref, () => ({ read: centredItem }));
+
+    const commit = () => {
+      userScrolling.current = false;
+      const next = centredItem();
+      if (next !== value) onChange(next);
+    };
+
+    const handleScroll = () => {
+      userScrolling.current = true;
       if (commitTimer.current) clearTimeout(commitTimer.current);
-    },
-    []
-  );
+      commitTimer.current = setTimeout(commit, 180);
+    };
 
-  const centredItem = () => {
-    const el = listRef.current;
-    if (!el) return value;
-    const idx = Math.max(0, Math.min(items.length - 1, Math.round(el.scrollTop / ITEM_H)));
-    return items[idx];
-  };
+    const fmt = format ?? pad2;
 
-  useImperativeHandle(ref, () => ({ read: centredItem }));
-
-  const commit = () => {
-    userScrolling.current = false;
-    const next = centredItem();
-    if (next !== value) onChange(next);
-  };
-
-  const handleScroll = () => {
-    userScrolling.current = true;
-    if (commitTimer.current) clearTimeout(commitTimer.current);
-    commitTimer.current = setTimeout(commit, 180);
-  };
-
-  const fmt = format ?? pad2;
-
-  return (
-    <div className="flex-1 min-w-0">
-      <div className="text-center font-serif text-[10px] uppercase tracking-[0.25em] text-gold-dim/70 mb-1.5">
-        {label}
-      </div>
-      <div className="relative">
-        <div className="h-[132px] overflow-hidden rounded-lg border border-gold-dim/20 bg-black/30">
-          <div
-            ref={listRef}
-            onScroll={handleScroll}
-            className="h-full overflow-y-auto snap-y snap-mandatory overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {/* One-row spacers so the first and last items can reach the centre bar;
-                item i is centred at scrollTop = i * ITEM_H. */}
-            <div aria-hidden="true" className="h-[44px] shrink-0" />
-            {items.map((it) => (
-              <div
-                key={it}
-                className={`h-[44px] snap-center flex items-center justify-center font-serif text-lg tabular-nums select-none transition-colors ${
-                  it === value ? 'text-gold-leaf font-bold' : 'text-parchment/45'
-                }`}
-              >
-                {fmt(it)}
-              </div>
-            ))}
-            <div aria-hidden="true" className="h-[44px] shrink-0" />
-          </div>
+    return (
+      <div className="flex-1 min-w-0">
+        <div className="text-center font-serif text-[10px] uppercase tracking-[0.25em] text-gold-dim/70 mb-1.5">
+          {label}
         </div>
-        {/* Center selection bar */}
-        <div className="pointer-events-none absolute inset-x-0 top-[44px] h-[44px] border-y border-gold-leaf/40 bg-gold-leaf/5" />
-        {/* Edge fades */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[44px] bg-gradient-to-b from-ink to-transparent rounded-t-lg" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[44px] bg-gradient-to-t from-ink to-transparent rounded-b-lg" />
+        <div className="relative">
+          <div className="h-[132px] overflow-hidden rounded-lg border border-gold-dim/20 bg-black/30">
+            <div
+              ref={listRef}
+              onScroll={handleScroll}
+              className="h-full overflow-y-auto snap-y snap-mandatory overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {/* One-row spacers so the first and last items can reach the centre bar;
+                item i is centred at scrollTop = i * ITEM_H. */}
+              <div aria-hidden="true" className="h-[44px] shrink-0" />
+              {items.map(it => (
+                <div
+                  key={it}
+                  className={`h-[44px] snap-center flex items-center justify-center font-serif text-lg tabular-nums select-none transition-colors ${
+                    it === value ? 'text-gold-leaf font-bold' : 'text-parchment/45'
+                  }`}
+                >
+                  {fmt(it)}
+                </div>
+              ))}
+              <div aria-hidden="true" className="h-[44px] shrink-0" />
+            </div>
+          </div>
+          {/* Center selection bar */}
+          <div className="pointer-events-none absolute inset-x-0 top-[44px] h-[44px] border-y border-gold-leaf/40 bg-gold-leaf/5" />
+          {/* Edge fades */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-[44px] bg-gradient-to-b from-ink to-transparent rounded-t-lg" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[44px] bg-gradient-to-t from-ink to-transparent rounded-b-lg" />
+        </div>
+        <div className="mt-1.5 text-center font-serif text-sm text-gold-leaf tabular-nums">
+          {fmt(value)}
+        </div>
       </div>
-      <div className="mt-1.5 text-center font-serif text-sm text-gold-leaf tabular-nums">{fmt(value)}</div>
-    </div>
-  );
-});
+    );
+  },
+);
+WheelColumn.displayName = 'WheelColumn';
 
-const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm, onClose, onReturnToLive }) => {
+const DateTimePicker: React.FC<DateTimePickerProps> = ({
+  initialDate,
+  onConfirm,
+  onClose,
+  onReturnToLive,
+}) => {
   const [value, setValue] = useState<Date>(() => {
     const d = new Date(initialDate);
     d.setFullYear(clampYear(d.getFullYear()));
@@ -139,26 +156,26 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
     y: clampYear(initialDate.getFullYear()),
     m: initialDate.getMonth(),
   }));
-  const [yearInput, setYearInput] = useState<string>(() => String(clampYear(initialDate.getFullYear())));
+  const [yearInput, setYearInput] = useState<string>(() =>
+    String(clampYear(initialDate.getFullYear())),
+  );
   const [yearEditing, setYearEditing] = useState(false);
 
   const hours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
   const minutes = useMemo(() => Array.from({ length: 60 }, (_, i) => i), []);
   const grid = useMemo(() => buildGrid(view.y, view.m), [view]);
 
-  const monthLabel = useMemo(
-    () => {
-      const s = new Date(view.y, view.m, 1).toLocaleDateString('es-ES', { month: 'long' });
-      return s.charAt(0).toUpperCase() + s.slice(1);
-    },
-    [view]
-  );
+  const monthLabel = useMemo(() => {
+    const s = new Date(view.y, view.m, 1).toLocaleDateString('es-ES', { month: 'long' });
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }, [view]);
 
   const hourWheelRef = useRef<WheelColumnHandle>(null);
   const minuteWheelRef = useRef<WheelColumnHandle>(null);
 
   useEffect(() => {
     if (yearEditing) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setYearInput(String(view.y));
   }, [view.y, yearEditing]);
 
@@ -171,20 +188,22 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
     }
     const clamped = clampYear(parsed);
     setView(v => ({ ...v, y: clamped }));
-    setValue(v => clampYearDate(new Date(clamped, v.getMonth(), v.getDate(), v.getHours(), v.getMinutes())));
+    setValue(v =>
+      clampYearDate(new Date(clamped, v.getMonth(), v.getDate(), v.getHours(), v.getMinutes())),
+    );
     setYearInput(String(clamped));
     setYearEditing(false);
   };
   // (that would revert a day picked in the meantime).
   const setTime = (h: number) => {
-    setValue((v) => new Date(v.getFullYear(), v.getMonth(), v.getDate(), h, v.getMinutes()));
+    setValue(v => new Date(v.getFullYear(), v.getMonth(), v.getDate(), h, v.getMinutes()));
   };
   const setMinute = (m: number) => {
-    setValue((v) => new Date(v.getFullYear(), v.getMonth(), v.getDate(), v.getHours(), m));
+    setValue(v => new Date(v.getFullYear(), v.getMonth(), v.getDate(), v.getHours(), m));
   };
 
   const pickDay = (day: number) => {
-    setValue((v) => clampYearDate(new Date(view.y, view.m, day, v.getHours(), v.getMinutes())));
+    setValue(v => clampYearDate(new Date(view.y, view.m, day, v.getHours(), v.getMinutes())));
   };
 
   // Read the wheels directly so a scroll whose commit is still pending is not lost.
@@ -195,7 +214,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
   };
 
   const shiftMonth = (delta: number) => {
-    setView((v) => {
+    setView(v => {
       let m = v.m + delta;
       let y = v.y;
       while (m < 0) {
@@ -211,7 +230,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
   };
 
   const shiftYear = (delta: number) => {
-    setView((v) => ({ y: clampYear(v.y + delta), m: v.m }));
+    setView(v => ({ y: clampYear(v.y + delta), m: v.m }));
   };
 
   const isSelected = (day: number) =>
@@ -222,21 +241,55 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
     return now.getFullYear() === view.y && now.getMonth() === view.m && now.getDate() === day;
   };
 
-  const summary = `${value.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} · ${pad2(value.getHours())}:${pad2(value.getMinutes())}`;
+  const summary = `${value.toLocaleDateString('es-ES', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })} · ${pad2(value.getHours())}:${pad2(value.getMinutes())}`;
+
+  const renderDay = (day: number | null, i: number) => {
+    if (day === null) return <div key={i} />;
+    const cls = isSelected(day)
+      ? 'bg-gold-leaf text-ink font-bold shadow-[0_0_10px_rgba(207,181,59,0.35)]'
+      : // eslint-disable-next-line sonarjs/no-nested-conditional
+      isToday(day)
+      ? 'text-gold-leaf border border-gold-leaf/50 hover:bg-gold-leaf/10'
+      : 'text-parchment/70 hover:bg-gold-leaf/10 hover:text-parchment';
+    return (
+      <button
+        key={i}
+        onClick={() => pickDay(day)}
+        className={`h-9 rounded-lg font-serif text-sm transition-all active:scale-90 ${cls}`}
+      >
+        {day}
+      </button>
+    );
+  };
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
+      onKeyDown={e => {
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
+      }}
     >
       <div
+        role="presentation"
         className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-sm max-h-[92vh] flex flex-col overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-4 border-b border-gold-dim/30 text-center shrink-0">
-          <h3 className="font-serif text-sm text-gold-leaf uppercase tracking-[0.3em] font-bold">⏳ Viaje Temporal</h3>
-          <p className="text-[10px] text-gold-dim/60 font-serif mt-1 tracking-wide">Simula cualquier fecha y hora</p>
+          <h3 className="font-serif text-sm text-gold-leaf uppercase tracking-[0.3em] font-bold">
+            ⏳ Viaje Temporal
+          </h3>
+          <p className="text-[10px] text-gold-dim/60 font-serif mt-1 tracking-wide">
+            Simula cualquier fecha y hora
+          </p>
           <div className="mt-2 mx-auto w-fit font-serif text-xs text-parchment/80 tabular-nums bg-gold-leaf/5 border border-gold-dim/20 rounded-full px-3 py-1">
             {summary}
           </div>
@@ -268,7 +321,6 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
                   <input
                     type="text"
                     inputMode="numeric"
-                    autoFocus
                     value={yearInput}
                     onChange={e => setYearInput(e.target.value)}
                     onBlur={() => commitYear(yearInput)}
@@ -318,37 +370,36 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ initialDate, onConfirm,
 
           {/* Calendar grid */}
           <div className="grid grid-cols-7 gap-1">
-            {WEEKDAYS.map((w) => (
-              <div key={w} className="text-center font-serif text-[10px] uppercase tracking-wider text-gold-dim/60 py-1">
+            {WEEKDAYS.map(w => (
+              <div
+                key={w}
+                className="text-center font-serif text-[10px] uppercase tracking-wider text-gold-dim/60 py-1"
+              >
                 {w}
               </div>
             ))}
-            {grid.map((day, i) =>
-              day === null ? (
-                <div key={i} />
-              ) : (
-                <button
-                  key={i}
-                  onClick={() => pickDay(day)}
-                  className={`h-9 rounded-lg font-serif text-sm transition-all active:scale-90 ${
-                    isSelected(day)
-                      ? 'bg-gold-leaf text-ink font-bold shadow-[0_0_10px_rgba(207,181,59,0.35)]'
-                      : isToday(day)
-                        ? 'text-gold-leaf border border-gold-leaf/50 hover:bg-gold-leaf/10'
-                        : 'text-parchment/70 hover:bg-gold-leaf/10 hover:text-parchment'
-                  }`}
-                >
-                  {day}
-                </button>
-              )
-            )}
+            {grid.map(renderDay)}
           </div>
 
           {/* Time wheels */}
           <div className="flex items-stretch gap-3 pt-1 border-t border-gold-dim/20">
-            <WheelColumn ref={hourWheelRef} items={hours} value={value.getHours()} onChange={setTime} label="Hora" />
-            <div className="flex items-center justify-center font-serif text-2xl text-gold-dim/50 pt-6">:</div>
-            <WheelColumn ref={minuteWheelRef} items={minutes} value={value.getMinutes()} onChange={setMinute} label="Minuto" />
+            <WheelColumn
+              ref={hourWheelRef}
+              items={hours}
+              value={value.getHours()}
+              onChange={setTime}
+              label="Hora"
+            />
+            <div className="flex items-center justify-center font-serif text-2xl text-gold-dim/50 pt-6">
+              :
+            </div>
+            <WheelColumn
+              ref={minuteWheelRef}
+              items={minutes}
+              value={value.getMinutes()}
+              onChange={setMinute}
+              label="Minuto"
+            />
           </div>
         </div>
 

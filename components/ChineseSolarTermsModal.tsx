@@ -18,14 +18,30 @@ const ChineseSolarTermsModal: React.FC<Props> = ({ isOpen, onClose, currentTermI
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
-      <div 
-        className="bg-parchment text-ink w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl p-6 shadow-2xl relative border border-gold-dim/40" 
+    <div
+      role="button"
+      tabIndex={0}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+      onKeyDown={e => {
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
+      }}
+    >
+      <div
+        role="presentation"
+        className="bg-parchment text-ink w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl p-6 shadow-2xl relative border border-gold-dim/40"
         onClick={e => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 text-ink hover:text-rose-800 font-bold transition-transform hover:scale-110 text-xl">✕</button>
-        
-        <h2 className="text-2xl font-serif font-bold text-center text-ink mb-8 uppercase tracking-widest">24 Términos Solares</h2>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-ink hover:text-rose-800 font-bold transition-transform hover:scale-110 text-xl"
+        >
+          ✕
+        </button>
+
+        <h2 className="text-2xl font-serif font-bold text-center text-ink mb-8 uppercase tracking-widest">
+          24 Términos Solares
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {seasons.map((season, sIdx) => (
@@ -36,15 +52,17 @@ const ChineseSolarTermsModal: React.FC<Props> = ({ isOpen, onClose, currentTermI
                   const globalIndex = sIdx * 6 + tIdx;
                   const isActive = globalIndex === currentTermIndex;
                   const isPast = globalIndex < currentTermIndex;
-                  
+
                   return (
-                    <div 
+                    <div
                       key={term.id}
                       className={`
                         p-3 rounded border transition-all duration-300
-                        ${isActive 
-                            ? 'bg-gold-dim/20 border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.3)] animate-pulse' 
-                            : 'bg-white/50 border-ink/10'}
+                        ${
+                          isActive
+                            ? 'bg-gold-dim/20 border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.3)] animate-pulse'
+                            : 'bg-white/50 border-ink/10'
+                        }
                         ${isPast ? 'opacity-40' : 'opacity-100'}
                       `}
                     >
@@ -52,7 +70,9 @@ const ChineseSolarTermsModal: React.FC<Props> = ({ isOpen, onClose, currentTermI
                         <span className="text-lg font-bold text-ink">{term.hanzi}</span>
                         <span className="text-[10px] text-ink/60 font-bold">{term.pinyin}</span>
                       </div>
-                      <div className="text-[10px] text-ink/70 mt-1 italic">{term.translation}</div>
+                      <div className="text-[10px] text-ink/70 mt-1 italic">
+                        {term.translation}
+                      </div>
                     </div>
                   );
                 })}

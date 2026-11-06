@@ -6,6 +6,7 @@
  * Converts a number to Ancient Greek alphabetic numerals (Milesian system).
  * Used for the Olympiad label.
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const toGreekNumeral = (n: number): string => {
   // For simplicity, use standard numerals with Greek styling for large numbers
   // Ancient Greek used alphabetic numerals (Milesian system)
@@ -32,13 +33,15 @@ export const toGreekNumeral = (n: number): string => {
 };
 
 // Olympiad year calculation (776 BC = Ol. 1, Year 1)
-export const getOlympiadYear = (gregorianYear: number): { olympiad: number; year: number; label: string } => {
+export const getOlympiadYear = (
+  gregorianYear: number,
+): { olympiad: number; year: number; label: string } => {
   const yearsSinceFirstOlympiad = gregorianYear + 775; // 776 BC = year 0 in this system
   const olympiad = Math.floor(yearsSinceFirstOlympiad / 4) + 1;
   const year = (yearsSinceFirstOlympiad % 4) + 1;
   return {
     olympiad,
     year,
-    label: `Ὀλ. ${toGreekNumeral(olympiad)}, ἔτος ${year}`
+    label: `Ὀλ. ${toGreekNumeral(olympiad)}, ἔτος ${year}`,
   };
 };

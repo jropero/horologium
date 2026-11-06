@@ -6,175 +6,319 @@ import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
 import { transliterateGreek } from '../utils/greekTransliteration';
 
 interface WeatherWidgetProps {
-    weather: WeatherData;
-    className?: string;
-    onClick?: () => void;
+  weather: WeatherData;
+  className?: string;
+  onClick?: () => void;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', onClick }) => {
-    const { civilization, labels } = useCivilization();
-    // Extraemos los datos de 'current' para que el resto del código funcione
-    const {
-        condition,
-        description,
-        greekDescription,
-        egyptianDescription,
-        temperature,
-        latinWindName,
-        greekWindName,
-        egyptianWindName,
-        windDirection,
-        windSpeed
-    } = weather.current;
+  const { civilization, labels } = useCivilization();
+  // Extraemos los datos de 'current' para que el resto del código funcione
+  const {
+    condition,
+    description,
+    greekDescription,
+    egyptianDescription,
+    temperature,
+    latinWindName,
+    greekWindName,
+    egyptianWindName,
+    windDirection,
+    windSpeed,
+  } = weather.current;
 
-    const displayDesc = civilization === 'hellas' && greekDescription 
-        ? greekDescription 
-        : civilization === 'aegyptus' && egyptianDescription
-            ? egyptianDescription
-            : description;
+  const displayDesc =
+    civilization === 'hellas' && greekDescription
+      ? greekDescription
+      : civilization === 'aegyptus' && egyptianDescription
+      ? egyptianDescription
+      : description;
 
-    const displayWind = civilization === 'hellas' && greekWindName 
-        ? greekWindName 
-        : civilization === 'aegyptus' && egyptianWindName
-            ? egyptianWindName
-            : latinWindName;
+  const displayWind =
+    civilization === 'hellas' && greekWindName
+      ? greekWindName
+      : civilization === 'aegyptus' && egyptianWindName
+      ? egyptianWindName
+      : latinWindName;
 
-    const renderIcon = () => {
-        switch (condition) {
-            case 'clear':
-                return (
-                    <svg viewBox="0 0 24 24" className={`w-8 h-8 ${civilization === 'aegyptus' ? 'text-amber-400' : 'text-gold-leaf'}`} fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="5" />
-                        <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
-                    </svg>
-                );
-            case 'partly-cloudy':
-                return (
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-parchment" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="9" cy="7.5" r="3.25" stroke={civilization === 'aegyptus' ? '#fbbf24' : '#cfb53b'} />
-                        <path d="M9 1.5v1.4M9 12.1v1.4M2.5 7.5H4M14 7.5h1.5M4.4 2.9l1 1M13.6 12.1l-1-1" stroke={civilization === 'aegyptus' ? '#fbbf24' : '#cfb53b'} opacity="0.7" />
-                        <path d="M17.5 21c2.2 0 4-1.8 4-4 0-2.03-1.53-3.7-3.5-3.94-.23-2.72-2.52-4.85-5.29-4.85-2.77 0-5.06 2.13-5.29 4.85-1.97.24-3.5 1.91-3.5 3.94 0 2.2 1.8 4 4 4h9.58z" />
-                    </svg>
-                );
-            case 'cloudy':
-            case 'fog':
-                return (
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-parchment" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C3.97 10.34 2.25 12.22 2.25 14.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
-                        <path d="M6 19v2M10 19v2M14 19v2M18 19v2" strokeDasharray="1 1" opacity="0.5" />
-                    </svg>
-                );
-            case 'rain':
-                return (
-                    <svg viewBox="0 0 24 24" className={`w-8 h-8 ${civilization === 'aegyptus' ? 'text-emerald-400' : 'text-sky-400'}`} fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M16 14c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C2.47 5.34.75 7.22.75 9.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
-                        <path d="M8 16l-2 4M12 16l-2 4M16 16l-2 4" />
-                    </svg>
-                );
-            case 'snow':
-                return (
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25" />
-                        <path d="M8 16l.01.01M8 20l.01.01M12 18l.01.01M12 22l.01.01M16 16l.01.01M16 20l.01.01" strokeWidth="3" strokeLinecap="round" />
-                    </svg>
-                );
-            case 'storm':
-                return (
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M19 16.9A5 5 0 0018 7h-1.26a8 8 0 10-11.62 9" />
-                        <path d="M13 11l-4 6h6l-4 6" />
-                    </svg>
-                );
-            default:
-                return null;
-        }
-    };
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  const renderIcon = () => {
+    switch (condition) {
+      case 'clear':
+        return (
+          <svg
+            viewBox="0 0 24 24"
+            className={`w-8 h-8 ${
+              civilization === 'aegyptus' ? 'text-amber-400' : 'text-gold-leaf'
+            }`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="5" />
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
+          </svg>
+        );
+      case 'partly-cloudy':
+        return (
+          <svg
+            viewBox="0 0 24 24"
+            className="w-8 h-8 text-parchment"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle
+              cx="9"
+              cy="7.5"
+              r="3.25"
+              stroke={civilization === 'aegyptus' ? '#fbbf24' : '#cfb53b'}
+            />
+            <path
+              d="M9 1.5v1.4M9 12.1v1.4M2.5 7.5H4M14 7.5h1.5M4.4 2.9l1 1M13.6 12.1l-1-1"
+              stroke={civilization === 'aegyptus' ? '#fbbf24' : '#cfb53b'}
+              opacity="0.7"
+            />
+            <path d="M17.5 21c2.2 0 4-1.8 4-4 0-2.03-1.53-3.7-3.5-3.94-.23-2.72-2.52-4.85-5.29-4.85-2.77 0-5.06 2.13-5.29 4.85-1.97.24-3.5 1.91-3.5 3.94 0 2.2 1.8 4 4 4h9.58z" />
+          </svg>
+        );
+      case 'cloudy':
+      case 'fog':
+        return (
+          <svg
+            viewBox="0 0 24 24"
+            className="w-8 h-8 text-parchment"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C3.97 10.34 2.25 12.22 2.25 14.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
+            <path d="M6 19v2M10 19v2M14 19v2M18 19v2" strokeDasharray="1 1" opacity="0.5" />
+          </svg>
+        );
+      case 'rain':
+        return (
+          <svg
+            viewBox="0 0 24 24"
+            className={`w-8 h-8 ${
+              civilization === 'aegyptus' ? 'text-emerald-400' : 'text-sky-400'
+            }`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M16 14c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C2.47 5.34.75 7.22.75 9.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
+            <path d="M8 16l-2 4M12 16l-2 4M16 16l-2 4" />
+          </svg>
+        );
+      case 'snow':
+        return (
+          <svg
+            viewBox="0 0 24 24"
+            className="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25" />
+            <path
+              d="M8 16l.01.01M8 20l.01.01M12 18l.01.01M12 22l.01.01M16 16l.01.01M16 20l.01.01"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
+        );
+      case 'storm':
+        return (
+          <svg
+            viewBox="0 0 24 24"
+            className="w-8 h-8 text-yellow-500"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M19 16.9A5 5 0 0018 7h-1.26a8 8 0 10-11.62 9" />
+            <path d="M13 11l-4 6h6l-4 6" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
 
-    return (
-        <div
-            onClick={onClick}
-            className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border p-2 rounded shadow-lg transition-all 
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      onClick={onClick}
+      className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border p-2 rounded shadow-lg transition-all
             ${civilization === 'aegyptus' ? 'border-emerald-500/30' : 'border-gold-dim'}
-            ${onClick ? `cursor-pointer hover:bg-white/5 group/weather ${civilization === 'aegyptus' ? 'hover:border-emerald-500' : 'hover:border-gold-leaf'}` : ''} ${className}`}
+            ${
+              onClick
+                ? `cursor-pointer hover:bg-white/5 group/weather ${
+                    civilization === 'aegyptus'
+                      ? 'hover:border-emerald-500'
+                      : 'hover:border-gold-leaf'
+                  }`
+                : ''
+            } ${className}`}
+    >
+      <div
+        className={`${
+          civilization === 'aegyptus' ? 'text-emerald-400' : 'text-gold-leaf'
+        } flex-shrink-0`}
+      >
+        {renderIcon()}
+      </div>
+      <div
+        className={`flex flex-col border-r justify-center pr-3 ${
+          civilization === 'aegyptus' ? 'border-emerald-500/20' : 'border-gold-dim/30'
+        }`}
+      >
+        <span
+          className={`font-serif text-xs uppercase tracking-widest leading-none mb-1 transition-colors ${
+            civilization === 'aegyptus'
+              ? 'text-emerald-600 group-hover/weather:text-emerald-400'
+              : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'
+          }`}
         >
-            <div className={`${civilization === 'aegyptus' ? 'text-emerald-400' : 'text-gold-leaf'} flex-shrink-0`}>
-                {renderIcon()}
-            </div>
-            <div className={`flex flex-col border-r justify-center pr-3 ${civilization === 'aegyptus' ? 'border-emerald-500/20' : 'border-gold-dim/30'}`}>
-                <span className={`font-serif text-xs uppercase tracking-widest leading-none mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>
-                    {civilization === 'babylonia' ? <GlossedTerm term={BAB.sky} align="start" className="text-sm" /> : labels.skyLabel}
-                </span>
-                <span className="text-parchment font-serif text-sm font-bold leading-tight">{displayDesc}</span>
-                {civilization === 'hellas' && greekDescription && (
-                    <div className="flex flex-col mb-1">
-                        <span className="font-serif text-[9px] tracking-widest uppercase text-gold-dim mt-0.5">{transliterateGreek(displayDesc)}</span>
-                        <span className="text-roman-red font-body italic text-[10px] font-bold uppercase mt-0.5 leading-none">{description}</span>
-                    </div>
-                )}
-                {civilization === 'aegyptus' && (
-                    <span className="text-emerald-500 font-serif text-xs font-bold mt-1 drop-shadow-sm">{egyptianDescription?.split(' ')[1]}</span>
-                )}
-                <span className="text-stone-400 font-serif text-xs mt-0.5">{Math.round(temperature)}°C</span>
-            </div>
+          {civilization === 'babylonia' ? (
+            <GlossedTerm term={BAB.sky} align="start" className="text-sm" />
+          ) : (
+            labels.skyLabel
+          )}
+        </span>
+        <span className="text-parchment font-serif text-sm font-bold leading-tight">
+          {displayDesc}
+        </span>
+        {civilization === 'hellas' && greekDescription && (
+          <div className="flex flex-col mb-1">
+            <span className="font-serif text-[9px] tracking-widest uppercase text-gold-dim mt-0.5">
+              {transliterateGreek(displayDesc)}
+            </span>
+            <span className="text-roman-red font-body italic text-[10px] font-bold uppercase mt-0.5 leading-none">
+              {description}
+            </span>
+          </div>
+        )}
+        {civilization === 'aegyptus' && (
+          <span className="text-emerald-500 font-serif text-xs font-bold mt-1 drop-shadow-sm">
+            {egyptianDescription?.split(' ')[1]}
+          </span>
+        )}
+        <span className="text-stone-400 font-serif text-xs mt-0.5">
+          {Math.round(temperature)}°C
+        </span>
+      </div>
 
-            {/* SECCIÓN DE VIENTO */}
-            {displayWind && (
-                <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-                    <span className={`font-serif text-xs uppercase tracking-widest mb-1 transition-colors ${civilization === 'aegyptus' ? 'text-emerald-600 group-hover/weather:text-emerald-400' : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'}`}>
-                        {civilization === 'babylonia' ? <GlossedTerm term={BAB.wind} className="text-sm" /> : labels.windLabel}
-                    </span>
-
-                    <div className="relative w-8 h-8 flex items-center justify-center mb-1">
-                        {/* Rosa de los vientos de fondo */}
-                        <svg viewBox="0 0 24 24" className={`absolute inset-0 w-full h-full opacity-40 ${civilization === 'aegyptus' ? 'text-emerald-500/50' : 'text-gold-dim'}`}>
-                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
-                            <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
-                            <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="1" />
-                            <line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="1" />
-                            <line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="1" />
-                        </svg>
-
-                        {/* Aguja 3D dinámica */}
-                        <svg
-                            viewBox="0 0 24 24"
-                            className="absolute inset-0 w-full h-full transition-transform duration-1000 ease-out drop-shadow-md"
-                            style={{ transform: `rotate(${windDirection}deg)` }}
-                        >
-                            <g transform="translate(12,12)">
-                                <path d="M0 -10 L3 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#34d399' : '#e3d6b3'} />
-                                <path d="M0 -10 L-3 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#059669' : '#c9b993'} />
-                                <path d="M0 10 L2 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#854d0e' : '#8a7826'} />
-                                <path d="M0 10 L-2 2 L0 0 Z" fill={civilization === 'aegyptus' ? '#422006' : '#5c4f15'} />
-                                <circle cx="0" cy="0" r="1.5" fill="#1a1a1a" stroke={civilization === 'aegyptus' ? '#34d399' : '#e3d6b3'} strokeWidth="0.5" />
-                            </g>
-                        </svg>
-                    </div>
-
-                    <span className="text-stone-300 font-serif text-xs text-center leading-tight">
-                        {civilization === 'aegyptus' ? displayWind.split(' ')[0] : displayWind.split(' ')[0]}
-                    </span>
-                    {civilization === 'hellas' && greekWindName && (
-                        <div className="flex flex-col items-center">
-                            <span className="font-serif text-[8px] tracking-widest uppercase text-gold-dim">{transliterateGreek(displayWind.split(' ')[0])}</span>
-                            <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">{latinWindName.split(' ')[0]}</span>
-                        </div>
-                    )}
-                    {civilization === 'aegyptus' && (
-                        <div className="flex flex-col items-center">
-                            <span className="text-emerald-500 font-serif text-sm mt-0.5 drop-shadow-sm">{displayWind.split(' ').pop()}</span>
-                            <span className="text-emerald-600/60 font-body italic text-[8px] font-bold leading-none uppercase mt-0.5">{latinWindName.split(' ')[0]}</span>
-                        </div>
-                    )}
-
-                    {windSpeed !== undefined && (
-                        <span className="text-gold-dim font-serif text-xs mt-0.5 tracking-wider">
-                            {Math.round(windSpeed)} km/h
-                        </span>
-                    )}
-                </div>
+      {/* SECCIÓN DE VIENTO */}
+      {displayWind && (
+        <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
+          <span
+            className={`font-serif text-xs uppercase tracking-widest mb-1 transition-colors ${
+              civilization === 'aegyptus'
+                ? 'text-emerald-600 group-hover/weather:text-emerald-400'
+                : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'
+            }`}
+          >
+            {civilization === 'babylonia' ? (
+              <GlossedTerm term={BAB.wind} className="text-sm" />
+            ) : (
+              labels.windLabel
             )}
+          </span>
+
+          <div className="relative w-8 h-8 flex items-center justify-center mb-1">
+            {/* Rosa de los vientos de fondo */}
+            <svg
+              viewBox="0 0 24 24"
+              className={`absolute inset-0 w-full h-full opacity-40 ${
+                civilization === 'aegyptus' ? 'text-emerald-500/50' : 'text-gold-dim'
+              }`}
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                strokeDasharray="2 2"
+              />
+              <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="1" />
+              <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="1" />
+              <line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="1" />
+              <line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="1" />
+            </svg>
+
+            {/* Aguja 3D dinámica */}
+            <svg
+              viewBox="0 0 24 24"
+              className="absolute inset-0 w-full h-full transition-transform duration-1000 ease-out drop-shadow-md"
+              style={{ transform: `rotate(${windDirection}deg)` }}
+            >
+              <g transform="translate(12,12)">
+                <path
+                  d="M0 -10 L3 2 L0 0 Z"
+                  fill={civilization === 'aegyptus' ? '#34d399' : '#e3d6b3'}
+                />
+                <path
+                  d="M0 -10 L-3 2 L0 0 Z"
+                  fill={civilization === 'aegyptus' ? '#059669' : '#c9b993'}
+                />
+                <path
+                  d="M0 10 L2 2 L0 0 Z"
+                  fill={civilization === 'aegyptus' ? '#854d0e' : '#8a7826'}
+                />
+                <path
+                  d="M0 10 L-2 2 L0 0 Z"
+                  fill={civilization === 'aegyptus' ? '#422006' : '#5c4f15'}
+                />
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="1.5"
+                  fill="#1a1a1a"
+                  stroke={civilization === 'aegyptus' ? '#34d399' : '#e3d6b3'}
+                  strokeWidth="0.5"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <span className="text-stone-300 font-serif text-xs text-center leading-tight">
+            {displayWind.split(' ')[0]}
+          </span>
+          {civilization === 'hellas' && greekWindName && (
+            <div className="flex flex-col items-center">
+              <span className="font-serif text-[8px] tracking-widest uppercase text-gold-dim">
+                {transliterateGreek(displayWind.split(' ')[0])}
+              </span>
+              <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">
+                {latinWindName.split(' ')[0]}
+              </span>
+            </div>
+          )}
+          {civilization === 'aegyptus' && (
+            <div className="flex flex-col items-center">
+              <span className="text-emerald-500 font-serif text-sm mt-0.5 drop-shadow-sm">
+                {displayWind.split(' ').pop()}
+              </span>
+              <span className="text-emerald-600/60 font-body italic text-[8px] font-bold leading-none uppercase mt-0.5">
+                {latinWindName.split(' ')[0]}
+              </span>
+            </div>
+          )}
+
+          {windSpeed !== undefined && (
+            <span className="text-gold-dim font-serif text-xs mt-0.5 tracking-wider">
+              {Math.round(windSpeed)} km/h
+            </span>
+          )}
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default WeatherWidget;

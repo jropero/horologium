@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Wind, Thermometer, CloudSun, History, Gauge, Navigation, MapPin, Map, Hourglass } from 'lucide-react';
+import { X, Wind, Thermometer, CloudSun, History, Gauge, Map, Hourglass } from 'lucide-react';
 import { WeatherData, WeatherSnapshot } from '../types';
 import { LOCATIONS } from '../utils/locations';
 import { Geolocation } from '@capacitor/geolocation';
@@ -9,348 +9,508 @@ import GlossedTerm from './GlossedTerm';
 import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
 
 interface WeatherModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    weather: WeatherData | null;
-    onUpdateLocation: (lat: number, lng: number) => void;
-    currentLat: number;
-    currentLng: number;
-    /** True while the app is showing a time-travel date instead of the present. */
-    isTimeTraveling?: boolean;
-    /** The date/time currently being viewed (only meaningful while time traveling). */
-    travelDate?: Date;
+  isOpen: boolean;
+  onClose: () => void;
+  weather: WeatherData | null;
+  onUpdateLocation: (lat: number, lng: number) => void;
+  currentLat: number;
+  currentLng: number;
+  /** True while the app is showing a time-travel date instead of the present. */
+  isTimeTraveling?: boolean;
+  /** The date/time currently being viewed (only meaningful while time traveling). */
+  travelDate?: Date;
 }
 
-const WeatherIcon = ({ condition, className = "w-12 h-12" }: { condition: string, className?: string }) => {
-    switch (condition) {
-        case 'clear':
-            return (
-                <svg viewBox="0 0 24 24" className={`${className} text-gold-leaf filter drop-shadow-glow`} fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="5" />
-                    <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
-                </svg>
-            );
-        case 'partly-cloudy':
-            return (
-                <svg viewBox="0 0 24 24" className={`${className} text-parchment`} fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="9" cy="7.5" r="3.25" stroke="#cfb53b" />
-                    <path d="M9 1.5v1.4M9 12.1v1.4M2.5 7.5H4M14 7.5h1.5M4.4 2.9l1 1M13.6 12.1l-1-1" stroke="#cfb53b" opacity="0.7" />
-                    <path d="M17.5 21c2.2 0 4-1.8 4-4 0-2.03-1.53-3.7-3.5-3.94-.23-2.72-2.52-4.85-5.29-4.85-2.77 0-5.06 2.13-5.29 4.85-1.97.24-3.5 1.91-3.5 3.94 0 2.2 1.8 4 4 4h9.58z" />
-                </svg>
-            );
-        case 'cloudy':
-        case 'fog':
-            return (
-                <svg viewBox="0 0 24 24" className={`${className} text-parchment`} fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C3.97 10.34 2.25 12.22 2.25 14.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
-                    <path d="M6 19v2M10 19v2M14 19v2M18 19v2" strokeDasharray="1 1" opacity="0.5" />
-                </svg>
-            );
-        case 'rain':
-            return (
-                <svg viewBox="0 0 24 24" className={`${className} text-sky-400`} fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M16 14c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C2.47 5.34.75 7.22.75 9.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
-                    <path d="M8 16l-2 4M12 16l-2 4M16 16l-2 4" />
-                </svg>
-            );
-        case 'snow':
-            return (
-                <svg viewBox="0 0 24 24" className={`${className} text-white`} fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25" />
-                    <path d="M8 16l.01.01M8 20l.01.01M12 18l.01.01M12 22l.01.01M16 16l.01.01M16 20l.01.01" strokeWidth="3" strokeLinecap="round" />
-                </svg>
-            );
-        case 'storm':
-            return (
-                <svg viewBox="0 0 24 24" className={`${className} text-yellow-500`} fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M19 16.9A5 5 0 0018 7h-1.26a8 8 0 10-11.62 9" />
-                    <path d="M13 11l-4 6h6l-4 6" />
-                </svg>
-            );
-        default:
-            return <CloudSun className={className} />;
-    }
+const WeatherIcon = ({
+  condition,
+  className = 'w-12 h-12',
+}: {
+  condition: string;
+  className?: string;
+}) => {
+  switch (condition) {
+    case 'clear':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={`${className} text-gold-leaf filter drop-shadow-glow`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <circle cx="12" cy="12" r="5" />
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
+        </svg>
+      );
+    case 'partly-cloudy':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={`${className} text-parchment`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <circle cx="9" cy="7.5" r="3.25" stroke="#cfb53b" />
+          <path
+            d="M9 1.5v1.4M9 12.1v1.4M2.5 7.5H4M14 7.5h1.5M4.4 2.9l1 1M13.6 12.1l-1-1"
+            stroke="#cfb53b"
+            opacity="0.7"
+          />
+          <path d="M17.5 21c2.2 0 4-1.8 4-4 0-2.03-1.53-3.7-3.5-3.94-.23-2.72-2.52-4.85-5.29-4.85-2.77 0-5.06 2.13-5.29 4.85-1.97.24-3.5 1.91-3.5 3.94 0 2.2 1.8 4 4 4h9.58z" />
+        </svg>
+      );
+    case 'cloudy':
+    case 'fog':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={`${className} text-parchment`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C3.97 10.34 2.25 12.22 2.25 14.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
+          <path d="M6 19v2M10 19v2M14 19v2M18 19v2" strokeDasharray="1 1" opacity="0.5" />
+        </svg>
+      );
+    case 'rain':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={`${className} text-sky-400`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M16 14c2.485 0 4.5-2.015 4.5-4.5 0-2.28-1.72-4.16-3.93-4.43-.26-3.05-2.83-5.44-5.94-5.44-3.11 0-5.68 2.39-5.94 5.44C2.47 5.34.75 7.22.75 9.5c0 2.485 2.015 4.5 4.5 4.5h10.75z" />
+          <path d="M8 16l-2 4M12 16l-2 4M16 16l-2 4" />
+        </svg>
+      );
+    case 'snow':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={`${className} text-white`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25" />
+          <path
+            d="M8 16l.01.01M8 20l.01.01M12 18l.01.01M12 22l.01.01M16 16l.01.01M16 20l.01.01"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
+    case 'storm':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={`${className} text-yellow-500`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M19 16.9A5 5 0 0018 7h-1.26a8 8 0 10-11.62 9" />
+          <path d="M13 11l-4 6h6l-4 6" />
+        </svg>
+      );
+    default:
+      return <CloudSun className={className} />;
+  }
 };
 
-const ChronosItem: React.FC<{ data: WeatherSnapshot; isCurrent?: boolean; civilization: string }> = ({ data, isCurrent, civilization }) => (
-    <div className={`p-4 rounded-lg border-2 transition-all duration-300 ${isCurrent
+const ChronosItem: React.FC<{
+  data: WeatherSnapshot;
+  isCurrent?: boolean;
+  civilization: string;
+}> = ({ data, isCurrent, civilization }) => (
+  <div
+    className={`p-4 rounded-lg border-2 transition-all duration-300 ${
+      isCurrent
         ? 'border-gold-leaf bg-gold-leaf/10 shadow-[0_0_15px_rgba(207,181,59,0.1)]'
         : 'border-gold-dim/20 bg-ink/40 hover:border-gold-dim/50'
-        }`}>
-        <div className="flex justify-between items-start mb-3">
-            <span className={`font-serif text-lg font-bold tracking-widest ${isCurrent ? 'text-gold-leaf' : 'text-gold-dim'}`}>
-                {data.yearLabel}
-            </span>
-            {isCurrent && (
-                <span className="text-xs uppercase tracking-widest font-black px-1.5 py-0.5 border border-gold-leaf bg-gold-leaf/20 text-gold-leaf rounded">
-                    {civilization === 'babylonia' ? <GlossedTerm term={BAB.today} className="text-sm" /> : 'Hodie'}
-                </span>
-            )}
-        </div>
-
-        <div className="flex items-center gap-4">
-            <WeatherIcon condition={data.condition} className="w-10 h-10 shrink-0" />
-            <div className="flex-1 min-w-0">
-                <div className="text-parchment font-serif text-base italic leading-tight truncate">
-                    {civilization === 'hellas' && data.greekDescription ? data.greekDescription : data.description}
-                </div>
-                {civilization === 'hellas' && data.greekDescription && (
-                    <div className="flex items-baseline gap-2 mt-0.5 truncate">
-                         <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(data.greekDescription)}</span>
-                         <span className="text-roman-red font-body italic text-xs font-bold uppercase">{data.description}</span>
-                    </div>
-                )}
-                <div className="flex items-center gap-4 mt-1">
-                    <div className="flex items-center gap-1 text-gold-dim">
-                        <Thermometer className="w-3 h-3" />
-                        <span className="text-sm font-bold">{Math.round(data.temperature)}°C</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-stone-500">
-                        <Wind className="w-3 h-3" />
-                        <span className="text-xs">{Math.round(data.windSpeed)} km/h</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    }`}
+  >
+    <div className="flex justify-between items-start mb-3">
+      <span
+        className={`font-serif text-lg font-bold tracking-widest ${
+          isCurrent ? 'text-gold-leaf' : 'text-gold-dim'
+        }`}
+      >
+        {data.yearLabel}
+      </span>
+      {isCurrent && (
+        <span className="text-xs uppercase tracking-widest font-black px-1.5 py-0.5 border border-gold-leaf bg-gold-leaf/20 text-gold-leaf rounded">
+          {civilization === 'babylonia' ? (
+            <GlossedTerm term={BAB.today} className="text-sm" />
+          ) : (
+            'Hodie'
+          )}
+        </span>
+      )}
     </div>
+
+    <div className="flex items-center gap-4">
+      <WeatherIcon condition={data.condition} className="w-10 h-10 shrink-0" />
+      <div className="flex-1 min-w-0">
+        <div className="text-parchment font-serif text-base italic leading-tight truncate">
+          {civilization === 'hellas' && data.greekDescription
+            ? data.greekDescription
+            : data.description}
+        </div>
+        {civilization === 'hellas' && data.greekDescription && (
+          <div className="flex items-baseline gap-2 mt-0.5 truncate">
+            <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">
+              {transliterateGreek(data.greekDescription)}
+            </span>
+            <span className="text-roman-red font-body italic text-xs font-bold uppercase">
+              {data.description}
+            </span>
+          </div>
+        )}
+        <div className="flex items-center gap-4 mt-1">
+          <div className="flex items-center gap-1 text-gold-dim">
+            <Thermometer className="w-3 h-3" />
+            <span className="text-sm font-bold">{Math.round(data.temperature)}°C</span>
+          </div>
+          <div className="flex items-center gap-1 text-stone-500">
+            <Wind className="w-3 h-3" />
+            <span className="text-xs">{Math.round(data.windSpeed)} km/h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 );
 
-const WeatherModal: React.FC<WeatherModalProps> = ({ 
-    isOpen, 
-    onClose, 
-    weather,
-    onUpdateLocation,
-    currentLat,
-    currentLng,
-    isTimeTraveling = false,
-    travelDate,
+const WeatherModal: React.FC<WeatherModalProps> = ({
+  isOpen,
+  onClose,
+  weather,
+  onUpdateLocation,
+  currentLat,
+  currentLng,
+  isTimeTraveling = false,
+  travelDate,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
-    const { civilization, labels } = useCivilization();
-    const [isLocLoading, setIsLocLoading] = React.useState(false);
+  const { civilization, labels } = useCivilization();
+  const [isLocLoading, setIsLocLoading] = React.useState(false);
 
-    if (!isOpen || !weather) return null;
+  if (!isOpen || !weather) return null;
 
-    const { current, historical } = weather;
+  const { current, historical } = weather;
 
-    const handleLocationSelect = async (loc: typeof LOCATIONS[0]) => {
-        if (loc.id === 'gps') {
-            setIsLocLoading(true);
-            try {
-                const position = await Geolocation.getCurrentPosition({
-                    enableHighAccuracy: false,
-                    timeout: 10000,
-                    maximumAge: 3600000
-                });
-                onUpdateLocation(position.coords.latitude, position.coords.longitude);
-            } catch (error: any) {
-                alert("Locus deprehendi non potuit: " + error.message);
-            } finally {
-                setIsLocLoading(false);
-            }
-        } else if (loc.lat !== null && loc.lng !== null) {
-            onUpdateLocation(loc.lat, loc.lng);
-        }
-    };
+  const handleLocationSelect = async (loc: (typeof LOCATIONS)[0]) => {
+    if (loc.id === 'gps') {
+      setIsLocLoading(true);
+      try {
+        const position = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 3600000,
+        });
+        onUpdateLocation(position.coords.latitude, position.coords.longitude);
+      } catch (error: any) {
+        alert('Locus deprehendi non potuit: ' + error.message);
+      } finally {
+        setIsLocLoading(false);
+      }
+    } else if (loc.lat !== null && loc.lng !== null) {
+      onUpdateLocation(loc.lat, loc.lng);
+    }
+  };
 
-    const isLocActive = (loc: typeof LOCATIONS[0]) => {
-        if (loc.id === 'gps') return false;
-        return Math.abs(currentLat - (loc.lat || 0)) < 0.001 && Math.abs(currentLng - (loc.lng || 0)) < 0.001;
-    };
-
+  const isLocActive = (loc: (typeof LOCATIONS)[0]) => {
+    if (loc.id === 'gps') return false;
     return (
-        <div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      Math.abs(currentLat - (loc.lat || 0)) < 0.001 &&
+      Math.abs(currentLng - (loc.lng || 0)) < 0.001
+    );
+  };
+
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      onClick={onClose}
+    >
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      <div
+        className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col relative overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Decorative background hatch */}
+        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+
+        {/* Header */}
+        <div className="bg-ink p-4 border-b border-gold-dim/50 flex justify-between items-center relative z-10 shadow-md">
+          <div className="flex items-center gap-3 text-gold-leaf">
+            <CloudSun className="w-6 h-6" />
+            <h2 className="font-serif text-xl font-bold uppercase tracking-[0.3em]">
+              {civilization === 'babylonia' ? (
+                <GlossedTerm term={BAB.skyRecords} align="start" />
+              ) : (
+                'Annales Coeli'
+              )}
+            </h2>
+          </div>
+          <button
             onClick={onClose}
-        >
-            <div
-                className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col relative overflow-hidden"
-                onClick={e => e.stopPropagation()}
-            >
-                {/* Decorative background hatch */}
-                <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+            className="text-parchment/80 hover:text-roman-red hover:bg-gold-leaf/10 transition-colors p-2 rounded-full"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
 
-                {/* Header */}
-                <div className="bg-ink p-4 border-b border-gold-dim/50 flex justify-between items-center relative z-10 shadow-md">
-                    <div className="flex items-center gap-3 text-gold-leaf">
-                        <CloudSun className="w-6 h-6" />
-                        <h2 className="font-serif text-xl font-bold uppercase tracking-[0.3em]">
-                            {civilization === 'babylonia' ? <GlossedTerm term={BAB.skyRecords} align="start" /> : 'Annales Coeli'}
-                        </h2>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="text-parchment/80 hover:text-roman-red hover:bg-gold-leaf/10 transition-colors p-2 rounded-full"
-                    >
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
+        {/* Time-travel banner (mirrors the app's amber Viaje Temporal bar) */}
+        {isTimeTraveling && (
+          <div className="relative z-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-amber-950/60 border-b border-amber-700/40 px-4 py-2 text-amber-300">
+            <Hourglass className="w-3.5 h-3.5 shrink-0" />
+            <span className="font-serif text-xs uppercase tracking-[0.25em] font-bold">
+              Viaje Temporal
+            </span>
+            {travelDate && (
+              <>
+                <span className="text-amber-700/60">·</span>
+                <span className="font-serif text-xs tabular-nums text-amber-400/90">
+                  {travelDate.toLocaleString(undefined, {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                  })}
+                </span>
+              </>
+            )}
+            <span className="ml-1 text-xs uppercase tracking-widest px-1.5 py-0.5 rounded border border-amber-700/40 text-amber-400/80">
+              {weather.isHistorical ? 'Datos históricos' : 'Sin registro · actual'}
+            </span>
+          </div>
+        )}
 
-                {/* Time-travel banner (mirrors the app's amber Viaje Temporal bar) */}
-                {isTimeTraveling && (
-                    <div className="relative z-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-amber-950/60 border-b border-amber-700/40 px-4 py-2 text-amber-300">
-                        <Hourglass className="w-3.5 h-3.5 shrink-0" />
-                        <span className="font-serif text-xs uppercase tracking-[0.25em] font-bold">
-                            Viaje Temporal
-                        </span>
-                        {travelDate && (
-                            <>
-                                <span className="text-amber-700/60">·</span>
-                                <span className="font-serif text-xs tabular-nums text-amber-400/90">
-                                    {travelDate.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
-                                </span>
-                            </>
-                        )}
-                        <span className="ml-1 text-xs uppercase tracking-widest px-1.5 py-0.5 rounded border border-amber-700/40 text-amber-400/80">
-                            {weather.isHistorical ? 'Datos históricos' : 'Sin registro · actual'}
-                        </span>
-                    </div>
-                )}
+        {/* Content */}
+        <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar relative z-10">
+          {/* Compact Location Selector */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-3 text-gold-dim">
+              <Map className="w-4 h-4" />
+              {civilization === 'babylonia' ? (
+                <GlossedTerm
+                  term={BAB.place}
+                  align="start"
+                  className="font-serif text-sm uppercase tracking-[0.2em] font-bold"
+                />
+              ) : (
+                <span className="font-serif text-xs uppercase tracking-[0.2em] font-bold">
+                  Mutare Locum:
+                </span>
+              )}
+            </div>
+            <div className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar-thin">
+              {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
+              {LOCATIONS.map(loc => {
+                const active = isLocActive(loc);
+                const Icon = loc.icon;
+                const isGps = loc.id === 'gps';
 
-                {/* Content */}
-                <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar relative z-10">
-                    
-                    {/* Compact Location Selector */}
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2 mb-3 text-gold-dim">
-                            <Map className="w-4 h-4" />
-                            {civilization === 'babylonia'
-                                ? <GlossedTerm term={BAB.place} align="start" className="font-serif text-sm uppercase tracking-[0.2em] font-bold" />
-                                : <span className="font-serif text-xs uppercase tracking-[0.2em] font-bold">Mutare Locum:</span>}
-                        </div>
-                        <div className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar-thin">
-                            {LOCATIONS.map((loc) => {
-                                const active = isLocActive(loc);
-                                const Icon = loc.icon;
-                                const isGps = loc.id === 'gps';
-
-                                return (
-                                    <button
-                                        key={loc.id}
-                                        onClick={() => handleLocationSelect(loc)}
-                                        disabled={isLocLoading}
-                                        className={`
+                return (
+                  <button
+                    key={loc.id}
+                    onClick={() => handleLocationSelect(loc)}
+                    disabled={isLocLoading}
+                    className={`
                                             flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300
                                             font-serif text-xs uppercase tracking-widest
-                                            ${active
+                                            ${
+                                              active
                                                 ? 'bg-gold-leaf text-ink border-gold-leaf shadow-lg'
                                                 : isGps
-                                                    ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20'
-                                                    : 'bg-gold-leaf/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:bg-gold-leaf/10'}
+                                                ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20'
+                                                : 'bg-gold-leaf/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:bg-gold-leaf/10'
+                                            }
                                             ${isLocLoading && isGps ? 'animate-pulse' : ''}
                                         `}
-                                    >
-                                        <Icon className={`w-3 h-3 ${active ? 'text-ink' : 'text-gold-leaf'}`} />
-                                        <span>{loc.name}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Hero Section: Current Weather */}
-                    <div className="bg-gradient-to-br from-gold-leaf/5 to-transparent border border-gold-leaf/30 rounded-2xl p-6 mb-8 shadow-inner">
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                                <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">
-                                    {civilization === 'babylonia'
-                                        ? <GlossedTerm term={isTimeTraveling ? BAB.day : BAB.today} align="start" glossClassName="tracking-normal" />
-                                        : isTimeTraveling ? 'Status Temporis' : 'Status Praesens'}
-                                </span>
-                                <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
-                                    {civilization === 'hellas' && current.greekDescription ? current.greekDescription : current.description}
-                                </h3>
-                                {civilization === 'hellas' && current.greekDescription && (
-                                    <div className="flex flex-col items-center md:items-start mb-2">
-                                        <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(current.greekDescription)}</span>
-                                        <span className="text-roman-red font-body italic text-sm font-bold uppercase">{current.description}</span>
-                                    </div>
-                                )}
-                                <div className="flex items-center gap-3 mt-2">
-                                    {civilization === 'babylonia'
-                                        ? <GlossedTerm term={BAB.wind} className="text-gold-dim font-serif text-sm tracking-widest uppercase" glossClassName="text-gold-dim" />
-                                        : <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">{labels.windLabel}:</span>}
-                                    <div className="flex flex-col items-start leading-tight">
-                                        <span className="text-parchment font-serif italic text-lg">{civilization === 'hellas' && current.greekWindName ? current.greekWindName : current.latinWindName}</span>
-                                        {civilization === 'hellas' && current.greekWindName && (
-                                            <>
-                                                <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">{transliterateGreek(current.greekWindName)}</span>
-                                                <span className="text-roman-red font-body italic text-xs font-bold">{current.latinWindName}</span>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-8">
-                                <WeatherIcon condition={current.condition} className="w-24 h-24 filter drop-shadow-glow" />
-                                <div className="flex flex-col items-center">
-                                    <span className="text-5xl md:text-6xl font-serif font-bold text-parchment">{Math.round(current.temperature)}°</span>
-                                    <span className="text-gold-dim font-serif text-xs uppercase tracking-widest mt-1">Celsius</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Detailed Metrics */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gold-dim/20">
-                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
-                                <Wind className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-xs uppercase text-stone-500 tracking-widest">{civilization === 'babylonia' ? 'Velocidad' : 'Velocitas'}</span>
-                                <span className="text-parchment font-bold">{Math.round(current.windSpeed)} km/h</span>
-                            </div>
-                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
-                                <div className="w-5 h-5 mb-2 relative" style={{ transform: `rotate(${current.windDirection}deg)` }}>
-                                    <svg viewBox="0 0 24 24" className="w-full h-full text-gold-leaf fill-current">
-                                        <path d="M12 2 L16 22 L12 18 L8 22 Z" />
-                                    </svg>
-                                </div>
-                                <span className="text-xs uppercase text-stone-500 tracking-widest">{civilization === 'babylonia' ? 'Dirección' : 'Directio'}</span>
-                                <span className="text-parchment font-bold">{current.windDirection}°</span>
-                            </div>
-                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
-                                <Gauge className="w-5 h-5 text-gold-dim mb-2" />
-                                <span className="text-xs uppercase text-stone-500 tracking-widest">{civilization === 'babylonia' ? 'Presión' : 'Pressio'}</span>
-                                <span className="text-parchment font-bold">{Math.round(current.surfacePressure)} hPa</span>
-                            </div>
-                            <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
-                                <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
-                                {civilization === 'babylonia'
-                                    ? <GlossedTerm term={BAB.sky} className="text-sm uppercase text-stone-500 tracking-widest" glossClassName="text-stone-500" />
-                                    : <span className="text-xs uppercase text-stone-500 tracking-widest">{labels.skyLabel}</span>}
-                                <span className="text-parchment font-bold">
-                                    {current.condition === 'clear' && 'Serenum'}
-                                    {current.condition === 'partly-cloudy' && 'Nubes Sparsae'}
-                                    {current.condition === 'cloudy' && 'Nubilum'}
-                                    {current.condition === 'rain' && 'Pluvia'}
-                                    {current.condition === 'snow' && 'Nix'}
-                                    {current.condition === 'storm' && 'Tempestas'}
-                                    {current.condition === 'fog' && 'Nebula'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Historical Comparison */}
-                    <div className="flex items-center gap-3 mb-6">
-                        <History className="w-5 h-5 text-gold-dim" />
-                        <h4 className="font-serif text-lg text-gold-leaf uppercase tracking-[0.2em] font-bold">
-                            {civilization === 'babylonia' ? <GlossedTerm term={BAB.formerDays} align="start" /> : 'Memoria Mundi'}
-                        </h4>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
-                        {historical.map((snap) => (
-                            <ChronosItem key={snap.yearLabel} data={snap} civilization={civilization} />
-                        ))}
-                    </div>
-
-                    <div className="mt-8 text-center pt-6 border-t border-gold-dim/20">
-                        <p className="text-xs font-serif text-stone-500 italic uppercase tracking-[0.3em]">
-                            Comparatio temporis in eodem loco per annos
-                        </p>
-                    </div>
-                </div>
+                  >
+                    <Icon className={`w-3 h-3 ${active ? 'text-ink' : 'text-gold-leaf'}`} />
+                    <span>{loc.name}</span>
+                  </button>
+                );
+              })}
             </div>
+          </div>
+
+          {/* Hero Section: Current Weather */}
+          <div className="bg-gradient-to-br from-gold-leaf/5 to-transparent border border-gold-leaf/30 rounded-2xl p-6 mb-8 shadow-inner">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">
+                  {civilization === 'babylonia' ? (
+                    <GlossedTerm
+                      term={isTimeTraveling ? BAB.day : BAB.today}
+                      align="start"
+                      glossClassName="tracking-normal"
+                    />
+                  ) : isTimeTraveling ? (
+                    'Status Temporis'
+                  ) : (
+                    'Status Praesens'
+                  )}
+                </span>
+                <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
+                  {civilization === 'hellas' && current.greekDescription
+                    ? current.greekDescription
+                    : current.description}
+                </h3>
+                {civilization === 'hellas' && current.greekDescription && (
+                  <div className="flex flex-col items-center md:items-start mb-2">
+                    <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">
+                      {transliterateGreek(current.greekDescription)}
+                    </span>
+                    <span className="text-roman-red font-body italic text-sm font-bold uppercase">
+                      {current.description}
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center gap-3 mt-2">
+                  {civilization === 'babylonia' ? (
+                    <GlossedTerm
+                      term={BAB.wind}
+                      className="text-gold-dim font-serif text-sm tracking-widest uppercase"
+                      glossClassName="text-gold-dim"
+                    />
+                  ) : (
+                    <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">
+                      {labels.windLabel}:
+                    </span>
+                  )}
+                  <div className="flex flex-col items-start leading-tight">
+                    <span className="text-parchment font-serif italic text-lg">
+                      {civilization === 'hellas' && current.greekWindName
+                        ? current.greekWindName
+                        : current.latinWindName}
+                    </span>
+                    {civilization === 'hellas' && current.greekWindName && (
+                      <>
+                        <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">
+                          {transliterateGreek(current.greekWindName)}
+                        </span>
+                        <span className="text-roman-red font-body italic text-xs font-bold">
+                          {current.latinWindName}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-8">
+                <WeatherIcon
+                  condition={current.condition}
+                  className="w-24 h-24 filter drop-shadow-glow"
+                />
+                <div className="flex flex-col items-center">
+                  <span className="text-5xl md:text-6xl font-serif font-bold text-parchment">
+                    {Math.round(current.temperature)}°
+                  </span>
+                  <span className="text-gold-dim font-serif text-xs uppercase tracking-widest mt-1">
+                    Celsius
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Detailed Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gold-dim/20">
+              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
+                <Wind className="w-5 h-5 text-gold-dim mb-2" />
+                <span className="text-xs uppercase text-stone-500 tracking-widest">
+                  {civilization === 'babylonia' ? 'Velocidad' : 'Velocitas'}
+                </span>
+                <span className="text-parchment font-bold">
+                  {Math.round(current.windSpeed)} km/h
+                </span>
+              </div>
+              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
+                <div
+                  className="w-5 h-5 mb-2 relative"
+                  style={{ transform: `rotate(${current.windDirection}deg)` }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-full h-full text-gold-leaf fill-current"
+                  >
+                    <path d="M12 2 L16 22 L12 18 L8 22 Z" />
+                  </svg>
+                </div>
+                <span className="text-xs uppercase text-stone-500 tracking-widest">
+                  {civilization === 'babylonia' ? 'Dirección' : 'Directio'}
+                </span>
+                <span className="text-parchment font-bold">{current.windDirection}°</span>
+              </div>
+              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
+                <Gauge className="w-5 h-5 text-gold-dim mb-2" />
+                <span className="text-xs uppercase text-stone-500 tracking-widest">
+                  {civilization === 'babylonia' ? 'Presión' : 'Pressio'}
+                </span>
+                <span className="text-parchment font-bold">
+                  {Math.round(current.surfacePressure)} hPa
+                </span>
+              </div>
+              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
+                <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
+                {civilization === 'babylonia' ? (
+                  <GlossedTerm
+                    term={BAB.sky}
+                    className="text-sm uppercase text-stone-500 tracking-widest"
+                    glossClassName="text-stone-500"
+                  />
+                ) : (
+                  <span className="text-xs uppercase text-stone-500 tracking-widest">
+                    {labels.skyLabel}
+                  </span>
+                )}
+                <span className="text-parchment font-bold">
+                  {current.condition === 'clear' && 'Serenum'}
+                  {current.condition === 'partly-cloudy' && 'Nubes Sparsae'}
+                  {current.condition === 'cloudy' && 'Nubilum'}
+                  {current.condition === 'rain' && 'Pluvia'}
+                  {current.condition === 'snow' && 'Nix'}
+                  {current.condition === 'storm' && 'Tempestas'}
+                  {current.condition === 'fog' && 'Nebula'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Historical Comparison */}
+          <div className="flex items-center gap-3 mb-6">
+            <History className="w-5 h-5 text-gold-dim" />
+            <h4 className="font-serif text-lg text-gold-leaf uppercase tracking-[0.2em] font-bold">
+              {civilization === 'babylonia' ? (
+                <GlossedTerm term={BAB.formerDays} align="start" />
+              ) : (
+                'Memoria Mundi'
+              )}
+            </h4>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
+            {historical.map(snap => (
+              <ChronosItem key={snap.yearLabel} data={snap} civilization={civilization} />
+            ))}
+          </div>
+
+          <div className="mt-8 text-center pt-6 border-t border-gold-dim/20">
+            <p className="text-xs font-serif text-stone-500 italic uppercase tracking-[0.3em]">
+              Comparatio temporis in eodem loco per annos
+            </p>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default WeatherModal;

@@ -1,30 +1,20 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   getProvinceMeta,
   getRomanProvince,
   loadRomanMapData,
   RomanMapData,
-} from "../utils/romanProvinces";
+} from '../utils/romanProvinces';
 import {
   CREATURES,
   CREATURE_ART_PX,
   MapCreature,
   paintCreature,
-} from "../utils/romanMapCreatures";
-import {
-  loadRomanRoads,
-  roadExistence,
-  RomanRoad,
-} from "../utils/romanRoads";
-import { KM_PER_ROMAN_MILE } from "../utils/romanProvinces";
-import { toRoman } from "../utils/romanTimeUtils";
-import { ROMAN_ROAD_LABELS as RL } from "../utils/civLabels";
+} from '../utils/romanMapCreatures';
+import { loadRomanRoads, roadExistence, RomanRoad } from '../utils/romanRoads';
+import { KM_PER_ROMAN_MILE } from '../utils/romanProvinces';
+import { toRoman } from '../utils/romanTimeUtils';
+import { ROMAN_ROAD_LABELS as RL } from '../utils/civLabels';
 
 /**
  * Canvas map of the Roman Empire (AD 117) shown in the ProvinciaInfo modal.
@@ -73,12 +63,12 @@ const DEDUPE_ZOOM = 3; // above this, a dot whose centre falls inside a drawn do
 /** Dot radius in px: grows with zoom, capped so neighbours stay distinct. */
 const cityRadius = (zoom: number) => Math.min(MAX_CITY_R, 1.6 + 0.35 * zoom);
 
-const SEA = "#3a6186";
-const RIVER = "rgba(58,97,134,0.8)";
-const FORTIFICATION = "rgba(196,120,24,0.95)";
-const PROVINCE_LABEL = "rgba(122,84,24,0.8)";
-const MARKER = "#d62828";
-const ROAD = "#7a2618";
+const SEA = '#3a6186';
+const RIVER = 'rgba(58,97,134,0.8)';
+const FORTIFICATION = 'rgba(196,120,24,0.95)';
+const PROVINCE_LABEL = 'rgba(122,84,24,0.8)';
+const MARKER = '#d62828';
+const ROAD = '#7a2618';
 
 const ROAD_TILE_DEG = 5; // roads are grouped into tiles so only those near the strip are stroked
 /** Douglas–Peucker tolerance in degrees per level of detail; 0 = as bundled (0.001°). */
@@ -87,7 +77,7 @@ const ROAD_HIT = 10; // px
 const ROAD_LABEL_ZOOM = 2.5; // road names from this zoom on
 const MAX_ROAD_LABELS = 40; // per frame
 const ROAD_LABEL_SPACING = 360; // px of road between repeats of one name
-const ROADS_KEY = "romanMapRoads"; // localStorage: the layer toggle
+const ROADS_KEY = 'romanMapRoads'; // localStorage: the layer toggle
 
 /** Coarsest level of detail whose tolerance stays under half a pixel at s px/°. */
 const roadLod = (s: number) => {
@@ -96,8 +86,7 @@ const roadLod = (s: number) => {
   return i;
 };
 
-const clamp = (v: number, lo: number, hi: number) =>
-  Math.min(hi, Math.max(lo, v));
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 /** Canvas height: most of the modal, capped; the width follows from the geographic ratio. */
 const baseHeight = () => Math.round(Math.min(window.innerHeight * 0.82, 600));
@@ -138,14 +127,9 @@ const gridRow = (lat: number) =>
   clamp(Math.floor((LAT_MAX - lat) / CELL_DEG), 0, GRID_ROWS - 1);
 
 const buildCityGrid = (cities: City[]): Int32Array[] => {
-  const cells: number[][] = Array.from(
-    { length: GRID_COLS * GRID_ROWS },
-    () => [],
-  );
-  cities.forEach((c, i) =>
-    cells[gridRow(c.lat) * GRID_COLS + gridCol(c.lng)].push(i),
-  );
-  return cells.map((c) => Int32Array.from(c));
+  const cells: number[][] = Array.from({ length: GRID_COLS * GRID_ROWS }, () => []);
+  cities.forEach((c, i) => cells[gridRow(c.lat) * GRID_COLS + gridCol(c.lng)].push(i));
+  return cells.map(c => Int32Array.from(c));
 };
 
 /**
@@ -159,10 +143,12 @@ class ScreenGrid {
   private bucket(cx: number, cy: number) {
     const k = this.key(cx, cy);
     let b = this.cells.get(k);
+    // eslint-disable-next-line sonarjs/no-nested-assignment
     if (!b) this.cells.set(k, (b = []));
     return b;
   }
   /** True when the rect [x0,x1]×[y0,y1] intersects a stored rect. */
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   hitsRect(x0: number, y0: number, x1: number, y1: number) {
     const c = this.cell;
     for (let cx = Math.floor(x0 / c); cx <= Math.floor(x1 / c); cx++)
@@ -170,8 +156,7 @@ class ScreenGrid {
         const b = this.cells.get(this.key(cx, cy));
         if (!b) continue;
         for (let i = 0; i < b.length; i += 4)
-          if (x0 < b[i + 2] && x1 > b[i] && y0 < b[i + 3] && y1 > b[i + 1])
-            return true;
+          if (x0 < b[i + 2] && x1 > b[i] && y0 < b[i + 3] && y1 > b[i + 1]) return true;
       }
     return false;
   }
@@ -182,6 +167,7 @@ class ScreenGrid {
         this.bucket(cx, cy).push(x0, y0, x1, y1);
   }
   /** True when a stored point lies closer than `d` (≤ cell size) to (x, y). */
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   hitsPoint(x: number, y: number, d: number) {
     const cx = Math.floor(x / this.cell),
       cy = Math.floor(y / this.cell);
@@ -195,39 +181,36 @@ class ScreenGrid {
     return false;
   }
   addPoint(x: number, y: number) {
-    this.bucket(Math.floor(x / this.cell), Math.floor(y / this.cell)).push(
-      x,
-      y,
-    );
+    this.bucket(Math.floor(x / this.cell), Math.floor(y / this.cell)).push(x, y);
   }
 }
 
 // Famous cities pinned to the top of the ranking, matched by name near these coordinates.
 const SEED_CITIES: [string, number, number][] = [
-  ["Roma", 12.5, 41.9],
-  ["Alexandria", 29.9, 31.2],
-  ["Carthago", 10.3, 36.9],
-  ["Antiochia", 36.2, 36.2],
-  ["Byzantium", 29.0, 41.0],
-  ["Athenae", 23.7, 38.0],
-  ["Londinium", -0.1, 51.5],
-  ["Lugdunum", 4.8, 45.8],
-  ["Ephesos", 27.3, 37.9],
-  ["Tarraco", 1.2, 41.1],
-  ["Gades", -6.3, 36.5],
-  ["Augusta Emerita", -6.3, 38.9],
-  ["Massalia", 5.4, 43.3],
-  ["Mediolanum", 9.2, 45.5],
-  ["Aquileia", 13.4, 45.8],
-  ["Augusta Treverorum", 6.6, 49.8],
-  ["Eburacum", -1.1, 54.0],
-  ["Sirmium", 19.6, 45.0],
-  ["Thessalonica", 22.9, 40.6],
-  ["Lepcis Magna", 14.3, 32.6],
-  ["Syracusae", 15.3, 37.1],
-  ["Caesarea", 34.9, 32.5],
-  ["Damascus", 36.3, 33.5],
-  ["Cyrene", 21.9, 32.8],
+  ['Roma', 12.5, 41.9],
+  ['Alexandria', 29.9, 31.2],
+  ['Carthago', 10.3, 36.9],
+  ['Antiochia', 36.2, 36.2],
+  ['Byzantium', 29.0, 41.0],
+  ['Athenae', 23.7, 38.0],
+  ['Londinium', -0.1, 51.5],
+  ['Lugdunum', 4.8, 45.8],
+  ['Ephesos', 27.3, 37.9],
+  ['Tarraco', 1.2, 41.1],
+  ['Gades', -6.3, 36.5],
+  ['Augusta Emerita', -6.3, 38.9],
+  ['Massalia', 5.4, 43.3],
+  ['Mediolanum', 9.2, 45.5],
+  ['Aquileia', 13.4, 45.8],
+  ['Augusta Treverorum', 6.6, 49.8],
+  ['Eburacum', -1.1, 54.0],
+  ['Sirmium', 19.6, 45.0],
+  ['Thessalonica', 22.9, 40.6],
+  ['Lepcis Magna', 14.3, 32.6],
+  ['Syracusae', 15.3, 37.1],
+  ['Caesarea', 34.9, 32.5],
+  ['Damascus', 36.3, 33.5],
+  ['Cyrene', 21.9, 32.8],
 ];
 
 /**
@@ -235,9 +218,10 @@ const SEED_CITIES: [string, number, number][] = [
  * and within each accuracy tier by farthest-point sampling, so any prefix of the
  * list is spread evenly over the empire instead of clustering in one province.
  */
-const rankCities = (places: RomanMapData["places"]): City[] => {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const rankCities = (places: RomanMapData['places']): City[] => {
   const all = places.features
-    .filter((f) => {
+    .filter(f => {
       const [lng, lat] = f.geometry.coordinates;
       return (
         f.properties.latin &&
@@ -247,11 +231,11 @@ const rankCities = (places: RomanMapData["places"]): City[] => {
         lat >= LAT_MAX - LAT_SPAN
       );
     })
-    .map((f) => ({
+    .map(f => ({
       city: {
         latin: f.properties.latin!,
         modern: f.properties.modern,
-        fortress: f.properties.type === "17",
+        fortress: f.properties.type === '17',
         lng: f.geometry.coordinates[0],
         lat: f.geometry.coordinates[1],
       },
@@ -280,14 +264,10 @@ const rankCities = (places: RomanMapData["places"]): City[] => {
     if (i >= 0) take(i);
   }
 
-  const tiers = [...new Set(all.map((c) => c.accuracy))].sort((a, b) => a - b);
+  const tiers = [...new Set(all.map(c => c.accuracy))].sort((a, b) => a - b);
   for (const accuracy of tiers) {
-    const tier = all
-      .map((_, i) => i)
-      .filter((i) => !used[i] && all[i].accuracy === accuracy);
-    const minD = tier.map((i) =>
-      order.reduce((m, j) => Math.min(m, d2(i, j)), Infinity),
-    );
+    const tier = all.map((_, i) => i).filter(i => !used[i] && all[i].accuracy === accuracy);
+    const minD = tier.map(i => order.reduce((m, j) => Math.min(m, d2(i, j)), Infinity));
     for (let left = tier.length; left > 0; left--) {
       let best = -1;
       for (let k = 0; k < tier.length; k++)
@@ -298,7 +278,7 @@ const rankCities = (places: RomanMapData["places"]): City[] => {
         if (!used[tier[k]]) minD[k] = Math.min(minD[k], d2(tier[k], pick));
     }
   }
-  return order.map((i) => all[i].city);
+  return order.map(i => all[i].city);
 };
 
 const addRing = (path: Path2D, ring: [number, number][]) => {
@@ -312,14 +292,13 @@ const addLine = (path: Path2D, line: [number, number][]) => {
 
 /** Paths are built in degrees (x = lng, y = lat); draw() maps them with a canvas transform. */
 const buildScene = (data: RomanMapData): Scene => {
-  const provinces = data.provinces.features.map((f) => {
+  const provinces = data.provinces.features.map(f => {
     const path = new Path2D();
-    for (const polygon of f.geometry.coordinates)
-      polygon.forEach((ring) => addRing(path, ring));
+    for (const polygon of f.geometry.coordinates) polygon.forEach(ring => addRing(path, ring));
     return path;
   });
   const extent = new Map(
-    data.provinces.features.map((f) => {
+    data.provinces.features.map(f => {
       let lo = Infinity,
         hi = -Infinity;
       for (const polygon of f.geometry.coordinates)
@@ -333,29 +312,25 @@ const buildScene = (data: RomanMapData): Scene => {
 
   const lakes = new Path2D();
   for (const f of data.lakes.features)
-    f.geometry.coordinates.forEach((ring) => addRing(lakes, ring));
+    f.geometry.coordinates.forEach(ring => addRing(lakes, ring));
   const rivers = new Path2D();
   for (const f of data.rivers.features)
-    f.geometry.coordinates.forEach((line) => addLine(rivers, line));
+    f.geometry.coordinates.forEach(line => addLine(rivers, line));
   const fortifications = new Path2D();
-  for (const f of data.fortifications.features)
-    addLine(fortifications, f.geometry.coordinates);
+  for (const f of data.fortifications.features) addLine(fortifications, f.geometry.coordinates);
 
-  const labels = data.labels.features.map((f) => {
+  const labels = data.labels.features.map(f => {
     const geoName = f.properties.name;
     const regio = /^[IVX]+$/.test(geoName);
     return {
-      text: (regio
-        ? `Regio ${geoName}`
-        : getProvinceMeta(geoName).name
-      ).toUpperCase(),
+      text: (regio ? `Regio ${geoName}` : getProvinceMeta(geoName).name).toUpperCase(),
       lng: f.geometry.coordinates[0],
       lat: f.geometry.coordinates[1],
       regio,
       widthDeg: extent.get(geoName) ?? 0,
     };
   });
-  const regiones = labels.filter((l) => l.regio);
+  const regiones = labels.filter(l => l.regio);
   const italia = regiones.length
     ? {
         lng: regiones.reduce((s, l) => s + l.lng, 0) / regiones.length,
@@ -377,7 +352,7 @@ const buildScene = (data: RomanMapData): Scene => {
 };
 
 // The data is cached in romanProvinces.ts; the derived paths are cached here so a reopen is instant.
-let sceneCache: { data: RomanMapData["provinces"]; scene: Scene } | null = null;
+let sceneCache: { data: RomanMapData['provinces']; scene: Scene } | null = null;
 const getScene = (data: RomanMapData) => {
   if (sceneCache?.data !== data.provinces)
     sceneCache = { data: data.provinces, scene: buildScene(data) };
@@ -420,6 +395,7 @@ const roadStyle = (r: RomanRoad, faded: boolean) =>
   r.type * 6 + r.certainty * 2 + (faded ? 1 : 0);
 const ROAD_STYLES = 12;
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const simplifyFlat = (pts: Float32Array, tol: number): Float32Array => {
   const n = pts.length / 2;
   if (n < 3) return pts;
@@ -460,9 +436,8 @@ const simplifyFlat = (pts: Float32Array, tol: number): Float32Array => {
 const roadPoints = (scene: RoadScene, level: number, i: number) => {
   const road = scene.roads[i];
   if (!ROAD_LODS[level]) return road.parts;
-  return (scene.lods[level][i] ??= road.parts.map((p) =>
-    simplifyFlat(p, ROAD_LODS[level]),
-  ));
+  // eslint-disable-next-line sonarjs/no-nested-assignment
+  return (scene.lods[level][i] ??= road.parts.map(p => simplifyFlat(p, ROAD_LODS[level])));
 };
 
 const buildRoadScene = (roads: RomanRoad[]): RoadScene => {
@@ -475,6 +450,7 @@ const buildRoadScene = (roads: RomanRoad[]): RoadScene => {
     if (!tile)
       byKey.set(
         key,
+        // eslint-disable-next-line sonarjs/no-nested-assignment
         (tile = {
           roads: [],
           lngMin: Infinity,
@@ -507,12 +483,12 @@ const buildRoadChains = (scene: RoadScene): RoadChain[] => {
     if (!scene.vis[i]) return;
     for (const name of r.viae) {
       let list = byName.get(name);
+      // eslint-disable-next-line sonarjs/no-nested-assignment
       if (!list) byName.set(name, (list = []));
       list.push(...roadPoints(scene, 2, i));
     }
   });
-  const key = (x: number, y: number) =>
-    `${Math.round(x * 100)},${Math.round(y * 100)}`;
+  const key = (x: number, y: number) => `${Math.round(x * 100)},${Math.round(y * 100)}`;
   const chains: RoadChain[] = [];
   byName.forEach((segs, name) => {
     const ends = new Map<string, number[]>();
@@ -522,10 +498,11 @@ const buildRoadChains = (scene: RoadScene): RoadChain[] => {
     });
     const used = new Uint8Array(segs.length);
     /** Extends `line` (lng, lat pairs) at its end with unused segments sharing that end point. */
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     const extend = (line: number[]) => {
       for (;;) {
         const k = key(line[line.length - 2], line[line.length - 1]);
-        const next = ends.get(k)?.find((j) => !used[j]);
+        const next = ends.get(k)?.find(j => !used[j]);
         if (next === undefined) return;
         used[next] = 1;
         const p = segs[next];
@@ -578,18 +555,20 @@ const setRoadYear = (scene: RoadScene, year: number | null) => {
   if (scene.year === year) return;
   scene.year = year;
   scene.roads.forEach((r, i) => {
-    const e = year === null ? "yes" : roadExistence(r, year);
-    scene.vis[i] = e === "no" ? 0 : e === "yes" ? 1 : 2;
+    const e = year === null ? 'yes' : roadExistence(r, year);
+    scene.vis[i] = e === 'no' ? 0 : e === 'yes' ? 1 : 2;
   });
   scene.paths.clear();
   scene.chains = buildRoadChains(scene);
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const getRoadPath = (
   scene: RoadScene,
   level: number,
   tile: number,
   style: number,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): Path2D | null => {
   const key = (level * scene.tiles.length + tile) * ROAD_STYLES + style;
   let path = scene.paths.get(key);
@@ -601,8 +580,7 @@ const getRoadPath = (
     path ??= new Path2D();
     for (const part of roadPoints(scene, level, i)) {
       path.moveTo(part[0], part[1]);
-      for (let k = 2; k < part.length; k += 2)
-        path.lineTo(part[k], part[k + 1]);
+      for (let k = 2; k < part.length; k += 2) path.lineTo(part[k], part[k + 1]);
     }
   }
   scene.paths.set(key, path);
@@ -610,11 +588,13 @@ const getRoadPath = (
 };
 
 /** The visible road nearest to (lng, lat) within tolDeg, from the bundled geometry. */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const hitRoad = (
   scene: RoadScene,
   lng: number,
   lat: number,
   tolDeg: number,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): RomanRoad | null => {
   let best: RomanRoad | null = null;
   let bestD = tolDeg * tolDeg;
@@ -635,9 +615,7 @@ const hitRoad = (
             dx = p[k] - ax,
             dy = p[k + 1] - ay;
           const len2 = dx * dx + dy * dy;
-          const t = len2
-            ? clamp(((lng - ax) * dx + (lat - ay) * dy) / len2, 0, 1)
-            : 0;
+          const t = len2 ? clamp(((lng - ax) * dx + (lat - ay) * dy) / len2, 0, 1) : 0;
           const d = (ax + t * dx - lng) ** 2 + (ay + t * dy - lat) ** 2;
           if (d < bestD) {
             bestD = d;
@@ -651,8 +629,7 @@ const hitRoad = (
 
 let roadSceneCache: { roads: RomanRoad[]; scene: RoadScene } | null = null;
 const getRoadScene = (roads: RomanRoad[]) => {
-  if (roadSceneCache?.roads !== roads)
-    roadSceneCache = { roads, scene: buildRoadScene(roads) };
+  if (roadSceneCache?.roads !== roads) roadSceneCache = { roads, scene: buildRoadScene(roads) };
   return roadSceneCache.scene;
 };
 
@@ -688,6 +665,7 @@ interface Glyph {
  * Letters of a label centred at arc length t, upright (reversed on a westward line),
  * or null where the line bends more than ~30° between letters or leaves `bounds`.
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const placeAlong = (
   xs: Float32Array,
   ys: Float32Array,
@@ -698,9 +676,9 @@ const placeAlong = (
   tw: number,
   fontPx: number,
   [bx0, by0, bx1, by1]: [number, number, number, number],
-): { glyphs: Glyph[]; box: [number, number, number, number] } | null => {
-  const flip =
-    alongAt(xs, ys, cum, t + tw / 2)[0] < alongAt(xs, ys, cum, t - tw / 2)[0];
+): // eslint-disable-next-line sonarjs/cognitive-complexity
+{ glyphs: Glyph[]; box: [number, number, number, number] } | null => {
+  const flip = alongAt(xs, ys, cum, t + tw / 2)[0] < alongAt(xs, ys, cum, t - tw / 2)[0];
   const glyphs: Glyph[] = [];
   let x0 = Infinity,
     y0 = Infinity,
@@ -713,9 +691,7 @@ const placeAlong = (
     const [x, y, dir] = alongAt(xs, ys, cum, at);
     const a = flip ? dir + Math.PI : dir;
     if (i) {
-      const turn = Math.abs(
-        ((a - glyphs[i - 1].a + 3 * Math.PI) % (2 * Math.PI)) - Math.PI,
-      );
+      const turn = Math.abs(((a - glyphs[i - 1].a + 3 * Math.PI) % (2 * Math.PI)) - Math.PI);
       if (turn > 0.5) return null;
     }
     if (x < bx0 || x > bx1 || y < by0 || y > by1) return null;
@@ -728,48 +704,46 @@ const placeAlong = (
   return { glyphs, box: [x0, y0, x1, y1] };
 };
 
-const savedRoadsOn = () => localStorage.getItem(ROADS_KEY) !== "0";
+const savedRoadsOn = () => localStorage.getItem(ROADS_KEY) !== '0';
 
 /** Visible city count grows geometrically from MIN_CITIES at zoom 1 to all at MAX_ZOOM. */
 const visibleCityCount = (zoom: number, total: number) =>
   Math.min(
     total,
     Math.round(
-      MIN_CITIES *
-        Math.pow(total / MIN_CITIES, (zoom - MIN_ZOOM) / (MAX_ZOOM - MIN_ZOOM)),
+      MIN_CITIES * Math.pow(total / MIN_CITIES, (zoom - MIN_ZOOM) / (MAX_ZOOM - MIN_ZOOM)),
     ),
   );
 
 const readColors = () => {
   const css = getComputedStyle(document.documentElement);
-  const v = (name: string, fallback: string) =>
-    css.getPropertyValue(name).trim() || fallback;
+  const v = (name: string, fallback: string) => css.getPropertyValue(name).trim() || fallback;
   return {
-    ink: v("--ink", "#1a1a1a"),
-    parchment: v("--parchment", "#e3d6b3"),
-    goldDim: v("--gold-dim", "#a09040"),
-    goldLeaf: v("--gold-leaf", "#cfb53b"),
+    ink: v('--ink', '#1a1a1a'),
+    parchment: v('--parchment', '#e3d6b3'),
+    goldDim: v('--gold-dim', '#a09040'),
+    goldLeaf: v('--gold-leaf', '#cfb53b'),
   };
 };
 
-type Status = "loading" | "ready" | "error";
+type Status = 'loading' | 'ready' | 'error';
 
 type Selection =
-  | { kind: "city"; city: City }
-  | { kind: "creature"; creature: MapCreature }
+  | { kind: 'city'; city: City }
+  | { kind: 'creature'; creature: MapCreature }
   // A road card sits at the tapped point; `related` = indices of the other segments of the same via.
-  | { kind: "road"; road: RomanRoad; related: number[]; lng: number; lat: number };
+  | { kind: 'road'; road: RomanRoad; related: number[]; lng: number; lat: number };
 const selectionPoint = (s: Selection) =>
-  s.kind === "city" ? s.city : s.kind === "creature" ? s.creature : s;
+  s.kind === 'city' ? s.city : s.kind === 'creature' ? s.creature : s;
 
 /** "ab anno 46 p. Chr. n. (fortasse iam ab anno 45 p. Chr. n.); usque ad annum …" */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const roadAetas = (r: RomanRoad) => {
   const out: string[] = [];
   if (r.from !== null)
-    out.push(RL.from(r.from) + (r.fromErr ? ` (${RL.fromErr(r.from - r.fromErr)})` : ""));
-  if (r.to !== null)
-    out.push(RL.to(r.to) + (r.toErr ? ` (${RL.toErr(r.to + r.toErr)})` : ""));
-  return out.length ? out.join("; ") : RL.aetasIgnota;
+    out.push(RL.from(r.from) + (r.fromErr ? ` (${RL.fromErr(r.from - r.fromErr)})` : ''));
+  if (r.to !== null) out.push(RL.to(r.to) + (r.toErr ? ` (${RL.toErr(r.to + r.toErr)})` : ''));
+  return out.length ? out.join('; ') : RL.aetasIgnota;
 };
 
 const roadLength = (m: number) => {
@@ -792,9 +766,10 @@ const RoadCard: React.FC<{
   onYear: (year: number | null) => void;
   /** True while the card's slider, not the app's date, sets the year. */
   ownYear: boolean;
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }> = ({ road, year, onYear, ownYear }) => {
   const rows: [string, string][] = [
-    [RL.segment, road.segment.replace(/-/g, " – ")],
+    [RL.segment, road.segment.replace(/-/g, ' – ')],
     [RL.typeLabel, RL.types[road.type]],
     [RL.certaintyLabel, RL.certainty[road.certainty]],
     [RL.aetas, roadAetas(road)],
@@ -807,14 +782,14 @@ const RoadCard: React.FC<{
         : road.conditor,
     ]);
   rows.push([RL.longitudo, roadLength(road.lengthM)]);
-  if (road.itineraria.length) rows.push([RL.itineraria, road.itineraria.join(", ")]);
-  if (road.recentiora.length) rows.push([RL.recentiora, road.recentiora.join(", ")]);
+  if (road.itineraria.length) rows.push([RL.itineraria, road.itineraria.join(', ')]);
+  if (road.recentiora.length) rows.push([RL.recentiora, road.recentiora.join(', ')]);
   if (road.fontes) rows.push([RL.fontes, road.fontes]);
   const status = year === null ? null : roadExistence(road, year);
   return (
     <>
       <div className="font-serif text-lg font-bold text-gold-leaf leading-tight">
-        {road.viae.length ? road.viae.join(" · ") : RL.unnamed}
+        {road.viae.length ? road.viae.join(' · ') : RL.unnamed}
       </div>
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 font-body text-sm leading-snug">
         {rows.map(([k, v]) => (
@@ -842,22 +817,22 @@ const RoadCard: React.FC<{
           max={SLIDER_MAX}
           step={1}
           value={toAstro(clamp(year ?? SLIDER_MAX, toHistorical(SLIDER_MIN), SLIDER_MAX))}
-          onChange={(e) => onYear(toHistorical(Number(e.target.value)))}
+          onChange={e => onYear(toHistorical(Number(e.target.value)))}
           aria-label={RL.annusViarum}
           aria-valuetext={year === null ? RL.omnesViae : RL.latinYear(year)}
           className="w-full mt-1 accent-[var(--gold-leaf)]"
           // A horizontal drag here moves the year, not the map's native scroll.
-          style={{ touchAction: "none" }}
+          style={{ touchAction: 'none' }}
         />
         {year !== null && (
           <div className="font-body italic text-sm text-parchment/75 leading-snug">
-            {status === "yes"
+            {status === 'yes'
               ? RL.exstabat
-              : status === "unknown"
-                ? RL.incerta
-                : road.from !== null && year < road.from - road.fromErr
-                  ? RL.nondum
-                  : RL.iamNon}
+              : status === 'unknown'
+              ? RL.incerta
+              : road.from !== null && year < road.from - road.fromErr
+              ? RL.nondum
+              : RL.iamNon}
           </div>
         )}
         <div className="mt-2 flex gap-2">
@@ -885,13 +860,14 @@ const RoadCard: React.FC<{
   );
 };
 
-const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
+// eslint-disable-next-line sonarjs/cognitive-complexity
+function RomanMapCanvas({
   latitude,
   longitude,
   onLocationChange,
   onClose,
   year,
-}) => {
+}: RomanMapCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -911,15 +887,13 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   const labelWidthsRef = useRef(new Map<number, Float32Array>());
   const frameRef = useRef<number | null>(null);
   const zoomFrameRef = useRef<number | null>(null);
-  const pendingZoomRef = useRef<{ zoom: number; x: number; y: number } | null>(
-    null,
-  );
+  const pendingZoomRef = useRef<{ zoom: number; x: number; y: number } | null>(null);
   const hitsRef = useRef<{ city: City; x: number; y: number }[]>([]);
   const creatureLayerRef = useRef<HTMLDivElement>(null);
   const creatureElsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const creatureHitsRef = useRef<
-    { creature: MapCreature; x: number; y: number; r: number }[]
-  >([]);
+  const creatureHitsRef = useRef<{ creature: MapCreature; x: number; y: number; r: number }[]>(
+    [],
+  );
   const pointersRef = useRef(new Map<number, { x: number; y: number }>());
   const gestureRef = useRef<{
     startX: number;
@@ -928,26 +902,30 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   } | null>(null);
   const pinchRef = useRef<{ dist: number; zoom: number } | null>(null);
   const userRef = useRef({ lat: latitude, lng: longitude });
+  // eslint-disable-next-line react-hooks/refs
   userRef.current = { lat: latitude, lng: longitude };
   // The road card's time slider overrides the app's date for the roads layer only.
   const [cardYear, setCardYear] = useState<number | null>(null);
   const roadsYear = cardYear ?? year ?? null;
   const yearRef = useRef(roadsYear);
+  // eslint-disable-next-line react-hooks/refs
   yearRef.current = roadsYear;
   const roadSceneRef = useRef<RoadScene | null>(null);
   // Road-name glyph widths per font (cleared with the city label widths when fonts load).
   const glyphWidthsRef = useRef(new Map<string, Map<string, number>>());
 
-  const [status, setStatus] = useState<Status>("loading");
+  const [status, setStatus] = useState<Status>('loading');
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [zoom, setZoom] = useState(MIN_ZOOM); // mirrors zoomRef for the zoom buttons
   const [selected, setSelected] = useState<Selection | null>(null);
   const selectedRef = useRef(selected);
+  // eslint-disable-next-line react-hooks/refs
   selectedRef.current = selected;
   const [roadsOn, setRoadsOn] = useState(savedRoadsOn);
   const roadsOnRef = useRef(roadsOn);
+  // eslint-disable-next-line react-hooks/refs
   roadsOnRef.current = roadsOn;
-  const [roadStatus, setRoadStatus] = useState<Status>("loading");
+  const [roadStatus, setRoadStatus] = useState<Status>('loading');
   const [roadAttempt, setRoadAttempt] = useState(0);
 
   const scale = () => (baseHRef.current / LAT_SPAN) * zoomRef.current; // px per degree
@@ -964,18 +942,15 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     const vw = viewWRef.current;
     const margin = Math.max(0, (vw - w) / 2); // the wrapper is centred when narrower
     return Math.round(
-      clamp(
-        container.scrollLeft - margin - OVERSCAN * vw,
-        0,
-        w - canvasWRef.current,
-      ),
+      clamp(container.scrollLeft - margin - OVERSCAN * vw, 0, w - canvasWRef.current),
     );
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const draw = useCallback(() => {
     frameRef.current = null;
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
     const { w, h } = canvasSize();
     const cw = canvasWRef.current;
@@ -1011,15 +986,15 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         -dpr * (s * LNG_MIN + ox),
         dpr * (LAT_MAX * s - panY),
       );
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
 
       // 2. Land.
       ctx.fillStyle = colors.parchment;
-      for (const p of scene.provinces) ctx.fill(p, "evenodd");
+      for (const p of scene.provinces) ctx.fill(p, 'evenodd');
       // 3. Lakes.
       ctx.fillStyle = SEA;
-      ctx.fill(scene.lakes, "evenodd");
+      ctx.fill(scene.lakes, 'evenodd');
       // 4. Rivers.
       ctx.strokeStyle = RIVER;
       ctx.lineWidth = (0.5 + 0.2 * z) / s;
@@ -1063,17 +1038,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           const main = style < 6,
             certainty = Math.floor(style / 2) % 3,
             faded = style % 2 === 1;
-          const width = main
-            ? Math.min(3, 1 + 0.15 * z)
-            : Math.min(1.8, 0.5 + 0.08 * z);
+          const width = main ? Math.min(3, 1 + 0.15 * z) : Math.min(1.8, 0.5 + 0.08 * z);
           ctx.globalAlpha =
-            [0.95, 0.75, 0.75][certainty] *
-            (main ? 1 : minorAlpha) *
-            (faded ? 0.35 : 1);
+            [0.95, 0.75, 0.75][certainty] * (main ? 1 : minorAlpha) * (faded ? 0.35 : 1);
           ctx.lineWidth = width / s;
-          ctx.setLineDash(
-            certainty === 2 ? [0.01 / s, (width + 2.5) / s] : [],
-          );
+          ctx.setLineDash(certainty === 2 ? [0.01 / s, (width + 2.5) / s] : []);
           for (const t of tiles) {
             const path = getRoadPath(roadScene, level, t, style);
             if (path) ctx.stroke(path);
@@ -1083,7 +1052,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         ctx.globalAlpha = 1;
 
         const sel = selectedRef.current;
-        if (sel?.kind === "road") {
+        if (sel?.kind === 'road') {
           ctx.strokeStyle = colors.goldLeaf;
           const strokeRoad = (r: RomanRoad) => {
             ctx.beginPath();
@@ -1095,8 +1064,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           };
           ctx.globalAlpha = 0.6;
           ctx.lineWidth = 2.5 / s;
-          for (const i of sel.related)
-            if (roadScene.vis[i]) strokeRoad(roadScene.roads[i]);
+          for (const i of sel.related) if (roadScene.vis[i]) strokeRoad(roadScene.roads[i]);
           ctx.globalAlpha = 1;
           ctx.lineWidth = 4 / s;
           strokeRoad(sel.road);
@@ -1110,23 +1078,20 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
       // 7. Province labels.
       const fontPx = Math.round(Math.min(18, 9 + 3 * (z - 1)));
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = PROVINCE_LABEL;
       for (const l of scene.labels) {
         if (l.regio && z < REGIO_ZOOM) continue;
         const x = xOf(l.lng);
         if (x < ox - 400 || x > ox + cw + 400) continue; // wider than any label
-        ctx.font = `${
-          l.regio ? Math.round(fontPx * 0.8) : fontPx
-        }px Cinzel, serif`;
-        if (z < 3 && l.widthDeg * s < ctx.measureText(l.text).width * 0.5)
-          continue;
+        ctx.font = `${l.regio ? Math.round(fontPx * 0.8) : fontPx}px Cinzel, serif`;
+        if (z < 3 && l.widthDeg * s < ctx.measureText(l.text).width * 0.5) continue;
         ctx.fillText(l.text, x, yOf(l.lat));
       }
       if (z < REGIO_ZOOM && scene.italia) {
         ctx.font = `${fontPx}px Cinzel, serif`;
-        ctx.fillText("ITALIA", xOf(scene.italia.lng), yOf(scene.italia.lat));
+        ctx.fillText('ITALIA', xOf(scene.italia.lng), yOf(scene.italia.lat));
       }
 
       // 8. Cities: filled circles for towns, hollow squares for legionary fortresses.
@@ -1141,8 +1106,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       for (let row = gridRow(latTop); row <= gridRow(latBottom); row++)
         for (let col = gridCol(lng0); col <= gridCol(lng1); col++) {
           const cell = scene.cityGrid[row * GRID_COLS + col];
-          for (let k = 0; k < cell.length && cell[k] < n; k++)
-            candidates.push(cell[k]);
+          for (let k = 0; k < cell.length && cell[k] < n; k++) candidates.push(cell[k]);
         }
       candidates.sort((a, b) => a - b);
 
@@ -1157,8 +1121,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         const city = scene.cities[i];
         const x = xOf(city.lng),
           y = yOf(city.lat);
-        if (x < xMin || x > xMax || y < -HIT_RADIUS || y > h + HIT_RADIUS)
-          continue;
+        if (x < xMin || x > xMax || y < -HIT_RADIUS || y > h + HIT_RADIUS) continue;
         if (dedupe) {
           if (dots.hitsPoint(x, y, r)) continue;
           dots.addPoint(x, y);
@@ -1183,8 +1146,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       const named = Math.min(hits.length, Math.round(16 * z * z));
       const cityFont = Math.round(Math.min(MAX_CITY_FONT, 9 + z));
       ctx.font = `${cityFont}px Cinzel, serif`;
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
       ctx.lineWidth = 3;
       ctx.strokeStyle = colors.parchment;
       ctx.fillStyle = colors.ink;
@@ -1200,8 +1163,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         const { city, x, y } = hits[k];
         const rank = ranks[k];
         let tw = widths[rank];
-        if (Number.isNaN(tw))
-          tw = widths[rank] = ctx.measureText(city.latin).width;
+        if (Number.isNaN(tw)) tw = widths[rank] = ctx.measureText(city.latin).width;
         const spots = [
           [x - tw / 2, y - gap - half],
           [x + gap + 1, y],
@@ -1229,12 +1191,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         const fontPx = Math.round(clamp(9 + z, 12, 15)); // never under 12 px
         const font = `italic ${fontPx}px "IM Fell English", serif`;
         ctx.font = font;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
         let glyphW = glyphWidthsRef.current.get(font);
+        // eslint-disable-next-line sonarjs/no-nested-assignment
         if (!glyphW) glyphWidthsRef.current.set(font, (glyphW = new Map()));
         const widthOf = (ch: string) => {
           let w = glyphW!.get(ch);
+          // eslint-disable-next-line sonarjs/no-nested-assignment
           if (w === undefined) glyphW!.set(ch, (w = ctx.measureText(ch).width));
           return w;
         };
@@ -1259,16 +1223,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           for (let k = 0; k < n; k++) {
             xs[k] = xOf(chain.pts[2 * k]);
             ys[k] = yOf(chain.pts[2 * k + 1]);
-            if (k)
-              cum[k] =
-                cum[k - 1] + Math.hypot(xs[k] - xs[k - 1], ys[k] - ys[k - 1]);
+            if (k) cum[k] = cum[k - 1] + Math.hypot(xs[k] - xs[k - 1], ys[k] - ys[k - 1]);
           }
           const total = cum[n - 1];
           if (total < tw + 2 * fontPx) continue;
-          const count = Math.max(
-            1,
-            Math.floor(total / Math.max(ROAD_LABEL_SPACING, 2 * tw)),
-          );
+          const count = Math.max(1, Math.floor(total / Math.max(ROAD_LABEL_SPACING, 2 * tw)));
           // One label per slot of the line: its middle first, then positions stepping
           // outwards (past a bend, a city name or the strip edge) while it fits the slot.
           const step = Math.max(tw / 2, 40);
@@ -1315,7 +1274,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       }
 
       const sel = selectedRef.current;
-      if (sel?.kind === "city") {
+      if (sel?.kind === 'city') {
         ctx.strokeStyle = colors.goldLeaf;
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -1345,7 +1304,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         const x = xOf(creature.lng),
           y = yOf(creature.lat);
         const onCanvas = y > -size && y < h + size;
-        el.style.visibility = onCanvas ? "visible" : "hidden";
+        el.style.visibility = onCanvas ? 'visible' : 'hidden';
         el.style.transform = `translate(${x - CREATURE_ART_PX / 2}px, ${
           y - CREATURE_ART_PX / 2
         }px) scale(${size / CREATURE_ART_PX})`;
@@ -1386,7 +1345,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     }
     const marker = markerRef.current;
     if (marker) {
-      marker.style.display = userVisible ? "block" : "none";
+      marker.style.display = userVisible ? 'block' : 'none';
       marker.style.transform = `translate(${ux}px, ${uy}px)`;
     }
 
@@ -1395,12 +1354,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     const sel = selectedRef.current;
     if (card && sel) {
       const p = selectionPoint(sel);
-      const gap = sel.kind === "creature" ? creatureSize(z) / 2 + 2 : 14;
-      const x = clamp(
-        xOf(p.lng),
-        card.offsetWidth / 2 + 4,
-        w - card.offsetWidth / 2 - 4,
-      );
+      const gap = sel.kind === 'creature' ? creatureSize(z) / 2 + 2 : 14;
+      const x = clamp(xOf(p.lng), card.offsetWidth / 2 + 4, w - card.offsetWidth / 2 - 4);
       const y = yOf(p.lat);
       const above = y - card.offsetHeight - gap - 4 >= 0;
       card.style.left = `${x}px`;
@@ -1412,8 +1367,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   }, []);
 
   const scheduleDraw = useCallback(() => {
-    if (frameRef.current === null)
-      frameRef.current = requestAnimationFrame(draw);
+    if (frameRef.current === null) frameRef.current = requestAnimationFrame(draw);
   }, [draw]);
 
   /** Draws now, dropping any frame already scheduled. */
@@ -1454,7 +1408,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       canvas.height = bh;
     }
     // Desktop: no scrollbar when the whole map fits.
-    container.style.scrollbarWidth = w <= vw ? "none" : "thin";
+    container.style.scrollbarWidth = w <= vw ? 'none' : 'thin';
   }, []);
 
   /** Zooms keeping the map point under (clientX, clientY) fixed on screen. */
@@ -1474,21 +1428,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
       zoomRef.current = z;
       const s1 = scale();
-      panYRef.current = clamp(
-        degFromTop * s1 - py,
-        0,
-        baseHRef.current * (z - 1),
-      );
+      panYRef.current = clamp(degFromTop * s1 - py, 0, baseHRef.current * (z - 1));
       applySize();
       const margin = Math.max(0, (container.clientWidth - canvasSize().w) / 2);
       container.scrollLeft =
-        margin +
-        (lng - LNG_MIN) * s1 -
-        (clientX - container.getBoundingClientRect().left);
+        margin + (lng - LNG_MIN) * s1 - (clientX - container.getBoundingClientRect().left);
       drawNow(); // after the scroll, so the canvas strip lands under the viewport
       setZoom(z);
-      if (z < CREATURE_ZOOM && selectedRef.current?.kind === "creature")
-        setSelected(null);
+      if (z < CREATURE_ZOOM && selectedRef.current?.kind === 'creature') setSelected(null);
     },
     [applySize, drawNow],
   );
@@ -1538,28 +1485,26 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     const container = containerRef.current;
     if (!container) return;
     const onScroll = () => {
-      if (
-        Math.abs(desiredOrigin() - originXRef.current) >
-        (OVERSCAN * viewWRef.current) / 2
-      )
+      if (Math.abs(desiredOrigin() - originXRef.current) > (OVERSCAN * viewWRef.current) / 2)
         scheduleDraw();
     };
-    container.addEventListener("scroll", onScroll, { passive: true });
-    return () => container.removeEventListener("scroll", onScroll);
+    container.addEventListener('scroll', onScroll, { passive: true });
+    return () => container.removeEventListener('scroll', onScroll);
   }, [scheduleDraw]);
 
   useEffect(() => {
     let cancelled = false;
-    setStatus("loading");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setStatus('loading');
     loadRomanMapData()
-      .then((data) => {
+      .then(data => {
         if (cancelled) return;
         sceneRef.current = getScene(data);
-        setStatus("ready");
+        setStatus('ready');
         scheduleDraw();
       })
       .catch(() => {
-        if (!cancelled) setStatus("error");
+        if (!cancelled) setStatus('error');
       });
     return () => {
       cancelled = true;
@@ -1569,16 +1514,12 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   useEffect(() => {
     const onResize = () => {
       baseHRef.current = baseHeight();
-      panYRef.current = clamp(
-        panYRef.current,
-        0,
-        baseHRef.current * (zoomRef.current - 1),
-      );
+      panYRef.current = clamp(panYRef.current, 0, baseHRef.current * (zoomRef.current - 1));
       applySize();
       drawNow();
     };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, [applySize, drawNow]);
 
   // Wheel / trackpad pinch zooms; horizontal wheel deltas keep scrolling natively.
@@ -1594,41 +1535,42 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         e.clientY,
       );
     };
-    container.addEventListener("wheel", onWheel, { passive: false });
-    return () => container.removeEventListener("wheel", onWheel);
+    container.addEventListener('wheel', onWheel, { passive: false });
+    return () => container.removeEventListener('wheel', onWheel);
   }, [requestZoom]);
 
   // Escape closes an open city card first. Capture phase, so it runs before the modal's
   // own Escape handler, which skips events marked defaultPrevented.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape" || !selectedRef.current) return;
+      if (e.key !== 'Escape' || !selectedRef.current) return;
       e.preventDefault();
       setSelected(null);
     };
-    window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
   }, []);
 
   // The roads file loads only while the layer is on (and once per session).
   useEffect(() => {
-    localStorage.setItem(ROADS_KEY, roadsOn ? "1" : "0");
+    localStorage.setItem(ROADS_KEY, roadsOn ? '1' : '0');
     if (!roadsOn) {
-      if (selectedRef.current?.kind === "road") setSelected(null);
+      if (selectedRef.current?.kind === 'road') setSelected(null);
       scheduleDraw();
       return;
     }
     let cancelled = false;
-    setRoadStatus("loading");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRoadStatus('loading');
     loadRomanRoads()
-      .then((roads) => {
+      .then(roads => {
         if (cancelled) return;
         roadSceneRef.current = getRoadScene(roads);
-        setRoadStatus("ready");
+        setRoadStatus('ready');
         scheduleDraw();
       })
       .catch(() => {
-        if (!cancelled) setRoadStatus("error");
+        if (!cancelled) setRoadStatus('error');
       });
     return () => {
       cancelled = true;
@@ -1637,7 +1579,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
   // A new app date can hide the selected road, and it replaces the card's own year.
   useEffect(() => {
-    if (selectedRef.current?.kind === "road") setSelected(null);
+    if (selectedRef.current?.kind === 'road') setSelected(null);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCardYear(null);
   }, [year]);
 
@@ -1645,7 +1588,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     scheduleDraw();
   }, [roadsYear, scheduleDraw]);
 
-  const creaturesShown = status === "ready" && zoom >= CREATURE_ZOOM;
+  const creaturesShown = status === 'ready' && zoom >= CREATURE_ZOOM;
 
   // Draw synchronously when the card opens (or the creature layer mounts) so nothing
   // shows at its unpositioned origin.
@@ -1663,8 +1606,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       scheduleDraw();
     };
     fonts.ready.then(refresh);
-    fonts.addEventListener?.("loadingdone", refresh);
-    return () => fonts.removeEventListener?.("loadingdone", refresh);
+    fonts.addEventListener?.('loadingdone', refresh);
+    return () => fonts.removeEventListener?.('loadingdone', refresh);
   }, [scheduleDraw]);
 
   useEffect(
@@ -1672,14 +1615,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       // Reset the refs too: StrictMode re-runs effects, and a stale frame id would
       // make scheduleDraw think a frame is still pending.
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
-      if (zoomFrameRef.current !== null)
-        cancelAnimationFrame(zoomFrameRef.current);
+      if (zoomFrameRef.current !== null) cancelAnimationFrame(zoomFrameRef.current);
       frameRef.current = null;
       zoomFrameRef.current = null;
     },
     [],
   );
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const tapAt = (clientX: number, clientY: number) => {
     const rect = wrapperRef.current?.getBoundingClientRect(); // hits are in map px
     if (!rect) return;
@@ -1693,14 +1636,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       const d = ((x - px) ** 2 + (y - py) ** 2) / (HIT_RADIUS * HIT_RADIUS);
       if (d <= bestD) {
         bestD = d;
-        best = { kind: "city", city };
+        best = { kind: 'city', city };
       }
     }
     for (const { creature, x, y, r } of creatureHitsRef.current) {
       const d = ((x - px) ** 2 + (y - py) ** 2) / (r * r);
       if (d <= bestD) {
         bestD = d;
-        best = { kind: "creature", creature };
+        best = { kind: 'creature', creature };
       }
     }
     // Roads come last: a tap near a city dot or a creature still picks those.
@@ -1712,13 +1655,11 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
       const road = hitRoad(roadScene, lng, lat, ROAD_HIT / s);
       if (road)
         best = {
-          kind: "road",
+          kind: 'road',
           road,
           related: road.viae.length
             ? roadScene.roads.flatMap((r, i) =>
-                r !== road && r.viae.some((v) => road.viae.includes(v))
-                  ? [i]
-                  : [],
+                r !== road && r.viae.some(v => road.viae.includes(v)) ? [i] : [],
               )
             : [],
           lng,
@@ -1737,8 +1678,9 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     };
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointersRef.current.size === 1) {
@@ -1753,6 +1695,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     }
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const p = pointersRef.current.get(e.pointerId);
     if (!p) return;
@@ -1764,36 +1707,25 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
     const pinch = pinchRef.current;
     if (pinch && pointersRef.current.size >= 2) {
       const m = pinchMetrics();
-      if (pinch.dist > 0)
-        requestZoom((pinch.zoom * m.dist) / pinch.dist, m.x, m.y);
+      if (pinch.dist > 0) requestZoom((pinch.zoom * m.dist) / pinch.dist, m.x, m.y);
       return;
     }
     const g = gestureRef.current;
     if (!g) return;
-    if (
-      !g.moved &&
-      Math.hypot(e.clientX - g.startX, e.clientY - g.startY) > CLICK_SLOP
-    )
+    if (!g.moved && Math.hypot(e.clientX - g.startX, e.clientY - g.startY) > CLICK_SLOP)
       g.moved = true;
     // Mouse drags pan both ways; on touch the browser pans horizontally itself
     // (touch-action: pan-x) and only vertical drags reach this handler.
     const container = containerRef.current;
     if (container && dx) container.scrollLeft -= dx;
-    const panY = clamp(
-      panYRef.current - dy,
-      0,
-      baseHRef.current * (zoomRef.current - 1),
-    );
+    const panY = clamp(panYRef.current - dy, 0, baseHRef.current * (zoomRef.current - 1));
     if (panY !== panYRef.current) {
       panYRef.current = panY;
       scheduleDraw();
     }
   };
 
-  const endPointer = (
-    e: React.PointerEvent<HTMLCanvasElement>,
-    cancelled: boolean,
-  ) => {
+  const endPointer = (e: React.PointerEvent<HTMLCanvasElement>, cancelled: boolean) => {
     if (!pointersRef.current.has(e.pointerId)) return;
     const tap =
       !cancelled &&
@@ -1807,9 +1739,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
   };
 
   const province =
-    selected?.kind === "city"
-      ? getRomanProvince(selected.city.lat, selected.city.lng)
-      : null;
+    selected?.kind === 'city' ? getRomanProvince(selected.city.lat, selected.city.lng) : null;
 
   return (
     <div className="flex flex-col gap-2">
@@ -1819,17 +1749,13 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
         // pan-x: native horizontal scrolling pans east–west; vertical drags and pinches come to the canvas.
         style={
           {
-            touchAction: "pan-x",
-            WebkitOverflowScrolling: "touch",
+            touchAction: 'pan-x',
+            WebkitOverflowScrolling: 'touch',
           } as React.CSSProperties
         }
       >
         {/* Sea background: shows only if a fast fling outruns the canvas strip for a frame. */}
-        <div
-          ref={wrapperRef}
-          className="relative mx-auto"
-          style={{ background: SEA }}
-        >
+        <div ref={wrapperRef} className="relative mx-auto" style={{ background: SEA }}>
           <canvas
             ref={canvasRef}
             className="absolute left-0 top-0 block select-none cursor-grab active:cursor-grabbing"
@@ -1837,8 +1763,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
             aria-label="Mapa del Imperio Romano — toque una ciudad para elegirla como ubicación"
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
-            onPointerUp={(e) => endPointer(e, false)}
-            onPointerCancel={(e) => endPointer(e, true)}
+            onPointerUp={e => endPointer(e, false)}
+            onPointerCancel={e => endPointer(e, true)}
           />
           {creaturesShown && (
             <div
@@ -1849,30 +1775,28 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
               {CREATURES.map((creature, i) => (
                 <div
                   key={creature.key}
-                  ref={(el) => {
+                  ref={el => {
                     creatureElsRef.current[i] = el;
                   }}
                   className="absolute left-0 top-0"
                   style={{
                     width: CREATURE_ART_PX,
                     height: CREATURE_ART_PX,
-                    transformOrigin: "50% 50%",
+                    transformOrigin: '50% 50%',
                   }}
                 >
                   <canvas
-                    ref={(el) => {
+                    ref={el => {
                       if (el && !el.dataset.painted) {
                         paintCreature(el, creature);
-                        el.dataset.painted = "1";
+                        el.dataset.painted = '1';
                       }
                     }}
-                    className={`block ${
-                      creature.sea ? "creature-bob" : "creature-breathe"
-                    }`}
+                    className={`block ${creature.sea ? 'creature-bob' : 'creature-breathe'}`}
                     // Staggered so the creatures never move in step.
                     style={{
-                      width: "100%",
-                      height: "100%",
+                      width: '100%',
+                      height: '100%',
                       animationDuration: `${5 + (i % 4) * 0.9}s`,
                       animationDelay: `${-i * 0.73}s`,
                     }}
@@ -1884,7 +1808,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           <div
             ref={markerRef}
             className="absolute left-0 top-0 pointer-events-none"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
           >
             <span
               className="absolute -left-3 -top-3 w-6 h-6 rounded-full border-2 animate-ping"
@@ -1892,17 +1816,17 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
             />
           </div>
 
-          {status !== "ready" && (
+          {status !== 'ready' && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
               <span className="font-body italic text-lg text-parchment/80">
-                {status === "loading"
-                  ? "Desplegando el mapa del Imperio…"
-                  : "No se pudo cargar el mapa."}
+                {status === 'loading'
+                  ? 'Desplegando el mapa del Imperio…'
+                  : 'No se pudo cargar el mapa.'}
               </span>
-              {status === "error" && (
+              {status === 'error' && (
                 <button
                   type="button"
-                  onClick={() => setLoadAttempt((n) => n + 1)}
+                  onClick={() => setLoadAttempt(n => n + 1)}
                   className="pointer-events-auto font-serif text-xs uppercase tracking-[0.25em] px-4 py-2 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
                 >
                   Reintentar
@@ -1915,28 +1839,28 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
             <div
               ref={cardRef}
               className={`absolute z-10 ${
-                selected.kind === "road"
-                  ? "w-72 max-h-[60%] overflow-y-auto overscroll-contain"
-                  : "w-60"
+                selected.kind === 'road'
+                  ? 'w-72 max-h-[60%] overflow-y-auto overscroll-contain'
+                  : 'w-60'
               } p-3 rounded-sm border border-gold-dim/60 bg-ink/95 shadow-2xl`}
               style={{ left: 0, top: 0 }}
               role="dialog"
               aria-label={
-                selected.kind === "city"
+                selected.kind === 'city'
                   ? selected.city.latin
-                  : selected.kind === "creature"
-                    ? selected.creature.name
-                    : selected.road.viae.join(" · ") || RL.unnamed
+                  : selected.kind === 'creature'
+                  ? selected.creature.name
+                  : selected.road.viae.join(' · ') || RL.unnamed
               }
             >
-              {selected.kind === "road" ? (
+              {selected.kind === 'road' ? (
                 <RoadCard
                   road={selected.road}
                   year={roadsYear}
                   onYear={setCardYear}
                   ownYear={cardYear !== null}
                 />
-              ) : selected.kind === "city" ? (
+              ) : selected.kind === 'city' ? (
                 <>
                   <div className="font-serif text-xl font-bold text-gold-leaf leading-tight">
                     {selected.city.latin}
@@ -1945,8 +1869,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
                     {selected.city.modern}
                   </div>
                   <div className="font-body text-sm text-parchment/60 mt-1">
-                    {selected.city.fortress ? "Castra" : "Urbs"}
-                    {province ? ` · ${province.name}` : ""}
+                    {selected.city.fortress ? 'Castra' : 'Urbs'}
+                    {province ? ` · ${province.name}` : ''}
                   </div>
                   <button
                     type="button"
@@ -1979,19 +1903,19 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
       <div className="flex items-center justify-between gap-3 px-1">
         <span className="font-body italic text-sm text-parchment/50 leading-tight">
-          Imperium Romanum, 117 d. C. · Datos: Digital Atlas of the Roman Empire
-          (DARE), vía klokantech/roman-empire
+          Imperium Romanum, 117 d. C. · Datos: Digital Atlas of the Roman Empire (DARE), vía
+          klokantech/roman-empire
         </span>
         <div className="flex gap-2 shrink-0">
           <button
             type="button"
-            onClick={() => setRoadsOn((v) => !v)}
+            onClick={() => setRoadsOn(v => !v)}
             aria-pressed={roadsOn}
             title={roadsOn ? RL.toggleHide : RL.toggleShow}
             className={`h-9 px-3 flex items-center gap-2 rounded-sm border font-serif text-xs uppercase tracking-[0.2em] ${
               roadsOn
-                ? "border-gold-leaf/60 text-gold-leaf bg-gold-leaf/10"
-                : "border-gold-dim/50 text-parchment/60 hover:bg-gold-leaf/10"
+                ? 'border-gold-leaf/60 text-gold-leaf bg-gold-leaf/10'
+                : 'border-gold-dim/50 text-parchment/60 hover:bg-gold-leaf/10'
             }`}
           >
             <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
@@ -2007,8 +1931,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
           </button>
           {(
             [
-              [1 / 1.5, "−", "Alejar", zoom <= MIN_ZOOM],
-              [1.5, "+", "Acercar", zoom >= MAX_ZOOM],
+              [1 / 1.5, '−', 'Alejar', zoom <= MIN_ZOOM],
+              [1.5, '+', 'Acercar', zoom >= MAX_ZOOM],
             ] as const
           ).map(([factor, glyph, label, disabled]) => (
             <button
@@ -2028,36 +1952,37 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
 
       {roadsOn && (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 font-body italic text-sm text-parchment/60 leading-tight">
-          {roadStatus === "ready" ? (
+          {roadStatus === 'ready' ? (
             <>
               {(
                 [
-                  [RL.legendMaior, 3, 0.95, ""],
-                  [RL.legendMinor, 1.5, 0.75, ""],
-                  [RL.legendHypothetica, 2, 0.75, "0.01 4.5"],
-                  ...(roadsYear !== null
-                    ? ([[RL.legendIgnota, 3, 0.33, ""]] as const)
-                    : []),
+                  [RL.legendMaior, 3, 0.95, ''],
+                  [RL.legendMinor, 1.5, 0.75, ''],
+                  [RL.legendHypothetica, 2, 0.75, '0.01 4.5'],
+                  ...(roadsYear !== null ? ([[RL.legendIgnota, 3, 0.33, '']] as const) : []),
                 ] as const
-              ).map(([label, width, opacity, dash]) => (
-                <span key={label} className="flex items-center gap-1.5">
-                  <svg width="28" height="8" viewBox="0 0 28 8" aria-hidden="true">
-                    <rect width="28" height="8" rx="1" fill={colorsRef.current.parchment} />
-                    <line
-                      x1="3"
-                      y1="4"
-                      x2="25"
-                      y2="4"
-                      stroke={ROAD}
-                      strokeOpacity={opacity}
-                      strokeWidth={width}
-                      strokeLinecap="round"
-                      strokeDasharray={dash || undefined}
-                    />
-                  </svg>
-                  {label}
-                </span>
-              ))}
+              )
+                /* eslint-disable react-hooks/refs */
+                .map(([label, width, opacity, dash]) => (
+                  <span key={label} className="flex items-center gap-1.5">
+                    <svg width="28" height="8" viewBox="0 0 28 8" aria-hidden="true">
+                      <rect width="28" height="8" rx="1" fill={colorsRef.current.parchment} />
+                      <line
+                        x1="3"
+                        y1="4"
+                        x2="25"
+                        y2="4"
+                        stroke={ROAD}
+                        strokeOpacity={opacity}
+                        strokeWidth={width}
+                        strokeLinecap="round"
+                        strokeDasharray={dash || undefined}
+                      />
+                    </svg>
+                    {label}
+                  </span>
+                  /* eslint-enable react-hooks/refs */
+                ))}
               {roadsYear !== null && <span>{RL.yearNote(roadsYear)}</span>}
               {cardYear !== null && (
                 <button
@@ -2069,14 +1994,14 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
                 </button>
               )}
             </>
-          ) : roadStatus === "loading" ? (
+          ) : roadStatus === 'loading' ? (
             <span>{RL.loading}</span>
           ) : (
             <span className="flex items-center gap-2">
               {RL.error}
               <button
                 type="button"
-                onClick={() => setRoadAttempt((n) => n + 1)}
+                onClick={() => setRoadAttempt(n => n + 1)}
                 className="not-italic font-serif text-xs uppercase tracking-[0.2em] px-2 py-1 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
               >
                 {RL.retry}
@@ -2084,7 +2009,7 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
             </span>
           )}
           <span className="basis-full text-parchment/45">
-            {RL.attribution}, doi:{" "}
+            {RL.attribution}, doi:{' '}
             <a
               href="https://doi.org/10.5281/zenodo.17122148"
               target="_blank"
@@ -2092,8 +2017,8 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
               className="underline hover:text-gold-leaf"
             >
               10.5281/zenodo.17122148
-            </a>{" "}
-            ·{" "}
+            </a>{' '}
+            ·{' '}
             <a
               href="https://creativecommons.org/licenses/by/4.0/"
               target="_blank"
@@ -2101,13 +2026,13 @@ const RomanMapCanvas: React.FC<RomanMapCanvasProps> = ({
               className="underline hover:text-gold-leaf"
             >
               CC BY 4.0
-            </a>{" "}
+            </a>{' '}
             · {RL.modified}
           </span>
         </div>
       )}
     </div>
   );
-};
+}
 
 export default RomanMapCanvas;

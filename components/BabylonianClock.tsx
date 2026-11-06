@@ -31,11 +31,17 @@ interface BabylonianCalendarModalProps {
 }
 
 const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
-  isOpen, onClose, modernTime, lat, lng,
+  isOpen,
+  onClose,
+  modernTime,
+  lat,
+  lng,
 }) => {
+  const modernTimeMs = modernTime.getTime();
   const babDate = useMemo(
     () => getBabylonianDate(modernTime, lat, lng),
-    [modernTime.getTime(), lat, lng]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [modernTimeMs, lat, lng],
   );
   const lore = getBabylonianLore(babDate.monthName);
 
@@ -56,7 +62,9 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
           const isToday = d === babDate.day;
           const isPast = d < babDate.day;
           let cls = 'bg-ink/40 text-blue-400 border border-blue-800/20';
-          if (isToday) cls = 'bg-blue-400 text-ink font-bold shadow-[0_0_8px_rgba(96,165,250,0.6)] ring-1 ring-blue-300 scale-110';
+          if (isToday)
+            cls =
+              'bg-blue-400 text-ink font-bold shadow-[0_0_8px_rgba(96,165,250,0.6)] ring-1 ring-blue-300 scale-110';
           else if (isPast) cls = 'bg-blue-900/30 text-blue-300 border border-blue-700/20';
           return (
             <div
@@ -73,10 +81,16 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/85 backdrop-blur-md animate-fadeIn cursor-pointer"
       onClick={onClose}
+      onKeyDown={e => {
+        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
+      }}
     >
       <div
+        role="presentation"
         className="w-full max-w-lg bg-ink border-4 border-blue-500/60 rounded-sm shadow-[0_0_50px_rgba(96,165,250,0.15)] overflow-hidden relative cursor-auto"
         onClick={e => e.stopPropagation()}
       >
@@ -104,7 +118,6 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
 
         {/* Body */}
         <div className="p-5 flex flex-col gap-5 max-h-[65vh] overflow-y-auto custom-scrollbar overscroll-behavior-contain">
-
           {/* Month grid */}
           <div>
             <h3 className="text-xs font-serif uppercase tracking-widest text-blue-400 mb-3 text-center flex items-center justify-center gap-2 border-y border-blue-500/20 py-2">
@@ -126,14 +139,20 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
                   <div className="text-xs font-bold uppercase tracking-widest text-blue-400">
                     Deidad del Mes
                   </div>
-                  <div className="text-lg font-serif font-black text-parchment">{lore.festivalDeity}</div>
+                  <div className="text-lg font-serif font-black text-parchment">
+                    {lore.festivalDeity}
+                  </div>
                   {lore.festivalDeityGloss && (
-                    <div className="text-xs font-serif italic text-blue-200/70">{lore.festivalDeityGloss}</div>
+                    <div className="text-xs font-serif italic text-blue-200/70">
+                      {lore.festivalDeityGloss}
+                    </div>
                   )}
                 </div>
               </div>
               <p className="text-xs font-serif text-parchment/80 italic leading-relaxed">
-                "{lore.description}"
+                {'"'}
+                {lore.description}
+                {'"'}
               </p>
               <div className="grid gap-2 sm:grid-cols-2">
                 <div className="p-2 bg-blue-800/20 border border-blue-600/20 rounded text-left">
@@ -142,7 +161,9 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
                   </div>
                   <div className="text-xs font-serif text-blue-100/90">
                     {lore.monthRegent}
-                    {lore.regentNote && <span className="text-blue-300/70 italic"> · {lore.regentNote}</span>}
+                    {lore.regentNote && (
+                      <span className="text-blue-300/70 italic"> · {lore.regentNote}</span>
+                    )}
                   </div>
                   <div className="mt-1 text-xs font-serif text-blue-200/70 leading-relaxed">
                     {babDate.monthRegentDesc}
@@ -156,10 +177,13 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
                 </div>
               </div>
               <div className="text-xs text-blue-400 font-serif">
-                Signo zodiacal: <span className="text-blue-300 font-bold">{lore.zodiacSign}</span>
+                Signo zodiacal:{' '}
+                <span className="text-blue-300 font-bold">{lore.zodiacSign}</span>
                 {lore.zodiacSign in BABYLONIAN_ZODIAC_ES && (
                   <span className="italic text-blue-300/60">
-                    {' '}≈ {BABYLONIAN_ZODIAC_ES[lore.zodiacSign as keyof typeof BABYLONIAN_ZODIAC_ES]}
+                    {' '}
+                    ≈{' '}
+                    {BABYLONIAN_ZODIAC_ES[lore.zodiacSign as keyof typeof BABYLONIAN_ZODIAC_ES]}
                   </span>
                 )}
               </div>
@@ -169,13 +193,23 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
           {/* Current day stats */}
           <div className="grid grid-cols-2 gap-3 text-center">
             {[
-              { label: 'Hora temporal', value: babDate.hourName,       gloss: babDate.hourNameEs },
-              { label: 'Guardia',       value: babDate.watchName,      gloss: babDate.watchDesc },
-              { label: 'Planeta rector',value: babDate.planetaryRuler, gloss: babDate.planetaryRulerEs },
-              { label: 'Fase lunar',    value: babDate.moonPhaseName,  gloss: babDate.moonPhaseNameEs },
+              { label: 'Hora temporal', value: babDate.hourName, gloss: babDate.hourNameEs },
+              { label: 'Guardia', value: babDate.watchName, gloss: babDate.watchDesc },
+              {
+                label: 'Planeta rector',
+                value: babDate.planetaryRuler,
+                gloss: babDate.planetaryRulerEs,
+              },
+              {
+                label: 'Fase lunar',
+                value: babDate.moonPhaseName,
+                gloss: babDate.moonPhaseNameEs,
+              },
             ].map(({ label, value, gloss }) => (
               <div key={label} className="bg-blue-900/15 border border-blue-500/20 rounded p-2">
-                <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">{label}</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
+                  {label}
+                </div>
                 <div className="text-sm font-serif text-parchment">{value}</div>
                 <div className="text-xs font-serif italic text-blue-200/65">{gloss}</div>
               </div>
@@ -222,7 +256,6 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
   return (
     <>
       <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
-
         {/* Top Bar */}
         <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-blue-500/30 bg-ink">
           {weather && (
@@ -234,7 +267,12 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
           )}
 
           <div
+            role="button"
+            tabIndex={0}
             onClick={() => setIsCalendarOpen(true)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') setIsCalendarOpen(true);
+            }}
             className="bg-ink/80 border border-blue-500/30 p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-blue-400 transition-all ml-auto"
           >
             <div className="text-blue-400 font-serif text-sm uppercase tracking-widest flex items-center gap-2 font-bold">
@@ -244,7 +282,6 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
             </div>
           </div>
         </div>
-
       </div>
 
       <BabylonianCalendarModal

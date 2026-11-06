@@ -16,66 +16,67 @@ const SLOW_FETCH_MS = 1000;
  *   placeholder). It never turns on for fetches that finish faster.
  */
 export const useWeather = (lat: number, lng: number, date?: Date) => {
-    const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [slowTimerFired, setSlowTimerFired] = useState(false);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [slowTimerFired, setSlowTimerFired] = useState(false);
 
-    // Primitive key so a new Date object with the same instant does not refetch.
-    const dateKey = date ? date.getTime() : null;
+  // Primitive key so a new Date object with the same instant does not refetch.
+  const dateKey = date ? date.getTime() : null;
 
-    useEffect(() => {
-        let mounted = true;
+  useEffect(() => {
+    let mounted = true;
 
-        const getWeather = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const data = await fetchWeather(lat, lng, date);
-                if (mounted) {
-                    setWeather(data);
-                }
-            } catch (err) {
-                if (mounted) {
-                    console.error(err);
-                    setError("Failed to fetch weather");
-                }
-            } finally {
-                if (mounted) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        getWeather();
-
-        // Live weather refreshes periodically; historical snapshots are immutable.
-        if (dateKey === null) {
-            const interval = setInterval(getWeather, 30 * 60 * 1000);
-            return () => {
-                mounted = false;
-                clearInterval(interval);
-            };
+    const getWeather = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWeather(lat, lng, date);
+        if (mounted) {
+          setWeather(data);
         }
-
-        return () => {
-            mounted = false;
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lat, lng, dateKey]);
-
-    const waitingForFirstData = loading && !weather;
-    useEffect(() => {
-        if (!waitingForFirstData) {
-            setSlowTimerFired(false);
-            return;
+      } catch (err) {
+        if (mounted) {
+          console.error(err);
+          setError('Failed to fetch weather');
         }
-        const t = setTimeout(() => setSlowTimerFired(true), SLOW_FETCH_MS);
-        return () => clearTimeout(t);
-    }, [waitingForFirstData]);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
 
-    // Gate on the live condition too, so `slow` drops in the same render the data arrives.
-    const slow = slowTimerFired && waitingForFirstData;
+    getWeather();
 
-    return { weather, loading, error, slow };
+    // Live weather refreshes periodically; historical snapshots are immutable.
+    if (dateKey === null) {
+      const interval = setInterval(getWeather, 30 * 60 * 1000);
+      return () => {
+        mounted = false;
+        clearInterval(interval);
+      };
+    }
+
+    return () => {
+      mounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lng, dateKey]);
+
+  const waitingForFirstData = loading && !weather;
+  useEffect(() => {
+    if (!waitingForFirstData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional synchronous reset when data arrives
+      setSlowTimerFired(false);
+      return;
+    }
+    const t = setTimeout(() => setSlowTimerFired(true), SLOW_FETCH_MS);
+    return () => clearTimeout(t);
+  }, [waitingForFirstData]);
+
+  // Gate on the live condition too, so `slow` drops in the same render the data arrives.
+  const slow = slowTimerFired && waitingForFirstData;
+
+  return { weather, loading, error, slow };
 };

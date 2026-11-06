@@ -8,79 +8,110 @@ const InfoSection: React.FC = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 mb-16 relative animate-fadeIn px-2">
-      <div 
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      <div
         className="bg-ink/95 text-parchment p-4 border border-gold-dim/40 rounded-t-lg flex justify-between items-center cursor-pointer hover:bg-black transition-all shadow-xl relative z-10"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-4">
-            <Scroll className="text-gold-leaf w-6 h-6" />
-            <h3 className="font-serif text-base md:text-lg font-bold uppercase tracking-[0.3em] text-gold-leaf">{labels.infoTitle}</h3>
+          <Scroll className="text-gold-leaf w-6 h-6" />
+          <h3 className="font-serif text-base md:text-lg font-bold uppercase tracking-[0.3em] text-gold-leaf">
+            {labels.infoTitle}
+          </h3>
         </div>
-        {isOpen ? <ChevronUp className="text-gold-dim" /> : <ChevronDown className="text-gold-dim" />}
+        {isOpen ? (
+          <ChevronUp className="text-gold-dim" />
+        ) : (
+          <ChevronDown className="text-gold-dim" />
+        )}
       </div>
-      
+
       {isOpen && (
         <div className="bg-parchment/95 p-8 border-x border-b border-gold-dim/30 rounded-b-lg shadow-2xl relative overflow-hidden group">
           {/* Subtle background texture for the "scroll" */}
           <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
-          
+
           <div className="font-body text-xl text-ink leading-relaxed space-y-6 text-justify relative z-10">
-             <p>
-                <span className="float-left text-7xl font-serif font-bold text-roman-red mr-4 mt-[-8px] drop-shadow-sm leading-none">{labels.infoFirstLetter}</span>
-                {labels.infoParagraph1}
-             </p>
-             <p>
-                {labels.infoParagraph2}
-             </p>
-             <div className="flex justify-center my-8">
-                <span className="text-3xl text-woodcut-green opacity-60">❦</span>
-             </div>
-             <p className="text-center font-serif text-base uppercase tracking-[0.3em] text-ink/60 font-bold">
-                {labels.infoBottomMotto}
-             </p>
-             {labels.infoBottomMottoEs && (
-               <p className="text-center font-serif text-sm uppercase tracking-[0.25em] text-ink/35 mt-1">
-                 {labels.infoBottomMottoEs}
-               </p>
-             )}
+            <p>
+              <span className="float-left text-7xl font-serif font-bold text-roman-red mr-4 mt-[-8px] drop-shadow-sm leading-none">
+                {labels.infoFirstLetter}
+              </span>
+              {labels.infoParagraph1}
+            </p>
+            <p>{labels.infoParagraph2}</p>
+            <div className="flex justify-center my-8">
+              <span className="text-3xl text-woodcut-green opacity-60">❦</span>
+            </div>
+            <p className="text-center font-serif text-base uppercase tracking-[0.3em] text-ink/60 font-bold">
+              {labels.infoBottomMotto}
+            </p>
+            {labels.infoBottomMottoEs && (
+              <p className="text-center font-serif text-sm uppercase tracking-[0.25em] text-ink/35 mt-1">
+                {labels.infoBottomMottoEs}
+              </p>
+            )}
 
-             {civilization === 'hellas' && (
-                <div className="mt-12 p-6 bg-sky-900/5 border-t-2 border-sky-500/20 rounded-b-lg">
-                  <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-sky-800 mb-4 flex items-center gap-3">
-                    <span className="text-2xl">🏛️</span>
-                    Sobre el Tiempo Griego
-                  </h4>
-                  <div className="space-y-4 font-body text-lg text-ink/80 leading-relaxed text-justify">
-                    <p>Los griegos de la antigüedad medían el día del mismo modo. El día comenzaba al amanecer y terminaba al anochecer, dividido siempre en doce partes iguales llamadas <em>ὧραι</em> (hōrai).</p>
-                    <p>Así como el curso del sol varía con las estaciones, también varía la duración de cada hora. En invierno una hora puede durar solo cuarenta y cinco minutos; en verano se extiende hasta los setenta y cinco.</p>
-                    <p className="text-center font-serif text-sm uppercase tracking-[0.3em] text-ink/50 font-bold pt-2">Πάντα Ῥεῖ · Todo fluye • Γνῶθι Σεαυτόν · Conócete a ti mismo</p>
-                  </div>
-                </div>
-              )}
-
-             {civilization === 'aegyptus' && (
-                <div className="mt-12 p-6 bg-emerald-900/5 border-t-2 border-emerald-500/20 rounded-b-lg">
-                  <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-emerald-800 mb-4 flex items-center gap-3">
-                    <span className="text-2xl">𓂀</span>
-                    El Secreto del Papiro de El Cairo 86637
-                  </h4>
-                  <p className="font-body text-lg text-ink/80 leading-relaxed text-justify">
-                    El calendario que estás viendo esconde el descubrimiento astrofísico más antiguo de la humanidad (c. 1200 a.C.). Recientes estudios (PLOS ONE, 2015) han demostrado que los días de 'buena' y 'mala' suerte de este papiro no eran superstición aleatoria, sino el registro exacto de las variaciones de brillo de la estrella binaria Algol (con un ciclo de 2.85 días) y de la Luna (29.53 días). Para los egipcios, los eclipses de Algol simbolizaban la debilidad del Ojo de Horus, mientras que la Luna representaba al dios Seth.
+            {civilization === 'hellas' && (
+              <div className="mt-12 p-6 bg-sky-900/5 border-t-2 border-sky-500/20 rounded-b-lg">
+                <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-sky-800 mb-4 flex items-center gap-3">
+                  <span className="text-2xl">🏛️</span>
+                  Sobre el Tiempo Griego
+                </h4>
+                <div className="space-y-4 font-body text-lg text-ink/80 leading-relaxed text-justify">
+                  <p>
+                    Los griegos de la antigüedad medían el día del mismo modo. El día comenzaba
+                    al amanecer y terminaba al anochecer, dividido siempre en doce partes
+                    iguales llamadas <em>ὧραι</em> (hōrai).
+                  </p>
+                  <p>
+                    Así como el curso del sol varía con las estaciones, también varía la
+                    duración de cada hora. En invierno una hora puede durar solo cuarenta y
+                    cinco minutos; en verano se extiende hasta los setenta y cinco.
+                  </p>
+                  <p className="text-center font-serif text-sm uppercase tracking-[0.3em] text-ink/50 font-bold pt-2">
+                    Πάντα Ῥεῖ · Todo fluye • Γνῶθι Σεαυτόν · Conócete a ti mismo
                   </p>
                 </div>
-              )}
+              </div>
+            )}
 
-             {civilization === 'zhongguo' && (
-                <div className="mt-12 p-6 bg-rose-900/5 border-t-2 border-rose-400/20 rounded-b-lg">
-                  <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-rose-800 mb-4 flex items-center gap-3">
-                    <span className="text-2xl">🌾</span>
-                    Patrimonio Inmaterial de la Humanidad
-                  </h4>
-                  <p className="font-body text-lg text-ink/80 leading-relaxed text-justify">
-                    En 2016, la UNESCO inscribió las Veinticuatro Divisiones Estacionales (二十四节气) en la Lista del Patrimonio Cultural Inmaterial de la Humanidad como "conocimiento de China sobre el tiempo y las prácticas desarrolladas a través de la observación del sol anual." Este sistema, de más de dos mil años de antigüedad, sigue determinando las fechas de festividades, la siembra y la recolección en el mundo agrícola chino, y guía la medicina tradicional, la alimentación estacional y los rituales familiares de más de mil millones de personas.
-                  </p>
-                </div>
-              )}
+            {civilization === 'aegyptus' && (
+              <div className="mt-12 p-6 bg-emerald-900/5 border-t-2 border-emerald-500/20 rounded-b-lg">
+                <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-emerald-800 mb-4 flex items-center gap-3">
+                  <span className="text-2xl">𓂀</span>
+                  El Secreto del Papiro de El Cairo 86637
+                </h4>
+                <p className="font-body text-lg text-ink/80 leading-relaxed text-justify">
+                  El calendario que estás viendo esconde el descubrimiento astrofísico más
+                  antiguo de la humanidad (c. 1200 a.C.). Recientes estudios (PLOS ONE, 2015)
+                  han demostrado que los días de &apos;buena&apos; y &apos;mala&apos; suerte de
+                  este papiro no eran superstición aleatoria, sino el registro exacto de las
+                  variaciones de brillo de la estrella binaria Algol (con un ciclo de 2.85 días)
+                  y de la Luna (29.53 días). Para los egipcios, los eclipses de Algol
+                  simbolizaban la debilidad del Ojo de Horus, mientras que la Luna representaba
+                  al dios Seth.
+                </p>
+              </div>
+            )}
+
+            {civilization === 'zhongguo' && (
+              <div className="mt-12 p-6 bg-rose-900/5 border-t-2 border-rose-400/20 rounded-b-lg">
+                <h4 className="font-serif text-lg font-bold uppercase tracking-widest text-rose-800 mb-4 flex items-center gap-3">
+                  <span className="text-2xl">🌾</span>
+                  Patrimonio Inmaterial de la Humanidad
+                </h4>
+                <p className="font-body text-lg text-ink/80 leading-relaxed text-justify">
+                  En 2016, la UNESCO inscribió las Veinticuatro Divisiones Estacionales
+                  (二十四节气) en la Lista del Patrimonio Cultural Inmaterial de la Humanidad
+                  como &quot;conocimiento de China sobre el tiempo y las prácticas desarrolladas
+                  a través de la observación del sol anual.&quot; Este sistema, de más de dos
+                  mil años de antigüedad, sigue determinando las fechas de festividades, la
+                  siembra y la recolección en el mundo agrícola chino, y guía la medicina
+                  tradicional, la alimentación estacional y los rituales familiares de más de
+                  mil millones de personas.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

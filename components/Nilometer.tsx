@@ -12,18 +12,66 @@ interface NilometerProps {
 }
 
 const NILE_MONTHLY_DATA: Record<number, { level: number; sublabel: string; fact: string }> = {
-  0:  { level: 80, sublabel: 'Crecida inicial — Las aguas de Hapy cubren los campos',    fact: 'Hapy, dios de la Inundación, trae fertilidad a Kemet.' },
-  1:  { level: 92, sublabel: 'Plenitud de la crecida — Nivel máximo del Nilo',            fact: 'El Nilo alcanza su cima. Los sacerdotes miden en los Nilómetros.' },
-  2:  { level: 75, sublabel: 'Las aguas comienzan a retirarse lentamente',                 fact: 'El limo negro (Kemet) empieza a aparecer bajo las aguas.' },
-  3:  { level: 58, sublabel: 'Recesión clara — La tierra negra emerge',                    fact: 'Los campos resurgen cubiertos de limo fértil, listos para arar.' },
-  4:  { level: 42, sublabel: 'Los campesinos comienzan la siembra en la Tierra Negra',     fact: 'Osiris germinante: los brotes emergen del limo sagrado.' },
-  5:  { level: 32, sublabel: 'Los canales de irrigación distribuyen el agua restante',      fact: 'Los campesinos siembran en la rica Tierra Negra (Kemet).' },
-  6:  { level: 25, sublabel: 'Los cultivos crecen — El río se retira a su cauce',          fact: 'Renenutet, diosa serpiente, protege los graneros.' },
-  7:  { level: 20, sublabel: 'Últimas aguas de irrigación antes de la cosecha',             fact: 'Las acequias se secan. Los sacerdotes rezan por la próxima crecida.' },
-  8:  { level: 17, sublabel: 'Cosecha temprana — El río está bajo',                         fact: 'Min protege los campos dorados listos para la siega.' },
-  9:  { level: 13, sublabel: 'Plena cosecha — Nivel mínimo del Nilo',                      fact: 'Los graneros se llenan. Egipto reza a Hapy por una buena crecida.' },
-  10: { level: 12, sublabel: 'Estiaje severo — El río apenas fluye',                       fact: 'Si la crecida no llega, habrá hambruna. Egipto contiene el aliento.' },
-  11: { level: 30, sublabel: 'Primeras señales de la crecida — Sirio reaparece',            fact: 'La estrella Sopdet (Sirio) sale al alba: la Inundación se acerca.' },
+  0: {
+    level: 80,
+    sublabel: 'Crecida inicial — Las aguas de Hapy cubren los campos',
+    fact: 'Hapy, dios de la Inundación, trae fertilidad a Kemet.',
+  },
+  1: {
+    level: 92,
+    sublabel: 'Plenitud de la crecida — Nivel máximo del Nilo',
+    fact: 'El Nilo alcanza su cima. Los sacerdotes miden en los Nilómetros.',
+  },
+  2: {
+    level: 75,
+    sublabel: 'Las aguas comienzan a retirarse lentamente',
+    fact: 'El limo negro (Kemet) empieza a aparecer bajo las aguas.',
+  },
+  3: {
+    level: 58,
+    sublabel: 'Recesión clara — La tierra negra emerge',
+    fact: 'Los campos resurgen cubiertos de limo fértil, listos para arar.',
+  },
+  4: {
+    level: 42,
+    sublabel: 'Los campesinos comienzan la siembra en la Tierra Negra',
+    fact: 'Osiris germinante: los brotes emergen del limo sagrado.',
+  },
+  5: {
+    level: 32,
+    sublabel: 'Los canales de irrigación distribuyen el agua restante',
+    fact: 'Los campesinos siembran en la rica Tierra Negra (Kemet).',
+  },
+  6: {
+    level: 25,
+    sublabel: 'Los cultivos crecen — El río se retira a su cauce',
+    fact: 'Renenutet, diosa serpiente, protege los graneros.',
+  },
+  7: {
+    level: 20,
+    sublabel: 'Últimas aguas de irrigación antes de la cosecha',
+    fact: 'Las acequias se secan. Los sacerdotes rezan por la próxima crecida.',
+  },
+  8: {
+    level: 17,
+    sublabel: 'Cosecha temprana — El río está bajo',
+    fact: 'Min protege los campos dorados listos para la siega.',
+  },
+  9: {
+    level: 13,
+    sublabel: 'Plena cosecha — Nivel mínimo del Nilo',
+    fact: 'Los graneros se llenan. Egipto reza a Hapy por una buena crecida.',
+  },
+  10: {
+    level: 12,
+    sublabel: 'Estiaje severo — El río apenas fluye',
+    fact: 'Si la crecida no llega, habrá hambruna. Egipto contiene el aliento.',
+  },
+  11: {
+    level: 30,
+    sublabel: 'Primeras señales de la crecida — Sirio reaparece',
+    fact: 'La estrella Sopdet (Sirio) sale al alba: la Inundación se acerca.',
+  },
 };
 
 const getNileState = (monthIndex: number) => {
@@ -40,13 +88,26 @@ const getNileState = (monthIndex: number) => {
   const data = NILE_MONTHLY_DATA[monthIndex] ?? { level: 50, sublabel: '', fact: '' };
   let waterColor: string, waterColorLight: string, icon: string;
   if (data.level >= 70) {
-    waterColor = '#0f766e'; waterColorLight = '#14b8a6'; icon = '𓇗';
+    waterColor = '#0f766e';
+    waterColorLight = '#14b8a6';
+    icon = '𓇗';
   } else if (data.level >= 35) {
-    waterColor = '#155e75'; waterColorLight = '#0891b2'; icon = '𓉐𓂋𓏏𓇶';
+    waterColor = '#155e75';
+    waterColorLight = '#0891b2';
+    icon = '𓉐𓂋𓏏𓇶';
   } else {
-    waterColor = '#164e63'; waterColorLight = '#0e7490'; icon = '𓈙𓅓𓏱';
+    waterColor = '#164e63';
+    waterColorLight = '#0e7490';
+    icon = '𓈙𓅓𓏱';
   }
-  return { level: data.level, waterColor, waterColorLight, sublabel: data.sublabel, fact: data.fact, icon };
+  return {
+    level: data.level,
+    waterColor,
+    waterColorLight,
+    sublabel: data.sublabel,
+    fact: data.fact,
+    icon,
+  };
 };
 
 const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
@@ -62,22 +123,26 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
   // Pit height: y=0..158
   // Floor:      y=158..170
 
-  const VW = 112, VH = 170;
-  const wallT = 12, floorH = 12;
-  const pitX = wallT;                       // 12
-  const pitW = VW - wallT * 2;              // 88  (12..100)
-  const pitH = VH - floorH;                 // 158 (0..158)
-  const colW = 28, colX = 42;
-  const lX = pitX, lW = colX - pitX;        // left:  12..42, w=30
-  const rX = colX + colW;                   // right: 70..100
-  const rW = pitX + pitW - rX;              // w=30
+  const VW = 112,
+    VH = 170;
+  const wallT = 12,
+    floorH = 12;
+  const pitX = wallT; // 12
+  const pitW = VW - wallT * 2; // 88  (12..100)
+  const pitH = VH - floorH; // 158 (0..158)
+  const colW = 28,
+    colX = 42;
+  const lX = pitX,
+    lW = colX - pitX; // left:  12..42, w=30
+  const rX = colX + colW; // right: 70..100
+  const rW = pitX + pitW - rX; // w=30
 
   const waterH = Math.max(0, (nile.level / 100) * pitH);
-  const waterY = pitH - waterH;             // y where water surface starts
+  const waterY = pitH - waterH; // y where water surface starts
 
   const NUM_CUBITS = 8;
-  const markStep = pitH / NUM_CUBITS;       // ~19.75px per cubit
-  const courseH = 18;                       // stone block course height
+  const markStep = pitH / NUM_CUBITS; // ~19.75px per cubit
+  const courseH = 18; // stone block course height
 
   return (
     <div
@@ -95,60 +160,55 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
       </h3>
 
       <div className="flex items-stretch gap-4">
-
         {/* ── SVG Nilometer ── */}
         <div className="flex-shrink-0">
-          <svg
-            width={VW} height={VH}
-            viewBox={`0 0 ${VW} ${VH}`}
-            className="drop-shadow-2xl"
-          >
+          <svg width={VW} height={VH} viewBox={`0 0 ${VW} ${VH}`} className="drop-shadow-2xl">
             <defs>
               {/* Pit interior: deep lapis darkness */}
               <linearGradient id="nm-pit" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#0d1a2e" />
+                <stop offset="0%" stopColor="#0d1a2e" />
                 <stop offset="100%" stopColor="#03080e" />
               </linearGradient>
 
               {/* Water column: surface bright → abyss dark */}
               <linearGradient id="nm-water" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor={nile.waterColorLight} stopOpacity="0.9" />
-                <stop offset="28%"  stopColor={nile.waterColor}      stopOpacity="0.85" />
-                <stop offset="100%" stopColor="#020a12"              stopOpacity="0.97" />
+                <stop offset="0%" stopColor={nile.waterColorLight} stopOpacity="0.9" />
+                <stop offset="28%" stopColor={nile.waterColor} stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#020a12" stopOpacity="0.97" />
               </linearGradient>
 
               {/* Left wall: inner-edge lighter (light from pit) → outer dark */}
               <linearGradient id="nm-wl" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%"   stopColor="#243040" />
-                <stop offset="55%"  stopColor="#1a2436" />
+                <stop offset="0%" stopColor="#243040" />
+                <stop offset="55%" stopColor="#1a2436" />
                 <stop offset="100%" stopColor="#121c2a" />
               </linearGradient>
 
               {/* Right wall: outer dark → inner-edge lighter */}
               <linearGradient id="nm-wr" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%"   stopColor="#121c2a" />
-                <stop offset="45%"  stopColor="#1a2436" />
+                <stop offset="0%" stopColor="#121c2a" />
+                <stop offset="45%" stopColor="#1a2436" />
                 <stop offset="100%" stopColor="#243040" />
               </linearGradient>
 
               {/* Floor */}
               <linearGradient id="nm-floor" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#182638" />
+                <stop offset="0%" stopColor="#182638" />
                 <stop offset="100%" stopColor="#0b141e" />
               </linearGradient>
 
               {/* Column: directional light — highlight on left, shadow on right */}
               <linearGradient id="nm-col" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%"   stopColor="#5c6c82" />
-                <stop offset="15%"  stopColor="#48596e" />
-                <stop offset="50%"  stopColor="#384558" />
-                <stop offset="82%"  stopColor="#263040" />
+                <stop offset="0%" stopColor="#5c6c82" />
+                <stop offset="15%" stopColor="#48596e" />
+                <stop offset="50%" stopColor="#384558" />
+                <stop offset="82%" stopColor="#263040" />
                 <stop offset="100%" stopColor="#161e2c" />
               </linearGradient>
 
               {/* Pit vignette: push edges darker for depth */}
               <radialGradient id="nm-vig" cx="50%" cy="30%" r="70%">
-                <stop offset="0%"   stopColor="transparent" />
+                <stop offset="0%" stopColor="transparent" />
                 <stop offset="100%" stopColor="rgba(0,0,0,0.50)" />
               </radialGradient>
 
@@ -163,7 +223,13 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
 
               {/* Subtle drop shadow for column capital/base slabs */}
               <filter id="nm-slab-shadow" x="-10%" y="-20%" width="120%" height="160%">
-                <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000" floodOpacity="0.55" />
+                <feDropShadow
+                  dx="0"
+                  dy="2"
+                  stdDeviation="2"
+                  floodColor="#000"
+                  floodOpacity="0.55"
+                />
               </filter>
             </defs>
 
@@ -171,8 +237,16 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             <rect x="0" y="0" width={wallT} height={VH} fill="url(#nm-wl)" />
             {/* Horizontal mortar joints */}
             {Array.from({ length: Math.ceil(VH / courseH) + 1 }, (_, i) => (
-              <line key={i} x1="0" y1={i * courseH} x2={wallT} y2={i * courseH}
-                stroke="#0a1220" strokeWidth="0.75" opacity="0.85" />
+              <line
+                key={i}
+                x1="0"
+                y1={i * courseH}
+                x2={wallT}
+                y2={i * courseH}
+                stroke="#0a1220"
+                strokeWidth="0.75"
+                opacity="0.85"
+              />
             ))}
             {/* Inner-edge highlight pair (stone face catching pit light) */}
             <rect x={wallT - 2.5} y="0" width="2" height={VH} fill="#304050" opacity="0.45" />
@@ -181,12 +255,27 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             {/* ══ Right wall ══ */}
             <rect x={VW - wallT} y="0" width={wallT} height={VH} fill="url(#nm-wr)" />
             {Array.from({ length: Math.ceil(VH / courseH) + 1 }, (_, i) => (
-              <line key={i} x1={VW - wallT} y1={i * courseH} x2={VW} y2={i * courseH}
-                stroke="#0a1220" strokeWidth="0.75" opacity="0.85" />
+              <line
+                key={i}
+                x1={VW - wallT}
+                y1={i * courseH}
+                x2={VW}
+                y2={i * courseH}
+                stroke="#0a1220"
+                strokeWidth="0.75"
+                opacity="0.85"
+              />
             ))}
             {/* Inner-edge shadow (right wall is in shade from column) */}
             <rect x={VW - wallT} y="0" width="0.5" height={VH} fill="rgba(0,0,0,0.35)" />
-            <rect x={VW - wallT + 0.5} y="0" width="2" height={VH} fill="#1c2840" opacity="0.35" />
+            <rect
+              x={VW - wallT + 0.5}
+              y="0"
+              width="2"
+              height={VH}
+              fill="#1c2840"
+              opacity="0.35"
+            />
 
             {/* ══ Pit interior ══ */}
             <rect x={pitX} y="0" width={pitW} height={pitH} fill="url(#nm-pit)" />
@@ -195,10 +284,24 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
 
             {/* ══ Floor ══ */}
             <rect x={pitX} y={pitH} width={pitW} height={floorH} fill="url(#nm-floor)" />
-            <line x1={pitX} y1={pitH} x2={pitX + pitW} y2={pitH}
-              stroke="#0a1220" strokeWidth="0.8" opacity="0.7" />
-            <line x1={pitX} y1={pitH + 0.8} x2={pitX + pitW} y2={pitH + 0.8}
-              stroke="#2a3c50" strokeWidth="0.5" opacity="0.45" />
+            <line
+              x1={pitX}
+              y1={pitH}
+              x2={pitX + pitW}
+              y2={pitH}
+              stroke="#0a1220"
+              strokeWidth="0.8"
+              opacity="0.7"
+            />
+            <line
+              x1={pitX}
+              y1={pitH + 0.8}
+              x2={pitX + pitW}
+              y2={pitH + 0.8}
+              stroke="#2a3c50"
+              strokeWidth="0.5"
+              opacity="0.45"
+            />
 
             {/* ══ Water — left channel ══ */}
             {waterH > 0 && (
@@ -212,12 +315,33 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             {/* ══ Caustic shimmer below water surface ══ */}
             {waterH > 20 && (
               <>
-                <ellipse className="anim-nile-caustic-a" cx={lX + lW * 0.36} cy={waterY + 12} rx="4" ry="1.3"
-                  fill={nile.waterColorLight} opacity="0.11" />
-                <ellipse className="anim-nile-caustic-b" cx={lX + lW * 0.72} cy={waterY + 27} rx="2.5" ry="0.9"
-                  fill={nile.waterColorLight} opacity="0.09" />
-                <ellipse className="anim-nile-caustic-c" cx={rX + rW * 0.55} cy={waterY + 18} rx="3.2" ry="1.1"
-                  fill={nile.waterColorLight} opacity="0.10" />
+                <ellipse
+                  className="anim-nile-caustic-a"
+                  cx={lX + lW * 0.36}
+                  cy={waterY + 12}
+                  rx="4"
+                  ry="1.3"
+                  fill={nile.waterColorLight}
+                  opacity="0.11"
+                />
+                <ellipse
+                  className="anim-nile-caustic-b"
+                  cx={lX + lW * 0.72}
+                  cy={waterY + 27}
+                  rx="2.5"
+                  ry="0.9"
+                  fill={nile.waterColorLight}
+                  opacity="0.09"
+                />
+                <ellipse
+                  className="anim-nile-caustic-c"
+                  cx={rX + rW * 0.55}
+                  cy={waterY + 18}
+                  rx="3.2"
+                  ry="1.1"
+                  fill={nile.waterColorLight}
+                  opacity="0.10"
+                />
               </>
             )}
 
@@ -227,13 +351,19 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
                 {/* Left channel wave */}
                 <path
                   d={`M${lX},${waterY} Q${lX + lW * 0.52},${waterY - 2.8} ${colX},${waterY}`}
-                  fill="none" stroke={nile.waterColorLight} strokeWidth="1.35" opacity="0.9"
+                  fill="none"
+                  stroke={nile.waterColorLight}
+                  strokeWidth="1.35"
+                  opacity="0.9"
                   filter="url(#nm-glow)"
                 />
                 {/* Right channel wave */}
                 <path
                   d={`M${rX},${waterY} Q${rX + rW * 0.48},${waterY + 2.2} ${rX + rW},${waterY}`}
-                  fill="none" stroke={nile.waterColorLight} strokeWidth="1.35" opacity="0.9"
+                  fill="none"
+                  stroke={nile.waterColorLight}
+                  strokeWidth="1.35"
+                  opacity="0.9"
                   filter="url(#nm-glow)"
                 />
               </g>
@@ -245,9 +375,16 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             <rect x={colX} y="0" width="1.8" height={pitH} fill="rgba(180,210,240,0.10)" />
             {/* Natural granite horizontal banding */}
             {Array.from({ length: Math.floor(pitH / 28) }, (_, i) => (
-              <line key={i}
-                x1={colX + 2} y1={i * 28 + 14} x2={colX + colW - 2} y2={i * 28 + 14}
-                stroke="#1e2838" strokeWidth="0.35" opacity="0.55" />
+              <line
+                key={i}
+                x1={colX + 2}
+                y1={i * 28 + 14}
+                x2={colX + colW - 2}
+                y2={i * 28 + 14}
+                stroke="#1e2838"
+                strokeWidth="0.35"
+                opacity="0.55"
+              />
             ))}
 
             {/* ══ Cubit marks — carved incisions ══ */}
@@ -263,20 +400,66 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
               return (
                 <g key={i}>
                   {/* Left tick — shadow + highlight */}
-                  <line x1={lX + 3} y1={mY}      x2={colX}    y2={mY}      stroke="#050c18" strokeWidth="1.2" opacity={tOp} />
-                  <line x1={lX + 3} y1={mY + 0.9} x2={colX}   y2={mY + 0.9} stroke="rgba(140,185,220,0.4)" strokeWidth="0.5" opacity={tOp} />
+                  <line
+                    x1={lX + 3}
+                    y1={mY}
+                    x2={colX}
+                    y2={mY}
+                    stroke="#050c18"
+                    strokeWidth="1.2"
+                    opacity={tOp}
+                  />
+                  <line
+                    x1={lX + 3}
+                    y1={mY + 0.9}
+                    x2={colX}
+                    y2={mY + 0.9}
+                    stroke="rgba(140,185,220,0.4)"
+                    strokeWidth="0.5"
+                    opacity={tOp}
+                  />
                   {/* Right tick — shadow + highlight */}
-                  <line x1={colX + colW} y1={mY}      x2={rX + rW - 3} y2={mY}      stroke="#050c18" strokeWidth="1.2" opacity={tOp} />
-                  <line x1={colX + colW} y1={mY + 0.9} x2={rX + rW - 3} y2={mY + 0.9} stroke="rgba(140,185,220,0.4)" strokeWidth="0.5" opacity={tOp} />
+                  <line
+                    x1={colX + colW}
+                    y1={mY}
+                    x2={rX + rW - 3}
+                    y2={mY}
+                    stroke="#050c18"
+                    strokeWidth="1.2"
+                    opacity={tOp}
+                  />
+                  <line
+                    x1={colX + colW}
+                    y1={mY + 0.9}
+                    x2={rX + rW - 3}
+                    y2={mY + 0.9}
+                    stroke="rgba(140,185,220,0.4)"
+                    strokeWidth="0.5"
+                    opacity={tOp}
+                  />
                   {/* Numeral on column face: carved depth (dark offset) + bright face */}
                   {cubit > 0 && (
                     <>
-                      <text x={colX + colW / 2 + 0.7} y={mY + 5.7}
-                        textAnchor="middle" fill="#040c18" fontSize="12" fontFamily="serif" opacity={textOp * 0.95}>
+                      <text
+                        x={colX + colW / 2 + 0.7}
+                        y={mY + 5.7}
+                        textAnchor="middle"
+                        fill="#040c18"
+                        fontSize="12"
+                        fontFamily="serif"
+                        opacity={textOp * 0.95}
+                      >
                         {cubit}
                       </text>
-                      <text x={colX + colW / 2} y={mY + 5}
-                        textAnchor="middle" fill={textCol} fontSize="12" fontFamily="serif" opacity={textOp}>
+                      <text
+                        x={colX + colW / 2}
+                        y={mY + 5}
+                        textAnchor="middle"
+                        fill={textCol}
+                        fontSize="12"
+                        fontFamily="serif"
+                        opacity={textOp}
+                      >
                         {cubit}
                       </text>
                     </>
@@ -289,16 +472,33 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
             {waterH > 0 && (
               <g className="anim-nile-surface">
                 {/* Dashed lines in each channel (skip over the column) */}
-                <line x1={lX} y1={waterY} x2={colX} y2={waterY}
-                  stroke={nile.waterColorLight} strokeWidth="1.4" strokeDasharray="3,2.5" opacity="0.72"
-                  filter="url(#nm-glow)" />
-                <line x1={colX + colW} y1={waterY} x2={rX + rW} y2={waterY}
-                  stroke={nile.waterColorLight} strokeWidth="1.4" strokeDasharray="3,2.5" opacity="0.72"
-                  filter="url(#nm-glow)" />
+                <line
+                  x1={lX}
+                  y1={waterY}
+                  x2={colX}
+                  y2={waterY}
+                  stroke={nile.waterColorLight}
+                  strokeWidth="1.4"
+                  strokeDasharray="3,2.5"
+                  opacity="0.72"
+                  filter="url(#nm-glow)"
+                />
+                <line
+                  x1={colX + colW}
+                  y1={waterY}
+                  x2={rX + rW}
+                  y2={waterY}
+                  stroke={nile.waterColorLight}
+                  strokeWidth="1.4"
+                  strokeDasharray="3,2.5"
+                  opacity="0.72"
+                  filter="url(#nm-glow)"
+                />
                 {/* Small arrowhead on column left-face pointing at current cubit level */}
                 <polygon
                   points={`${colX},${waterY - 3} ${colX + 5},${waterY} ${colX},${waterY + 3}`}
-                  fill={nile.waterColorLight} opacity="0.80"
+                  fill={nile.waterColorLight}
+                  opacity="0.80"
                   filter="url(#nm-glow)"
                 />
               </g>
@@ -306,61 +506,139 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
 
             {/* ══ Column capital (top slab + gold accent) ══ */}
             {/* Neck molding */}
-            <rect x={colX - 1} y="5" width={colW + 2} height="2.5" rx="0.5"
-              fill="#2c3a4e" filter="url(#nm-slab-shadow)" />
+            <rect
+              x={colX - 1}
+              y="5"
+              width={colW + 2}
+              height="2.5"
+              rx="0.5"
+              fill="#2c3a4e"
+              filter="url(#nm-slab-shadow)"
+            />
             {/* Abacus slab */}
-            <rect x={colX - 5} y="0" width={colW + 10} height="5.5" rx="1.2"
-              fill="#404f62" filter="url(#nm-slab-shadow)" />
+            <rect
+              x={colX - 5}
+              y="0"
+              width={colW + 10}
+              height="5.5"
+              rx="1.2"
+              fill="#404f62"
+              filter="url(#nm-slab-shadow)"
+            />
             {/* Gold crown line */}
-            <rect x={colX - 5} y="0" width={colW + 10} height="1.2"
-              fill="rgba(207,181,59,0.55)" />
-            <rect x={colX - 5} y="1.2" width={colW + 10} height="0.6"
-              fill="rgba(207,181,59,0.18)" />
+            <rect
+              x={colX - 5}
+              y="0"
+              width={colW + 10}
+              height="1.2"
+              fill="rgba(207,181,59,0.55)"
+            />
+            <rect
+              x={colX - 5}
+              y="1.2"
+              width={colW + 10}
+              height="0.6"
+              fill="rgba(207,181,59,0.18)"
+            />
             {/* Egyptian blue band below gold */}
-            <rect x={colX - 4} y="4.5" width={colW + 8} height="1"
-              fill="rgba(24,64,160,0.50)" />
+            <rect
+              x={colX - 4}
+              y="4.5"
+              width={colW + 8}
+              height="1"
+              fill="rgba(24,64,160,0.50)"
+            />
 
             {/* ══ Column base (mirror of capital) ══ */}
             {/* Torus molding */}
-            <rect x={colX - 1} y={pitH - 8} width={colW + 2} height="3" rx="0.5"
-              fill="#2c3a4e" />
+            <rect
+              x={colX - 1}
+              y={pitH - 8}
+              width={colW + 2}
+              height="3"
+              rx="0.5"
+              fill="#2c3a4e"
+            />
             {/* Plinth */}
-            <rect x={colX - 5} y={pitH - 5} width={colW + 10} height="5" rx="1.2"
-              fill="#364554" filter="url(#nm-slab-shadow)" />
-            <rect x={colX - 5} y={pitH - 5.5} width={colW + 10} height="0.7"
-              fill="rgba(207,181,59,0.20)" />
+            <rect
+              x={colX - 5}
+              y={pitH - 5}
+              width={colW + 10}
+              height="5"
+              rx="1.2"
+              fill="#364554"
+              filter="url(#nm-slab-shadow)"
+            />
+            <rect
+              x={colX - 5}
+              y={pitH - 5.5}
+              width={colW + 10}
+              height="0.7"
+              fill="rgba(207,181,59,0.20)"
+            />
 
             {/* ══ Double frame border — gold outer + Egyptian blue inner ══ */}
-            <rect x="0.6" y="0.6" width={VW - 1.2} height={VH - 1.2}
-              fill="none" stroke="rgba(207,181,59,0.45)" strokeWidth="1.2" />
-            <rect x="2.2" y="2.2" width={VW - 4.4} height={VH - 4.4}
-              fill="none" stroke="rgba(24,64,160,0.38)" strokeWidth="0.8" />
+            <rect
+              x="0.6"
+              y="0.6"
+              width={VW - 1.2}
+              height={VH - 1.2}
+              fill="none"
+              stroke="rgba(207,181,59,0.45)"
+              strokeWidth="1.2"
+            />
+            <rect
+              x="2.2"
+              y="2.2"
+              width={VW - 4.4}
+              height={VH - 4.4}
+              fill="none"
+              stroke="rgba(24,64,160,0.38)"
+              strokeWidth="0.8"
+            />
           </svg>
         </div>
 
         {/* ── Info panel ── */}
         <div className="flex-1 flex flex-col justify-center gap-2.5">
-
           {/* Hieroglyphic season icon */}
-          <div className="text-2xl tracking-widest drop-shadow-sm" style={{ color: 'rgba(212,168,50,0.9)' }}>
+          <div
+            className="text-2xl tracking-widest drop-shadow-sm"
+            style={{ color: 'rgba(212,168,50,0.9)' }}
+          >
             {nile.icon}
           </div>
 
           {/* Season label */}
-          <div className="font-serif text-xs font-bold uppercase tracking-widest"
-            style={{ color: 'rgba(240,220,180,0.9)' }}>
+          <div
+            className="font-serif text-xs font-bold uppercase tracking-widest"
+            style={{ color: 'rgba(240,220,180,0.9)' }}
+          >
             {seasonName}
           </div>
 
           {/* Level bar */}
           <div className="w-full">
-            <div className="flex justify-between mb-1"
-              style={{ fontSize: '12px', fontFamily: 'serif', color: 'rgba(207,181,59,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            <div
+              className="flex justify-between mb-1"
+              style={{
+                fontSize: '12px',
+                fontFamily: 'serif',
+                color: 'rgba(207,181,59,0.5)',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}
+            >
               <span>Seco</span>
               <span>Pleno</span>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden"
-              style={{ background: 'rgba(6,12,22,0.7)', border: '1px solid rgba(24,64,160,0.3)' }}>
+            <div
+              className="w-full h-2 rounded-full overflow-hidden"
+              style={{
+                background: 'rgba(6,12,22,0.7)',
+                border: '1px solid rgba(24,64,160,0.3)',
+              }}
+            >
               <div
                 className="h-full rounded-full transition-all duration-1000 ease-out"
                 style={{
@@ -373,20 +651,30 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
           </div>
 
           {/* Description */}
-          <p style={{ fontSize: '12px', fontFamily: 'serif', color: 'rgba(207,181,59,0.72)', fontStyle: 'italic', lineHeight: 1.4 }}>
+          <p
+            style={{
+              fontSize: '12px',
+              fontFamily: 'serif',
+              color: 'rgba(207,181,59,0.72)',
+              fontStyle: 'italic',
+              lineHeight: 1.4,
+            }}
+          >
             {nile.sublabel}
           </p>
 
           {/* Fact — Egyptian blue left border accent */}
-          <div style={{
-            marginTop: '2px',
-            fontSize: '12px',
-            fontFamily: 'serif',
-            color: 'rgba(240,220,180,0.45)',
-            lineHeight: 1.4,
-            borderLeft: '2px solid rgba(24,64,160,0.45)',
-            paddingLeft: '8px',
-          }}>
+          <div
+            style={{
+              marginTop: '2px',
+              fontSize: '12px',
+              fontFamily: 'serif',
+              color: 'rgba(240,220,180,0.45)',
+              lineHeight: 1.4,
+              borderLeft: '2px solid rgba(24,64,160,0.45)',
+              paddingLeft: '8px',
+            }}
+          >
             {nile.fact}
           </div>
         </div>

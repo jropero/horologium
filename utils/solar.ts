@@ -1,6 +1,13 @@
 import {
-  MoonPhase, SearchMoonPhase, SearchRiseSet, SunPosition, Seasons,
-  Body, Observer, Equator, Horizon,
+  MoonPhase,
+  SearchMoonPhase,
+  SearchRiseSet,
+  SunPosition,
+  Seasons,
+  Body,
+  Observer,
+  Equator,
+  Horizon,
 } from 'astronomy-engine';
 
 // JDE (Julian Day Ephemeris) ↔ JS Date; TT ≈ UTC within ~70 s — negligible for calendar use
@@ -42,28 +49,33 @@ const observerMidnightMs = (date: Date, lng: number): number =>
 const coordsKey = (lat: number, lng: number): string => `${lat.toFixed(4)},${lng.toFixed(4)}`;
 
 export const getSunTimes = (date: Date, lat: number, lng: number) =>
-  boundedMemo(_sunTimesCache, `${observerMidnightMs(date, lng)}|${coordsKey(lat, lng)}`, _SUN_TIMES_CACHE_MAX, () => {
-    // Sunrise search starts at the observer's local midnight, sunset at local noon,
-    // so each event falls within its 1-day window.
-    const midnight = new Date(observerMidnightMs(date, lng));
-    const targetDate = new Date(midnight.getTime() + DAY_MS / 2);
+  boundedMemo(
+    _sunTimesCache,
+    `${observerMidnightMs(date, lng)}|${coordsKey(lat, lng)}`,
+    _SUN_TIMES_CACHE_MAX,
+    () => {
+      // Sunrise search starts at the observer's local midnight, sunset at local noon,
+      // so each event falls within its 1-day window.
+      const midnight = new Date(observerMidnightMs(date, lng));
+      const targetDate = new Date(midnight.getTime() + DAY_MS / 2);
 
-    const observer = new Observer(lat, lng, 0);
-    const riseResult = SearchRiseSet(Body.Sun, observer, +1, midnight,     1);
-    const setResult  = SearchRiseSet(Body.Sun, observer, -1, targetDate,   1);
+      const observer = new Observer(lat, lng, 0);
+      const riseResult = SearchRiseSet(Body.Sun, observer, +1, midnight, 1);
+      const setResult = SearchRiseSet(Body.Sun, observer, -1, targetDate, 1);
 
-    if (!riseResult || !setResult) {
-      // Polar edge: altitude at local noon determines day vs. night
-      const eq = Equator(Body.Sun, targetDate, observer, true, true);
-      const hz = Horizon(targetDate, observer, eq.ra, eq.dec, 'normal');
-      if (hz.altitude > 0) {
-        return { sunrise: midnight, sunset: new Date(midnight.getTime() + DAY_MS - 1) };
+      if (!riseResult || !setResult) {
+        // Polar edge: altitude at local noon determines day vs. night
+        const eq = Equator(Body.Sun, targetDate, observer, true, true);
+        const hz = Horizon(targetDate, observer, eq.ra, eq.dec, 'normal');
+        if (hz.altitude > 0) {
+          return { sunrise: midnight, sunset: new Date(midnight.getTime() + DAY_MS - 1) };
+        }
+        return { sunrise: targetDate, sunset: targetDate };
       }
-      return { sunrise: targetDate, sunset: targetDate };
-    }
 
-    return { sunrise: riseResult.date, sunset: setResult.date };
-  });
+      return { sunrise: riseResult.date, sunset: setResult.date };
+    },
+  );
 
 export const getSolarLongitudeDeg = (date: Date): number =>
   ((SunPosition(date).elon % 360) + 360) % 360;
@@ -71,10 +83,17 @@ export const getSolarLongitudeDeg = (date: Date): number =>
 // Moon phase moves ~0.0009° per hour, so a 1-minute bucket is far finer than
 // anything this app displays (lunar day / new-moon / full-moon windows).
 export const getMoonPhase = (date: Date): number =>
-  boundedMemo(_moonPhaseCache, `${Math.floor(date.getTime() / 60000)}`, _MOON_PHASE_CACHE_MAX, () => MoonPhase(date) / 360);
+  boundedMemo(
+    _moonPhaseCache,
+    `${Math.floor(date.getTime() / 60000)}`,
+    _MOON_PHASE_CACHE_MAX,
+    () => MoonPhase(date) / 360,
+  );
 
 export const getMoonPosition = (
-  date: Date, lat: number, lng: number
+  date: Date,
+  lat: number,
+  lng: number,
 ): { altitude: number; azimuth: number } => {
   try {
     const observer = new Observer(lat, lng, 0);
@@ -87,7 +106,10 @@ export const getMoonPosition = (
 };
 
 export const getPlanetPosition = (
-  body: Body, date: Date, lat: number, lng: number
+  body: Body,
+  date: Date,
+  lat: number,
+  lng: number,
 ): { altitude: number; azimuth: number } => {
   try {
     const observer = new Observer(lat, lng, 0);
@@ -102,8 +124,7 @@ export const getPlanetPosition = (
 // ── New-moon JDE helpers ───────────────────────────────────────────────────────
 // k = lunation index relative to J2000 new moon (JDE 2451550.09766)
 
-export const kForJDE = (jd: number): number =>
-  Math.round((jd - 2451550.09766) / 29.530588861);
+export const kForJDE = (jd: number): number => Math.round((jd - 2451550.09766) / 29.530588861);
 
 // True new moon JDE via SearchMoonPhase (~arcsecond precision).
 export const trueNewMoonJDE = (k: number): number => {
@@ -116,7 +137,10 @@ export const trueNewMoonJDE = (k: number): number => {
 export const prevNewMoonJDE = (jd: number): number => {
   let k = kForJDE(jd);
   let nm = trueNewMoonJDE(k);
-  if (nm > jd) { k--; nm = trueNewMoonJDE(k); }
+  if (nm > jd) {
+    k--;
+    nm = trueNewMoonJDE(k);
+  }
   const nmNext = trueNewMoonJDE(k + 1);
   return nmNext <= jd ? nmNext : nm;
 };
@@ -124,7 +148,10 @@ export const prevNewMoonJDE = (jd: number): number => {
 export const nextNewMoonJDE = (jd: number): number => {
   let k = kForJDE(jd) + 1;
   let nm = trueNewMoonJDE(k);
-  while (nm <= jd) { k++; nm = trueNewMoonJDE(k); }
+  while (nm <= jd) {
+    k++;
+    nm = trueNewMoonJDE(k);
+  }
   return nm;
 };
 

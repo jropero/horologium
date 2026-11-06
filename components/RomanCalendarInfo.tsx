@@ -1,752 +1,927 @@
-
-import React, { useState, useEffect, useMemo } from 'react';
-import { getRomanDayInfo, RomanDayInfo, getNextRomanFestivals } from '../utils/romanCalendarData';
+import React, { useState, useEffect } from 'react';
+import {
+  getRomanDayInfo,
+  RomanDayInfo,
+  getNextRomanFestivals,
+} from '../utils/romanCalendarData';
 import { ROMAN_YEAR_DATA, YearDayEntry } from '../utils/romanYearData';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
-import { getAtticFestivalInfo, getDefaultAtticDeity, AtticFestivalInfo } from '../utils/atticCalendarData';
+import {
+  getAtticFestivalInfo,
+  getDefaultAtticDeity,
+  AtticFestivalInfo,
+} from '../utils/atticCalendarData';
 import { getHistoricalEvents } from '../utils/romanHistoryData';
 import { useCivilization } from '../contexts/CivilizationContext';
-import { transliterateGreek } from '../utils/greekTransliteration';
-import { translateGreekUI } from '../utils/greekTranslations';
-import { 
-    OVID_MOS_MAIORUM, 
-    OVID_ANNALES_BELLI, 
-    OVID_PRECES_ET_SACRA, 
-    OVID_AEDES_ET_MONUMENTA,
-    OVID_STATUS_EXPLANATIONS,
-    OVID_SACRIFICIA
+import {
+  OVID_MOS_MAIORUM,
+  OVID_ANNALES_BELLI,
+  OVID_PRECES_ET_SACRA,
+  OVID_AEDES_ET_MONUMENTA,
+  OVID_STATUS_EXPLANATIONS,
+  OVID_SACRIFICIA,
 } from '../utils/ovidFastiData';
 import { Info, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // ─── Roman Monthly Day Grid ──────────────────────────────────────────────────
 
 const STATUS_RING: Record<string, string> = {
-    NP_fest: 'bg-amber-500/20 ring-1 ring-amber-400/60',
-    NP:      'bg-amber-900/20 ring-1 ring-amber-700/40',
-    N:       'bg-rose-900/25 ring-1 ring-rose-500/40',
-    EN:      'bg-orange-900/20 ring-1 ring-orange-500/35',
-    F:       'bg-emerald-900/15 ring-1 ring-emerald-600/30',
-    C:       'bg-ink/30',
+  NP_fest: 'bg-amber-500/20 ring-1 ring-amber-400/60',
+  NP: 'bg-amber-900/20 ring-1 ring-amber-700/40',
+  N: 'bg-rose-900/25 ring-1 ring-rose-500/40',
+  EN: 'bg-orange-900/20 ring-1 ring-orange-500/35',
+  F: 'bg-emerald-900/15 ring-1 ring-emerald-600/30',
+  C: 'bg-ink/30',
 };
 
 const STATUS_TEXT_COLOR: Record<string, string> = {
-    NP: 'text-amber-400', N: 'text-rose-400', EN: 'text-orange-400',
-    F: 'text-emerald-400', C: 'text-blue-400',
+  NP: 'text-amber-400',
+  N: 'text-rose-400',
+  EN: 'text-orange-400',
+  F: 'text-emerald-400',
+  C: 'text-blue-400',
 };
 
 const STATUS_BADGE_CLS: Record<string, string> = {
-    NP: 'border-amber-500/40 text-amber-400 bg-amber-900/20',
-    N:  'border-rose-500/40 text-rose-400 bg-rose-900/20',
-    EN: 'border-orange-500/40 text-orange-400 bg-orange-900/20',
-    F:  'border-emerald-500/40 text-emerald-400 bg-emerald-900/20',
-    C:  'border-blue-500/40 text-blue-400 bg-blue-900/20',
+  NP: 'border-amber-500/40 text-amber-400 bg-amber-900/20',
+  N: 'border-rose-500/40 text-rose-400 bg-rose-900/20',
+  EN: 'border-orange-500/40 text-orange-400 bg-orange-900/20',
+  F: 'border-emerald-500/40 text-emerald-400 bg-emerald-900/20',
+  C: 'border-blue-500/40 text-blue-400 bg-blue-900/20',
 };
 
 const STATUS_NAMES: Record<string, string> = {
-    F: 'Fastus', C: 'Comitialis', N: 'Nefastus', NP: 'NP', EN: 'Endotercissus',
+  F: 'Fastus',
+  C: 'Comitialis',
+  N: 'Nefastus',
+  NP: 'NP',
+  EN: 'Endotercissus',
 };
 
-const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = ({ month, year, today }) => {
-    const [selectedDay, setSelectedDay] = useState<number | null>(null);
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+// eslint-disable-next-line sonarjs/cognitive-complexity
+function RomanDayGrid({ month, year, today }: { month: number; year: number; today: number }) {
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    const getDayEntry = (day: number): YearDayEntry | undefined =>
-        ROMAN_YEAR_DATA[`${month}-${day}`];
+  const getDayEntry = (day: number): YearDayEntry | undefined =>
+    ROMAN_YEAR_DATA[`${month}-${day}`];
 
-    // Nones: day 7 in March, May, July, October; day 5 all others
-    const nones = [2, 4, 6, 9].includes(month) ? 7 : 5;
-    // Ides: day 15 in those same months; day 13 otherwise
-    const ides = [2, 4, 6, 9].includes(month) ? 15 : 13;
+  // Nones: day 7 in March, May, July, October; day 5 all others
+  const nones = [2, 4, 6, 9].includes(month) ? 7 : 5;
+  // Ides: day 15 in those same months; day 13 otherwise
+  const ides = [2, 4, 6, 9].includes(month) ? 15 : 13;
 
-    const panels = [
-        { days: Array.from({ length: nones - 1 }, (_, i) => i + 1),            label: 'Kalendae', sublabel: 'Ante Nonas' },
-        { days: Array.from({ length: ides - nones }, (_, i) => i + nones),     label: 'Nonae',    sublabel: 'Ante Idvs'  },
-        { days: Array.from({ length: daysInMonth - ides + 1 }, (_, i) => i + ides), label: 'Idvs', sublabel: 'Post Idvs' },
-    ];
+  const panels = [
+    {
+      days: Array.from({ length: nones - 1 }, (_, i) => i + 1),
+      label: 'Kalendae',
+      sublabel: 'Ante Nonas',
+    },
+    {
+      days: Array.from({ length: ides - nones }, (_, i) => i + nones),
+      label: 'Nonae',
+      sublabel: 'Ante Idvs',
+    },
+    {
+      days: Array.from({ length: daysInMonth - ides + 1 }, (_, i) => i + ides),
+      label: 'Idvs',
+      sublabel: 'Post Idvs',
+    },
+  ];
 
-    let activePanel = 0;
-    if (today >= ides) activePanel = 2;
-    else if (today >= nones) activePanel = 1;
+  let activePanel = 0;
+  if (today >= ides) activePanel = 2;
+  else if (today >= nones) activePanel = 1;
 
-    const selEntry = selectedDay !== null ? getDayEntry(selectedDay) : null;
+  const selEntry = selectedDay !== null ? getDayEntry(selectedDay) : null;
 
-    const cellCls = (day: number): string => {
-        const entry = getDayEntry(day);
-        if (day === selectedDay) return 'bg-gold-leaf/20 ring-2 ring-gold-leaf shadow-[0_0_8px_rgba(212,175,55,0.4)]';
-        if (day === today) return 'bg-gold-leaf/25 ring-2 ring-gold-leaf shadow-[0_0_12px_rgba(212,175,55,0.5)]';
-        if (!entry) return 'bg-ink/40';
-        const key = entry.status === 'NP' && entry.festivalName ? 'NP_fest' : entry.status;
-        return STATUS_RING[key] ?? 'bg-ink/30';
-    };
+  const cellCls = (day: number): string => {
+    const entry = getDayEntry(day);
+    if (day === selectedDay)
+      return 'bg-gold-leaf/20 ring-2 ring-gold-leaf shadow-[0_0_8px_rgba(212,175,55,0.4)]';
+    if (day === today)
+      return 'bg-gold-leaf/25 ring-2 ring-gold-leaf shadow-[0_0_12px_rgba(212,175,55,0.5)]';
+    if (!entry) return 'bg-ink/40';
+    const key = entry.status === 'NP' && entry.festivalName ? 'NP_fest' : entry.status;
+    return STATUS_RING[key] ?? 'bg-ink/30';
+  };
 
-    const numCls = (day: number): string => {
-        const entry = getDayEntry(day);
-        if (day === selectedDay) return 'text-gold-leaf font-black';
-        if (day === today) return 'text-gold-leaf font-black text-[13px]';
-        if (day < today) return 'text-parchment/30';
-        return STATUS_TEXT_COLOR[entry?.status ?? ''] ?? 'text-parchment/60';
-    };
+  const numCls = (day: number): string => {
+    const entry = getDayEntry(day);
+    if (day === selectedDay) return 'text-gold-leaf font-black';
+    if (day === today) return 'text-gold-leaf font-black text-[13px]';
+    if (day < today) return 'text-parchment/30';
+    return STATUS_TEXT_COLOR[entry?.status ?? ''] ?? 'text-parchment/60';
+  };
 
-    return (
-        <div className="mt-4 w-full" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-center gap-3 mb-3">
-                <div className="h-px flex-1 bg-gold-dim/20" />
-                <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">Calendarium Mensis</span>
-                <div className="h-px flex-1 bg-gold-dim/20" />
-            </div>
+  return (
+    <div
+      role="presentation"
+      className="mt-4 w-full"
+      onClick={e => e.stopPropagation()}
+      onKeyDown={e => e.stopPropagation()}
+    >
+      <div className="flex items-center justify-center gap-3 mb-3">
+        <div className="h-px flex-1 bg-gold-dim/20" />
+        <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">
+          Calendarium Mensis
+        </span>
+        <div className="h-px flex-1 bg-gold-dim/20" />
+      </div>
 
-            <div className="flex flex-row justify-center gap-1.5 w-full">
-                {panels.map(({ days, label, sublabel }, panelIdx) => {
-                    const active = panelIdx === activePanel;
-                    return (
-                        <div
-                            key={label}
-                            style={{ flex: days.length }}
-                            className={`p-2 rounded-lg border transition-all duration-500 relative overflow-hidden
-                                ${active
+      <div className="flex flex-row justify-center gap-1.5 w-full">
+        {panels.map(({ days, label, sublabel }, panelIdx) => {
+          const active = panelIdx === activePanel;
+          return (
+            <div
+              key={label}
+              style={{ flex: days.length }}
+              className={`p-2 rounded-lg border transition-all duration-500 relative overflow-hidden
+                                ${
+                                  active
                                     ? 'border-gold-dim/50 bg-amber-950/20 shadow-[0_0_15px_rgba(212,175,55,0.08)] scale-[1.02] z-10'
                                     : 'border-gold-dim/20 bg-ink/30'
                                 }`}
-                        >
-                            {active && (
-                                <div className="absolute -right-4 -top-4 w-16 h-16 bg-gold-leaf/5 rounded-full blur-xl pointer-events-none" />
-                            )}
-                            <div className="text-center mb-2 border-b border-gold-dim/20 pb-1.5">
-                                <div className={`text-xs font-bold uppercase tracking-widest ${active ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>{label}</div>
-                                <div className="text-xs font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">{sublabel}</div>
-                            </div>
-                            <div className={`grid gap-1 justify-items-center ${panelIdx === 2 ? 'grid-cols-3' : 'grid-cols-2'}`}>
-                                {days.filter(d => d <= daysInMonth).map(day => (
-                                        <button
-                                            key={day}
-                                            type="button"
-                                            className={`relative flex flex-col items-center justify-center rounded-sm py-1.5 w-full transition-all cursor-pointer select-none ${cellCls(day)}`}
-                                            onClick={() => setSelectedDay(prev => prev === day ? null : day)}
-                                        >
-                                            <span className={`text-xs font-serif leading-none font-bold ${numCls(day)}`}>{day}</span>
-                                        </button>
-                                ))}
-                            </div>
-                        </div>
-                    );
-                })}
+            >
+              {active && (
+                <div className="absolute -right-4 -top-4 w-16 h-16 bg-gold-leaf/5 rounded-full blur-xl pointer-events-none" />
+              )}
+              <div className="text-center mb-2 border-b border-gold-dim/20 pb-1.5">
+                <div
+                  className={`text-xs font-bold uppercase tracking-widest ${
+                    active ? 'text-gold-leaf' : 'text-gold-dim/60'
+                  }`}
+                >
+                  {label}
+                </div>
+                <div className="text-xs font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">
+                  {sublabel}
+                </div>
+              </div>
+              <div
+                className={`grid gap-1 justify-items-center ${
+                  panelIdx === 2 ? 'grid-cols-3' : 'grid-cols-2'
+                }`}
+              >
+                {days
+                  .filter(d => d <= daysInMonth)
+                  .map(day => (
+                    <button
+                      key={day}
+                      type="button"
+                      className={`relative flex flex-col items-center justify-center rounded-sm py-1.5 w-full transition-all cursor-pointer select-none ${cellCls(
+                        day,
+                      )}`}
+                      onClick={() => setSelectedDay(prev => (prev === day ? null : day))}
+                    >
+                      <span
+                        className={`text-xs font-serif leading-none font-bold ${numCls(day)}`}
+                      >
+                        {day}
+                      </span>
+                    </button>
+                  ))}
+              </div>
             </div>
+          );
+        })}
+      </div>
 
-            {/* Info panel */}
-            <div className={`mt-2 rounded-lg border transition-all ${
-                selEntry && selectedDay !== null
-                    ? 'border-gold-dim/40 bg-amber-950/15 p-3'
-                    : 'border-gold-dim/20 bg-transparent py-2 px-3'
-            }`}>
-                {selEntry && selectedDay !== null ? (
-                    <div className="flex flex-col gap-2 text-left">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <span className="text-xs font-serif font-bold text-gold-leaf uppercase tracking-wider">Dies {selectedDay}</span>
-                                <span className={`text-xs font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${STATUS_BADGE_CLS[selEntry.status] ?? 'border-gold-dim/30 text-gold-dim bg-transparent'}`}>
-                                    {STATUS_NAMES[selEntry.status] ?? selEntry.status}
-                                </span>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => setSelectedDay(null)}
-                                className="text-gold-dim/50 hover:text-gold-dim text-xs leading-none px-1 cursor-pointer"
-                            >✕</button>
-                        </div>
-                        {selEntry.festivalName ? (
-                            <div>
-                                <span className="text-sm font-serif font-bold text-amber-400">{selEntry.festivalName}</span>
-                                {selEntry.festivalDesc && (
-                                    <p className="text-xs font-serif text-parchment/80 mt-1 leading-snug">{selEntry.festivalDesc}</p>
-                                )}
-                            </div>
-                        ) : (
-                            <span className="text-xs font-serif text-parchment/70">{selEntry.statusFull}</span>
-                        )}
-                        {selEntry.deity && selEntry.deity !== 'Ninguna' && (
-                            <div className="border-t border-gold-dim/20 pt-2">
-                                <span className="text-xs font-serif font-bold text-gold-dim">{selEntry.deity}</span>
-                                <p className="text-xs font-serif text-parchment/60 mt-0.5 leading-snug">{selEntry.deityDesc}</p>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <p className="text-xs font-serif text-gold-dim/50 text-center">Toca un día para ver su información</p>
+      {/* Info panel */}
+      <div
+        className={`mt-2 rounded-lg border transition-all ${
+          selEntry && selectedDay !== null
+            ? 'border-gold-dim/40 bg-amber-950/15 p-3'
+            : 'border-gold-dim/20 bg-transparent py-2 px-3'
+        }`}
+      >
+        {selEntry && selectedDay !== null ? (
+          <div className="flex flex-col gap-2 text-left">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-serif font-bold text-gold-leaf uppercase tracking-wider">
+                  Dies {selectedDay}
+                </span>
+                <span
+                  className={`text-xs font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${
+                    STATUS_BADGE_CLS[selEntry.status] ??
+                    'border-gold-dim/30 text-gold-dim bg-transparent'
+                  }`}
+                >
+                  {STATUS_NAMES[selEntry.status] ?? selEntry.status}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedDay(null)}
+                className="text-gold-dim/50 hover:text-gold-dim text-xs leading-none px-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            {selEntry.festivalName ? (
+              <div>
+                <span className="text-sm font-serif font-bold text-amber-400">
+                  {selEntry.festivalName}
+                </span>
+                {selEntry.festivalDesc && (
+                  <p className="text-xs font-serif text-parchment/80 mt-1 leading-snug">
+                    {selEntry.festivalDesc}
+                  </p>
                 )}
-            </div>
+              </div>
+            ) : (
+              <span className="text-xs font-serif text-parchment/70">
+                {selEntry.statusFull}
+              </span>
+            )}
+            {selEntry.deity && selEntry.deity !== 'Ninguna' && (
+              <div className="border-t border-gold-dim/20 pt-2">
+                <span className="text-xs font-serif font-bold text-gold-dim">
+                  {selEntry.deity}
+                </span>
+                <p className="text-xs font-serif text-parchment/60 mt-0.5 leading-snug">
+                  {selEntry.deityDesc}
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs font-serif text-gold-dim/50 text-center">
+            Toca un día para ver su información
+          </p>
+        )}
+      </div>
 
-            {/* Legend */}
-            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
-                {([
-                    { cls: 'bg-amber-500/25 ring-1 ring-amber-400/60', label: 'Festum NP' },
-                    { cls: 'bg-amber-900/25 ring-1 ring-amber-700/40', label: 'NP' },
-                    { cls: 'bg-rose-900/25 ring-1 ring-rose-500/40',   label: 'Nefastus' },
-                    { cls: 'bg-orange-900/20 ring-1 ring-orange-500/35', label: 'Endotercissus' },
-                ] as const).map(({ cls, label }) => (
-                    <div key={label} className="flex items-center gap-1">
-                        <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
-                        <span className="text-xs text-gold-dim/50 font-serif uppercase tracking-wide">{label}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
+      {/* Legend */}
+      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
+        {(
+          [
+            { cls: 'bg-amber-500/25 ring-1 ring-amber-400/60', label: 'Festum NP' },
+            { cls: 'bg-amber-900/25 ring-1 ring-amber-700/40', label: 'NP' },
+            { cls: 'bg-rose-900/25 ring-1 ring-rose-500/40', label: 'Nefastus' },
+            { cls: 'bg-orange-900/20 ring-1 ring-orange-500/35', label: 'Endotercissus' },
+          ] as const
+        ).map(({ cls, label }) => (
+          <div key={label} className="flex items-center gap-1">
+            <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
+            <span className="text-xs text-gold-dim/50 font-serif uppercase tracking-wide">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface RomanCalendarInfoProps {
-    currentDate?: Date;
-    /** Observer location for the Attic comparison date (defaults to Athens). */
-    lat?: number;
-    lng?: number;
+  currentDate?: Date;
+  /** Observer location for the Attic comparison date (defaults to Athens). */
+  lat?: number;
+  lng?: number;
 }
 
-const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new Date(), lat, lng }) => {
-    const { civilization, labels } = useCivilization();
-    const [info, setInfo] = useState<RomanDayInfo | null>(null);
-    const [showFestivals, setShowFestivals] = useState(false);
-    const [showStatusInfo, setShowStatusInfo] = useState(false);
-    const [fontesOpen, setFontesOpen] = useState(false);
-    const [greekInfo, setGreekInfo] = useState<{ festival: AtticFestivalInfo | null; defaultDeity: AtticFestivalInfo; atticDate: AtticDateResult } | null>(null);
-    const [activeSacrificeIdx, setActiveSacrificeIdx] = useState(0);
+// eslint-disable-next-line sonarjs/cognitive-complexity
+function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendarInfoProps) {
+  const { civilization, labels } = useCivilization();
+  const [info, setInfo] = useState<RomanDayInfo | null>(null);
+  const [showFestivals, setShowFestivals] = useState(false);
+  const [showStatusInfo, setShowStatusInfo] = useState(false);
+  const [fontesOpen, setFontesOpen] = useState(false);
+  const [greekInfo, setGreekInfo] = useState<{
+    festival: AtticFestivalInfo | null;
+    defaultDeity: AtticFestivalInfo;
+    atticDate: AtticDateResult;
+  } | null>(null);
+  const [activeSacrificeIdx, setActiveSacrificeIdx] = useState(0);
 
-    const month = currentDate.getMonth() + 1;
-    const day = currentDate.getDate();
-    const isApril = month === 4;
-    const isMay = month === 5;
-    const isFloralia = isMay && (day >= 1 && day <= 3);
-    const isLemuria = isMay && (day === 9 || day === 11 || day === 13);
-    const isJune = month === 6;
+  const month = currentDate.getMonth() + 1;
+  const day = currentDate.getDate();
+  const isApril = month === 4;
+  const isMay = month === 5;
+  const isFloralia = isMay && day >= 1 && day <= 3;
+  const isLemuria = isMay && (day === 9 || day === 11 || day === 13);
+  const isJune = month === 6;
 
-    const sacrificesForDay = OVID_SACRIFICIA.filter(e => e.month === month && e.day === day);
-    const hasMultipleSacrifices = sacrificesForDay.length > 1;
+  const sacrificesForDay = OVID_SACRIFICIA.filter(e => e.month === month && e.day === day);
+  const hasMultipleSacrifices = sacrificesForDay.length > 1;
 
-    const sacrifice = sacrificesForDay.length > 0 
-        ? sacrificesForDay[0] 
-        : null;
+  const sacrifice = sacrificesForDay.length > 0 ? sacrificesForDay[0] : null;
 
-    useEffect(() => {
-        setInfo(getRomanDayInfo(currentDate));
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setInfo(getRomanDayInfo(currentDate));
 
-        const atticDate = getAtticDate(currentDate, lat, lng);
-        const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
-        const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
-        setGreekInfo({ festival, defaultDeity, atticDate });
-        setActiveSacrificeIdx(0);
-        setFontesOpen(false);
-    }, [currentDate, lat, lng]);
+    const atticDate = getAtticDate(currentDate, lat, lng);
+    const festival = getAtticFestivalInfo(atticDate.monthIndex, atticDate.dayOfMonth);
+    const defaultDeity = getDefaultAtticDeity(atticDate.monthIndex);
+    setGreekInfo({ festival, defaultDeity, atticDate });
+    setActiveSacrificeIdx(0);
+    setFontesOpen(false);
+  }, [currentDate, lat, lng]);
 
-    if (!info && !greekInfo) return null;
+  if (!info && !greekInfo) return null;
 
-    const getStatusIcon = (status: string) => {
-        if (status === 'F' || status === 'C') return "⚖️";
-        if (status === 'N' || status === 'NP') return "🏛️";
-        return "📜";
-    };
+  const getStatusIcon = (status: string) => {
+    if (status === 'F' || status === 'C') return '⚖️';
+    if (status === 'N' || status === 'NP') return '🏛️';
+    return '📜';
+  };
 
-    const getStatusColor = (status: string) => {
-        if (status === 'F') return "text-emerald-600 dark:text-emerald-400";
-        if (status === 'C') return "text-blue-600 dark:text-blue-400";
-        if (status === 'N') return "text-rose-600 dark:text-rose-400";
-        if (status === 'NP') return "text-amber-500 dark:text-amber-400";
-        return "text-gold-leaf";
-    };
+  const getStatusColor = (status: string) => {
+    if (status === 'F') return 'text-emerald-600 dark:text-emerald-400';
+    if (status === 'C') return 'text-blue-600 dark:text-blue-400';
+    if (status === 'N') return 'text-rose-600 dark:text-rose-400';
+    if (status === 'NP') return 'text-amber-500 dark:text-amber-400';
+    return 'text-gold-leaf';
+  };
 
-    const mosMaiorum = OVID_MOS_MAIORUM.find(e => e.month === month && e.day === day);
-    const annalesBelli = OVID_ANNALES_BELLI.find(e => e.month === month && e.day === day);
-    
-    const preces = OVID_PRECES_ET_SACRA.find(e => {
-        if (e.startMonth === e.endMonth) {
-            return month === e.startMonth && day >= e.startDay && day <= e.endDay;
-        }
-        if (month === e.startMonth) return day >= e.startDay;
-        if (month === e.endMonth) return day <= e.endDay;
-        if (month > e.startMonth && month < e.endMonth) return true;
-        return false;
-    });
-    
-    
-    const monument = OVID_AEDES_ET_MONUMENTA.find(e => e.month === month && e.day === day);
-    
-    const statusExplanation = OVID_STATUS_EXPLANATIONS.find(e => e.status === info?.status) || 
-                             (info?.status.startsWith('N') ? OVID_STATUS_EXPLANATIONS.find(e => e.status === 'N') : null);
+  const mosMaiorum = OVID_MOS_MAIORUM.find(e => e.month === month && e.day === day);
+  const annalesBelli = OVID_ANNALES_BELLI.find(e => e.month === month && e.day === day);
 
-    // Roman mode
-    if (civilization === 'rome' && info) {
-        return (
-            <div className="w-full max-w-md mx-auto mt-6 mb-6">
-                <div 
-                    className="bg-ink/90 border border-gold-dim p-5 rounded-lg shadow-xl relative overflow-hidden text-center group cursor-pointer hover:border-roman-red transition-colors"
-                    onClick={() => setShowFestivals(true)}
+  const preces = OVID_PRECES_ET_SACRA.find(e => {
+    if (e.startMonth === e.endMonth) {
+      return month === e.startMonth && day >= e.startDay && day <= e.endDay;
+    }
+    if (month === e.startMonth) return day >= e.startDay;
+    if (month === e.endMonth) return day <= e.endDay;
+    return month > e.startMonth && month < e.endMonth;
+  });
+
+  const monument = OVID_AEDES_ET_MONUMENTA.find(e => e.month === month && e.day === day);
+
+  const statusExplanation =
+    OVID_STATUS_EXPLANATIONS.find(e => e.status === info?.status) ||
+    (info?.status.startsWith('N')
+      ? OVID_STATUS_EXPLANATIONS.find(e => e.status === 'N')
+      : null);
+
+  // Roman mode
+  if (civilization === 'rome' && info) {
+    return (
+      <div className="w-full max-w-md mx-auto mt-6 mb-6">
+        <div
+          role="button"
+          tabIndex={0}
+          className="bg-ink/90 border border-gold-dim p-5 rounded-lg shadow-xl relative overflow-hidden text-center group cursor-pointer hover:border-roman-red transition-colors"
+          onClick={() => setShowFestivals(true)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') setShowFestivals(true);
+          }}
+        >
+          {info.isMajorFestival && (
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-leaf via-transparent to-transparent" />
+          )}
+
+          <div className="relative z-10 flex flex-col items-center gap-4">
+            {/* TOP: Status & Date Type */}
+            <div className="border-b border-gold-dim/50 pb-2 w-full flex items-center justify-center gap-3">
+              <span className="text-2xl filter drop-shadow-glow">
+                {getStatusIcon(info.status)}
+              </span>
+              <h3
+                className={`font-serif text-lg uppercase tracking-[0.2em] ${getStatusColor(
+                  info.status,
+                )}`}
+              >
+                {info.statusFull}
+              </h3>
+              {statusExplanation && (
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    setShowStatusInfo(true);
+                  }}
+                  className="p-1 hover:bg-white/10 rounded-full transition-colors group flex-shrink-0"
+                  title="Explicación de Ovidio"
                 >
+                  <Info className="w-4 h-4 text-gold-dim group-hover:text-gold-leaf" />
+                </button>
+              )}
+            </div>
 
-                    {info.isMajorFestival && (
-                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-leaf via-transparent to-transparent" />
+            {/* MAIN: Deus Diei */}
+            <div className="flex flex-col items-center gap-2 w-full bg-stone-900/40 p-6 rounded border border-gold-dim/20 shadow-inner">
+              <div className="text-gold-dim text-xs uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
+                <span className="opacity-40">—</span>
+                {labels.godOfDayTitle}
+                <span className="opacity-40">—</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-serif font-black text-parchment drop-shadow-md uppercase tracking-wider">
+                {info.god}
+              </h2>
+              <p className="font-serif text-sm md:text-base text-parchment/80 italic px-4 mt-2 leading-relaxed">
+                &quot;{info.description}&quot;
+              </p>
+            </div>
+
+            {/* MONTHLY CALENDAR */}
+            <RomanDayGrid
+              month={currentDate.getMonth()}
+              year={currentDate.getFullYear()}
+              today={currentDate.getDate()}
+            />
+
+            {/* BOTTOM: Festival */}
+            {info.festivalName && (
+              <div className="mt-1 w-full animate-fadeIn">
+                <div className="text-festival opacity-80 text-xs uppercase tracking-widest mb-1">
+                  {labels.festivalLabel}
+                </div>
+                <h2 className="font-serif text-xl font-bold text-festival mb-1 tracking-wide">
+                  {info.festivalName.toUpperCase()}
+                </h2>
+              </div>
+            )}
+
+            {/* FONTES ANTIQUI */}
+            {info.fontes && info.fontes.length > 0 && (
+              <div
+                role="presentation"
+                className="w-full mt-4 border border-gold-dim/30 rounded-md overflow-hidden"
+                onClick={e => e.stopPropagation()}
+                onKeyDown={e => e.stopPropagation()}
+              >
+                {/* Collapsed header — always visible */}
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-3 py-2 bg-stone-900/60 hover:bg-stone-900/80 transition-colors cursor-pointer"
+                  onClick={() => setFontesOpen(o => !o)}
+                  aria-expanded={fontesOpen}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-xs font-serif uppercase tracking-[0.25em] text-gold-dim/70 flex-shrink-0">
+                      Fontes Antiqui
+                    </span>
+                    {!fontesOpen && (
+                      <span className="text-xs font-serif text-parchment/50 truncate">
+                        · {info.fontes[0].author}, {info.fontes[0].work}
+                        {info.fontes[0].book ? ` ${info.fontes[0].book}` : ''}
+                        {info.fontes[0].lines ? `.${info.fontes[0].lines}` : ''}
+                      </span>
                     )}
+                  </div>
+                  <span
+                    className="text-gold-dim/60 text-xs flex-shrink-0 ml-2 transition-transform duration-200"
+                    style={{
+                      display: 'inline-block',
+                      transform: fontesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
+                    aria-hidden="true"
+                  >
+                    ▾
+                  </span>
+                </button>
 
-                    <div className="relative z-10 flex flex-col items-center gap-4">
-
-                        {/* TOP: Status & Date Type */}
-                        <div className="border-b border-gold-dim/50 pb-2 w-full flex items-center justify-center gap-3">
-                            <span className="text-2xl filter drop-shadow-glow">{getStatusIcon(info.status)}</span>
-                            <h3 className={`font-serif text-lg uppercase tracking-[0.2em] ${getStatusColor(info.status)}`}>
-                                {info.statusFull}
-                            </h3>
-                            {statusExplanation && (
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); setShowStatusInfo(true); }}
-                                    className="p-1 hover:bg-white/10 rounded-full transition-colors group flex-shrink-0"
-                                    title="Explicación de Ovidio"
-                                >
-                                    <Info className="w-4 h-4 text-gold-dim group-hover:text-gold-leaf" />
-                                </button>
+                {/* Expanded body */}
+                {fontesOpen && (
+                  <div className="bg-stone-950/60 px-3 pt-3 pb-2 flex flex-col gap-3">
+                    {info.fontes.map((fonte, idx) => {
+                      const typeBadge =
+                        fonte.type !== 'description'
+                          ? fonte.type.charAt(0).toUpperCase() + fonte.type.slice(1)
+                          : null;
+                      const citHeader = [
+                        fonte.author,
+                        fonte.work,
+                        fonte.book ? `Lib. ${fonte.book}` : null,
+                        fonte.lines ? `vv. ${fonte.lines}` : null,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ');
+                      return (
+                        <div
+                          key={idx}
+                          className={idx > 0 ? 'border-t border-gold-dim/20 pt-3' : ''}
+                        >
+                          <div className="flex items-start justify-between gap-2 mb-1.5">
+                            <span className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim/60 leading-tight">
+                              {citHeader}
+                            </span>
+                            {typeBadge && (
+                              <span className="text-xs uppercase tracking-widest text-amber-700/70 border border-amber-700/30 px-1 py-0.5 rounded flex-shrink-0">
+                                {typeBadge}
+                              </span>
                             )}
-                        </div>
-
-                        {/* MAIN: Deus Diei */}
-                        <div className="flex flex-col items-center gap-2 w-full bg-stone-900/40 p-6 rounded border border-gold-dim/20 shadow-inner">
-                            <div className="text-gold-dim text-xs uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
-                                <span className="opacity-40">—</span>
-                                {labels.godOfDayTitle}
-                                <span className="opacity-40">—</span>
-                            </div>
-                            <h2 className="text-3xl md:text-4xl font-serif font-black text-parchment drop-shadow-md uppercase tracking-wider">
-                                {info.god}
-                            </h2>
-                            <p className="font-serif text-sm md:text-base text-parchment/80 italic px-4 mt-2 leading-relaxed">
-                                "{info.description}"
+                          </div>
+                          {fonte.textLa && (
+                            <p className="text-xs font-serif italic text-parchment/85 leading-relaxed mb-1.5 whitespace-pre-line">
+                              {fonte.textLa}
                             </p>
+                          )}
+                          {fonte.textLa && (
+                            <div className="border-t border-gold-dim/15 my-1.5" />
+                          )}
+                          <p className="text-xs font-serif text-parchment/55 leading-relaxed italic">
+                            {fonte.textEs}
+                          </p>
                         </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
 
-                        {/* MONTHLY CALENDAR */}
-                        <RomanDayGrid
-                            month={currentDate.getMonth()}
-                            year={currentDate.getFullYear()}
-                            today={currentDate.getDate()}
-                        />
+            {/* EPIC 4: Mos Maiorum (Curiosidad del Día) */}
+            {mosMaiorum && (
+              <div className="mt-4 p-4 bg-amber-900/20 border border-gold-dim/30 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🍷</span>
+                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-amber-500">
+                    Mos Maiorum: {mosMaiorum.title}
+                  </span>
+                </div>
+                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
+                  &quot;{mosMaiorum.text}&quot;
+                </p>
+                <span className="text-xs text-gold-dim/60 self-end uppercase tracking-widest">
+                  — Ovidio, {mosMaiorum.reference}
+                </span>
+              </div>
+            )}
 
-                        {/* BOTTOM: Festival */}
-                        {info.festivalName && (
-                            <div className="mt-1 w-full animate-fadeIn">
-                                <div className="text-festival opacity-80 text-xs uppercase tracking-widest mb-1">{labels.festivalLabel}</div>
-                                <h2 className="font-serif text-xl font-bold text-festival mb-1 tracking-wide">
-                                    {info.festivalName.toUpperCase()}
-                                </h2>
-                            </div>
-                        )}
+            {/* EPIC 5: Annales Belli (Memoria del Imperio) */}
+            {annalesBelli && (
+              <div className="mt-4 p-4 bg-roman-red/10 border border-roman-red/50 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">⚔️</span>
+                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-roman-red">
+                    Annales Belli: {annalesBelli.title}
+                  </span>
+                </div>
+                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
+                  &quot;{annalesBelli.text}&quot;
+                </p>
+                <span className="text-xs text-roman-red/60 self-end uppercase tracking-widest">
+                  — Ovidio, {annalesBelli.reference}
+                </span>
+              </div>
+            )}
 
-                        {/* FONTES ANTIQUI */}
-                        {info.fontes && info.fontes.length > 0 && (
-                            <div
-                                className="w-full mt-4 border border-gold-dim/30 rounded-md overflow-hidden"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {/* Collapsed header — always visible */}
-                                <button
-                                    type="button"
-                                    className="w-full flex items-center justify-between px-3 py-2 bg-stone-900/60 hover:bg-stone-900/80 transition-colors cursor-pointer"
-                                    onClick={() => setFontesOpen(o => !o)}
-                                    aria-expanded={fontesOpen}
-                                >
-                                    <div className="flex items-center gap-2 min-w-0">
-                                        <span className="text-xs font-serif uppercase tracking-[0.25em] text-gold-dim/70 flex-shrink-0">
-                                            Fontes Antiqui
-                                        </span>
-                                        {!fontesOpen && (
-                                            <span className="text-xs font-serif text-parchment/50 truncate">
-                                                · {info.fontes[0].author}, {info.fontes[0].work}{info.fontes[0].book ? ` ${info.fontes[0].book}` : ''}{info.fontes[0].lines ? `.${info.fontes[0].lines}` : ''}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <span
-                                        className="text-gold-dim/60 text-xs flex-shrink-0 ml-2 transition-transform duration-200"
-                                        style={{ display: 'inline-block', transform: fontesOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                                        aria-hidden="true"
-                                    >▾</span>
-                                </button>
+            {/* EPIC 6: Preces et Sacra */}
+            {preces && (
+              <div className="mt-4 p-5 bg-stone-900/90 border-2 border-parchment/30 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                <div className="flex items-center justify-center gap-3 border-b border-parchment/20 pb-2 w-full">
+                  <span className="text-xl">{preces.icon || '🙏'}</span>
+                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-parchment">
+                    Preces et Sacra: {preces.title}
+                  </span>
+                  <span className="text-xl">{preces.icon || '🌬️'}</span>
+                </div>
+                <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-center italic w-full">
+                  &quot;{preces.text}&quot;
+                </p>
+                <span className="text-xs text-parchment/50 uppercase tracking-widest mt-1">
+                  — Ovidio, {preces.reference}
+                </span>
+              </div>
+            )}
 
-                                {/* Expanded body */}
-                                {fontesOpen && (
-                                    <div className="bg-stone-950/60 px-3 pt-3 pb-2 flex flex-col gap-3">
-                                        {info.fontes.map((fonte, idx) => {
-                                            const typeBadge = fonte.type !== 'description'
-                                                ? fonte.type.charAt(0).toUpperCase() + fonte.type.slice(1)
-                                                : null;
-                                            const citHeader = [
-                                                fonte.author,
-                                                fonte.work,
-                                                fonte.book ? `Lib. ${fonte.book}` : null,
-                                                fonte.lines ? `vv. ${fonte.lines}` : null,
-                                            ].filter(Boolean).join(' · ');
-                                            return (
-                                                <div key={idx} className={idx > 0 ? 'border-t border-gold-dim/20 pt-3' : ''}>
-                                                    <div className="flex items-start justify-between gap-2 mb-1.5">
-                                                        <span className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim/60 leading-tight">
-                                                            {citHeader}
-                                                        </span>
-                                                        {typeBadge && (
-                                                            <span className="text-xs uppercase tracking-widest text-amber-700/70 border border-amber-700/30 px-1 py-0.5 rounded flex-shrink-0">
-                                                                {typeBadge}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    {fonte.textLa && (
-                                                        <p className="text-xs font-serif italic text-parchment/85 leading-relaxed mb-1.5 whitespace-pre-line">
-                                                            {fonte.textLa}
-                                                        </p>
-                                                    )}
-                                                    {fonte.textLa && (
-                                                        <div className="border-t border-gold-dim/15 my-1.5" />
-                                                    )}
-                                                    <p className="text-xs font-serif text-parchment/55 leading-relaxed italic">
-                                                        {fonte.textEs}
-                                                    </p>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+            {/* EPIC 7: Aedes et Monumenta */}
+            {monument && (
+              <div className="mt-4 p-4 bg-stone-800 border-x-4 border-stone-500 rounded-sm relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🏛️</span>
+                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300">
+                    Aedes et Monumenta: {monument.title}
+                  </span>
+                </div>
+                <p className="text-xs font-serif text-stone-400 leading-relaxed text-left border-l-2 border-stone-600 pl-3 italic">
+                  &quot;{monument.text}&quot;
+                </p>
+                <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
+                  — Fasti, {monument.reference}
+                </span>
+              </div>
+            )}
 
-                        {/* EPIC 4: Mos Maiorum (Curiosidad del Día) */}
-                        {mosMaiorum && (
-                            <div className="mt-4 p-4 bg-amber-900/20 border border-gold-dim/30 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl">🍷</span>
-                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-amber-500">
-                                        Mos Maiorum: {mosMaiorum.title}
-                                    </span>
-                                </div>
-                                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
-                                    "{mosMaiorum.text}"
-                                </p>
-                                <span className="text-xs text-gold-dim/60 self-end uppercase tracking-widest">
-                                    — Ovidio, {mosMaiorum.reference}
-                                </span>
-                            </div>
-                        )}
-
-                        {/* EPIC 5: Annales Belli (Memoria del Imperio) */}
-                        {annalesBelli && (
-                            <div className="mt-4 p-4 bg-roman-red/10 border border-roman-red/50 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl">⚔️</span>
-                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-roman-red">
-                                        Annales Belli: {annalesBelli.title}
-                                    </span>
-                                </div>
-                                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
-                                    "{annalesBelli.text}"
-                                </p>
-                                <span className="text-xs text-roman-red/60 self-end uppercase tracking-widest">
-                                    — Ovidio, {annalesBelli.reference}
-                                </span>
-                            </div>
-                        )}
-
-                        {/* EPIC 6: Preces et Sacra */}
-                        {preces && (
-                            <div className="mt-4 p-5 bg-stone-900/90 border-2 border-parchment/30 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                                <div className="flex items-center justify-center gap-3 border-b border-parchment/20 pb-2 w-full">
-                                    <span className="text-xl">{preces.icon || "🙏"}</span>
-                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-parchment">
-                                        Preces et Sacra: {preces.title}
-                                    </span>
-                                    <span className="text-xl">{preces.icon || "🌬️"}</span>
-                                </div>
-                                <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-center italic w-full">
-                                    "{preces.text}"
-                                </p>
-                                <span className="text-xs text-parchment/50 uppercase tracking-widest mt-1">
-                                    — Ovidio, {preces.reference}
-                                </span>
-                            </div>
-                        )}
-
-                        {/* EPIC 7: Aedes et Monumenta */}
-                        {monument && (
-                            <div className="mt-4 p-4 bg-stone-800 border-x-4 border-stone-500 rounded-sm relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn shadow-sm">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl">🏛️</span>
-                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300">
-                                        Aedes et Monumenta: {monument.title}
-                                    </span>
-                                </div>
-                                <p className="text-xs font-serif text-stone-400 leading-relaxed text-left border-l-2 border-stone-600 pl-3 italic">
-                                    "{monument.text}"
-                                </p>
-                                <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
-                                    — Fasti, {monument.reference}
-                                </span>
-                            </div>
-                        )}
-
-                        {/* EPIC 10: Hostiae et Sacrificia */}
-                        {hasMultipleSacrifices ? (
-                            <div 
-                                className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-4 w-full animate-fadeIn ${
-                                    isApril 
-                                        ? 'bg-roman-red/15 border-2 border-roman-red/50 shadow-[0_0_25px_rgba(183,28,28,0.35)]' 
-                                        : isFloralia
-                                            ? 'bg-emerald-900/20 border-2 border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
-                                            : isLemuria
-                                                ? 'bg-indigo-950/40 border-2 border-indigo-500/50 shadow-[0_0_25px_rgba(99,102,241,0.25)]'
-                                                : isJune
-                                                    ? 'bg-orange-950/20 border-2 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.2)]'
-                                                    : 'bg-stone-950/90 border-2 border-roman-red/40 shadow-[0_0_20px_rgba(183,28,28,0.2)]'
-                                }`}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <div className="flex flex-col items-center w-full border-b border-roman-red/20 pb-2">
-                                    <div className="text-4xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300 hover:scale-110 flex items-center gap-2">
-                                        {sacrificesForDay[activeSacrificeIdx].icon || "🗡️"}
-                                        {isApril && (
-                                            <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(239,68,68,0.4)] animate-pulse" title="Sangre purificadora o Fuego lustral de Abril">
-                                                {(sacrificesForDay[activeSacrificeIdx].icon?.includes('🔥') || sacrificesForDay[activeSacrificeIdx].title.toLowerCase().includes('zorra')) ? '🔥' : '🩸'}
-                                            </span>
-                                        )}
-                                        {isLemuria && (
-                                            <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(99,102,241,0.4)] animate-pulse" title="Espectro / Lemur de los Muertos">
-                                                👻
-                                            </span>
-                                        )}
-                                        {isJune && sacrificesForDay[activeSacrificeIdx].icon === "🫏" && (
-                                            <span className="text-2xl filter drop-shadow-[0_0_5px_rgba(249,115,22,0.4)] animate-pulse" title="Pan de la Vestalia">
-                                                🍞
-                                            </span>
-                                        )}
-                                    </div>
-                                    <span className="text-xs font-serif uppercase tracking-[0.22em] font-black text-roman-red text-center mt-2">
-                                        {sacrificesForDay[activeSacrificeIdx].title}
-                                    </span>
-                                    {sacrificesForDay[activeSacrificeIdx].crime && (
-                                        <div className="mt-2 text-xs uppercase font-bold tracking-widest text-roman-red bg-roman-red/10 px-3 py-1 rounded border border-roman-red/20 text-center max-w-full">
-                                            Crimen: {sacrificesForDay[activeSacrificeIdx].crime}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="w-full flex flex-col gap-2">
-                                    <blockquote className="italic text-[12px] md:text-[13px] font-serif text-parchment/90 border-l-2 border-roman-red/50 pl-4 py-2 leading-relaxed bg-stone-900/40 rounded-r shadow-inner text-left animate-fadeIn">
-                                        "{sacrificesForDay[activeSacrificeIdx].text}"
-                                    </blockquote>
-                                    <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
-                                        — Ovidio, {sacrificesForDay[activeSacrificeIdx].reference}
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center justify-between w-full mt-1 pt-2 border-t border-stone-800">
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setActiveSacrificeIdx((prev) => (prev === 0 ? sacrificesForDay.length - 1 : prev - 1));
-                                        }}
-                                        className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
-                                        title="Anterior"
-                                    >
-                                        <ChevronLeft className="w-4 h-4" />
-                                    </button>
-
-                                    <div className="flex gap-1.5 items-center justify-center">
-                                        {sacrificesForDay.map((item, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setActiveSacrificeIdx(idx);
-                                                }}
-                                                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                                                    idx === activeSacrificeIdx
-                                                        ? 'w-4 bg-roman-red shadow-[0_0_6px_rgba(239,68,68,0.7)]'
-                                                        : 'w-2 bg-stone-700 hover:bg-stone-500'
-                                                }`}
-                                                title={item.title}
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setActiveSacrificeIdx((prev) => (prev === sacrificesForDay.length - 1 ? 0 : prev + 1));
-                                        }}
-                                        className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
-                                        title="Siguiente"
-                                    >
-                                        <ChevronRight className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            sacrifice && (
-                                <div 
-                                    className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg ${
-                                        isApril 
-                                            ? 'bg-roman-red/15 border border-roman-red/50 shadow-[0_0_20px_rgba(183,28,28,0.25)]' 
-                                            : isFloralia
-                                                ? 'bg-emerald-900/20 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
-                                                : isLemuria
-                                                    ? 'bg-indigo-950/40 border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.25)]'
-                                                    : isJune
-                                                        ? 'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]'
-                                                        : 'bg-stone-900/60 border border-stone-500/30'
-                                    }`}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <div className="flex flex-col items-center gap-1.5 w-full">
-                                        <div className="flex items-center justify-center gap-3 w-full flex-wrap">
-                                            <span className="text-2xl filter drop-shadow-md flex items-center gap-2">
-                                                {sacrifice.icon || "🗡️"}
-                                                {isApril && (
-                                                    <span className="text-lg filter drop-shadow-md animate-pulse" title="Sangre purificadora o Fuego lustral de Abril">
-                                                        {(sacrifice.icon?.includes('🔥') || sacrifice.title.toLowerCase().includes('zorra')) ? '🔥' : '🩸'}
-                                                    </span>
-                                                )}
-                                                {isLemuria && (
-                                                    <span className="text-lg filter drop-shadow-md animate-pulse" title="Espectro / Lemur de los Muertos">
-                                                        👻
-                                                    </span>
-                                                )}
-                                                {isJune && sacrifice.icon === "🫏" && (
-                                                    <span className="text-lg filter drop-shadow-md animate-pulse" title="Pan de la Vestalia">
-                                                        🍞
-                                                    </span>
-                                                )}
-                                            </span>
-                                            <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
-                                                {isLemuria ? "Lemuria: Ofrenda Lustral" : `Sacrificia: ${sacrifice.title}`}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
-                                        <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
-                                            "{sacrifice.text}"
-                                        </p>
-                                        <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
-                                            — Ovidio, {sacrifice.reference}
-                                        </span>
-                                    </div>
-                                </div>
-                            )
-                        )}
-
-                        {/* EPHEMERIDES */}
-                        {getHistoricalEvents(currentDate).length > 0 && (
-                            <div className="mt-4 pt-4 border-t border-gold-dim/30 w-full animate-fadeIn">
-                                <div className="text-parchment/90 text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
-                                    <span>📜</span> {labels.calendarInfoTitle} <span>📜</span>
-                                </div>
-                                <ul className="space-y-3">
-                                    {getHistoricalEvents(currentDate).map((evt: any, i: number) => (
-                                        <li key={i} className="flex flex-col text-center">
-                                            <span className="text-gold-leaf font-serif italic text-sm">"{evt.latin}"</span>
-                                            <span className="text-parchment/70 text-xs">{evt.spanish}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
+            {/* EPIC 10: Hostiae et Sacrificia */}
+            {hasMultipleSacrifices ? (
+              <div
+                role="presentation"
+                className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-4 w-full animate-fadeIn ${
+                  isApril
+                    ? 'bg-roman-red/15 border-2 border-roman-red/50 shadow-[0_0_25px_rgba(183,28,28,0.35)]'
+                    : isFloralia
+                    ? 'bg-emerald-900/20 border-2 border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.15)]'
+                    : isLemuria
+                    ? 'bg-indigo-950/40 border-2 border-indigo-500/50 shadow-[0_0_25px_rgba(99,102,241,0.25)]'
+                    : isJune
+                    ? 'bg-orange-950/20 border-2 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.2)]'
+                    : 'bg-stone-950/90 border-2 border-roman-red/40 shadow-[0_0_20px_rgba(183,28,28,0.2)]'
+                }`}
+                onClick={e => e.stopPropagation()}
+                onKeyDown={e => e.stopPropagation()}
+              >
+                <div className="flex flex-col items-center w-full border-b border-roman-red/20 pb-2">
+                  <div className="text-4xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300 hover:scale-110 flex items-center gap-2">
+                    {sacrificesForDay[activeSacrificeIdx].icon || '🗡️'}
+                    {isApril && (
+                      <span
+                        className="text-2xl filter drop-shadow-[0_0_5px_rgba(239,68,68,0.4)] animate-pulse"
+                        title="Sangre purificadora o Fuego lustral de Abril"
+                      >
+                        {sacrificesForDay[activeSacrificeIdx].icon?.includes('🔥') ||
+                        sacrificesForDay[activeSacrificeIdx].title
+                          .toLowerCase()
+                          .includes('zorra')
+                          ? '🔥'
+                          : '🩸'}
+                      </span>
+                    )}
+                    {isLemuria && (
+                      <span
+                        className="text-2xl filter drop-shadow-[0_0_5px_rgba(99,102,241,0.4)] animate-pulse"
+                        title="Espectro / Lemur de los Muertos"
+                      >
+                        👻
+                      </span>
+                    )}
+                    {isJune && sacrificesForDay[activeSacrificeIdx].icon === '🫏' && (
+                      <span
+                        className="text-2xl filter drop-shadow-[0_0_5px_rgba(249,115,22,0.4)] animate-pulse"
+                        title="Pan de la Vestalia"
+                      >
+                        🍞
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs font-serif uppercase tracking-[0.22em] font-black text-roman-red text-center mt-2">
+                    {sacrificesForDay[activeSacrificeIdx].title}
+                  </span>
+                  {sacrificesForDay[activeSacrificeIdx].crime && (
+                    <div className="mt-2 text-xs uppercase font-bold tracking-widest text-roman-red bg-roman-red/10 px-3 py-1 rounded border border-roman-red/20 text-center max-w-full">
+                      Crimen: {sacrificesForDay[activeSacrificeIdx].crime}
                     </div>
+                  )}
                 </div>
 
-                {/* NEXT FESTIVALS MODAL */}
-                {showFestivals && (
-                    <div 
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
-                        onClick={() => setShowFestivals(false)}
-                    >
-                        <div 
-                            className="w-full max-w-lg bg-ink border-4 border-roman-red rounded-sm shadow-[0_0_50px_rgba(153,27,27,0.3)] overflow-hidden relative cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {/* Header */}
-                            <div className="p-6 border-b border-roman-red bg-rose-950/20 text-center">
-                                <div className="text-roman-red text-3xl mb-2">🏛️</div>
-                                <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
-                                    Proxima Festa
-                                </h2>
-                                <p className="text-xs text-roman-red uppercase tracking-[0.3em] font-bold mt-1">
-                                    Calendarium Romanum
-                                </p>
-                            </div>
+                <div className="w-full flex flex-col gap-2">
+                  <blockquote className="italic text-[12px] md:text-[13px] font-serif text-parchment/90 border-l-2 border-roman-red/50 pl-4 py-2 leading-relaxed bg-stone-900/40 rounded-r shadow-inner text-left animate-fadeIn">
+                    &quot;{sacrificesForDay[activeSacrificeIdx].text}&quot;
+                  </blockquote>
+                  <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
+                    — Ovidio, {sacrificesForDay[activeSacrificeIdx].reference}
+                  </span>
+                </div>
 
-                            {/* List */}
-                            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
-                                {getNextRomanFestivals(currentDate, 3).map((f, i) => (
-                                    <div key={i} className="group/fest">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <div className="flex flex-col gap-1">
-                                                <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-roman-red transition-colors leading-tight">
-                                                    {f.name}
-                                                </h4>
-                                                <span className="text-xs text-gold-dim/60 font-bold uppercase tracking-widest">
-                                                    {f.date}
-                                                </span>
-                                            </div>
-                                            <div className="bg-roman-red/10 border border-roman-red/30 rounded px-2 py-1 text-right">
-                                                <div className="text-[14px] text-roman-red font-black leading-none">{f.daysRemaining}</div>
-                                                <div className="text-[7px] text-roman-red/60 uppercase font-bold tracking-tighter">dies</div>
-                                            </div>
-                                        </div>
-                                        <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-roman-red/20 pl-4 py-1">
-                                            {f.description}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
+                <div className="flex items-center justify-between w-full mt-1 pt-2 border-t border-stone-800">
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      setActiveSacrificeIdx(prev =>
+                        prev === 0 ? sacrificesForDay.length - 1 : prev - 1,
+                      );
+                    }}
+                    className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
+                    title="Anterior"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
 
-                            {/* Footer */}
-                            <button 
-                                className="w-full p-4 bg-roman-red/10 border-t border-roman-red/30 text-roman-red font-serif text-xs uppercase tracking-widest hover:bg-roman-red/20 transition-all font-bold"
-                                onClick={() => setShowFestivals(false)}
-                            >
-                                Claudere Fastos
-                            </button>
-                        </div>
+                  <div className="flex gap-1.5 items-center justify-center">
+                    {sacrificesForDay.map((item, idx) => (
+                      <button
+                        key={idx}
+                        onClick={e => {
+                          e.stopPropagation();
+                          setActiveSacrificeIdx(idx);
+                        }}
+                        className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                          idx === activeSacrificeIdx
+                            ? 'w-4 bg-roman-red shadow-[0_0_6px_rgba(239,68,68,0.7)]'
+                            : 'w-2 bg-stone-700 hover:bg-stone-500'
+                        }`}
+                        title={item.title}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      setActiveSacrificeIdx(prev =>
+                        prev === sacrificesForDay.length - 1 ? 0 : prev + 1,
+                      );
+                    }}
+                    className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
+                    title="Siguiente"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              sacrifice && (
+                <div
+                  role="presentation"
+                  className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg ${
+                    isApril
+                      ? 'bg-roman-red/15 border border-roman-red/50 shadow-[0_0_20px_rgba(183,28,28,0.25)]'
+                      : isFloralia
+                      ? 'bg-emerald-900/20 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+                      : isLemuria
+                      ? 'bg-indigo-950/40 border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.25)]'
+                      : isJune
+                      ? 'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]'
+                      : 'bg-stone-900/60 border border-stone-500/30'
+                  }`}
+                  onClick={e => e.stopPropagation()}
+                  onKeyDown={e => e.stopPropagation()}
+                >
+                  <div className="flex flex-col items-center gap-1.5 w-full">
+                    <div className="flex items-center justify-center gap-3 w-full flex-wrap">
+                      <span className="text-2xl filter drop-shadow-md flex items-center gap-2">
+                        {sacrifice.icon || '🗡️'}
+                        {isApril && (
+                          <span
+                            className="text-lg filter drop-shadow-md animate-pulse"
+                            title="Sangre purificadora o Fuego lustral de Abril"
+                          >
+                            {sacrifice.icon?.includes('🔥') ||
+                            sacrifice.title.toLowerCase().includes('zorra')
+                              ? '🔥'
+                              : '🩸'}
+                          </span>
+                        )}
+                        {isLemuria && (
+                          <span
+                            className="text-lg filter drop-shadow-md animate-pulse"
+                            title="Espectro / Lemur de los Muertos"
+                          >
+                            👻
+                          </span>
+                        )}
+                        {isJune && sacrifice.icon === '🫏' && (
+                          <span
+                            className="text-lg filter drop-shadow-md animate-pulse"
+                            title="Pan de la Vestalia"
+                          >
+                            🍞
+                          </span>
+                        )}
+                      </span>
+                      <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
+                        {isLemuria
+                          ? 'Lemuria: Ofrenda Lustral'
+                          : `Sacrificia: ${sacrifice.title}`}
+                      </span>
                     </div>
-                )}
+                  </div>
+                  <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
+                    <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
+                      &quot;{sacrifice.text}&quot;
+                    </p>
+                    <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
+                      — Ovidio, {sacrifice.reference}
+                    </span>
+                  </div>
+                </div>
+              )
+            )}
 
-                {/* EPIC 9: Status Info Modal */}
-                {showStatusInfo && statusExplanation && (
-                    <div 
-                        className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn cursor-pointer"
-                        onClick={() => setShowStatusInfo(false)}
-                    >
-                        <div 
-                            className="w-full max-w-sm bg-stone-900 border border-gold-leaf/50 p-6 rounded-lg shadow-2xl relative cursor-default"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button 
-                                onClick={() => setShowStatusInfo(false)}
-                                className="absolute top-4 right-4 text-gold-dim hover:text-gold-leaf transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                            
-                            <div className="flex flex-col items-center gap-4 text-center">
-                                <div className="text-4xl filter drop-shadow-glow mb-2">{getStatusIcon(info.status)}</div>
-                                <h3 className={`font-serif text-2xl uppercase tracking-[0.3em] font-black ${getStatusColor(info.status)}`}>
-                                    Día {info.statusFull}
-                                </h3>
-                                <div className="w-16 h-px bg-gold-leaf/30" />
-                                <p className="font-serif text-parchment/90 italic leading-relaxed">
-                                    "{statusExplanation.text}"
-                                </p>
-                                <span className="text-xs text-gold-dim/60 uppercase tracking-widest font-bold">
-                                    — Fastos, {statusExplanation.reference}
-                                </span>
-                            </div>
+            {/* EPHEMERIDES */}
+            {getHistoricalEvents(currentDate).length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gold-dim/30 w-full animate-fadeIn">
+                <div className="text-parchment/90 text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
+                  <span>📜</span> {labels.calendarInfoTitle} <span>📜</span>
+                </div>
+                <ul className="space-y-3">
+                  {getHistoricalEvents(currentDate).map((evt: any, i: number) => (
+                    <li key={i} className="flex flex-col text-center">
+                      <span className="text-gold-leaf font-serif italic text-sm">
+                        &quot;{evt.latin}&quot;
+                      </span>
+                      <span className="text-parchment/70 text-xs">{evt.spanish}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* NEXT FESTIVALS MODAL */}
+        {showFestivals && (
+          <div
+            role="presentation"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
+            onClick={() => setShowFestivals(false)}
+            onKeyDown={e => {
+              if (e.key === 'Escape') setShowFestivals(false);
+            }}
+          >
+            <div
+              role="presentation"
+              className="w-full max-w-lg bg-ink border-4 border-roman-red rounded-sm shadow-[0_0_50px_rgba(153,27,27,0.3)] overflow-hidden relative cursor-pointer"
+              onClick={e => e.stopPropagation()}
+              onKeyDown={e => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="p-6 border-b border-roman-red bg-rose-950/20 text-center">
+                <div className="text-roman-red text-3xl mb-2">🏛️</div>
+                <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
+                  Proxima Festa
+                </h2>
+                <p className="text-xs text-roman-red uppercase tracking-[0.3em] font-bold mt-1">
+                  Calendarium Romanum
+                </p>
+              </div>
+
+              {/* List */}
+              <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
+                {getNextRomanFestivals(currentDate, 3).map((f, i) => (
+                  <div key={i} className="group/fest">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex flex-col gap-1">
+                        <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-roman-red transition-colors leading-tight">
+                          {f.name}
+                        </h4>
+                        <span className="text-xs text-gold-dim/60 font-bold uppercase tracking-widest">
+                          {f.date}
+                        </span>
+                      </div>
+                      <div className="bg-roman-red/10 border border-roman-red/30 rounded px-2 py-1 text-right">
+                        <div className="text-[14px] text-roman-red font-black leading-none">
+                          {f.daysRemaining}
                         </div>
+                        <div className="text-[7px] text-roman-red/60 uppercase font-bold tracking-tighter">
+                          dies
+                        </div>
+                      </div>
                     </div>
-                )}
+                    <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-roman-red/20 pl-4 py-1">
+                      {f.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <button
+                className="w-full p-4 bg-roman-red/10 border-t border-roman-red/30 text-roman-red font-serif text-xs uppercase tracking-widest hover:bg-roman-red/20 transition-all font-bold"
+                onClick={() => setShowFestivals(false)}
+              >
+                Claudere Fastos
+              </button>
             </div>
-        );
-    }
+          </div>
+        )}
 
-    return null;
-};
+        {/* EPIC 9: Status Info Modal */}
+        {showStatusInfo && statusExplanation && (
+          <div
+            role="presentation"
+            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn cursor-pointer"
+            onClick={() => setShowStatusInfo(false)}
+            onKeyDown={e => {
+              if (e.key === 'Escape') setShowStatusInfo(false);
+            }}
+          >
+            <div
+              role="presentation"
+              className="w-full max-w-sm bg-stone-900 border border-gold-leaf/50 p-6 rounded-lg shadow-2xl relative cursor-default"
+              onClick={e => e.stopPropagation()}
+              onKeyDown={e => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowStatusInfo(false)}
+                className="absolute top-4 right-4 text-gold-dim hover:text-gold-leaf transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex flex-col items-center gap-4 text-center">
+                <div className="text-4xl filter drop-shadow-glow mb-2">
+                  {getStatusIcon(info.status)}
+                </div>
+                <h3
+                  className={`font-serif text-2xl uppercase tracking-[0.3em] font-black ${getStatusColor(
+                    info.status,
+                  )}`}
+                >
+                  Día {info.statusFull}
+                </h3>
+                <div className="w-16 h-px bg-gold-leaf/30" />
+                <p className="font-serif text-parchment/90 italic leading-relaxed">
+                  &quot;{statusExplanation.text}&quot;
+                </p>
+                <span className="text-xs text-gold-dim/60 uppercase tracking-widest font-bold">
+                  — Fastos, {statusExplanation.reference}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return null;
+}
 
 export default RomanCalendarInfo;
