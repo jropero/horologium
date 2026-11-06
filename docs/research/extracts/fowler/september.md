@@ -1,4 +1,5 @@
 # September — Fowler (1899)
+
 **PDF pages used**: 226–265 (printed 215–254)
 **September chapter**: printed pp. 215–235; October begins at printed p. 236.
 
@@ -56,12 +57,12 @@
 
 Fowler's September chapter (printed pp. 215–235; PDF pp. 226–246) contains remarkably few discrete festival entries. The author opens by noting that "the Calendar of this month is almost a blank" — only the Kalends, Nones, and Ides are marked in the large letters of the public fasti, with no other festival assigned its own deity in the calendar proper. The usable data is:
 
-| Day | Festival | Deity | Source |
-|-----|----------|-------|--------|
-| 5–19 | Ludi Romani (Ludi Magni) | Jupiter | p. 215–216 |
-| 13 | Epulum Iovis | Jupiter, Juno, Minerva | pp. 217–220, 234 |
-| 13 | Dies Natalis Templi Capitolini | Jupiter Capitolinus | p. 217 |
-| 13 | Clavus Annalis (nail ceremony) | [Fortuna/Necessitas] | pp. 234–235 |
+| Day  | Festival                       | Deity                  | Source           |
+| ---- | ------------------------------ | ---------------------- | ---------------- |
+| 5–19 | Ludi Romani (Ludi Magni)       | Jupiter                | p. 215–216       |
+| 13   | Epulum Iovis                   | Jupiter, Juno, Minerva | pp. 217–220, 234 |
+| 13   | Dies Natalis Templi Capitolini | Jupiter Capitolinus    | p. 217           |
+| 13   | Clavus Annalis (nail ceremony) | [Fortuna/Necessitas]   | pp. 234–235      |
 
 The bulk of the chapter (pp. 218–234) is a long scholarly excursus on the nature and development of the cult of Jupiter throughout Italy (Umbria, Sabellic peoples, Oscan, Etruscan, Latin, Praenestine, and finally Roman forms), provoked by the anthropomorphic Epulum. This discussion contains no additional datable September festivals. The September chapter has no Volturnalia entry — that festival (vi Kal. Sept. = Aug. 27) appears in the preceding August chapter and was extracted from the top of the same PDF pages but belongs to August.
 

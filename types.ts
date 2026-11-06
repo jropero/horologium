@@ -39,10 +39,10 @@ export interface RomanTimeData {
   zodiacSign: string;
 }
 
-export type TimePeriod = "Dies" | "Nox";
+export type TimePeriod = 'Dies' | 'Nox';
 export const TimePeriod = {
-  Day: "Dies" as TimePeriod,
-  Night: "Nox" as TimePeriod
+  Day: 'Dies' as TimePeriod,
+  Night: 'Nox' as TimePeriod,
 };
 
 export type WeatherCondition =
@@ -55,36 +55,36 @@ export type WeatherCondition =
   | 'fog';
 
 export interface WeatherSnapshot {
-    temperature: number;
-    condition: WeatherCondition;
-    description: string;
-    greekDescription?: string;
-    egyptianDescription?: string;
-    chineseDescription?: string;
-    chineseWindName?: string;
-    code: number;
-    windSpeed: number;
-    windGusts: number;
-    windDirection: number;
-    latinWindName: string;
-    greekWindName?: string;
-    egyptianWindName?: string;
-    surfacePressure: number;
-    yearLabel: string; // "MMIII", "MCMLXXIII", etc.
+  temperature: number;
+  condition: WeatherCondition;
+  description: string;
+  greekDescription?: string;
+  egyptianDescription?: string;
+  chineseDescription?: string;
+  chineseWindName?: string;
+  code: number;
+  windSpeed: number;
+  windGusts: number;
+  windDirection: number;
+  latinWindName: string;
+  greekWindName?: string;
+  egyptianWindName?: string;
+  surfacePressure: number;
+  yearLabel: string; // "MMIII", "MCMLXXIII", etc.
 }
 
 export interface WeatherData {
-    current: WeatherSnapshot;
-    historical: WeatherSnapshot[]; // Un array con los años pasados
-    /** True when `current` is recorded weather for a time-travel date (not the present). */
-    isHistorical?: boolean;
-    /** True when the weather fetch failed (e.g. offline). Effects use a green aura instead. */
-    isOffline?: boolean;
-    /**
-     * True when the sky shows the aurora borealis: either because there is no
-     * weather data (offline / failed / slow fetch) or because the user chose it
-     * as a custom sky from the mobile menu.
-     */
-    aurora?: boolean;
+  current: WeatherSnapshot;
+  historical: WeatherSnapshot[]; // Un array con los años pasados
+  /** True when `current` is recorded weather for a time-travel date (not the present). */
+  isHistorical?: boolean;
+  /** True when the weather fetch failed (e.g. offline). Effects use a green aura instead. */
+  isOffline?: boolean;
+  /**
+   * True when the sky shows the aurora borealis: either because there is no
+   * weather data (offline / failed / slow fetch) or because the user chose it
+   * as a custom sky from the mobile menu.
+   */
+  aurora?: boolean;
 }
 // --- END OF FILE horologium-main/types.ts ---

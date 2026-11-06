@@ -1,9 +1,11 @@
 # Aprilis — Scullard (1981)
+
 **PDF pages used**: 96–116
 
 ---
 
 ## Veneralia
+
 - **Day**: 1
 - **Fasti status**: F
 - **Deity**: Venus Verticordia; Fortuna Virilis
@@ -15,6 +17,7 @@
 ---
 
 ## Ludi Matri deum Magnae Idaeae / Ludi Megalesiaci (start)
+
 - **Day**: 4 (runs 4–10 April)
 - **Fasti status**: C
 - **Deity**: Mater Magna (Cybele)
@@ -26,6 +29,7 @@
 ---
 
 ## Ludi Megalesia (duration)
+
 - **Day**: 4–10 April (PRID. NON. – iv ID. APR.)
 - **Fasti status**: not stated for the full span
 - **Deity**: Mater Magna
@@ -37,6 +41,7 @@
 ---
 
 ## Fortunae Publicae Citeriori in Colle
+
 - **Day**: 5
 - **Fasti status**: N
 - **Deity**: Fortuna Publica (Citerior); related to Fortuna Primigenia on Quirinal
@@ -48,6 +53,7 @@
 ---
 
 ## Matri deum Magnae Idaeae in Palatio (culmination of Megalesia)
+
 - **Day**: 10
 - **Fasti status**: N
 - **Deity**: Mater Magna (Cybele)
@@ -59,6 +65,7 @@
 ---
 
 ## Ludi Cereri / Cerialia (start)
+
 - **Day**: 12–19 April (III ID. APR. – XIII KAL. MAI.)
 - **Fasti status**: NP (on final day, 19 April, per calendars)
 - **Deity**: Ceres, Liber, Libera
@@ -70,6 +77,7 @@
 ---
 
 ## Iovi Victori, Iovi Libertati
+
 - **Day**: 13 (Ides of April)
 - **Fasti status**: NP
 - **Deity**: Jupiter Victor; Jupiter Libertas; Jupiter Capitolinus (general Ides observance)
@@ -81,6 +89,7 @@
 ---
 
 ## FORDICIDIA
+
 - **Day**: 15
 - **Fasti status**: NP
 - **Deity**: Tellus (Terra Mater)
@@ -92,6 +101,7 @@
 ---
 
 ## CERIALIA
+
 - **Day**: 19 (final day; Games ran 12–19)
 - **Fasti status**: NP
 - **Deity**: Ceres, Liber, Libera
@@ -103,6 +113,7 @@
 ---
 
 ## PARILIA (Roma condita)
+
 - **Day**: 21
 - **Fasti status**: NP
 - **Deity**: Pales (sex uncertain; possibly two Pales — Antiate calendar for 7 July refers to Palibus duobus)
@@ -114,6 +125,7 @@
 ---
 
 ## VINALIA PRIORA (Vinalia Erucinae)
+
 - **Day**: 23
 - **Fasti status**: F (Ant. mai.)
 - **Deity**: Jupiter (primary, per Varro); Venus Erucina (per Antiate calendar and calendars; later association)
@@ -125,6 +137,7 @@
 ---
 
 ## ROBIGALIA
+
 - **Day**: 25
 - **Fasti status**: NP
 - **Deity**: Robigus / Robigo (sex uncertain to the Romans; spirit of robigo: blight, red rust or mildew)
@@ -136,6 +149,7 @@
 ---
 
 ## Ludi Florae / FLORALIA (start)
+
 - **Day**: 27 (Julian 28), iv KAL. MAI.
 - **Fasti status**: C
 - **Deity**: Flora (ancient Italian goddess of flowers and vegetation in general; had her own flamen Floralis)
@@ -147,6 +161,7 @@
 ---
 
 ## Feriae Latinae (Feriae Conceptivae — moveable feast)
+
 - **Day**: Moveable; not fixed in the calendar. Normally held before the consuls departed for the campaign season in spring; sometimes a little later. Described under April as typical timing.
 - **Fasti status**: Conceptivae (moveable); date fixed at start of each year by incoming consuls
 - **Deity**: Jupiter Latiaris (on the Alban Mount)
@@ -161,25 +176,26 @@
 
 Scullard covers fifteen named occasions (including the Megalesia as both its start and its culmination separately, and the Cerialia as both a start-of-games entry and the final day):
 
-| Day | Festival | Fasti | Deity |
-|-----|----------|-------|-------|
-| 1 | Veneralia | F | Venus Verticordia, Fortuna Virilis |
-| 4–10 | Ludi Megalesiaci / Megalesia | C | Mater Magna (Cybele) |
-| 5 | Fortunae Publicae Citeriori in Colle | N | Fortuna Publica |
-| 10 | Matri deum Magnae Idaeae in Palatio | N | Mater Magna |
-| 12–19 | Ludi Cereri (Cerialia, games span) | — | Ceres |
-| 13 | Iovi Victori, Iovi Libertati (Ides) | NP | Jupiter Victor, Jupiter Libertas |
-| 15 | Fordicidia | NP | Tellus / Terra Mater |
-| 19 | Cerialia (final day) | NP | Ceres, Liber, Libera |
-| 21 | Parilia (Roma condita) | NP | Pales |
-| 23 | Vinalia Priora | F | Jupiter (primary); Venus Erucina |
-| 25 | Robigalia | NP | Robigus / Robigo |
-| 27 | Ludi Florae / Floralia (start) | C | Flora |
-| moveable | Feriae Latinae | conceptivae | Jupiter Latiaris |
+| Day      | Festival                             | Fasti       | Deity                              |
+| -------- | ------------------------------------ | ----------- | ---------------------------------- |
+| 1        | Veneralia                            | F           | Venus Verticordia, Fortuna Virilis |
+| 4–10     | Ludi Megalesiaci / Megalesia         | C           | Mater Magna (Cybele)               |
+| 5        | Fortunae Publicae Citeriori in Colle | N           | Fortuna Publica                    |
+| 10       | Matri deum Magnae Idaeae in Palatio  | N           | Mater Magna                        |
+| 12–19    | Ludi Cereri (Cerialia, games span)   | —           | Ceres                              |
+| 13       | Iovi Victori, Iovi Libertati (Ides)  | NP          | Jupiter Victor, Jupiter Libertas   |
+| 15       | Fordicidia                           | NP          | Tellus / Terra Mater               |
+| 19       | Cerialia (final day)                 | NP          | Ceres, Liber, Libera               |
+| 21       | Parilia (Roma condita)               | NP          | Pales                              |
+| 23       | Vinalia Priora                       | F           | Jupiter (primary); Venus Erucina   |
+| 25       | Robigalia                            | NP          | Robigus / Robigo                   |
+| 27       | Ludi Florae / Floralia (start)       | C           | Flora                              |
+| moveable | Feriae Latinae                       | conceptivae | Jupiter Latiaris                   |
 
 **Explicit aitia given**: Veneralia (temple founded 114 BC for Vestal incest atonement; statue by Sulpicia per Sibylline Books); Megalesia (sacred stone arrived 4 April 204 BC, Hannibalic War); Vinalia (Aeneas–Turnus–Mezentius myth, per Ovid); Floralia (drought 241/238 BC, Sibylline Books, sterilitatem frugum — stated in Praenestine calendar note); Feriae Latinae (Latin League origin, destruction of Alba Longa).
 
 **Key ritual details of note for the app**:
+
 - Fordicidia ashes + October Horse blood → Parilia bonfires (cross-festival link across 15 April and 21 April, and 15 October).
 - Cerialia's fox rite (burning brands on tails) is described as cruel and obscure; Scullard does not endorse any specific explanation.
 - Robigalia dog sacrifice: entrails of dog + sheep by flamen Quirinalis; sucking puppy (Columella); not on a fixed day for the Porta Catularia version.

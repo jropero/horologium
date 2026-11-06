@@ -1,4 +1,5 @@
 # Roman Calendar Review — Februarius
+
 **App data**: `utils/romanYearData.ts` keys `"1-1"` through `"1-28"`
 **Sources**: Scullard (1981) pp. 69–85; Fowler (1899) pp. 299–331
 **Reviewer**: Claude Sonnet 4.6
@@ -32,7 +33,7 @@
 - **Source**: Scullard p.74–75 gives the Fasti status as "F (Ant. mai.; Maff.) / FP (Caer.; Vend.). Dies religiosus." Fowler p.306–310 concurs: "Feralia appears in three calendars (Caer. Maff. Farn.) in large letters, and is partly F/FP." Neither source gives NP for this day.
 - **Issue** (two compounding errors):
   1. `status: 'NP'` is wrong; the attested calendar designations are F or FP depending on the calendar.
-  2. The `festivalDesc` states "Día nefasto: toda actividad pública estaba prohibida." F (dies fastus) means legal business *was* permitted — the opposite of what the app claims. The Feralia was a dies religiosus but not nefastus in the usual sense; private piety and family tomb-visits characterised it, not a general ban on public activity.
+  2. The `festivalDesc` states "Día nefasto: toda actividad pública estaba prohibida." F (dies fastus) means legal business _was_ permitted — the opposite of what the app claims. The Feralia was a dies religiosus but not nefastus in the usual sense; private piety and family tomb-visits characterised it, not a general ban on public activity.
 - **Fix**: Change `status: 'F'` (taking the majority Fasti reading — Ant. mai., Maff.). Remove the sentence "Día nefasto: toda actividad pública estaba prohibida" from `festivalDesc`. Replace with: "Único festival público del período de la Parentalia. Los ritos eran de carácter privado: las familias llevaban ofrendas a las tumbas y apaciguaban a los Manes. Como dies religiosus, los magistrados depusieron sus insignias durante todo el período parental." Also add a brief note on the private rite of Tacita/Muta (Scullard p.75; Fowler p.308): an old woman performed sympathetic magic with incense, black beans, and a fish sewn with a bronze needle, to silence hostile spirits — this private rite is described by Ovid alongside the official Feralia.
 - **Priority**: HIGH
 
@@ -77,8 +78,9 @@
 
 ```typescript
 // Addition to "1-1" festivalDesc:
-festivalDesc: "Aniversario del templo de Juno Sospita en Roma (voto de C. Cornelio Cetego, 197 a.C.; dedicado en 194 a.C.). Los cónsules realizaban un sacrificio anual en su santuario principal en Lanuvio. En el mismo día, los pontífices ofrendaban en el bosque sagrado de Helernus, divinidad primitiva posiblemente ctónica cuyo nombre varía en los manuscritos (Avernus, Elernus); Festo menciona el sacrificio de un buey negro (Scullard p.72)."
+festivalDesc: 'Aniversario del templo de Juno Sospita en Roma (voto de C. Cornelio Cetego, 197 a.C.; dedicado en 194 a.C.). Los cónsules realizaban un sacrificio anual en su santuario principal en Lanuvio. En el mismo día, los pontífices ofrendaban en el bosque sagrado de Helernus, divinidad primitiva posiblemente ctónica cuyo nombre varía en los manuscritos (Avernus, Elernus); Festo menciona el sacrificio de un buey negro (Scullard p.72).';
 ```
+
 - **Priority**: MEDIUM
 
 ---
@@ -97,6 +99,7 @@ festivalDesc: "Aniversario del templo de Juno Sospita en Roma (voto de C. Cornel
 // quindecimviros, augures, Salios y un flamen. Macrobio (1.13.3) lo vincula a Numa y a los Di Manes.
 // Casos históricos documentados: 49 a.C. y 271 d.C. (Scullard pp.82–84)."
 ```
+
 - **Priority**: MEDIUM
 
 ---
@@ -123,21 +126,23 @@ festivalDesc: "Aniversario del templo de Juno Sospita en Roma (voto de C. Cornel
 
 ## Summary
 
-| Category | Count | Findings |
-|---|---|---|
-| WRONG_STATUS | 2 | Day 1 (NP→N); Day 21 (NP→F) |
-| WRONG_DEITY | 3 | Day 15 (Lupercus); Day 17 (Fornax); Day 22 (Concordia Familiar→Lares) |
-| WRONG_RITUAL | 2 | Day 21 (nefastus claim); Day 27 (chariots as established fact) |
-| INVENTED_AITION | 0 | — |
-| MISSING_FESTIVAL | 2 | Helernus (Feb 1); Amburbium (moveable) |
-| MINOR | 2 | Day 13 (Faunus displaced); Day 23 (Terminalia too sparse) |
-| **TOTAL** | **11** | |
+| Category         | Count  | Findings                                                              |
+| ---------------- | ------ | --------------------------------------------------------------------- |
+| WRONG_STATUS     | 2      | Day 1 (NP→N); Day 21 (NP→F)                                           |
+| WRONG_DEITY      | 3      | Day 15 (Lupercus); Day 17 (Fornax); Day 22 (Concordia Familiar→Lares) |
+| WRONG_RITUAL     | 2      | Day 21 (nefastus claim); Day 27 (chariots as established fact)        |
+| INVENTED_AITION  | 0      | —                                                                     |
+| MISSING_FESTIVAL | 2      | Helernus (Feb 1); Amburbium (moveable)                                |
+| MINOR            | 2      | Day 13 (Faunus displaced); Day 23 (Terminalia too sparse)             |
+| **TOTAL**        | **11** |                                                                       |
 
 ### Priority summary
+
 - **HIGH** (3): Wrong status Feb 1; Lupercus invented deity; Feralia status+ritual double-error
 - **MEDIUM** (5): Caristia deity; Quirinalia/Fornax deity; Equirria chariots; Helernus missing; Amburbium missing
 - **LOW** (2): Faunus/Parentalia ordering; Terminalia description sparse
 
 ### Sources consulted
-- H. H. Scullard, *Festivals and Ceremonies of the Roman Republic* (1981), pp. 69–85 (Februarius chapter)
-- W. Warde Fowler, *The Roman Festivals of the Period of the Republic* (1899), pp. 299–331 (Mensis Februarius)
+
+- H. H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (1981), pp. 69–85 (Februarius chapter)
+- W. Warde Fowler, _The Roman Festivals of the Period of the Republic_ (1899), pp. 299–331 (Mensis Februarius)

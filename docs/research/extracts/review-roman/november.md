@@ -1,8 +1,9 @@
 # Roman November — App vs. Scullard / Fowler Review
 
 **Sources:**
-- H. H. Scullard, *Festivals and Ceremonies of the Roman Republic* (1981), pp. 196–202
-- W. Warde Fowler, *The Roman Festivals of the Period of the Republic* (1899), pp. 252–254 (printed; PDF pp. 263–265)
+
+- H. H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (1981), pp. 196–202
+- W. Warde Fowler, _The Roman Festivals of the Period of the Republic_ (1899), pp. 252–254 (printed; PDF pp. 263–265)
 - App data: `utils/romanYearData.ts`, keys `"10-1"` through `"10-30"` (month index 10 = November, 0-based)
 
 **Note on sources:** Fowler's November chapter is extremely thin (three printed pages). Scullard is the primary source for this month. Fowler corroborates on the major items (Ludi Plebeii, Mundus patet, Feronia, Fortuna Primigenia) but adds no detail that contradicts Scullard.
@@ -12,11 +13,11 @@
 ## WRONG_STATUS + WRONG_DEITY + WRONG_RITUAL: Ludi Victoriae Sullanae — Day 1
 
 - **App**: key `"10-1"` | status=`NP` | statusFull=`"Kalendae"` | festivalName=`"Ludi Sullanae"` | deity=`"Juno"` | festivalDesc=`"Conclusión de los juegos de Sila. Honores habituales de las Calendas."`
-- **Source**: Scullard p. 196 — 1 Nov. (KAL. NOV.) is the culminating day (Circenses) of the *Ludi Victoriae Sullanae*, a games sequence running 26 October – 1 November. Fasti status: **F**. Deity: **Victoria / Victoria Sullana**. The Circenses on 1 November marked the anniversary of the Battle of the Colline Gate (81 BC). Staged by praetors. Established by Sulla; originally called *Victoriae*, later renamed *Sullanae* to distinguish from Caesar's games.
+- **Source**: Scullard p. 196 — 1 Nov. (KAL. NOV.) is the culminating day (Circenses) of the _Ludi Victoriae Sullanae_, a games sequence running 26 October – 1 November. Fasti status: **F**. Deity: **Victoria / Victoria Sullana**. The Circenses on 1 November marked the anniversary of the Battle of the Colline Gate (81 BC). Staged by praetors. Established by Sulla; originally called _Victoriae_, later renamed _Sullanae_ to distinguish from Caesar's games.
 - **Issue (status):** App records NP; Scullard gives F.
 - **Issue (deity):** App lists Juno, which belongs to the Kalendae formula but is not the deity of this festival. Scullard clearly names Victoria / Victoria Sullana.
 - **Issue (ritual):** festivalDesc conflates Kalends rites ("honores habituales de las Calendas") with the actual games. The correct content is the concluding Circenses of the Ludi Victoriae Sullanae.
-- **Issue (name):** "Ludi Sullanae" is an incomplete name. Full attested name is *Ludi Victoriae Sullanae*.
+- **Issue (name):** "Ludi Sullanae" is an incomplete name. Full attested name is _Ludi Victoriae Sullanae_.
 - **Fix:**
   ```ts
   "10-1": {
@@ -70,7 +71,7 @@
 ## MISSING_FESTIVAL: Feronia — Day 13
 
 - **App**: key `"10-13"` only records the Epulum Iovis / Iovis epulum. No Feronia entry exists on day 13. The app incorrectly places Feronia on day 15 (see below).
-- **Source**: Scullard pp. 197–198 — Fasti entry "Feroniae in Campo" (Arv.); "Feroniae, Fortunae Primigeniae, [Pie]tati" (Ant. mai.). Status: **NP** (same Ides day). Feronia had a temple/grove in the Campus Martius. Freedwomen (*libertinae*) contributed money as a gift to Feronia. At Terracina slaves could receive the cap of freedom (*pilleus*) at her altar. She may have originated as an agricultural goddess who later acquired association with freedmen's liberation. Fowler pp. 252–254: "the only mention we have of Feronia in Rome"; her cult predates the Ludi Plebeii in the Campus Martius.
+- **Source**: Scullard pp. 197–198 — Fasti entry "Feroniae in Campo" (Arv.); "Feroniae, Fortunae Primigeniae, [Pie]tati" (Ant. mai.). Status: **NP** (same Ides day). Feronia had a temple/grove in the Campus Martius. Freedwomen (_libertinae_) contributed money as a gift to Feronia. At Terracina slaves could receive the cap of freedom (_pilleus_) at her altar. She may have originated as an agricultural goddess who later acquired association with freedmen's liberation. Fowler pp. 252–254: "the only mention we have of Feronia in Rome"; her cult predates the Ludi Plebeii in the Campus Martius.
 - **Issue**: The festival of Feronia belongs on day 13 (Ides of November), not day 15. It is completely absent from `"10-13"`.
 - **Suggested entry** (to be merged into `"10-13"` data or handled as a secondary festival note):
   ```ts
@@ -159,22 +160,24 @@
 
 ## Summary
 
-| Category | Count | Days affected |
-|---|---|---|
-| WRONG_STATUS | 2 | 1, 8 |
-| WRONG_DEITY | 3 | 1, 8, 14 |
-| WRONG_RITUAL | 2 | 1, 8 |
-| WRONG_DATE | 2 | 3 (Ludi Plebeii start), 15 (Feronia) |
-| MISSING_FESTIVAL | 3 | 13 (Feronia, Fortuna Primigenia, [Pietati]) |
-| MINOR | 1 | 1 (festival name truncation) |
-| **Total** | **13** | |
+| Category         | Count  | Days affected                               |
+| ---------------- | ------ | ------------------------------------------- |
+| WRONG_STATUS     | 2      | 1, 8                                        |
+| WRONG_DEITY      | 3      | 1, 8, 14                                    |
+| WRONG_RITUAL     | 2      | 1, 8                                        |
+| WRONG_DATE       | 2      | 3 (Ludi Plebeii start), 15 (Feronia)        |
+| MISSING_FESTIVAL | 3      | 13 (Feronia, Fortuna Primigenia, [Pietati]) |
+| MINOR            | 1      | 1 (festival name truncation)                |
+| **Total**        | **13** |                                             |
 
 **Priority breakdown:**
+
 - HIGH (5): Day 1 (Ludi Victoriae Sullanae composite), Day 3 (Ludi Plebeii start), Day 8 (Mundus Patet), Day 13 (Feronia missing), Day 15 (Feronia wrong date)
 - MEDIUM (2): Day 13 (Fortuna Primigenia missing), Day 14 (Equorum Probatio deity)
 - LOW (1): Day 13 ([Pietati] missing)
 
 **Key observations:**
+
 - November is the Roman calendar's leanest month (both Scullard and Fowler explicitly characterize it as such). The app's coverage is broadly correct in structure but has significant precision errors on the three major fixed points: the Ludi Victoriae Sullanae closing day (1st), the Mundus Patet (8th), and the Ides cluster (13th).
 - The Ides of November (13th) are the most complex day: four distinct NP events share it — Iovis epulum, Feronia, Fortuna Primigenia, and [Pietati]. The app covers only one and misplaces Feronia two days forward.
 - Days 21–30 of November have no recorded festivals in either source and the app's plain C entries for those days are correct.

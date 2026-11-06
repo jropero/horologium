@@ -1,44 +1,45 @@
 # Roman Calendar Review — Summary Sep–Dec
+
 **Generated**: 2026-10-25
 **Sources**: Scullard (1981); Fowler (1899)
-**App keys**: September = "8-*"; October = "9-*"; November = "10-*"; December = "11-*"
+**App keys**: September = "8-_"; October = "9-_"; November = "10-_"; December = "11-_"
 
 ---
 
-## WRONG_* Findings
+## WRONG\_\* Findings
 
-| Month | Key | Category | Priority | Field | Current Value | Correct Value | Source |
-|---|---|---|---|---|---|---|---|
-| September | "8-4" | WRONG_DATE | HIGH | festivalName | Ludi Romani day 1 listed Sep 4 ("Comienzo…") | Sep 5 (Republican attested start); Sep 4 is uncertain Mommsen inference for imperial era | Scullard p.183–186; Fowler p.215 |
-| September | "8-1" | WRONG_DEITY | MEDIUM | deity | "Juno Regina" | "Juno Regina; Júpiter Tonante; Júpiter Libre" | Scullard p.183 |
-| September | "8-13" | WRONG_DEITY | HIGH | deity | "Júpiter" | "Júpiter; Juno; Minerva" (full Capitoline Triad) | Scullard p.186–187; Fowler pp.217–220 |
-| September | "8-14" | WRONG_DEITY | HIGH | deity | "Marte / Júpiter" | "Ninguna" (no named patron deity in sources) | Scullard p.188; Fowler pp.215–216 |
-| September | "8-23" | WRONG_DEITY | MEDIUM | deity | "Apolo" | "Apolo; Latona" | Scullard p.188 |
-| September | "8-1" | WRONG_STATUS | MEDIUM | status | NP | F | Scullard p.183 |
-| September | "8-15" | WRONG_STATUS | MEDIUM | status | NP | C (or F; NP not supported for Sep 15) | Scullard p.183–186; Fowler p.215–216 |
-| September | "8-14" | WRONG_RITUAL | HIGH | festivalDesc | "purificación militar" | Review/inspection only (equorum probatio); no purification rite | Scullard p.188; Fowler pp.215–216 |
-| October | "9-1" | WRONG_STATUS | MEDIUM | status | NP | N | Scullard p.189–190 |
-| October | "9-1" | WRONG_DEITY | HIGH | deity | "Fides" | "Fides / Jano Curiacio / Juno Sororia" (Tigillum deities erased) | Scullard p.190; Fowler pp.238–239 |
-| October | "9-7" | WRONG_DEITY | HIGH | deity | "Júpiter Fulgur / Juno" | "Júpiter Fulgur / Juno Curitis" (specific Faliscan epithet) | Scullard p.191; Fowler p.239 |
-| October | "9-9" | WRONG_DEITY | HIGH | deity | "Genius Publicus" | "Genius Publicus / Fausta Felicitas / Venus Victrix" | Scullard p.191 |
-| October | "9-10" | WRONG_RITUAL | MEDIUM | festivalName | "Ludi Augustales" | "Iunoni Monetae" (independent named calendar entry suppressed) | Scullard p.191–192 |
-| October | "9-15" | WRONG_RITUAL | HIGH | festivalDesc | "purificado y sacrificado" | "sacrificado" only; no purification — horse was killed with a spear | Scullard p.193–195; Fowler pp.241–250 |
-| November | "10-1" | WRONG_STATUS | HIGH | status | NP | F | Scullard p.196 |
-| November | "10-1" | WRONG_DEITY | HIGH | deity | "Juno" | "Victoria" (Victoria Sullana) | Scullard p.196 |
-| November | "10-1" | WRONG_RITUAL | HIGH | festivalDesc | "Conclusión de los juegos de Sila. Honores habituales de las Calendas." | Concluding Circenses of Ludi Victoriae Sullanae; Kalends rites not the content | Scullard p.196 |
-| November | "10-3" | WRONG_DATE | HIGH | festivalName | Ludi Plebeii start listed Nov 3 | Nov 4 (PR. NON. NOV.); key "10-3" should have no festivalName | Scullard pp.196–197; Fowler p.252 |
-| November | "10-8" | WRONG_STATUS | HIGH | status | NP | C (dies religiosus) | Scullard p.197 |
-| November | "10-8" | WRONG_DEITY | HIGH | deity | "Manes" | "Divinidades ctónicas" (no named deity in sources) | Scullard p.197 |
-| November | "10-8" | WRONG_RITUAL | HIGH | festivalDesc | "Segunda apertura sagrada" | Third and final annual opening (sequence: 24 Aug → 5 Oct → 8 Nov) | Scullard p.197 |
-| November | "10-14" | WRONG_DEITY | MEDIUM | deity | "Marte / Júpiter" | "Ninguna" (no deity stated; Mars attribution is unsourced inference) | Scullard p.198 |
-| November | "10-15" | WRONG_DATE | HIGH | deity / festivalName | Feronia placed Nov 15 | Nov 13 (Ides); "Feroniae in Campo" is unambiguously under 13 Nov | Scullard pp.197–198; Fowler p.252 |
-| December | "11-1" | WRONG_STATUS | MEDIUM | status | NP | N | Scullard p.199 |
-| December | "11-3" | WRONG_RITUAL | HIGH | festivalDesc | "el vino estaba terminantemente prohibido" | Wine was the central offering, renamed 'milk' by ritual convention; prohibition was on the word not the substance | Scullard pp.199–201; Fowler p.256 |
-| December | "11-8" | WRONG_DEITY | MEDIUM | deity | "Tiberinus" | "Tiberinus / Gaia" | Scullard pp.202–203 |
-| December | "11-13" | WRONG_DEITY | HIGH | deity / festivalName | festivalName "Lectisternium a Ceres" makes Ceres the apparent primary deity | Tellus is primary (dies natalis of Tellus temple); Ceres is secondary (lectisternium). deity: "Tellus / Ceres" | Scullard pp.204–205 |
-| December | "11-15" | WRONG_RITUAL | HIGH | festivalDesc | "burros y mulas eran coronados"; "Se destapaba su altar del Circo Máximo" | "caballos (equi) et muli"; altar-uncovering belongs to August Consualia (21 Aug), not December | Scullard p.205; Fowler p.268 |
-| December | "11-23" | WRONG_RITUAL | HIGH | festivalDesc | "Conclusión sombría de las Saturnales" | Independent parentatio at tomb of Acca Larentia; unconnected to Saturnalia | Scullard pp.211–212; Fowler pp.275–276 |
-| December | "11-25" | WRONG_STATUS | MEDIUM | status | NP | C (Republican calendar; Sol Invictus is an imperial-era addition) | Scullard p.212 |
+| Month     | Key     | Category     | Priority | Field                | Current Value                                                               | Correct Value                                                                                                     | Source                                 |
+| --------- | ------- | ------------ | -------- | -------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| September | "8-4"   | WRONG_DATE   | HIGH     | festivalName         | Ludi Romani day 1 listed Sep 4 ("Comienzo…")                                | Sep 5 (Republican attested start); Sep 4 is uncertain Mommsen inference for imperial era                          | Scullard p.183–186; Fowler p.215       |
+| September | "8-1"   | WRONG_DEITY  | MEDIUM   | deity                | "Juno Regina"                                                               | "Juno Regina; Júpiter Tonante; Júpiter Libre"                                                                     | Scullard p.183                         |
+| September | "8-13"  | WRONG_DEITY  | HIGH     | deity                | "Júpiter"                                                                   | "Júpiter; Juno; Minerva" (full Capitoline Triad)                                                                  | Scullard p.186–187; Fowler pp.217–220  |
+| September | "8-14"  | WRONG_DEITY  | HIGH     | deity                | "Marte / Júpiter"                                                           | "Ninguna" (no named patron deity in sources)                                                                      | Scullard p.188; Fowler pp.215–216      |
+| September | "8-23"  | WRONG_DEITY  | MEDIUM   | deity                | "Apolo"                                                                     | "Apolo; Latona"                                                                                                   | Scullard p.188                         |
+| September | "8-1"   | WRONG_STATUS | MEDIUM   | status               | NP                                                                          | F                                                                                                                 | Scullard p.183                         |
+| September | "8-15"  | WRONG_STATUS | MEDIUM   | status               | NP                                                                          | C (or F; NP not supported for Sep 15)                                                                             | Scullard p.183–186; Fowler p.215–216   |
+| September | "8-14"  | WRONG_RITUAL | HIGH     | festivalDesc         | "purificación militar"                                                      | Review/inspection only (equorum probatio); no purification rite                                                   | Scullard p.188; Fowler pp.215–216      |
+| October   | "9-1"   | WRONG_STATUS | MEDIUM   | status               | NP                                                                          | N                                                                                                                 | Scullard p.189–190                     |
+| October   | "9-1"   | WRONG_DEITY  | HIGH     | deity                | "Fides"                                                                     | "Fides / Jano Curiacio / Juno Sororia" (Tigillum deities erased)                                                  | Scullard p.190; Fowler pp.238–239      |
+| October   | "9-7"   | WRONG_DEITY  | HIGH     | deity                | "Júpiter Fulgur / Juno"                                                     | "Júpiter Fulgur / Juno Curitis" (specific Faliscan epithet)                                                       | Scullard p.191; Fowler p.239           |
+| October   | "9-9"   | WRONG_DEITY  | HIGH     | deity                | "Genius Publicus"                                                           | "Genius Publicus / Fausta Felicitas / Venus Victrix"                                                              | Scullard p.191                         |
+| October   | "9-10"  | WRONG_RITUAL | MEDIUM   | festivalName         | "Ludi Augustales"                                                           | "Iunoni Monetae" (independent named calendar entry suppressed)                                                    | Scullard p.191–192                     |
+| October   | "9-15"  | WRONG_RITUAL | HIGH     | festivalDesc         | "purificado y sacrificado"                                                  | "sacrificado" only; no purification — horse was killed with a spear                                               | Scullard p.193–195; Fowler pp.241–250  |
+| November  | "10-1"  | WRONG_STATUS | HIGH     | status               | NP                                                                          | F                                                                                                                 | Scullard p.196                         |
+| November  | "10-1"  | WRONG_DEITY  | HIGH     | deity                | "Juno"                                                                      | "Victoria" (Victoria Sullana)                                                                                     | Scullard p.196                         |
+| November  | "10-1"  | WRONG_RITUAL | HIGH     | festivalDesc         | "Conclusión de los juegos de Sila. Honores habituales de las Calendas."     | Concluding Circenses of Ludi Victoriae Sullanae; Kalends rites not the content                                    | Scullard p.196                         |
+| November  | "10-3"  | WRONG_DATE   | HIGH     | festivalName         | Ludi Plebeii start listed Nov 3                                             | Nov 4 (PR. NON. NOV.); key "10-3" should have no festivalName                                                     | Scullard pp.196–197; Fowler p.252      |
+| November  | "10-8"  | WRONG_STATUS | HIGH     | status               | NP                                                                          | C (dies religiosus)                                                                                               | Scullard p.197                         |
+| November  | "10-8"  | WRONG_DEITY  | HIGH     | deity                | "Manes"                                                                     | "Divinidades ctónicas" (no named deity in sources)                                                                | Scullard p.197                         |
+| November  | "10-8"  | WRONG_RITUAL | HIGH     | festivalDesc         | "Segunda apertura sagrada"                                                  | Third and final annual opening (sequence: 24 Aug → 5 Oct → 8 Nov)                                                 | Scullard p.197                         |
+| November  | "10-14" | WRONG_DEITY  | MEDIUM   | deity                | "Marte / Júpiter"                                                           | "Ninguna" (no deity stated; Mars attribution is unsourced inference)                                              | Scullard p.198                         |
+| November  | "10-15" | WRONG_DATE   | HIGH     | deity / festivalName | Feronia placed Nov 15                                                       | Nov 13 (Ides); "Feroniae in Campo" is unambiguously under 13 Nov                                                  | Scullard pp.197–198; Fowler p.252      |
+| December  | "11-1"  | WRONG_STATUS | MEDIUM   | status               | NP                                                                          | N                                                                                                                 | Scullard p.199                         |
+| December  | "11-3"  | WRONG_RITUAL | HIGH     | festivalDesc         | "el vino estaba terminantemente prohibido"                                  | Wine was the central offering, renamed 'milk' by ritual convention; prohibition was on the word not the substance | Scullard pp.199–201; Fowler p.256      |
+| December  | "11-8"  | WRONG_DEITY  | MEDIUM   | deity                | "Tiberinus"                                                                 | "Tiberinus / Gaia"                                                                                                | Scullard pp.202–203                    |
+| December  | "11-13" | WRONG_DEITY  | HIGH     | deity / festivalName | festivalName "Lectisternium a Ceres" makes Ceres the apparent primary deity | Tellus is primary (dies natalis of Tellus temple); Ceres is secondary (lectisternium). deity: "Tellus / Ceres"    | Scullard pp.204–205                    |
+| December  | "11-15" | WRONG_RITUAL | HIGH     | festivalDesc         | "burros y mulas eran coronados"; "Se destapaba su altar del Circo Máximo"   | "caballos (equi) et muli"; altar-uncovering belongs to August Consualia (21 Aug), not December                    | Scullard p.205; Fowler p.268           |
+| December  | "11-23" | WRONG_RITUAL | HIGH     | festivalDesc         | "Conclusión sombría de las Saturnales"                                      | Independent parentatio at tomb of Acca Larentia; unconnected to Saturnalia                                        | Scullard pp.211–212; Fowler pp.275–276 |
+| December  | "11-25" | WRONG_STATUS | MEDIUM   | status               | NP                                                                          | C (Republican calendar; Sol Invictus is an imperial-era addition)                                                 | Scullard p.212                         |
 
 ---
 
@@ -79,13 +80,13 @@
 
 ## Totals
 
-| Category | Count |
-|---|---|
-| WRONG_DATE | 3 |
-| WRONG_DEITY | 12 |
-| WRONG_STATUS | 7 |
-| WRONG_RITUAL | 8 |
-| MISSING_FESTIVAL | 12 |
-| INVENTED_AITION | 1 |
-| MINOR | 7 |
-| **TOTAL** | **50** |
+| Category         | Count  |
+| ---------------- | ------ |
+| WRONG_DATE       | 3      |
+| WRONG_DEITY      | 12     |
+| WRONG_STATUS     | 7      |
+| WRONG_RITUAL     | 8      |
+| MISSING_FESTIVAL | 12     |
+| INVENTED_AITION  | 1      |
+| MINOR            | 7      |
+| **TOTAL**        | **50** |

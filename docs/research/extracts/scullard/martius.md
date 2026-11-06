@@ -1,9 +1,11 @@
 # Martius — Scullard (1981)
+
 **PDF pages used**: 84–97
 
 ---
 
 ## Feriae Marti / Salii / Matronalia
+
 - **Day**: 1
 - **Fasti status**: NP; Dies religiosus
 - **Deity**: Mars (primary); Juno Lucina; Vesta
@@ -15,6 +17,7 @@
 ---
 
 ## Matronalia
+
 - **Day**: 1
 - **Fasti status**: NP (unofficial designation; observed on the Kalends of March)
 - **Deity**: Juno Lucina
@@ -26,6 +29,7 @@
 ---
 
 ## Vediovis
+
 - **Day**: 7
 - **Fasti status**: F
 - **Deity**: Vediovis (Vediovis Artis; Vediovis inter duos lucos on the Capitol)
@@ -37,6 +41,7 @@
 ---
 
 ## Arma Ancilia Moventur (Second Salian Procession)
+
 - **Day**: 9
 - **Fasti status**: C; Dies religiosus
 - **Deity**: Mars
@@ -48,6 +53,7 @@
 ---
 
 ## Equirria (March)
+
 - **Day**: 14
 - **Fasti status**: NP
 - **Deity**: Mars
@@ -59,6 +65,7 @@
 ---
 
 ## Mamuralia / Sacrum Mamurio
+
 - **Day**: 14
 - **Fasti status**: NP (same day as Equirria; listed in Philocalus and Menologia but not earlier calendars)
 - **Deity**: Mamurius Veturius (legendary smith; possibly equated with Mars or of Etruscan origin)
@@ -70,6 +77,7 @@
 ---
 
 ## Feriae Iovi (Ides of March)
+
 - **Day**: 15
 - **Fasti status**: NP
 - **Deity**: Jupiter
@@ -81,6 +89,7 @@
 ---
 
 ## Feriae Annae Perennae
+
 - **Day**: 15
 - **Fasti status**: NP
 - **Deity**: Anna Perenna
@@ -92,6 +101,7 @@
 ---
 
 ## Itur ad Argeos
+
 - **Day**: 16–17
 - **Fasti status**: Dies religiosus
 - **Deity**: Argei (twenty-seven sacraria at various points within the four "Servian" regions of Rome)
@@ -103,6 +113,7 @@
 ---
 
 ## Liberalia
+
 - **Day**: 17
 - **Fasti status**: NP (calendars vary: some give Liberalia only, others add Agonalia; Caer. gives both and adds "Libero Liberae")
 - **Deity**: Liber Pater; Libera
@@ -114,6 +125,7 @@
 ---
 
 ## Agonalia (March)
+
 - **Day**: 17
 - **Fasti status**: NP (combined with Liberalia entry; Macrobius calls the day agonium Martiale; Varro says in the books of the Salii Agonenses the day was called Agonia)
 - **Deity**: Mars (Agonium Martiale per Macrobius); possibly also Liber
@@ -125,6 +137,7 @@
 ---
 
 ## Toga Virilis Ceremony
+
 - **Day**: 17
 - **Fasti status**: not stated (domestic ceremony on the day of Liberalia)
 - **Deity**: Lares (domestic); Liber or Iuventus (Capitol sacrifice)
@@ -136,6 +149,7 @@
 ---
 
 ## Quinquatrus
+
 - **Day**: 19
 - **Fasti status**: NP
 - **Deity**: Mars (primary; Fasti Vaticani state Feriae Marti); Minerva (secondary, popular association)
@@ -147,6 +161,7 @@
 ---
 
 ## Tubilustrium
+
 - **Day**: 23
 - **Fasti status**: NP; Dies religiosus
 - **Deity**: Mars (primary; Praenestine calendar calls it a festival of Mars); Minerva (Ovid attributes it to "forti deae," a strong goddess = Minerva); Nerio/Nerine (Lydus; alleged wife of Mars, Sabine name)
@@ -158,6 +173,7 @@
 ---
 
 ## Q.R.C.F. (Quando Rex Comitiavit Fas)
+
 - **Day**: 24
 - **Fasti status**: F
 - **Deity**: None specified (procedural/legal day)
@@ -169,6 +185,7 @@
 ---
 
 ## Luna in Aventino (dies natalis)
+
 - **Day**: 31
 - **Fasti status**: C
 - **Deity**: Luna (Moon)

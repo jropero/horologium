@@ -1,6 +1,9 @@
 # El-Sabban — Ptolemaic Temple Calendars Extraction
+
 ## Source: El-Sabban (2000), Ch.6 — Minor, Fragmentary & Late Calendars
+
 ## Calendars covered: Kom Ombo (East & West), Esna, Edfu (1–4), Dendera (1–2)
+
 ## PDF pages extracted: 83–132 (printed pp 154–191)
 
 Note on text structure: The PDF preserves a two-column layout that pdftotext renders interleaved.
@@ -18,36 +21,44 @@ Calendar is in two sections: East Side (Ptolemy VI) and West Side (Ptolemy VI).
 ### EAST SIDE
 
 #### I Akhet — app month 0
+
 - Day 1: Opening of the year; causing the appearance of Horus, Lord of Ombos — deity: Horus. Resting in broad hall of Horus and Tooth; offering to Re. Continuing until Day 2.
 - Day 4–12: Appearing and resting in the broad hall (festival continues from Day 1)
 - Day 4–5: Performing all the ritual of the appearing and resting in the broad hall
 
 #### II Akhet — app month 1
+
 - Day 1: After the 8th hour, causing the appearance of Horus, chief of the two lands; performing his rites; keeping vigil by all the priests — deity: Horus
 - Day 2: Celebration in the temple of Horus Lord of Ombos; causing appearance of this god in his goodly festival of entering his town (when he has been in the Northland) — deity: Horus
 - Day 3–30: Resting in his place (continuation)
 
 #### III Akhet — app month 2
+
 - Day 28: Festival of Hathor, resident in Ombos. Causing the appearance of Horus and Hathor; performing all the rites — deities: Hathor, Horus
 
 #### IV Akhet — app month 3
+
 - Day 2–5: Appearing and resting in the broad hall (procession)
 - Day 30 to I Peret Day 4 (5 days): The appearance of Horus and Hathor; performing his rites — deities: Horus, Hathor
 
 #### II Peret — app month 5
+
 - Day 9: Festival of d3rt ("the devouring of ibm" / "the bringing of the willow", one calls it); appearance of this god; resting in broad hall of encounter; burning before him — deity: Horus
 - Day 10 (2nd day): Appearing of this god; performance of rites
 - Day 13–17: Resting in his place (continuation)
 
 #### III Peret — app month 6
+
 - Day 9: Appearing in the festival of entering his city; sailing before him by ships; performing rites — deity: Horus
 - Day 10 (2nd day): Appearing of this god to the North of this town (place called "the Baiu")
 - Day 10–12: Performing rites, resting in his temple
 
 #### IV Peret — app month 7
+
 - Day 3: Festival of Horus, son of Re; performing his rites — deity: Horus
 
 #### I Shomu — app month 8
+
 - Day 1: Appearing of Horus, together with his followers; performing his rites — deity: Horus
 - Day of New Moon: Appearing of this god "in appearing, in order to go to Gebgeb"; sailing; resting at his temple; keeping vigil by the young people — deity: Horus
 - Day 4: Appearing of this god
@@ -57,13 +68,16 @@ Calendar is in two sections: East Side (Ptolemy VI) and West Side (Ptolemy VI).
 - Day 8: Appearing of this god; taking the haunch before him; performing his rites; resting
 
 #### III Shomu — app month 10
+
 - Day 19: Appearing of this god in his goodly festival of "Treading (?) the fishes", one calls it; arriving at broad hall; treading fishes; doing likewise on Day 23 for 5 days — deity: Horus
 
 #### IV Shomu — app month 11
+
 - Day 1: Likeness of that day of crossing over against the rebel; sailing — deity: Horus
 - Day 30: First feast of wn-hr ("public appearance") of this god at his noble mound; appearing at every first place — deity: Horus
 
 #### Epagomenal Days — app month -1
+
 - Births of Horus, Isis, Nephthys (noted in summary line at end of east side)
 
 ---
@@ -71,10 +85,12 @@ Calendar is in two sections: East Side (Ptolemy VI) and West Side (Ptolemy VI).
 ### WEST SIDE (also Ptolemy VI)
 
 #### I Akhet — app month 0
+
 - Day 1: Appearing of Horus, Lord of Ombos; appearing of Euergetes, Philopator, Epiphanes, Philometor together with him — deities: Horus, Sobek Lord of Ombos, Ta-sent-nofret, Hathor, Min
 - On every New Moon: general appearance with all deities
 
 #### II Akhet — app month 1
+
 - Day 2–3: Appearing of Horus, chief of the two lands — deity: Horus
 - Day 3: Appearing of the noble standard of Haroeris, chief of the great seat; of Ta-sent-nofret; of Min
 - Day 3: Appearing of Sobek, Lord of Ombos — deity: Sobek
@@ -84,24 +100,29 @@ Calendar is in two sections: East Side (Ptolemy VI) and West Side (Ptolemy VI).
 - Day 7 (cont.): Appearing of Lord of Two Lands; resting at birth house, until Day 10
 
 #### I Peret — app month 4
+
 - Day 3: Appearing of Horus, Chief of the great seat, Lord of Two Lands; and Sobek, Lord of Ombos — deities: Horus, Sobek
 - Day 6: Appearing of Ta-sent-nofret, Hathor, Lord of Two Lands; resting at birth house; keeping vigil — deities: Ta-sent-nofret, Hathor
 - Day 7: Appearing and resting at their temple
 
 #### III Peret — app month 6
+
 - Days 1, 11, 13, 17, 20, 24, 25, 27: Appearing daily, at the temple of Ombos
 
 #### IV Peret — app month 7
+
 - Day 10: After the 8th hour, appearance of Ta-sent-nofret, Hathor, Lord of Two Lands; trumpets not played, no singing; resting at birth house — deities: Ta-sent-nofret, Hathor
 - Day 11 (dawn): wn-tu "public appearance" at birth house; making all the images for the birth of the gods; appearing of Lord of Two Lands at temple of Horus; resting at birth house
 - Day 20: Appearing of Sobek and Lord of Two Lands; vigil at birth house — deity: Sobek
 - Day 30: Appearing daily at temple of Ombos
 
 #### I Shomu — app month 8
+
 - Day 1: After appearing of Horus, appearing of these gods at birth house; resting on their seats; repeated appearing of Lord of Two Lands; bringing the torch — deity: Horus
 - Day 1, 11, 20: Appearing daily at temple of Ombos
 
 #### II Shomu — app month 9
+
 - Day 6: Appearing of Ta-sent-nofret and Lord of Two Lands — deity: Ta-sent-nofret
 - Days 8, 9, 19: Appearing daily at temple of Ombos
 - Day 15: Appearing of Amon, resident in Ombos; performing the rites of the sailing — deity: Amon
@@ -109,13 +130,16 @@ Calendar is in two sections: East Side (Ptolemy VI) and West Side (Ptolemy VI).
 - Day 27: Appearing of these gods at Gebu; arriving at "Flood crest"; sailing before them; drawing and resting in Gebu; appearing after the 8th; resting in broad hall of Horus and Thoth
 
 #### III Shomu — app month 10
+
 - Day 1: Appearing of noble standard of Horus and Lord of Two Lands — deity: Horus
 - Day 9: Appearing of these gods
 
 #### IV Shomu — app month 11
+
 - Day 1: Appearing of noble standard of Horus; appearing of Ta-sent-nofret and Lord of Two Lands
 
 #### Epagomenal Days — app month -1
+
 - Births of Horus, Isis, Nephthys
 - I Akhet, Day 19: Appearing of this god; making every image of the feast of Tooth
 - II Akhet, Day 9: wn-tu "public appearance" at the temple of Ombos; Day 10: Founding at Gebu; Day 23: Feast of Khons; Day 11: Resting at his temple
@@ -132,6 +156,7 @@ temple facade (Esna II, No. 55 and No. 77). Main deities: Khnum-Re, Nebtu (Neith
 Heqa the child, Menhyt.
 
 ### I Akhet (1st Month of Inundation) — app month 0
+
 - Day 1: Festival of the opening of the year (for a double benefit); Festival of Nehebkau and Khnum and his ennead; Shu finds the eye of Horus within the hands of Seth, he takes it from him — deities: Khnum, Nehebkau, Shu
 - Day 4: Reading the tablet of "the opening of the good year"; procession of Khnum-Re, chief of Esna and his ennead, Pi-Khnum, Pi-Sahme; union with the disk; returning — deities: Khnum-Re, Shu
 - Day 4 (cont.): Festival of Amon and festival of Re ("the beginning of making festivals" / "festival of the opening of the year"); presenting material to Khnum and his ennead of Pi-Khnum and countryside — deities: Amon, Re, Khnum
@@ -152,6 +177,7 @@ Heqa the child, Menhyt.
 - Day 28: Feast of Menhyt-Nebtu; procession of this goddess to make the countryside green; accomplishing rites of returning in court of appearance — deity: Menhyt-Nebtu
 
 ### II Akhet (2nd Month of Inundation) — app month 1
+
 - Day 1: Guarding (?) the eye of Horus, on this day when Shu and Tefnut go out to judge the followers; procession of Heqa, Khonsu, Thoth; union with the disk; return — deities: Shu, Tefnut, Heqa, Khonsu, Thoth
 - Day 4: Shu son of Re; Khnum, chief of the countryside — deities: Shu, Khnum
 - Day 14: Festival of Tooth (the very great one); festival of Horus; Shu, son of Re; entering to feed his father; accomplishing all the rites — deities: Tooth (Thoth), Horus, Shu
@@ -162,6 +188,7 @@ Heqa the child, Menhyt.
 - Day 29: "The presentation of offerings"; procession of Nebtu in her good feast; coming back into outer hypostyle; appearance of procession at the great good place; after evening service, coming back to Pi-Neter — deity: Nebtu
 
 ### III Akhet (3rd Month of Inundation) — app month 2
+
 - Day 1: Feast of Sekhmet; procession of sacred standards of Khnum, Neith, Nebtu; returning in open court — deities: Sekhmet, Khnum, Neith, Nebtu
 - Day 10: "Half bad, half good"; feast of Neith and his son Tithoes — deities: Neith, Tithoes
 - Day 19: Festival of Tooth, the very great one, in the whole country; festival of Horus — deities: Tooth (Thoth), Horus
@@ -172,6 +199,7 @@ Heqa the child, Menhyt.
 - Day 30: Making the appearance of the procession of Heqa the child at the great place; accomplishing all the rites of the day of navigation — deity: Heqa
 
 ### IV Akhet (4th Month of Inundation) — app month 3
+
 - Day 1: Feast of Ka-hir-ka; procession of Khnum-Re, chief of his principal seat at Esna; union with the disk; return; procession of Nebtu and her followers to the great place; libation; incense; return to temple of Khnum; offerings on the altar — deities: Khnum-Re, Nebtu
 - Day 2: Feast of setting up the Djed pillar of Osiris in Pi-Neter — deity: Osiris
 - Days 1–6 (of the season): The gods come from their provinces to contemplate the venerable god; listing: Horus of Hierakonpolis, Shu son of Re, Hathor of Agny, Nephthys of Kommer, Menhuy, Horus of the east of Hafat, Sobek chief of Summenu, Hemen of Sekhmet-iuret, Amon of Pe — many deities
@@ -184,6 +212,7 @@ Heqa the child, Menhyt.
 - Day 30 (cont.): Feast of bearing (?) the sky; making it like the feast of "Lifting up the sky"
 
 ### I Peret (1st Month of Winter) — app month 4
+
 - Day 1: Feast of Tefnut; procession of Menhyt, Nebtu, Heqa — deities: Tefnut, Menhyt, Nebtu, Heqa
 - Day 4: Going out by Shema-nefer; receiving banquets in presence of father and mother; running around the sacred area
 - Day 5: Feast of Neith, the great feast of Heqa the child and the feast of the child at Sais; processional appearance of this goddess; ritual of "navigation on the sacred lake of Asher" until Day 21 — deities: Neith, Heqa
@@ -197,6 +226,7 @@ Heqa the child, Menhyt.
 - Day 30: Feast of Hathor, mistress of Agny — deity: Hathor
 
 ### II Peret (2nd Month of Winter) — app month 5
+
 - Day 1: Feast of the gods and goddesses; accomplishing all the rites of navigation; making a halt; passing a happy day with all men
 - Day 6: Feast of bearing (?) of the sky; making it like the feast of "Lifting up the sky"
 - Day 8: Feast of Neith, opening the 2 door-leaves in the house of Neith; placing food offerings for the gods; procession of this goddess and her ennead; evening service; union with the disk; return — deity: Neith
@@ -204,12 +234,14 @@ Heqa the child, Menhyt.
 - Day 21: Feast of victory; procession of Heqa the child to court of appearance; accomplishing all rites of the feast of victory — deity: Heqa
 
 ### III Peret (3rd Month of Winter) — app month 6
+
 - Day 1: Feast of Ptah; feast of "lifting up the sky"; feast of Khnum-Re, chief of Esna; procession of this god and his ennead at dawn; union with disk — deities: Ptah, Khnum-Re
 - Day 5: Feast of Nebtu — deity: Nebtu
 - Days 10–11: Procession of Khnum, the good protector; union with disk; pause at Pi-Sahure; on morning of Day 11, procession of Tooth in middle of house of the two little birds; union with disk; returning — deities: Khnum, Tooth (Thoth)
 - Day 14: [lost beginning]; procession of Khnum-Re, Lord of Esna, with his ennead; union with disk; return; procession of Child (Heqa) going before his father; coming back to mammisi; procession made to Pi-Khnum and Pi-Sahure; holiday called "Feast of Ermuthis" — deities: Khnum-Re, Heqa (= Ermuthis)
 
 #### Birth-house (mammisi) crown sequence associated with III Peret Day 1 (Heqa the child):
+
 - Day 1: white crown at birth house; double crown before his father
 - Day 3: crowned with small wig in birth house; red crown before his father
 - Day 6: white crown at birth house; double crown before his father
@@ -221,17 +253,20 @@ Heqa the child, Menhyt.
 - Day 22: "Ten" crown at birth house; travelling through his town; purifying this god; returning to temple of Khnum
 
 ### IV Peret (4th Month of Winter) — app month 7
+
 - Day 1: Half bad, half good; feast of Shu; feast of the eye of Re (= Sekhmet); feast of Menhyt; the goddess of this day is "the great of love" — deities: Shu, Sekhmet, Menhyt
 - Day 11: Procession of Neith and Heqa the child in the morning; union with disk; returning; feast of the navigation of this goddess; performing the ritual of the divine birth of Re and of Horus in the second lunar day of this month — deities: Neith, Heqa, Re, Horus
 - Day 28: Feast of Harsiesis; procession of Heqa the child and Harsiesis — deities: Harsiesis, Heqa
 - Day 30: Procession of Nebtu in Esna; making halt in house of birth (mammisi); accomplishing all rites by dawn — deity: Nebtu
 
 ### I Shomu (1st Month of Summer) — app month 8
+
 - Day 1: Feast of Khnum, of Nebtu and of Heqa and Tooth and of the gods and goddesses; Shu and Tefnut are borne; Shu-Tooth bring back the eye to its owner; "feast of revealing the face" in the temple of Khnum; procession of Khnum-Re, Lord of Esna, with his ennead; union with disk; return — deities: Khnum, Nebtu, Heqa, Tooth, Shu, Tefnut
 - Day 1 (cont.): Procession of Heqa the child on golden palanquin; procession of Amon-Min to the birth house; pause before Nebtu; return
 - Day 25: Procession of Khnum-Re, chief of the countryside; [at] "the appearance in the palace of Ermouthis"; this feast completed in 6 days — deity: Khnum-Re
 
 ### II Shomu (2nd Month of Summer) — app month 9
+
 - Day 1: Half bad, half good; appearance of Khnum, Neith, Nebtu; union with disk; going up to Pi-Sahure; placing 4 fishes at 4 doors, committing them to flame; priest of Sekhmet throws them in canal — deities: Khnum, Neith, Nebtu
 - Day 4: Arriving at Esna
 - Day 9: Re enters the upper place to see his son Shu — deities: Re, Shu
@@ -244,6 +279,7 @@ Heqa the child, Menhyt.
 - Day 30: Pacifying Sekhmet — deity: Sekhmet
 
 ### III Shomu (3rd Month of Summer) — app month 10
+
 - Day 1: Feast of Khnum-Re, chief of the countryside; reading the second ritual of the divine birth for Heqa the child — deities: Khnum-Re, Heqa
 - Day 4: Procession of these great gods at the feast of the resting place of Sahure ("the appearance in the palace of Ermouthis"); completed in 6 days
 - Day 13: Feast of Neith who saved her son Re from the hands of her children; reaching her town on Day 13 of 3rd month of summer; Re says to the gods "make Neith welcome"; procession of this goddess and her ennead; making halt; accomplishing all rites of the black heifer at night-time — deity: Neith
@@ -253,11 +289,13 @@ Heqa the child, Menhyt.
 - Day 29: Feast of the gods, on the occasion of the feast of her Majesty; performing the ritual which concerns them; taking 3 days
 
 ### IV Shomu (4th Month of Summer) — app month 11
+
 - Day 1: Feast of Khnum-Re, chief of Esna; Re says to this god: "May Nut not give birth this month, because I was myself born in it!"; spreading fresh milk about in abundance along the central aisle — deity: Khnum-Re
 - Day 20: Feast of Menhuy [Menhyt]; offerings on the altar — deity: Menhyt
 - Day 30: Feast of Khnum, performed at Pi-Khnum; when the 12th hour of night comes, making the procession appear; lighting numerous torches in it, by all the men — deity: Khnum
 
 ### Epagomenal Days — app month -1
+
 - Day 1: Feast of the birth of Osiris; presenting material to Khnum-Re, chief of Esna, and his ennead; offerings on altar — deity: Osiris
 - Day 2: Feast of the birth of Horus and feast of Heqa the child; feast of revealing the face in the temples in the eighth hour — deities: Horus, Heqa
 - Day 3: [3rd epagomenal day — text damaged]
@@ -269,6 +307,7 @@ Heqa the child, Menhyt.
 ## EDFU CALENDARS (printed pp 169–180)
 
 Temple of Horus (Horus the Behdetite), Edfu. Contains four calendars:
+
 1. Small Calendar of Horus (abbreviated date list)
 2. Large Calendar of Horus (fuller, south jamb of north-east gateway)
 3. Calendar of Hathor (north-west gateway and north enclosing wall)
@@ -282,6 +321,7 @@ This is a bare list of dates with no festival names, except for one New Moon not
 Found on east outer jamb of the inner vestibule. Fuller details are only in the larger calendars.
 
 "List ('name') of festivals:"
+
 - I Akhet: 1, 4, 5
 - IV Akhet: 5, 14, 20
 - II Akhet: 18, 23
@@ -299,22 +339,26 @@ Found on east outer jamb of the inner vestibule. Fuller details are only in the 
 South jamb of north-east gateway of forecourt.
 
 #### I Akhet — app month 0
+
 - [Day 1]: Procession of Re on his feast; Feast of the New Year (wp-rnpt); [day of the sed-feast?] of the Behdetite — deities: Re, Horus the Behdetite
 - [Day 4]: Feast of Horus? [cf. Small Calendar above]; feast of the sed-festival — deity: Horus
 - Day 5: Feast of Horus the Behdetite — deity: Horus the Behdetite
 
 #### II Akhet — app month 1
+
 - [Day 9]: Day of navigation of this god's sacred barque — deity: Horus
 - Day 18: [possibly feast — cf. Small Calendar]
 - Day 23: [date from Small Calendar — no festival name in Large Calendar]
 - Day 30: Feast of the Great Luminary (=Horus?), who overthrows his enemies — deity: Horus
 
 #### III Akhet — app month 2
+
 - Days 24–28: [Feast, text lost]
 - [Day 29]: Procession of Horus the Behdetite, 1st Day; reposing at the Mam-chapel of King Menibre; offering every good thing to him — deity: Horus
 - Last day: 2nd day of the Procession of this god; his rituals are celebrated
 
 #### IV Akhet — app month 3
+
 - Day 1: [3rd day] of the Procession of this god; celebrating his rituals; resting in his sanctuary
 - Day 5: Taking Horus the Behdetite, Lord of heaven, out in procession, on his feast of going out (?) to his Horizon; after submission occurs on the night of the Protected One; resting in the Maru-chapel; celebrating his rituals — deity: Horus the Behdetite
 - Day 6: 2nd day of the god's procession; celebrating his rituals
@@ -327,6 +371,7 @@ South jamb of north-east gateway of forecourt.
 - Day 30: Taking this god and his ennead out in procession to rest in the Maru-chapel; celebrating his rituals — deity: Horus
 
 #### I Peret — app month 4
+
 - Day 1: Feast of Opening the Year (of the reign) of Horus the Behdetite, Son of Re; Beloved of mankind — deity: Horus the Behdetite
 - Day 5: [Small Calendar date — no name in Large Calendar]
 - Day 17: Feast of Mesenet — deity: Mesenet
@@ -336,16 +381,19 @@ South jamb of north-east gateway of forecourt.
 - Day 27: [Small Calendar date]
 
 #### II Peret — app month 5
+
 - Day 10, 17: [Small Calendar dates — no festival names]
 - Day 21: Feast of Victory?; when they punished Seth; [Horus given to him] — deities: Horus, Seth
 - Days 25–28: Feast of endowing offerings for the gods of Behdet
 
 #### III Peret — app month 6
+
 - Day 5: Feast of Horus the [..., text lost] — deity: Horus
 - Day 24: Appearance as star(s) of the sky; Re's heart is happy; feast of Horus the Behdetite likewise — deity: Horus the Behdetite
 - Day 26 ("16"): Feast of Horus the Behdetite; the due respect (or, recognition) [of Horus?] — deity: Horus
 
 #### IV Peret — app month 7
+
 - Day 1: Feast of [Re] and the Eye of Re — deities: Re, Eye of Re
 - Day 2: [text lost]
 - Day 3–5, 9: [Small Calendar dates]
@@ -354,16 +402,19 @@ South jamb of north-east gateway of forecourt.
 - Day 28: Feast of Horus of Sepa, offspring of Sekhmet — deities: Horus of Sepa, Sekhmet
 
 #### I Shomu — app month 8
+
 - Day 1: Feast of the Hand-of-the-god, Hathor-Iusaas, Eye of Re, mother of Shu and Tefnut; Hathor, Lady of Dendera [until 2nd Shomu, Day 1] — deities: Hathor-Iusaas, Shu, Tefnut
 - Day 11: Birth-giving of Iusaas (=Hathor Lady of Dendera); Eye of Re, mother of Shu and Tefnut; feast lasts until Day 21 — deity: Iusaas / Hathor
 - New Moon: Going out to Khadi; procession of Harsomtous and his ennead; approaching his barque on the river; leading gods-on-their-standards; reciting "Overthrowing the Foe"; crossing to Khadi for 5 days; striking the foe; hall strewn with shelled barley — deity: Harsomtous (son of Horus)
 - [Day of Full Moon]: Feast of purifying Hathor, Lady of Dendera — deity: Hathor
 
 #### II Shomu — app month 9
+
 - Day 1: Feast of Hathor, Lady of Dendera, Eye of Re, Eye of Horus, Eye of Osiris; (fire)stick is rubbed; candle lit; rites until last day of month — deity: Hathor
 - [Day 25]: Feast of Horus the Behdetite (3rd day of procession) — deity: Horus
 
 #### III Shomu — app month 10
+
 - [Day x]: [rites, lost]
 - Day 4: Conception of Horus son of Isis and of Osiris; he is born on 4th Peret Day 28; called "Beautiful Falcon of the Golden One"; he is called Hathor because he forms an 'abode of Horus' (Hat-hor) within the goddess — deities: Horus, Isis, Osiris, Hathor
 - Day 12: Marriage-contract of the Mistress of mankind; Isis; Thy is born — deity: Isis
@@ -372,6 +423,7 @@ South jamb of north-east gateway of forecourt.
 - Last day: 4th day of procession of Hathor; proceeding to royal way-station with great torch of dried grass called "the Widow's (?) Flame"; returning and resting in her temple — deity: Hathor
 
 #### IV Shomu — app month 11
+
 - Day 1: Feast of Her Majesty (=Hathor); 5th day of procession; stopping in kiosk — deity: Hathor
 - Day 2: Taking out Isis the Brilliant, Mother of the god, residing in Behdet; resting in barque-sanctuary; every good thing offered to her — deity: Isis the Brilliant
 - Day 6: 6th day of procession
@@ -388,6 +440,7 @@ South jamb of north-east gateway of forecourt.
 - Day 30: Feast of Robing of Horus the Behdetite, great god, Lord of heaven; great oblation; procession to Place of the First Feast; all rites performed — deity: Horus
 
 #### Epagomenal Days — app month -1
+
 - Birth of Osiris: Robing of the Great Pillar of Behdet and his ennead — deity: Osiris
 - Birth of Horus: Divine service as on every day; all rites celebrated as on 4th Shomu 30 (Feast of Robing) — deity: Horus
 - Birth of Isis: First Feast of this god; going out in procession; resting in Place of First Feast; offering for the purification-feast; every instruction for the robing carried out; going from there; resting in Mesenet-chapel — deity: Isis
@@ -400,6 +453,7 @@ South jamb of north-east gateway of forecourt.
 North-west gateway of forecourt and enclosing wall just north of it.
 
 #### I Akhet — app month 0
+
 - [Day 1]: Feast of Re at the Opening of the Year — deity: Re
 - [Day 2]: Procession by the Great Lotus (Ihy) in his form of Ihy; sistrum in right hand, counterpoise in left hand; wearing Double Crown; arising as Osiris — deity: Ihy (= son of Hathor)
 - [Day 9(?)]: Procession by Hathor of Dendera and her ennead; resting in the Birth-House (mammisi); festival celebrated by the citizens; choir of singers and instruments; going to her palace after the evening offertory — deity: Hathor
@@ -413,6 +467,7 @@ North-west gateway of forecourt and enclosing wall just north of it.
 - In 1st Akhet: Feast of Harsomtous, Lord of Khadi, in his feast of the birth of the sun; procession in portable chest-shrines; stopping at pure place opposite the House of Re; bread, beer, oxen, fowl, and every good thing offered — deity: Harsomtous
 
 #### II Akhet — app month 1
+
 - [Day x]: Every ritual of the feast of the gods of the noble chapel performed; bread, beer, oxen, fowl, and every good thing
 - Day 5: Procession of Hathor, Lady of Dendera and her ennead; offerings for her father the great Nun; fresh plants in shrine of the creator of plants; placed before the creator of water — deity: Hathor; Nun
 - Day 6: Festival of Isis the great, Lady of the Two Lands; beginning of the writing for her (annals) by her mother Tefnut — deity: Isis
@@ -421,17 +476,20 @@ North-west gateway of forecourt and enclosing wall just north of it.
 - Last day: Procession of Harsomtous to the royal way-station; libation for the gods of Khadi; offerings sent to Khadi-neter until Day 6 — deity: Harsomtous
 
 #### III Akhet — app month 2
+
 - Days 1 to I Peret: Festival of [the Lady of] Dendera; reckoned as feast of Eye of Re, Eye of Horus, Eye of Osiris in Hermopolis on the [21st] of this month — deity: Hathor / Eye of Re
 - Day 23: Feast of the Field-goddess (Sekhet) — deity: Sekhet (= Renenutet/Thermouthis)
 - Day 29: Procession of Hathor, Lady of Dendera, and her ennead to the royal way-station; feast of Nehebkau; rituals performed; return to kiosk of King Userkare Meryamun (=Ptolemy II) — deities: Hathor, Nehebkau
 - Last day: 2nd day of the procession of the goddess; ritual of "opening (revealing?) the breast of the women"; performing ritual — deity: Hathor
 
 #### IV Akhet — app month 3
+
 - Day 1: 3rd day of the procession of the goddess and her ennead; "opening/revealing the breasts of the women"; ritual performed; stopping in her great place — deity: Hathor
 - [Day 9]: Entering the Temple of Shentayet until Day 26; procession of [Sokar?]; resting at his place; procession of Hathor, Lady of Dendera and her ennead — deities: Shentayet, Sokar, Hathor
 - Last day: 2nd day of the feast of the goddess; procession; stopping in barque-sanctuary; feast of erecting the Djed-pillar — deities: Hathor, Osiris (Djed pillar)
 
 #### I Peret — app month 4
+
 - Day 1: Feast of "opening the year" of Horus son of Osiris and of Isis; coronation of Horus the Behdetite, son of Re, Beloved of mankind; all rites performed as on 1st Akhet, 1 — deities: Horus, Osiris, Isis
 - Day 3(?): Feast of Drunkenness of the Eye of Re — deity: Eye of Re (Hathor)
 - Day 5(?): [Feast of...] and feast of the Lady of Dendera — deity: Hathor
@@ -441,6 +499,7 @@ North-west gateway of forecourt and enclosing wall just north of it.
 - Day 25: Feast of Hathor, Lady of Dendera — "descent of the Dove" — deity: Hathor
 
 #### II Peret — app month 5
+
 - Day 4: The very, very great festival; altars furnished with oxen and fowl, gazelles, oryx, ibex; singing, dancing, prancing, rejoicing by the braided dancers; at 8th hour, stopping at the palace — deity: Hathor
 - Day 9: Feast of the great burning — (unnamed deity)
 - Day 21: Feast of Victory in the whole land; ritual celebrated as on 1st Akhet, Day 19; "Mekhir" is the name of this day; also called Feast of reunion — deities: Hathor, Horus
@@ -448,11 +507,13 @@ North-west gateway of forecourt and enclosing wall just north of it.
 - Days 28–29: Feast of removing the deceased to Isle-of-Flame; Feast of Ptah who protects the great winged disc of gold, who saves Shu from Geb in Memphis — deities: Ptah, Shu
 
 #### III Peret — app month 6
+
 - Day 1: Feast [of...]; feast of Lifting up the Sky by Ptah alongside Herishef, Lord of Heracleopolis; burial of Osiris at Busiris; feast of Ptah who protects the great winged disc of gold — deities: Ptah, Herishef, Osiris
 - Day 15: Feast of Horus the Behdetite, Lord of Dendera — deity: Horus the Behdetite
 - Day 24: Feast of the Behdetite; the (masc.) Winged Disc and (fem.) Winged Disc fly to the horizon, becoming a star in the sky — deity: Horus the Behdetite
 
 #### IV Peret — app month 7
+
 - Day 1: Feast of Horus and the Eye of Horus — deities: Horus, Eye of Horus
 - Day 4: [Feast?] of Pakhet; it is the Eye of Horus; feast of Horus, Lord of life — deities: Pakhet, Horus
 - New Moon of this month: Horus son of Isis and of Osiris is born; birth-giving of the goddess for Isis until Day 21; Isis goes around her town — deities: Horus, Isis, Osiris
@@ -460,19 +521,23 @@ North-west gateway of forecourt and enclosing wall just north of it.
 - Day 28: Feast of Horus of Sepa, offspring of Sekhmet; on this day; Atum residing in Bubastis — deities: Horus of Sepa, Sekhmet, Atum
 
 #### I Shomu — app month 8
+
 - Day 11: Birth-giving of Iusaas, who is also called Hathor Lady of Dendera; it is the Eye of Re, mother of Shu and Tefnut; feast lasts until Day 21 — deity: Iusaas / Hathor
 - New Moon: Going out to Khadi; procession of Harsomtous and his ennead; approaching barque on river; leading gods-on-their-standards; "Overthrowing the Foe" recited; crossing to Khadi; 5 days there; striking the foe; floor strewn with barley; procession to royal way-station of Khadi; retainers scatter barley; sistrum and tambourine played; singing hymn "You have crushed the aggressors, O Harsomtous!"; same done for 5 days — deity: Harsomtous
 
 #### II Shomu — app month 9
+
 - Day 1: Feast of Hathor, Lady of Dendera, Eye of Re, Eye of Horus, Eye of Osiris; (fire)stick rubbed; candle lit in sanctuary of the temples by the torch-bearer; provided with cult needs until last day of month — deity: Hathor
 
 #### III Shomu — app month 10
+
 - Day 4: Conception of Horus son of Isis and of Osiris; born on 4th Peret, 28; called "Beautiful Falcon of the Golden One"; he forms an 'abode of Horus' (Hat-hor) within her; abundant food-offerings levied for Temple of Dendera until 4th month of Shomu — deities: Horus, Isis, Osiris, Hathor
 - Day 12: Marriage-contract of the Mistress of mankind; Isis; Thy is born; feast of Re — deities: Isis, Re
 - New Moon: Feast of reunion; rite of first-fruits of fields in accord with decrees of King Amenemhat; Lady of Dendera goes in procession; resting in river-barque "Lady of Love"; sailing upstream to Edfu Province; landfall at Behdet; harpooners celebrate feast of the hunt; ten more days at divine mansion; Hathor goes to Dendera; finishing after 14 days — deities: Hathor, Horus the Behdetite
 - Last day: 4th day of procession of Hathor, Lady of Dendera; proceeding to royal way-station with great torch of dried grass, called "the Widow's (?) Flame"; returning and resting in her temple — deity: Hathor
 
 #### IV Shomu — app month 11
+
 - Day 1: Feast of Her Majesty (=Hathor); 5th day of procession; stopping in kiosk; playing sistrum, reaping the barley, releasing Aper-geese; ritual of the feast performed before them; leaving there, resting in temple — deity: Hathor
 - Day 2: 6th day of procession
 - Days 3–7: Ditto
@@ -484,6 +549,7 @@ North-west gateway of forecourt and enclosing wall just north of it.
 - Days 28–29: 2nd and 3rd days of procession
 
 #### Epagomenal Days — app month -1
+
 - Birth of Nephthys: [...] in all his offerings — deity: Nephthys
 
 ---
@@ -495,15 +561,18 @@ This is NOT a full year-long calendar. It covers: (a) a New Moon feast in 3rd Sh
 (b) a feast of the Behdetite including Hathor lasting 13 days. Detailed ritual summaries are given.
 
 #### III Shomu — app month 10
+
 - New Moon: "Rituals performed in the feast of the Behdetite, in the 3rd month of summer, at New Moon, when it is brought ... from the day of the arrival of Hathor, Lady of Dendera from her city, and mooring at Wetjeset-Hor (= Edfu)". Procession of Horus the Behdetite, Hathor, Lady of Dendera, and their ennead — deities: Horus the Behdetite, Hathor
 - "Appearing in the great Broad Hall, going to his great place; great Opening of the Mouth; celebrating a great feast in Wetjeset-Hor" — deity: Horus
 
 #### IV Shomu — app month 11
+
 - Day 1: Feast of Her Majesty (=Hathor); 5th day of procession of this goddess — deity: Hathor
 - Days 10–19(?): Praise of Mut — deity: Mut
 - Last day: Offerings on the altar for Osiris in his place — deity: Osiris
 
 #### The New Moon feast sequence continues with 13 named days:
+
 - 1st day (New Moon): Opening of the Month; procession of Horus the Behdetite, Hathor, Lady of Dendera; going into the great river-barque; long series of rites
 - 2nd day: 1st day of the feast of Behdet; procession of Horus of Behdet, Hathor, Khons of Behdet; long series of rites
 - 3rd day of feast of Behdet: performing all rites of the shrine of the Four Mounds
@@ -519,6 +588,7 @@ This is NOT a full year-long calendar. It covers: (a) a New Moon feast in 3rd Sh
 - 13th day of feast of Behdet: procession of the noble god
 
 #### Epagomenal Days — app month -1 (Edfu Calendar 4)
+
 - Birth of Osiris: Providing the clothing of Osiris residing in Dendera, according to what is in the ritual — deity: Osiris
 - Birth of Horus: Procession of Hathor, Lady of Dendera, and her ennead; stopping at her seat until evening meal time; resting in the 'Palace' — deities: Horus, Hathor
 - (3rd day): celebrating according to what is in the ritual of the evening meal; burnt offerings until 9th hour of night; procession by Hathor, Lady of Dendera; bearers sent to the Behdetite; stopping and making holiday
@@ -539,19 +609,24 @@ Found in the west crypts of the Dendera temple. A brief summary list.
 "Name(s) of the feast-days of this goddess:"
 
 #### I Akhet — app month 0
+
 - Day 1: Feast of Robing — deity: Hathor
 - Day 20: Feast of Drunkenness; feast of repeated drunkenness of this goddess; her barque is rowed — deity: Hathor
 
 #### III Akhet to I Peret — app months 2–4
+
 - Days 1 (III Akhet) to end of I Peret: Feast of rowing the barque of this goddess — deity: Hathor
 
 #### IV Peret — app month 7
+
 - (unspecified day): Feast of the birth-giving of this goddess — deity: Hathor
 
 #### IV Shomu — app month 11
+
 - Day 1: Feast of this goddess — deity: Hathor
 
 #### III Shomu — app month 10 (noted as "3rd Shomu" but clearly New Moon in 3rd Shomu)
+
 - New Moon: Causing this goddess, the Lady of Dendera, to go in procession to Behdet; to celebrate her beautiful festival of navigation; great oblation presented; entering her river-barque "Great of love"; prophets and chief priests of Hathor lead; servants of the goddess in front; scribe of sacred book in front; all rituals of procession celebrated for 4 days — deity: Hathor
 
 ---
@@ -564,6 +639,7 @@ east of the inner hypostyle hall of the Dendera temple.
 "List of Calendar-festivals in which this goddess shines forth during the whole year."
 
 #### I Akhet — app month 0
+
 - Day 1: Feast of Re at the "Opening of the Year" — a feast of all gods and all goddesses; after sacred offerings, at 8th hour, all rites for taking out this goddess in her portable barque with her ennead to the great heavenly vault (temple-roof); uniting with her father; mankind sees her beauty; returns to her temple at a slow pace — deities: Re, Hathor
 - Day 2: At the 4th hour, procession of the Great Lotus (Ihy the great, Son of Hathor) in his (royal) kiosk; arriving at way-station; citizens see his beauty; returning to temple; going forth in noble shrine from within the divine mansion; stopping at Mansion of the Bier. Procession of Hathor, Lady of Dendera, with her ennead; stopping at birth-house; at 10th hour, going to divine mansion — deities: Ihy, Hathor
 - Day 9: At 3rd hour, procession of Hathor, Lady of Dendera and her ennead; stopping at Mansion of the Bier; at 10th hour, gods go in procession into divine mansion and rest there — deity: Hathor
@@ -571,15 +647,18 @@ east of the inner hypostyle hall of the Dendera temple.
 - Day 20: Feast of the Purification of Re and of Drunkenness of the Lady of Dendera; at 10th hour, procession of Hathor to great heavenly vault (temple-roof); union with the sun's disc; returning to her temple; procession by her ennead; union with sun's disc; resting; total 5 days (of feast) — deities: Re, Hathor
 
 #### II Akhet — app month 1
+
 - Day 5: At 1st hour, procession by Hathor, Lady of Dendera and her ennead; stopping in great Broad Hall (hypostyle); setting out offerings for her father Nun the great; then resting in her temple — deities: Hathor, Nun
 - Last day: Procession by Harsomtous, Lord of Khadi, to the way-station; pouring a libation for the gods in Khadi; performing all rites also done on 1st Akhet, 10; offerings sent there; total 3 days (of feast) — deity: Harsomtous
 
 #### IV Akhet — app month 3
+
 - Day 24: Procession of Osiris by night; stopping opposite the sacred lake; performing all the rites; going around the divine mansion; resting in his place — deity: Osiris
 - Day 25: At 12th hour, procession of Osiris, Chief of the East; arriving at the Mansion of Horus; stopping in his place of eternity — deity: Osiris
 - Day 26: Procession of Sokar at the 1st hour to the Mansion of Horus; pouring a libation; returning to divine mansion; Procession of Hathor, Lady of Dendera and her ennead to great heavenly vault (temple-roof); union with sun's disc; resting in temple; total one night and 2 days (of feast) — deities: Sokar, Hathor
 
 #### I Peret — app month 4
+
 - Day 19: Procession of Hathor, Lady of Dendera and her ennead; stopping at kiosk at the (canal) quay; face turned north; performing ritual of the navigation; celebrating all rites; procession by this goddess and her ennead; resting in pronaos (front hall) — deity: Hathor
 - Day 20: Same as Day 19
 - Day 21: Same. Day 22, same; stopping at her place
@@ -588,31 +667,38 @@ east of the inner hypostyle hall of the Dendera temple.
 - Last day: same; rites of Day 20
 
 #### II Peret — app month 5
+
 - Day 1: Ditto (navigation rites). Day 2, ditto. Day 3, ditto.
 - Day 4: At 3rd hour, procession by this goddess; stopping at kiosk at quay; performing all rites; at 5th hour, procession by Hathor; resting in her temple — deity: Hathor
 - Day 21: Procession by Hathor, Lady of Dendera and her ennead; resting at great heavenly vault (temple-roof); celebrating all rites for the Feast of Victory; procession; stopping at birth-house (mammisi); all rites; at 10th hour, goddess goes in procession; rests in temple with ennead; total 5 days — deity: Hathor
 
 #### IV Peret — app month 7
+
 - New Moon in this month: At 3rd hour, procession of Hathor, Lady of Dendera and her ennead; stopping at birth-house
 - Day 28: The same; total 2 days (of feast) — deity: Hathor
 
 #### I Shomu — app month 8
+
 - New Moon: The visit to Khadi; procession of Horus, great god, Lord of Khadi; proceeding to his beautiful barque called "Illuminator of the Two Lands"; reaching Khadi; shemsu-priest celebrates all rites until 5th day; going in procession from divine mansion to Mansion of [...]; resting in barque; arriving at divine mansion of noble goddess; stopping in his place — deity: Horus / Harsomtous
 - Day 11: Procession by Hathor, Lady of Dendera and her ennead; union with her father; stopping in the Mansion of the Bier — deity: Hathor
 - Day 15 (Feast of the 15th Day, day of full moon): Great festival in the whole land; procession by Hathor; union with the sun's disc; resting in birth-house; total 3 days (of feast) — deity: Hathor
 
 #### II Shomu — app month 9
+
 - Day 27: Procession of Hathor, Lady of Dendera, in her noble shrine; procession of Horus, great god, residing in Dendera, along with her in his portable barque; going round her domain; going to the south; stopping at the Mansion of Horus; celebrating all rites; gods go in procession turning north; resting in her temple in the divine mansion — deities: Hathor, Horus
 - Day 28: Same. Day 29, same. Last day, same. Total 4 days (of feast)
 
 #### III Shomu — app month 10
+
 - New Moon: Feast of happy reunion, it is called; at 10th hour, procession by Hathor, Lady of Dendera and her ennead to great heavenly vault (temple-roof); union with sun's disc; gods rest in their places; total one day (of feast) — deity: Hathor
 
 #### IV Shomu — app month 11
+
 - Day 1: At 3rd hour, procession of Hathor, Lady of Dendera and her ennead; resting in great Broad Hall (hypostyle); performing all rites of the ritual for the Feast of Her-Majesty; (returning) in procession; resting in her palace — deity: Hathor
 - Day 27: Procession by Hathor, Lady of Dendera with her ennead into the Hall of Appearance; performing all rites; resting in their places — deity: Hathor
 
 #### Epagomenal Days — app month -1
+
 - Day 4: Beautiful day of "the night of the child in his nest" — a great feast in the whole land; procession by Hathor, Lady of Dendera with her ennead during the night preceding that day; going around her divine mansion; celebrating all rites; gods rest in their places — deity: Hathor
 
 ---
@@ -637,24 +723,24 @@ El-Sabban makes these key observations:
 
 Comparing what appears across Esna, Edfu (Horus), Edfu (Hathor), and Dendera calendars:
 
-| Festival | Esna | Edfu Horus | Edfu Hathor | Dendera |
-|----------|------|------------|-------------|---------|
-| Opening of the Year (I Akhet 1) | Yes (Khnum) | Yes (wp-rnpt) | Yes (Re feast) | Yes (Re feast) |
-| Feast of Drunkenness (I Akhet 20) | — | — | — | Yes (Hathor) |
-| Shu and Tefnut feast (I Akhet 18) | — | — | Yes | — |
-| Navigation of Hathor (I Peret ff.) | — | — | Yes | Yes (Days 19–30) |
-| Feast of Victory (II Peret 21) | — | Yes (2nd Peret) | Yes (Mekhir) | Yes (Day 21) |
-| Feast of Sokar (IV Akhet 26) | Yes | Yes | — | — |
-| Erecting Djed Pillar | Yes (IV Akhet 2, 30) | — | Yes | — |
-| New Year / Opening of Reign (I Peret 1) | — | Yes | Yes | — |
-| Birth of Osiris (Epag. 1) | Yes | Yes | — | Yes |
-| Birth of Horus (Epag. 2) | Yes | Yes | — | Yes |
-| Birth of Isis (Epag. 3) | Yes | Yes | Yes | — |
-| Birth of Nephthys (Epag. 4 or 5) | Yes | Yes | Yes | — |
-| New Moon of 3rd Shomu (Hathor goes to Edfu) | — | Yes | Yes | Yes |
-| Full Moon feast (15th day) | — | — | Yes | Yes |
-| Feast of Ptah/Lifting Up the Sky | Yes (III Peret) | Yes | Yes | — |
-| Feast of Nehebkau | — | — | Yes (III Akhet 29) | — |
+| Festival                                    | Esna                 | Edfu Horus      | Edfu Hathor        | Dendera          |
+| ------------------------------------------- | -------------------- | --------------- | ------------------ | ---------------- |
+| Opening of the Year (I Akhet 1)             | Yes (Khnum)          | Yes (wp-rnpt)   | Yes (Re feast)     | Yes (Re feast)   |
+| Feast of Drunkenness (I Akhet 20)           | —                    | —               | —                  | Yes (Hathor)     |
+| Shu and Tefnut feast (I Akhet 18)           | —                    | —               | Yes                | —                |
+| Navigation of Hathor (I Peret ff.)          | —                    | —               | Yes                | Yes (Days 19–30) |
+| Feast of Victory (II Peret 21)              | —                    | Yes (2nd Peret) | Yes (Mekhir)       | Yes (Day 21)     |
+| Feast of Sokar (IV Akhet 26)                | Yes                  | Yes             | —                  | —                |
+| Erecting Djed Pillar                        | Yes (IV Akhet 2, 30) | —               | Yes                | —                |
+| New Year / Opening of Reign (I Peret 1)     | —                    | Yes             | Yes                | —                |
+| Birth of Osiris (Epag. 1)                   | Yes                  | Yes             | —                  | Yes              |
+| Birth of Horus (Epag. 2)                    | Yes                  | Yes             | —                  | Yes              |
+| Birth of Isis (Epag. 3)                     | Yes                  | Yes             | Yes                | —                |
+| Birth of Nephthys (Epag. 4 or 5)            | Yes                  | Yes             | Yes                | —                |
+| New Moon of 3rd Shomu (Hathor goes to Edfu) | —                    | Yes             | Yes                | Yes              |
+| Full Moon feast (15th day)                  | —                    | —               | Yes                | Yes              |
+| Feast of Ptah/Lifting Up the Sky            | Yes (III Peret)      | Yes             | Yes                | —                |
+| Feast of Nehebkau                           | —                    | —               | Yes (III Akhet 29) | —                |
 
 ### Key observations on specific festivals:
 
@@ -680,4 +766,4 @@ Comparing what appears across Esna, Edfu (Horus), Edfu (Hathor), and Dendera cal
 4. The Edfu Large Calendar of Horus has many lacunae (lost text) especially in the Shomu months.
 5. The Esna calendar covers the complete year including all 12 months and the 5 epagomenal days — it is the most complete calendar in this chapter.
 6. The Kom Ombo calendar covers Akhet through Shomu with significant gaps; it is the least detailed of the Ptolemaic calendars surveyed here.
-7. El-Sabban explicitly defers full analysis to Grimm's companion work (Grimm 1994, *Die altägyptischen Festkalender*) which was not yet available when El-Sabban wrote.
+7. El-Sabban explicitly defers full analysis to Grimm's companion work (Grimm 1994, _Die altägyptischen Festkalender_) which was not yet available when El-Sabban wrote.

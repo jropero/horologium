@@ -1,4 +1,5 @@
 # December — Scullard (1981)
+
 **PDF pages used**: 199–215
 
 General context: No public Games were held in December; six large-lettered festivals appear in the calendar. The month was under Vesta's protection. Rustic calendars note manuring of vineyards, sowing of beans, and gathering of olives.
@@ -237,29 +238,30 @@ General context: No public Games were held in December; six large-lettered festi
 
 Scullard covers fifteen distinct entries for December across pages 199–212. The six NP (large-lettered) festivals the calendars preserve for December are: **Agonalia** (11), **Telluri** (13), **Consualia** (15, probably NP), **Saturnalia** (17–23), **Divalia/Angeronalia** (21), and **Larentalia** (23). Additional days with attested ceremonies:
 
-| Day | Festival/event | Deity | Fasti |
-|-----|---------------|-------|-------|
-| 1 | Neptuno et Pietati (dies natales) | Neptune, Pietas | N |
-| 3 | Bona Dea (women's night rite) | Bona Dea | — (not in calendars) |
-| 5 | Faunalia (rural) | Faunus | F (not in city calendars) |
-| 8 | Tiberino et Gaiae (dies natalis) | Tiberinus, Gaia | C |
-| 10 | Tribuni plebis magistratum ineunt | — | C |
-| 11 | Agonalia | Sol Indiges | NP |
-| 11 | Septimontium | Diva Palatua + hill deities | — (late calendars only) |
-| 12 | Consualia I (dies natalis) | Consus | EN |
-| 13 | Telluri et Cereri lectisternium | Tellus, Ceres | NP |
-| 15 | Consualia II | Consus | EN / prob. NP |
-| 17–23 | Saturnalia | Saturn | NP |
-| 19 | Opalia | Ops | N / NP |
-| 19 | Io[ventati?] | Juventas | — (uncertain restoration) |
-| 21 | Divalia/Angeronalia | Angerona, Volupia | NP |
-| 21 | Sacrifice | Hercules, Ceres | — |
-| 22 | Laribus Permarinis (dies natalis) | Lares Permarini | C |
-| 23 | Larentalia | Acca Larentia | NP |
-| 23 | Dianae et Iunoni Reginae (dies natales) | Diana, Juno Regina, Tempestates | — |
-| 25 | Bruma (astronomical) / Sol Invictus (Empire) | Sol Invictus | C |
+| Day   | Festival/event                               | Deity                           | Fasti                     |
+| ----- | -------------------------------------------- | ------------------------------- | ------------------------- |
+| 1     | Neptuno et Pietati (dies natales)            | Neptune, Pietas                 | N                         |
+| 3     | Bona Dea (women's night rite)                | Bona Dea                        | — (not in calendars)      |
+| 5     | Faunalia (rural)                             | Faunus                          | F (not in city calendars) |
+| 8     | Tiberino et Gaiae (dies natalis)             | Tiberinus, Gaia                 | C                         |
+| 10    | Tribuni plebis magistratum ineunt            | —                               | C                         |
+| 11    | Agonalia                                     | Sol Indiges                     | NP                        |
+| 11    | Septimontium                                 | Diva Palatua + hill deities     | — (late calendars only)   |
+| 12    | Consualia I (dies natalis)                   | Consus                          | EN                        |
+| 13    | Telluri et Cereri lectisternium              | Tellus, Ceres                   | NP                        |
+| 15    | Consualia II                                 | Consus                          | EN / prob. NP             |
+| 17–23 | Saturnalia                                   | Saturn                          | NP                        |
+| 19    | Opalia                                       | Ops                             | N / NP                    |
+| 19    | Io[ventati?]                                 | Juventas                        | — (uncertain restoration) |
+| 21    | Divalia/Angeronalia                          | Angerona, Volupia               | NP                        |
+| 21    | Sacrifice                                    | Hercules, Ceres                 | —                         |
+| 22    | Laribus Permarinis (dies natalis)            | Lares Permarini                 | C                         |
+| 23    | Larentalia                                   | Acca Larentia                   | NP                        |
+| 23    | Dianae et Iunoni Reginae (dies natales)      | Diana, Juno Regina, Tempestates | —                         |
+| 25    | Bruma (astronomical) / Sol Invictus (Empire) | Sol Invictus                    | C                         |
 
 Key observations:
+
 - The December cluster of Consualia–Saturnalia–Opalia (15th/17th/19th) reflects an agricultural sequence invoking storage, abundance, and the earth's produce.
 - The Bona Dea night ceremony (c. 3 Dec) and Faunalia (5 Dec) are both attested but absent from the official urban calendars.
 - Scullard is explicit that the Septimontium (11 Dec) was not a populi festival and only appears in late calendars.

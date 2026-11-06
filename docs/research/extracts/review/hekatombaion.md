@@ -1,4 +1,5 @@
 # Review: Hekatombaion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -28,8 +29,9 @@ huyeran tras el primer plato."
 **Verdict**: UNSOURCED_AITION | MISSING_DETAIL
 
 **Issues**:
+
 1. **"Los amos servían la cena a los esclavos"** — Neither Parke nor Deubner says masters
-   *served* dinner to slaves. Both say they *dined together/with* slaves. The serving
+   _served_ dinner to slaves. Both say they _dined together/with_ slaves. The serving
    detail comes from the Roman Saturnalia (a cognate festival), not from the Attic Kronia.
    This conflation should be removed or clearly distinguished.
 2. **"Edad de Oro de Crono / no existían clases sociales ni trabajo"** — The Golden Age
@@ -42,6 +44,7 @@ huyeran tras el primer plato."
    mentioned in the app. Minor missing detail.
 
 **Fix**:
+
 - Change "Los amos servían la cena a los esclavos" → "Los esclavos cenaban junto a sus
   amos" (masters and slaves dined together).
 - Trim the Golden Age gloss from the aition or make it secondary; the primary aition
@@ -74,6 +77,7 @@ pueblo convenciendo a los clanes para fundirse en la gran ciudad mágica de Aten
 **Verdict**: WRONG_DEITY | UNSOURCED_AITION | MISSING_DETAIL
 
 **Issues**:
+
 1. **Missing Zeus Phratrios** — Both Parke and Deubner confirm the second day (16th, the
    annual day) included sacrifice to Zeus Phratrios. The app lists only "Atenea." The
    correct deity pair is Athena + Zeus Phratrios (with Eirene from 374 BC onward).
@@ -89,6 +93,7 @@ pueblo convenciendo a los clanes para fundirse en la gran ciudad mágica de Aten
    present in either source; flagged as UNSOURCED_AITION.
 
 **Fix**:
+
 - Deity field: add "Zeus Phratrios" (e.g., "Atenea y Zeus Phratrios [+ Eirene desde 374 a.C.]").
 - Add note on Eirene cult (374 BC, Cephisodotus' statue).
 - Aition: tone down to "Conmemora el Synoikismos atribuido a Teseo, la unificación de los
@@ -129,6 +134,7 @@ el gigante Encélado **(o Asterión)** en los albores del tiempo."
 **Verdict**: WRONG_DEITY (partial) | UNSOURCED_AITION (one element)
 
 **Issues**:
+
 1. **"o Asterión"** — Parke names **Enceladus** as the giant depicted on the peplos
    (explicitly: "Athena's exploit in overcoming Enceladus in the battle of the Gods and
    Giants"). Neither Parke nor Deubner mentions Asterión in this context. Asterión is a
@@ -148,6 +154,7 @@ el gigante Encélado **(o Asterión)** en los albores del tiempo."
 7. **Peplos as ship-sail** — Correctly attested in Parke. No issues.
 
 **Fix**:
+
 - Remove "o Asterión" entirely. Enceladus alone is the attested figure.
 - Optionally note the annual vs. Great (penteteris) distinction: "El Gran Festival
   (penteteris) se celebraba cada cuatro años con agones panhelénicos; el festival anual era
@@ -158,7 +165,7 @@ el gigante Encélado **(o Asterión)** en los albores del tiempo."
 ## Apollon Hekatombaios — Day 7 — POTENTIAL MISSING FESTIVAL
 
 **Parke**: Parke's chapter introduction explicitly states: "The festival of the
-*Hecatombaia* had **vanished from importance in Attica before classical times**, leaving
+_Hecatombaia_ had **vanished from importance in Attica before classical times**, leaving
 only the month-name as its survival." Parke does not treat it as an active classical
 festival.
 
@@ -225,11 +232,11 @@ consider adding it with the note that the exact date within Hekatombaion is unkn
 
 ## Summary Table
 
-| Festival | Day | App Status | Key Issues |
-|---|---|---|---|
-| Kronia | 12 | Present, partial errors | "Served" vs "dined with"; Golden Age aition unsourced; missing boulē suspension |
-| Synoikia | 16 | Present, incomplete | Missing Zeus Phratrios; missing Eirene (374 BC); unsourced wandering-Theseus aition |
-| Panathenaia | 28 | Present, one error | "Asterión" is invented — remove; correct Enceladus only |
-| Apollon Hekatombaios | 7 | Not in app | Parke says festival had vanished; Deubner infers from analogy; omission defensible |
-| Herakleia Marathonic | early | Not in app | Quadrennial, no fixed day; omission defensible |
-| Aphrodisia | month | Not in app | No fixed day, Deubner only; omission defensible |
+| Festival             | Day   | App Status              | Key Issues                                                                          |
+| -------------------- | ----- | ----------------------- | ----------------------------------------------------------------------------------- |
+| Kronia               | 12    | Present, partial errors | "Served" vs "dined with"; Golden Age aition unsourced; missing boulē suspension     |
+| Synoikia             | 16    | Present, incomplete     | Missing Zeus Phratrios; missing Eirene (374 BC); unsourced wandering-Theseus aition |
+| Panathenaia          | 28    | Present, one error      | "Asterión" is invented — remove; correct Enceladus only                             |
+| Apollon Hekatombaios | 7     | Not in app              | Parke says festival had vanished; Deubner infers from analogy; omission defensible  |
+| Herakleia Marathonic | early | Not in app              | Quadrennial, no fixed day; omission defensible                                      |
+| Aphrodisia           | month | Not in app              | No fixed day, Deubner only; omission defensible                                     |

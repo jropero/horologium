@@ -8,7 +8,7 @@ const normalizedPhase = phase < 0 ? phase + 1 : phase;
 const isEclipsed = normalizedPhase <= 0.15 || normalizedPhase >= 0.85;
 
 console.log({
-    diffDays,
-    phase: normalizedPhase,
-    isEclipsed
+  diffDays,
+  phase: normalizedPhase,
+  isEclipsed,
 });

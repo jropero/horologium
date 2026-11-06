@@ -1,4 +1,5 @@
 # October — Roman Calendar Review
+
 **App data**: `utils/romanYearData.ts`, keys `"9-1"` – `"9-31"`
 **Sources**: Scullard (1981) pp. 189–198; Fowler (1899) pp. 238–251 (printed)
 **Date of review**: 2026-10-25
@@ -129,17 +130,18 @@
 
 ## Summary
 
-| Category | Count | Days affected |
-|----------|-------|---------------|
-| WRONG_STATUS | 1 | 1 |
-| WRONG_DEITY | 3 | 1, 7, 9 |
-| WRONG_RITUAL | 2 | 10, 15 |
-| INVENTED_AITION | 1 | 7 |
-| MISSING_FESTIVAL | 2 | 14, 15 (Ludi Capitolini) |
-| MINOR | 4 | 5, 19, 31 (+deity conflation Oct 1) |
-| **Total** | **13** | |
+| Category         | Count  | Days affected                       |
+| ---------------- | ------ | ----------------------------------- |
+| WRONG_STATUS     | 1      | 1                                   |
+| WRONG_DEITY      | 3      | 1, 7, 9                             |
+| WRONG_RITUAL     | 2      | 10, 15                              |
+| INVENTED_AITION  | 1      | 7                                   |
+| MISSING_FESTIVAL | 2      | 14, 15 (Ludi Capitolini)            |
+| MINOR            | 4      | 5, 19, 31 (+deity conflation Oct 1) |
+| **Total**        | **13** |                                     |
 
 **Priority breakdown**:
+
 - HIGH (fix before shipping): Oct 1 (Tigillum deity suppressed), Oct 7 (Juno Curitis; invented aition), Oct 9 (two deities omitted), Oct 15 ("purificado" unsupported).
 - MEDIUM: Oct 1 (status N vs NP), Oct 10 (Iunoni Monetae eclipsed by Ludi Augustales label), Oct 14 (missing Penates festival), Oct 15 (festivalDesc very sparse).
 - LOW: Oct 15 Ludi Capitolini note, Oct 5 deity conflation, Oct 19 "legiones," Oct 31 description.

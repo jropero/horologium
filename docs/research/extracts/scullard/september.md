@@ -1,12 +1,14 @@
 # September — Scullard (1981)
+
 **PDF pages used**: 182–192
-**Source**: H.H. Scullard, *Festivals and Ceremonies of the Roman Republic* (Thames & Hudson, 1981)
+**Source**: H.H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (Thames & Hudson, 1981)
 
 **Chapter note**: Scullard describes September as "a month of Games rather than of the commemoration of individual deities." None of the festivals are marked in large letters (i.e., no major feriae publicae in the old sense). About half the month was devoted to the Ludi Romani. The rustic Menologia place September under the protection of Vulcan and record an epulum in honour of Minerva. Scullard argues September was effectively Jupiter's month.
 
 ---
 
 ## Ludi Romani (Ludi Magni)
+
 - **Day**: 5–19 (by the late Republic; originally anchored on the 13th)
 - **Fasti status**: Not stated as a unit; the central day (13 Sep) is NP
 - **Deity**: Jupiter Optimus Maximus
@@ -18,6 +20,7 @@
 ---
 
 ## Dedicatio: Iovis Tonanti et Iovis Liberi / Iunoni Reginae in Aventino
+
 - **Day**: 1 (Kalendae Septembres)
 - **Fasti status**: F
 - **Deity**: Jupiter Tonans; Jupiter Liber; Juno Regina
@@ -29,6 +32,7 @@
 ---
 
 ## Dedicatio: Iovis Statoris
+
 - **Day**: 5 (Nonae Septembres)
 - **Fasti status**: F
 - **Deity**: Jupiter Stator
@@ -40,6 +44,7 @@
 ---
 
 ## Epulum Iovis (Iovis, Iunoni, Minervae)
+
 - **Day**: 13 (Idus Septembres)
 - **Fasti status**: NP
 - **Deity**: Jupiter Optimus Maximus; Juno; Minerva
@@ -51,6 +56,7 @@
 ---
 
 ## Equorum Probatio
+
 - **Day**: 14
 - **Fasti status**: F Dies religiosus
 - **Deity**: None named
@@ -62,6 +68,7 @@
 ---
 
 ## Mercatus
+
 - **Day**: 20–23
 - **Fasti status**: Not stated
 - **Deity**: None
@@ -73,6 +80,7 @@
 ---
 
 ## Dedicatio: Apollini et Latonae ad Theatrum Marcelli
+
 - **Day**: 23
 - **Fasti status**: C
 - **Deity**: Apollo; Latona
@@ -84,6 +92,7 @@
 ---
 
 ## Dedicatio: Veneri Genetrici in Foro Caesaris
+
 - **Day**: 26
 - **Fasti status**: C
 - **Deity**: Venus Genetrix
@@ -98,15 +107,15 @@
 
 Scullard's September chapter covers eight distinct entries:
 
-| Day | Name | Fasti | Deity |
-|-----|------|-------|-------|
-| 1 | Dedicatio Iunoni Reginae / Iovis Tonanti / Iovis Liberi | F | Jupiter (×2), Juno Regina |
-| 5 | Dedicatio Iovis Statoris | F | Jupiter Stator |
-| 5–19 | Ludi Romani | (NP on 13th) | Jupiter Optimus Maximus |
-| 13 | Epulum Iovis / Iunonis / Minervae | NP | Jupiter, Juno, Minerva |
-| 14 | Equorum Probatio | F (dies religiosus) | — |
-| 20–23 | Mercatus | — | — |
-| 23 | Dedicatio Apollini et Latonae | C | Apollo, Latona |
-| 26 | Dedicatio Veneri Genetrici | C | Venus Genetrix |
+| Day   | Name                                                    | Fasti               | Deity                     |
+| ----- | ------------------------------------------------------- | ------------------- | ------------------------- |
+| 1     | Dedicatio Iunoni Reginae / Iovis Tonanti / Iovis Liberi | F                   | Jupiter (×2), Juno Regina |
+| 5     | Dedicatio Iovis Statoris                                | F                   | Jupiter Stator            |
+| 5–19  | Ludi Romani                                             | (NP on 13th)        | Jupiter Optimus Maximus   |
+| 13    | Epulum Iovis / Iunonis / Minervae                       | NP                  | Jupiter, Juno, Minerva    |
+| 14    | Equorum Probatio                                        | F (dies religiosus) | —                         |
+| 20–23 | Mercatus                                                | —                   | —                         |
+| 23    | Dedicatio Apollini et Latonae                           | C                   | Apollo, Latona            |
+| 26    | Dedicatio Veneri Genetrici                              | C                   | Venus Genetrix            |
 
 Key themes: September is dominated by the Ludi Romani (5–19 Sep), centred on Jupiter Optimus Maximus and reaching its religious peak in the Epulum Iovis on the 13th (Ides). The remaining entries are temple dedication anniversaries (three Augustan restorations). The Equorum Probatio on the 14th may be imperial-era only. No entry in September carries the large-letter designation of a major public festival in the older sense; the Ludi Romani themselves are the sole major observance.

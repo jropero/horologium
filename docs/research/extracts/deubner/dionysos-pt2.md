@@ -1,5 +1,6 @@
 # Deubner — Dionysos, Part 2 (Lenaia, Dionysia, Oschophoria)
-Source: L. Deubner, *Attische Feste* (1932), printed p. 123–151 / PDF p. 122–150
+
+Source: L. Deubner, _Attische Feste_ (1932), printed p. 123–151 / PDF p. 122–150
 Extracted: 2026-10-25
 
 ---
@@ -21,6 +22,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 **Venue**: The Lenaion — a large enclosed precinct (τρίβολον) in the city of Athens; its exact location unknown. Deubner rejects the identification of Dionysos Limnaios with Dionysos Lenaios, and rejects the "field" interpretation derived from a confused scholion on Aristoph. Ach. 202. He places the Lenaion in or near the agora.
 
 **Ritual**:
+
 1. Pompe (procession) within or from the Lenaion precinct, organized jointly by the Basileus and the Epimeletes (Aristot. Ath. Pol. 57.1; law of Euegoros: Demosth. 21.10)
 2. Before or during the agon, the eleusinian Dadouchos holding a torch addressed the assembly: "Invoke the god!" (Καλεῖτε θεόν); the crowd responded: "Σεμέλης Ἴακχε πλουτοδότα" (Schol. Aristoph. Frö. 479)
 3. Sacrifice by the ἐπισκόποι Ἐλευσινόθεν (IG² 1672, 182), preceded by an ἀπαρχή to Demeter, Kore, and Pluton
@@ -32,6 +34,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 **Aition**: None discussed by Deubner for the Lenaia itself. The Dadouchos' invocation of Iakchos as son of Semele connects to the Theban Dionysos myth, reflecting the orgiastic tradition's Boeotian origin (Frickenhaus, followed cautiously by Deubner).
 
 **Participants**:
+
 - Basileus (oversaw agon)
 - Epimeletes (jointly organized pompe)
 - Eleusinian Dadouchos (ritual invocation)
@@ -41,6 +44,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - Ion. Mykonos parallels: 10 Lenaion — Demeter, Kore, Zeus Buleus; 11 Lenaion — Semele; 12 Lenaion — Dionysos Leneus (Prott, Fasti sacri Nr. 4 = Dittenberger Syll.³ 1024)
 
 **Sources**:
+
 - Aristotle, Ath. Pol. 57.1 (basileus organized pompe and agon with epimeletes)
 - Demosth. 21.10 (law of Euegoros: pompe epi Lenaio, tragedians, comedians)
 - Hesych. ἐπὶ Ληναίω ἀγών (Lenaion as large precinct with shrine of Dionysos Lenaios)
@@ -58,6 +62,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - Archilochos frg. 119 (lobakchoi with mention of Demeter and Kore feast)
 
 **Notes**:
+
 - Central dispute: Nilsson attributed the Lenaia vases to the Choen (Anthesteria), Deubner to the Lenaia. Deubner's main arguments: (a) characteristic vessel is the skyphos, not the chous; (b) only women visible, consistent with Ληναί; (c) ecstatic dancing and thyrsos are not mere artistic invention. Nilsson's followers included Beazley, Wrede, Buschor, Altheim, Wilamowitz.
 - The name Lenaion derives from Ληναί (maenads), not from ληνός (wine-press; Ribbeck, followed by Deubner and Nilsson). The "wine-pressing" interpretation of Lenaia is rejected.
 - Relationship to Eleusis: Deubner acknowledges the eleusinian elements (dadouchos, epimeletes) but notes they are relatively recent, linked to the young figure of Iakchos.
@@ -70,11 +75,12 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 
 ### Ländliche Dionysia (Rural Dionysia)
 
-**Month/Day**: Posideon; for the demos Myrrinus, assembly about the festival was on the 19th Posideon (IG² 1183, 36), which Deubner (following Wilhelm) places *after* the festival, so Myrrinus celebrated *before* the 19th. Other demes not necessarily on the same day.
+**Month/Day**: Posideon; for the demos Myrrinus, assembly about the festival was on the 19th Posideon (IG² 1183, 36), which Deubner (following Wilhelm) places _after_ the festival, so Myrrinus celebrated _before_ the 19th. Other demes not necessarily on the same day.
 
 **Deity**: Dionysos (Phales as companion: Aristoph. Ach. 263)
 
 **Ritual**:
+
 1. Pompe (procession), described from Aristoph. Ach. 247 ff.:
    - Daughter of Dikaiopolis as Kanephore at the front
    - Two slaves holding the phallus erect
@@ -88,12 +94,14 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 **Aition**: None discussed by Deubner.
 
 **Participants**:
+
 - All free men including slaves
 - Kanephore (prominent family daughter)
 - κωμάρχοι (leaders of komoi groups)
 - Slaves
 
 **Sources**:
+
 - Aristoph. Ach. 247–279 (pompe description)
 - Plut. de cup. div. 527d (traditional pompe content)
 - Plut. non posse suav. vivi 1098b (slaves' participation)
@@ -105,6 +113,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - Documented in demes: Acharnai (IG² 1206; Aristoph. Ach. 247); Aixone (Polemon 1, 1929, 162; IG² 1202); Ikaria (IG I² 187; IG² 1178); Kollytos (Aeschin. 1.157; Demosth. 18.180); Myrrinus (IG² 1183); Phlya (Isaeus 8.15, 35); Eleusis (IG² 1186, 1189, etc.); Piräus (IG² 1496; Demosth. 21.10; Aristot. Ath. Pol. 54.8 — state-level festival with Archon-Demarch and state funding)
 
 **Notes**:
+
 - The phallus was not a symbol of Dionysos but the older autonomous phallic fertility god absorbed into the Dionysiac cult. The Ländliche Dionysia were originally a pure phallic celebration.
 - Deubner rejects a separate festival "Askolia" as a grammaticians' invention.
 - The Piräus festival (Διονύσια τὰ ἐν Πειραιεῖ) had state-level status equal to the Lenaia and Städtische Dionysia; epheboi participated in pompe and sacrifice.
@@ -118,6 +127,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 ### Städtische Dionysia (Great Dionysia / City Dionysia)
 
 **Month/Day**: Elaphebolion; Proagon on 8th; Asklepieia on 8th (preceding Dionysia, per hautgelderrechnung IG² 1496); eisagoge (ritual entrance of image) evening of 8th; main festival 9th–13th:
+
 - 9th morning: Pompe (great sacrificial procession)
 - 9th day: choirs of παῖδες and ἄνδρες
 - 9th evening: Komos
@@ -128,6 +138,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 **Deity**: Dionysos Eleuthereus
 
 **Ritual**:
+
 1. **Proagon** (8 Elaphebolion): poets and actors presented themselves to the public (Rohde, Kl. Schr. 2, 381 ff.; IG² 780.15)
 2. **Asklepieia** (8 Elaphebolion): sacrifice to Asklepios in the neighboring sanctuary (Aeschin. 3.67)
 3. **Eisagoge** (evening of 8th): Epheboi escorted the image of Dionysos Eleuthereus by torchlight from the Eschara (a small altar near the Academy chapel) to the theater precinct (IG² 1006, 12; 1008, 14; 1011, 11). A preliminary sacrifice was made at the Academy chapel before departure (Deubner: relic of the original appeasement sacrifice in Eleutherai when the god was taken away). Before the procession there was a general banquet (Menander / Alkiphr. 4.18.16; Philostr. v. soph. 2.1.3)
@@ -136,9 +147,10 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 6. **Komos** (evening of 9th): dionysiac carnivalesque revel-procession, in contrast to the hieratic pompe (mockeries, jokes)
 7. **Dramatic competitions**: comedies (10th), tragedies (11th–13th)
 
-**Aition**: Deubner does not discuss an aition per se, but notes that the annual eisagoge *re-enacts* the original transfer of the Eleuthereus image from Eleutherai to Athens (Paus. 1.38.8; 1.29.2), hence the small chapel near the Academy (a temporary stop, representing Eleutherai). The festival was (probably) founded by Peisistratos.
+**Aition**: Deubner does not discuss an aition per se, but notes that the annual eisagoge _re-enacts_ the original transfer of the Eleuthereus image from Eleutherai to Athens (Paus. 1.38.8; 1.29.2), hence the small chapel near the Academy (a temporary stop, representing Eleutherai). The festival was (probably) founded by Peisistratos.
 
 **Participants**:
+
 - Archon Eponymos (oversaw festival — not the Basileus; this marks it as a newer foundation)
 - Epheboi (eisagoge, sacrifice, pompe with bull: IG² 1028, 1029)
 - Epimeletes of mysteries (also involved)
@@ -147,6 +159,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - Iobakchen: celebrated 10 Elaphebolion with sponde (IG² 1368.117)
 
 **Sources**:
+
 - Aristot. Ath. Pol. 56.3 ff. (Archon Eponymos overseeing)
 - Demosth. 21.10 (law of Euegoros: pompe, boy-choirs, [men's choirs], komos, comedians, tragedians)
 - Paus. 1.20.3; 1.29.2; 1.38.8 (eisagoge, Academy chapel, Eleutherai origin)
@@ -161,6 +174,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - Thuk. 4.118.12 (assembly on 14th)
 
 **Notes**:
+
 - Three processional acts are distinct (Deubner argues firmly against scholars who conflated them): (1) eisagoge (preparatory, not part of the proper festival), (2) pompe (the proper sacrificial procession), (3) komos (carnivalesque appendage). Robert, Pfuhl, Bethe, and Buschor had variously confused or equated these; Deubner insists the epigraphic evidence (ephebe inscriptions and Euegoros law) clearly separates them.
 - The festival is modeled on the Ländliche Dionysia (hence the phallos in the pompe); it is younger than the rural version, younger than the Lenaia.
 - The Basileus was not the organizer (unlike Lenaia and Anthesteria); the Archon Eponymos was — a sign of the festival's relatively recent origin.
@@ -178,6 +192,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 **Deity**: Dionysos (departure point of procession, recipient of the vine-branches); Athena Skiras (destination)
 
 **Ritual**:
+
 1. **Procession** (ὦσχοφορία / ὠσχοφορία) from a Dionysos sanctuary in the city (probably the Limnaion) to the precinct of Athena Skiras in Phaleron:
    - Led by two youths (νεανίαι) dressed in women's clothing, carrying vine-branches heavy with grapes (ὤσχοι; ὦσχος = vine-branch with fruit still attached)
    - The two leaders were selected from noble and wealthy families (Istor, apud Harpokr.; Hesych)
@@ -199,6 +214,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 **Aition**: Deubner notes that the bräuche were interpreted through the Theseus-Crete myth (probably not before the 6th century BCE: Robert). The vine-branches were said to have been offered to Dionysos and Ariadne. The women's dress of the two leaders was interpreted as Theseus disguising his youths. Deubner treats the aition as secondary and irrelevant to the actual ritual.
 
 **Participants**:
+
 - Two leading νεανίαι: noble and wealthy families, dressed as women
 - Chorus (singing oschophorika)
 - Epheboi from all ten phylai (race)
@@ -207,6 +223,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - Broader Athenian public joining the procession
 
 **Sources**:
+
 - Proklos Chrest. in Phot. Bibl. S. 322.13 Bekk. (procession, the two leaders, race, pentaploa)
 - Plut. Thes. 22.4; 23.2–4 (via Demon: deipnophoroi, sacrifice; ritual cries; aetiological connection to Theseus)
 - Harpokr. ὠσχοφόροι; Istor, apud Harpokr. (noble families)
@@ -221,6 +238,7 @@ The stated offset (PDF page = printed page − 1) applies to the range PDF 122�
 - IG I² 187; IG² 1178 (for deme Ikaria Dionysia, context)
 
 **Notes**:
+
 - The purpose of the festival: thanksgiving/blessing for the completed grape harvest (galathe). The procession went to Phaleron (the sea) because Dionysos was believed to have landed there when he brought the vine to Attica — Pfuhl's explanation, accepted by Deubner.
 - The Oschophorion: a τόπος (informal locality), not a proper temenos. Athena Skiras settled there from Salamis at some point, her temple then marking the endpoint of the procession; she is not the mistress of the festival.
 - The vine-branches were offerings for Dionysos, not Athena Skiras; "Ὠσχοφόρια" should not be called the chief festival of Athena Skiras (against Bekk. Anecd. and Suid. Ὠσχοφόρια: Σκιράδος Ἀθηνᾶς ἑορτή).
@@ -314,6 +332,7 @@ Deubner treats several minor or poorly attested Dionysiac observances in a closi
 **Sources**: [Demosth.] 59.78; IG² 1368 (Iobakchen inscription, 2nd c. CE — the cult association "cannot be separated" from the older festival)
 
 **Notes**:
+
 - Nothing else known about the festival's actual ritual.
 - Its connection to the Anthesteria-Limnaion area is confirmed by the fact that the Iobakchen association (IG² 1368) settled on the site of the old Limnaion in the 2nd c. CE, and by a month "Iobakchios" on Astypalaia apparently equated with Anthesterion (Bischoff, De fastis 374, 377).
 - Robert identified the Iobakcheia with the festival of the Lenaia vases; Buschor assigned it to the wine-libation at the Choen; Prott made Ambrosia, Klematis, and Iobakcheia three separate days of the Lenaia — Deubner calls all of these "mere speculation."
@@ -333,12 +352,14 @@ Deubner treats several minor or poorly attested Dionysiac observances in a closi
 **Participants**: General deme population plus specific gennētai groups, including (probably) Krokonidai or Koironidai — eleusinian gennē (Harpokr. Θεοίνια, citing Lykourgos, Δικαδασία Κροκωνιδῶν πρὸς Κοιρωνίδας)
 
 **Sources**:
+
 - Harpokr. Θεοίνια (Lykourgos reference; Aeschylus frg. 382 N. and Dionysios Skymnaios in Schol. Lykophr. 1247 for the epithet Θεοίνης/Θεοινοῦς in connection with maenads)
 - Hesych. Θεοίνια
 - Phot. Θεοίνιον (sanctuary of Dionysos; brief excerpt from a source mentioning a genos)
 - Bekk. Anecd. 1, 264.6; Etym. m. 446.40
 
 **Notes**:
+
 - Deubner distinguishes Theoinia firmly from the Ländliche Dionysia (following Nilsson, De Dion. att. 104 ff.): different cult epithet, different character.
 - Orgiasticism: two Tragiker fragments (Aeschylus frg. 382; Dionysios Skymnaios apud Schol. Lykophr. 1247) mention Theoinos alongside maenads, but Deubner judges any conclusion about orgiasticism "highly doubtful" (äußerst zweifelhaft).
 - Only one "Theoinia" is unconfirmed; there may have been multiple such cult places.
@@ -372,6 +393,7 @@ This is not a civic Athenian festival but the calendar of the private Iobakchen 
 **Sources**: IG² 1368 (Iobakchen inscription, 2nd c. CE; with commentaries by Dittenberger, Syll.³ 1109 and Ziehen, Leg. sacr. 132 ff.); Philostr. v. Apollon. 4.21 (Anthesteria still celebrated 2nd c. CE)
 
 **Notes**:
+
 - The σπονδή for Katagogia at the Stibas supports Deubner's earlier identification of Katagogia with the Anthesteria (p. 104), since the Iobakchen settled on the Limnaion site.
 - The five divine roles paired with five human roles may not be coincidental; the five divine are: Kore (= Dionysokore), Palaimon (in Dionysiac connection elsewhere), Aphrodite, Proteurythmos (dance daemon), and implicitly Dionysos himself (played by the priest?).
 - The 10th Elaphebolion sacrifice by the archebakkos (2nd day of Great Dionysia): seemingly in conflict with the Stibas-context for the drama, suggesting later editorial insertion into the inscription.

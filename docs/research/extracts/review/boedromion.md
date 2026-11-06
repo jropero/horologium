@@ -1,4 +1,5 @@
 # Review: Boedromion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -15,6 +16,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION + MISSING_DETAIL
 
 **Issues**:
+
 1. The aition is invented. Neither Parke nor Deubner describes Ge absorbing the blood of the fallen to form an "unbeatable foundation" unifying Athens. Parke gives no mythological narrative at all; the origin is historical (Solon converting an aristocratic rite to a state festival), not mythological.
 2. Ge is missing from the deity field. Deubner explicitly notes sacrifice was also made to Ge (Earth). The app lists only "Los Muertos."
 
@@ -49,6 +51,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION (embellishment) + MISSING_DETAIL
 
 **Issues**:
+
 1. "los ejércitos de Eleusis iban a masacrar Atenas" — embellished. Parke says Eumolpus was winning when Ion came to help; it does not say Eleusis was about to massacre Athens. The app adds dramatic urgency not in the source.
 2. The end-of-campaigning-season explanation ("marcando el fin de la temporada de campañas") is Parke's speculative suggestion, not a fact. The app presents it as the established description.
 3. The app presents the Ion legend without noting Parke's explicit skepticism ("a typical story invented to explain a cult, but it is unnecessary").
@@ -60,7 +63,7 @@ Date: 2026-10-25
 
 ## Day 13 — Escort of the Hiera (MISSING FESTIVAL)
 
-**Parke**: On the 13th, Epheboi went out to Eleusis to escort the Holy Things (*Hiera*) to Athens. The Hiera were carried in round boxes (*kistai*) tied with purple ribbons. The priestesses dismounted at the Rheitoi streams to carry them across a narrow bridge; the wagon went round via the ford. On arrival, the Phaidryntes (Cleaner) reported to the priestess of Athena on the Acropolis. The conveyance was a high state occasion.
+**Parke**: On the 13th, Epheboi went out to Eleusis to escort the Holy Things (_Hiera_) to Athens. The Hiera were carried in round boxes (_kistai_) tied with purple ribbons. The priestesses dismounted at the Rheitoi streams to carry them across a narrow bridge; the wagon went round via the ford. On arrival, the Phaidryntes (Cleaner) reported to the priestess of Athena on the Acropolis. The conveyance was a high state occasion.
 
 **Deubner**: Day 13: epheboi went to Eleusis and escorted the sacred objects (cists) back to the urban Eleusinion below the Akropolis.
 
@@ -88,7 +91,7 @@ Date: 2026-10-25
 
 ## Eleusinian Mysteries, Day 1 — Agyrmos — Day 15
 
-**Parke**: The Gathering (*Agyrmos*). Assembly in Agora at the Painted Portico (*Stoa Poikile*). Hierophantes and Daiduchos delivered formal proclamation. Candidates must be of pure hands (especially re blood-guilt) and 'soul conscious of no evil, lived well and justly.' Excluded: those with blood-guilt, barbarians (non-Greeks; Romans later accepted). Fees paid (15 drachmas total in the late 4th century). Mystagogoi assigned to guide foreign initiates.
+**Parke**: The Gathering (_Agyrmos_). Assembly in Agora at the Painted Portico (_Stoa Poikile_). Hierophantes and Daiduchos delivered formal proclamation. Candidates must be of pure hands (especially re blood-guilt) and 'soul conscious of no evil, lived well and justly.' Excluded: those with blood-guilt, barbarians (non-Greeks; Romans later accepted). Fees paid (15 drachmas total in the late 4th century). Mystagogoi assigned to guide foreign initiates.
 
 **Deubner**: Assembly of the mystai; Hierophant and Daduch formally excluded barbarians and murderers from the Stoa Poikile.
 
@@ -104,7 +107,7 @@ Date: 2026-10-25
 
 ## Eleusinian Mysteries, Day 2 — Halade Mystai — Day 16
 
-**Parke**: Command "Seaward, Initiates!" (*Halade Mystai*). Initiates travelled to the Piraeus or Phaleron coast (~8 miles). Each Mystes walked into the water carrying a piglet supplied by the authorities. Piglet purified by immersion then sacrificed; initiates sprinkled with the blood. Probably ended with a feast of suckling pig. Parke notes the pig was "the conventional victim offered to Demeter, perhaps as a natural emblem of fecundity" — not as a sin-bearer. Mylonas: more like a holiday outing. Shark incident in 339 BC.
+**Parke**: Command "Seaward, Initiates!" (_Halade Mystai_). Initiates travelled to the Piraeus or Phaleron coast (~8 miles). Each Mystes walked into the water carrying a piglet supplied by the authorities. Piglet purified by immersion then sacrificed; initiates sprinkled with the blood. Probably ended with a feast of suckling pig. Parke notes the pig was "the conventional victim offered to Demeter, perhaps as a natural emblem of fecundity" — not as a sin-bearer. Mylonas: more like a holiday outing. Shark incident in 339 BC.
 
 **Deubner**: Initiates and their sacrificial pigs bathed in the sea at the Kantharos harbour (Piraeus); the pigs were subsequently sacrificed.
 
@@ -113,6 +116,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION + MINOR_ERROR
 
 **Issues**:
+
 1. "a Falero" — Deubner specifies Kantharos harbour (Piraeus). Parke says Piraeus or Phaleron. Phaleron alone is slightly off; Piraeus is the more specifically attested location.
 2. The scapegoat interpretation ("el pecado humano se transfería al cerdo, quien moría llevándose las culpas al inframundo") is not in either source. Parke says the pig was the conventional Demeter victim, "perhaps as a natural emblem of fecundity" — the opposite of a pollution-bearer. The app inverts the pig's ritual role.
 3. "el agua salada curaba el alma" is a reasonable interpretation of sea-purification but not explicitly stated by Parke or Deubner.
@@ -123,7 +127,7 @@ Date: 2026-10-25
 
 ## Eleusinian Mysteries, Day 3 — Hither the Victims — Day 17
 
-**Parke**: Probably called 'Hither the victims' (*Deuro hai hiereia*) — the names of Demeter and Persephone were too sacred to utter, so this paraphrase was used. Likely the main state sacrifice in Athens for the Two Goddesses. Very little ancient evidence survives for this day; the name itself is tentative.
+**Parke**: Probably called 'Hither the victims' (_Deuro hai hiereia_) — the names of Demeter and Persephone were too sacred to utter, so this paraphrase was used. Likely the main state sacrifice in Athens for the Two Goddesses. Very little ancient evidence survives for this day; the name itself is tentative.
 
 **Deubner**: Sacrifice for Demeter and Kore at the urban Eleusinion, attested in a private Attic calendar.
 
@@ -132,6 +136,7 @@ Date: 2026-10-25
 **Verdict**: MISSING_DETAIL
 
 **Issues**:
+
 1. The day-name "Hither the Victims" is left in English while all other day-names are in Spanish. Inconsistency.
 2. The app calls it the "gran sacrificio oficial" — Parke calls it the likely date of the "main state sacrifice" and notes very little evidence. The certainty is overstated slightly, but the core content is correct.
 
@@ -141,7 +146,7 @@ Date: 2026-10-25
 
 ## Eleusinian Mysteries, Day 4 — Epidauria — Day 18
 
-**Parke**: Asclepius cult introduced to Athens from Epidaurus in 420/19 BC. The Mystai were expected to stay indoors. An independent festival of Asclepius (the *Epidauria*) filled this vacuum, organized with a pompe by the Basileus. The myth: Asclepius had come to Athens to seek initiation but arrived too late for the preliminary ceremonies, so they were all rushed through again for his benefit — giving mythological cover to any other late arrivals. Sacred snake sent from Epidaurus. The founding inscription names the archonship of Astyphilos (420/19 BC).
+**Parke**: Asclepius cult introduced to Athens from Epidaurus in 420/19 BC. The Mystai were expected to stay indoors. An independent festival of Asclepius (the _Epidauria_) filled this vacuum, organized with a pompe by the Basileus. The myth: Asclepius had come to Athens to seek initiation but arrived too late for the preliminary ceremonies, so they were all rushed through again for his benefit — giving mythological cover to any other late arrivals. Sacred snake sent from Epidaurus. The founding inscription names the archonship of Astyphilos (420/19 BC).
 
 **Deubner**: Asklepios festival inserted when his cult was admitted to the Mysteries; pompe organized by the Basileus; mystai stayed home.
 
@@ -150,6 +155,7 @@ Date: 2026-10-25
 **Verdict**: MISSING_DETAIL + partial conflation
 
 **Issues**:
+
 1. "Los rezagados se purifican" — the myth about latecomers is Parke's secondary explanation for the Epidauria's mythological function; it is not the primary description of the day. The primary content is an independent Asclepius festival with a pompe organized by the Basileus while the Mystai stay home.
 2. The 420/19 BCE date of the cult's introduction — an important historical datum Parke gives — is omitted.
 3. "Llegada de Asclepio" conflates the historical introduction of the cult (420/19 BCE) with the mythological narrative (Asclepius arriving to seek initiation). These are distinct.
@@ -160,7 +166,7 @@ Date: 2026-10-25
 
 ## Eleusinian Mysteries, Day 5 — Great Procession — Day 19
 
-**Parke**: The Iacchos image (young man with torch) carried from near the Dipylon Gate. Holy Things escorted from the Eleusinion. 14-mile procession to Eleusis. Mystai wore myrtle garlands and carried *bacchoi* (myrtle branches tied with wool) and a bundle of provisions on a stick. Gephyrismos: men with heads COVERED to conceal their identities sat on the Kephisos bridge and hurled ribald insults at distinguished persons — Parke notes it is "impossible to decide how far this had a magic intention to forestall any ill-luck, or again how far it was just a traditional opportunity for popular licence." Procession arrived at Eleusis after dark by torchlight.
+**Parke**: The Iacchos image (young man with torch) carried from near the Dipylon Gate. Holy Things escorted from the Eleusinion. 14-mile procession to Eleusis. Mystai wore myrtle garlands and carried _bacchoi_ (myrtle branches tied with wool) and a bundle of provisions on a stick. Gephyrismos: men with heads COVERED to conceal their identities sat on the Kephisos bridge and hurled ribald insults at distinguished persons — Parke notes it is "impossible to decide how far this had a magic intention to forestall any ill-luck, or again how far it was just a traditional opportunity for popular licence." Procession arrived at Eleusis after dark by torchlight.
 
 **Deubner**: Great procession along the Sacred Road to Eleusis with sacrifices, libations, hymns, and dances at stations. Night 19/20: torch-lit dances and songs at the Kallichoron well; Iakchos received solemnly by the Epimeletes.
 
@@ -169,6 +175,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION + MISSING_DETAIL
 
 **Issues**:
+
 1. "los lugareños les gritan insultos" — Parke says the insulters were men with COVERED heads concealing their identity, not "locals." The anonymity is ritually significant.
 2. "Esto imita a las ancianas que insultaron a Deméter" — Parke makes no connection between the gephyrismos and any old women insulting Demeter (that belongs to the Iambe/Baubo tradition in the Hymn). The app invents this aition. Parke explicitly says the purpose is unknowable.
 3. Night 19/20 at Eleusis: torch-lit dances and songs at the Kallichoron well, Iakchos received solemnly by the Epimeletes (Deubner) — not mentioned in the app.
@@ -188,7 +195,7 @@ Date: 2026-10-25
 
 **Verdict**: OK (minor imprecision)
 
-**Issue**: The kykeon is described as "cebada y poleo" but Parke says "water, flour, and the herb pennyroyal." "Flour" (barley-meal) is close to "cebada" but strictly the kykeon is the mixed drink, not barley alone. The Homeric Hymn specifies barley-meal (*alphita*), water, and pennyroyal — so "cebada" is defensible but "harina de cebada" would be more precise. The aition itself (Demeter refusing wine, asking for kykeon from Metaneira) is correctly sourced from the Homeric Hymn as cited by Parke.
+**Issue**: The kykeon is described as "cebada y poleo" but Parke says "water, flour, and the herb pennyroyal." "Flour" (barley-meal) is close to "cebada" but strictly the kykeon is the mixed drink, not barley alone. The Homeric Hymn specifies barley-meal (_alphita_), water, and pennyroyal — so "cebada" is defensible but "harina de cebada" would be more precise. The aition itself (Demeter refusing wine, asking for kykeon from Metaneira) is correctly sourced from the Homeric Hymn as cited by Parke.
 
 **Fix**: Minor: change "cebada y poleo" to "harina de cebada, agua y poleo" to match the Homeric Hymn's three-ingredient kykeon.
 
@@ -205,6 +212,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION (day division and specific claims)
 
 **Issues**:
+
 1. Neither Parke nor Deubner assigns the Epopteia to a separate Day 21 — it is grouped with "days following 20." The day-by-day breakdown is the app's own construction.
 2. "según Plutarco, eliminaba el miedo a la muerte para siempre" — Parke cites Plutarch in the context of the initiate and philosopher comparison, but does not specifically quote Plutarch saying the Mysteries "eliminate fear of death forever." This specific Plutarch attribution needs a direct source.
 3. "revelarlo se castigaba con la muerte" — a common claim about the Mysteries, but not stated in this Parke extract.
@@ -245,24 +253,25 @@ Date: 2026-10-25
 
 ## Summary of findings
 
-| Day | Festival | Status |
-|-----|----------|--------|
-| 5 | Genesia | UNSOURCED_AITION + Ge missing from deity |
-| 6 | Artemis Agrotera | MISSING_DETAIL (reason for the 6th) |
-| 7 | Boedromia | UNSOURCED_AITION (Ion embellished) + MISSING_DETAIL |
-| 13 | Escort of Hiera | MISSING_FESTIVAL |
-| 14 | Arrival of Hiera | MISSING_FESTIVAL |
-| 15 | Agyrmos | UNSOURCED_AITION ("terror neolítico") |
-| 16 | Halade Mystai | UNSOURCED_AITION (scapegoat pig) + location minor error |
-| 17 | Hither the Victims | MISSING_DETAIL (English day-name, tentative status) |
-| 18 | Epidauria | MISSING_DETAIL + partial conflation |
-| 19 | Great Procession | UNSOURCED_AITION (Iambe connection) + MISSING_DETAIL |
-| 19/20 | Night at Kallichoron | MISSING_FESTIVAL |
-| 20 | Telete | OK (minor: kykeon ingredients) |
-| 21 | Second day / Epopteia | UNSOURCED_AITION (day division, Plutarch citation) |
-| 22 | Plemochoai | OK (minor embellishment) |
+| Day   | Festival              | Status                                                  |
+| ----- | --------------------- | ------------------------------------------------------- |
+| 5     | Genesia               | UNSOURCED_AITION + Ge missing from deity                |
+| 6     | Artemis Agrotera      | MISSING_DETAIL (reason for the 6th)                     |
+| 7     | Boedromia             | UNSOURCED_AITION (Ion embellished) + MISSING_DETAIL     |
+| 13    | Escort of Hiera       | MISSING_FESTIVAL                                        |
+| 14    | Arrival of Hiera      | MISSING_FESTIVAL                                        |
+| 15    | Agyrmos               | UNSOURCED_AITION ("terror neolítico")                   |
+| 16    | Halade Mystai         | UNSOURCED_AITION (scapegoat pig) + location minor error |
+| 17    | Hither the Victims    | MISSING_DETAIL (English day-name, tentative status)     |
+| 18    | Epidauria             | MISSING_DETAIL + partial conflation                     |
+| 19    | Great Procession      | UNSOURCED_AITION (Iambe connection) + MISSING_DETAIL    |
+| 19/20 | Night at Kallichoron  | MISSING_FESTIVAL                                        |
+| 20    | Telete                | OK (minor: kykeon ingredients)                          |
+| 21    | Second day / Epopteia | UNSOURCED_AITION (day division, Plutarch citation)      |
+| 22    | Plemochoai            | OK (minor embellishment)                                |
 
 **Priority fixes** (most significant errors):
+
 1. **Day 5 aition**: Remove invented Ge-blood-foundation myth entirely. Add Ge to deity.
 2. **Day 16 aition**: Remove scapegoat/sin-transfer interpretation (contradicts Parke's fecundity framing of the pig).
 3. **Day 19 aition**: Remove the old-women-insulting-Demeter connection to the gephyrismos — invented, and Parke explicitly says the meaning is unknowable.

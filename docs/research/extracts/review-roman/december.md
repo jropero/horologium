@@ -1,4 +1,5 @@
 # Roman December — App vs. Sources Review
+
 **Date**: 2026-10-25
 **Sources**: Scullard (1981) pp. 199–212; Fowler (1899) pp. 256–281
 **App keys**: "11-1" through "11-31" in `utils/romanYearData.ts`
@@ -63,6 +64,7 @@
 - **Fix**: Add `festivalName: "Consualia I (Aventino)"`, `festivalDesc: "Aniversario del templo de Consus en el Aventino (dies natalis). El propio Consus recibiría de nuevo honras el 15 de diciembre."`, `deity: "Consus"`, `deityDesc: "Dios custodio de los silos de grano."`
 
 Suggested TypeScript entry:
+
 ```typescript
 "11-12": {
     status: 'EN',
@@ -73,6 +75,7 @@ Suggested TypeScript entry:
     festivalDesc: "Aniversario del templo de Consus en el monte Aventino. El mismo dios sería honrado de nuevo el 15 de diciembre en la Consualia de invierno."
 },
 ```
+
 - **Priority**: MEDIUM
 
 ---
@@ -151,22 +154,24 @@ Suggested TypeScript entry:
 
 ## Summary
 
-| Category | Count | Days affected |
-|---|---|---|
-| WRONG_STATUS | 2 | 1, 25 |
-| WRONG_RITUAL | 3 | 3, 15, 23 |
-| WRONG_DEITY | 2 | 8, 13 |
-| MISSING_FESTIVAL | 5 | 1 (Neptune/Pietas), 10 (Tribuni), 12 (Consualia I), 23 (Diana/Juno), 21 (Hercules/Ceres) |
-| MINOR | 1 | 22 (Lares Permarini name/altar) |
-| **Total** | **13** | |
+| Category         | Count  | Days affected                                                                            |
+| ---------------- | ------ | ---------------------------------------------------------------------------------------- |
+| WRONG_STATUS     | 2      | 1, 25                                                                                    |
+| WRONG_RITUAL     | 3      | 3, 15, 23                                                                                |
+| WRONG_DEITY      | 2      | 8, 13                                                                                    |
+| MISSING_FESTIVAL | 5      | 1 (Neptune/Pietas), 10 (Tribuni), 12 (Consualia I), 23 (Diana/Juno), 21 (Hercules/Ceres) |
+| MINOR            | 1      | 22 (Lares Permarini name/altar)                                                          |
+| **Total**        | **13** |                                                                                          |
 
 ### HIGH priority (fix first)
+
 1. Day 3 — Bona Dea: wine was offered, not prohibited
 2. Day 13 — festivalName inverts Tellus/Ceres relationship; Tellus is the primary deity
 3. Day 15 — "burros" → "caballos"; altar-uncovering belongs to August Consualia, not December
 4. Day 23 — Larentalia is not the "conclusion of Saturnalia"
 
 ### MEDIUM priority
+
 5. Day 1 — status should be N not NP
 6. Day 8 — Gaia missing; festivalName "Tiberinalia" not attested
 7. Day 12 — EN day has no festivalName for Consualia I on Aventine
@@ -174,6 +179,7 @@ Suggested TypeScript entry:
 9. Day 25 — status should be C not NP
 
 ### LOW priority
+
 10. Day 1 — Neptune/Pietas temple anniversaries unrecorded
 11. Day 10 — Tribuni plebis office assumption unrecorded
 12. Day 21 — secondary Hercules/Ceres sacrifice unrecorded

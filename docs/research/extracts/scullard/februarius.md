@@ -1,9 +1,11 @@
 # Februarius — Scullard (1981)
+
 **PDF pages used**: 69–85 (printed same)
 
 ---
 
 ## Iuno Sospita (lunoni Sospitae Matri Reginae)
+
 - **Day**: 1 (Kalends of February)
 - **Fasti status**: N (Ant. mai.)
 - **Deity**: Juno Sospita Mater Regina
@@ -16,6 +18,7 @@
 ---
 
 ## Helernus (Helerna)
+
 - **Day**: 1 (Kalends of February)
 - **Fasti status**: not stated (embedded in 1 Feb. entry)
 - **Deity**: Helernus (primitive deity, perhaps of the underworld; name uncertain — MSS vary between Avernus, Elernus, Elemo)
@@ -28,6 +31,7 @@
 ---
 
 ## Concordia (Concordiae in Capitolio)
+
 - **Day**: 5 (Nones of February)
 - **Fasti status**: N (Ant. mai.; Praen. records it as "Concordiae in Arce")
 - **Deity**: Concordia
@@ -40,6 +44,7 @@
 ---
 
 ## Faunus (Fauno in Insula)
+
 - **Day**: 13 (Ides of February)
 - **Fasti status**: NP
 - **Deity**: Faunus
@@ -52,6 +57,7 @@
 ---
 
 ## Fornacalia (Feriae Conceptivae)
+
 - **Day**: moveable; proclaimed by Curio Maximus on or before the Nones (5 February); ended 17 February (Quirinalia = Stultorum Feriae, the fallback day for those who missed their curia's meeting)
 - **Fasti status**: Feriae Conceptivae (moveable public feast)
 - **Deity**: No major deity; Fornax (Goddess of the Oven) was a later invention. Dionysius of Halicarnassus (2.23) records that the curiae tables were dedicated to Iuno Curitis. Ovid (F.2.525) says that happy farmers (coloni) prayed to Fornax.
@@ -64,6 +70,7 @@
 ---
 
 ## Parentalia
+
 - **Day**: 13–21 February (begins at the sixth hour of 13 February; Vestal parentat on first day per Phil.)
 - **Fasti status**: Dies religiosus (NP on 13th per Farn./Silv.; see also entry for Feralia on 21st). Calendars note: Parentatio incipit (Farn.), Parentatio tumulorum incipit (Silv.), Virgo Vestalis parentat (Phil.).
 - **Deity**: Di Manes (ancestral dead)
@@ -76,6 +83,7 @@
 ---
 
 ## Feralia
+
 - **Day**: 21 February (ix KAL. MART.)
 - **Fasti status**: F (Ant. mai.; Maff.) / FP (Caer.; Vend.). Dies religiosus.
 - **Deity**: Di Manes (official); Tacita / Muta (Silent/Mute Goddess, Mother of the Lares) in private rite.
@@ -88,6 +96,7 @@
 ---
 
 ## Caristia / Cara Cognatio
+
 - **Day**: 22 February (vm KAL. MART.)
 - **Fasti status**: C
 - **Deity**: Lares (family gods)
@@ -100,6 +109,7 @@
 ---
 
 ## Lupercalia
+
 - **Day**: 15 February (xv KAL. MART.)
 - **Fasti status**: NP. Dies religiosus.
 - **Deity**: Faunus (per Ovid); Inuus (per Livy, possibly "the Goer-in", god of sexual intercourse); both identified with Pan. "Lupercus" was an Augustan invention; the original deity is uncertain and probably pre-anthropomorphic.
@@ -112,6 +122,7 @@
 ---
 
 ## Quirinalia
+
 - **Day**: 17 February (xm KAL. MART.)
 - **Fasti status**: NP. Dies religiosus.
 - **Deity**: Quirinus
@@ -124,6 +135,7 @@
 ---
 
 ## Terminalia
+
 - **Day**: 23 February (vii KAL. MART.)
 - **Fasti status**: NP
 - **Deity**: Terminus (god of boundaries)
@@ -136,6 +148,7 @@
 ---
 
 ## Regifugium
+
 - **Day**: 24 February (vi KAL. MART.) — but if an intercalary month followed, the Regifugium fell on its proper date (sixth day before Kalends of March) within the intercalary month, not on 24 February itself.
 - **Fasti status**: N
 - **Deity**: Unclear; Rex Sacrorum officiated. Salii participated in the sacrifice. Macrobius links it to Di Manes / Amburbium context. Silvius notes "Cum Tarquinius Superbus fertur ab urbe expulsus".
@@ -148,6 +161,7 @@
 ---
 
 ## Equirria
+
 - **Day**: 27 February (in KAL. MART.)
 - **Fasti status**: NP
 - **Deity**: Mars
@@ -160,6 +174,7 @@
 ---
 
 ## Amburbium (Feriae Conceptivae)
+
 - **Day**: moveable; sometime in February. Macrobius (1.13.3) places it in February: 'King Numa ordered the city to be lustrated in February and sacrifice offered to the Di Manes.'
 - **Fasti status**: Feriae Conceptivae (moveable)
 - **Deity**: Di Manes (per Macrobius); purification rite involving the city's boundary (pomerium), so also implicitly related to Terminus and protective deities.
@@ -173,19 +188,19 @@
 
 ## Summary
 
-| Day | Festival / Occasion | Fasti Status | Deity |
-|-----|--------------------|--------------|----|
-| 1 | Iuno Sospita (lunoni Sospitae Matri Reginae) | N | Iuno Sospita Mater Regina |
-| 1 | Helernus (grove sacrifice) | not stated | Helernus |
-| 5 (Nones) | Concordia (Concordiae in Capitolio / in Arce) | N | Concordia |
-| 13 (Ides) | Faunus (Fauno in Insula) | NP | Faunus |
-| 13–17 | Fornacalia (Feriae Conceptivae, moveable, ends 17th) | Feriae Conceptivae | Fornax / Iuno Curitis |
-| 13–21 | Parentalia (begins sixth hour of 13th) | dies religiosus | Di Manes |
-| 15 | Lupercalia | NP, dies religiosus | Faunus / Inuus |
-| 17 | Quirinalia (= Stultorum Feriae = last day of Fornacalia) | NP, dies religiosus | Quirinus |
-| 21 | Feralia | F / FP, dies religiosus | Di Manes / Tacita–Muta |
-| 22 | Caristia / Cara Cognatio | C | Lares |
-| 23 | Terminalia | NP | Terminus |
-| 24 | Regifugium | N | (Rex Sacrorum; Salii) |
-| 27 | Equirria | NP | Mars |
-| moveable (Feb.) | Amburbium (Feriae Conceptivae) | Feriae Conceptivae | Di Manes / city deities |
+| Day             | Festival / Occasion                                      | Fasti Status            | Deity                     |
+| --------------- | -------------------------------------------------------- | ----------------------- | ------------------------- |
+| 1               | Iuno Sospita (lunoni Sospitae Matri Reginae)             | N                       | Iuno Sospita Mater Regina |
+| 1               | Helernus (grove sacrifice)                               | not stated              | Helernus                  |
+| 5 (Nones)       | Concordia (Concordiae in Capitolio / in Arce)            | N                       | Concordia                 |
+| 13 (Ides)       | Faunus (Fauno in Insula)                                 | NP                      | Faunus                    |
+| 13–17           | Fornacalia (Feriae Conceptivae, moveable, ends 17th)     | Feriae Conceptivae      | Fornax / Iuno Curitis     |
+| 13–21           | Parentalia (begins sixth hour of 13th)                   | dies religiosus         | Di Manes                  |
+| 15              | Lupercalia                                               | NP, dies religiosus     | Faunus / Inuus            |
+| 17              | Quirinalia (= Stultorum Feriae = last day of Fornacalia) | NP, dies religiosus     | Quirinus                  |
+| 21              | Feralia                                                  | F / FP, dies religiosus | Di Manes / Tacita–Muta    |
+| 22              | Caristia / Cara Cognatio                                 | C                       | Lares                     |
+| 23              | Terminalia                                               | NP                      | Terminus                  |
+| 24              | Regifugium                                               | N                       | (Rex Sacrorum; Salii)     |
+| 27              | Equirria                                                 | NP                      | Mars                      |
+| moveable (Feb.) | Amburbium (Feriae Conceptivae)                           | Feriae Conceptivae      | Di Manes / city deities   |

@@ -1,6 +1,7 @@
 # Martius — Fowler (1899)
+
 **PDF pages used**: 44–77 (printed pp. 33–66)
-**Source**: W. Warde Fowler, *The Roman Festivals of the Period of the Republic* (Macmillan, 1899)
+**Source**: W. Warde Fowler, _The Roman Festivals of the Period of the Republic_ (Macmillan, 1899)
 
 ---
 
@@ -10,9 +11,9 @@
 - **Fasti status**: NP (Feriae — the day is marked as Feriae in the Fasti; Philocalus also notes N = natalis Martis, which Fowler considers very doubtful)
 - **Deity**: Mars (primary); Juno Lucina (temple dedication on this day, Esquiline)
 - **Ritual**: The sacred fire of Vesta was renewed; fresh laurels were fixed on the Regia, the Curiae, and the houses of the flamens. The Aedes Vestae was also freshly decorated (Macrobius, Sat. 1.12.6; Ovid, Fasti 3.135 ff.). This was the New Year's day of the Roman religious calendar. The day was also called **Matronalia** (not a technical religious term): wives received presents from their husbands and entertained their slaves. It was also the first day on which the Salii 'moved' the ancilia: they took the sacred shields from the sacrarium Martis in the Regia and carried them through the city in procession, leaping, dancing, striking the shields, and singing the Salian hymns. Dionysius (2.70) describes these processions, which continued until the 24th.
-- **Aition**: Fowler notes the legend that the original ancile fell from heaven (or was found in Numa's house) on this day, and that the first of the twelve copies was made by Mamurius (mentioned in the Carmen Saliare). He also records — but doubts — Philocalus' notation that this is the *natalis Martis*, noting no early Latin source corroborates a birth of Mars on this day. The temple of Juno Lucina was dedicated on this day (probably 375 BCE per Pliny, NH 16.235), and Fowler thinks this dedication-day may have suggested the motherhood of Juno and the birth of Mars.
+- **Aition**: Fowler notes the legend that the original ancile fell from heaven (or was found in Numa's house) on this day, and that the first of the twelve copies was made by Mamurius (mentioned in the Carmen Saliare). He also records — but doubts — Philocalus' notation that this is the _natalis Martis_, noting no early Latin source corroborates a birth of Mars on this day. The temple of Juno Lucina was dedicated on this day (probably 375 BCE per Pliny, NH 16.235), and Fowler thinks this dedication-day may have suggested the motherhood of Juno and the birth of Mars.
 - **Page**: pp. 36–39
-- **Notes**: Fowler is explicitly sceptical of the *natalis Martis* being ancient (Philocalus is 4th century CE, "urban and not a rustic basis"). The 'Matronalia' label has no technical or religious significance according to Fowler. The Salian processions began today and ran continuously through March 24.
+- **Notes**: Fowler is explicitly sceptical of the _natalis Martis_ being ancient (Philocalus is 4th century CE, "urban and not a rustic basis"). The 'Matronalia' label has no technical or religious significance according to Fowler. The Salian processions began today and ran continuously through March 24.
 
 ---
 
@@ -117,7 +118,7 @@
 - **Day**: 24 (IX Kal. Apr.)
 - **Fasti status**: NP (IP in Vaticanus and Caeretani; Maffeiani and Praenestini give Q.REX.C.F.)
 - **Deity**: no specific deity; the day is a procedural/constitutional one under the Rex sacrificulus
-- **Ritual**: The comitia curiata met under the presidency of the Rex sacrificulus for the sanctioning (calatio) of wills, one of the two fixed days per year for this (the other being May 24). 'Q.R.C.F.' = *Quando Rex Comitiavit Fas*: judicial proceedings could only begin once the Rex had dissolved the assembly. The Salii were also active on this day (Festus 278).
+- **Ritual**: The comitia curiata met under the presidency of the Rex sacrificulus for the sanctioning (calatio) of wills, one of the two fixed days per year for this (the other being May 24). 'Q.R.C.F.' = _Quando Rex Comitiavit Fas_: judicial proceedings could only begin once the Rex had dissolved the assembly. The Salii were also active on this day (Festus 278).
 - **Aition**: Fasti Praenestini record a popular but incorrect etymology: that the day was so named because the King fled the Comitium on this day (alluding to Tarquinius Superbus). Fowler follows Mommsen in rejecting this and favouring the procedural interpretation.
 - **Page**: pp. 63–64
 - **Notes**: This entry is taken in conjunction with May 23–24, which have identical calendar markings. The Tubilustrium on March 23 purified the tubae for use at the March 24 assembly. Fowler does not treat this as a religious festival in its own right, but as a constitutional event with religious overtones.
@@ -126,18 +127,18 @@
 
 ## Summary
 
-| Day | Festival Name | Day No. | Deity |
-|-----|--------------|---------|-------|
-| Kal. Mart. | Feriae Marti / Matronalia | 1 | Mars, Juno Lucina |
-| Non. Mart. | Vediovis (temple) | 7 | Vediovis |
-| VII Id. Mart. | Arma Ancilia Movent (2nd) | 9 | Mars (Salii) |
-| Prid. Id. Mart. | Equirria / Mamuralia | 14 | Mars; Mamurius (late) |
-| Id. Mart. | Anna Perenna | 15 | Anna Perenna |
-| XVI Kal. Apr. | Liberalia / Agonalia | 17 | Liber; Iuventas; Jupiter |
-| XIV Kal. Apr. | Quinquatrus | 19 | Mars; Minerva (from temple) |
-| X Kal. Apr. | Tubilustrium | 23 | Mars; 'dea fortis' |
-| IX Kal. Apr. | Q.R.C.F. | 24 | (Rex sacrificulus) |
-| (continuous) | Salii Processions | 1–24 | Mars |
-| (Mar 16–17) | Argei Circuit | 16–17 | (Argeorum sacella) |
+| Day             | Festival Name             | Day No. | Deity                       |
+| --------------- | ------------------------- | ------- | --------------------------- |
+| Kal. Mart.      | Feriae Marti / Matronalia | 1       | Mars, Juno Lucina           |
+| Non. Mart.      | Vediovis (temple)         | 7       | Vediovis                    |
+| VII Id. Mart.   | Arma Ancilia Movent (2nd) | 9       | Mars (Salii)                |
+| Prid. Id. Mart. | Equirria / Mamuralia      | 14      | Mars; Mamurius (late)       |
+| Id. Mart.       | Anna Perenna              | 15      | Anna Perenna                |
+| XVI Kal. Apr.   | Liberalia / Agonalia      | 17      | Liber; Iuventas; Jupiter    |
+| XIV Kal. Apr.   | Quinquatrus               | 19      | Mars; Minerva (from temple) |
+| X Kal. Apr.     | Tubilustrium              | 23      | Mars; 'dea fortis'          |
+| IX Kal. Apr.    | Q.R.C.F.                  | 24      | (Rex sacrificulus)          |
+| (continuous)    | Salii Processions         | 1–24    | Mars                        |
+| (Mar 16–17)     | Argei Circuit             | 16–17   | (Argeorum sacella)          |
 
 **Note on festivals absent or not treated in Fowler's March chapter**: The Equirria of February 27 is mentioned only in passing as 'the first Equirria.' The Argei circuit is treated briefly under March 17 but Fowler explicitly defers full discussion to May 15. He makes no mention of a Neptunalia or any other non-Mars festival for March beyond those listed above.

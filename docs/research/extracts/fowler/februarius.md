@@ -1,10 +1,13 @@
 # Mensis Februarius — Fowler (1899)
+
 **PDF pages used**: 310–342 (printed 299–331)
 
 ## Introduction: the month of purification
+
 Fowler opens with a careful warning: "februum" (instrument of purification, Sabine = purgamentum) does not mean general lustration of the people nor a Christian-style penitential period. It covers involuntary ritual errors and aversion of hostile unseen influences, not moral sin. The Parentalia and Lupercalia are the characteristic rites. The month marks a transition from joyful winter gatherings to duties toward dead ancestors and a mysterious piacular rite. Spring begins agriculturally on Feb. 7 (Favonius). Pages 299–302.
 
 ## Junoni Sospitae (Kalends of February)
+
 - **Day**: 1 (Kalends)
 - **Fasti status**: N
 - **Deity**: Juno Sospita (the great Lanuvian goddess)
@@ -12,6 +15,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 302
 
 ## Fauno in Insula (Ides of February)
+
 - **Day**: 13 (Ides, but dated to this entry because placed by Fowler before the Fornacalia discussion)
 - **Fasti status**: IP (C.I.L. vi. 2302)
 - **Deity**: Faunus
@@ -19,6 +23,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 302
 
 ## Fornacalia
+
 - **Day**: Variable (conceptivae); ending on the Quirinalia (Feb. 17); the day for each individual curia was announced by its curio at varying times
 - **Fasti status**: Not in calendars (sacrum publicum pro curiis, not pro populo)
 - **Deity**: Fornax (spirit of the oven); Juno Curis honoured in the curiae (tables = mensae in quibus immolabatur Iunoni)
@@ -26,6 +31,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 302–306
 
 ## Parentalia (and Feralia)
+
 - **Day**: Feb. 13–21 (begins sixth hour of Feb. 13; public festival = Feralia, Feb. 21)
 - **Fasti status**: Dies parentales not individually marked N in calendars (per Mommsen, showing they are later than the Lemuria, which are N). Feralia appears in three calendars (Caer. Maff. Farn.) in large letters, and is partly F/FP.
 - **Deity**: Di Manes (dead ancestors); no specific deity
@@ -34,6 +40,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 306–310
 
 ## Caristia / Cara Cognatio
+
 - **Day**: 22
 - **Fasti status**: Mentioned in Philocalus, Silvius, and rustic calendars only; Valerius Maximus is the next writer after Ovid to mention it
 - **Deity**: Lares of the family (who shared in the sacred meal, "incincti")
@@ -41,6 +48,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 309–310
 
 ## Lupercalia
+
 - **Day**: 15 (XV KAL. MART.)
 - **Fasti status**: NP (Caer. Maff. Farn. IP; Philoc. Silv. and all rustic calendars)
 - **Deity**: Uncertain. Ovid attributes it to Faunus ("Cornipedi Fauno caesa de more capella," Fasti 2.361); Livy mentions Inuus (a mysterious deity otherwise hardly known); Liber is suggested by Servius; Juno has been suggested because the thongs were called "Iunonis amiculum." Fowler concludes the Romans of the literary age did not know who the god was; no deity called Lupercus existed.
@@ -49,6 +57,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 310–321
 
 ## Quirinalia
+
 - **Day**: 17 (XXII KAL. MART.)
 - **Fasti status**: IP (Caer. Maff. Farn. Philoc.); Quirino in colle (Farn. Caer.)
 - **Deity**: Quirinus (on the Quirinal hill; Fowler regards him as another form of Mars, the equivalent cult-expression of the same religious conception in two allied communities)
@@ -56,6 +65,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 322–324
 
 ## Terminalia
+
 - **Day**: 23 (VII KAL. MART.)
 - **Fasti status**: IP (Caer. Maff. Rust. Philoc. Silv.)
 - **Deity**: Terminus (god of boundaries; eventually connected with Jupiter, who shared his Capitoline temple with a terminus-stone under an open hole in the roof)
@@ -63,6 +73,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 324–327
 
 ## Regifugium
+
 - **Day**: 24 (VI KAL. MART.)
 - **Fasti status**: N (Caer. Maff. Philoc.); Silvius adds "Tarquinius Superbus fertur ab urbe expulsus"
 - **Deity**: Unknown (Rex sacrorum as celebrant); connection with Jupiter suggested by some later sources but rejected
@@ -70,6 +81,7 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 327–330
 
 ## Equirria
+
 - **Day**: 27 (III KAL. MART.)
 - **Fasti status**: IP (Maff. Caer.); Varro L.L. 6.13
 - **Deity**: Mars (horse-race in the Campus Martius, said to have been established by Romulus in honour of Mars)
@@ -77,4 +89,5 @@ Fowler opens with a careful warning: "februum" (instrument of purification, Sabi
 - **Page**: p. 330–331
 
 ## Summary
+
 Fowler presents February as a transitional month: the joyful mid-winter series ends and gives way to duties toward the dead (Parentalia, Feralia) and a mysterious piacular rite (Lupercalia). The Fornacalia and its conclusion at the Quirinalia are carefully linked to the old curiate organisation. The Lupercalia receives by far the most extensive treatment of any February festival, with a full survey of competing theories (Schwegler's human sacrifice hypothesis, Mannhardt's vegetation-spirit, Robertson Smith's sacrosanct-victim framework). Fowler is consistently cautious and identifies multiple genuine open questions. The month ends with the Equirria as a prologue to the Mars-festivals of March, and the Regifugium preserves (Fowler argues) an ancient sacerdotal flight whose original meaning was already lost by the Republic.

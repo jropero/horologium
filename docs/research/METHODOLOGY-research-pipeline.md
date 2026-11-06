@@ -1,7 +1,8 @@
 # Research Pipeline Methodology
+
 ## Scholarly validation of festival data against PDF sources
 
-*Written after the Hellenic festival review (2026-10-25). Use as a template for future civilizations.*
+_Written after the Hellenic festival review (2026-10-25). Use as a template for future civilizations._
 
 ---
 
@@ -34,6 +35,7 @@ Before spawning anything:
 **One agent per source per month (or per chapter section).**
 
 Each agent:
+
 - Reads a defined page range from the PDF
 - Extracts all festival data for its assigned scope
 - Writes to a dedicated output file (e.g. `docs/research/extracts/parke/boedromion.md`)
@@ -43,6 +45,7 @@ Each agent:
 Launch all agents in a single message to run in parallel. For a 12-month calendar with 2 sources, that is ~24 agents at once.
 
 **Agent prompt must include:**
+
 - Exact PDF path
 - Page range (derived from the page offset)
 - Output file path
@@ -67,11 +70,13 @@ This phase runs only when source organization doesn't match app organization. Fo
 **One agent per month.**
 
 Each agent:
+
 - Reads the app's source file (e.g. `utils/atticCalendarData.ts`) for its assigned month
 - Reads the relevant source extract files (Phase 1 output)
 - Produces a structured comparison in `docs/research/extracts/review/<month>.md`
 
 Finding categories to use consistently:
+
 - `WRONG_DATE` — festival on wrong day vs. sources
 - `WRONG_DEITY` — wrong deity name or epithet
 - `INVENTED_AITION` — aition not found in any source
@@ -193,15 +198,15 @@ This is enough for all PDF extraction. No other special permissions needed beyon
 
 ## Agent spawn summary (Hellenic review, for reference)
 
-| Phase | Agents | Parallel? | Model |
-|---|---|---|---|
-| 1 — Parke extraction | 12 (one per month) | Yes | sonnet |
-| 1 — Deubner extraction | 8 (one per deity chapter) | Yes | sonnet |
-| 1 — Mikalson extraction | 1 (full calendar) | — | sonnet |
-| 2 — Deubner reindex | 1 | — | sonnet |
-| 3 — Per-month comparison | 12 | Yes | sonnet |
-| 4 — Collation | 1 | — | sonnet |
-| **Total** | **35** | | |
+| Phase                    | Agents                    | Parallel? | Model  |
+| ------------------------ | ------------------------- | --------- | ------ |
+| 1 — Parke extraction     | 12 (one per month)        | Yes       | sonnet |
+| 1 — Deubner extraction   | 8 (one per deity chapter) | Yes       | sonnet |
+| 1 — Mikalson extraction  | 1 (full calendar)         | —         | sonnet |
+| 2 — Deubner reindex      | 1                         | —         | sonnet |
+| 3 — Per-month comparison | 12                        | Yes       | sonnet |
+| 4 — Collation            | 1                         | —         | sonnet |
+| **Total**                | **35**                    |           |        |
 
 Total agent-tokens consumed: ~450k across all phases. Wall-clock time: ~3 hours (most of it waiting for parallel batches).
 
@@ -211,15 +216,15 @@ Total agent-tokens consumed: ~450k across all phases. Wall-clock time: ~3 hours 
 
 The Roman review would target `utils/romanCalendarData.ts`. Suggested sources and their roles:
 
-| Role | Source | Format | Offset |
-|---|---|---|---|
-| Primary festival descriptions | Scullard, *Festivals and Ceremonies of the Roman Republic* (1981) | PDF | TBD |
-| Detailed ritual attestation | Fowler, *The Roman Festivals of the Period of the Republic* (1899) | PDF (public domain scan) | TBD |
-| Date/day attestation | Michels, *The Calendar of the Roman Republic* (1967) | PDF | TBD |
-| Ancient primary source for aitia | Ovid, *Fasti* | freely available text | — |
+| Role                             | Source                                                             | Format                   | Offset |
+| -------------------------------- | ------------------------------------------------------------------ | ------------------------ | ------ |
+| Primary festival descriptions    | Scullard, _Festivals and Ceremonies of the Roman Republic_ (1981)  | PDF                      | TBD    |
+| Detailed ritual attestation      | Fowler, _The Roman Festivals of the Period of the Republic_ (1899) | PDF (public domain scan) | TBD    |
+| Date/day attestation             | Michels, _The Calendar of the Roman Republic_ (1967)               | PDF                      | TBD    |
+| Ancient primary source for aitia | Ovid, _Fasti_                                                      | freely available text    | —      |
 
 The Roman calendar is fixed (not lunar), so page-offset errors propagate less. The main complication is that Roman festivals span the Julian calendar year (January–December) rather than 12 named Attic months — the month mapping to `monthIndex` will need to be verified before writing Phase 3 prompts.
 
 ---
 
-*This document describes the process as executed in October 2026. Update it if the approach changes for subsequent civilizations.*
+_This document describes the process as executed in October 2026. Update it if the approach changes for subsequent civilizations._

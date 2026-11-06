@@ -1,4 +1,5 @@
 # November — Fowler (1899)
+
 **PDF pages used**: 263–265 (printed 252–254)
 
 ---
@@ -79,17 +80,18 @@ Fowler characterizes November as "the least important from a religious point of 
 
 Fowler discusses only five November items, none with substantial ritual detail:
 
-| Festival | Day | Fasti | Deity | Note |
-|---|---|---|---|---|
-| Ludi Plebeii | Nov. 4–11 (orig. Nov. 13) | — | Jupiter | From 220 BC; Circus Flaminius |
-| Mundus patet | Nov. 8 | — | — | Cross-ref to Oct. 5 only |
-| Feronia in campo | Nov. 13 (Ides) | NP | Feronia | AKV addition; only Roman attestation |
-| Fortunae Primigeniae in colle | Nov. 13 (Ides) | NP | Fortuna Primigenia | AKV addition; from 204 BC |
-| Epulum Iovis | Nov. 13 | — | Jupiter | Cross-ref to ludi Romani only |
+| Festival                      | Day                       | Fasti | Deity              | Note                                 |
+| ----------------------------- | ------------------------- | ----- | ------------------ | ------------------------------------ |
+| Ludi Plebeii                  | Nov. 4–11 (orig. Nov. 13) | —     | Jupiter            | From 220 BC; Circus Flaminius        |
+| Mundus patet                  | Nov. 8                    | —     | —                  | Cross-ref to Oct. 5 only             |
+| Feronia in campo              | Nov. 13 (Ides)            | NP    | Feronia            | AKV addition; only Roman attestation |
+| Fortunae Primigeniae in colle | Nov. 13 (Ides)            | NP    | Fortuna Primigenia | AKV addition; from 204 BC            |
+| Epulum Iovis                  | Nov. 13                   | —     | Jupiter            | Cross-ref to ludi Romani only        |
 
 **No aition is given for any November festival.** Fowler explicitly characterizes November as the calendrically emptiest month, dominated by agricultural work. The two Ides entries (Feronia, Fortuna Primigenia) are both Arval calendar additions, later than the original calendar layer. The Ludi Plebeii and Epulum Iovis are substantive but discussed without ritual detail in this chapter.
 
 **Key sources Fowler cites for November:**
+
 - Varro, R.R. (rustic calendars: "Sementes triticariae et hordiariae")
 - Livy 23.30 (Ludi Plebeii established)
 - C.I.L. i² 335 (Ludi Plebeii date range)

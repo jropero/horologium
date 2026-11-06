@@ -1,9 +1,11 @@
 # Iulius — Scullard (1981)
+
 **PDF pages used**: 158–171
 
 ---
 
 ## Kalendae Quintiles — Iunoni / Felicitati
+
 - **Day**: 1
 - **Fasti status**: N
 - **Deity**: Juno (Kalends), Felicitas
@@ -15,6 +17,7 @@
 ---
 
 ## Poplifugia
+
 - **Day**: 5
 - **Fasti status**: NP
 - **Deity**: Jupiter (Feriae Iovi)
@@ -26,6 +29,7 @@
 ---
 
 ## Ludi Apollinares
+
 - **Day**: 6–13 (festival day proper: 13 July; games extended backward to 6 July by end of Republic)
 - **Fasti status**: 13 July = C (chief day); game days not individually stated
 - **Deity**: Apollo; also Latona, Diana (sacrifice)
@@ -37,6 +41,7 @@
 ---
 
 ## Fortunae Muliebri (Via Latina)
+
 - **Day**: 6
 - **Fasti status**: N
 - **Deity**: Fortuna Muliebris
@@ -48,6 +53,7 @@
 ---
 
 ## Palibus duobus (second Parilia)
+
 - **Day**: 7
 - **Fasti status**: N
 - **Deity**: Pales
@@ -59,6 +65,7 @@
 ---
 
 ## Nonae Caprotinae / Ancillarum Feriae
+
 - **Day**: 7
 - **Fasti status**: N
 - **Deity**: Juno Caprotina
@@ -70,6 +77,7 @@
 ---
 
 ## Consus in Circo
+
 - **Day**: 7
 - **Fasti status**: not stated
 - **Deity**: Consus
@@ -81,6 +89,7 @@
 ---
 
 ## Vitulatio
+
 - **Day**: 8
 - **Fasti status**: N Dies religiosus
 - **Deity**: Vitula
@@ -92,6 +101,7 @@
 ---
 
 ## Apollo — dies natalis templi (chief day of Ludi Apollinares)
+
 - **Day**: 13
 - **Fasti status**: C
 - **Deity**: Apollo
@@ -103,6 +113,7 @@
 ---
 
 ## Mercatus
+
 - **Day**: 14–19
 - **Fasti status**: not stated
 - **Deity**: none
@@ -114,6 +125,7 @@
 ---
 
 ## Equitum Romanorum Transvectio
+
 - **Day**: 15
 - **Fasti status**: NP
 - **Deity**: Castor and Pollux
@@ -125,6 +137,7 @@
 ---
 
 ## Honori (et Virtuti)
+
 - **Day**: 17
 - **Fasti status**: C
 - **Deity**: Honos (and Virtus)
@@ -136,6 +149,7 @@
 ---
 
 ## Victoriae in Capitolio
+
 - **Day**: 17
 - **Fasti status**: C
 - **Deity**: Victoria
@@ -147,6 +161,7 @@
 ---
 
 ## Alliensis Dies
+
 - **Day**: 18
 - **Fasti status**: C Dies religiosus (dies ater / black day)
 - **Deity**: none
@@ -158,6 +173,7 @@
 ---
 
 ## Lucaria
+
 - **Day**: 19 and 21 (two days)
 - **Fasti status**: NP (both days)
 - **Deity**: not stated (grove spirits / vague forest powers implied)
@@ -169,6 +185,7 @@
 ---
 
 ## Ludi Victoriae Caesaris
+
 - **Day**: 20–30
 - **Fasti status**: not stated
 - **Deity**: Venus Genetrix (also Victoria)
@@ -180,6 +197,7 @@
 ---
 
 ## Concordiae
+
 - **Day**: 22
 - **Fasti status**: C
 - **Deity**: Concordia
@@ -191,6 +209,7 @@
 ---
 
 ## Neptunalia
+
 - **Day**: 23
 - **Fasti status**: NP
 - **Deity**: Neptune
@@ -202,6 +221,7 @@
 ---
 
 ## Furrinalia
+
 - **Day**: 25
 - **Fasti status**: NP
 - **Deity**: Furrina
@@ -213,6 +233,7 @@
 ---
 
 ## Fortunae Huiusque Diei in Campo
+
 - **Day**: 30
 - **Fasti status**: C
 - **Deity**: Fortuna Huiusque Diei ("Fortune of This Day")
@@ -230,6 +251,7 @@ Scullard covers eighteen distinct entries for July (some days carry multiple ent
 The older festivals — **Poplifugia** (5 July), **Nonae Caprotinae** (7 July), **Vitulatio** (8 July), **Lucaria** (19 and 21 July), **Neptunalia** (23 July), **Furrinalia** (25 July) — are treated by Scullard as genuinely archaic rites whose original meaning was unclear even to ancient scholars. Most had lost popular significance by the late Republic.
 
 Notable calendar features for July:
+
 - **18 July** is a dies ater (Alliensis dies) — no ritual, purely ill-omened.
 - **15 July** (Equitum transvectio) was a spectacular military parade revived by Augustus.
 - The month had no major festivals in NP status in the second half beyond the Lucaria (19, 21) and Neptunalia (23) and Furrinalia (25).

@@ -13,6 +13,7 @@ npm run preview  # Preview the production build locally
 There are no lint or test scripts. `scripts/buildRomanRoads.ts` regenerates the bundled Roman roads (see "Roman roads layer"). Verification scripts in the root (`verify_moon.ts`, `verify_descriptions.ts`, `verify_translation.ts`) can be run with `npx tsx <file>` for ad-hoc checks.
 
 ### Android (Capacitor)
+
 ```bash
 npm run build && npx cap sync android   # Sync web assets to Android project
 npx cap open android                    # Open Android Studio
@@ -29,26 +30,29 @@ Each `Festival` entry has `name`, `description`, optional `icon`, and optional `
 
 ```ts
 interface FestivalFonte {
-  spell: string;    // "Capítulo CXXX"
-  excerpt: string;  // verbatim excerpt in Spanish
-  source: string;   // edition and papyrus citation
+  spell: string; // "Capítulo CXXX"
+  excerpt: string; // verbatim excerpt in Spanish
+  source: string; // edition and papyrus citation
 }
 ```
 
 `HALL_OF_MAATI` (array of 42 `MaatiAssessor` entries) comes from Ch. CXXV, Papiro de Nebseni (BM 9,900). It drives the Hall of Maāti modal in `EgyptianCalendarInfo.tsx`. Minimum font size in that modal: **12px** (`text-xs`); never use `text-[8px]`, `text-[9px]`, `text-[10px]`, or `text-[11px]` inside it.
 
 Sources cross-referenced for festival entries:
-- S. El-Sabban, *Temple Festival Calendars of Ancient Egypt* (2000) — primary civil festival reference
-- C. J. Bleeker, *Egyptian Festivals* (1967) — ritual interpretation
-- A. von Lieven, *Grundriss des Laufes der Sterne* (2007) — astronomical calendar
-- E. A. Wallis Budge, *The Book of the Dead* (1898), Theban Recension — `fonte` quotes; papyri Ani (BM 10,470), Nu (BM 10,477), Nebseni (BM 9,900)
+
+- S. El-Sabban, _Temple Festival Calendars of Ancient Egypt_ (2000) — primary civil festival reference
+- C. J. Bleeker, _Egyptian Festivals_ (1967) — ritual interpretation
+- A. von Lieven, _Grundriss des Laufes der Sterne_ (2007) — astronomical calendar
+- E. A. Wallis Budge, _The Book of the Dead_ (1898), Theban Recension — `fonte` quotes; papyri Ani (BM 10,470), Nu (BM 10,477), Nebseni (BM 9,900)
 
 Research files live in `docs/research/`:
+
 - `egypt-festivals-review-2026-10-25.md` — consolidated review report
 - `extracts/egypt-by-month.md` — unified civil-month reference from all sources
 - `extracts/book-of-the-dead/extract.md` — BoD spells cross-referenced to calendar dates
 
 **Rules for editing festival entries:**
+
 1. **`fonte` field is sourced, not invented.** Only add a `FestivalFonte` if Budge's Theban Recension explicitly links the spell to a date or rite. Cite the chapter number and papyrus.
 2. **Epagomenal days** (`"e-1"` … `"e-5"`) have their base text from `getEpagomenalDayInfo()` in `egyptianCalendarData.ts`. The `fonte` from `CIVIL_FESTIVALS["e-N"]` is surfaced separately in the epagomenal card in `EgyptianCalendarInfo.tsx` — both paths must be kept consistent.
 3. **Do not invent festivals.** Every entry must trace to El-Sabban or Bleeker. Open items are catalogued in the review report.
@@ -75,6 +79,7 @@ One agent compares the app baseline (Phase 0) against all source extracts (Phase
 
 **Phase 3 — Consolidated review report**
 Aggregate all month files into a single `docs/research/<civ>-festivals-review-<date>.md`. Categorise findings:
+
 - `WRONG_DATE` — attested date differs from app
 - `WRONG_DEITY` — wrong deity assigned
 - `WRONG_RITUAL` — ritual description contradicts sources
@@ -88,12 +93,15 @@ Assign severity: HIGH (factual error), MEDIUM (sourcing issue), MINOR/LOW (wordi
 Apply HIGH and MEDIUM findings first in one pass, then MINOR/LOW in a second pass. For each change, cite the source inline in the data file comment or field. Commit each pass separately.
 
 ### Book of the Dead cross-reference (Aegyptus only)
+
 After Phase 4, run a separate agent to read `docs/research/extracts/book-of-the-dead/extract.md` and map each BoD spell to its calendar date. For spells that map unambiguously, add a `fonte: FestivalFonte` to the corresponding `CIVIL_FESTIVALS` or `LUNAR_FESTIVALS` entry. Save the extract file before this step.
 
 ### Primary text fonte pass (Babylonia only)
-After Phase 4, add `fonte: BabylonianFonte` entries to `dayEvents` in `babylonianLoreData.ts`. Only add a fonte where a verbatim primary-text passage (Akkadian ritual tablet, Sumerian poem, creation epic) is directly linked to the rite of that day. Sources already used: King 1902 (Enūma Eliš), Thureau-Dangin 1921 (Akītu tablets), Rogers 1908 (Descent of Ištar), Jacobsen 1976 (sacred marriage hymns), Abusch 2016 (Maqlu). Future pass: Sachs & Hunger *Astronomical Diaries* (attested diary entries) for `BabylonianSkyDiary` component.
+
+After Phase 4, add `fonte: BabylonianFonte` entries to `dayEvents` in `babylonianLoreData.ts`. Only add a fonte where a verbatim primary-text passage (Akkadian ritual tablet, Sumerian poem, creation epic) is directly linked to the rite of that day. Sources already used: King 1902 (Enūma Eliš), Thureau-Dangin 1921 (Akītu tablets), Rogers 1908 (Descent of Ištar), Jacobsen 1976 (sacred marriage hymns), Abusch 2016 (Maqlu). Future pass: Sachs & Hunger _Astronomical Diaries_ (attested diary entries) for `BabylonianSkyDiary` component.
 
 ### Output files to commit
+
 - `docs/research/extracts/<source>/*.md` — raw extracts
 - `docs/research/extracts/review/*.md` — month comparisons (optional, useful for audit trail)
 - `docs/research/<civ>-festivals-review-<date>.md` — consolidated report
@@ -105,16 +113,18 @@ After Phase 4, add `fonte: BabylonianFonte` entries to `dayEvents` in `babylonia
 
 Festival data for the Hellas civilization lives in `utils/atticCalendarData.ts` (`getAtticFestivalInfo(monthIndex, dayOfMonth)`). Every festival entry has been cross-referenced against three scholarly sources:
 
-- H. W. Parke, *Festivals of the Athenians* (1977) — primary source
-- L. Deubner, *Attische Feste* (1932) — primary source
-- J. D. Mikalson, *The Sacred and Civil Calendar of the Athenian Year* (1975) — date attestation
+- H. W. Parke, _Festivals of the Athenians_ (1977) — primary source
+- L. Deubner, _Attische Feste_ (1932) — primary source
+- J. D. Mikalson, _The Sacred and Civil Calendar of the Athenian Year_ (1975) — date attestation
 
 Research files live in `docs/research/`:
+
 - `hellenic-festivals-review-2026-10-25.md` — consolidated review report (77 findings, 6 categories)
 - `extracts/review/` — per-month comparison files (12 months)
 - `extracts/parke/`, `extracts/deubner/`, `extracts/mikalson/` — source extracts
 
 **Rules for editing festival entries:**
+
 1. **`aition` field is sourced, not invented.** Only add an aition if Parke, Deubner, or Mikalson explicitly discusses the myth or founding narrative. If no source gives one, leave the field empty.
 2. **Day numbers are often uncertain.** Many festivals have no fixed ancient day within their month. Mark uncertain days as approximate in `festivalDesc`; do not present them as fact.
 3. **Deity fields must match sources.** Check which deity is primary per the inscriptional and textual evidence; order matters (primary first).
@@ -129,23 +139,25 @@ Roman calendar day data lives in `utils/romanYearData.ts` (`ROMAN_YEAR_DATA`). K
 
 ```ts
 interface YearDayEntry {
-  status: string;        // "F" | "C" | "N" | "NP" | "EN" | "FP" | "QRCF" | "QRCI" | "COMP"
-  statusFull: string;    // Latin expansion of status abbreviation
-  deity?: string;        // primary deity or deities
-  deityDesc?: string;    // description of the deity's role
+  status: string; // "F" | "C" | "N" | "NP" | "EN" | "FP" | "QRCF" | "QRCI" | "COMP"
+  statusFull: string; // Latin expansion of status abbreviation
+  deity?: string; // primary deity or deities
+  deityDesc?: string; // description of the deity's role
   festivalName?: string; // name of the festival if any
   festivalDesc?: string; // description of the festival
 }
 ```
 
 Sources cross-referenced (134 corrections applied 2026-10-25):
-- H. H. Scullard, *Festivals and Ceremonies of the Roman Republic* (1981) — primary reference
-- W. W. Fowler, *The Roman Festivals of the Period of the Republic* (1899) — secondary
+
+- H. H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (1981) — primary reference
+- W. W. Fowler, _The Roman Festivals of the Period of the Republic_ (1899) — secondary
 
 A consolidated review was completed 2026-10-25 in two passes (93 HIGH+MEDIUM + 41 MINOR/LOW corrections). No separate review report file was kept; changes are traceable via git log commits 7de5d30 and e64745e.
 
 **Rules for editing entries:**
-1. `status` codes follow Mommsen's *Fasti*. Do not invent new codes.
+
+1. `status` codes follow Mommsen's _Fasti_. Do not invent new codes.
 2. `festivalDesc` must be sourced. If Scullard or Fowler gives no description, leave the field empty rather than paraphrasing encyclopaedias.
 3. Deity order: primary deity first. Joint cults (e.g. Jupiter Optimus Maximus) are not split.
 
@@ -157,13 +169,13 @@ Festival day-event data lives in `utils/babylonianLoreData.ts` as `BABYLONIAN_MO
 
 ```ts
 interface BabylonianFonte {
-  title: string;    // e.g. "Enūma Eliš · Tablilla IV"
-  excerpt: string;  // verbatim excerpt in Spanish
-  source: string;   // edition and line citation
+  title: string; // e.g. "Enūma Eliš · Tablilla IV"
+  excerpt: string; // verbatim excerpt in Spanish
+  source: string; // edition and line citation
 }
 
 interface BabylonianDayEvent {
-  shortLabel: string;  // 1–3 word label shown in day grid dot tooltip
+  shortLabel: string; // 1–3 word label shown in day grid dot tooltip
   description: string; // full ritual description shown in tap panel
   type: 'akitu' | 'procession' | 'mourning' | 'marriage' | 'ritual' | 'festival' | 'astronomy';
   fonte?: BabylonianFonte; // optional primary-text quote panel (collapsible)
@@ -171,27 +183,32 @@ interface BabylonianDayEvent {
 ```
 
 Sources cross-referenced for day events (scholarly review completed 2026-10-25, 8 HIGH + 6 MEDIUM corrections, 7 missing entries added):
-- M. E. Cohen, *The Cultic Calendars of the Ancient Near East*. CDL Press, 1993 — primary day-level reference
-- M. J. H. Linssen, *The Cults of Uruk and Babylon*. Cuneiform Monographs 25, Brill, 2004 — Hellenistic ritual series
-- F. Thureau-Dangin, *Rituels Accadiens*. Ernest Leroux, 1921 — primary Akītu tablet (DT.109, MNB.1848)
-- T. Jacobsen, *The Treasures of Darkness*. Yale UP, 1976 — mythological/theological background
+
+- M. E. Cohen, _The Cultic Calendars of the Ancient Near East_. CDL Press, 1993 — primary day-level reference
+- M. J. H. Linssen, _The Cults of Uruk and Babylon_. Cuneiform Monographs 25, Brill, 2004 — Hellenistic ritual series
+- F. Thureau-Dangin, _Rituels Accadiens_. Ernest Leroux, 1921 — primary Akītu tablet (DT.109, MNB.1848)
+- T. Jacobsen, _The Treasures of Darkness_. Yale UP, 1976 — mythological/theological background
 
 Sources used for `fonte` excerpts:
-- L. W. King, *The Seven Tablets of Creation*. London, 1902 — Enūma Eliš (Nisannu 4, Kislīmu 4)
+
+- L. W. King, _The Seven Tablets of Creation_. London, 1902 — Enūma Eliš (Nisannu 4, Kislīmu 4)
 - Thureau-Dangin 1921, DT.109+MNB.1848 ll. 414–450 — King's humiliation ritual (Nisannu 5)
-- R. W. Rogers, *Religion of Babylonia and Assyria*. Eaton & Mains, 1908 — Descent of Ištar (Duʾūzu 27)
+- R. W. Rogers, _Religion of Babylonia and Assyria_. Eaton & Mains, 1908 — Descent of Ištar (Duʾūzu 27)
 - Jacobsen 1976 — sacred marriage hymn of Inanna (Ulūlu 3)
-- T. Abusch, *The Magical Ceremony Maqlû*. SBL Press, 2016 — Maqlu Tablet I (Abu 28)
+- T. Abusch, _The Magical Ceremony Maqlû_. SBL Press, 2016 — Maqlu Tablet I (Abu 28)
 
 Research files:
+
 - `docs/research/babylon-festivals-review-2026-10-25.md` — consolidated review report
 - `docs/research/extracts/babylon/{cohen,linssen,thureau-dangin,jacobsen}/extract.md` — source extracts
 
 UI features built on this data:
+
 - **DayGrid** in `BabylonianCalendarInfo.tsx`: days with `dayEvent` show a green dot; tap to expand description + optional `BabylonianFontePanel` (collapsible, 𒀭 DINGIR prefix, lapis-blue palette)
 - **Próximos Festivales modal**: `getNextBabylonianFestivals(monthIndex, day, count)` in `babylonianLoreData.ts` walks `BABYLONIAN_MONTH_LORE` day by day and returns the next N upcoming events (approximates 30 days/month for distance)
 
 **Rules for editing day events:**
+
 1. **`fonte` is sourced, not invented.** Only add a `BabylonianFonte` if a verbatim cuneiform text passage is directly linked to the rite of that specific day. Cite edition and line numbers.
 2. **Uncertain days must be flagged.** Many month-level rites have no attested day number. Mark them as approximate in `description` — do not silently assign a day.
 3. **Do not conflate city traditions.** Uruk and Babylon often held parallel rites; check Cohen and Linssen separately. Note the city in `description`.
@@ -223,6 +240,7 @@ The active civilization (`rome` | `hellas` | `aegyptus` | `babylonia` | `zhonggu
 ### Data files (static)
 
 Heavy static datasets live in `utils/`:
+
 - Roman: `romanCalendarData.ts`, `romanHistoryData.ts`, `romanYearData.ts`, `romanProvinces.ts`, `romanRoads.ts` (roads layer, see below)
 - Hellenic: `atticCalendarData.ts`, `atticCalendarUtils.ts`, `greekRegions.ts`, `greekTranslations.ts`, `greekTransliteration.ts`, `sortesHomericae.ts`
 - Egyptian: `egyptianCalendarData.ts`, `egyptianCalendarUtils.ts`, `egyptianDeities.ts`, `egyptianFestivalsData.ts`, `egyptianHemerologyData.ts`, `egyptianWisdomData.ts`, `egyptianAstronomy.ts`, `egyptianRegions.ts`, `egyptianSkyMap.ts` (star-map positions), `brightStarCatalog.ts` (2851 stars ≤ mag 5.5, lazy-loaded)
@@ -233,11 +251,11 @@ Heavy static datasets live in `utils/`:
 
 ### Roman roads layer (Itiner-e)
 
-- **Data**: `public/assets/roman-map/roads.json` (2.9 MB, 0.95 MB gzip), all 14 769 segments of Itiner-e static version 2024 (de Soto, Pažout, Brughmans et al., *Scientific Data* 2025; doi:10.5281/zenodo.17122148; **CC BY 4.0**, attribution shown under the map while the layer is on). Generated by `npx tsx scripts/buildRomanRoads.ts <itinere_roads.geojson>`: EPSG:3395 → WGS84, Douglas–Peucker at 0.001°, 1e-4° integer deltas, string table. The script documents every normalisation. Don't hand-edit the JSON.
+- **Data**: `public/assets/roman-map/roads.json` (2.9 MB, 0.95 MB gzip), all 14 769 segments of Itiner-e static version 2024 (de Soto, Pažout, Brughmans et al., _Scientific Data_ 2025; doi:10.5281/zenodo.17122148; **CC BY 4.0**, attribution shown under the map while the layer is on). Generated by `npx tsx scripts/buildRomanRoads.ts <itinere_roads.geojson>`: EPSG:3395 → WGS84, Douglas–Peucker at 0.001°, 1e-4° integer deltas, string table. The script documents every normalisation. Don't hand-edit the JSON.
 - **Loading**: `utils/romanRoads.ts` `loadRomanRoads()` fetches it from the same `DATA_BASE`, only while the toggle is on (`localStorage` key `romanMapRoads`, default on). It is precached by the service worker through `includeAssets`, but kept out of `globPatterns` (`globIgnores` in `vite.config.ts`) because it is over Workbox's 2 MiB glob limit.
-- **Names**: the dataset's `Itinerary` field is split into three groups. Latin road names (`Via …`, `Strata …`) are the only ones used as map labels. Ancient itineraries (Tabula Peutingeriana, Itinerarium Antonini, Stadiasmus Patarensis…) are listed in the card. Modern names (Watling Street, Fosse Way, Limesweg…) are shown in the card only as *Nomina recentiora*: never as labels and never translated. Builders (`Cons_per_e`, English in the dataset) map to their standard Latin names. Period labels with no ancient form ("Tetrarchy", "Severan"…) are dropped, and only their dates are shown. The segment name (`Tractus`) mixes ancient and modern toponyms as the dataset gives them.
+- **Names**: the dataset's `Itinerary` field is split into three groups. Latin road names (`Via …`, `Strata …`) are the only ones used as map labels. Ancient itineraries (Tabula Peutingeriana, Itinerarium Antonini, Stadiasmus Patarensis…) are listed in the card. Modern names (Watling Street, Fosse Way, Limesweg…) are shown in the card only as _Nomina recentiora_: never as labels and never translated. Builders (`Cons_per_e`, English in the dataset) map to their standard Latin names. Period labels with no ancient form ("Tetrarchy", "Severan"…) are dropped, and only their dates are shown. The segment name (`Tractus`) mixes ancient and modern toponyms as the dataset gives them.
 - **Dating**: Itiner-e dates only 477 segments (`Lower/Upper_Date` with error margins, 9999 = unknown). The build adds the start year of `Cons_per_e` (≈ 2 800 more), giving 3 300 dated segments; 11 469 have no date. Errata are fixed in `DATE_FIX` with their source (Via Aemilia 187 BCE, Livy 39.2.10). `roadExistence()` returns `yes`/`no`/`unknown`, with the error margins read as "may have existed".
-- **Time-awareness**: live, every road is drawn. When the app is time-travelling (`travelDate` App → ProvinciaInfo → `year` prop), dated roads outside their range are hidden. Undated roads are **drawn faded, not hidden**: the dataset can't say they did not exist, and we don't guess. The road card's *Iter per tempora* slider sets a map-only year (`cardYear`) that overrides the app date for the roads layer. It resets when the app date changes.
+- **Time-awareness**: live, every road is drawn. When the app is time-travelling (`travelDate` App → ProvinciaInfo → `year` prop), dated roads outside their range are hidden. Undated roads are **drawn faded, not hidden**: the dataset can't say they did not exist, and we don't guess. The road card's _Iter per tempora_ slider sets a map-only year (`cardYear`) that overrides the app date for the roads layer. It resets when the app date changes.
 - **Drawing** (`RomanMapCanvas`): roads are grouped into 5° tiles, each road in the tile of its bbox centre. Path2Ds are built lazily per level of detail (`ROAD_LODS`, chosen to stay under ½ px) × tile × style, and cleared when the year changes. Styles: main roads wider; certainty certain > conjectured (lighter) > hypothetical (dotted); undated roads faded while time-travelling; secondary roads fade in with zoom. Road names are set letter by letter along chained segments of the same via (`buildRoadChains`), from zoom 2.5. They are placed after the city names in the same collision grid, in IM Fell English italic at ≥ 12 px. A tap hits a city or creature first, then the nearest road within 10 px.
 - **Strings**: all Latin, in `ROMAN_ROAD_LABELS` (`utils/civLabels.ts`).
 - **Performance** (Chrome, 6× CPU throttle, dev build): vertical pan median 5.8 ms / max 9.6 ms per frame with roads (1.7 ms without). Warm zoom max 9.2 ms. The first visit to a new level of detail costs one ~60 ms frame while its paths are built.
@@ -267,8 +285,8 @@ Configured via `vite-plugin-pwa` in `vite.config.ts`. Service worker uses `autoU
 Planetary hours and the planetary week are Greco-Roman (Cassius Dio 37.18–19; Bultrighini & Stern 2021: no planetary week in Egypt or Mesopotamia before the 2nd c. CE). `App.tsx` therefore renders a different hour panel per civilization. **All sources behind these panels — verbatim texts, citations, URLs, open uncertainties and enhancement ideas — are in `docs/research/hours-and-planets-sources.md`. Read it before changing or extending this data.**
 
 - **`components/PlanetaryPositions.tsx`** — Rome, Hellas, Zhongguo. Builds the 24 hours of the current planetary day (sunrise → next sunrise) plus the next day, and lists the current hour and the next three (running on past sunrise into the next day). The current row has a progress bar; the header shows day/night hour length. Parapegma section above it (Rome, Hellas).
-  - Rome: `utils/romanHoursData.ts`. `CHRONOGRAPH_HOURS` = the Chronograph of 354 captions (verbatim "… utile est" clause + the omens for births, a runaway, the sick and theft + B/C/N rating, a badge on every row). `CIVIC_DAY_HOURS` = Martial 4.8 (hours I–X, XI–XII Censorinus' *suprema*); `CIVIC_NIGHT_HOURS` = Censorinus 24, mapped approximately onto night hours; `vigiliaOf` = Vegetius 3.8 (four watches of three hours).
-  - Hellas: `VALENS` = verbatim excerpts of Vettius Valens I.1 (Kroll 1908, page.line) with Spanish translation; `GREEK_STAR_NAMES` = Φαίνων, Φαέθων… ([Arist.] *De mundo* 392a).
+  - Rome: `utils/romanHoursData.ts`. `CHRONOGRAPH_HOURS` = the Chronograph of 354 captions (verbatim "… utile est" clause + the omens for births, a runaway, the sick and theft + B/C/N rating, a badge on every row). `CIVIC_DAY_HOURS` = Martial 4.8 (hours I–X, XI–XII Censorinus' _suprema_); `CIVIC_NIGHT_HOURS` = Censorinus 24, mapped approximately onto night hours; `vigiliaOf` = Vegetius 3.8 (four watches of three hours).
+  - Hellas: `VALENS` = verbatim excerpts of Vettius Valens I.1 (Kroll 1908, page.line) with Spanish translation; `GREEK_STAR_NAMES` = Φαίνων, Φαέθων… ([Arist.] _De mundo_ 392a).
   - Zhongguo: a note that the 七曜 week came with the 宿曜经 (759).
 - **`components/EgyptianHours.tsx`** — Aegyptus. The 12 hour goddesses of the current half: night from the Amduat (Hornung), day from the Book of the Day (Müller-Roth 2008, lower confidence). Data in `utils/egyptianHoursData.ts`; transliterations only where verified.
 - **`components/BabylonianSkyDiary.tsx`** — Babylonia. Time since sunset/sunrise in bēru and UŠ, the watch (`getWatch` in `babylonianCalendarUtils.ts`, names after Streck, RlA "Tag"), and the five planets as in the Astronomical Diaries: logogram + Akkadian name, sign (Late Babylonian abbreviation, tropical like the rest of the app), ina NIM / ina ŠÚ, UŠ (station). No Diaries term for retrograde is attested, so it is Spanish only. Planet state comes from `utils/planetSkyState.ts` (ecliptic of date, elongation-based visibility, daily motion).
@@ -321,7 +339,7 @@ Measured in Chrome during a drag: about 1 ms JS per frame at desktop speed, ≤ 
 - **Intercalation**: 7 intercalary months per 19-year Metonic cycle. Historically the extra month was **Addaru II** (after month 12) or occasionally **Ulūlu II** (after month 6). The app does not use a lookup table: a year is intercalary when 13 crescent months fall between two Nisannu 1s (astronomical reconstruction), and the extra month is always shown as Addaru II.
 - **Month names and numbers** (important — "Warḫum N" means "Month N"):
   1. Nisannu · 2. Aiaru · 3. Simanu · 4. Dumuzu · 5. Abu · 6. Ulūlu
-  7. Tašrītu · 8. Araḫsamnu · 9. Kislīmu · 10. Ṭebētu · 11. Šabāṭu · 12. Addaru
+  2. Tašrītu · 8. Araḫsamnu · 9. Kislīmu · 10. Ṭebētu · 11. Šabāṭu · 12. Addaru
 - **"Warḫum"** (𒌗) is the Akkadian word for "month" (literally "moon"). Displayed as "Warḫum N" in the UI badge below the month name = canonical tablet notation.
 - **Day divisions**: The Babylonian day begins at sunset. Nights are divided into 3 watches (maṣṣartu), days into temporal hours. The planetary-hour ruler cycles through the 7 planets (Moon, Mercury, Venus, Sun, Mars, Jupiter, Saturn).
 - **Sapatu** (day 15): the full moon "rest" day — sacred, shown with amber gold dot. Do NOT confuse with the Judaic Sabbath; it is a lunar phenomenon, not a weekly cycle.
@@ -337,6 +355,7 @@ Measured in Chrome during a drag: about 1 ms JS per frame at desktop speed, ≤ 
 ### Day events in `babylonianLoreData.ts`
 
 Each month entry in `BABYLONIAN_LORE` has:
+
 - `monthRegent`, `festivalDeity`, `regentNote?`, `icon`, `description`, `festival`, `zodiacSign` — month-level metadata.
   - `monthRegent` = canonical regent of the month, from the cuneiform month-regent lists (IV R 33; the Astrolabe B regent series). Shared source of truth: `BABYLONIAN_MONTH_REGENTS` in `types/babylonia.ts` (also drives `tutelaMensis` and the date-picker gloss). The regent's descriptive bio shown in the UI is `MONTH_REGENT_DESCS` in `babylonianCalendarUtils.ts`, exposed as `monthRegentDesc` on the date object.
   - `festivalDeity` = deity presiding the month's main festival / the Astrolabe B menology ("the month of X"). This is the evocative hero of the month card; it is NOT the regent.
@@ -344,18 +363,21 @@ Each month entry in `BABYLONIAN_LORE` has:
 - `dayEvents?: Record<number, BabylonianDayEvent>` — day-specific festivals/rituals.
 
 `BabylonianDayEvent` interface:
+
 ```ts
 interface BabylonianDayEvent {
-  shortLabel: string;  // 1-3 word label shown in day grid dot tooltip
+  shortLabel: string; // 1-3 word label shown in day grid dot tooltip
   description: string; // full ritual description shown in tap panel
   type: 'akitu' | 'procession' | 'mourning' | 'marriage' | 'ritual' | 'festival' | 'astronomy';
 }
 ```
-Days with `dayEvents` entries show a **green dot** (top-right of cell) in the DayGrid. Primary source for festivals: Cohen 1993 *Cultic Calendars of the Ancient Near East* (CDL Press), ANETODAY ritual texts. Month regents follow the cuneiform month-regent lists (IV R 33; Astrolabe B / KAV 218, ed. Horowitz, *The Three Stars Each*, 2014), corroborated by the *Iqqur īpuš* menology (Labat 1965, no. 105) and Muss-Arnolt 1892 (JBL 11).
+
+Days with `dayEvents` entries show a **green dot** (top-right of cell) in the DayGrid. Primary source for festivals: Cohen 1993 _Cultic Calendars of the Ancient Near East_ (CDL Press), ANETODAY ritual texts. Month regents follow the cuneiform month-regent lists (IV R 33; Astrolabe B / KAV 218, ed. Horowitz, _The Three Stars Each_, 2014), corroborated by the _Iqqur īpuš_ menology (Labat 1965, no. 105) and Muss-Arnolt 1892 (JBL 11).
 
 ### Theme — Lapis Lazuli / Ishtar Gate palette
 
 CSS variables are overridden in `[data-civ="babylonia"]` block in `index.css`:
+
 - `--ink`: `#07101d` (deep lapis night)
 - `--gold-leaf`: `#60a5fa` (blue-400, the "primary accent" colour)
 - `--gold-dim`: `#93c5fd` (blue-300, secondary)
@@ -381,6 +403,7 @@ Every Akkadian term or heading on the Babylonian page is shown with its Spanish 
 ### `CuneiformBorder` SVG in `BabylonianCalendarInfo.tsx`
 
 Replicates the actual **Ishtar Gate upper frieze** (Pergamon Museum, Berlin):
+
 - **Pattern tile**: 50×36 user units, repeating via `<pattern>`.
 - **Palmette** (cream fan flower, 7 radiating ribs + arc): centered at x=25, amber base cup at y≈26.
 - **Teal S-scroll volutes**: flanking the palmette at x≈2 and x≈48 (outer amber beads at tile edges for near-continuous tiling), inner cream dot at tip.
@@ -391,6 +414,7 @@ Replicates the actual **Ishtar Gate upper frieze** (Pergamon Museum, Berlin):
 ### `DayGrid` interaction model
 
 Mobile-first tap/click (no hover):
+
 - Each day is a `<button>` with `onClick` toggling `selectedDay` state.
 - Tapping a selected day deselects it (panel closes).
 - Info panel renders below the grid (not a tooltip/overlay) showing special day info + festival description.
@@ -402,10 +426,10 @@ Mobile-first tap/click (no hover):
 
 ### Time system
 
-- **Shichen** (時辰): The day is divided into 12 double-hours keyed to the Twelve Earthly Branches (地支, *dìzhī*). Each Shichen spans 2 solar hours and is associated with a zodiac animal. `getCurrentShichen(date)` in `utils/chineseTimeUtils.ts` returns the current branch and progress within it.
-- **Solar Terms** (二十四节气, *Èrshísì Jiéqì*): 24 points of the ecliptic at 15° intervals, each ~15 days. Each is further divided into 3 pentads (候, *hòu*) of 5 days, each associated with a natural phenomenon. Computed in `utils/chineseCalendarUtils.ts`.
+- **Shichen** (時辰): The day is divided into 12 double-hours keyed to the Twelve Earthly Branches (地支, _dìzhī_). Each Shichen spans 2 solar hours and is associated with a zodiac animal. `getCurrentShichen(date)` in `utils/chineseTimeUtils.ts` returns the current branch and progress within it.
+- **Solar Terms** (二十四节气, _Èrshísì Jiéqì_): 24 points of the ecliptic at 15° intervals, each ~15 days. Each is further divided into 3 pentads (候, _hòu_) of 5 days, each associated with a natural phenomenon. Computed in `utils/chineseCalendarUtils.ts`.
 - **Lunisolar calendar**: Month boundaries follow actual lunar conjunctions. `utils/chineseLunisolarUtils.ts` computes the current month, day, and whether the year is intercalary.
-- **Sexagenary cycle** (干支, *gānzhī*): 60-year cycle combining 10 Heavenly Stems (天干) and 12 Earthly Branches. Year, month, day, and hour each have their own pillar — together forming the Four Pillars of Destiny (八字, *bāzì*).
+- **Sexagenary cycle** (干支, _gānzhī_): 60-year cycle combining 10 Heavenly Stems (天干) and 12 Earthly Branches. Year, month, day, and hour each have their own pillar — together forming the Four Pillars of Destiny (八字, _bāzì_).
 
 ### Key components
 
@@ -420,6 +444,7 @@ Mobile-first tap/click (no hover):
 ### Theme — Ink Wash / Vermilion palette
 
 CSS variables are overridden in `[data-civ="zhongguo"]` block in `index.css`:
+
 - `--ink`: `#1a1410` (deep ink-wash dark)
 - `--gold-leaf`: `#e11d48` (rose-600, vermilion red primary accent)
 - `--gold-dim`: `#be123c` (rose-700, secondary)

@@ -1,9 +1,11 @@
 # October — Scullard (1981)
+
 **PDF pages used**: 189–198
 
 ---
 
 ## Fidei in Capitolio
+
 - **Day**: 1
 - **Fasti status**: N
 - **Deity**: Fides (Bona Fides / Fides Publica)
@@ -15,6 +17,7 @@
 ---
 
 ## Tigillo Sororio ad Compitum Acili
+
 - **Day**: 1
 - **Fasti status**: not stated (appears in Arval record for 1 October)
 - **Deity**: Juno Sororia; Janus Curiatius
@@ -26,6 +29,7 @@
 ---
 
 ## Ieiunium Cereris (Fast of Ceres)
+
 - **Day**: 4
 - **Fasti status**: C
 - **Deity**: Ceres
@@ -37,6 +41,7 @@
 ---
 
 ## Mundus patet (second opening)
+
 - **Day**: 5
 - **Fasti status**: C (Dies religiosus)
 - **Deity**: not stated
@@ -48,6 +53,7 @@
 ---
 
 ## Iovi Fulguri, Iunoni Quiriti (Iunoni Curriti in Campo)
+
 - **Day**: 7
 - **Fasti status**: F
 - **Deity**: Jupiter Fulgur; Juno Curitis
@@ -59,6 +65,7 @@
 ---
 
 ## Genio Publico, Faustae Felicitati, Veneri Victrici in Capitolio
+
 - **Day**: 9
 - **Fasti status**: C
 - **Deity**: Genius Publicus; Fausta Felicitas; Venus Victrix
@@ -70,6 +77,7 @@
 ---
 
 ## Iunoni Monetae
+
 - **Day**: 10
 - **Fasti status**: C
 - **Deity**: Juno Moneta
@@ -81,6 +89,7 @@
 ---
 
 ## Meditrinalia
+
 - **Day**: 11
 - **Fasti status**: NP
 - **Deity**: Jupiter (presiding deity per the calendars; a goddess "Meditrina" is a late invention from the festival name)
@@ -92,6 +101,7 @@
 ---
 
 ## Fontinalia
+
 - **Day**: 13
 - **Fasti status**: NP
 - **Deity**: Fons (god of Springs)
@@ -103,6 +113,7 @@
 ---
 
 ## [...]Penatibus in Velia
+
 - **Day**: 14
 - **Fasti status**: EN
 - **Deity**: Penates Dei
@@ -114,6 +125,7 @@
 ---
 
 ## Equus October (October Horse)
+
 - **Day**: 15
 - **Fasti status**: NP (calendar entry is Feriae Iovi; the October Horse appears only in the late Calendar of Philocalus as "Equus ad Nixas fit")
 - **Deity**: Mars (sacrifice); Jupiter (Ides dedication)
@@ -125,6 +137,7 @@
 ---
 
 ## Ludi Capitolini
+
 - **Day**: 15 October (approximate; not in the official calendars)
 - **Fasti status**: not stated (private Games by the College of Capitolini, not public)
 - **Deity**: Jupiter Feretrius (older tradition: Tertullian, Ennius); Jupiter Optimus Maximus (Livy's attribution)
@@ -136,6 +149,7 @@
 ---
 
 ## Armilustrium
+
 - **Day**: 19
 - **Fasti status**: NP (Dies religiosus)
 - **Deity**: Mars
@@ -147,6 +161,7 @@
 ---
 
 ## Ludi Victoriae Sullanae
+
 - **Day**: 26 October – 1 November
 - **Fasti status**: not stated (not in the Republican calendars; a later addition)
 - **Deity**: Victoria (Sulla's)

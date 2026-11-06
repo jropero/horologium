@@ -1,39 +1,40 @@
 # Roman Festival Review — Summary Jan–Apr
+
 **Generated**: 2026-10-25
 **Sources**: Scullard (1981); Fowler (1899)
 **App data**: `utils/romanYearData.ts`
 
 ---
 
-## All Findings — Main Table (WRONG_* categories only)
+## All Findings — Main Table (WRONG\_\* categories only)
 
-| Month | Key | Category | Priority | Field | Current Value | Correct Value | Source |
-|---|---|---|---|---|---|---|---|
-| Ianuarius | "0-1" | WRONG_DEITY | HIGH | deity | "Jano / Juno" | "Júpiter Óptimo Máximo" | Scullard p.52–55; Fowler p.278–279 |
-| Ianuarius | "0-3"/"0-4" | WRONG_RITUAL | MEDIUM | festivalDesc | Two consecutive Compitalia days | Single day (feriae conceptivae) | Scullard p.59–60; Fowler p.279–281 |
-| Ianuarius | "0-11" | WRONG_DEITY | MEDIUM | deity | "Carmenta / Juturna" combined | "Carmenta" (Juturna structurally distinct) | Scullard p.62–65; Fowler p.290–293 |
-| Ianuarius | "0-24"–"0-26" | WRONG_RITUAL | HIGH | festivalDesc | Three consecutive Sementivae days | Two non-consecutive days, seven days apart | Scullard p.68–69; Fowler p.294–296 |
-| Ianuarius | "0-24"–"0-26" | WRONG_DEITY | HIGH | deity | "Ceres y Tellus" jointly on all three days | Tellus alone (day 1); Ceres alone (day 2, ~7 days later) | Scullard p.68–69; Fowler p.294–296 |
-| Februarius | "1-1" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard p.71; Fowler p.302 |
-| Februarius | "1-15" | WRONG_DEITY | HIGH | deity | "Fauno / Lupercus" | "Fauno / Inuus (incierto)" | Scullard p.78; Fowler p.310–321 |
-| Februarius | "1-17" | WRONG_DEITY | MEDIUM | deity | "Quirino / Fornax" | "Quirino" (Fornax is scholastic invention) | Scullard p.73–74; Fowler p.302–306 |
-| Februarius | "1-21" | WRONG_STATUS | HIGH | status | "NP" | "F" | Scullard p.74–75; Fowler p.306–310 |
-| Februarius | "1-21" | WRONG_RITUAL | HIGH | festivalDesc | "Día nefasto: toda actividad pública estada prohibida" | F (dies fastus) = legal business permitted; dies religiosus not nefastus | Scullard p.74–75; Fowler p.306–310 |
-| Februarius | "1-22" | WRONG_DEITY | MEDIUM | deity | "Concordia Familiar" | "Lares" | Scullard p.75–76; Fowler p.309–310 |
-| Februarius | "1-27" | WRONG_RITUAL | MEDIUM | festivalDesc | "carreras de carros y caballos" | Horse-racing only; chariot involvement uncertain | Scullard p.82; Fowler p.330 |
-| Martius | "2-14" | WRONG_RITUAL | MEDIUM | festivalDesc | "purificar a las monturas militares" | Horse-race (feriae Marti); not a purification of mounts | Scullard p.89–90; Fowler p.44 |
-| Martius | "2-17" | WRONG_RITUAL | HIGH | festivalDesc | Describes toga virilis ceremony only | Toga virilis secondary; liba-selling by old women and Liber/Libera cult is primary | Scullard p.91–93; Fowler p.54–57 |
-| Martius | "2-17" | WRONG_DEITY | MEDIUM | deity | "Liber Pater / Marte" | "Liber Pater / Libera" | Scullard p.91–93; Fowler p.54–57 |
-| Martius | "2-19" | WRONG_DEITY | HIGH | deity | "Minerva" | "Marte / Minerva" (Mars primary; Minerva secondary popular association) | Scullard p.93–95; Fowler p.57–62 |
-| Aprilis | "3-1" | WRONG_DEITY | HIGH | deity | "Venus Verticordia" | "Venus Verticordia / Fortuna Virilis" | Scullard p.96–97; Fowler p.67–69 |
-| Aprilis | "3-1" | WRONG_RITUAL | HIGH | festivalDesc | Statue-bath attributed to Venus Verticordia; Fortuna Virilis absent | Bathing rite belongs to Fortuna Virilis; two distinct cults conflated | Scullard p.96; Fowler p.68 |
-| Aprilis | "3-4" | WRONG_STATUS | HIGH | status | "NP" | "C" | Scullard p.97; Fowler p.69 |
-| Aprilis | "3-5" | WRONG_STATUS | MEDIUM | status | "NP" | "C" | Scullard p.101 |
-| Aprilis | "3-10" | WRONG_STATUS | MEDIUM | status | "NP" | "N" | Scullard p.101; Fowler p.69 |
-| Aprilis | "3-19" | WRONG_DEITY | HIGH | deity | "Ceres" | "Ceres, Liber, Libera" | Scullard p.102; Fowler p.72 |
-| Aprilis | "3-23" | WRONG_DEITY | HIGH | deity | "Venus / Júpiter" | "Júpiter / Venus Erucina" (Jupiter primary throughout Republic) | Scullard p.106; Fowler p.85 |
-| Aprilis | "3-23" | WRONG_STATUS | MEDIUM | status | "NP" | "F" | Scullard p.106; Fowler p.85 |
-| Aprilis | "3-25" | WRONG_RITUAL | HIGH | festivalDesc | "un animal de pelaje rojo" | Dog and a sheep (two victims); Flamen Quirinalis sacrificed both | Scullard p.131; Fowler p.88 |
+| Month      | Key           | Category     | Priority | Field        | Current Value                                                       | Correct Value                                                                      | Source                             |
+| ---------- | ------------- | ------------ | -------- | ------------ | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------- |
+| Ianuarius  | "0-1"         | WRONG_DEITY  | HIGH     | deity        | "Jano / Juno"                                                       | "Júpiter Óptimo Máximo"                                                            | Scullard p.52–55; Fowler p.278–279 |
+| Ianuarius  | "0-3"/"0-4"   | WRONG_RITUAL | MEDIUM   | festivalDesc | Two consecutive Compitalia days                                     | Single day (feriae conceptivae)                                                    | Scullard p.59–60; Fowler p.279–281 |
+| Ianuarius  | "0-11"        | WRONG_DEITY  | MEDIUM   | deity        | "Carmenta / Juturna" combined                                       | "Carmenta" (Juturna structurally distinct)                                         | Scullard p.62–65; Fowler p.290–293 |
+| Ianuarius  | "0-24"–"0-26" | WRONG_RITUAL | HIGH     | festivalDesc | Three consecutive Sementivae days                                   | Two non-consecutive days, seven days apart                                         | Scullard p.68–69; Fowler p.294–296 |
+| Ianuarius  | "0-24"–"0-26" | WRONG_DEITY  | HIGH     | deity        | "Ceres y Tellus" jointly on all three days                          | Tellus alone (day 1); Ceres alone (day 2, ~7 days later)                           | Scullard p.68–69; Fowler p.294–296 |
+| Februarius | "1-1"         | WRONG_STATUS | HIGH     | status       | "NP"                                                                | "N"                                                                                | Scullard p.71; Fowler p.302        |
+| Februarius | "1-15"        | WRONG_DEITY  | HIGH     | deity        | "Fauno / Lupercus"                                                  | "Fauno / Inuus (incierto)"                                                         | Scullard p.78; Fowler p.310–321    |
+| Februarius | "1-17"        | WRONG_DEITY  | MEDIUM   | deity        | "Quirino / Fornax"                                                  | "Quirino" (Fornax is scholastic invention)                                         | Scullard p.73–74; Fowler p.302–306 |
+| Februarius | "1-21"        | WRONG_STATUS | HIGH     | status       | "NP"                                                                | "F"                                                                                | Scullard p.74–75; Fowler p.306–310 |
+| Februarius | "1-21"        | WRONG_RITUAL | HIGH     | festivalDesc | "Día nefasto: toda actividad pública estada prohibida"              | F (dies fastus) = legal business permitted; dies religiosus not nefastus           | Scullard p.74–75; Fowler p.306–310 |
+| Februarius | "1-22"        | WRONG_DEITY  | MEDIUM   | deity        | "Concordia Familiar"                                                | "Lares"                                                                            | Scullard p.75–76; Fowler p.309–310 |
+| Februarius | "1-27"        | WRONG_RITUAL | MEDIUM   | festivalDesc | "carreras de carros y caballos"                                     | Horse-racing only; chariot involvement uncertain                                   | Scullard p.82; Fowler p.330        |
+| Martius    | "2-14"        | WRONG_RITUAL | MEDIUM   | festivalDesc | "purificar a las monturas militares"                                | Horse-race (feriae Marti); not a purification of mounts                            | Scullard p.89–90; Fowler p.44      |
+| Martius    | "2-17"        | WRONG_RITUAL | HIGH     | festivalDesc | Describes toga virilis ceremony only                                | Toga virilis secondary; liba-selling by old women and Liber/Libera cult is primary | Scullard p.91–93; Fowler p.54–57   |
+| Martius    | "2-17"        | WRONG_DEITY  | MEDIUM   | deity        | "Liber Pater / Marte"                                               | "Liber Pater / Libera"                                                             | Scullard p.91–93; Fowler p.54–57   |
+| Martius    | "2-19"        | WRONG_DEITY  | HIGH     | deity        | "Minerva"                                                           | "Marte / Minerva" (Mars primary; Minerva secondary popular association)            | Scullard p.93–95; Fowler p.57–62   |
+| Aprilis    | "3-1"         | WRONG_DEITY  | HIGH     | deity        | "Venus Verticordia"                                                 | "Venus Verticordia / Fortuna Virilis"                                              | Scullard p.96–97; Fowler p.67–69   |
+| Aprilis    | "3-1"         | WRONG_RITUAL | HIGH     | festivalDesc | Statue-bath attributed to Venus Verticordia; Fortuna Virilis absent | Bathing rite belongs to Fortuna Virilis; two distinct cults conflated              | Scullard p.96; Fowler p.68         |
+| Aprilis    | "3-4"         | WRONG_STATUS | HIGH     | status       | "NP"                                                                | "C"                                                                                | Scullard p.97; Fowler p.69         |
+| Aprilis    | "3-5"         | WRONG_STATUS | MEDIUM   | status       | "NP"                                                                | "C"                                                                                | Scullard p.101                     |
+| Aprilis    | "3-10"        | WRONG_STATUS | MEDIUM   | status       | "NP"                                                                | "N"                                                                                | Scullard p.101; Fowler p.69        |
+| Aprilis    | "3-19"        | WRONG_DEITY  | HIGH     | deity        | "Ceres"                                                             | "Ceres, Liber, Libera"                                                             | Scullard p.102; Fowler p.72        |
+| Aprilis    | "3-23"        | WRONG_DEITY  | HIGH     | deity        | "Venus / Júpiter"                                                   | "Júpiter / Venus Erucina" (Jupiter primary throughout Republic)                    | Scullard p.106; Fowler p.85        |
+| Aprilis    | "3-23"        | WRONG_STATUS | MEDIUM   | status       | "NP"                                                                | "F"                                                                                | Scullard p.106; Fowler p.85        |
+| Aprilis    | "3-25"        | WRONG_RITUAL | HIGH     | festivalDesc | "un animal de pelaje rojo"                                          | Dog and a sheep (two victims); Flamen Quirinalis sacrificed both                   | Scullard p.131; Fowler p.88        |
 
 ---
 
@@ -73,13 +74,13 @@
 
 ## Totals
 
-| Category | Count |
-|---|---|
-| WRONG_DATE | 0 |
-| WRONG_DEITY | 11 |
-| WRONG_STATUS | 6 |
-| WRONG_RITUAL | 8 |
-| MISSING_FESTIVAL | 7 |
-| INVENTED_AITION | 1 |
-| MINOR | 11 |
-| **TOTAL** | **44** |
+| Category         | Count  |
+| ---------------- | ------ |
+| WRONG_DATE       | 0      |
+| WRONG_DEITY      | 11     |
+| WRONG_STATUS     | 6      |
+| WRONG_RITUAL     | 8      |
+| MISSING_FESTIVAL | 7      |
+| INVENTED_AITION  | 1      |
+| MINOR            | 11     |
+| **TOTAL**        | **44** |
