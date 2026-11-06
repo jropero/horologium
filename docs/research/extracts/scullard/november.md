@@ -1,20 +1,23 @@
 # November — Scullard (1981)
+
 **PDF pages used**: 196–202
 
 ---
 
 ## Ludi Victoriae Sullanae (culmination)
+
 - **Day**: 1 (KAL. NOV.)
 - **Fasti status**: F
 - **Deity**: Victoria / Victoria Sullana
 - **Ritual**: Culminating day (Circenses) of the Ludi Victoriae Sullanae, a multi-day games sequence running 26 October – 1 November. The Circenses on 1 November marked the anniversary of the Battle of the Colline Gate. Staged by praetors.
-- **Aition**: Established 81 BC by Sulla to celebrate his victory over the Samnites at the Colline Gate. Originally called simply *Victoriae*; later renamed *Sullanae* to distinguish them from Caesar's Victory Games. First holding attested by a denarius of 59 BC: "Sex. Nonius praetor (in 81 BC) ludos Victoriae primus fecit."
+- **Aition**: Established 81 BC by Sulla to celebrate his victory over the Samnites at the Colline Gate. Originally called simply _Victoriae_; later renamed _Sullanae_ to distinguish them from Caesar's Victory Games. First holding attested by a denarius of 59 BC: "Sex. Nonius praetor (in 81 BC) ludos Victoriae primus fecit."
 - **Participants**: Praetors (organisers); general public (spectators).
 - **Page**: p. 196
 
 ---
 
 ## Ludi Plebeii
+
 - **Day**: 4–17 (PR. NON. NOV. – xiv [Julian xv] KAL. DEC.)
 - **Fasti status**: not stated in this entry (games period)
 - **Deity**: Jupiter (central Iovis epulum on the Ides; pompa circensis)
@@ -26,6 +29,7 @@
 ---
 
 ## Mundus patet (third opening)
+
 - **Day**: 8 (vi ID. NOV.)
 - **Fasti status**: C; Dies religiosus
 - **Deity**: (chthonic — the mundus pit)
@@ -37,6 +41,7 @@
 ---
 
 ## Feriae Iovi / Iovis epulum
+
 - **Day**: 13 (ID. NOV.)
 - **Fasti status**: NP
 - **Deity**: Jupiter
@@ -48,6 +53,7 @@
 ---
 
 ## Feronia
+
 - **Day**: 13 (ID. NOV.) — Fasti entry: "Feroniae in Campo" (Arv.); "Feroniae, Fortunae Primigeniae, [Pie]tati" (Ant. mai.)
 - **Fasti status**: NP (part of the 13 November NP day)
 - **Deity**: Feronia
@@ -59,6 +65,7 @@
 ---
 
 ## Fortunae Primigeniae (13 November temple)
+
 - **Day**: 13 (ID. NOV.) — Fasti entry: "Fortunae Primigeniae in C[apitolio?]" (Arv.)
 - **Fasti status**: NP (part of the 13 November NP day)
 - **Deity**: Fortuna Primigenia
@@ -70,6 +77,7 @@
 ---
 
 ## [Pietati] (13 November)
+
 - **Day**: 13 (ID. NOV.) — Fasti entry: "[Pie]tati" (Ant. mai.; supplement, not fully preserved)
 - **Fasti status**: NP (part of the 13 November NP day)
 - **Deity**: Pietas
@@ -81,6 +89,7 @@
 ---
 
 ## Equorum probatio
+
 - **Day**: 14 (xvii [Julian xviii] KAL. DEC.)
 - **Fasti status**: F; Dies Religiosus
 - **Deity**: (no deity stated for this entry; see 15 July, p. 164f.)
@@ -92,6 +101,7 @@
 ---
 
 ## Mercatus
+
 - **Day**: 18–20 (xiii [Julian xiv] – xi [Julian xii] KAL. DEC.)
 - **Fasti status**: not stated
 - **Deity**: none stated
@@ -106,19 +116,20 @@
 
 November is the leanest festival month in the Roman calendar (Scullard's characterisation). Its religious content is dominated by two extended games periods:
 
-| Day(s) | Name | Status | Deity/Focus |
-|--------|------|--------|-------------|
-| 1 | Ludi Victoriae Sullanae (culmination) | F | Victoria |
-| 4–17 | Ludi Plebeii | — | Jupiter (central epulum) |
-| 8 | Mundus patet (3rd opening) | C, dies religiosus | chthonic |
-| 13 | Feriae Iovi / Iovis epulum | NP | Jupiter |
-| 13 | Feronia | NP | Feronia |
-| 13 | Fortunae Primigeniae | NP | Fortuna Primigenia |
-| 13 | [Pietati] | NP | Pietas |
-| 14 | Equorum probatio | F, dies religiosus | — |
-| 18–20 | Mercatus | — | — |
+| Day(s) | Name                                  | Status             | Deity/Focus              |
+| ------ | ------------------------------------- | ------------------ | ------------------------ |
+| 1      | Ludi Victoriae Sullanae (culmination) | F                  | Victoria                 |
+| 4–17   | Ludi Plebeii                          | —                  | Jupiter (central epulum) |
+| 8      | Mundus patet (3rd opening)            | C, dies religiosus | chthonic                 |
+| 13     | Feriae Iovi / Iovis epulum            | NP                 | Jupiter                  |
+| 13     | Feronia                               | NP                 | Feronia                  |
+| 13     | Fortunae Primigeniae                  | NP                 | Fortuna Primigenia       |
+| 13     | [Pietati]                             | NP                 | Pietas                   |
+| 14     | Equorum probatio                      | F, dies religiosus | —                        |
+| 18–20  | Mercatus                              | —                  | —                        |
 
 **Key observations:**
+
 - The Ides of November (13th) cluster the most sacred content: the Iovis epulum as the pivot of the Ludi Plebeii, plus the festivals of Feronia, Fortuna Primigenia, and Pietas all sharing the NP day.
 - Feronia is the most extensively discussed deity: her cult blended agricultural first-fruits with freedmen's liberation rites, and her Campus Martius temple likely predates the Plebeian Games.
 - The mundus is opened three times a year (24 Aug., 5 Oct., 8 Nov.), each a dies religiosus; Scullard gives the full account at August and cross-references here.

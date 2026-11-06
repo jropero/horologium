@@ -1,4 +1,5 @@
 # Hellenic Festival Data Review — Consolidated Report
+
 **Date:** 2026-10-25
 **Sources cross-referenced:** Parke (1977), Deubner (1932), Mikalson (1975)
 **Scope:** All twelve Attic months, `utils/atticCalendarData.ts`, `getAtticFestivalInfo(monthIndex, dayOfMonth)`
@@ -10,14 +11,14 @@
 
 ### Finding counts by severity category
 
-| Category | Count |
-|---|---|
-| WRONG_DATE | 9 |
-| WRONG_DEITY | 6 |
-| INVENTED_AITION | 25 |
-| WRONG_RITUAL | 7 |
-| MISSING_FESTIVAL | 17 |
-| MINOR | 16 |
+| Category         | Count |
+| ---------------- | ----- |
+| WRONG_DATE       | 9     |
+| WRONG_DEITY      | 6     |
+| INVENTED_AITION  | 25    |
+| WRONG_RITUAL     | 7     |
+| MISSING_FESTIVAL | 17    |
+| MINOR            | 16    |
 
 ### Top 5 most urgent fixes
 
@@ -57,7 +58,7 @@ A finding is WRONG_DATE when no ancient source supports the app's specific day a
 
 **App says:** "Los amos servían la cena a los esclavos" and the aition frames it as the Golden Age of Kronos.
 
-**Sources say:** Both Parke (1977, pp. 29–32) and Deubner (1932) state masters and slaves *dined together* — not that masters served. The serving detail comes from the Roman Saturnalia (a cognate festival), not the Attic Kronia. Neither source invokes the Hesiodic Golden Age as the aition; Parke's aition is agricultural (end-of-harvest supper). Mikalson (1975, p. 187) confirms day 12 as ATTESTED but gives no aition.
+**Sources say:** Both Parke (1977, pp. 29–32) and Deubner (1932) state masters and slaves _dined together_ — not that masters served. The serving detail comes from the Roman Saturnalia (a cognate festival), not the Attic Kronia. Neither source invokes the Hesiodic Golden Age as the aition; Parke's aition is agricultural (end-of-harvest supper). Mikalson (1975, p. 187) confirms day 12 as ATTESTED but gives no aition.
 
 **Fix:** Change "Los amos servían la cena a los esclavos" → "Los esclavos cenaban junto a sus amos." Trim the Golden Age framing from the aition; the harvest-supper explanation is the sourced one.
 
@@ -239,7 +240,7 @@ Mikalson (p. 187) lists "Demokratia, Boedromion 12" as a positively dated festiv
 
 **App says:** "Carrera de jóvenes vestidos de mujer portando ramas de vid (Oschophoria)."
 
-**Sources say:** The central ritual of the Oschophoria was a *procession* (pompe) of exactly two Oschoporoi (outstanding youths, not a general group), carrying grape-clusters to Phaleron — not a race. A subsidiary epheboi foot-race took place additionally (Deubner), but calling the main event a "carrera" conflates the two and errors the participant description.
+**Sources say:** The central ritual of the Oschophoria was a _procession_ (pompe) of exactly two Oschoporoi (outstanding youths, not a general group), carrying grape-clusters to Phaleron — not a race. A subsidiary epheboi foot-race took place additionally (Deubner), but calling the main event a "carrera" conflates the two and errors the participant description.
 
 **Fix:** Change to: "procesión solemne de dos jóvenes nobles (Oschophoroi) vestidos de mujer portando racimos de uva, desde un santuario de Dioniso hasta el templo de Atenea Skiras en Falero."
 
@@ -247,7 +248,7 @@ Mikalson (p. 187) lists "Demokratia, Boedromion 12" as a positively dated festiv
 
 **App says:** "Apolo / Dionisio y Atenea Skiras" (Dionysus listed before Athena Skiras).
 
-**Sources say:** Parke establishes Athena Skiras as the *primary* deity of the Oschophoria (confirmed by an Agora inscription), with Dionysus secondary. The order as written implies Dionysus has the leading role.
+**Sources say:** Parke establishes Athena Skiras as the _primary_ deity of the Oschophoria (confirmed by an Agora inscription), with Dionysus secondary. The order as written implies Dionysus has the leading role.
 
 **Fix:** Correct to "Apolo (Pyanepsia) / Atenea Skiras y Dioniso (Oschophoria)."
 
@@ -255,7 +256,7 @@ Mikalson (p. 187) lists "Demokratia, Boedromion 12" as a positively dated festiv
 
 **App says:** "Teseo inventó la rama decorada para agradecer a Apolo haberlos salvado."
 
-**Sources say:** Parke says Theseus used suppliant boughs (*hiketeria*) already in existence on his voyage to Delos — not that he "invented" them to thank Apollo. Minor but the invention aspect is incorrect.
+**Sources say:** Parke says Theseus used suppliant boughs (_hiketeria_) already in existence on his voyage to Delos — not that he "invented" them to thank Apollo. Minor but the invention aspect is incorrect.
 
 #### [MISSING_FESTIVAL] Stenia — Day 9
 
@@ -313,7 +314,7 @@ Both Parke and Deubner confirm the Chalkeia on the last day of Pyanepsion: festi
 
 #### [MINOR] Pompaia — Day 20 (missing details)
 
-Parke specifically records: those being purified stood on the fleece with their *left foot* (a notable ritual detail). The caduceus/kērykeion is named by both Parke and Deubner as a key procession element. Deubner adds: purificatory material was cast at crossroads at the end. Parke is explicit that "the ordinary Athenian played no part" — priestly officials only; the app implies universal civic benefit.
+Parke specifically records: those being purified stood on the fleece with their _left foot_ (a notable ritual detail). The caduceus/kērykeion is named by both Parke and Deubner as a key procession element. Deubner adds: purificatory material was cast at crossroads at the end. Parke is explicit that "the ordinary Athenian played no part" — priestly officials only; the app implies universal civic benefit.
 
 ---
 
@@ -323,7 +324,7 @@ Parke specifically records: those being purified stood on the fleece with their 
 
 **App says:** Festival on day 19.
 
-**Sources say:** Parke is explicit the festival "was not tied to a single date in the month." Deubner's "before 19th" refers to a deme-assembly at Myrrinus *about* the festival arrangements — the festival itself fell before the 19th, not on it. Mikalson (p. 187) confirms: "Rural Dionysia — various deme-specific days — UNCERTAIN (city)."
+**Sources say:** Parke is explicit the festival "was not tied to a single date in the month." Deubner's "before 19th" refers to a deme-assembly at Myrrinus _about_ the festival arrangements — the festival itself fell before the 19th, not on it. Mikalson (p. 187) confirms: "Rural Dionysia — various deme-specific days — UNCERTAIN (city)."
 
 **Fix:** Remove fixed day 19. Note as "(sin fecha fija; segunda mitad del mes; cada demo en fecha propia)."
 
@@ -347,7 +348,7 @@ Parke specifically records: those being purified stood on the fleece with their 
 
 **App says:** Priestesses whispered to women to "busquen amantes" (seek lovers). Ritual carried "símbolos fálicos" (phallic symbols only).
 
-**Sources say:** Parke states the content of the priestesses' whispering was "not recorded" by any ancient source. The app's specific content claim is an unsourced invention. Parke is explicit that women "carried models of male *and* female genital organs" — both types, not only phallic. Both sources also specifically list the forbidden foods (pomegranate, apple, eggs, domestic fowl, mullet, certain fish) — distinctive and documented details absent from the app.
+**Sources say:** Parke states the content of the priestesses' whispering was "not recorded" by any ancient source. The app's specific content claim is an unsourced invention. Parke is explicit that women "carried models of male _and_ female genital organs" — both types, not only phallic. Both sources also specifically list the forbidden foods (pomegranate, apple, eggs, domestic fowl, mullet, certain fish) — distinctive and documented details absent from the app.
 
 **Fix:** Remove whispering content. Change "símbolos fálicos" to "símbolos de órganos masculinos y femeninos." Add the forbidden foods list.
 
@@ -449,7 +450,7 @@ The Hydrophoria (wheaten flour mixed with honey thrown into the Olympieion chasm
 
 #### [MISSING_DETAIL] Diasia — Day 23
 
-Both sources note: the Diasia was held *outside the city* near the Ilissos (Thucydides 1.126; Parke). The app omits the location. Parke and Deubner also note children received gifts (toy carts — Deubner) on this day alongside the gloomy sacrifices. Both missing.
+Both sources note: the Diasia was held _outside the city_ near the Ilissos (Thucydides 1.126; Parke). The app omits the location. Parke and Deubner also note children received gifts (toy carts — Deubner) on this day alongside the gloomy sacrifices. Both missing.
 
 #### [MISSING_FESTIVAL] Lesser Mysteries at Agrai — Month of Anthesterion
 
@@ -511,7 +512,7 @@ Both Parke and Deubner confirm: Epheboi escorted the xoanon (old wooden statue) 
 
 **App says:** "falos gigantes montados en carros."
 
-**Sources say:** Phallus-carts are a feature of the Rural Dionysia (Aristophanes' *Acharnians*). At the City Dionysia, Parke says phalli were "carried in procession" — not mounted on carts. The Komos (nocturnal revel) is a named rite in both sources not explicitly named in the app. Mikalson confirms first day of City Dionysia as Elaphebolion 10 (PROBABLE).
+**Sources say:** Phallus-carts are a feature of the Rural Dionysia (Aristophanes' _Acharnians_). At the City Dionysia, Parke says phalli were "carried in procession" — not mounted on carts. The Komos (nocturnal revel) is a named rite in both sources not explicitly named in the app. Mikalson confirms first day of City Dionysia as Elaphebolion 10 (PROBABLE).
 
 **Fix:** Remove "montados en carros." Add a named reference to the Komos.
 
@@ -559,7 +560,7 @@ The aition (Theseus's suppliant bough before sailing to Crete) is attested in bo
 
 **App says:** `isApaphrades: true`. Beating implements described as "cebollas silvestres" (squill) only.
 
-**Sources say:** Day 6 is not a dies nefastus in either Parke or Deubner. Only the Plynteria (day 25) carries that status in Thargelion. The `isApaphrades` flag incorrectly renders Day 6 as taboo in the UI. Both Parke and Deubner specify fig-branches *and* squill as the beating implements — the fig-branch is the better-attested element (Hipponax) and is missing from the app. Mikalson assigns the Thargelia to Day 7 (ATTESTED via Plutarch Mor. 717D) and places Day 6 as the purification day (PROBABLE association only).
+**Sources say:** Day 6 is not a dies nefastus in either Parke or Deubner. Only the Plynteria (day 25) carries that status in Thargelion. The `isApaphrades` flag incorrectly renders Day 6 as taboo in the UI. Both Parke and Deubner specify fig-branches _and_ squill as the beating implements — the fig-branch is the better-attested element (Hipponax) and is missing from the app. Mikalson assigns the Thargelia to Day 7 (ATTESTED via Plutarch Mor. 717D) and places Day 6 as the purification day (PROBABLE association only).
 
 **Fix:** Remove `isApaphrades: true` from Day 6. Add fig-branches: "golpeados con ramas de higuera y cebollas silvestres (escila)."
 
@@ -585,7 +586,7 @@ festivalDesc says "coros masculinos" but the competition included men's AND boys
 
 #### [MINOR] Plynteria — Day 25
 
-The scope of the rope closure is understated: the app says "el templo cerrado con cuerdas" but both sources specify ALL sanctuaries in Athens were roped off, not only Athena's temple. Missing: the two *Loutrides* (Plyntrides) who performed the actual washing; the *peplotheke* who washed the peplos; the image was wrapped and veiled for transport (not visible to the public). Mikalson confirms Plynteria Thargelion 25 as ATTESTED.
+The scope of the rope closure is understated: the app says "el templo cerrado con cuerdas" but both sources specify ALL sanctuaries in Athens were roped off, not only Athena's temple. Missing: the two _Loutrides_ (Plyntrides) who performed the actual washing; the _peplotheke_ who washed the peplos; the image was wrapped and veiled for transport (not visible to the public). Mikalson confirms Plynteria Thargelion 25 as ATTESTED.
 
 #### [MISSING_FESTIVAL] Kallynteria — ca. Day 22–24
 
@@ -609,7 +610,7 @@ Both Parke and Deubner attest the Kallynteria (annual clean-up of the Erechtheio
 
 **App says:** Day 30. Deity "Zeus Soter y Pan." Description: "Gran festival de cierre de año con una espectacular carrera de antorchas nocturna para el dios Pan."
 
-**Sources say:** The year-end event on day 30 is the modest *Eisiteria* / year-end sacrifice to Zeus Soter alone — a small institutional sacrifice at the Agora's Stoa of Zeus by the King Archon and outgoing council (Parke, Deubner, confirmed by Mikalson who attests 10 instances of Ekklesia meetings on Skirophorion 30; Lysias 26.6 attests Zeus Soter sacrifice on the last day). The large Piraeus Diisoteria (with bull sacrifices and ephebe regatta) falls before day 20 per Deubner, or "towards end of month" per Parke — explicitly a Piraeus festival, not an Agora one. Pan has no attested connection to day 30 or to Zeus Soter. Parke tentatively places the Pan torch-race in Boedromion (9th of month), not Skiraphorion at all.
+**Sources say:** The year-end event on day 30 is the modest _Eisiteria_ / year-end sacrifice to Zeus Soter alone — a small institutional sacrifice at the Agora's Stoa of Zeus by the King Archon and outgoing council (Parke, Deubner, confirmed by Mikalson who attests 10 instances of Ekklesia meetings on Skirophorion 30; Lysias 26.6 attests Zeus Soter sacrifice on the last day). The large Piraeus Diisoteria (with bull sacrifices and ephebe regatta) falls before day 20 per Deubner, or "towards end of month" per Parke — explicitly a Piraeus festival, not an Agora one. Pan has no attested connection to day 30 or to Zeus Soter. Parke tentatively places the Pan torch-race in Boedromion (9th of month), not Skiraphorion at all.
 
 **Fix:** Change Day 30 entry: deity Zeus Soter alone; description = modest official year-end sacrifice at the Agora Stoa of Zeus by the King Archon and outgoing council; participants = city magistrates and council (not general public); no aition given (Lysias 382 BCE is earliest reference). Move the Piraeus Diisoteria to an earlier slot (Deubner: before day 20; a placeholder day 16–17 is defensible). Remove Pan and the torch-race from Skiraphorion entirely.
 
@@ -623,29 +624,29 @@ Day 14 and deity Zeus Polieus are correct per both sources and Mikalson (ATTESTE
 
 Mikalson (1975) provides independently attested dates that resolve or sharpen conflicts in the app. The following are cases where Mikalson's evidence directly affects the app:
 
-| Festival | App day | Mikalson day | Mikalson confidence | Action |
-|---|---|---|---|---|
-| Gamelion Theogamia | 26 | 27 | ATTESTED (Erkhia calendar) | Change to 27 |
-| Elaphebolion Pandia | 14 | 17 | PROBABLE | Change to 17 |
-| Elaphebolion City Dionysia span | 10–13 | 10–16 (Pandia on 17) | PROBABLE | Extend awareness of span |
-| Pyanopsion Stenia | absent | 9 | ATTESTED (Calendar II) | Add entry |
-| Pyanopsion Chalkeia | absent | 30 | ATTESTED (Calendar II) | Add entry |
-| Pyanopsion Theseia | 8 | 8 | ATTESTED | Confirmed correct |
-| Boedromion Demokratia | absent | 12 | ATTESTED | Consider adding |
-| Mounichion Feast of Eros | absent | 4 | ATTESTED (inscription) | Add entry |
-| Mounichion Delphinia | 6 | 6 | ATTESTED (Artemis, not Apollo) | Deity order confirmed |
-| Mounichion Olympieia | 19 | 19 | ATTESTED | Confirmed correct |
-| Thargelion Bendideia | 19 | 19 | ATTESTED | Confirmed correct |
-| Thargelion Plynteria | 25 | 25 | ATTESTED | Confirmed correct |
-| Thargelion Thargelia | 7 | 7 | ATTESTED | Confirmed correct |
-| Skiraphorion Dipolieia | 14 | 14 | ATTESTED (two ancient sources) | Confirmed correct |
-| Skiraphorion Arrephoria | 3 | 3 | PROBABLE (not conclusive) | Flag as probable |
-| Anthesterion 11–13 | 11–13 | 11–13 | ATTESTED | Confirmed correct |
-| Anthesterion Diasia | 23 | 23 | ATTESTED | Confirmed correct |
-| Gamelion Lenaia | 12 | period 12–19 | PROBABLE | Day 12 not conclusive |
-| Metageitnia | 7 | unknown | UNCERTAIN | Remove fixed day |
-| Maimakteria | 10 | unknown | UNCERTAIN | Remove fixed day |
-| Rural Dionysia | 19 | various (deme-specific) | UNCERTAIN | Remove fixed day |
+| Festival                        | App day | Mikalson day            | Mikalson confidence            | Action                   |
+| ------------------------------- | ------- | ----------------------- | ------------------------------ | ------------------------ |
+| Gamelion Theogamia              | 26      | 27                      | ATTESTED (Erkhia calendar)     | Change to 27             |
+| Elaphebolion Pandia             | 14      | 17                      | PROBABLE                       | Change to 17             |
+| Elaphebolion City Dionysia span | 10–13   | 10–16 (Pandia on 17)    | PROBABLE                       | Extend awareness of span |
+| Pyanopsion Stenia               | absent  | 9                       | ATTESTED (Calendar II)         | Add entry                |
+| Pyanopsion Chalkeia             | absent  | 30                      | ATTESTED (Calendar II)         | Add entry                |
+| Pyanopsion Theseia              | 8       | 8                       | ATTESTED                       | Confirmed correct        |
+| Boedromion Demokratia           | absent  | 12                      | ATTESTED                       | Consider adding          |
+| Mounichion Feast of Eros        | absent  | 4                       | ATTESTED (inscription)         | Add entry                |
+| Mounichion Delphinia            | 6       | 6                       | ATTESTED (Artemis, not Apollo) | Deity order confirmed    |
+| Mounichion Olympieia            | 19      | 19                      | ATTESTED                       | Confirmed correct        |
+| Thargelion Bendideia            | 19      | 19                      | ATTESTED                       | Confirmed correct        |
+| Thargelion Plynteria            | 25      | 25                      | ATTESTED                       | Confirmed correct        |
+| Thargelion Thargelia            | 7       | 7                       | ATTESTED                       | Confirmed correct        |
+| Skiraphorion Dipolieia          | 14      | 14                      | ATTESTED (two ancient sources) | Confirmed correct        |
+| Skiraphorion Arrephoria         | 3       | 3                       | PROBABLE (not conclusive)      | Flag as probable         |
+| Anthesterion 11–13              | 11–13   | 11–13                   | ATTESTED                       | Confirmed correct        |
+| Anthesterion Diasia             | 23      | 23                      | ATTESTED                       | Confirmed correct        |
+| Gamelion Lenaia                 | 12      | period 12–19            | PROBABLE                       | Day 12 not conclusive    |
+| Metageitnia                     | 7       | unknown                 | UNCERTAIN                      | Remove fixed day         |
+| Maimakteria                     | 10      | unknown                 | UNCERTAIN                      | Remove fixed day         |
+| Rural Dionysia                  | 19      | various (deme-specific) | UNCERTAIN                      | Remove fixed day         |
 
 **Mikalson's "10 key findings" cross-check (from extract):**
 
@@ -671,23 +672,29 @@ The following are firmly attested by 2+ sources and require direct code changes 
 ### WRONG_DATE fixes
 
 **Gamelion Theogamia** (Mikalson ATTESTED; overrides Parke's 26)
+
 - `monthIndex 6, dayOfMonth 26` → move entry to `dayOfMonth 27`
 - Add code comment: `// Parke: day 26; Deubner: ca. day 24; Mikalson (Erkhia calendar IG II² 1358): day 27 — use 27`
 
 **Elaphebolion Pandia** (Mikalson PROBABLE, Photios confirmation)
+
 - `monthIndex 8, dayOfMonth 14` → move entry to `dayOfMonth 17`
 - Add code comment: `// Neither source gives day 14; Mikalson deduces day 17 from Photios + City Dionysia ending on day 16`
 
 **Pyanepsion Anarrhysis** (both Parke and Deubner: no fixed day within Pyanepsion)
+
 - Remove specific day assignment for Apaturia (days 19, 20, 21) or add a comment that these are conventional approximations with no ancient attestation of the specific days.
 
 **Maimakterion Maimakteria** (both Parke and Deubner: no day given)
+
 - `monthIndex 4, dayOfMonth 10` — either remove this entry's day or note as "día desconocido"
 
 **Poseideon Rural Dionysia** (Parke: no fixed day; Mikalson: uncertain)
+
 - `monthIndex 5, dayOfMonth 19` — remove fixed day or note as approximate/deme-specific
 
 **Metageitnion Metageitnia** (Mikalson: uncertain; both Parke and Deubner: no day)
+
 - `monthIndex 1, dayOfMonth 7` — remove fixed day
 
 ---
@@ -695,28 +702,36 @@ The following are firmly attested by 2+ sources and require direct code changes 
 ### WRONG_DEITY fixes
 
 **Hekatombaion Synoikia** (both Parke and Deubner: Zeus Phratrios present)
+
 - `monthIndex 0, dayOfMonth 16` — change field `deity` from `"Atenea"` to `"Atenea y Zeus Phratrios"` (also note: Eirene cult added 374 BC)
 
 **Pyanepsion Oschophoria deity order** (Parke + Agora inscription: Athena Skiras primary)
+
 - `monthIndex 3, dayOfMonth 7` — change field `deity` from the current order listing Dionysus before Athena Skiras to `"Apolo (Pyanepsia) / Atenea Skiras y Dioniso (Oschophoria)"`
 
 **Pyanepsion Anarrhysis deity** (both Parke and Deubner: Zeus Phratrios + Athena Phratria)
+
 - The Anarrhysis day entry — change field `deity` from `"Dionisio Melanaigis"` to `"Zeus Phratrios y Atenea Phratria"`
 
 **Poseideon Haloa** (Parke + Deubner: Demeter + Kore; Dionysus secondary/probable)
+
 - `monthIndex 5, dayOfMonth 26` — change field `deity` from `"Deméter y Dionisio"` to `"Deméter y Perséfone"` (note Dionysus as secondary)
 
 **Boedromion Genesia** (Deubner: Ge also receives sacrifice)
+
 - `monthIndex 2, dayOfMonth 5` — change field `deity` from `"Los Muertos"` to `"Los Muertos / Ge (Tierra)"`
 
 **Anthesterion Diasia deityDesc** (both Parke and Deubner: Meilichios = honey-sweet, not underground)
+
 - `monthIndex 7, dayOfMonth 23` — change field `deityDesc` from containing `"subterráneo"` to `"Zeus 'el Apacible' o 'el que se deja propiciar' (de μείλιχος); culto con rasgos ctónicos"`
 
 **Munichion Munichia festival name and content** (both Parke and Deubner: Brauronia is a separate festival)
+
 - `monthIndex 9, dayOfMonth 16` — change field `festivalName` from `"Munichia y Brauronia"` to `"Munichia"`
 - Remove all content about girls acting as bears from `festivalDesc` and `aition`
 
 **Skiraphorion Diisoteria deity** (all three sources: Zeus Soter alone on day 30)
+
 - `monthIndex 11, dayOfMonth 30` — change field `deity` from `"Zeus Soter y Pan"` to `"Zeus Soter"`
 
 ---
@@ -724,27 +739,35 @@ The following are firmly attested by 2+ sources and require direct code changes 
 ### WRONG_RITUAL fixes
 
 **Hekatombaion Kronia** (both Parke and Deubner: masters and slaves dined together, not masters serving)
+
 - `monthIndex 0, dayOfMonth 12` — change phrase "Los amos servían la cena a los esclavos" to "Los esclavos cenaban junto a sus amos"
 
 **Pyanepsion Oschophoria ritual description** (both Parke and Deubner: procession, not race)
+
 - `monthIndex 3, dayOfMonth 7` — change "Carrera de jóvenes vestidos de mujer" to "Procesión de dos jóvenes nobles vestidos de mujer (Oschophoroi)"
 
 **Boedromion Halade Mystai — pig's ritual role** (Parke directly contradicts the scapegoat reading)
+
 - `monthIndex 2, dayOfMonth 16` — remove the scapegoat/sin-transfer interpretation from `aition`. The pig was a Demeter fecundity offering, not a pollution-bearer.
 
 **Poseideon Haloa — genital symbols** (Parke: both male and female)
+
 - `monthIndex 5, dayOfMonth 26` — change "símbolos fálicos" to "símbolos de órganos masculinos y femeninos"
 
 **Thargelion Thargelia I — `isApaphrades` flag** (neither Parke nor Deubner: day 6 is not apaphrades)
+
 - `monthIndex 10, dayOfMonth 6` — change field `isApaphrades` from `true` to `false`
 
 **Thargelion Thargelia I — beating implements** (both Parke and Deubner: fig-branches AND squill)
+
 - `monthIndex 10, dayOfMonth 6` — add "ramas de higuera" to the description of the pharmakoi beating alongside squill
 
 **Maimakterion Pompaia — fleece origin** (Deubner: from a Zeus Meilichios sacrifice, not the Maimakteria ram)
+
 - `monthIndex 4, dayOfMonth 20` — remove the claim that the fleece came from the Maimakteria ram; replace with "fleece from a sheep sacrificed to Zeus Meilichios"
 
 **Metageitnion Herakleia en Kynosarges — festival character** (both Parke and Deubner: feast, not athletics)
+
 - `monthIndex 1, dayOfMonth 15` — change "Festival atlético" to "Festival de sacrificio y banquete"; remove agonDesc about athletic competitions; correct "metecos" to "nothoi"
 
 ---
@@ -753,18 +776,19 @@ The following are firmly attested by 2+ sources and require direct code changes 
 
 Each item below requires a new `if (dayOfMonth === X) return { ... }` block or equivalent in `getAtticFestivalInfo`:
 
-| monthIndex | dayOfMonth | festivalName | deity | Source attestation |
-|---|---|---|---|---|
-| 2 (Boedromion) | 13 | Procesión de las Hieras | Deméter y Perséfone | Parke + Deubner |
-| 2 (Boedromion) | 14 | Depósito de las Hieras | Deméter y Perséfone | Parke + Deubner |
-| 3 (Pyanepsion) | 9 | Stenia | Deméter y Perséfone | Parke + Deubner + Mikalson (ATTESTED) |
-| 3 (Pyanepsion) | 30 | Chalkeia | Atenea Ergane y Hefesto | Parke + Deubner + Mikalson (ATTESTED) |
-| 5 (Poseideon) | 8 | Posidea | Poseidón | Parke + Deubner (day tentative) |
-| 8 (Elaphebolion) | 8 (eve) | Eisagoge | Dionisio Eleuthereus | Parke + Deubner |
-| 9 (Munichion) | 4 | Fiesta de Eros | Eros / Afrodita | Parke + Deubner + Mikalson (ATTESTED) |
-| 10 (Thargelion) | ~22 | Kallynteria | Atenea Polias | Parke + Deubner + Mikalson (UNCERTAIN day) |
+| monthIndex       | dayOfMonth | festivalName            | deity                   | Source attestation                         |
+| ---------------- | ---------- | ----------------------- | ----------------------- | ------------------------------------------ |
+| 2 (Boedromion)   | 13         | Procesión de las Hieras | Deméter y Perséfone     | Parke + Deubner                            |
+| 2 (Boedromion)   | 14         | Depósito de las Hieras  | Deméter y Perséfone     | Parke + Deubner                            |
+| 3 (Pyanepsion)   | 9          | Stenia                  | Deméter y Perséfone     | Parke + Deubner + Mikalson (ATTESTED)      |
+| 3 (Pyanepsion)   | 30         | Chalkeia                | Atenea Ergane y Hefesto | Parke + Deubner + Mikalson (ATTESTED)      |
+| 5 (Poseideon)    | 8          | Posidea                 | Poseidón                | Parke + Deubner (day tentative)            |
+| 8 (Elaphebolion) | 8 (eve)    | Eisagoge                | Dionisio Eleuthereus    | Parke + Deubner                            |
+| 9 (Munichion)    | 4          | Fiesta de Eros          | Eros / Afrodita         | Parke + Deubner + Mikalson (ATTESTED)      |
+| 10 (Thargelion)  | ~22        | Kallynteria             | Atenea Polias           | Parke + Deubner + Mikalson (UNCERTAIN day) |
 
 Additional entries attested by one source or with uncertain day (add with appropriate caveats if the data model supports approximate entries):
+
 - Boedromion, Night 19/20: torch-lit festival at the Kallichoron well at Eleusis (Deubner)
 - Anthesterion, ~day 20–26: Lesser Mysteries at Agrai (both Parke and Deubner; Mikalson: UNCERTAIN within this range)
 - Gamelion, day 19: Kittoseies Dionysou (Deubner; thin imperial-date attestation)
@@ -772,4 +796,4 @@ Additional entries attested by one source or with uncertain day (add with approp
 
 ---
 
-*End of review — 2026-10-25*
+_End of review — 2026-10-25_

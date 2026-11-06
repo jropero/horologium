@@ -1,6 +1,7 @@
 # Augustus — Scullard (1981)
+
 **PDF pages used**: 169–184
-**Source**: H.H. Scullard, *Festivals and Ceremonies of the Roman Republic* (Thames & Hudson, 1981)
+**Source**: H.H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (Thames & Hudson, 1981)
 
 ---
 
@@ -11,6 +12,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Spes in Foro Holitorio
+
 - **Day**: 1
 - **Fasti status**: F
 - **Deity**: Spes (Hope)
@@ -22,6 +24,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Victoria / Victoria Virgo in Palatio
+
 - **Day**: 1
 - **Fasti status**: F (same day as Spes)
 - **Deity**: Victoria, Victoria Virgo
@@ -33,6 +36,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Supplicia Canum
+
 - **Day**: 3
 - **Fasti status**: C
 - **Deity**: (no named deity; associated with Iuventus and Summanus, temples flanking the procession route)
@@ -44,6 +48,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Saluti in Colle Quirinale sacrificium publicum
+
 - **Day**: 5
 - **Fasti status**: F
 - **Deity**: Salus
@@ -55,6 +60,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Solis Indigitis in Colle Quirinale sacrificium publicum
+
 - **Day**: 9
 - **Fasti status**: C
 - **Deity**: Sol Indiges
@@ -66,6 +72,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Herculi Invicto ad Circum Maximum
+
 - **Day**: 12
 - **Fasti status**: C
 - **Deity**: Hercules Invictus (and on 13th, Hercules Invictus ad Portam Trigeminam)
@@ -77,6 +84,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Veneri Victrici, Honori, Virtuti, Felicitati in theatro marmoreo
+
 - **Day**: 12
 - **Fasti status**: C (same entry)
 - **Deity**: Venus Victrix, Honos, Virtus, Felicitas (and possibly Vesta or Valetudo — V uncertain)
@@ -88,6 +96,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Dianae in Aventino
+
 - **Day**: 13
 - **Fasti status**: NP
 - **Deity**: Diana
@@ -99,6 +108,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Vortumno in Aventino
+
 - **Day**: 13
 - **Fasti status**: NP (same day)
 - **Deity**: Vortumnus (Vertumnus) — Etruscan god
@@ -110,6 +120,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Fortunae Equestri
+
 - **Day**: 13
 - **Fasti status**: NP (same day; attested in Fasti Antiates alone)
 - **Deity**: Fortuna Equestris
@@ -121,6 +132,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Herculi Victori / Herculi Invicto ad Portam Trigeminam
+
 - **Day**: 13
 - **Fasti status**: NP (same day)
 - **Deity**: Hercules Victor / Hercules Invictus
@@ -132,6 +144,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Castori, Polluci in Circo Flaminio
+
 - **Day**: 13
 - **Fasti status**: NP (same day)
 - **Deity**: Castor and Pollux (Dioscuri)
@@ -143,6 +156,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Camenis
+
 - **Day**: 13
 - **Fasti status**: NP (same day)
 - **Deity**: Camenae (deities of springs, later identified with the Muses)
@@ -154,6 +168,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Florae ad Circum Maximum
+
 - **Day**: 13
 - **Fasti status**: NP (same day; Fasti Allifani)
 - **Deity**: Flora
@@ -165,6 +180,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## PORTUNALIA
+
 - **Day**: 17
 - **Fasti status**: NP
 - **Deity**: Portunus
@@ -176,6 +192,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Iano ad Theatrum Marcelli
+
 - **Day**: 17
 - **Fasti status**: NP (same day; later dies natalis shifted to 18 October after Augustan/Tiberian restoration)
 - **Deity**: Janus
@@ -187,6 +204,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## VINALIA (Vinalia Rustica)
+
 - **Day**: 19
 - **Fasti status**: F
 - **Deity**: Jupiter (primary); Venus Obsequens (associated)
@@ -198,6 +216,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Venus Libitina in Luco Libitinae
+
 - **Day**: 19
 - **Fasti status**: not stated (not in Fasti Antiates)
 - **Deity**: Venus Libitina
@@ -209,6 +228,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## CONSUALIA
+
 - **Day**: 21
 - **Fasti status**: NP
 - **Deity**: Consus (god of the store-bin / harvested grain)
@@ -220,6 +240,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## VOLCANALIA
+
 - **Day**: 23
 - **Fasti status**: NP
 - **Deity**: Vulcan (primary); also Maia, Nymphs, Ops Opifera, Hora Quirini
@@ -231,6 +252,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Lunae in Graecostasi
+
 - **Day**: 24
 - **Fasti status**: C (also marked Dies religiosus)
 - **Deity**: Luna
@@ -242,6 +264,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Mundus patet
+
 - **Day**: 24
 - **Fasti status**: not in any calendar (no calendar includes "mundus patet"); the day is marked comitialis (C) in the fasti
 - **Deity**: Dis and Proserpina (associated later); originally possibly Ceres
@@ -253,6 +276,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## OPICONSIVIA
+
 - **Day**: 25
 - **Fasti status**: NP
 - **Deity**: Ops Consiva (Ops = Plenty; regarded as the Earth, terra)
@@ -264,6 +288,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## VOLTURNALIA
+
 - **Day**: 27
 - **Fasti status**: NP
 - **Deity**: Volturnus (river or wind god; regarded as father of the fountain-deity Juturna)
@@ -275,6 +300,7 @@ The month (Mensis Sextilis) was under the protection of Ceres. Rustic calendars 
 ---
 
 ## Solis et Lunae Circenses
+
 - **Day**: 28
 - **Fasti status**: C
 - **Deity**: Sol and Luna

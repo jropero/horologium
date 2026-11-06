@@ -1,4 +1,5 @@
 # Review: Metageitnion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -15,11 +16,13 @@ Date: 2026-10-25
 **Verdict**: WRONG_DAY | UNSOURCED_AITION | MISSING_DETAIL
 
 **Issues**:
+
 1. **Day**: Neither Parke nor Deubner assigns a day to this festival. Day 7 is unsupported. The day may have been chosen by analogy with Apollo's number, but no source licenses it for Metageitnion.
 2. **Aition (invented)**: The Ionian migration narrative (Melite → Diomea, led by Apollo) does not appear in Parke or Deubner. Parke explicitly states that no aition narrative survives. This is embellishment, not attestation.
 3. **"Banquete comunitario"**: Parke says "no Athenian ritual details survive." A sacrifice is reasonable as a default festival element, but a community feast is not attested. The description imports a social function that the sources do not support.
 
 **Fix**:
+
 - Remove the specific day or note it as uncertain (no ancient source fixes it).
 - Strip the migration aition entirely; replace with: "El nombre derivaba de μετοίκησις (cambio de vecindad). Ninguna fuente ática transmite los ritos; el festival está atestiguado también en Mileto, Delos, Éfeso y Samos."
 - Remove "banquete comunitario"; retain only "sacrificio" as a generic festival element.
@@ -37,6 +40,7 @@ Date: 2026-10-25
 **Verdict**: WRONG_DAY | WRONG_DEITY (wrong characterisation) | UNSOURCED_AITION | MISSING_DETAIL
 
 **Issues**:
+
 1. **Day**: Neither Parke nor Deubner assigns day 15. The day is unsupported.
 2. **"Festival atlético" is wrong**: Parke characterises this as a feast festival; feasting is the prominent ritual element ("generally included feasting as a prominent element in the ritual"). There is no mention of athletic competitions in Parke or Deubner. The app inverts the character of the festival.
 3. **"Metecos"**: Parke and Deubner specify nothoi (children of mixed Athenian/foreign-wife marriages), not metecos. Metecos were a different legal category. This is inaccurate.
@@ -45,6 +49,7 @@ Date: 2026-10-25
 6. **Aition (the white-dog etymology)**: The story of a white dog stealing sacrificial meat and the Oracle sanctifying the spot is not in Parke or Deubner. It circulates in late sources (scholia and Harpocration on Kynosarges), but its absence from both primary references used here means it cannot be confirmed from these sources alone. Flag as not traceable to Parke 1977 or Deubner 1932.
 
 **Fix**:
+
 - Remove specific day or note as uncertain.
 - Change "Festival atlético" to "Festival de sacrificio y banquete" or equivalent.
 - Remove "metecos"; retain only "nothoi (hijos de matrimonios mixtos de ciudadano y extranjera)."
@@ -80,8 +85,8 @@ Note: the day within Metageitnion is not fixed in the sources; if a specific day
 
 ## Summary
 
-| Festival | Day | Deity/Epithet | Description | Aition | Missing Details |
-|---|---|---|---|---|---|
-| Metageitnia | WRONG (unsourced) | OK | Partly wrong (banquete unsourced) | INVENTED | — |
-| Herakleia en Kynosarges | WRONG (unsourced) | Wrong character (feast not athletics) | Wrong (athletic framing) | UNSOURCED (white-dog) | Bull-lifting, Parasitoi |
-| Eleusinia | — | — | — | — | ENTIRE FESTIVAL MISSING |
+| Festival                | Day               | Deity/Epithet                         | Description                       | Aition                | Missing Details         |
+| ----------------------- | ----------------- | ------------------------------------- | --------------------------------- | --------------------- | ----------------------- |
+| Metageitnia             | WRONG (unsourced) | OK                                    | Partly wrong (banquete unsourced) | INVENTED              | —                       |
+| Herakleia en Kynosarges | WRONG (unsourced) | Wrong character (feast not athletics) | Wrong (athletic framing)          | UNSOURCED (white-dog) | Bull-lifting, Parasitoi |
+| Eleusinia               | —                 | —                                     | —                                 | —                     | ENTIRE FESTIVAL MISSING |

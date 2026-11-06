@@ -1,14 +1,17 @@
 # El-Sabban — Egyptian Festival Calendar Extraction
-## Source: El-Sabban (2000), *Temple Festival Calendars of Ancient Egypt*, Liverpool University Press
+
+## Source: El-Sabban (2000), _Temple Festival Calendars of Ancient Egypt_, Liverpool University Press
+
 ## Extracted: 2026-10-25
 
 ---
 
 ## MIDDLE KINGDOM FESTIVALS (Chapter 2: Illahun / Lahun archive + Sesostris temples)
 
-Source basis: Schott 1951, *Altägyptische Festdaten*, pp. 79–113; Luft 1992 (Illahun papyri, 67 fragments from pyramid-temple of Sesostris II, reigns of Sesostris II–III); Hapdjefa's contracts at Siut; Dyn. 13 court accounts at Medamud. Unknown day-dates marked as `—`.
+Source basis: Schott 1951, _Altägyptische Festdaten_, pp. 79–113; Luft 1992 (Illahun papyri, 67 fragments from pyramid-temple of Sesostris II, reigns of Sesostris II–III); Hapdjefa's contracts at Siut; Dyn. 13 court accounts at Medamud. Unknown day-dates marked as `—`.
 
 ### I Akhet (1st month of inundation) — app month 0
+
 - Day 1: New Year — sources: Illahun, Sesostris III Year 35, Siut (Hapdjefa's contracts)
 - Day 17: Eve of Wagy festival — sources: Illahun; also Hapdjefa
 - Day 18: Wagy festival — source: Illahun
@@ -17,19 +20,23 @@ Source basis: Schott 1951, *Altägyptische Festdaten*, pp. 79–113; Luft 1992 (
 - `—`: Renewing of the year — source: Illahun
 
 ### II Akhet (2nd month of inundation) — app month 1
+
 - Day 26: Feast of Sokar — source: Illahun
 - Days 27–28 (2 days): Feast of Montu and Horus of Medamud — source: Dyn. 13 court accounts
 
 ### III Akhet (3rd month of inundation) — app month 2
+
 - Day 20: Heden-plant feast of Hathor — source: Illahun
 - `—`: Lifting up the Sky — source: Illahun
 - `—`: Exalting the God — source: Illahun
 - `—`: Periplus of Sokar — source: Illahun
 
 ### (III or IV Akhet) — uncertain placement
+
 - `—`: Entering into the Sky — source: Illahun
 
 ### IV Akhet (4th month of inundation) — app month 3
+
 - Day 1: Periplus of Hathor — source: Illahun
 - Day 26 (?): Festival of Sokar — source: Illahun
 - `—`: Anointing the Gods — source: Illahun (cf. New Kingdom, Day 27 of Sokar cycle)
@@ -38,44 +45,55 @@ Source basis: Schott 1951, *Altägyptische Festdaten*, pp. 79–113; Luft 1992 (
 - `—`: Drawing along Sokar — source: Illahun (cf. New Kingdom, Day 28 of Sokar cycle)
 
 ### I Peret (1st month of winter) — app month 4
+
 - Day 1: Neheb-kau festival — source: Illahun
 - Day 1: Periplus of Hathor, Lady of Ahnas — source: Illahun
 
 ### II Peret (2nd month of winter) — app month 5
+
 - `—`: Feast of Sokar — source: Illahun
 - `—`: Drawing along of Sokar — source: Illahun
 
 ### III Peret (3rd month of winter) — app month 6
+
 - Day 1: Great Burning — source: Illahun
 - `—`: Entering into the Temple — source: Illahun
 
 ### (III or IV Peret) — uncertain placement
+
 - `—`: Periplus — source: Illahun
 
 ### IV Peret (4th month of winter) — app month 7
+
 - Day 1: Lesser Burning — source: Illahun
 - Day 14 or 15 (?): Going forth to the Sky — source: Illahun
 - Day 15: Renewing of the year — source: Illahun
 - Day 21: Victory festival — source: Sesostris III at Semna
 
 ### I Shomu (1st month of summer) — app month 8
+
 - `—`: Feast of Sobek Lord of Sehwy — source: Illahun
 - `—`: Festival of the Valley, Thebes — source: Dyn. 12, Montuhotep Temple
 
 ### II Shomu (2nd month of summer) — app month 9
+
 - `—`: Festival of the Ruler (?) — source: Illahun
 - `—`: Festival of Sobek — source: Illahun
 
 ### III Shomu (3rd month of summer) — app month 10
+
 - Day 1: Festival (?) — source: Sesostris IV, Thebes
 
 ### IV Shomu (4th month of summer) — app month 11
+
 - (Lunar feasts only attested; no named annual festivals preserved from this month)
 
 ### Epagomenal Days — app month -1
+
 - Days 1–5: Feasts of the Births of Osiris, Horus, Seth, Isis, Nephthys — source: Illahun
 
 ### Monthly (non-annual) feasts also attested in the Middle Kingdom (Illahun)
+
 - **New Moon**: 1st, 3rd, 4th Akhet; 3rd Peret; 3rd Shomu
 - **Month-feast**: 2nd, 3rd, 4th Akhet; 1st–4th Peret; 1st, 2nd, 4th Shomu
 - **Full Moon**: 2nd–4th Akhet; 1st–4th Peret; 1st, 4th Shomu
@@ -90,6 +108,7 @@ Source basis: Schott 1951, *Altägyptische Festdaten*, pp. 79–113; Luft 1992 (
 ---
 
 ## MEDINET HABU CALENDAR (Chapter 5: Ramesses III, New Kingdom)
+
 ### Temple of Ramesses III at Medinet Habu; main feast calendar
 
 Source text references given as El-Sabban item numbers in parentheses, e.g. (629). Items from the "List" headings are drawn from El-Sabban's chapter 5 section structure. The calendar covers annual feasts; lunar/monthly feasts are in separate Lists 7–15 (not dated to specific calendar days).
@@ -106,6 +125,7 @@ Source text references given as El-Sabban item numbers in parentheses, e.g. (629
 - Day 28: [Military/historical] Killing of the land of Meshwesh — Year 11 record; not an annual feast — (1223)
 
 ### II Akhet (2nd month of inundation) — app month 1
+
 **Opet festival: spans II Akhet day 18 through III Akhet day 12 (24 days total at Medinet Habu)**
 
 - Day 18: Eve of the festival of Amon in his festival of Opet — deity: Amon-Re with his Ennead — List 28; (725)
@@ -123,7 +143,8 @@ Source text references given as El-Sabban item numbers in parentheses, e.g. (629
 - Last day of month: 12th day of Amon's festival of Opet — deity: Amon-Re, Wosermaatre Meriamon — (845)
 
 ### III Akhet (3rd month of inundation) — app month 2
-*(Opet festival continues from II Akhet)*
+
+_(Opet festival continues from II Akhet)_
 
 - Day 1: 13th day of Amon's festival of Opet — deity: Amon-Re, Wosermaatre Meriamon — (846)
 - Day 2: 14th day of Amon's festival of Opet — deity: Amon-Re, Wosermaatre Meriamon — (847)
@@ -140,6 +161,7 @@ Source text references given as El-Sabban item numbers in parentheses, e.g. (629
 - Day 17: Festival of Amon that occurs after the festival of Opet — deity: Amon-Re with his Ennead — (902)
 
 ### IV Akhet (4th month of inundation) — app month 3
+
 **Sokar festival cycle: days 20–30 (last) of IV Akhet**
 
 - Day 1: Festival of Hathor — deity: Amon-Re with his Ennead, Wosermaatre Meriamon — (917)
@@ -164,6 +186,7 @@ Source text references given as El-Sabban item numbers in parentheses, e.g. (629
 - Day 29: Erecting the trt-tree — deity: Amon-Re — (1322); also described as "Amon in the 1st month of winter on the 29th day"
 
 ### II Peret (2nd month of winter) — app month 5
+
 **Festival of Amon: Lifting up the Sky — spans II Peret day 9 through III Peret day 1**
 
 - Day 1: Navigation of Anubis — deity: Amon-Re with his Ennead — (1337)
@@ -181,9 +204,10 @@ Source text references given as El-Sabban item numbers in parentheses, e.g. (629
 - Day 1: Day of the festival of [Sokar], brought by the new moon — deity: Amon-Re with his Ennead — (1388) [note: same day; two separate entries, or the same entry read differently]
 - Day 4: Chewing onions for Bast — deity: Amon-Re with his Ennead — (1373)
 
-*(also: reentry of Amon, 3rd day of the festival, list 69)*
+_(also: reentry of Amon, 3rd day of the festival, list 69)_
 
 ### I Shomu (1st month of summer) — app month 8
+
 **Festival of Min / Festival of Amon: Processional feast**
 
 - Day 1: Renenutet festival — deity: Amon-Re — (1402)
@@ -202,12 +226,15 @@ Source text references given as El-Sabban item numbers in parentheses, e.g. (629
 - Day 23: [Festival of Amon-Re, 1st year] — (36, minor/fragmentary calendar; listed under "Minor, Fragmentary and Late Calendars" by El-Sabban)
 
 ### III Shomu (3rd month of summer) — app month 10
-*(No specifically dated entries preserved in the Chapter 5 Medinet Habu calendar for this month. El-Sabban notes only undated general references.)*
+
+_(No specifically dated entries preserved in the Chapter 5 Medinet Habu calendar for this month. El-Sabban notes only undated general references.)_
 
 ### IV Shomu (4th month of summer) — app month 11
-*(No specifically dated entries preserved in the Chapter 5 Medinet Habu calendar for this month.)*
+
+_(No specifically dated entries preserved in the Chapter 5 Medinet Habu calendar for this month.)_
 
 ### Epagomenal Days — app month -1
+
 - El-Sabban mentions the epagomenal days in the context of offering counts ("10 items daily excluding the 5 epagomenal days") but does not give a specific dated festival list for them from the Medinet Habu calendar. The Middle Kingdom (Illahun) attests Births of Osiris, Horus, Seth, Isis, Nephthys on Days 1–5.
 
 ---
@@ -230,6 +257,7 @@ The following festivals appear in the Medinet Habu calendar as regular observanc
 ## NOTES
 
 ### Structure of the Medinet Habu calendar (El-Sabban's analysis)
+
 - The calendar divides into approximately 52+ numbered Lists (offering-tables), each tied to a named feast or feast-day
 - Lists 1–6: likely introductory/regular offerings (not fully extracted here)
 - Lists 7–15: monthly/lunar feasts (New Moon, Full Moon, monthly feasts, procession of Min and Sem-priest)
@@ -239,6 +267,7 @@ The following festivals appear in the Medinet Habu calendar as regular observanc
 - Lists 52+: Peret and Shomu festivals
 
 ### Damaged/uncertain entries
+
 - (1003): "Nlryt feast" — Egyptian term not transliterated in El-Sabban's English translation; day 25 of IV Akhet
 - (943): "Opening the window in the [...]" — context partially damaged; deity and precise ritual not certain; assigned to IV Akhet day 21
 - (954): "Earth-backing feast" — unusual term; IV Akhet day 22; deity not named in grep context
@@ -246,20 +275,25 @@ The following festivals appear in the Medinet Habu calendar as regular observanc
 - (629): Sothis entry: no explicit day number given; the "coming out of Sothis on its day" is described as a minor feast in El-Sabban's commentary; associated with I Akhet but Sothis heliacal rising is calendrically mobile
 
 ### Opet festival duration at Medinet Habu
+
 - 24 days total (II Akhet day 18 through III Akhet day 12, inclusive of the eve); this is significantly longer than earlier periods. El-Sabban's analysis confirms this from the offering totals ("Opet festival hall offerings representing the 24 days of Opet").
 
 ### Sokar festival structure at Medinet Habu
+
 - 10 days (IV Akhet days 20–29 / last day), running from Purifying the Ennead through Raising the Djed Pillar on the last day of IV Akhet
 - El-Sabban labels these as "Days 1–10" of the Sokar festival in his List headings (Lists 42–51)
 - The Djed-raising on the last day of IV Akhet / transition into I Peret is confirmed
 
 ### Festival of Lifting up the Sky / Reentry of the Sky
+
 - This Amon festival spans II Peret → III Peret → IV Peret days 1 at minimum; its start on II Peret day 9 is explicit
 - The "last day of II Peret" and "first day of III Peret" continuation is explicit in entries (1368–1369)
 - The III Peret → IV Peret transition (entries 1370–1372) gives another instance that may be a different Amon festival or the same one recurring
 
 ### Comparison with current app data
+
 The app (`utils/egyptianFestivalsData.ts`) currently has approximately 20 entries for the entire Egyptian year. This extraction yields:
+
 - **Middle Kingdom**: ~30 attested festival occasions (many undated within their month)
 - **Medinet Habu**: ~50+ dated entries, dominated by the Opet (24 days), Sokar (10 days), and smaller festivals in Peret and Shomu
 - **Major gaps in the app**: Opet festival (entirely absent), Sokar festival cycle (entirely absent), Neheb-kau, Navigation of Anubis, Lifting up the Sky, festival of Hathor (IV Akhet day 1), Renenutet, Min's procession, Valley Festival, Thoth festival (I Akhet day 19)

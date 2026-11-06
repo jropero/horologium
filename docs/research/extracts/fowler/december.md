@@ -1,7 +1,9 @@
 # Mensis December — Fowler (1899)
+
 **PDF pages used**: 267–287 (printed 256–276)
 
 ## Women's Sacrifice to the Bona Dea
+
 - **Day**: 3/4 (night between Dec. 3 and 4, per Plutarch and Dio; date not fixed)
 - **Fasti status**: Not in calendars
 - **Deity**: Bona Dea (identified with Fauna, female form of Faunus)
@@ -10,6 +12,7 @@
 - **Page**: p. 256
 
 ## Faunalia (Rustica)
+
 - **Day**: 5 (Nones of December)
 - **Fasti status**: F (Nones); but the rural Faunalia does not appear in Roman city calendars
 - **Deity**: Faunus
@@ -17,6 +20,7 @@
 - **Page**: p. 257
 
 ## Agonalia (December) / Septimontium
+
 - **Day**: 11 (H ID. DEC.)
 - **Fasti status**: Appears as AG. IN. (Amiternian), AGON. (three other calendars). The Septimontiale sacrum may fall on the same day per Scaliger's conjecture from Festus.
 - **Deity**: Unknown for Agonalia. Septimontium: sacrifice on the Palatium by the Flamen Palatualis (deity unknown, perhaps Pales or Palatua).
@@ -25,6 +29,7 @@
 - **Page**: p. 265–267
 
 ## Conso in Aventino
+
 - **Day**: 12 (PRID. ID. DEC.)
 - **Fasti status**: EN (Amiternian)
 - **Deity**: Consus
@@ -32,6 +37,7 @@
 - **Page**: p. 268
 
 ## Consualia (Winter)
+
 - **Day**: 15 (XVIII K.IAN.)
 - **Fasti status**: IP (Maff. Praen. Amit. Ant.); Feriae Consoni (Praen. Amit.)
 - **Deity**: Consus
@@ -39,6 +45,7 @@
 - **Page**: p. 268
 
 ## Saturnalia
+
 - **Day**: 17 (XVI K.IAN., originally; the 19th became current through a calendar change that confused some people)
 - **Fasti status**: IP (all major calendars: Maff. Amit. Guid. Rust. Philoc.); Feriae Saturno (Maff. Amit.)
 - **Deity**: Saturnus (old agricultural god, possibly connected with serere/satio)
@@ -47,6 +54,7 @@
 - **Page**: p. 269–273
 
 ## Opalia
+
 - **Day**: 19 (XIV K.IAN.)
 - **Fasti status**: IP (Maff. Amit.); Feriae Opi; Opi ad Forum (Amit.)
 - **Deity**: Ops
@@ -54,6 +62,7 @@
 - **Page**: p. 273–274
 
 ## Divalia (Angeronalia)
+
 - **Day**: 21 (XII K.IAN.)
 - **Fasti status**: Feriae Divae Angeronae (Maff. Praen.)
 - **Deity**: Diva Angerona; rite took place in the sacellum Volupiae (ara Volupiae)
@@ -61,6 +70,7 @@
 - **Page**: p. 275
 
 ## Larentalia
+
 - **Day**: 23 (X K.IAN.)
 - **Fasti status**: IP (Maff. Praen.); Feriae Iovi, Acca Larentiae (Praen. note)
 - **Deity**: Acca Larentia (semi-deity); also Feriae Iovi (connection of Jupiter unexplained; Fowler calls it accidental)
@@ -69,6 +79,7 @@
 - **Page**: p. 275–276
 
 ## Compitalia
+
 - **Day**: Variable (conceptivae); between Saturnalia (Dec. 17) and Jan. 5; tendency to fall late in that period (Philocalus, Silvius)
 - **Fasti status**: Not stativae until late Empire; announced by the praetor
 - **Deity**: Lares Compitales (two shrines at each crossroads)
@@ -77,4 +88,5 @@
 - **Page**: p. 279–281 (treated under January entry for Jan. 3–5)
 
 ## Summary
+
 Fowler presents December as a "slack time" for agriculturists, filled with antique and obscure festivals nearly all traceable to husbandry and primitive country life. The sequence Consualia–Saturnalia–Opalia reflects a final mid-winter reckoning of the harvest; the Saturnalia is by far the most fully documented, with detailed treatment of its popular customs, slave equality, gift-giving (cerei, sigillaria), and connections to Christian Christmas traditions. The Faunalia and Bona Dea rites stand apart as non-calendar survivals. The Divalia, Larentalia, and Agonalia/Septimontium are frankly obscure even to Fowler, who is candid about the limits of available evidence. The Compitalia, though variable and possibly falling in early January, is treated here as the culmination of this winter series.

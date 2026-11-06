@@ -1,4 +1,5 @@
 # Review: Munichion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -16,7 +17,7 @@ Date: 2026-10-25
 
 **Issue**: A named festival attested in both Parke and Deubner by epigraphic evidence is entirely absent from the app.
 
-**Fix**: Add `if (dayOfMonth === 4) return { festivalName: "Fiesta de Eros", deity: "Eros / Afrodita", deityDesc: "Dios del amor, venerado junto a Afrodita.", festivalDesc: "Festival en el santuario de Eros en la ladera norte de la Acrópolis, atestiguado por una inscripción rupestre del siglo V a.C. No se conservan detalles del rito.", category: "Purificación y Expiación" };`  Do not invent a ritual; the sources have none.
+**Fix**: Add `if (dayOfMonth === 4) return { festivalName: "Fiesta de Eros", deity: "Eros / Afrodita", deityDesc: "Dios del amor, venerado junto a Afrodita.", festivalDesc: "Festival en el santuario de Eros en la ladera norte de la Acrópolis, atestiguado por una inscripción rupestre del siglo V a.C. No se conservan detalles del rito.", category: "Purificación y Expiación" };` Do not invent a ritual; the sources have none.
 
 ---
 
@@ -31,6 +32,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION (partial) / MISSING_DETAIL
 
 **Issues**:
+
 1. The aition is attested in both sources, so it is not invented — but Parke explicitly calls it a "secondary rationalisation." The app presents it as the authoritative explanation without qualification.
 2. "para ser sacrificado al Minotauro" adds narrative context not cited in either source for this specific festival entry; it is general mythological knowledge attached here without warrant.
 3. The app omits Parke's key interpretive point: the original ceremony was a communal women's supplication to Artemis as protectress of the female sex; the Apollo/Theseus layer is secondary.
@@ -50,6 +52,7 @@ Date: 2026-10-25
 **Verdict**: WRONG_DEITY (festival name); UNSOURCED_AITION (second half); MISSING_DETAIL (multiple)
 
 **Issues**:
+
 1. **Festival name is wrong.** "Munichia y Brauronia" conflates two distinct festivals. The Brauronia is a separate annual (and penteteris) celebration at Brauron — neither Parke nor Deubner places it on Munichion Day 16.
 2. **"Las niñas de Atenas actúan como osas en el santuario"** belongs to the Arkteia/Brauronia at Brauron, not to the Munichia. This element has been imported from the wrong festival.
 3. **Second aition clause ("el mito de las niñas 'osa'…")** is similarly from Brauronia/Arkteia, not Munichia. Neither source links it to Munichion Day 16.
@@ -58,6 +61,7 @@ Date: 2026-10-25
 6. **Missing: Salamis commemoration** (Deubner).
 
 **Fix**:
+
 - Rename to `"Munichia"` only.
 - Remove all "bears/osas" content from `festivalDesc` and `aition` — it belongs to Brauronia.
 - Keep the Embaros aition (attested by Parke).
@@ -97,9 +101,9 @@ Date: 2026-10-25
 
 ## Summary table
 
-| Day | Festival | App status |
-|-----|----------|-----------|
-| 4   | Feast of Eros | MISSING_FESTIVAL |
-| 6   | Delphinia | UNSOURCED_AITION (aition presented uncritically; bears/owl motif added beyond sources) |
-| 16  | Munichia | WRONG_FESTIVAL_NAME; Brauronia conflated; bears aition from wrong festival; missing Hekate, epheboi regatta, Salamis note |
-| 19  | Olympieia | UNSOURCED_AITION (Phocion anecdote wrongly labelled as founding legend) |
+| Day | Festival      | App status                                                                                                                |
+| --- | ------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 4   | Feast of Eros | MISSING_FESTIVAL                                                                                                          |
+| 6   | Delphinia     | UNSOURCED_AITION (aition presented uncritically; bears/owl motif added beyond sources)                                    |
+| 16  | Munichia      | WRONG_FESTIVAL_NAME; Brauronia conflated; bears aition from wrong festival; missing Hekate, epheboi regatta, Salamis note |
+| 19  | Olympieia     | UNSOURCED_AITION (Phocion anecdote wrongly labelled as founding legend)                                                   |

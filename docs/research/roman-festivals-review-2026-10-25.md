@@ -1,23 +1,25 @@
 # Roman Festivals Review — 2026-10-25
-*Sources: Scullard (1981), Fowler (1899)*
-*Target: utils/romanYearData.ts*
+
+_Sources: Scullard (1981), Fowler (1899)_
+_Target: utils/romanYearData.ts_
 
 ---
 
 ## Executive Summary
 
-| Category | Jan–Apr | May–Aug | Sep–Dec | **Total** |
-|---|---|---|---|---|
-| WRONG_DATE | 0 | 2 | 3 | **5** |
-| WRONG_DEITY | 11 | 5 | 12 | **28** |
-| WRONG_STATUS | 6 | 17 | 7 | **30** |
-| WRONG_RITUAL | 8 | 14 | 8 | **30** |
-| MISSING_FESTIVAL | 7 | 21 | 12 | **40** |
-| INVENTED_AITION | 1 | 1 | 1 | **3** |
-| MINOR | 11 | 12 | 7 | **30** |
-| **TOTAL** | **44** | **72** | **50** | **166** |
+| Category         | Jan–Apr | May–Aug | Sep–Dec | **Total** |
+| ---------------- | ------- | ------- | ------- | --------- |
+| WRONG_DATE       | 0       | 2       | 3       | **5**     |
+| WRONG_DEITY      | 11      | 5       | 12      | **28**    |
+| WRONG_STATUS     | 6       | 17      | 7       | **30**    |
+| WRONG_RITUAL     | 8       | 14      | 8       | **30**    |
+| MISSING_FESTIVAL | 7       | 21      | 12      | **40**    |
+| INVENTED_AITION  | 1       | 1       | 1       | **3**     |
+| MINOR            | 11      | 12      | 7       | **30**    |
+| **TOTAL**        | **44**  | **72**  | **50**  | **166**   |
 
-**Priority breakdown (WRONG_* findings only):**
+**Priority breakdown (WRONG\_\* findings only):**
+
 - HIGH: 55 (all 5 WRONG_DATE + 20 WRONG_STATUS + 17 WRONG_DEITY + 13 WRONG_RITUAL)
 - MEDIUM: 38 (10 WRONG_STATUS + 11 WRONG_DEITY + 17 WRONG_RITUAL)
 - LOW: 0
@@ -26,7 +28,7 @@
 
 ## Top Urgent Fixes
 
-Grouped by category, HIGH priority WRONG_* only. These require immediate code changes.
+Grouped by category, HIGH priority WRONG\_\* only. These require immediate code changes.
 
 ### WRONG_STATUS (HIGH)
 
@@ -500,6 +502,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "0-1" — Kalendae Ianuariae
+
 **Field**: `deity`
 **Current**: `"Jano / Juno"`
 **Change to**: `"Júpiter Óptimo Máximo"`
@@ -508,6 +511,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Keys "0-3" / "0-4" — Compitalia
+
 **Field**: `festivalDesc` on `"0-4"`
 **Current**: `"Continuación de las festividades en honor a los Lares."`
 **Change to**: Remove `"0-4"` festivalName and festivalDesc (Compitalia is a single day, feriae conceptivae); note moveable date in `"0-3"` only
@@ -516,6 +520,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "0-11" — Carmentalia / Juturnalia
+
 **Field**: `deity`
 **Current**: `"Carmenta / Juturna"`
 **Change to**: `"Carmenta"`
@@ -524,6 +529,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "0-24" — Feriae Sementivae (day 1)
+
 **Field**: `deity`
 **Current**: `"Ceres y Tellus"`
 **Change to**: `"Tellus"`
@@ -537,6 +543,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "0-25" — Feriae Sementivae (continuation)
+
 **Field**: `deity`
 **Current**: `"Ceres y Tellus"`
 **Change to**: Remove or mark as day between the two Sementivae rites (not a Sementivae day)
@@ -545,6 +552,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "0-26" — Feriae Sementivae (day 2, ~7 days later)
+
 **Field**: `deity`
 **Current**: `"Ceres y Tellus"`
 **Change to**: `"Ceres"` (second day of Sementivae honors Ceres alone, ~7 days after day 1)
@@ -553,6 +561,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "1-1" — Kalendae Februariae
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -561,6 +570,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "1-15" — Lupercalia
+
 **Field**: `deity`
 **Current**: `"Fauno / Lupercus"`
 **Change to**: `"Fauno / Inuus (incierto)"`
@@ -569,6 +579,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "1-17" — Quirinalia
+
 **Field**: `deity`
 **Current**: `"Quirino / Fornax"`
 **Change to**: `"Quirino"`
@@ -577,6 +588,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "1-21" — Feralia
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'F'`
@@ -590,6 +602,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "1-22" — Caristia
+
 **Field**: `deity`
 **Current**: `"Concordia Familiar"`
 **Change to**: `"Lares"`
@@ -598,6 +611,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "1-27" — Equirria
+
 **Field**: `festivalDesc`
 **Current**: `"Primera de las carreras de carros y caballos en el Campo de Marte, dedicadas al dios antes de la temporada militar."`
 **Change to**: Horse-racing only; chariot involvement uncertain; remove "carros y"
@@ -606,6 +620,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "2-14" — Segunda Equirria
+
 **Field**: `festivalDesc`
 **Current**: `"Segunda fecha de carreras de caballos sagradas en el Campo de Marte para honrar y purificar a las monturas militares."`
 **Change to**: Remove "purificar a las monturas militares" — this is a horse-race (feriae Marti), not a purification of mounts
@@ -614,6 +629,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "2-17" — Liberalia
+
 **Field**: `deity`
 **Current**: `"Liber Pater / Marte"`
 **Change to**: `"Liber Pater / Libera"`
@@ -627,6 +643,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "2-19" — Quinquatrus
+
 **Field**: `deity`
 **Current**: `"Minerva"`
 **Change to**: `"Marte / Minerva"`
@@ -635,6 +652,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-1" — Veneralia
+
 **Field**: `deity`
 **Current**: `"Venus Verticordia"`
 **Change to**: `"Venus Verticordia / Fortuna Virilis"`
@@ -648,6 +666,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-4" — Megalesia
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`
@@ -656,6 +675,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-5" — Nonae Apriles / Megalesia
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`
@@ -664,6 +684,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-10" — Megalesia (Fin)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -672,6 +693,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-19" — Cerialia (Fin)
+
 **Field**: `deity`
 **Current**: `"Ceres"`
 **Change to**: `"Ceres, Liber, Libera"`
@@ -680,6 +702,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-23" — Vinalia Priora
+
 **Field**: `deity`
 **Current**: `"Venus / Júpiter"`
 **Change to**: `"Júpiter / Venus Erucina"`
@@ -693,6 +716,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "3-25" — Robigalia
+
 **Field**: `festivalDesc`
 **Current**: `"El flamen Quirinalis sacrificaba un animal de pelaje rojo para apaciguar al dios/diosa del mildiu y rogar que no oxidara el trigo incipiente."`
 **Change to**: Two victims: a dog and a sheep; Flamen Quirinalis sacrificed both
@@ -701,6 +725,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-1" — Kalendae Maiae
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'F'`
@@ -709,6 +734,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-9" — Lemuria
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -722,6 +748,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-11" — Lemuria (II)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -730,6 +757,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-13" — Lemuria (III)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -738,6 +766,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-14" — Ritos de los Argei
+
 **Field**: `festivalDesc`
 **Current**: `"Procesión sagrada. Las vírgenes vestales arrojan efigies de paja llamadas 'Argei' a las aguas del río Tíber."`
 **Change to**: Replace "paja" with "junco" (rush-figures, not straw); note date disputed (Scullard: 14; Fowler: 15 May)
@@ -746,6 +775,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-23" — Tubilustrium (Maius)
+
 **Field**: `festivalDesc`
 **Current**: `"Segunda purificación anual de las trompetas sagradas (tubae), dedicadas a Vulcano."`
 **Change to**: Remove "dedicadas a Vulcano" — Tubilustrium had no named deity; Feriae Volcano is a separate festival on the same day
@@ -754,6 +784,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-24" — Quando Rex Comitiavit Fas (Maius)
+
 **Field**: `festivalDesc`
 **Current**: `"El Rex Sacrorum completaba sus deberes religiosos."`
 **Change to**: Describe formal Comitia dismissal by the Rex Sacrorum enabling legal acts (wills) for the remainder of the day
@@ -762,6 +793,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "4-29" — Ambarvalia
+
 **Field**: `deity`
 **Current**: `"Deidades agrarias"`
 **Change to**: `"Marte / Ceres"`
@@ -770,6 +802,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-1" — Kalendae Iuniae
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -778,6 +811,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-5" — Nonae Iuniae
+
 **Field**: `status`
 **Current**: `'F'`
 **Change to**: `'N'`
@@ -786,6 +820,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-7" — Ludi Piscatorii
+
 **Field**: `deity`
 **Current**: `"Tiberinus"`
 **Change to**: `"Vulcanus"`
@@ -794,6 +829,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-9" — Vestalia
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -807,6 +843,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-11" — Matralia
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -815,6 +852,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-14" — Vestalia (continued)
+
 **Field**: `festivalDesc`
 **Current**: `"Último día de labores previas a la apertura ritual total."`
 **Change to**: Remove "apertura ritual" framing — penus had been open since June 7; June 14 is within the open Vestalia period
@@ -823,6 +861,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-15" — Quando Stercum Delatum Fas
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'` (or note the QSDF designation in statusFull)
@@ -836,6 +875,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "5-20" — Summanalia
+
 **Field**: `festivalDesc`
 **Current**: `"Sacrificio de expiación a Summanus. Se ofrecían pasteles de harina con forma de ruedas."`
 **Change to**: Replace "Sacrificio de expiación" with "ofrenda del dies natalis" — this is not a piaculum
@@ -844,6 +884,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-1" — Kalendae Iuliae
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -857,6 +898,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-5" — Poplifugia
+
 **Field**: `festivalDesc`
 **Current**: `"La 'Huida del Pueblo'. Ritos misteriosos de origen antiquísimo vinculados a asaltos de pueblos vecinos en los albores de Roma."`
 **Change to**: Remove the Fidenae aition — it is explicitly rejected by both Scullard and Fowler as a secondary invention; describe as mysterious rite of unknown origin
@@ -865,6 +907,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-7" — Nonae Iuliae / Nonae Caprotinae
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -873,6 +916,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-13" — Ludi Apollinares (Fin)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`
@@ -881,6 +925,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-17" — Dedicación del Templo de Honos
+
 **Field**: `deity`
 **Current**: `"Honos"`
 **Change to**: `"Honos y Virtus"`
@@ -889,6 +934,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-18" — Dies Alliensis
+
 **Field**: `festivalDesc`
 **Current**: `"Día de luto. Conmemora la derrota devastadora del ejército romano frente a los galos en la batalla del Alia (390 a.C.)."`
 **Change to**: Add the defeat of the Fabii on the Cremera (479 BC) — this day commemorates both disasters ("Dies Alliae et Fabiorum")
@@ -897,6 +943,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "6-24" → "6-25" — Furrinalia (WRONG_DATE)
+
 **Action**: Move entire festival entry from `"6-24"` to `"6-25"`
 
 **Key "6-24"**
@@ -911,6 +958,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-1" — Kalendae Augusti
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'F'`
@@ -924,6 +972,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-9" — Sol Indiges
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`
@@ -932,6 +981,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-11" → "7-12" — Ara Maxima / Hercules (WRONG_DATE)
+
 **Action**: Move festival entry from `"7-11"` to `"7-12"`
 
 **Key "7-11"**
@@ -946,6 +996,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-13" — Idus Augusti / Dianae in Aventino
+
 **Field**: `festivalName`
 **Current**: `"Nemoralia"`
 **Change to**: `"Dianae in Aventino"`
@@ -954,6 +1005,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-19" — Vinalia Rustica
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'F'`
@@ -962,6 +1014,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-21" — Consualia (Augustus)
+
 **Field**: `status`
 **Current**: `'F'`
 **Change to**: `'NP'`
@@ -970,6 +1023,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-24" — Mundus Patet (I)
+
 **Field**: `festivalDesc`
 **Current**: `"Primera de las tres fechas del año en que el 'Mundo' (fosa ritual del más allá) quedaba abierto, siendo un día nefasto para cualquier labor militar o política mayor."`
 **Change to**: Replace "día nefasto" with "dies religiosus" — legally distinct category (Macrobius 1.16.18); dies nefastus concerns courts/assemblies, not this rite
@@ -978,6 +1032,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-25" — Opiconsivia
+
 **Field**: `festivalDesc`
 **Current**: `"Festividad secreta y sagrada celebrada en la Regia por las Vírgenes Vestales y el Pontifex Maximus en honor a la abundancia agraria."`
 **Change to**: Replace "Pontifex Maximus" with "Rex Sacrorum (sacerdos publicus)"
@@ -986,6 +1041,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "7-28" — Culto del Sol y la Luna
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`
@@ -994,6 +1050,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "8-1" — Dedicación de Juno Regina (September)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'F'`
@@ -1007,6 +1064,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "8-4" — Ludi Romani (Sep 4)
+
 **Field**: `festivalDesc`
 **Current**: `"Comienzo de los masivos Juegos Romanos que se celebraban durante dos semanas en el mes de septiembre en agradecimiento a Júpiter."`
 **Change to**: Remove "Comienzo"; Sep 4 is not the Republican attested start; the games run from Sep 5 (Nonae). Sep 4 can note anticipatory preparations or be treated as a generic C-day
@@ -1015,6 +1073,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "8-13" — Epulum Jovis (Ides Septembres)
+
 **Field**: `deity`
 **Current**: `"Júpiter"`
 **Change to**: `"Júpiter; Juno; Minerva"`
@@ -1023,6 +1082,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "8-14" — Equorum Probatio (September)
+
 **Field**: `deity`
 **Current**: `"Marte / Júpiter"`
 **Change to**: `"Ninguna"`
@@ -1036,6 +1096,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "8-15" — Ludi Romani (Sep 15)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'` (NP not supported for Sep 15; see also Open Questions)
@@ -1044,6 +1105,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "8-23" — Dedicación del Templo de Apolo
+
 **Field**: `deity`
 **Current**: `"Apolo"`
 **Change to**: `"Apolo; Latona"`
@@ -1052,6 +1114,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "9-1" — Ritos a Fides / Tigillum Sororium (October)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -1065,6 +1128,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "9-7" — Ritos a Júpiter (October)
+
 **Field**: `deity`
 **Current**: `"Júpiter Fulgur / Juno"`
 **Change to**: `"Júpiter Fulgur / Juno Curitis"`
@@ -1073,6 +1137,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "9-9" — Dedicación y Juegos (October)
+
 **Field**: `deity`
 **Current**: `"Genius Publicus"`
 **Change to**: `"Genius Publicus / Fausta Felicitas / Venus Victrix"`
@@ -1081,6 +1146,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "9-10" — Dies Comitialis (October 10)
+
 **Field**: `festivalName`
 **Current**: `"Ludi Augustales"`
 **Change to**: `"Iunoni Monetae"` (independent named calendar entry; dies natalis of Juno Moneta's temple)
@@ -1089,6 +1155,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "9-15" — Equus October
+
 **Field**: `festivalDesc`
 **Current**: `"Carrera de carros solemne final de la temporada bélica. El caballo ganador a la derecha era purificado y sacrificado al dios Marte en el Campo."`
 **Change to**: Remove "purificado"; the horse was killed with a spear (not purified beforehand); "sacrificado" is sufficient
@@ -1097,6 +1164,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "10-1" — Kalendae Novembres / Ludi Sullanae
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'F'`
@@ -1115,6 +1183,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "10-3" → "10-4" — Ludi Plebeii (WRONG_DATE)
+
 **Action**: Move festivalName start from `"10-3"` to `"10-4"`
 
 **Key "10-3"**
@@ -1130,6 +1199,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "10-8" — Mundus Patet (III, November)
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`
@@ -1148,6 +1218,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "10-14" — Equorum Probatio (November)
+
 **Field**: `deity`
 **Current**: `"Marte / Júpiter"`
 **Change to**: `"Ninguna"`
@@ -1156,6 +1227,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "10-15" → "10-13" — Feronia (WRONG_DATE)
+
 **Action**: Move Feronia entry from `"10-15"` to `"10-13"`
 
 **Key "10-15"**
@@ -1170,6 +1242,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-1" — Kalendae Decembres
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'N'`
@@ -1178,6 +1251,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-3" — Ritos de la Bona Dea
+
 **Field**: `festivalDesc`
 **Current**: `"Sacrificios místicos de bienestar auspiciados por la mujer de un magistrado; la participación masculina y el vino estaban terminantemente prohibidos."`
 **Change to**: Wine was the central offering, referred to as 'milk' (lac) by ritual convention; the prohibition was on using the word "wine" and on men, not on wine substance itself
@@ -1186,6 +1260,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-8" — Tiberinalia
+
 **Field**: `deity`
 **Current**: `"Tiberinus"`
 **Change to**: `"Tiberinus / Gaia"`
@@ -1194,6 +1269,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-13" — Idus Decembres / Lectisternium
+
 **Field**: `deity`
 **Current**: `"Tellus"`
 **Change to**: `"Tellus / Ceres"`
@@ -1207,6 +1283,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-15" — Consualia de Invierno
+
 **Field**: `festivalDesc`
 **Current**: `"Se destapaba su altar del Circo Máximo. Los burros y mulas eran coronados en agradecimiento general agrario."`
 **Change to**: (1) Replace "burros" with "caballos (equi)" — the December Consualia honored equi et muli, not donkeys; (2) Remove "Se destapaba su altar del Circo Máximo" — altar-uncovering belongs to the August Consualia (21 Aug), not December
@@ -1215,6 +1292,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-23" — Larentalia
+
 **Field**: `festivalDesc`
 **Current**: `"Conclusión sombría de las Saturnales de diciembre con un rito mortuorio por los ancestros y la heroína nutricia romana en el Velabro."`
 **Change to**: Larentalia is an independent parentatio at the tomb of Acca Larentia in the Velabrum; it has no connection to the Saturnalia; remove "Conclusión sombría de las Saturnales"
@@ -1223,6 +1301,7 @@ Only HIGH and MEDIUM WRONG_DATE, WRONG_DEITY, WRONG_STATUS, WRONG_RITUAL finding
 ---
 
 ### Key "11-25" — Dies Natalis Solis Invicti
+
 **Field**: `status`
 **Current**: `'NP'`
 **Change to**: `'C'`

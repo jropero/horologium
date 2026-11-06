@@ -1,5 +1,6 @@
 # Deubner — Athena chapter
-Source: L. Deubner, *Attische Feste* (1932), printed p. 9–39 / PDF p. 8–38
+
+Source: L. Deubner, _Attische Feste_ (1932), printed p. 9–39 / PDF p. 8–38
 Extracted: 2026-10-25
 
 ---
@@ -23,21 +24,24 @@ Extracted: 2026-10-25
 **Deity**: Athena (Polias)
 
 **Ritual**:
+
 - Two girls called Arrephoren live on the Akropolis near the temple of Athena Polias.
 - At the time of the festival, by night, the priestess of Athena places on their heads certain objects to carry — objects unknown even to the priestess herself.
 - The girls descend by a natural underground passage that leads through the precinct of Aphrodite en Kepois (in the Gardens), near the Akropolis.
 - Below, they leave what they have carried and bring back something else, also covered/wrapped, that they find there.
 - After performing this task, they are dismissed and new girls are installed in their place.
-- Deubner distinguishes two annual rites: (a) the Skirophorion rite, in which the secret objects (ἄρρητα) are carried *down* — when the harvest was over, fertility symbols were deposited to recharge the earth's powers; (b) the autumn rite (Pyanopsion), in which the objects are retrieved (as Pausanias describes), analogous to the Thesmophoria.
+- Deubner distinguishes two annual rites: (a) the Skirophorion rite, in which the secret objects (ἄρρητα) are carried _down_ — when the harvest was over, fertility symbols were deposited to recharge the earth's powers; (b) the autumn rite (Pyanopsion), in which the objects are retrieved (as Pausanias describes), analogous to the Thesmophoria.
 
 **Aition**: The story of the chest of Erichthonios (forbidden to be opened by the daughters of Kekrops) grew out of these secret rites, according to Deubner. The chest reflects the covered objects carried by the Arrephoren; the snake said to be hidden in it mirrors the ἐρπετῶν μιμήματα ("likenesses of serpents") from the Lukian scholion.
 
 **Participants**:
+
 - Two Arrephoren (of four elected by the people for nobility), aged 7–11 years, girls
 - Priestess of Athena (gives out the covered objects; does not know their contents either)
 - Two of the four Arrephoren were also chosen by the Archon Basileus specifically for the Peplos-weaving task at the Chalkeia; the other two performed the underground rite.
 
 **Sources (ancient)**:
+
 - Pausanias 1.27.3 (primary description of the rite)
 - Etym. magnum 149.14 (Arrephoria: festival of Athena in Skirophorion)
 - Schol. Lukian (Rabe p. 276.13): the objects carried are ἄρρητα ἱερά made of dough — likenesses of snakes and phalli; pine branches also brought up for the plant's fertility
@@ -53,6 +57,7 @@ Extracted: 2026-10-25
 - Suidas s.v. ἀνάστατοι; Pausanias Atticus ap. Eustath. Il. 18.575
 
 **Notes / Deubner's uncertainties**:
+
 - Deubner separates Arrephoren from Herrephoren/Hersephoren, contra the common scholarly tendency to identify them. The Herrephoren served Pandrosos (and carried dew, connected with the goddess Herse/τὴν δρόσον φέρουσαι); the Arrephoren served Athena and dealt with the ἄρρητα.
 - He rejects the derivation of the name from ἄρριχος (basket), proposed by Lobeck, Hiller von Gärtringen, and Ziehen (Burs. Jahresb. 172, 1915, 107).
 - He rejects Robert's interpretation that the people merely nominated and the Basileus confirmed: the Harpokration text is unambiguous that election was by the people (Robert, GGA 1899, 533; contra: Schoemann-Lipsius 493.4).
@@ -66,11 +71,12 @@ Extracted: 2026-10-25
 
 ### Procharisteria
 
-**Month/Day**: No specific Attic month or day stated by Deubner. He says only: "at the end of winter, when the grain began to sprout" (*Am Ausgang des Winters, wenn das Getreide zu sprießen begann*). Connected by later sources to the return of Kore (i.e., spring).
+**Month/Day**: No specific Attic month or day stated by Deubner. He says only: "at the end of winter, when the grain began to sprout" (_Am Ausgang des Winters, wenn das Getreide zu sprießen begann_). Connected by later sources to the return of Kore (i.e., spring).
 
 **Deity**: Athena (old agrarian aspect; later connected to the return of Kore from the Underworld)
 
 **Ritual**:
+
 - All leading state officials (πάντες οἱ τῆς ἀρχῆς) sacrificed to Athena.
 - The name means "giving thanks before [the harvest]" — entreating the goddess's favor well ahead of harvest time, at an early stage of growth.
 - After Eleusinian cult was adopted, the festival was interpreted as connected to the ἄνοδος (return) of Kore.
@@ -81,12 +87,14 @@ Extracted: 2026-10-25
 **Participants**: All serving state officials (πάντες ἄρχοντες)
 
 **Sources (ancient)**:
+
 - Suidas s.v. προχαριστήρια (main description)
 - Lykourgos, in the speech Περὶ τῆς ἱερωσύνης (cited by Suidas): the oldest sacrifice, called Procharisteria, on account of the sprouting crops
 - Bekker, Anecd. 1.295.3: μυστικὴ θυσία τῆς Ἀθηνᾶς ὑπὲρ τῶν φυομένων καρπῶν
 - Harpokration s.v. (with the variant form Προσχαιρητήρια)
 
 **Notes / Deubner's uncertainties**:
+
 - The variant name Προσχαιρητήρια in Harpokration may be a scribal corruption or may represent a genuinely different festival — Deubner is cautious and does not decide.
 - Whether the Krokonidai (priests of Kekrops) participated alongside the Eteobutadai in the Procharisteria sacrifice (suggested by the title of a Lykourg speech) is "completely uncertain."
 - Deubner notes that Bekker's reading ἀγομένη (rather than the transmitted γραφομένη) is required to make sense of the text, as is Valesius' ἀνιένου for ἀπιένου.
@@ -102,6 +110,7 @@ Extracted: 2026-10-25
 **Deity**: Athena Polias (implied)
 
 **Ritual**:
+
 - Sweeping and cleaning of the temple of Athena Polias (καλλύνειν = to sweep/clean).
 - Deubner argues this from the name and from the analogy of a decree about Aphrodite Pandemos (287/6 BCE) that ordered her sanctuary and cult images cleaned during a procession.
 - Highly probable that on this day the annual renewal of the oil in the eternal golden lamp of Athena Polias (Kallimachos' lamp) took place, as Pausanias reports it refilled once a year.
@@ -112,6 +121,7 @@ Extracted: 2026-10-25
 **Participants**: Unknown (temple personnel, presumably)
 
 **Sources (ancient)**:
+
 - Photios s.v. Καλλυντήρια καὶ Πλυντήρια (gives the 19th for Kallynteria)
 - Etym. m. 487.13: two festivals of Athena
 - Harpokration s.v. Πλυντήρια
@@ -119,6 +129,7 @@ Extracted: 2026-10-25
 - Paus. 1.26.6 (Kallimachos' golden lamp; oil refilled once a year)
 
 **Notes / Deubner's uncertainties**:
+
 - Nothing is directly transmitted about the Kallynteria's content; everything is inferred from the name and the connection with the Plynteria.
 - Date uncertain: Deubner rejects Photios' 19th because the Bendideia occupied the 20th and he thinks the Kallynteria would not have been displaced by them. He cannot believe a "late reorganization" shifted them.
 - Deubner explicitly says "nothing is transmitted" about what happened.
@@ -134,7 +145,8 @@ Extracted: 2026-10-25
 **Deity**: Athena Polias (the old wooden image, xoanon)
 
 **Ritual**:
-- The Praxiergidai (hereditary cult family) secretly removed the ornament (κόσμος) and clothing from the ancient wooden image of Athena Polias *before* the procession, and covered the statue with a cloth.
+
+- The Praxiergidai (hereditary cult family) secretly removed the ornament (κόσμος) and clothing from the ancient wooden image of Athena Polias _before_ the procession, and covered the statue with a cloth.
 - A procession led the image down to Phaleron, where it was washed in the sea.
 - Two girls called πλυντρίδες or λουτρίδες were specifically tasked with the washing.
 - Epheboi escorted the goddess to Phaleron and back.
@@ -150,6 +162,7 @@ Extracted: 2026-10-25
 **Aition**: Deubner dismisses the ancient explanation involving Aglauros as a later invention.
 
 **Participants**:
+
 - Praxiergidai (hereditary cult family; removed and replaced the statue's clothing)
 - Two λουτρίδες / πλυντρίδες (girls who performed the actual washing)
 - Epheboi (escort)
@@ -157,6 +170,7 @@ Extracted: 2026-10-25
 - κατανίπτης (washer of the Peplos)
 
 **Sources (ancient)**:
+
 - Plutarch, Alkib. 34.1 (date, the xoanon covered, Praxiergidai, secret rites; the day treated as worst of ἀποφράδες)
 - Xenophon, Hell. 1.4.12 (Alkibiades returned on this day, seen as ominous; statue covered)
 - Photios s.v. λουτρίδες; Hesych. s.v. λουτρίδες
@@ -171,11 +185,12 @@ Extracted: 2026-10-25
 - IG 2² 776 (c. 240 BCE): priestess of Polias donated 100 drachmai for the Praxiergidai sacrifice
 
 **Notes / Deubner's uncertainties**:
-- Deubner argues the roping off of *other* sanctuaries (not just the Polias temple) against contamination from the ritual "filth" stirred up during cleaning — analogous to the Roman Vesta temple cleaning (dies nefasti 7–15 June, quando stercus delatum fas).
+
+- Deubner argues the roping off of _other_ sanctuaries (not just the Polias temple) against contamination from the ritual "filth" stirred up during cleaning — analogous to the Roman Vesta temple cleaning (dies nefasti 7–15 June, quando stercus delatum fas).
 - He rejects the kathartisch (purificatory) interpretation of the ἡγητήρια (figs), which Toepffer, Duemmler, Pfuhl, Harrison, Hock, and Stengel had all accepted. Deubner reads it as a simple food-offering.
 - He reads the day as inauspicious not because the statue is uncovered, but because cleaning stirs up spiritually harmful material.
 - Date controversy: Photios' 29th is explicitly rejected because a popular assembly (ἐκκλησία) is attested on the 29th Thargelion under the archon Chairondas (338/7), which could not fall on an ἀποφράς day.
-- Deubner notes that the delian inscription CIG 2265 (= IG 11.4.1065) does *not* equate the Eretrean Hippion month's 5th-from-last day with the Plynteria — a correction of Mommsen's argument.
+- Deubner notes that the delian inscription CIG 2265 (= IG 11.4.1065) does _not_ equate the Eretrean Hippion month's 5th-from-last day with the Plynteria — a correction of Mommsen's argument.
 
 **Deubner**: printed p. 17–22 / PDF p. 16–21
 
@@ -189,12 +204,14 @@ Extracted: 2026-10-25
 
 **Ritual**:
 
-*Pannychis (night before, 27/28 Hekatombaion):*
+_Pannychis (night before, 27/28 Hekatombaion):_
+
 - Young men and maidens danced and sang on the Akropolis overnight.
 - A paian was sung to the goddess; the women responded with ololyge.
 - A torch-race (lampas) took place, modeled on the Prometheia; the winning torch lit the sacrificial pyre.
 
-*Procession (starting at sunrise on the 28th):*
+_Procession (starting at sunrise on the 28th):_
+
 - Kanephoroi (virginal basket-carriers from noble families) led the procession, carrying sacrificial equipment.
 - A thymiatarion (incense-burner) was also carried.
 - Thallophoroi: handsome old men selected to carry olive branches (ἐλαίας κλάδους).
@@ -204,12 +221,14 @@ Extracted: 2026-10-25
 - Cattle and sheep were led in procession for sacrifice.
 - Freed slaves and barbarians carried oak branches through the agora (to bless this civic center).
 
-*Sacrifices (at the Akropolis):*
+_Sacrifices (at the Akropolis):_
+
 - Two categories of sacrifice:
   1. **Old sacrifice**: Two offerings "as before" — one to Athena Hygieia, one in the old (Erechtheion) temple. This double sacrifice (cow + sheep) was shared between Athena and Pandrosos (Philochoros ap. Harpokration: whoever sacrifices a cow to Athena must also sacrifice a sheep to Pandrosos; called ἐπίβοιον). Officials (prytaneis, archons, treasurers, hieropoioi, strategoi, taxiarchoi, procession participants, kanephoroi) received portions; remainder to the people. Deubner regards this as the older, religiously more significant offering.
   2. **Hekatombe**: The hieropoioi bought cows for 41 minas (from the inscription IG 2² 334 = 335/4 BCE), led them in procession, sacrificed all on the great altar of Athena; the finest was first sacrificed at the altar of Athena Nike. The meat was distributed on the Kerameikos by deme, proportional to each deme's contribution of procession participants.
 
-*Peplos (Great Panathenaia only):*
+_Peplos (Great Panathenaia only):_
+
 - A magnificent embroidered Peplos depicting the Gigantomachy was brought to the Akropolis.
 - It was displayed on a specially rigged ship-cart (ναῦς = Panathenaic ship), with a mast and crosspiece forming a T-shape, on which the Peplos was hung like a sail.
 - The ship-cart traveled in procession from the Kerameikos as far as the Eleusinion at the foot of the Akropolis; there the Peplos was removed from the cart and carried up to the Burg.
@@ -218,7 +237,8 @@ Extracted: 2026-10-25
 - The Peplos was the size of a himation (rectangular cloth); weaving began nine months earlier at the Chalkeia.
 - Deubner argues the ship-cart was introduced at the same time as the Peplos (566 BCE), derived from the Dionysiac ship-cart; he rejects the idea that the mast alone came first and the ship-form was a later addition.
 
-*Agones:*
+_Agones:_
+
 - Gymnastic and hippic agons; the penteteris (Great Panathenaia) also featured musical agons.
 - Prizes: oil from the sacred olives (moria) of Athena, distributed in the famous Panathenaic amphorae (especially for hippic contests).
 - Oil from the sacred trees had religious significance, not just economic value (the Segenskraft of the goddess).
@@ -229,6 +249,7 @@ Extracted: 2026-10-25
 **Aition**: The original festival was called Ἀθηναία and was founded by Erichthonios; Theseus, by unifying Attika, gave it the name Panathenaia and made it a common celebration of all Athenians. The agon was set up by Erichthonios. The Great Panathenaia (penteteris) with the gymnastic agon was established 566/5 BCE under archon Hippokleides; Aristotle already connected this reorganization with Peisistratos.
 
 **Participants**:
+
 - Kanephoroi (noble virgins from Athens)
 - Thallophoroi (old men of exceptional appearance, carrying olive branches)
 - Skaphephoroi and hydriaphoroi (male and female metoikoi)
@@ -239,6 +260,7 @@ Extracted: 2026-10-25
 - Prytaneis, archons, treasurers, strategen, taxiarchoi
 
 **Sources (ancient)**:
+
 - IG 2² 334 (335/4 BCE): major decree for the small Panathenaia sacrifices and meat distribution
 - IG 2² 1496: skin-money inscriptions showing two classes of sacrifice
 - Harpokration s.v. Παναθήναια (foundation legend)
@@ -268,6 +290,7 @@ Extracted: 2026-10-25
 - Brauchitsch, Die panathenäischen Preisamphoren (amphora prizes)
 
 **Notes / Deubner's uncertainties**:
+
 - The Eiresione carried to the Akropolis at the Panathenaia (attested in late sources) is rejected by Deubner as a confusion with the Pyanopsia: if it were ancient, it would appear on the Parthenon frieze.
 - The claims in the Plato scholion and in Lactantius Placidus about an annual or trieteris Peplos are rejected as scribal confusions.
 - The ship-cart and Peplos were introduced simultaneously in 566 BCE (contra Farnell and Pfuhl, who thought the mast pre-dated the ship-form).
@@ -285,10 +308,11 @@ Extracted: 2026-10-25
 **Deity**: Athena Ergane (primarily); Hephaistos (secondary, informal role)
 
 **Ritual**:
+
 - Sacrifice to Athena Ergane on the Akropolis, by the prytaneis (attested by decree IG 2² 674, 277/6 BCE).
 - In archaic times the whole people participated; later only craftsmen (τεχνῖται) kept the festival.
 - Workmen appear in a Sophocles fragment with upright σκεφαί (baskets / here used as κανοῦν) honoring Athena Ergane.
-- The weaving of the Peplos for the Great Panathenaia officially *began* at the Chalkeia; two Arrephoren participated in setting up the warp (ἔκθεσις τοῦ πέπλου).
+- The weaving of the Peplos for the Great Panathenaia officially _began_ at the Chalkeia; two Arrephoren participated in setting up the warp (ἔκθεσις τοῦ πέπλου).
 - The two Arrephoren dedicated their gold ornaments to the goddess at the Chalkeia (from Harpokration).
 - Hephaistos was drawn into the festival secondarily, as patron of smiths and associate of Athena; Phanodemos even claimed the festival belonged to Hephaistos alone, not to Athena — but Deubner firmly rejects this.
 - A fragment of a decree (IG 2² 930, early 2nd c. BCE) mentions the Chalkeia alongside Athena Polias and the other gods; another decree (IG 2² 990) records a sacrifice at the Chalkeia with "the goddess" (= Athena).
@@ -297,12 +321,14 @@ Extracted: 2026-10-25
 **Aition**: None discussed.
 
 **Participants**:
+
 - In early times: all citizens (δημώδης, of the whole people).
 - In later times: craftsmen (τεχνῖται) chiefly; smiths especially.
 - Prytaneis (state officials, officially represented in the 277/6 decree).
 - Two Arrephoren (for the Peplos-weaving start).
 
 **Sources (ancient)**:
+
 - Suidas s.v. Χαλκεῖα II (= Etym. m. 805.43ff.): ancient festival, once of the whole people, later of craftsmen only; "ἕνη καὶ νέα τοῦ Πυανεψιῶνος"
 - Harpokration s.v. Χαλκεῖα (= Suidas Χαλκεῖα III): same date; festival common especially to smiths
 - Harpokration / Suidas s.v. Χαλκεῖα III: Phanodemos' claim that it belonged to Hephaistos, not Athena
@@ -316,6 +342,7 @@ Extracted: 2026-10-25
 - Suid. Χαλκεῖα II; Harpokration Χαλκεῖα; Eustath. Il. 2.552 S. 284.35 (date)
 
 **Notes / Deubner's uncertainties**:
+
 - Deubner emphasizes that Athena is unambiguously the primary deity; Hephaistos had only an unofficial role.
 - The Chalkeia is where the Peplos-weaving began, nine months before the Great Panathenaia (28 Hekatombaion). This is "the last day of Pyanopsion" which makes chronological sense: nine months from the end of Pyanopsion to 28 Hekatombaion.
 - The name "Athenaia" in official sources appears only once (IG 2² 1937, 157/6 BCE) and may reflect an exceptional occasion or later agonistic expansion; it is not the normal official name.
@@ -331,22 +358,25 @@ Extracted: 2026-10-25
 **Deity**: Athena (as goddess of the state); Eirene (Peace) — added later, 374 BCE.
 
 **Ritual**:
+
 - Public festival (δημοτελής) to keep alive the memory of the Synoikismos of Theseus, which politically united Attika.
 - The deme Skambonidai participated by sacrificing a full-grown animal (τέλεον) on the Akropolis (IG i² 188.60). The meat was to be sold raw (ὠμά).
 - An offering to Eirene was associated with the Synoikia because of its political character. This was instituted in 374 BCE to celebrate the peace between Athens and Sparta after Timotheos' naval victory.
 - The altar of Eirene set up at that time was probably a lektisternion-style offering (the goddess invited to recline on a κλίνη), as Nepos Tim. 2.2 says a pulvinar was also instituted.
-- The Eirene sacrifice had an *unbloody altar* (ὁ βωμὸς μὴ αἱματοῦσθαι), per the scholion.
+- The Eirene sacrifice had an _unbloody altar_ (ὁ βωμὸς μὴ αἱματοῦσθαι), per the scholion.
 - Deubner carefully examines Aristophanes Peace 1017–1019 and concludes the Aristophanes passage does NOT prove a pre-374 BCE unbloody cult of Eirene; it is poetic characterization, not a reference to cult practice.
 - Philochoros (ap. Didymos) confirms the altar of Eirene was founded at the time of this specific peace, implying no earlier official Eirene altar existed.
 
 **Aition**: The festival commemorates the Synoikismos of Theseus (historical/mythological foundation of Athens as a united city-state). The connection with Eirene (374 BCE) is a later historical addition.
 
 **Participants**:
+
 - Citizens of Athens generally (δημοτελής)
 - Deme Skambonidai (specific obligation to sacrifice on the Akropolis)
 - Strategen (who offered the Eirene sacrifice, based on the skin-money list IG 2² 1496)
 
 **Sources (ancient)**:
+
 - Thucydides 2.15.2: "and the Synoikia, which the Athenians celebrate in honor of the goddess to this day as a public festival, since that time of the Synoikismos"
 - Plutarch, Thes. 24.4: "he sacrificed also on the 16th Hekatombaion, which is still sacrificed now" (ὃν ἔτι νῦν θύουσι)
 - IG i² 188.60 (Skambonidai decree): sacrifice at the Synoikia in the city, meat to be sold raw
@@ -362,6 +392,7 @@ Extracted: 2026-10-25
 - Nilsson, RE 2. Reihe 4, 1435.31ff. (alternative interpretation: Synoikia as neighborhood festival, analogous to Metageitnia — rejected by Deubner because of the Akropolis sacrifice)
 
 **Notes / Deubner's uncertainties**:
+
 - Deubner explicitly rejects Nilsson's alternative interpretation of Synoikia as a "neighborliness festival" (like the Metageitnia), arguing the sacrifice on the Akropolis specifically points to its political character commemorating the Synoikismos.
 - He rejects the Plutarch (Kim. 13.5) claim of an Eirene altar after the Kallias Peace as apocryphal — it arose from the proximity of a Kallias statue to the Kephisodotos Eirene.
 - The question of whether Aristophanes attests a pre-374 unbloody cult of Eirene is discussed at length and answered in the negative: the poet is making a rhetorical point about the nature of peace (which cannot delight in slaughter), not describing an actual cult.
@@ -373,13 +404,13 @@ Extracted: 2026-10-25
 
 ## Overview table
 
-| Festival | Attic month | Day | Deity |
-|---|---|---|---|
-| Arretophoria (summer rite) | Skirophorion | not specified | Athena Polias |
-| Arretophoria (autumn rite) | Pyanopsion (Deubner's reconstruction) | not specified | Athena Polias |
-| Procharisteria | end of winter (no month named) | not specified | Athena |
-| Kallynteria | Thargelion | shortly before 25th | Athena Polias |
-| Plynteria | Thargelion | 25th (Deubner's preferred date) | Athena Polias |
-| Panathenaia (annual/Great) | Hekatombaion | 28th | Athena Polias / Hygieia / Nike |
-| Chalkeia | Pyanopsion | last day (eny kai nea) | Athena Ergane |
-| Synoikia | Hekatombaion | 16th | Athena; also Eirene (from 374 BCE) |
+| Festival                   | Attic month                           | Day                             | Deity                              |
+| -------------------------- | ------------------------------------- | ------------------------------- | ---------------------------------- |
+| Arretophoria (summer rite) | Skirophorion                          | not specified                   | Athena Polias                      |
+| Arretophoria (autumn rite) | Pyanopsion (Deubner's reconstruction) | not specified                   | Athena Polias                      |
+| Procharisteria             | end of winter (no month named)        | not specified                   | Athena                             |
+| Kallynteria                | Thargelion                            | shortly before 25th             | Athena Polias                      |
+| Plynteria                  | Thargelion                            | 25th (Deubner's preferred date) | Athena Polias                      |
+| Panathenaia (annual/Great) | Hekatombaion                          | 28th                            | Athena Polias / Hygieia / Nike     |
+| Chalkeia                   | Pyanopsion                            | last day (eny kai nea)          | Athena Ergane                      |
+| Synoikia                   | Hekatombaion                          | 16th                            | Athena; also Eirene (from 374 BCE) |

@@ -1,4 +1,5 @@
 # Review: Gamelion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -17,11 +18,13 @@ App block: `utils/atticCalendarData.ts`, `monthIndex === 6` (lines 93–96)
 **Verdict**: WRONG_DETAIL | UNSOURCED_AITION
 
 **Issues**:
+
 1. The description singles out comedy but both Parke and Deubner attest tragedy AND comedy as equal components of the dramatic agon. This is a material error of omission.
 2. The aition ("calor divino que derrota al frío y resucita las plantas") has no ancient support. Neither Parke nor Deubner records any aition for the Lenaia. Parke explicitly says none is discussed. The "magical heat" framing is modern romantic invention.
 3. The key ritual details attested by both sources are absent: exclusion of foreigners (Parke: "a more native and intimate occasion"); the Daiduchos/Dadouchos invocation formula; the women's orgiastic rite (Lēnai) before the columnar Dionysus mask (Deubner).
 
 **Fix**:
+
 - Change "competiciones de comedia" to "competiciones de comedia y tragedia".
 - Remove the aition entirely, or replace with a non-aition note referencing the exclusion of foreigners and the women's rite: "El único festival dramático exclusivamente para ciudadanos atenienses (ni extranjeros ni metecos). El daduco eleusinio invocaba al dios: '¡Invocad al dios!'. Las devotas (Lēnai) realizaban ritos extáticos ante una máscara de Dionisio."
 
@@ -38,12 +41,14 @@ App block: `utils/atticCalendarData.ts`, `monthIndex === 6` (lines 93–96)
 **Verdict**: WRONG_DAY (minor — sources conflict) | UNSOURCED_AITION | MISSING_DETAIL
 
 **Issues**:
+
 1. **Day conflict between sources**: Parke says 26th, Deubner says ca. 24th. The app follows Parke's day (26). This is defensible but should be flagged in a comment. Deubner's figure (24) has epigraphic backing (IG I² 840.20 is an old sacrifice calendar); Parke's figure is not explicitly sourced. Deubner's "ca. 24" is likely more reliable.
 2. **Aition is invented**: Parke is explicit that "no details of the festival are preserved." The "fertilidad celestial que cae sobre los campos congelados" is modern romantic invention with no ancient attestation in either source.
 3. **Missing detail**: The sacrifice to Zeus Hēraios (a piglet on the Akropolis, IG I² 840.20) is the only positively attested ritual element (Deubner) and is absent from the app.
 4. **Missing name**: The name "Gamelia" (which gives the month its name) is absent. The app uses only "Theogamia (Hieros Gamos)".
 
 **Fix**:
+
 - Change day to 24 (Deubner, epigraphic; add code comment noting Parke says 26).
 - Remove the aition; replace with the only attested fact: "Los detalles del rito no se han conservado. Se sabe que se ofrecía un lechón a Zeus Hēraios en la Acrópolis. El nombre del mes, Gamelion, deriva de esta fiesta (Gamelia)."
 - Add the name "Gamelia" to `festivalName`, e.g. `"Theogamia / Gamelia (Hieros Gamos)"`.
@@ -96,10 +101,10 @@ App block: `utils/atticCalendarData.ts`, `monthIndex === 6` (lines 93–96)
 
 ## Summary table
 
-| Day | Festival | Day verdict | Deity verdict | Aition verdict | Key missing detail |
-|-----|----------|------------|--------------|---------------|--------------------|
-| 12 | Lenaia | OK (both sources) | OK | UNSOURCED | Tragedy omitted; foreigners excluded; Dadouchos invocation; women's orgiastic rite |
-| 26 | Theogamia | WRONG_DAY (Deubner: 24) | OK | UNSOURCED | Gamelia name; piglet sacrifice to Zeus Hēraios |
-| 19 | Kittoseies Dionysou | — | — | — | MISSING_FESTIVAL (thin attestation) |
-| ~27 | Goat sacrifice | — | — | — | MISSING_FESTIVAL (epigraphically attested) |
-| ? | Ambrosia | — | — | — | MISSING_FESTIVAL (uncertain; omission acceptable) |
+| Day | Festival            | Day verdict             | Deity verdict | Aition verdict | Key missing detail                                                                 |
+| --- | ------------------- | ----------------------- | ------------- | -------------- | ---------------------------------------------------------------------------------- |
+| 12  | Lenaia              | OK (both sources)       | OK            | UNSOURCED      | Tragedy omitted; foreigners excluded; Dadouchos invocation; women's orgiastic rite |
+| 26  | Theogamia           | WRONG_DAY (Deubner: 24) | OK            | UNSOURCED      | Gamelia name; piglet sacrifice to Zeus Hēraios                                     |
+| 19  | Kittoseies Dionysou | —                       | —             | —              | MISSING_FESTIVAL (thin attestation)                                                |
+| ~27 | Goat sacrifice      | —                       | —             | —              | MISSING_FESTIVAL (epigraphically attested)                                         |
+| ?   | Ambrosia            | —                       | —             | —              | MISSING_FESTIVAL (uncertain; omission acceptable)                                  |

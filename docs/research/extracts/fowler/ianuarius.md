@@ -1,7 +1,9 @@
 # Mensis Ianuarius — Fowler (1899)
+
 **PDF pages used**: 289–307 (printed 278–296)
 
 ## Kalends (Jan. 1) — Vediovis in Insula
+
 - **Day**: 1
 - **Fasti status**: F (Praen.)
 - **Deity**: Vediovis; also Aesculapius (both on Tiber island)
@@ -9,6 +11,7 @@
 - **Page**: p. 278–279
 
 ## Compitalia (Ludi Compitales)
+
 - **Day**: Variable (conceptivae); fell between Dec. 17 (Saturnalia) and Jan. 5; Philocalus assigns Ludi Compitales to Jan. 3–5
 - **Fasti status**: Not stativae until late Empire
 - **Deity**: Lares Compitales
@@ -16,6 +19,7 @@
 - **Page**: p. 279–281
 
 ## Agonalia (January)
+
 - **Day**: 9 (V ID. IAN.)
 - **Fasti status**: IP? (Maff. Praen.); Praen. note gives the word Agonium
 - **Deity**: Janus (implied; not certain). Rex sacrorum sacrificed a ram in the Regia; Ovid says Janus was "agonali luce piandus."
@@ -23,6 +27,7 @@
 - **Page**: p. 280–289
 
 ## Carmentalia (First Day)
+
 - **Day**: 11 (III ID. IAN.)
 - **Fasti status**: IP (Praen. Maff.)
 - **Deity**: Carmenta (also Juturna worshipped on this day per Ovid, Fasti 1.463, but the Juturnalia is a dedication festival only)
@@ -31,6 +36,7 @@
 - **Page**: p. 290–293
 
 ## Carmentalia (Second Day)
+
 - **Day**: 15 (XVIII K.FEB.)
 - **Fasti status**: IP (Praen. Maff. Phil. Caer.)
 - **Deity**: Carmenta
@@ -38,6 +44,7 @@
 - **Page**: p. 290–293
 
 ## Sementivae / Paganalia
+
 - **Day**: Variable (conceptivae); Ovid dates ~Jan. 24–26; not fixed because the festival's timing was tied to agricultural conditions
 - **Fasti status**: Not in calendars (feriae conceptivae)
 - **Deity**: Ceres and Tellus ("consortes operis": Ceres provides the power of grain, Tellus provides the place/earth)
@@ -45,4 +52,5 @@
 - **Page**: p. 294–296
 
 ## Summary
+
 January has only three fasti-attested festivals in large letters (Agonalia, and two Carmentalia), plus the major variable feriae (Compitalia and Paganalia). The Agonalia entry prompts Fowler's longest digression of any January section — a full treatise on Janus, concluding that he originated as the numen of the house-door and became the god of all beginnings by logical extension from that root. The Carmentalia receives careful discussion of the double-day problem and the goddess's dual role as prophetess and birth-deity. The Paganalia/Sementivae section connects agricultural timing with ritual: it closes the mid-winter feast series inaugurated by the Saturnalia, just before the spring sowing begins.

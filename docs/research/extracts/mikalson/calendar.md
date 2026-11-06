@@ -1,7 +1,8 @@
 # Mikalson — Sacred and Civil Calendar of the Athenian Year (1975)
+
 Extracted: 2026-10-25
 
-Source: Jon D. Mikalson, *The Sacred and Civil Calendar of the Athenian Year*. Princeton, 1975.
+Source: Jon D. Mikalson, _The Sacred and Civil Calendar of the Athenian Year_. Princeton, 1975.
 Chapter III: Calendar of the Athenian Year (printed pp. 25–181 = PDF pp. 39–195).
 Conclusions (Chapter IV, pp. 183–197+), including Calendar I–III tables.
 
@@ -9,7 +10,7 @@ Conclusions (Chapter IV, pp. 183–197+), including Calendar I–III tables.
 
 ## Notes on method
 
-Mikalson's procedure: for each day of each month he compiles *positively dated* ancient evidence (inscriptions, literary sources) and distinguishes it from restorations. A day is treated as ATTESTED only when ancient sources directly give a day-number. PROBABLE = Mikalson infers the date from indirect evidence or strong analogy. UNCERTAIN = date disputed or wholly inferential.
+Mikalson's procedure: for each day of each month he compiles _positively dated_ ancient evidence (inscriptions, literary sources) and distinguishes it from restorations. A day is treated as ATTESTED only when ancient sources directly give a day-number. PROBABLE = Mikalson infers the date from indirect evidence or strong analogy. UNCERTAIN = date disputed or wholly inferential.
 
 The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3, Herakles/Hermes/Aphrodite/Eros day 4, Artemis day 6, Apollo day 7, Poseidon-and-Theseus day 8) are confirmed through the Erkhia sacrificial calendar and repeated literary testimony and are ATTESTED across all twelve months. They are listed once below and implied for every subsequent month.
 
@@ -32,7 +33,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Hekatombaion (Month 1, high summer, ~July/August)
 
-*Note: Mikalson's day-by-day text for Hekatombaion (printed pp. 25–36) could not be directly extracted due to PDF rendering limits. The following data is reconstructed from the Conclusions calendar tables (Calendar II, p. 188) and cross-references in the body text.*
+_Note: Mikalson's day-by-day text for Hekatombaion (printed pp. 25–36) could not be directly extracted due to PDF rendering limits. The following data is reconstructed from the Conclusions calendar tables (Calendar II, p. 188) and cross-references in the body text._
 
 - **Day 1**: Noumenia — ATTESTED (monthly, all months)
 - **Day 2**: Agathos Daimon — ATTESTED (monthly)
@@ -51,7 +52,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Metageitnion (Month 2, ~August/September)
 
-*Note: printed pp. 37–46. The Metageitnia festival gives the month its name but Mikalson finds no secure day-date for it.*
+_Note: printed pp. 37–46. The Metageitnia festival gives the month its name but Mikalson finds no secure day-date for it._
 
 - **Days 1–8**: Monthly festival days — ATTESTED (see above)
 - **Day 9**: Ekklesia meeting attested (multiple inscriptions; Mikalson's Calendar I)
@@ -65,7 +66,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Boedromion (Month 3, ~September/October)
 
-*Printed pp. 47–73.*
+_Printed pp. 47–73._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
 - **Day 5**: Genesia (festival for the dead; state festival) — ATTESTED. Mikalson (p. 187) lists "Genesia, Boedromion 5" as a positively dated festival day on which no Ekklesia meeting is attested.
@@ -80,7 +81,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Pyanopsion (Month 4, ~October/November)
 
-*Printed pp. 65–83. Note: Thesmophoria (days 11–13) skipped per task instructions.*
+_Printed pp. 65–83. Note: Thesmophoria (days 11–13) skipped per task instructions._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
 - **Day 7**: Pyanopsia — ATTESTED. The month is named after this Apollo festival. Coincides with the monthly Apollo day. Plutarch and lexicographers establish the date directly.
@@ -97,7 +98,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Maimakterion (Month 5, ~November/December)
 
-*Printed pp. 84–87.*
+_Printed pp. 84–87._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
 - **Maimakteria** (festival of Zeus Maimaktes, names the month): No specific day-date attested in Mikalson's analysis. — UNCERTAIN.
@@ -109,7 +110,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Posideon (Month 6, ~December/January)
 
-*Printed pp. 88–97.*
+_Printed pp. 88–97._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
 - **Day 19**: Rural Dionysia (deme Myrrhinos) — ATTESTED for Myrrhinos specifically (IG II² 1183; Theophrastos Char. 3.5). Mikalson notes the rural Dionysia were celebrated on different days in different demes; no single city-wide day is attested. City Dionysia in Piraeus had no securely dated state day.
@@ -121,13 +122,13 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Gamelion (Month 7, ~January/February)
 
-*Printed pp. 98–110.*
+_Printed pp. 98–110._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
   - Day 7: Erkhia calendar confirms Apollo Lykeios and Apollo Delphinios sacrifices (Gamelion 7)
   - Day 8: Boule meeting attested 112/1 BC (IG II² 1012); Erkhia prescribes sacrifices to Apollo Apotropaios, Apollo Nymphegetes, Nymphs
 - **Day 19**: Ivy placed on statues of Dionysos — ATTESTED (IG II² 1367, private calendar of 1st–2nd c. AD: "Γαμηλιῶνος κιττώσεις Διονύσους θι"). No other indisputable evidence.
-- **Day 27**: Theogamia (sacred marriage of Zeus and Hera; festival of Hera) — ATTESTED (PROBABLE). Primary evidence: Erkhia sacrificial calendar designates Gamelion 27 with sacrifices to Kourotrophos, Hera, Zeus Teleios, Poseidon (IG II² 1358, confirmed by Columns B, Γ, Δ). F. Salviat (*BCH* 88, 1964) associates these with the Theogamia. Mikalson accepts this over Deubner's Gamelion 24. Mikalson: "the Theogamia should, as Salviat noted, be dated to Gamelion 27." Meeting of Ekklesia also attested on this day (unusual; probably because Theogamia was celebrated exclusively by women).
+- **Day 27**: Theogamia (sacred marriage of Zeus and Hera; festival of Hera) — ATTESTED (PROBABLE). Primary evidence: Erkhia sacrificial calendar designates Gamelion 27 with sacrifices to Kourotrophos, Hera, Zeus Teleios, Poseidon (IG II² 1358, confirmed by Columns B, Γ, Δ). F. Salviat (_BCH_ 88, 1964) associates these with the Theogamia. Mikalson accepts this over Deubner's Gamelion 24. Mikalson: "the Theogamia should, as Salviat noted, be dated to Gamelion 27." Meeting of Ekklesia also attested on this day (unusual; probably because Theogamia was celebrated exclusively by women).
 - **Lenaia**: PROBABLE period Gamelion 12–21. Mikalson's Summary: "The exact dating of the Lenaia has never been established." Ancient sources confirm Gamelion as the month (Schol. to Hesiod Op. 504–506; Bekker Anecd. 1.235). The sacrifice to Dionysos Leneus on Mykonos on "the twelfth day of Lenaion" (Dittenberger Sylloge³ 1024) "strongly suggests that Gamelion 12 in Athens was a day of the Lenaia." Festival may have continued to Gamelion 19 (ivy-placing). Period 12–21 is free from Ekklesia meetings (consistent with festival exclusion). — PROBABLE for days 12–19 block; UNCERTAIN for specific day.
 
 **Gamelion—Summary (Mikalson):** Theogamia (27) is the only annual festival to receive a secure date. Lenaia falls in the period 12–19 but no single day is firmly established.
@@ -136,7 +137,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Anthesterion (Month 8, ~February/March)
 
-*Printed pp. 111–121.*
+_Printed pp. 111–121._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
   - Day 2: Erkhia calendar adds Dionysos sacrifice (IG II² 1367, col. Γ, lines 42–47)
@@ -145,7 +146,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 - **Day 12**: Khoes (Anthesteria day 2; Feast of Cups) — ATTESTED. Thucydides 2.15.4 (the "most important" day, τῷ Διονύσῳ ἱερόν). Plutarch Mor. 655E. Harpokration on Khoes confirms (Anthesterion 12). No Ekklesia meeting attested.
 - **Day 13**: Khytroi (Anthesteria day 3; "Pots") — ATTESTED. Harpokration (citing Philokhoros) establishes this as day of the Khytroi. Scholion to Aristophanes Ach. 1076 discussion resolved by Mikalson: Khytroi belongs to Anthesterion 13.
 - **Day 23**: Diasia (festival of Zeus Meilichios) — ATTESTED. Scholion to Aristophanes Nub. 408: "Διάσιον· ἑορτὴ Ἀθήνησι Μειλιχίου Διός· ἄγεται δὲ μηνὸς Ἀνθεστηριῶνος ἢ φθίνοντος." Confirmed by Erkhia sacrificial calendar (Column A, lines 37–43: sacrifice to Zeus Meilikhios at the Diasia in Anthesterion at Agrai). No Ekklesia meeting attested (p. 187).
-- **Mysteries at Agrai (Lesser Mysteries)**: UNCERTAIN. Mikalson's Summary: festival fell in Anthesterion (Plutarch Demetrios 26.1), but within the period Anthesterion 20–26 (seven days free from meetings), which days cannot be further specified. Probably associated with Diasia (Anthesterion 23) given Michael Jameson's argument (*BCH* 89, 1965), but Mikalson says "it is not possible to determine more precisely."
+- **Mysteries at Agrai (Lesser Mysteries)**: UNCERTAIN. Mikalson's Summary: festival fell in Anthesterion (Plutarch Demetrios 26.1), but within the period Anthesterion 20–26 (seven days free from meetings), which days cannot be further specified. Probably associated with Diasia (Anthesterion 23) given Michael Jameson's argument (_BCH_ 89, 1965), but Mikalson says "it is not possible to determine more precisely."
 
 **Anthesterion—Summary (Mikalson):** Anthesteria (11–13) and Diasia (23) are positively dated. The Mysteries at Agrai fall sometime in Anthesterion 20–26 but cannot be further dated.
 
@@ -153,14 +154,14 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Elaphebolion (Month 9, ~March/April)
 
-*Printed pp. 122–137.*
+_Printed pp. 122–137._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
   - Day 6: Erkhia calendar confirms Artemis sacrifice Elaphebolion 6 (see Appendix II note in Mikalson)
 - **Day 5**: Ekklesia meeting attested (284/3 BC, IG II² 656)
 - **Day 8**: Proagon (preliminary contests) + sacrifice to Asklepios — ATTESTED. Aeschines 3.66–67: explicitly dates both events to "the eighth day of the month Elaphebolion." Festival day; meeting of the Ekklesia ALSO attested on this day 346 BC (unusual; Mikalson p. 189 discusses as an exceptional case).
 - **Day 9**: Ekklesia meeting firmly attested (four or more instances).
-- **Day 10**: City Dionysia day 1 (procession escorting Dionysos to theater) — PROBABLE/ATTESTED. Ferguson (*Hesp* 1948) argued persuasively for Elaphebolion 10 as first day; accepted by Mikalson, Gould-Lewis, Pickard-Cambridge. No ancient source names day 10 specifically, but deduced from the scholion to Aeschines 3.67 ("a few days after the Proagon") counting inclusively from day 8. — PROBABLE (strong scholarly consensus).
+- **Day 10**: City Dionysia day 1 (procession escorting Dionysos to theater) — PROBABLE/ATTESTED. Ferguson (_Hesp_ 1948) argued persuasively for Elaphebolion 10 as first day; accepted by Mikalson, Gould-Lewis, Pickard-Cambridge. No ancient source names day 10 specifically, but deduced from the scholion to Aeschines 3.67 ("a few days after the Proagon") counting inclusively from day 8. — PROBABLE (strong scholarly consensus).
 - **Days 10–11**: Mikalson (p. 187) lists "City Dionysia, Elaphebolion 10–11" as two festival days without Ekklesia meetings attested (core procession and first competition day). Additionally Mikalson's Summary: "The City Dionysia included the days Elaphebolion 10–16, and the Pandia occurred on Elaphebolion 17."
 - **Days 12–14**: Meetings of the Ekklesia attested during the City Dionysia period — ATTESTED as exceptions. Mikalson (p. 187) lists these in the "festival days with meetings" category. Source: Aeschines 3.67–68; Hesp 1936 and 1938.
 - **Day 14**: Ekklesia meeting attested; Thucydides 4.118.11–13 records vote on Peace of Nikias preliminary measures on Elaphebolion 14, 423 BC.
@@ -181,7 +182,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Mounichion (Month 10, ~April/May)
 
-*Printed pp. 138–150.*
+_Printed pp. 138–150._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
   - Day 2: Legal proceedings attested 325/4 BC (IG II² 1629)
@@ -200,18 +201,18 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Thargelion (Month 11, ~May/June)
 
-*Printed pp. 151–164.*
+_Printed pp. 151–164._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
 - **Day 6**: City of Athens purified — PROBABLE association with Thargelia (Diogenes Laertios 2.44: "Θαργηλιῶνος ἕκτῃ, ὅτε καθαίρουσιν Ἀθηναῖοι τὴν πόλιν"). Deubner associates this purification with the Thargelia on day 7. Mikalson notes Deubner's evidence is "not conclusive" but "from the purification and from the monthly celebration Thargelion 6 may be considered a festival day." — PROBABLE.
 - **Day 7**: Thargelia (festival of Apollo's birthday; two pharmakoi expelled) — ATTESTED. Plutarch Mor. 717B: "τῇ ἕκτῃ τοῦ Θαργηλιῶνος ἱσταμένου... τῇ ἑβδόμῃ τὴν Πλάτωνος ἤγομεν." Mor. 717D confirms Apollo's birthday and the Thargelia on Thargelion 7. Month named after this festival.
-- **Day 14**: Ekklesia meeting attested (Aristotle, *Ath. Pol.* 32: 412/1 BC; two other inscriptions).
+- **Day 14**: Ekklesia meeting attested (Aristotle, _Ath. Pol._ 32: 412/1 BC; two other inscriptions).
 - **Day 16**: Ekklesia meeting attested (IG II² 1011, 107/6 BC; Erkhia prescribes sacrifice to Zeus Epakrios on this day).
 - **Day 18**: Ekklesia meeting attested (IG II² 503, 302/1 BC).
-- **Day 19**: Bendideia (festival of Bendis in Piraeus) — ATTESTED. Proklos *in Ti.* 9B: "τῇ ἐνάτῃ ἐπὶ δέκα τοῦ Θαργηλιῶνος." Scholion to *Rep.* 327A confirms. Aristotle in Proklos *in Ti.* 27A gives variant "Thargelion 20" (the εἰκάδι) but Mikalson accepts 19 per Proklos's primary citation. Erkhia calendar prescribes sacrifice to Menedeios on this day (Jameson associates with Bendideia). No Ekklesia meeting attested (p. 187, "Bendideia, Thargelion 19").
-  - *Conflict noted*: Aristotle (*in Ti.* 27A) places the Bendideia on "the twentieth of Thargelion" (eikas), but Mikalson explains this as referring to the festival extending into the evening of day 19, technically counted as day 20 by sunset reckoning. The two-day span (Thargelion 19–20) results from the evening extension.
+- **Day 19**: Bendideia (festival of Bendis in Piraeus) — ATTESTED. Proklos _in Ti._ 9B: "τῇ ἐνάτῃ ἐπὶ δέκα τοῦ Θαργηλιῶνος." Scholion to _Rep._ 327A confirms. Aristotle in Proklos _in Ti._ 27A gives variant "Thargelion 20" (the εἰκάδι) but Mikalson accepts 19 per Proklos's primary citation. Erkhia calendar prescribes sacrifice to Menedeios on this day (Jameson associates with Bendideia). No Ekklesia meeting attested (p. 187, "Bendideia, Thargelion 19").
+  - _Conflict noted_: Aristotle (_in Ti._ 27A) places the Bendideia on "the twentieth of Thargelion" (eikas), but Mikalson explains this as referring to the festival extending into the evening of day 19, technically counted as day 20 by sunset reckoning. The two-day span (Thargelion 19–20) results from the evening extension.
 - **Day 23**: Ekklesia meeting attested (three instances: IG II² 1673; IG II² 361; Hesp 1941).
-- **Day 25**: Plynteria (washing of Athena's statue; days of ill omen) — ATTESTED. Plutarch *Alc.* 34.1 explicitly: "ἑβδάτῳ φθίνοντος" of Thargelion = day 25 (in 30-day month). Proklos *in Ti.* 27A confirms location in last third of month. No Ekklesia meetings expected (Plutarch: Plynteria was "ἀποφράς" — ill-omened, no public business).
+- **Day 25**: Plynteria (washing of Athena's statue; days of ill omen) — ATTESTED. Plutarch _Alc._ 34.1 explicitly: "ἑβδάτῳ φθίνοντος" of Thargelion = day 25 (in 30-day month). Proklos _in Ti._ 27A confirms location in last third of month. No Ekklesia meetings expected (Plutarch: Plynteria was "ἀποφράς" — ill-omened, no public business).
 - **Kallynteria**: day in last third of Thargelion, just before Plynteria — UNCERTAIN. Deubner placed it on Thargelion 24 (day before Plynteria 25). Mikalson: "It would seem that the Kallynteria could be dated to any one of these days [24–28], with the exception of Thargelion 25, the day of the Plynteria." No direct ancient evidence for a specific day number.
 - **Day 29**: Ekklesia meeting attested (three sources, 338/7, 300/299, and 146/5 BC).
 
@@ -221,11 +222,11 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 
 ## Skirophorion (Month 12, ~June/July)
 
-*Printed pp. 165–181. Note: Skira (day 12) skipped per task instructions.*
+_Printed pp. 165–181. Note: Skira (day 12) skipped per task instructions._
 
 - **Days 1–8**: Monthly festival days — ATTESTED
 - **Day 2**: Agathos Daimon (monthly) + meeting of phylai attested — ATTESTED. Aeschines 3.27: "ἔγραψε Δημοσθένης ἀγορὰν ποιῆσαι τῶν φυλῶν Σκιροφοριῶνος δευτέρᾳ ἱσταμένου καὶ τρίτῃ." Thiasotai of Bendis on Salamis regularly met on this day (IG II² 1317, IG II² 1317b addenda).
-- **Day 3**: Athena (monthly) + Arrephoria association — PROBABLE. Erkhia calendar prescribes sacrifices to Kourotrophos, Athena Polias, Aglauros, Zeus Polieus, and Poseidon on Skirophorion 3 (Columns A–Δ). Jameson (*BCH* 89, 1965) and Burkert (*Hermes* 94, 1966) associate these with the Arrephoria. Mikalson: "Burkert is more cautious, noting that one need not assume the cults of a deme and of the state correspond exactly. The evidence does suggest strongly that the state Arrephoria are to be dated to Skirophorion 3, but it is not conclusive." — PROBABLE.
+- **Day 3**: Athena (monthly) + Arrephoria association — PROBABLE. Erkhia calendar prescribes sacrifices to Kourotrophos, Athena Polias, Aglauros, Zeus Polieus, and Poseidon on Skirophorion 3 (Columns A–Δ). Jameson (_BCH_ 89, 1965) and Burkert (_Hermes_ 94, 1966) associate these with the Arrephoria. Mikalson: "Burkert is more cautious, noting that one need not assume the cults of a deme and of the state correspond exactly. The evidence does suggest strongly that the state Arrephoria are to be dated to Skirophorion 3, but it is not conclusive." — PROBABLE.
   - Meeting of the Boule also attested for Skirophorion 3 (215/4 BC, IG II² 847, lines 1–6).
 - **Day 4**: Herakles, Hermes, Aphrodite, Eros (monthly) + Boule meeting attested 161/0 BC (IG II² 952) — ATTESTED.
 - **Day 6**: Artemis (monthly) + Nomothetai meeting attested 335/4 BC (IG II² 333) — ATTESTED.
@@ -235,7 +236,7 @@ The "monthly festival days" (Noumenia day 1, Agathos Daimon day 2, Athena day 3,
 - **Day 10**: Ekklesia meeting attested (IG II² 349, 331/0 BC).
 - **Day 11**: Ekklesia meeting attested (IG II² source, 272/1 BC).
 - **Day 12**: Skira — ATTESTED (skipped per task instructions). Festival day; no Ekklesia meeting attested (p. 187).
-- **Day 14**: Dipolieia (festival of Zeus Polieus; Buphonia ox-slaughter) — ATTESTED. Two ancient sources: Scholion to Aristophanes *Pax* 419 ("Διπόλεια δέ ἐστιν ἑορτὴ Ἀθήνησιν, ἐν ᾗ Πολιεῖ Διὶ θύουσι Σκιροφοριῶνος τετράδι ἐπὶ δέκα"); *Etym. Magn.* 210.30 ("Βουφόνια· ἤγετο αὕτη Σκιροφοριῶνος μηνὸς τετράρτῃ ἐπὶ δέκα"). Bekker *Anecd.* 1.238.21's variant "sixth of Skirophorion" rejected by Mikalson as confused. Note: Aristotle *Ath. Pol.* 32 records that on this day in 411 BC a new Boule entered office — not a meeting but a term-start. No Ekklesia meeting attested (p. 187).
+- **Day 14**: Dipolieia (festival of Zeus Polieus; Buphonia ox-slaughter) — ATTESTED. Two ancient sources: Scholion to Aristophanes _Pax_ 419 ("Διπόλεια δέ ἐστιν ἑορτὴ Ἀθήνησιν, ἐν ᾗ Πολιεῖ Διὶ θύουσι Σκιροφοριῶνος τετράδι ἐπὶ δέκα"); _Etym. Magn._ 210.30 ("Βουφόνια· ἤγετο αὕτη Σκιροφοριῶνος μηνὸς τετράρτῃ ἐπὶ δέκα"). Bekker _Anecd._ 1.238.21's variant "sixth of Skirophorion" rejected by Mikalson as confused. Note: Aristotle _Ath. Pol._ 32 records that on this day in 411 BC a new Boule entered office — not a meeting but a term-start. No Ekklesia meeting attested (p. 187).
 - **Day 16**: Ekklesia meeting attested — three instances (Demosthenes 19.58; IG II² 893, 188/7 BC; IG II² 949, 165/4 BC) and also financial transaction.
 - **Day 18**: Ekklesia meeting attested (SEG 21, no. 272, 335/4 BC).
 - **Day 21**: Ekklesia meeting attested (three major instances: IG II² 493, 303/2 BC; IG II² 494, 303/2 BC; IG II² 505, 302/1 BC; IG II² 676, 273/2 BC).
@@ -292,46 +293,46 @@ Calendar II (p. 188) = master grid of all attested festival days (F) and Ekklesi
 
 Mikalson (pp. 183–197 passim) does not produce a single consolidated "Probable Dates" table outside of the body text and Calendars I–III. All date attributions are embedded in the monthly sections and the Conclusions calendars. The following is a condensed version derived from the text:
 
-| Festival | Month | Day(s) | Mikalson's confidence |
-|---|---|---|---|
-| Kronia | Hekatombaion | 12 | ATTESTED |
-| Synoikia | Hekatombaion | 15–16 | ATTESTED |
-| Panathenaia (chief day) | Hekatombaion | 28 | ATTESTED |
-| Metageitnia | Metageitnion | unknown | UNCERTAIN |
-| Genesia | Boedromion | 5 | ATTESTED |
-| Artemis Agrotera | Boedromion | 6 | ATTESTED |
-| Demokratia | Boedromion | 12 | ATTESTED |
-| Eleusinian Mysteries | Boedromion | 15–17, 19–22 | ATTESTED |
-| Pyanopsia | Pyanopsion | 7 | ATTESTED |
-| Theseia | Pyanopsion | 8 | ATTESTED |
-| Stenia | Pyanopsion | 9 | ATTESTED |
-| Thesmophoria in Halimus | Pyanopsion | 10 | ATTESTED |
-| Thesmophoria (Anodos, Nesteia, Kalligeneia) | Pyanopsion | 11–13 | ATTESTED |
-| Chalkeia | Pyanopsion | 30 | ATTESTED |
-| Maimakteria | Maimakterion | unknown | UNCERTAIN |
-| Rural Dionysia | Posideon | various (deme-specific) | UNCERTAIN (city) |
-| Haloa | Posideon | 26 | ATTESTED |
-| Lenaia | Gamelion | 12–19 (period) | PROBABLE |
-| Theogamia | Gamelion | 27 | ATTESTED (probable) |
-| Anthesteria (Pithoigia) | Anthesterion | 11 | ATTESTED |
-| Anthesteria (Khoes) | Anthesterion | 12 | ATTESTED |
-| Anthesteria (Khytroi) | Anthesterion | 13 | ATTESTED |
-| Diasia | Anthesterion | 23 | ATTESTED |
-| Lesser Mysteries (Agrai) | Anthesterion | 20–26 (period) | UNCERTAIN |
-| Proagon + Asklepios | Elaphebolion | 8 | ATTESTED |
-| City Dionysia (first day) | Elaphebolion | 10 | PROBABLE (strong consensus) |
-| City Dionysia | Elaphebolion | 10–16 | PROBABLE |
-| Pandia | Elaphebolion | 17 | PROBABLE |
-| Delphinia | Mounichion | 6 | ATTESTED |
-| Mounichia | Mounichion | 16 | ATTESTED |
-| Olympieia | Mounichion | 19 | ATTESTED |
-| Thargelia | Thargelion | 7 | ATTESTED |
-| Bendideia | Thargelion | 19 | ATTESTED |
-| Kallynteria | Thargelion | 24–28 (excl. 25) | UNCERTAIN |
-| Plynteria | Thargelion | 25 | ATTESTED |
-| Arrephoria | Skirophorion | 3 | PROBABLE |
-| Skira | Skirophorion | 12 | ATTESTED |
-| Dipolieia / Buphonia | Skirophorion | 14 | ATTESTED |
+| Festival                                    | Month        | Day(s)                  | Mikalson's confidence       |
+| ------------------------------------------- | ------------ | ----------------------- | --------------------------- |
+| Kronia                                      | Hekatombaion | 12                      | ATTESTED                    |
+| Synoikia                                    | Hekatombaion | 15–16                   | ATTESTED                    |
+| Panathenaia (chief day)                     | Hekatombaion | 28                      | ATTESTED                    |
+| Metageitnia                                 | Metageitnion | unknown                 | UNCERTAIN                   |
+| Genesia                                     | Boedromion   | 5                       | ATTESTED                    |
+| Artemis Agrotera                            | Boedromion   | 6                       | ATTESTED                    |
+| Demokratia                                  | Boedromion   | 12                      | ATTESTED                    |
+| Eleusinian Mysteries                        | Boedromion   | 15–17, 19–22            | ATTESTED                    |
+| Pyanopsia                                   | Pyanopsion   | 7                       | ATTESTED                    |
+| Theseia                                     | Pyanopsion   | 8                       | ATTESTED                    |
+| Stenia                                      | Pyanopsion   | 9                       | ATTESTED                    |
+| Thesmophoria in Halimus                     | Pyanopsion   | 10                      | ATTESTED                    |
+| Thesmophoria (Anodos, Nesteia, Kalligeneia) | Pyanopsion   | 11–13                   | ATTESTED                    |
+| Chalkeia                                    | Pyanopsion   | 30                      | ATTESTED                    |
+| Maimakteria                                 | Maimakterion | unknown                 | UNCERTAIN                   |
+| Rural Dionysia                              | Posideon     | various (deme-specific) | UNCERTAIN (city)            |
+| Haloa                                       | Posideon     | 26                      | ATTESTED                    |
+| Lenaia                                      | Gamelion     | 12–19 (period)          | PROBABLE                    |
+| Theogamia                                   | Gamelion     | 27                      | ATTESTED (probable)         |
+| Anthesteria (Pithoigia)                     | Anthesterion | 11                      | ATTESTED                    |
+| Anthesteria (Khoes)                         | Anthesterion | 12                      | ATTESTED                    |
+| Anthesteria (Khytroi)                       | Anthesterion | 13                      | ATTESTED                    |
+| Diasia                                      | Anthesterion | 23                      | ATTESTED                    |
+| Lesser Mysteries (Agrai)                    | Anthesterion | 20–26 (period)          | UNCERTAIN                   |
+| Proagon + Asklepios                         | Elaphebolion | 8                       | ATTESTED                    |
+| City Dionysia (first day)                   | Elaphebolion | 10                      | PROBABLE (strong consensus) |
+| City Dionysia                               | Elaphebolion | 10–16                   | PROBABLE                    |
+| Pandia                                      | Elaphebolion | 17                      | PROBABLE                    |
+| Delphinia                                   | Mounichion   | 6                       | ATTESTED                    |
+| Mounichia                                   | Mounichion   | 16                      | ATTESTED                    |
+| Olympieia                                   | Mounichion   | 19                      | ATTESTED                    |
+| Thargelia                                   | Thargelion   | 7                       | ATTESTED                    |
+| Bendideia                                   | Thargelion   | 19                      | ATTESTED                    |
+| Kallynteria                                 | Thargelion   | 24–28 (excl. 25)        | UNCERTAIN                   |
+| Plynteria                                   | Thargelion   | 25                      | ATTESTED                    |
+| Arrephoria                                  | Skirophorion | 3                       | PROBABLE                    |
+| Skira                                       | Skirophorion | 12                      | ATTESTED                    |
+| Dipolieia / Buphonia                        | Skirophorion | 14                      | ATTESTED                    |
 
 ---
 

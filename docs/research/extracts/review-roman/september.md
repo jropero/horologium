@@ -1,4 +1,5 @@
 # September — Roman Calendar Review
+
 **App data**: `utils/romanYearData.ts`, keys "8-1" through "8-30"
 **Sources**: Scullard (1981) pp. 182–192; Fowler (1899) pp. 215–235
 **Reviewed**: 2026-10-25
@@ -118,20 +119,22 @@ Context: September is dominated by the Ludi Romani (5–19 Sep). Fowler calls th
 
 ## Summary
 
-| Category | Count | Days affected |
-|----------|-------|---------------|
-| WRONG_DATE | 1 | 4 |
-| WRONG_DEITY | 4 | 1, 13, 14, 23 |
-| WRONG_STATUS | 2 | 1, 15 |
-| WRONG_RITUAL | 1 | 14 |
-| MISSING_FESTIVAL | 2 | 5 (Iovis Statoris), 20–23 (Mercatus) |
-| MINOR | 2 | 23 (wrong occasion implied), 26 (aition gap) |
-| **Total** | **12** | |
+| Category         | Count  | Days affected                                |
+| ---------------- | ------ | -------------------------------------------- |
+| WRONG_DATE       | 1      | 4                                            |
+| WRONG_DEITY      | 4      | 1, 13, 14, 23                                |
+| WRONG_STATUS     | 2      | 1, 15                                        |
+| WRONG_RITUAL     | 1      | 14                                           |
+| MISSING_FESTIVAL | 2      | 5 (Iovis Statoris), 20–23 (Mercatus)         |
+| MINOR            | 2      | 23 (wrong occasion implied), 26 (aition gap) |
+| **Total**        | **12** |                                              |
 
 ### Priority breakdown
+
 - **HIGH** (fix before next release): 3 findings — WRONG_DATE on day 4 (Ludi start), WRONG_DEITY on day 13 (Epulum missing Juno + Minerva in deity field), WRONG_DEITY + WRONG_RITUAL on day 14 (invented Mars/Jupiter deity and purification ritual for Equorum Probatio)
 - **MEDIUM**: 6 findings — days 1 (status and deity), 5 (missing Iovis Statoris), 15 (wrong status NP), 20–23 (missing Mercatus), 23 (Latona missing + wrong occasion)
 - **LOW**: 1 finding — day 26 (aition enrichment only)
 
 ### Key structural note
+
 The Ludi Romani (Sep 5–19) are correctly represented as the dominant feature of the month. The most serious structural error is the Equorum Probatio entry (8-14): it invents both a deity (Mars/Jupiter) and a ritual type (purification) that no source supports. The second most serious is the Epulum Iovis deity field listing only Jupiter when both Scullard and Fowler clearly name the full Capitoline Triad.

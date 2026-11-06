@@ -1,5 +1,6 @@
 # Deubner — Apollon und Artemis chapter
-Source: L. Deubner, *Attische Feste* (1932), printed p. 179–210 / PDF p. 193–224
+
+Source: L. Deubner, _Attische Feste_ (1932), printed p. 179–210 / PDF p. 193–224
 Extracted: 2026-10-25
 
 ---
@@ -15,7 +16,8 @@ Extracted: 2026-10-25
 
 **Ritual**:
 
-*Day 1 — 6th Thargelion (kathartikos):*
+_Day 1 — 6th Thargelion (kathartikos):_
+
 - Two men (pharmakoi), selected as scapegoats, were led (exégon) out of the city in a formal procession
 - One represented men, one represented women (each wore a necklace of figs: the men's representative black figs, the women's white — but Deubner suspects the gender-distinction on the necklaces is a late rationalisation attested only in Helladios, 4th c. CE)
 - They were beaten with fig-branches (kradai) and squill (skilla) during the procession through the city — the xradias nomos was the accompanying flute tune (Hesych)
@@ -24,7 +26,8 @@ Extracted: 2026-10-25
 - Possibly called sybakchoi (< sykobakchoi, "fig-bacchants") — but this name is attested only in the same Helladios and may be late
 - Purpose: remove all accumulated pollution before the harvest; apotropaic, not fertility-magical
 
-*Day 2 — 7th Thargelion (firstfruits pompe):*
+_Day 2 — 7th Thargelion (firstfruits pompe):_
+
 - Firstfruits of the not-yet-ripe grain (thargelia) were cooked together in a pot (chytra or chytros)
 - A loaf baked from the new grain was also called thargelos
 - A solemn pompe conveyed both to the deity; the Archon Eponymos was the responsible official (Aristot. Ath. pol. 56.3.5)
@@ -35,6 +38,7 @@ Extracted: 2026-10-25
 **Participants**: Social outcasts (the pharmakoi); the Archon Eponymos managed the pompe; choregoi and competing choruses; the whole polis symbolically
 
 **Sources**:
+
 - Harpokration s.v. pharmakos (= Suid.; Etym. m. 787.55ff.) — Istros on pharmakos legend
 - Helladios in Phot. Bibl. 534a — necklaces, sybakchoi, Androgeos aition
 - Aristophanes: Ritt. 1405; Frö. 733; frg. 634
@@ -51,6 +55,7 @@ Extracted: 2026-10-25
 - Demosth. 18.141 — Apollon Pythios as patroios of the polis
 
 **Notes**:
+
 - Deubner's central thesis: the pharmakoi are a straightforward scapegoat ritual (apotropaic), not a vegetation-daemon rite. The beating serves to drive evil out more forcefully, not to invigorate a crop-spirit. He refutes Mannhardt, Frazer, Nilsson, Gebhard on the vegetation-daemon interpretation.
 - He argues the Eiresione was NOT carried at the Thargelia: the relevant Aristophanes scholia (Ritt. 729; Plut. 1054) that associate the Eiresione with both Pyanopsia and Thargelia are unreliable — they derive from a single source that confused the two festivals because both are Apollo harvest-festivals. The calendar frieze of Hagios Eleutherios shows the Eiresione only under Pyanopsion, not Thargelion.
 - Apollon was not the original deity of the Thargelia — the purification rite attracted him secondarily as god of expiation.
@@ -66,6 +71,7 @@ Extracted: 2026-10-25
 **Deity**: Apollon (and Artemis in private offerings; Helios and Horai associated — see Notes)
 
 **Ritual**:
+
 - Bean-dish (pyanon, pyanos): all kinds of legumes cooked together with wheat flour and sweetened — offered to Apollon; perhaps in the form of a lectisternium (table set before the god)
 - In Eleusis on the same day, Apollon Pythios received offerings including a goat, and a table (trapeza) was prepared for him (IG 2² 1363)
 - Private offering of a cake (plakounta) to Apollon and Artemis (IG 2² 1367)
@@ -80,6 +86,7 @@ Extracted: 2026-10-25
 **Participants**: Boys (amphithaleis) for the Eiresione procession; all households (private Eiresione at doors); private worshippers of Apollon and Artemis
 
 **Sources**:
+
 - Harpokration s.v. Poanopsia (citing Apollonios of Acharnai): 7th Pyanopsion, Apollon, bean-dish, Eiresione
 - Phot. s.v. pyanopsia and pyanoipsion
 - Suid. s.v. Pyaneipsionos
@@ -97,6 +104,7 @@ Extracted: 2026-10-25
 - Calendar frieze of Hagios Eleutherios, Taf. 35.2
 
 **Notes**:
+
 - The Eiresione is the primary rite; the bean-dish is a general harvest-blessing offering. Both are pre-Apolline in origin.
 - Deubner rejects the Eiresione at Thargelia: the same Aristophanes scholia source (Ritt. 729; Plut. 1054) that links eiresione to both festivals is unreliable; the calendar frieze confirms it only for Pyanopsion.
 - The role of Helios and Horai: the scholia mention them as recipients at Pyanopsia. Deubner accepts their mention but considers it secondary — they were important for fruit-ripening and may have been honoured in song or prayer, perhaps even sacrifice, but this is uncertain given the single-source problem.
@@ -116,6 +124,7 @@ Extracted: 2026-10-25
 **Participants**: Unknown
 
 **Sources**:
+
 - Etym. m. 321.5 — month named because Apollo receives sacrifice as Hekatombaios
 - Hesych s.v. Hekatombaios — Apollon at Athens
 - Bekker Anecd. 1.247.1
@@ -139,12 +148,14 @@ Extracted: 2026-10-25
 **Participants**: Maidens (korai)
 
 **Sources**:
+
 - Plut. Thes. 18.2 — 6th day of month of Munichion, maidens still sent to Delphinion
 - Plut. Thes. 18.1 — hikétéria aition
 - W. Schmidt, Geburtstag im Alt. 94ff. — 6th as Artemis' day
 - Schol. Pind. Pyth. 8.88.91 — festival called Delphinia at Aigina (for Apollon)
 
 **Notes**:
+
 - Pfuhl's suggestion that the procession primarily served Artemis (since the 6th is hers) is uncertain.
 - Whether the festival extended to the 7th (Apollon's day) is also uncertain.
 - The festival name Delphinia is inferred from the Aigina parallel.
@@ -164,6 +175,7 @@ Extracted: 2026-10-25
 **Participants**: Probably neighborhood groups (Deubner follows Radermacher)
 
 **Sources**:
+
 - Plut. de exilio 601b — Metageitnion and sacrifice, "Metageitnia"
 - Lysimachides in Harpokr. s.v. Metageitnion — Apollon Metageitnios, offerings
 
@@ -183,6 +195,7 @@ Extracted: 2026-10-25
 **Participants**: State festival; details unknown
 
 **Sources**:
+
 - Etym. m. 202.49 — month named for Apollon Boedromios, the god who helped in battle-cry (boé)
 - Plut. Thes. 27.3 (Lindsk. Z. 22f.)
 - Philochoros in Harpokr. s.v. Boedromia
@@ -202,6 +215,7 @@ Extracted: 2026-10-25
 **Ritual**: Dressing of the offering-basket (kanoun); hymns to the god; laurel-branch carrying. Deubner tentatively identifies this with the Pyanopsia eiresione (which also used laurel). A daphnephorion is attested at the demo Phlya (Theophr. in Athen. 424f.).
 
 **Sources**:
+
 - Lydus de mens. S. 172.22 W. — daphnephoria at Athens like the Roman Agonalia
 - Schol. Hesiod Erga 767 S. 419.9 Gaisf. — 7th as Apollon's birthday, Athenians honour it with daphnephoria, dressing the kanoun, singing hymns
 - Theophr. in Athen. 424f. — daphnephorion at Phlya
@@ -218,6 +232,7 @@ Extracted: 2026-10-25
 **Deity**: Apollon at Delphi (Pythios)
 
 **Ritual**:
+
 1. Pythaistai watched for the lightning sign on Mount Parnes (Harma ridge)
 2. If the sign appeared, a great sacrificial festival was dispatched to Delphi
 3. The Athenian theoria brought: sacrificial animals, firstfruits of the harvest (aparchai), and choruses
@@ -229,6 +244,7 @@ Extracted: 2026-10-25
 **Participants**: Pythaistai, kanephoroi, representatives of the Athenian state and citizenry, choruses; in later period a pyrophoros
 
 **Sources**:
+
 - Apollodor in Strabo 9.2.11 — watching for lightning on Harma
 - Dittenberger Syll.³ 696–699 — late Hellenistic Pythais inscriptions
 - Syll.³ 696 C, 711 E, 728 E — kanephoroi
@@ -254,6 +270,7 @@ Extracted: 2026-10-25
 **Participants**: Athenian theoria; choruses; architheoros appointed by the Archon Eponymos; kanephoroi
 
 **Sources**:
+
 - Xen. Mem. 4.8.2
 - Nilsson, Gr. Feste 144ff.
 - Aristot. Ath. pol. 56.3 — Archon appoints choregoi and architheoros for Delos
@@ -277,6 +294,7 @@ Extracted: 2026-10-25
 **Deity**: Artemis Munichia; Hekate at the crossroads (private, same day)
 
 **Ritual**:
+
 1. Solemn procession to the sanctuary of Artemis Munichia on the Munichia peninsula
 2. Round cakes (amphiphontes — "all-shining around") with burning candles stuck all around them were brought to the sanctuary
 3. At the crossroads, Hekate received the same cakes privately (Phot./Philochoros; also Philemon frg. 67)
@@ -288,6 +306,7 @@ Extracted: 2026-10-25
 **Participants**: Citizens; epheboi (pompe, sacrifice, regatta); private individuals (Hekate offering); ships designated as sacred (hierai naus)
 
 **Sources**:
+
 - Plut. de glor. Athen. 349f — 16th Munichion, Artemis Munichia, full moon, Salamis victory
 - Phot. s.v. amphiphontes (= Philochoros) — round cakes with candles, first custom; Hekate at crossroads
 - Suid. s.v. anastasoi (= Paus. att., Eust. Il. 18.575 S. 1165.9ff.) — amphiphontes carried to Munichia
@@ -299,6 +318,7 @@ Extracted: 2026-10-25
 **Aition (cult myth, not calendar aition)**: A bear was killed in the sanctuary of Artemis Munichia → plague → oracle demands sacrifice of a daughter → Embaros dressed a goat as his daughter and sacrificed it, having first secured the hereditary priesthood for his family. The goat-disguise is the story's punch-line. A later corrupt version of the myth adds the institution of the arktoi — Deubner shows this is contamination from the Brauronian tradition.
 
 **Notes**:
+
 - Deubner firmly separates the Munichia arktoi question: the arktoi belong to Brauron, not to Munichia. The Lysistrate scholion's "and the Munichia" is an error of the grammatical tradition; Harpokration's disjunctive "the Munichia or the Brauronia" is the reliable form.
 - The day's identification with Salamis is a liturgical transfer — the battle was in Metageitnion.
 - The boats used by the epheboi were sacred (reserved for ritual purposes).
@@ -314,6 +334,7 @@ Extracted: 2026-10-25
 **Deity**: Artemis Brauronia
 
 **Ritual**:
+
 1. Girls aged 5–10 (arktoi, "bears") dressed in saffron-coloured robes served the goddess; arkteuein = to consecrate oneself to Artemis before marriage and to sacrifice to her
 2. Goat sacrifice to Artemis (Hesych s.v. Brauronia)
 3. Kanephoros participation → implies a pompe/procession
@@ -324,6 +345,7 @@ Extracted: 2026-10-25
 **Participants**: Girls 5–10 years old (arktoi); women primarily (Herod. 6.138; Plut. de mul. virt. 247a, aet. gr. 296b says it was especially a women's festival); kanephoroi; Athenian theoria; rhapsodes (at penteteris)
 
 **Sources**:
+
 - Aristoph. Lys. 645 (with saffron robe reference: xrokotón — the yellow robe at Brauronia)
 - Philochoros in Schol. Lukian Katapl. 25 S. 52.20 Rabe — saffron-robed arkteuousai at Brauronia
 - Schol. Aristoph. Lys. 645 (Duebn.) — arktoi, age 5–10, saffron robes, parthenos designation
@@ -336,6 +358,7 @@ Extracted: 2026-10-25
 - Krateros in Harpokr./Suid. s.v. arktousai — arkteuein = dedication of virgins to Artemis before marriage
 
 **Notes**:
+
 - Deubner: the arktoi belonged specifically to Brauron (not Munichia). The Lysistrate scholion's "at the Brauronia and the Munichia" is a conflation; Harpokration's disjunctive form ("Munichia or Brauronia") is the reliable tradition.
 - The arktoi served a pre-marital dedication: they were consecrated to Artemis before marriage and served the sanctuary (hence the "Artemis was once imagined as a bear" interpretation — Artemis in bear-form, her servants correspondingly called bears).
 - The penteteris was grander than the annual celebration.
@@ -352,6 +375,7 @@ Extracted: 2026-10-25
 **Deity**: Artemis Tauropolos ("Goddess of the Bulls" — ancient epithet)
 
 **Ritual**:
+
 1. A night celebration with music and choral dancing; women and younger girls participated
 2. A man had his throat scratched with a sword until blood flowed — a symbolically attenuated human sacrifice befitting the fierce character of the Tauropolos
 
@@ -360,6 +384,7 @@ Extracted: 2026-10-25
 **Participants**: Women and young girls primarily; young men also present (Menander's Epitrepontes shows the festival's nighttime character created opportunities for assault)
 
 **Sources**:
+
 - Menander, Epitrepontes V. 234, 255, 260, 300, 479, 685 — night festival, women, girls dancing, drunken encounter
 - Hesych s.v. Tauroupolia (corrected by Deubner to read: "The people of Halai celebrate a festival to Artemis")
 - Euripides IT 1449ff.; 1458ff. — the aition for the sword-scratch; clear distinction Halai/Brauron
@@ -367,6 +392,7 @@ Extracted: 2026-10-25
 - Kallim. Hymn. 3.173f. — Halai and the Taurian image
 
 **Notes**:
+
 - Deubner's major argument: Brauronia and Tauropolia are two separate festivals at two separate sites. He rejects the identification made by Preller-Robert, Mommsen, Feste 456.2, Stengel 250, and Wilamowitz. The Strabo passage (9.1.22) distinguishes the two sites clearly.
 - The Hesych entry was read as "Tauroupolia: those who celebrate a festival to Artemis" (opaque) — Deubner corrects to "the Haleis [people of Halai] celebrate a festival to Artemis."
 - The sword-scratch at the man's neck: a symbolic remnant of full human sacrifice, fitting the "dark" character of the Tauropolos (Nilsson, Griech. Feste 252 for the dark character; cf. other traces of human sacrifice in Artemis cult generally).
@@ -382,6 +408,7 @@ Extracted: 2026-10-25
 **Location**: Sanctuary of Artemis at Agrai (suburb of Athens on the Ilissos)
 
 **Ritual**:
+
 1. The Polemarchos sacrificed 500 goats to Artemis Agroptera and to Enyalios — fulfilling a vow made before the Battle of Marathon
 2. Pompe to the sanctuary at Agrai
 3. Epheboi participated in full armour (in armis)
@@ -391,6 +418,7 @@ Extracted: 2026-10-25
 **Aition**: The Polemarchos Kallimachos vowed before Marathon (in Metageitnion) that if victorious he would sacrifice one goat for each Persian killed — impossible to fulfil, so 500 goats per year became the custom. The date 6th Boedromion was chosen because Artemis already received sacrifice on this day, presumably as a war goddess.
 
 **Sources**:
+
 - Aristot. Ath. pol. 58.1 — Polemarchos, Artemis Agroptera and Enyalios, annual sacrifice
 - Xen. Anab. 3.2.12
 - Plut. de Herod. mal. 862c; de glor. Ath. 349f; Camill. 19.5
@@ -398,6 +426,7 @@ Extracted: 2026-10-25
 - Plut. de Herod. mal. 862a — pompe to Agrai still in Plutarch's day
 
 **Notes**:
+
 - Aelian v.h. 2.25 is wrong on two counts: he says 6th Thargelion (should be 6th Boedromion) and 300 goats (should be 500).
 - The battle of Marathon was in Metageitnion; the date 6th Boedromion was chosen because of an existing Artemis cult on that day, not because of the battle's actual date.
 - Enyalios was perhaps already honoured alongside Artemis on this day before Marathon.
@@ -412,12 +441,14 @@ Extracted: 2026-10-25
 **Deity**: Artemis (as huntress, Elaphebolos — "deer-shooter")
 
 **Ritual**:
+
 - Originally: real deer were sacrificed to Artemis
 - Later substitute: cakes (plakountes) shaped like deer, made from wheat-dough, honey, and sesame
 
 **Participants**: Unknown (Stengel doubts state organization, but Deubner finds this improbable given the month-name)
 
 **Sources**:
+
 - Bekker Anecd. 1.249.7 — 5th month at Athens (Elaphebolion), they sacrifice to Artemis Elaphebolia; kakes shaped like deer
 - Athen. 646e — elaphos (cakes) made of dough, honey, sesame in the form of deer, for the Elaphebolia
 
@@ -438,6 +469,7 @@ Extracted: 2026-10-25
 **Participants**: Demo Athmonon primarily; possibly broader Athenian state participation
 
 **Sources**:
+
 - Paus. 1.31.4 — Athmonon honours Artemis Amarysia, festival not inferior to the Euboean Artemisia
 - Nilsson, Griech. Feste 238
 - Schoemann-Lipsius 501 with n. 4

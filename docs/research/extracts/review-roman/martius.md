@@ -1,6 +1,7 @@
 # Roman Festival Data — March (Martius) Review
+
 **App data key range**: "2-1" through "2-31"
-**Sources**: H. H. Scullard, *Festivals and Ceremonies of the Roman Republic* (1981), pp. 84–96 (extract: `scullard/martius.md`); W. Warde Fowler, *The Roman Festivals of the Period of the Republic* (1899), pp. 44–77 (extract: `fowler/martius.md`)
+**Sources**: H. H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (1981), pp. 84–96 (extract: `scullard/martius.md`); W. Warde Fowler, _The Roman Festivals of the Period of the Republic_ (1899), pp. 44–77 (extract: `fowler/martius.md`)
 **Reviewed**: 2026-10-25
 
 ---
@@ -22,7 +23,7 @@
 
 - **App**: key "2-14" | status=NP | festivalName="Segunda Equirria" | deity="Marte" | festivalDesc: "Segunda fecha de carreras de caballos sagradas en el Campo de Marte para **honrar y purificar a las monturas militares**."
 - **Source**: Scullard p. 89–90: "Horse-racing festival … linked with preparations for the campaigning season." Fowler p. 44: "A horse-race (feriae Marti), the second Equirria of the year."
-- **Issue**: The app's festivalDesc says the rite was to "purify the military mounts" (*purificar a las monturas militares*). Neither source supports this; the Equirria was a horse-race (*ludi equestres*, feriae Marti), not a purification of mounts. Purification language in March properly belongs to the Quinquatrus (purification of the *ancilia*) and the Tubilustrium (purification of the *tubae*). The phrase transplants a ritual concept from a different day.
+- **Issue**: The app's festivalDesc says the rite was to "purify the military mounts" (_purificar a las monturas militares_). Neither source supports this; the Equirria was a horse-race (_ludi equestres_, feriae Marti), not a purification of mounts. Purification language in March properly belongs to the Quinquatrus (purification of the _ancilia_) and the Tubilustrium (purification of the _tubae_). The phrase transplants a ritual concept from a different day.
 - **Fix**: "Segunda carrera de caballos del año celebrada como feriae Marti en el Campo de Marte. Junto con la Equirria del 27 de febrero, inauguraba la temporada de campaña y rendía honores al dios de la guerra."
 - **Priority**: MEDIUM (wrong ritual description, but name, date, status, and deity are correct)
 
@@ -34,7 +35,7 @@
 - **Source**: Scullard pp. 89–90: "Mamuralia / Sacrum Mamurio — Day 14, Fasti status NP (same day as Equirria; listed in Philocalus and Menologia but not earlier calendars). Deity: Mamurius Veturius." Ritual: a man clad in skins was beaten with rods and driven from the city amid shouts of 'Mamurius' (Lydus, 6th c. CE); Servius and Minucius Felix record that the Salii 'beat a skin' on this day. Fowler pp. 44–50 devotes six pages to the rite and its debated interpretation (scapegoat, old year-spirit), while explicitly cautioning that the Mamuralia appears only from Philocalus (354 CE) onwards and is absent from the older calendar fasti.
 - **Issue**: Both sources discuss the Mamuralia at length for March 14, even if Fowler is sceptical of its antiquity. The app makes no mention of it.
 - **Suggested entry note**: Given Fowler's explicit warning that the rite is unattested before the 4th century CE and may be a popular festival name for the second Equirria, the Mamuralia should be mentioned in the festivalDesc as a late-attested alternative tradition on the same day rather than given a separate entry. A note in the Equirria's festivalDesc would be the minimal fix:
-  - Add to existing festivalDesc: "Los calendarios tardíos (Filócalo, s. IV d.C.) denominan este mismo día *Mamuralia* o *Sacrum Mamurio*: según Lydus, un hombre vestido de pieles era golpeado con varas y expulsado de la ciudad; Fowler considera el rito de antigüedad incierta."
+  - Add to existing festivalDesc: "Los calendarios tardíos (Filócalo, s. IV d.C.) denominan este mismo día _Mamuralia_ o _Sacrum Mamurio_: según Lydus, un hombre vestido de pieles era golpeado con varas y expulsado de la ciudad; Fowler considera el rito de antigüedad incierta."
 - **Priority**: MEDIUM (both sources cover it; the festival is debated but real enough to note)
 
 ---

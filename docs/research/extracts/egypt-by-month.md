@@ -1,11 +1,14 @@
 # Egyptian Festivals — Consolidated by Civil Month
+
 ## Sources: El-Sabban (2000); Bleeker (1967); Von Lieven (2016)
+
 ## Compiled: 2026-10-25
 
 This document consolidates all attested festival dates from the four Phase 1 extracts:
+
 - **ES-NK**: El-Sabban Ch.2 (Middle Kingdom, Illahun/Lahun) and Ch.5 (Medinet Habu, Ramesses III)
 - **ES-PT**: El-Sabban Ch.6 (Ptolemaic: Kom Ombo East/West, Esna, Edfu 1–4, Dendera 1–2)
-- **BL**: Bleeker (1967), *Egyptian Festivals*
+- **BL**: Bleeker (1967), _Egyptian Festivals_
 - **VL**: Von Lieven (2016), hemerology papyri
 
 App key format: "month-day" (0-based month). App entries currently at: "0-1", "0-18", "0-19", "1-15", "2-1", "3-1", "3-4", "3-30", "4-1", "4-30", "5-1", "6-1", "7-1", "7-25", "8-1", "8-10", "8-11", "9-25", "11-9", "11-24".
@@ -17,7 +20,9 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
 ## I Akhet (app month 0) — Thoth / Inundation month 1
 
 ### Day 1 — Wep Renpet / New Year
+
 **APP ENTRY: "0-1" ✓**
+
 - **Wep Renpet (Opening of the Year / New Year)** — attested across all periods and all calendar sources
   - Deity: Re / Amon-Re / Horus (varies by temple)
   - MK ritual (Illahun, Sesostris III Yr 35, Hapdjefa contracts Siut): New Year, torch kindling, loaves, procession; Hepzefi contracts list New Year's eve and New Year's morning as separate feast occasions (BL p.132)
@@ -33,12 +38,14 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-NK (MK: Illahun; NK: MH 629); ES-PT (all Ptolemaic temples); BL p.113, 132
 
 ### Day 2
+
 - **Procession of Ihy / Hathor ennead** [**temple-specific, Dendera/Edfu**]
   - Dendera Cal 2: At 4th hour, procession of the Great Lotus (Ihy the great, Son of Hathor) in kiosk; procession of Hathor with ennead, stopping at birth-house
   - Edfu Cal 3 (Hathor): Procession of the Great Lotus (Ihy) in form of Ihy; sistrum, Double Crown; arising as Osiris
   - Sources: ES-PT (Dendera Cal 2; Edfu Cal 3)
 
 ### Day 4
+
 - **Procession and feast (Esna; Edfu)** [**temple-specific**]
   - Esna: Reading the tablet of "the opening of the good year"; procession of Khnum-Re and ennead; union with disk; also Festival of Amon and Re described as "the beginning of making festivals"
   - Edfu Cal 1 (Small): Day 4 listed (no festival name)
@@ -46,51 +53,60 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-PT (Esna; Edfu 1, 2)
 
 ### Day 5
+
 - **Feast of Horus the Behdetite** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Horus the Behdetite
   - Edfu Cal 1 (Small): Day 5 listed
   - Sources: ES-PT (Edfu 1, 2)
 
 ### Day 6
+
 - **Feast of Menhyt; Feast of Isis** [**temple-specific, Esna**]
   - Esna: Feast of Menhyt: the ladies play their tambourines for her; also: Feast of Isis
   - Sources: ES-PT (Esna)
 
 ### Day 9
+
 - **Procession of Khnum-Re; Procession of Hathor** [**temple-specific**]
   - Esna: Procession of Khnum-Re, chief of the countryside; union with disk; return
   - Dendera Cal 2: Procession of Hathor and ennead; stopping at Mansion of the Bier
   - Sources: ES-PT (Esna; Dendera Cal 2)
 
 ### Day 10
+
 - **Procession of Harsomtous** [**temple-specific, Dendera**]
   - Esna: Feast; procession of Khnum-Re; union with disk
   - Dendera Cal 2: Procession by Harsomtous, great god, Lord of Khadi; pouring libation; burnt offerings; returning
   - Sources: ES-PT (Esna; Dendera Cal 2)
 
 ### Day 12
+
 - **Opening of the Two Lands; Procession of Nebtu/Isis** [**temple-specific**]
   - Esna: Procession of Nebtu, Mistress of Esna; also procession of Isis in Pi-Neter; Nebtu at night-time, returning to temple of Khnum
   - Edfu Cal 3 (Hathor): Day of "Opening of the Two Lands"; cow bound for milking; milk offered
   - Sources: ES-PT (Esna; Edfu Cal 3)
 
 ### Day 13
+
 - **First day of the feast of jubilation at the year's beginning** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): First day of the "feast of jubilation at the year's beginning"; every ritual of this temple performed
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 14
+
 - **Festival of Tithoes (Tutu), daughter of Neith** [**temple-specific, Esna**]
   - Esna: Festival of Tithoes, daughter of Neith; supplying altar with offerings
   - Sources: ES-PT (Esna)
 
 ### Day 16
+
 - **Feast of Neith; Feast of the Eye of Horus** [**temple-specific, Esna**]
   - Esna: Feast of Neith; feast of the eye of Horus (Shu brings it back)
   - VL: I Akhet 16 — birth prognosis: "one born on this day is prophesied death by crocodile" (great calendar, pCairo/pSallier IV)
   - Sources: ES-PT (Esna); VL p.35
 
 ### Day 17 — Eve of the Wagy Festival
+
 - **Eve of the Wꜣg festival**
   - Deity: Osiris / Upwaut / Anubis
   - MK (Illahun): "Eve of Wagy festival" — source: Illahun papyri; also Hapdjefa contracts
@@ -99,7 +115,9 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-NK (MK: Illahun; NK: MH 646); BL p.132
 
 ### Day 18 — Wagy Festival
+
 **APP ENTRY: "0-18" ✓**
+
 - **Wꜣg festival (Festival of the Dead)**
   - Deity: Osiris; patron gods at Siut: Upwaut ("opener of the ways") and Anubis
   - MK (Illahun): Wagy festival — source: Illahun
@@ -109,7 +127,9 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-NK (MK: Illahun; NK: MH 667); BL p.132; ES-PT (Edfu Cal 3)
 
 ### Day 19 — Feast of Thoth
+
 **APP ENTRY: "0-19" ✓**
+
 - **Feast of Thoth**
   - Deity: Thoth / Amon-Re with Ennead
   - MH: Festival of Thoth — deity: Amon-Re, Wosermaatre Meriamon and the Ennead (686)
@@ -118,7 +138,9 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-NK (NK: MH 686); BL p.132; ES-PT (Esna)
 
 ### Day 20 — Feast of Drunkenness
+
 **NO APP ENTRY — major gap**
+
 - **Feast of Drunkenness (of Hathor)**
   - Deity: Hathor / Re
   - MK (Illahun): "Feast of Drunkenness (possibly of Hathor)" — source: Illahun
@@ -130,7 +152,9 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-NK (MK: Illahun); ES-PT (Dendera Cal 1, Cal 2; Edfu Cal 3); BL p.244
 
 ### Day 22 — Great Procession of Osiris
+
 **NO APP ENTRY — major gap**
+
 - **Great Procession of Osiris**
   - Deity: Osiris / Amon-Re
   - MK (Illahun): "Great Procession (of Osiris)" — source: Illahun
@@ -140,16 +164,19 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
   - Sources: ES-NK (MK: Illahun; NK: MH 705); ES-PT (Edfu Cal 3)
 
 ### Day 25
+
 - **Feast of Ptah; Feast of Heqa** [**temple-specific, Esna**]
   - Esna: Feast of Ptah, chief of Memphis; feast of Heqa
   - Sources: ES-PT (Esna)
 
 ### Day 28
+
 - **Feast of Menhyt-Nebtu** [**temple-specific, Esna**]
   - Esna: Feast of Menhyt-Nebtu; procession of this goddess to make the countryside green; rites of returning in court of appearance
   - Sources: ES-PT (Esna)
 
 ### Undated within month
+
 - **Renewing of the year** — MK (Illahun): "Renewing of the year" — no day given
   - Sources: ES-NK (MK: Illahun)
 - **Festival of Harsomtous, feast of birth of the sun** [**temple-specific**] — Edfu Cal 3 (Hathor): in I Akhet, procession of Harsomtous in portable chest-shrines; stopping at pure place opposite House of Re
@@ -160,51 +187,62 @@ Temple-specific notes: Kom Ombo festivals = Haroeris/Sobek cult. Edfu festivals 
 ## II Akhet (app month 1) — Phaophi / Inundation month 2
 
 ### Menology note (Von Lieven)
+
 VL: The tutelary deity of II Akhet is **Šentait** (a funerary cow-goddess, associated with Osiris). Menology omen: "How good is this month! There will be no fever in it." — from menology on writing tablet, 18th Dynasty (edited Vernus 1981). Sources: VL p.36.
 
 ### Day 1
+
 - **Feast of Guarding the Eye of Horus; Procession of Heqa/Khonsu/Thoth** [**temple-specific, Esna**]
   - Esna: Guarding the eye of Horus; Shu and Tefnut go out to judge; procession of Heqa, Khonsu, Thoth; union with disk; return
   - Kom Ombo East: After the 8th hour, causing appearance of Horus, chief of the two lands; vigil by all priests [**temple-specific**]
   - Sources: ES-PT (Esna; Kom Ombo East)
 
 ### Day 2–3
+
 - **Festival of entering Horus's town** [**temple-specific, Kom Ombo**]
   - Kom Ombo East: Celebration in the temple; causing appearance of Horus in his goodly festival of entering his town (returning from the Northland); Days 3–30: resting in his place
   - Kom Ombo West: Appearing of Horus, chief of the two lands; Day 3: appearing of noble standard of Haroeris; appearing of Sobek; appearing of Ta-sent-nofret and Min at Gebu; resting at mammisi
   - Sources: ES-PT (Kom Ombo East; Kom Ombo West)
 
 ### Day 4
+
 - **Shu and Khnum feast** [**temple-specific, Esna**]
   - Esna: Shu son of Re; Khnum, chief of the countryside
   - Sources: ES-PT (Esna)
 
 ### Day 5
+
 - **Procession of Hathor** [**temple-specific, Dendera/Edfu**]
   - Edfu Cal 3 (Hathor): Procession of Hathor, Lady of Dendera and ennead; offerings for her father the great Nun; fresh plants in shrine of creator of plants
   - Dendera Cal 2: At 1st hour, procession by Hathor, Lady of Dendera and ennead; stopping in great Broad Hall; setting out offerings for her father Nun
   - Sources: ES-PT (Edfu Cal 3; Dendera Cal 2)
 
 ### Day 6
+
 - **Festival of Isis the great** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Festival of Isis the great, Lady of the Two Lands; beginning of the writing for her by her mother Tefnut
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 8
+
 - **Procession of Hathor** [**temple-specific**]
   - Edfu Cal 3 (Hathor): Procession of Hathor; stopping in barque-sanctuary; making offering
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 14
+
 - **Festival of Thoth; Festival of Horus; Shu** [**temple-specific, Esna**]
   - Esna: Festival of Tooth (the very great one); festival of Horus; Shu son of Re enters to feed his father; accomplishing all rites
   - Sources: ES-PT (Esna)
 
 ### Day 15
+
 **APP ENTRY: "1-15"** — No specifically named festival on II Akhet Day 15 found in any of the four sources. The Opet festival begins on Day 18–19 in Medinet Habu. Possible explanation: app entry may conflate with monthly full moon feast (attested in MK as a regular observance) or with the Opet starting date calculated differently. Flag for review.
 
 ### Day 18–30 (into III Akhet Day 12): Opet Festival
+
 **NO DEDICATED APP ENTRY — major gap (24-day festival entirely absent from app)**
+
 - **Opet Festival** (Festival of Amon / ꜥIp.t)
   - Deity: Amon-Re (primary); Mut and Khonsu (their three boats appear together)
   - Duration at Medinet Habu: 24 days total (II Akhet day 18 through III Akhet day 12, inclusive of the eve)
@@ -225,21 +263,25 @@ VL: The tutelary deity of II Akhet is **Šentait** (a funerary cow-goddess, asso
   - Sources: ES-NK (NK: MH Lists 28–37); BL p.187
 
 ### Day 19
+
 - **Festival of Inundation** [**temple-specific, Esna**]
   - Esna: Festival of Inundation (the red bandage)
   - Sources: ES-PT (Esna)
 
 ### Day 22
+
 - **Beginning of the feast of Heqa** [**temple-specific, Esna**]
   - Esna: Beginning of the feast of Heqa in the direction of the house of Khnum
   - Sources: ES-PT (Esna)
 
 ### Day 23
+
 - **Procession of Nebtu and Khnum** [**temple-specific, Esna**]
   - Esna: Nebtu and Khnum the good protector going towards the great place; libation; incense; return to temple of Khnum
   - Sources: ES-PT (Esna)
 
 ### Day 26 — Feast of Sokar (Middle Kingdom placement)
+
 - **Feast of Sokar** — MK date
   - Note: In the Middle Kingdom (Illahun), the Feast of Sokar is placed in II Akhet (day 26); in the New Kingdom it migrated to IV Akhet (Khoiak) day 26. Two separate placements reflect calendar evolution.
   - MK (Illahun): Feast of Sokar — source: Illahun
@@ -247,16 +289,19 @@ VL: The tutelary deity of II Akhet is **Šentait** (a funerary cow-goddess, asso
   - Sources: ES-NK (MK: Illahun)
 
 ### Days 27–28
+
 - **Feast of Montu and Horus of Medamud**
   - MK: Feast of Montu and Horus of Medamud — source: Dyn. 13 court accounts at Medamud (2 days)
   - Sources: ES-NK (MK: Dyn. 13 Medamud)
 
 ### Day 29
+
 - **Procession of Nebtu in her good feast** [**temple-specific, Esna**]
   - Esna: Procession of Nebtu; coming back into outer hypostyle; appearance of procession at the great good place; evening service; coming back to Pi-Neter
   - Sources: ES-PT (Esna)
 
 ### Last day
+
 - **Procession of Harsomtous to way-station** [**temple-specific, Dendera**]
   - Dendera Cal 2: Procession by Harsomtous, Lord of Khadi, to way-station; pouring libation for gods in Khadi; total 3 days
   - Sources: ES-PT (Dendera Cal 2)
@@ -266,10 +311,13 @@ VL: The tutelary deity of II Akhet is **Šentait** (a funerary cow-goddess, asso
 ## III Akhet (app month 2) — Hathor/Athyr / Inundation month 3
 
 ### Hemerology note (Von Lieven)
+
 VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) give different ratings (one each of good/uncertain/dangerous). Demonstrates that the tradition was not monolithic. Sources: VL p.36.
 
 ### Days 1–12: Opet Festival continues
+
 **APP ENTRY: "2-1" — note: this day is within the Opet festival at Medinet Habu**
+
 - **Opet festival continuation (from II Akhet)**
   - MH: III Akhet days 1–12 = days 13–24 of the Opet festival
     - Day 1: 13th day (846); Day 2: 14th (847); Day 3: 15th (848); Day 4: 16th (849); Day 5: 17th (850); Day 6: 18th (851); Day 7: 19th (852); Day 8: 20th (853); Day 9: 21st (854); Day 10: 22nd (855); Day 11: 23rd (856)
@@ -278,69 +326,83 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 846–857); ES-PT (Esna)
 
 ### Day 1 also: Feast of Sekhmet [**temple-specific, Esna**]
-  - Esna: Feast of Sekhmet; procession of sacred standards of Khnum, Neith, Nebtu
-  - Sources: ES-PT (Esna)
+
+- Esna: Feast of Sekhmet; procession of sacred standards of Khnum, Neith, Nebtu
+- Sources: ES-PT (Esna)
 
 ### Day 10
+
 - **Feast of Neith and Tithoes** [**temple-specific, Esna**]
   - Esna: "Half bad, half good"; feast of Neith and his son Tithoes
   - Sources: ES-PT (Esna)
 
 ### Day 17
+
 - **Festival of Amon after Opet**
   - MH: Festival of Amon that occurs after the festival of Opet — deity: Amon-Re with his Ennead (902)
   - Sources: ES-NK (NK: MH 902)
 
 ### Day 18
+
 - **Hemerology divergence** — VL specifically flags III Akhet 18 as the example where all three manuscript witnesses disagree on the day-rating — illustrating the variability of the tradition.
   - Sources: VL p.36
 
 ### Day 19
+
 - **Festival of Thoth in the whole country** [**temple-specific, Esna**]
   - Esna: Festival of Tooth (Thoth), the very great one, in the whole country; festival of Horus
   - Sources: ES-PT (Esna)
 
 ### Day 20 — Heden-plant feast of Hathor
+
 - **Heden-plant feast of Hathor**
   - MK (Illahun): Heden-plant feast of Hathor — source: Illahun
   - Sources: ES-NK (MK: Illahun)
 
 ### Day 21
+
 - **Carrying out "the triumph of the god Thoth"** [**temple-specific, Esna**]
   - Esna: Carrying out "the triumph of the god Tooth" in the presence of Re
   - Sources: ES-PT (Esna)
 
 ### Day 23
+
 - **Feast of the Field-goddess (Sekhet / Renenutet)** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Feast of the Field-goddess (Sekhet = Renenutet/Thermouthis)
   - Esna: Nebtu and Khnum going towards the great place; libation; incense; return
   - Sources: ES-PT (Edfu Cal 3; Esna)
 
 ### Days 24–29: Procession of Horus the Behdetite [**temple-specific, Edfu**]
-  - Edfu Cal 2: Days 24–28 feast (text lost); Day 29: Procession of Horus the Behdetite, 1st Day; reposing at the Mam-chapel of King Menibre; offering every good thing
-  - Last day of III Akhet: 2nd day of Procession of this god; his rituals are celebrated
-  - Sources: ES-PT (Edfu Cal 2)
+
+- Edfu Cal 2: Days 24–28 feast (text lost); Day 29: Procession of Horus the Behdetite, 1st Day; reposing at the Mam-chapel of King Menibre; offering every good thing
+- Last day of III Akhet: 2nd day of Procession of this god; his rituals are celebrated
+- Sources: ES-PT (Edfu Cal 2)
 
 ### Day 28 — Festival of Hathor [**temple-specific, Kom Ombo**]
-  - Kom Ombo East: Festival of Hathor, resident in Ombos; causing appearance of Horus and Hathor; performing all rites
-  - Sources: ES-PT (Kom Ombo East)
+
+- Kom Ombo East: Festival of Hathor, resident in Ombos; causing appearance of Horus and Hathor; performing all rites
+- Sources: ES-PT (Kom Ombo East)
 
 ### Day 29
+
 - **Procession of Hathor and ennead; Feast of Nehebkau** [**temple-specific**]
   - Edfu Cal 3 (Hathor): Procession of Hathor, Lady of Dendera, and ennead to royal way-station; feast of Nehebkau; rituals performed; return to kiosk of Ptolemy II
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 29–30
+
 - **Procession of the gods; feast of Heqa navigation** [**temple-specific, Esna**]
   - Esna: Day 29: Making the procession of the gods returning to their provinces; procession of Nebtu and Heqa the child to Pi-Sahure; return to Esna at night
   - Esna: Day 30: Making the appearance of the procession of Heqa the child at the great place; accomplishing all rites of the day of navigation
   - Sources: ES-PT (Esna)
 
 ### Last day — 2nd day of Hathor procession [**temple-specific, Edfu**]
-  - Edfu Cal 3 (Hathor): 2nd day of the procession of the goddess; ritual of "opening/revealing the breast of the women"
-  - Sources: ES-PT (Edfu Cal 3)
+
+- Edfu Cal 3 (Hathor): 2nd day of the procession of the goddess; ritual of "opening/revealing the breast of the women"
+- Sources: ES-PT (Edfu Cal 3)
 
 ### Undated within month
+
 - **Lifting up the Sky** — MK (Illahun): Lifting up the Sky — no day given
   - Sources: ES-NK (MK: Illahun)
 - **Exalting the God** — MK (Illahun): no day given
@@ -355,7 +417,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## IV Akhet (app month 3) — Khoiak/Choiak / Inundation month 4
 
 ### Day 1 — Festival of Hathor
+
 **APP ENTRY: "3-1" ✓**
+
 - **Festival of Hathor / Start of Sokar-Osiris cycle context**
   - Deity: Amon-Re with Ennead / Hathor / Khnum-Re / Nebtu
   - MK (Illahun): Periplus of Hathor — source: Illahun
@@ -366,44 +430,53 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (MK: Illahun; NK: MH 917); ES-PT (Esna; Edfu Cal 2, Cal 3)
 
 ### Day 2
+
 - **Feast of setting up the Djed pillar of Osiris** [**temple-specific, Esna**]
   - Esna: Feast of setting up the Djed pillar of Osiris in Pi-Neter — deity: Osiris
   - Sources: ES-PT (Esna)
 
 ### Days 1–6 (IV Akhet season start)
+
 - **The gods come from their provinces** [**temple-specific, Esna**]
   - Esna: The gods come from their provinces to contemplate the venerable god; listing many deities from different local temples: Horus of Hierakonpolis, Shu son of Re, Hathor of Agny, Nephthys of Kommer, Menhuy, Horus of the east, Sobek chief of Summenu, Hemen, Amon of Pe
   - Sources: ES-PT (Esna)
 
 ### Day 4
+
 **APP ENTRY: "3-4"** — The app has an entry here. No specifically named festival on IV Akhet Day 4 found in any source. Esna has a procession of Nebtu (Day 4) and Edfu Small Calendar lists Day 4 (no name). Possible that "3-4" is a secondary Sokar-cycle day. Flag for review.
-  - Esna: Procession of Nebtu and her following to Pi-Khnum; return to temple of Khnum at night [**temple-specific**]
-  - Sources: ES-PT (Esna)
+
+- Esna: Procession of Nebtu and her following to Pi-Khnum; return to temple of Khnum at night [**temple-specific**]
+- Sources: ES-PT (Esna)
 
 ### Day 5
+
 - **Procession of Horus to his Horizon** [**temple-specific, Edfu**]
   - Edfu Cal 2: Taking Horus the Behdetite out in procession, on his feast of going out to his Horizon; after submission on the night of the Protected One; resting in the Maru-chapel
   - Edfu Cal 1 (Small): Day 5 listed
   - Sources: ES-PT (Edfu Cal 1, Cal 2)
 
 ### Day 9
+
 - **Entering the Temple of Shentayet; Procession of Sokar/Hathor** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): [Day 9]: Entering the Temple of Shentayet until Day 26; procession of [Sokar?]; resting at his place; procession of Hathor, Lady of Dendera and ennead
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 12 — ḫbf tꜣ ritual (Denderah text, Ptolemaic)
+
 - **Ritual of breaking open the ground (original date, per Denderah text)**
   - BL: The Denderah text (Loret edition) describes rituals from 12–30 Khoiak; "12 Khoiak: ritual of breaking open the ground (ḫbf tꜣ)" — Bleeker argues this is the authentic original date for this ritual (before it shifted to 22 Khoiak in the Medinet Habu calendar)
   - Note: Bleeker's conclusion is that the ḫbf tꜣ was originally connected with Sokaris, not Osiris; it formed the prelude to Sokaris' own festival
   - Sources: BL p.70
 
 ### Day 14 — Older Sokaris festival (MK attestation)
+
 - **Festival of Sokar** (Middle Kingdom alternative date)
   - MK: Bleeker: "From the Middle Kingdom, at least two Sokaris festivals are attested: one on 14 Khoiak" (IV Akhet day 14)
   - Edfu Cal 1 (Small): Day 14 listed; Edfu Cal 2: Day 14 listed (no festival name)
   - Sources: BL p.70; ES-PT (Edfu Cal 1, Cal 2)
 
 ### Day 20 — Sokar cycle Day 1
+
 - **Purifying the Ennead (start of Sokar 10-day cycle)**
   - Deity: Amon-Re with his Ennead / Ptah-Sokar-Osiris
   - MH: Purifying the Ennead — deity: Amon-Re with his Ennead (932)
@@ -411,7 +484,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 932); ES-PT (Edfu Cal 2)
 
 ### Day 21 — Sokar cycle Day 2
+
 **VL example entry; NO APP ENTRY**
+
 - **Opening of the window in the sanctuary of Sokaris**
   - Deity: Ptah-Sokar-Osiris
   - MH: "Opening the window in the [Shetayet shrine?]" (943) — context partially damaged
@@ -420,6 +495,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 943); BL p.70; VL p.35, 202
 
 ### Day 22 — Sokar cycle Day 3
+
 - **Earth-backing feast / Festival of breaking open the ground (ḫbf tꜣ)**
   - MH: "Earth-backing feast" — deity unnamed (954); unusual term, day 22 of IV Akhet
   - BL: "Day of the festival of breaking open the ground (ḫbf tꜣ)"; two functions: (1) founding of temples — king demarcates site with pickaxe; (2) commencement of field work; cited from OIP Vol. LI and JEOL 7
@@ -427,12 +503,14 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 954); BL p.70
 
 ### Day 23 — Sokar cycle Day 4
+
 - **Making a way in the Shetayet shrine / Procession in the sanctuary of Sokaris**
   - MH: Making a way in the Shetayet shrine — deity: Ptah-Sokar Osiris (974)
   - BL: "Day of holding a procession in the sanctuary of Sokaris" (p.70 table)
   - Sources: ES-NK (NK: MH 974); BL p.70
 
 ### Day 24 — Sokar cycle Day 5
+
 - **Placing Sokar in the shrine**
   - MH: Placing Sokar [in the shrine] — deity: Ptah-Sokar Osiris (988)
   - BL: "Day of the placing of Sokaris 'in their midst' (of the dead?)" (p.70 table)
@@ -440,11 +518,13 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 988); BL p.70; ES-PT (Dendera Cal 2)
 
 ### Day 24 also [Edfu Cal 2]
+
 - **Feast of the Behdetite Beloved of Mankind** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of the Behdetite Beloved of Mankind — for the lifespan of Re in Edfu
   - Sources: ES-PT (Edfu Cal 2)
 
 ### Day 25 — Sokar cycle Day 6: Nḏrj.t feast
+
 - **Nḏrj.t festival (garlands of onions)**
   - MH: "Nlryt feast" (1003) — Egyptian term not fully transliterated; assigned to IV Akhet day 25
   - BL: "Nḏrj.t festival — garlands of onions were woven, apparently to be worn at the Sokaris festival on day 26"; onion = symbol of fertility; meaning of name obscure (p.73)
@@ -452,6 +532,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 1003); BL p.73; ES-PT (Dendera Cal 2)
 
 ### Day 26 — Festival of Sokar (principal)
+
 - **Festival of Sokaris** — the principal festival of the Sokar cycle
   - Deity: Ptah-Sokar Osiris and Nefertem
   - MK (Illahun): Festival of Sokar (day 26?, tentative) — source: Illahun (see note)
@@ -464,6 +545,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (MK: Illahun; NK: MH List 47, 1025); BL p.70; ES-PT (Esna; Edfu Cal 2; Dendera Cal 2)
 
 ### Day 27 — Sokar cycle Day 8: Anointing the Ennead
+
 - **Anointing the Ennead**
   - MH: Anointing the Ennead — deity: Ptah-Sokar Osiris with his Ennead — List 48 (1108)
   - BL: "Offerings to Ptah-Sokaris-Osiris and his ennead; no special Sokaris ritual mentioned in the calendar" (days 27–29 treated as offering days)
@@ -471,18 +553,22 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH List 48, 1108); BL p.70; ES-PT (Esna)
 
 ### Day 28 — Sokar cycle Day 9: Drawing-forth the Benben
+
 - **Drawing-forth the Benben**
   - MH: Drawing-forth the Benben — deity: Ptah-Sokar Osiris with his Ennead — List 49 (1123)
   - BL: "Offerings to Ptah-Sokaris-Osiris and his ennead" (days 27–29)
   - Sources: ES-NK (NK: MH List 49, 1123); BL p.70
 
 ### Day 29 — Sokar cycle Day 10 (damaged)
+
 - **Offerings for Ptah-Sokar Osiris** (entry substantially damaged)
   - MH: Only "offerings for Ptah-Sokar Osiris" preserved — List 50 (1139); title lost / damaged
   - Sources: ES-NK (NK: MH List 50, 1139)
 
 ### Day 30 — Raising the Djed Pillar / Interment of Osiris
+
 **APP ENTRY: "3-30" ✓**
+
 - **Raising the Djed Pillar (ḏd-pillar erection)**
   - Deity: Amon-Re; Osiris
   - MH: Raising the Djed pillar — deity: Amon-Re, Amon's estate western Thebes — List 51 (1163); last day of IV Akhet
@@ -493,6 +579,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH List 51, 1163); BL p.70; ES-PT (Esna; Edfu Cal 3)
 
 ### Undated within month
+
 - **Anointing the Gods** — MK (Illahun): cf. NK Day 27 of Sokar cycle — source: Illahun
 - **Drawing along Sokar** — MK (Illahun): cf. NK Day 28 of Sokar cycle — source: Illahun
 - **Entering into the Sky** — MK (Illahun) — source: Illahun
@@ -503,7 +590,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## I Peret (app month 4) — Tybi / Winter month 1
 
 ### Day 1 — Neheb-kau Festival
+
 **APP ENTRY: "4-1" ✓**
+
 - **Neheb-kau festival** + **Coronation / New Year of Reign**
   - Deity: Neheb-kau; Amon-Re; Horus
   - MK (Illahun): Neheb-kau festival — source: Illahun; also: Periplus of Hathor, Lady of Ahnas — on same day
@@ -515,18 +604,21 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (MK: Illahun; NK: MH 1191); BL p.113; ES-PT (Esna; Edfu Cal 2, Cal 3)
 
 ### Day 3
+
 - **Feast of Drunkenness of the Eye of Re** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Feast of Drunkenness of the Eye of Re — deity: Eye of Re (Hathor)
   - BL: El-Sabban Conclusion Summary notes: "Feast of Drunkenness" appears also at I Peret 3 in Edfu Hathor calendar
   - Sources: ES-PT (Edfu Cal 3); BL (Conclusion Summary)
 
 ### Day 5
+
 - **Great feast of Heqa; navigation on the sacred lake; Feast of Neith** [**temple-specific, Esna**]
   - Esna: Feast of Neith, the great feast of Heqa the child and the feast of the child at Sais; ritual of "navigation on the sacred lake of Asher" until Day 21
   - Edfu Cal 1 (Small): Day 5 listed
   - Sources: ES-PT (Esna; Edfu Cal 1)
 
 ### Day 6
+
 - **Festival of Amon in the estate of Ptah** (MH); Procession of Khnum-Re (Esna)
   - MH: Festival of Amon, laid down by the King, in the estate of Ptah — deity: Amon-Re with Ennead (1287)
   - Esna: Making procession of Khnum-Re, chief of the countryside [**temple-specific**]
@@ -534,56 +626,67 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 1287); ES-PT (Esna; Kom Ombo West)
 
 ### Day 7
+
 - **Feast of Rennutet** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Feast of Rennutet — deity: Rennutet
   - Kom Ombo West: Appearing of Ta-sent-nofret and Hathor; resting at their temple [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 3; Kom Ombo West)
 
 ### Day 11
+
 - **Procession of Khnum** [**temple-specific, Esna**]
   - Esna: Procession of Khnum, the good protector to Pi-Khnum; libation of water; burning incense; coming again to Pi-Sahure until Day 18; return to temple of Khnum
   - Sources: ES-PT (Esna)
 
 ### Day 17
+
 - **Navigation of Menhyt; Feast of Mesenet** [**temple-specific**]
   - Esna: Navigation of Menhyt — deity: Menhyt [**temple-specific**]
   - Edfu Cal 2: Feast of Mesenet — deity: Mesenet [**temple-specific**]
   - Sources: ES-PT (Esna; Edfu Cal 2)
 
 ### Days 19–30
+
 - **Navigation of Hathor** [**temple-specific, Dendera**] (multi-day feast)
   - Dendera Cal 2: Day 19: Procession of Hathor and ennead; stopping at kiosk at canal quay; ritual of navigation; Days 20, 21, 22 (same); Day 28, 29, Last day (same); rites of Day 20
   - Edfu Cal 3 (Hathor): Days 19–21: Feast of the navigation of this goddess; procession to the quay; stopping; all ritual of navigation performed; doing same from Day 28 to II Peret Day 4
   - Sources: ES-PT (Dendera Cal 2; Edfu Cal 3)
 
 ### Day 21
+
 - **Feast of Shu** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Shu — deity: Shu
   - Sources: ES-PT (Edfu Cal 2)
 
 ### Day 22
+
 - **Festival of hryr (?)** (uncertain identification)
   - MH: Festival of hryr — deity: Amon-Re, Wosermaatre Meriamon (1304); Egyptian festival name "hryr" not fully identified in El-Sabban's text
   - Sources: ES-NK (NK: MH 1304)
 
 ### Day 24 – III Peret Day 1
+
 - **Feast of Ptah who protects the Great Winged Disc** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Ptah who protects the Great Winged Disc of gold (lasting from I Peret Day 24 to III Peret Day 1)
   - Sources: ES-PT (Edfu Cal 2)
 
 ### Day 25
+
 - **Feast of Hathor, "descent of the Dove"** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Feast of Hathor, Lady of Dendera — "descent of the Dove"
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 29
+
 - **Erecting the trt-tree; Procession of Khnum-Re**
   - MH: Erecting the trt-tree — deity: Amon-Re (1322); "Amon in the 1st month of winter on the 29th day"
   - Esna: Feast of entering in his town; procession of Khnum-Re, chief of Esna [**temple-specific**]
   - Sources: ES-NK (NK: MH 1322); ES-PT (Esna)
 
 ### Day 30
+
 **APP ENTRY: "4-30"** — Esna attests a Feast of Hathor on I Peret Day 30.
+
 - **Feast of Hathor, mistress of Agny** [**temple-specific, Esna**]
   - Esna: Feast of Hathor, mistress of Agny — deity: Hathor
   - Sources: ES-PT (Esna)
@@ -593,7 +696,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## II Peret (app month 5) — Mechir / Winter month 2
 
 ### Day 1 — Navigation of Anubis
+
 **APP ENTRY: "5-1" ✓**
+
 - **Navigation of Anubis**
   - Deity: Amon-Re with his Ennead / Anubis
   - MH: Navigation of Anubis — deity: Amon-Re with his Ennead (1337)
@@ -602,34 +707,40 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 1337); ES-PT (Esna; Dendera Cal 2)
 
 ### Day 6
+
 - **Feast of bearing the sky** [**temple-specific, Esna**]
   - Esna: Feast of bearing the sky; making it like the feast of "Lifting up the sky"
   - Sources: ES-PT (Esna)
 
 ### Day 8
+
 - **Feast of Neith; opening the doors** [**temple-specific, Esna**]
   - Esna: Feast of Neith; opening the 2 door-leaves in the house of Neith; procession of Neith and ennead; evening service; union with disk; return
   - Sources: ES-PT (Esna)
 
 ### Day 9 — Lifting up the Sky (start)
+
 - **Festival of Amon: Lifting up the Sky** (begins; continues to III Peret)
   - MH: 1st day of Amon's festival of Lifting up the Sky — deity: Amon-Re, Wosermaatre Meriamon (1350); festival spans II Peret Day 9 through at least III Peret Day 1
   - Kom Ombo East: Festival of d3rt ("the devouring of ibm" / "bringing of the willow"); appearance of this god; resting in broad hall; burning before him [**temple-specific**]
   - Sources: ES-NK (NK: MH 1350); ES-PT (Kom Ombo East)
 
 ### Day 16 — Sokaris festival (Middle Kingdom alternative)
+
 - **Feast of Sokar** (MK placement in II Peret)
   - BL: "From the Middle Kingdom, at least two Sokaris festivals are attested: one on 16 Mechir (II Peret day 16) — in the New Kingdom this shifted to 27 Mechir"
   - MK (Illahun): Feast of Sokar and Drawing along of Sokar — no day given; Bleeker identifies 16 Mechir as the MK date
   - Sources: BL p.70; ES-NK (MK: Illahun)
 
 ### Day 17
+
 - **Feast of Neith, mistress of Lower Egypt; ritual of Min, Lord of Sais** [**temple-specific, Esna**]
   - Esna: Feast of Neith, mistress of Lower Egypt; acting in accordance with the ritual of Min, Lord of Sais
   - Edfu Cal 1 (Small): Day 17 listed
   - Sources: ES-PT (Esna; Edfu Cal 1)
 
 ### Day 21 — Feast of Victory
+
 - **Feast of Victory** / **Reunion feast** (multi-temple attestation)
   - Deity: Hathor / Horus / Heqa
   - Esna: Feast of victory; procession of Heqa the child to court of appearance; accomplishing all rites of the feast of victory [**temple-specific**]
@@ -640,16 +751,19 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Esna; Edfu Cal 2, Cal 3; Dendera Cal 2)
 
 ### Last day of II Peret
+
 - **2nd day of Amon's festival of Lifting up the Sky**
   - MH: 2nd day of Amon's festival of Lifting up the Sky — deity: Amon-Re (1368)
   - Sources: ES-NK (NK: MH 1368)
 
 ### Days 28–29
+
 - **Feast of removing the deceased; Feast of Ptah** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Feast of removing the deceased to Isle-of-Flame; Feast of Ptah who protects the great winged disc of gold, who saves Shu from Geb in Memphis
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Days 25–28
+
 - **Feast of endowing offerings for the gods of Behdet** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of endowing offerings for the gods of Behdet
   - Sources: ES-PT (Edfu Cal 2)
@@ -659,7 +773,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## III Peret (app month 6) — Phamenoth / Winter month 3
 
 ### Day 1 — Lifting up the Sky / Great Burning
+
 **APP ENTRY: "6-1" ✓**
+
 - **Feast of Lifting up the Sky / Feast of Ptah** + **Great Burning** (MK)
   - MK (Illahun): Great Burning — source: Illahun; III Peret day 1
   - MH: 1st day of Amon's festival of the Reentry of the Sky (continuation from II Peret) — deity: Amon-Re (1370)
@@ -668,43 +784,51 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (MK: Illahun; NK: MH 1370); ES-PT (Esna; Edfu Cal 3)
 
 ### Day 5
+
 - **Feast of Nebtu** [**temple-specific, Esna**]
   - Esna: Feast of Nebtu — deity: Nebtu
   - Edfu Cal 2: Feast of Horus [text lost at beginning] [**temple-specific**]
   - Sources: ES-PT (Esna; Edfu Cal 2)
 
 ### Days 10–11
+
 - **Procession of Khnum and Thoth** [**temple-specific, Esna**]
   - Esna: Procession of Khnum, the good protector; union with disk; pause at Pi-Sahure; on morning of Day 11, procession of Tooth (Thoth) in middle of house of the two little birds; union with disk; returning
   - Sources: ES-PT (Esna)
 
 ### Day 14
+
 - **Feast of Ermuthis (Renenutet / Thermouthis)** [**temple-specific, Esna**]
   - Esna: Feast of Ermuthis; procession of Khnum-Re Lord of Esna; procession of Child (Heqa) going before his father; coming back to mammisi; procession made to Pi-Khnum and Pi-Sahure
   - Sources: ES-PT (Esna)
 
 ### Day 15
+
 - **Feast of Horus the Behdetite** [**temple-specific, Edfu**]
   - Edfu Cal 3 (Hathor): Feast of Horus the Behdetite, Lord of Dendera
   - Sources: ES-PT (Edfu Cal 3)
 
 ### Day 24
+
 - **Feast of the Behdetite; Winged Disc ascent** [**temple-specific, Edfu**]
   - Edfu Cal 2: Appearance as star(s) of the sky; Re's heart is happy; feast of Horus the Behdetite likewise
   - Edfu Cal 3 (Hathor): Feast of the Behdetite; the Winged Disc flies to the horizon, becoming a star in the sky
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 26 ("16")
+
 - **Feast of Horus the Behdetite** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Horus the Behdetite; the due respect of Horus (text partially uncertain — El-Sabban labels this "16" but reads as III Peret context)
   - Sources: ES-PT (Edfu Cal 2)
 
 ### Last day of III Peret
+
 - **2nd day of Amon's festival of the Reentry of the Sky**
   - MH: 2nd day of Amon's festival of the Reentry of the Sky — deity: Amon-Re (1371)
   - Sources: ES-NK (NK: MH 1371)
 
 ### Undated within month
+
 - **Entering into the Temple** — MK (Illahun): no day given
   - Sources: ES-NK (MK: Illahun)
 - **Periplus (of uncertain assignment)** — MK (Illahun): uncertain placement in III or IV Peret
@@ -715,7 +839,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## IV Peret (app month 7) — Pharmuthi / Winter month 4
 
 ### Day 1 — Entering the Sky / Festival of Sokar (new moon)
+
 **APP ENTRY: "7-1" ✓**
+
 - **Reentry of Amon / Festival of Entering the Sky** + **Festival of Sokar at new moon**
   - MH: Day 1: 1st day of Amon's festival of Entering the Sky — deity: Amon-Re (1372); also: Day of the festival of [Sokar], brought by the new moon — deity: Amon-Re with his Ennead (1388) [two separate entries for the same day; one an Amon festival, one a Sokar occasion triggered by the lunar new moon]
   - Edfu Cal 3 (Hathor): Feast of Horus and the Eye of Horus — deities: Horus, Eye of Horus [**temple-specific**]
@@ -723,18 +849,21 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 1372, 1388); ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 3
+
 - **Festival of Horus, son of Re** [**temple-specific, Kom Ombo**]
   - Kom Ombo East: Festival of Horus, son of Re; performing his rites
   - Edfu Cal 1 (Small): Day 3 listed
   - Sources: ES-PT (Kom Ombo East; Edfu Cal 1)
 
 ### Day 4 — Chewing onions for Bast
+
 - **Chewing onions for Bast**
   - MH: Chewing onions for Bast — deity: Amon-Re with his Ennead (1373)
   - Edfu Cal 3 (Hathor): Feast of Pakhet; it is the Eye of Horus; feast of Horus, Lord of life [**temple-specific**]
   - Sources: ES-NK (NK: MH 1373); ES-PT (Edfu Cal 3)
 
 ### New Moon (variable date)
+
 - **Birth of Horus son of Isis; Isis goes around her town until Day 21**
   - Edfu Cal 2: Feast of the First Occasion; Horus son of Isis and Osiris is born on it; birth-giving of the goddess for Isis; Isis goes around her town until Day 21 — deities: Horus, Isis, Osiris [**temple-specific**]
   - Edfu Cal 3 (Hathor): Horus son of Isis and of Osiris is born; birth-giving for Isis until Day 21; Isis goes around her town [**temple-specific**]
@@ -742,29 +871,35 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Edfu Cal 2, Cal 3; Dendera Cal 2)
 
 ### Day 10–11
+
 - **Appearances of Sobek; Divine birth rites** [**temple-specific, Kom Ombo**]
   - Kom Ombo West: Day 10: After 8th hour, appearance of Ta-sent-nofret, Hathor; trumpets not played; resting at birth house; Day 11: "public appearance" at birth house; making all images for birth of the gods; appearing of Lord of Two Lands at temple of Horus
   - Sources: ES-PT (Kom Ombo West)
 
 ### Day 11
+
 - **Procession of Neith and Heqa; divine birth of Re and Horus** [**temple-specific, Esna**]
   - Esna: Procession of Neith and Heqa the child in the morning; union with disk; feast of the navigation of this goddess; performing the ritual of the divine birth of Re and of Horus in the second lunar day of this month
   - Sources: ES-PT (Esna)
 
 ### Day 14 or 15 (uncertain)
+
 - **Going forth to the Sky; Renewing of the year** — MK (Illahun)
   - MK (Illahun): "Day 14 or 15 (?): Going forth to the Sky" and "Day 15: Renewing of the year" — source: Illahun; day uncertain
   - Sources: ES-NK (MK: Illahun)
 
 ### Day 21 — Victory festival (Sesostris III)
+
 - **Victory festival** (historical / royal, Sesostris III)
   - MK: Victory festival — source: Sesostris III temple at Semna; day 21
   - Sources: ES-NK (MK: Sesostris III at Semna)
 
 ### Day 25
+
 **APP ENTRY: "7-25"** — IV Peret day 25 has no named festival in any of the four sources. Esna has Day 28 (Feast of Harsiesis). Edfu Cal 3 has Day 28 (Feast of Horus of Sepa). Possible that "7-25" in the app is based on a different source not covered in this extraction, or is in error. Flag for review.
 
 ### Day 28
+
 - **Feast of Horus of Sepa, offspring of Sekhmet** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Horus of Sepa, offspring of Sekhmet; Atum residing in Bubastis [**temple-specific**]
   - Edfu Cal 3 (Hathor): Feast of Horus of Sepa, offspring of Sekhmet — deities: Horus of Sepa, Sekhmet, Atum [**temple-specific**]
@@ -773,12 +908,14 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Edfu Cal 2, Cal 3; Esna; Dendera Cal 2)
 
 ### Day 30
+
 - **Procession of Nebtu in Esna** [**temple-specific, Esna**]
   - Esna: Procession of Nebtu in Esna; making halt in house of birth (mammisi); accomplishing all rites by dawn
   - Kom Ombo West: Appearing daily at temple of Ombos [**temple-specific**]
   - Sources: ES-PT (Esna; Kom Ombo West)
 
 ### Undated within month
+
 - **Lesser Burning** — MK (Illahun): IV Peret day 1 (El-Sabban Ch.2); unusual that "Lesser Burning" is listed under IV Peret Day 1 but the current day 1 entry is the MH Entering the Sky festival — may reflect different calendar traditions
   - Sources: ES-NK (MK: Illahun)
 
@@ -787,7 +924,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## I Shomu (app month 8) — Pachon / Summer month 1
 
 ### Day 1 — Renenutet festival
+
 **APP ENTRY: "8-1" ✓**
+
 - **Renenutet festival**
   - Deity: Amon-Re / Khnum / Hathor / multiple
   - MH: Renenutet festival — deity: Amon-Re (1402)
@@ -798,6 +937,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 1402); ES-PT (Kom Ombo East; Kom Ombo West; Esna; Edfu Cal 2)
 
 ### New Moon (variable)
+
 - **Processional feast of Amon; Visit to Khadi** [**temple-specific**]
   - MH: Processional feast of Amon / 1st festival of I Shomu (4th occasion of new moon's festival) — deity: Amon-Re, lord of thrones of both lands, chief of Karnak — List 67 (1451); followed by 2nd, 3rd, 4th, and 5th days of Amon festival (1470, 1472, 1474, 1476)
   - Kom Ombo East: Appearing of this god "in appearing, in order to go to Gebgeb"; sailing; resting at his temple; vigil by the young people [**temple-specific**]
@@ -807,18 +947,23 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH 1451ff.); ES-PT (Kom Ombo East; Edfu Cal 2, Cal 3; Dendera Cal 2)
 
 ### Day 4–8
+
 - **Festival of Horus at Kom Ombo** (multi-day) [**temple-specific**]
   - Kom Ombo East: Days 4–8: Appearing of this god on successive days; Day 5: arriving at open court north of town; reciting spells for overthrowing Apophis; judging the two lords; Day 6: anointing with Tishepes oil; Day 7: traversing the field before him with barley and spelt; Day 8: taking the haunch before him; resting
   - Sources: ES-PT (Kom Ombo East)
 
 ### Day 10 — Festival of Clothing Anubis
+
 **APP ENTRY: "8-10" ✓**
+
 - **Festival of clothing Anubis**
   - MH: Festival of clothing Anubis — deity: Amon-Re with his Ennead; note: "daily offerings every day" suggests extended observance (1416)
   - Sources: ES-NK (NK: MH 1416)
 
 ### Day 11 — Min Festival
+
 **APP ENTRY: "8-11" ✓**
+
 - **Min's Procession (Min festival)**
   - Deity: Min (Amon-Min); also: Iusaas / Hathor (at Edfu)
   - MH: Min's procession to the terrace when the new moon is in the morning — deity: Amon-Re, Wosermaatre Meriamon — List 66 (1430); note: described as occurring on the new moon, linking it to the lunar calendar; depicted on Northern and Eastern walls of second court of Medinet Habu
@@ -829,16 +974,19 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH List 66, 1430); BL p.112, 121, 165; ES-PT (Edfu Cal 2, Cal 3; Dendera Cal 2)
 
 ### Day 15
+
 - **Great festival; Feast of the 15th Day (Full Moon)** [**temple-specific, Dendera**]
   - Dendera Cal 2: Great festival in the whole land; procession by Hathor; union with sun's disc; resting in birth-house; total 3 days of feast
   - Sources: ES-PT (Dendera Cal 2)
 
 ### Day 25
+
 - **Feast in the palace of Ermouthis** [**temple-specific, Esna**]
   - Esna: Procession of Khnum-Re, chief of the countryside; "the appearance in the palace of Ermouthis"; this feast completed in 6 days
   - Sources: ES-PT (Esna)
 
 ### Day 26
+
 - **Accession anniversary of the King** (Ramesses III)
   - MH: Day of the accession of the King — deity: Amon-Re and the Ennead, Wosermaatre Meriamon (553, 601); two entries for same date, related to "accession-anniversary statue"
   - Sources: ES-NK (NK: MH 553, 601)
@@ -848,7 +996,9 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## II Shomu (app month 9) — Payni / Summer month 2
 
 ### Beautiful Feast of the Valley — undated within month
+
 **APP ENTRY: "9-25"** — Bleeker gives no specific day-number for the Valley Festival; only "Payni" (II Shomu). No day 25 entry is attested for this festival in any source. The app entry "9-25" may derive from a source not covered in this extraction. Flag for review.
+
 - **Beautiful Feast of the Valley (Festival of the Valley)**
   - Deity: Amon-Re (principal); Hathor in the background
   - MH: "Valley Festival — II Shomu (traditional date); El-Sabban's analysis groups it with Shomu offerings; no specific day extracted from the text" (El-Sabban note in Ch.5)
@@ -856,6 +1006,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-NK (NK: MH, undated Shomu); BL p.152
 
 ### Day 1
+
 - **Feast of Hathor, Lady of Dendera** (entire month) [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Hathor, Lady of Dendera, Eye of Re, Eye of Horus, Eye of Osiris; (fire)stick rubbed; candle lit; rites until last day of month
   - Edfu Cal 3 (Hathor): Same: Feast of Hathor, Lady of Dendera; until last day of month [**temple-specific**]
@@ -863,41 +1014,49 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Edfu Cal 2, Cal 3; Esna)
 
 ### Day 6
+
 - **Appearing of Ta-sent-nofret** [**temple-specific, Kom Ombo**]
   - Kom Ombo West: Appearing of Ta-sent-nofret and Lord of Two Lands
   - Sources: ES-PT (Kom Ombo West)
 
 ### Day 14
+
 - **Feast of Hathor, mistress of Agny; Navigation of Nebtu** [**temple-specific, Esna**]
   - Esna: Feast of Hathor, mistress of Agny; accomplishing all rites of navigation of Nebtu — deities: Hathor, Nebtu
   - Sources: ES-PT (Esna)
 
 ### Day 15
+
 - **Appearing of Amon; sailing rites** [**temple-specific, Kom Ombo**]
   - Kom Ombo West: Appearing of Amon, resident in Ombos; performing the rites of the sailing
   - Sources: ES-PT (Kom Ombo West)
 
 ### Day 16
+
 - **Feast of Menhyt; Feast of Bastet; Purifying Sekhmet** [**temple-specific, Esna**]
   - Esna: Feast of Menhyt; feast of Bastet; purifying Sekhmet — deities: Menhyt, Bastet, Sekhmet
   - Sources: ES-PT (Esna)
 
 ### Day 25
+
 - **Feast of Horus the Behdetite (3rd day of procession)** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Horus the Behdetite (3rd day of procession)
   - Sources: ES-PT (Edfu Cal 2)
 
 ### Day 26
+
 - **Feast of the beginning of the year; feast of the revealing of the face in the temple of Neith** [**temple-specific, Esna**]
   - Esna: Feast of the beginning of the year; feast of the revealing of the face in the temple of Neith; giving material to the gods like what is done on 8th of 2nd month of winter
   - Sources: ES-PT (Esna)
 
 ### Day 27–30
+
 - **Procession of Hathor and Horus; 4-day feast** [**temple-specific, Dendera**]
   - Dendera Cal 2: Procession of Hathor, Lady of Dendera, in her noble shrine; procession of Horus, great god, residing in Dendera, along with her in portable barque; going round her domain; going south; stopping at Mansion of Horus; gods turn north; resting in divine mansion; Days 28, 29, last day: same. Total 4 days of feast
   - Sources: ES-PT (Dendera Cal 2)
 
 ### Day 30
+
 - **Pacifying Sekhmet** [**temple-specific, Esna**]
   - Esna: Pacifying Sekhmet — deity: Sekhmet
   - Sources: ES-PT (Esna)
@@ -907,6 +1066,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## III Shomu (app month 10) — Epiphi / Summer month 3
 
 ### New Moon — Hathor goes to Edfu (Feast of Behdet)
+
 - **Feast of the Sacred Marriage / Reunion / Feast of Behdet** (major multi-temple festival)
   - Deity: Horus the Behdetite + Hathor of Dendera
   - Edfu Cal 2: Procession of Horus and Hathor; "first-fruits of fields; proceeding to Behdet-temple; Hathor goes to Dendera; after 10 days of jubilee festival"; feast of reunion; rite of first-fruits; Hathor sails upstream to Edfu Province; landing at Behdet [**temple-specific**]
@@ -918,54 +1078,64 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Edfu Cal 2, Cal 3, Cal 4; Dendera Cal 1, Cal 2); BL p.244
 
 ### Day 1
+
 - **Feast of Khnum-Re; reading the ritual of divine birth** [**temple-specific, Esna**]
   - Esna: Feast of Khnum-Re, chief of the countryside; reading the second ritual of the divine birth for Heqa the child
   - Kom Ombo West: Appearing of noble standard of Horus and Lord of Two Lands [**temple-specific**]
   - Sources: ES-PT (Esna; Kom Ombo West)
 
 ### Day 4
+
 - **Conception of Horus son of Isis and Osiris** [**temple-specific, Edfu/Dendera**]
   - Edfu Cal 2: Conception of Horus son of Isis and of Osiris; he is born on 4th Peret Day 28; called "Beautiful Falcon of the Golden One"; he forms an "abode of Horus" (Hat-hor) within the goddess [**temple-specific**]
   - Edfu Cal 3 (Hathor): Same. Also: abundant food-offerings levied for Temple of Dendera until 4th month of Shomu [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 12
+
 - **Marriage-contract of Isis** [**temple-specific, Edfu**]
   - Edfu Cal 2: Marriage-contract of the Mistress of mankind; Isis; Thy is born [**temple-specific**]
   - Edfu Cal 3 (Hathor): Marriage-contract of Isis; Thy is born; feast of Re [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 13
+
 - **Feast of Neith** [**temple-specific, Esna**]
   - Esna: Feast of Neith who saved her son Re from the hands of her children; reaching her town on Day 13; Re says to the gods "make Neith welcome"; procession of goddess and ennead; accomplishing all rites of the black heifer at night-time
   - Sources: ES-PT (Esna)
 
 ### Day 19 (and Day 23)
+
 - **Appearing of Horus in "Treading the Fishes"** [**temple-specific, Kom Ombo**]
   - Kom Ombo East: Day 19: Appearing of this god in his goodly festival of "Treading (?) the fishes"; arriving at broad hall; treading fishes; doing likewise on Day 23 for 5 days
   - Sources: ES-PT (Kom Ombo East)
 
 ### Day 19
+
 - **Appearance of Khnum** [**temple-specific, Esna**]
   - Esna: Appearance of Khnum, the good protector of Pi-Khnum; making halt by entrance of red pool
   - Sources: ES-PT (Esna)
 
 ### Day 20
+
 - **Feast of grasping the crook** [**temple-specific, Esna**]
   - Esna: Feast of grasping the crook; appearance of Khnum-Re, chief of the countryside in Aba; offerings on the altar
   - Sources: ES-PT (Esna)
 
 ### Day 21
+
 - **Appearance of Khnum-Re and Nebtu; Navigation; making the countryside green** [**temple-specific, Esna**]
   - Esna: Appearance of Khnum-Re, chief of the countryside and his ennead; union with disk; return; navigation on the river; feast of Nebtu; reading the writing of "making the countryside green"
   - Sources: ES-PT (Esna)
 
 ### Day 29
+
 - **Feast of the gods** [**temple-specific, Esna**]
   - Esna: Feast of the gods, on the occasion of the feast of her Majesty; performing the ritual; taking 3 days
   - Sources: ES-PT (Esna)
 
 ### Last day
+
 - **4th day of Procession of Hathor; the "Widow's Flame"** [**temple-specific, Edfu/Dendera**]
   - Edfu Cal 2: 4th day of procession of Hathor, Lady of Dendera; proceeding to royal way-station with great torch of dried grass called "the Widow's (?) Flame"; returning and resting in her temple [**temple-specific**]
   - Edfu Cal 3 (Hathor): Same [**temple-specific**]
@@ -976,6 +1146,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 ## IV Shomu (app month 11) — Mesore / Summer month 4
 
 ### Day 1 — Feast of Her Majesty (Hathor)
+
 - **Feast of Her Majesty (Hathor); 5th day of procession**
   - Edfu Cal 2: Feast of Her Majesty (=Hathor); 5th day of procession; stopping in kiosk [**temple-specific**]
   - Edfu Cal 3 (Hathor): Same [**temple-specific**]
@@ -987,47 +1158,56 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Edfu Cal 2, Cal 3, Cal 4; Dendera Cal 1, Cal 2; Kom Ombo East, West)
 
 ### Day 2
+
 - **Taking out Isis the Brilliant; procession** [**temple-specific, Edfu**]
   - Edfu Cal 2: Taking out Isis the Brilliant, Mother of the god, residing in Behdet; resting in barque-sanctuary; every good thing offered
   - Edfu Cal 3 (Hathor): 6th day of procession [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Days 3–8
+
 - **Procession of Hathor continued** [**temple-specific, Edfu**]
   - Edfu Cal 2: Days 3–7: ditto; Day 8: 12th day of procession; resting in great sanctuary
   - Edfu Cal 4: Days 10–19: Praise of Mut
   - Sources: ES-PT (Edfu Cal 2, Cal 4)
 
 ### Day 9
+
 **APP ENTRY: "11-9"** — No named festival on IV Shomu Day 9 found in any source. Edfu Cal 4 mentions Praise of Mut for "days 10–19(?)." Kom Ombo West has Day 9 of III Shomu (different month). Flag for review.
 
 ### Day 14
+
 - **Feast of registration; Menat-collars** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of registration for a day; removing the tie and unrolling papyri by this goddess; women of town take Menat-collars in their hands to gladden everyone; singing "Osiris is well, and Tebeh (Seth) is no more!"; cucumbers go forth
   - Edfu Cal 3 (Hathor): Same [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 15 (Full Moon) — Great feast in all the land
+
 - **Great feast; Feast of birth-giving of Hathor; Harsomtous procession**
   - Edfu Cal 2: Great feast in all the land; great offering of bread, beer, oxen, fowl; oryx sacrificed; wine; pig cut up; feast of birth-giving of the goddess for Hathor, Lady of Dendera; Harsomtous the child taken out in procession; carried on arms to way-station; stopping in mammisi; offerings; on 7th/14th/15th day further processions [**temple-specific**]
   - Edfu Cal 3 (Hathor): Same great feast; sistrum; reaping the barley; releasing Aper-geese [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Days 19–21
+
 - **Praise of Mut** [**temple-specific, Edfu**]
   - Edfu Cal 2: Praise of Mut — deity: Mut [**temple-specific**]
   - Edfu Cal 3 (Hathor): Praise of Mut — deity: Mut [**temple-specific**]
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 20
+
 - **Feast of Menhyt** [**temple-specific, Esna**]
   - Esna: Feast of Menhuy [Menhyt]; offerings on the altar
   - Sources: ES-PT (Esna)
 
 ### Day 24
+
 **APP ENTRY: "11-24"** — No named festival on IV Shomu Day 24 found in any source. The nearest is Day 27 (procession of Hathor). Flag for review.
 
 ### Day 27
+
 - **Procession of Hathor and Harsomtous to the south** [**temple-specific, Edfu/Dendera**]
   - Edfu Cal 2: Procession of Hathor, Lady of Dendera, and Harsomtous to south of town; stopping at Maru-chapel of Sesostris; face turned South; rites for Lord of Behdet; returning [**temple-specific**]
   - Edfu Cal 3 (Hathor): Same [**temple-specific**]
@@ -1035,11 +1215,13 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
   - Sources: ES-PT (Edfu Cal 2, Cal 3; Dendera Cal 2)
 
 ### Days 28–29
+
 - **2nd and 3rd days of procession** [**temple-specific, Edfu**]
   - Edfu Cal 2 and Cal 3: 2nd and 3rd days of procession
   - Sources: ES-PT (Edfu Cal 2, Cal 3)
 
 ### Day 30
+
 - **Feast of Robing of Horus the Behdetite** [**temple-specific, Edfu**]
   - Edfu Cal 2: Feast of Robing of Horus the Behdetite, great god, Lord of heaven; great oblation; procession to Place of the First Feast; all rites performed [**temple-specific**]
   - Edfu Cal 4: Last day: Offerings on the altar for Osiris in his place [**temple-specific**]
@@ -1054,6 +1236,7 @@ VL: III Akhet 18 — all three witnesses (pCairo, pSallier IV, third source) giv
 These 5 days are treated as the birthdays of the Osirian group of gods. All major calendar sources attest them as feast days; they are described as especially dangerous in the hemerology tradition.
 
 ### Epag. Day 1 — Birth of Osiris
+
 - **Feast of the Birth of Osiris**
   - MK (Illahun): Birth of Osiris — source: Illahun
   - Esna: Feast of the birth of Osiris; presenting material to Khnum-Re, chief of Esna, and his ennead; offerings on altar
@@ -1063,6 +1246,7 @@ These 5 days are treated as the birthdays of the Osirian group of gods. All majo
   - Sources: ES-NK (MK: Illahun); ES-PT (Esna; Edfu Cal 2, Cal 4); BL p.33, 132
 
 ### Epag. Day 2 — Birth of Horus
+
 - **Feast of the Birth of Horus**
   - MK (Illahun): Birth of Horus — source: Illahun
   - Esna: Feast of the birth of Horus and feast of Heqa the child; feast of revealing the face in the temples in the eighth hour
@@ -1072,14 +1256,16 @@ These 5 days are treated as the birthdays of the Osirian group of gods. All majo
   - Sources: ES-NK (MK: Illahun); ES-PT (Esna; Edfu Cal 2, Cal 4; Kom Ombo)
 
 ### Epag. Day 3 — Birth of Seth
+
 - **Feast of the Birth of Seth**
   - MK (Illahun): Birth of Seth — source: Illahun
   - Esna: 3rd epagomenal day — text damaged
   - Edfu Cal 4: "(3rd day): celebrating according to what is in the ritual of the evening meal; burnt offerings until 9th hour of night; procession by Hathor, Lady of Dendera; bearers sent to the Behdetite; stopping and making holiday" [note: Edfu Cal 4 does not name Seth; the procession is for Hathor] [**temple-specific**]
-  - VL: Plutarch's *De Iside* 12 — remark about the 3rd epagomenal day shows that Plutarch's informants still had access to traditional mythological day-ratings in the Roman period (Harpocrates/Horus variant in Plutarch, but VL notes this is the Seth birth day in the standard tradition). Sources: VL p.35
+  - VL: Plutarch's _De Iside_ 12 — remark about the 3rd epagomenal day shows that Plutarch's informants still had access to traditional mythological day-ratings in the Roman period (Harpocrates/Horus variant in Plutarch, but VL notes this is the Seth birth day in the standard tradition). Sources: VL p.35
   - Sources: ES-NK (MK: Illahun); ES-PT (Esna; Edfu Cal 4); VL p.35
 
 ### Epag. Day 4 — Birth of Isis
+
 - **Feast of the Birth of Isis** — great feast in the whole land
   - MK (Illahun): Birth of Isis — source: Illahun
   - Esna: Birth of Isis; "that good feast of the sky and earth"; presenting material to Khnum and his ennead
@@ -1089,6 +1275,7 @@ These 5 days are treated as the birthdays of the Osirian group of gods. All majo
   - Sources: ES-NK (MK: Illahun); ES-PT (Esna; Edfu Cal 2, Cal 4; Dendera Cal 2)
 
 ### Epag. Day 5 — Birth of Nephthys
+
 - **Feast of the Birth of Nephthys**
   - MK (Illahun): Birth of Nephthys — source: Illahun
   - Esna: Feast of the birth of Nephthys; Isis is in Pi-Neter; "she who offers and goes out every 10 days"
@@ -1106,34 +1293,42 @@ These 5 days are treated as the birthdays of the Osirian group of gods. All majo
 These are attested across multiple sources but occur on lunar or recurring cycles rather than fixed civil calendar dates.
 
 ### New Moon feast (ꜣbḏ)
+
 - Attested: MK (Illahun) — New Moon in 1st, 3rd, 4th Akhet; 3rd Peret; 3rd Shomu
 - MH: Regular new moon feasts — Lists 7, 9–12, 14 (monthly/lunar feasts)
 - BL: "1st of every month (new moon celebration, from time immemorial)" — Pyramid Texts; Ahmose I inscription lists "the monthly feast of the first of the month"
 - Sources: ES-NK (MK; NK MH); BL p.229
 
 ### Month-feast
+
 - Attested: MK (Illahun) — 2nd, 3rd, 4th Akhet; all four Peret months; 1st, 2nd, 4th Shomu
 - Sources: ES-NK (MK: Illahun)
 
 ### Full Moon feast (psDntyw)
+
 - Attested: MK (Illahun) — 2nd–4th Akhet; all four Peret months; 1st, 4th Shomu
 - BL: "Half-way through the month (full moon)" — Pyramid Texts (p.229)
 - Sources: ES-NK (MK: Illahun); BL p.229
 
 ### Sixth Day feast (ꜥrk) — BL: "6th of every month" — Pyramid Texts; Ahmose I inscription
+
 - Sources: BL p.229
 
 ### Half-moon feast — MH: "every half-moon festival which shall happen" (452)
+
 - Sources: ES-NK (NK: MH 452)
 
 ### 1st and 10th day of every month — MH: monthly offerings — Lists 10, 13
+
 - Sources: ES-NK (NK: MH)
 
 ### Festival of Min (procession) — recurring at new moon; I Shomu (lunar)
+
 - MH: "Procession of Min — on every festival which shall happen; lunar" (306)
 - Sources: ES-NK (NK: MH 306)
 
 ### Feast of the Sem-priest — no fixed date; associated with procession of Min and feast of the Sem priest
+
 - MH: Lists 8, 11
 - Sources: ES-NK (NK: MH)
 
@@ -1141,30 +1336,31 @@ These are attested across multiple sources but occur on lunar or recurring cycle
 
 ## Summary: App Coverage Assessment
 
-| App entry | Day | Festival found in sources | Confidence |
-|---|---|---|---|
-| 0-1 | I Akhet 1 | Wep Renpet / New Year | HIGH — all periods, all temples |
-| 0-18 | I Akhet 18 | Wagy festival | HIGH — MK + NK + Bleeker |
-| 0-19 | I Akhet 19 | Feast of Thoth | HIGH — NK (MH) + Bleeker |
-| 1-15 | II Akhet 15 | NOT ATTESTED in these sources | FLAG — review needed |
-| 2-1 | III Akhet 1 | Within Opet festival (MH); Feast of Sekhmet (Esna) | PARTIAL — day is Opet context |
-| 3-1 | IV Akhet 1 | Festival of Hathor (MH + MK + Esna + Edfu) | HIGH |
-| 3-4 | IV Akhet 4 | NOT SPECIFICALLY NAMED in major sources | FLAG — Esna has minor procession |
-| 3-30 | IV Akhet 30 | Raising the Djed pillar / Interment of Osiris | HIGH — MK + NK + Ptolemaic |
-| 4-1 | I Peret 1 | Neheb-kau; Opening of Reign; Bleeker "time of flowering" | HIGH |
-| 4-30 | I Peret 30 | Feast of Hathor, mistress of Agny (Esna only) | LOW — temple-specific |
-| 5-1 | II Peret 1 | Navigation of Anubis (MH) | MEDIUM — NK only, one source |
-| 6-1 | III Peret 1 | Great Burning (MK); Lifting up the Sky (MH + Esna + Edfu) | HIGH |
-| 7-1 | IV Peret 1 | Entering the Sky / Sokar new moon (MH) + Edfu Eye feasts | HIGH |
-| 7-25 | IV Peret 25 | NOT ATTESTED in these sources | FLAG — review needed |
-| 8-1 | I Shomu 1 | Renenutet (MH + multiple temples) | HIGH |
-| 8-10 | I Shomu 10 | Festival of clothing Anubis (MH) | MEDIUM — NK only |
-| 8-11 | I Shomu 11 | Min festival (MH + Bleeker) | HIGH |
-| 9-25 | II Shomu 25 | Feast of Horus the Behdetite (Edfu, temple-specific); Valley Festival undated in Bleeker | LOW–MEDIUM — see note |
-| 11-9 | IV Shomu 9 | NOT ATTESTED in these sources | FLAG — review needed |
-| 11-24 | IV Shomu 24 | NOT ATTESTED in these sources | FLAG — review needed |
+| App entry | Day         | Festival found in sources                                                                | Confidence                       |
+| --------- | ----------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
+| 0-1       | I Akhet 1   | Wep Renpet / New Year                                                                    | HIGH — all periods, all temples  |
+| 0-18      | I Akhet 18  | Wagy festival                                                                            | HIGH — MK + NK + Bleeker         |
+| 0-19      | I Akhet 19  | Feast of Thoth                                                                           | HIGH — NK (MH) + Bleeker         |
+| 1-15      | II Akhet 15 | NOT ATTESTED in these sources                                                            | FLAG — review needed             |
+| 2-1       | III Akhet 1 | Within Opet festival (MH); Feast of Sekhmet (Esna)                                       | PARTIAL — day is Opet context    |
+| 3-1       | IV Akhet 1  | Festival of Hathor (MH + MK + Esna + Edfu)                                               | HIGH                             |
+| 3-4       | IV Akhet 4  | NOT SPECIFICALLY NAMED in major sources                                                  | FLAG — Esna has minor procession |
+| 3-30      | IV Akhet 30 | Raising the Djed pillar / Interment of Osiris                                            | HIGH — MK + NK + Ptolemaic       |
+| 4-1       | I Peret 1   | Neheb-kau; Opening of Reign; Bleeker "time of flowering"                                 | HIGH                             |
+| 4-30      | I Peret 30  | Feast of Hathor, mistress of Agny (Esna only)                                            | LOW — temple-specific            |
+| 5-1       | II Peret 1  | Navigation of Anubis (MH)                                                                | MEDIUM — NK only, one source     |
+| 6-1       | III Peret 1 | Great Burning (MK); Lifting up the Sky (MH + Esna + Edfu)                                | HIGH                             |
+| 7-1       | IV Peret 1  | Entering the Sky / Sokar new moon (MH) + Edfu Eye feasts                                 | HIGH                             |
+| 7-25      | IV Peret 25 | NOT ATTESTED in these sources                                                            | FLAG — review needed             |
+| 8-1       | I Shomu 1   | Renenutet (MH + multiple temples)                                                        | HIGH                             |
+| 8-10      | I Shomu 10  | Festival of clothing Anubis (MH)                                                         | MEDIUM — NK only                 |
+| 8-11      | I Shomu 11  | Min festival (MH + Bleeker)                                                              | HIGH                             |
+| 9-25      | II Shomu 25 | Feast of Horus the Behdetite (Edfu, temple-specific); Valley Festival undated in Bleeker | LOW–MEDIUM — see note            |
+| 11-9      | IV Shomu 9  | NOT ATTESTED in these sources                                                            | FLAG — review needed             |
+| 11-24     | IV Shomu 24 | NOT ATTESTED in these sources                                                            | FLAG — review needed             |
 
 ### Major festivals NOT in app (high confidence gaps)
+
 1. **I Akhet 20 — Feast of Drunkenness** (MK + Dendera) — absent from app
 2. **I Akhet 22 — Great Procession of Osiris** (MK + NK) — absent from app
 3. **II Akhet 18 to III Akhet 12 — Opet Festival** (24-day, NK; major festival) — entirely absent from app

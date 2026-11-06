@@ -1,7 +1,7 @@
 # Las Tesmoforias y la Stenia: el poder ritual de las mujeres de Atenas
 
-*Artículo para conferencia. Basado en Parke (1977), Deubner (1932), Mikalson (1975),
-el Himno Homérico a Deméter y las fuentes antiguas citadas en cada sección.*
+_Artículo para conferencia. Basado en Parke (1977), Deubner (1932), Mikalson (1975),
+el Himno Homérico a Deméter y las fuentes antiguas citadas en cada sección._
 
 ---
 
@@ -17,13 +17,13 @@ Eso eran las Tesmoforias. Y antes de que comenzaran, la noche del día 9, ocurr�
 
 ## II. La Stenia: el preludio nocturno
 
-La Stenia es uno de esos festivales que casi no dejan rastro en las fuentes. Mikalson, en su *The Sacred and Civil Calendar of the Athenian Year*, la lista bajo Pyanepsion 9 con la máxima calificación de certeza: **atestiguada**. Parke y Deubner la mencionan como una reunión nocturna de mujeres dos días antes de las Tesmoforias.
+La Stenia es uno de esos festivales que casi no dejan rastro en las fuentes. Mikalson, en su _The Sacred and Civil Calendar of the Athenian Year_, la lista bajo Pyanepsion 9 con la máxima calificación de certeza: **atestiguada**. Parke y Deubner la mencionan como una reunión nocturna de mujeres dos días antes de las Tesmoforias.
 
-El nombre podría derivar de *stenos* (estrecho, angosto) o de *stenazein* (gemir, lamentarse), aunque los gramáticos griegos ya no estaban seguros en época tardía. Lo que sí sabemos es que su rito central era la **aischrología**: el intercambio ritual de insultos obscenos y bromas groseras entre mujeres.
+El nombre podría derivar de _stenos_ (estrecho, angosto) o de _stenazein_ (gemir, lamentarse), aunque los gramáticos griegos ya no estaban seguros en época tardía. Lo que sí sabemos es que su rito central era la **aischrología**: el intercambio ritual de insultos obscenos y bromas groseras entre mujeres.
 
 No era una fiesta de borrachas. Era un rito.
 
-Deubner añade un detalle que suele pasarse por alto: los Prítanos —los cincuenta ciudadanos que presidían el Consejo de Atenas esa semana— sacrificaban formalmente a Deméter y Perséfone *en nombre del Consejo y el Pueblo* antes de que comenzara la reunión nocturna. El estado ateniense, representado por sus más altos funcionarios de turno, reconocía oficialmente la Stenia como un acto religioso de primer orden.
+Deubner añade un detalle que suele pasarse por alto: los Prítanos —los cincuenta ciudadanos que presidían el Consejo de Atenas esa semana— sacrificaban formalmente a Deméter y Perséfone _en nombre del Consejo y el Pueblo_ antes de que comenzara la reunión nocturna. El estado ateniense, representado por sus más altos funcionarios de turno, reconocía oficialmente la Stenia como un acto religioso de primer orden.
 
 Lo que las mujeres decían entre sí esa noche, en cambio, no quedaba registrado en ningún decreto.
 
@@ -43,11 +43,11 @@ Las Tesmoforias eran, en palabras de Parke, "el festival más extendido del mund
 
 ### Día 11 de Pyanepsion — Ánodos: el ascenso
 
-La palabra *ánodos* significa "camino hacia arriba". Al amanecer del día 11, miles de mujeres casadas y ciudadanas de Atenas —y solo ellas: ni esclavas, ni prostitutas, ni extranjeras, ni muchachas sin casar— iniciaban la subida al Tesmoforion. Este santuario estaba situado en la ladera de la colina del Pnyx, el mismo lugar donde los hombres celebraban la asamblea popular.
+La palabra _ánodos_ significa "camino hacia arriba". Al amanecer del día 11, miles de mujeres casadas y ciudadanas de Atenas —y solo ellas: ni esclavas, ni prostitutas, ni extranjeras, ni muchachas sin casar— iniciaban la subida al Tesmoforion. Este santuario estaba situado en la ladera de la colina del Pnyx, el mismo lugar donde los hombres celebraban la asamblea popular.
 
 No es casual. Las mujeres ocupaban físicamente el espacio político de los hombres y lo convertían, durante tres días, en un recinto exclusivamente femenino.
 
-Llevaban sus provisiones, sus mantas, sus colchones de ramas de *lygos* —la planta conocida como árbol casto, *Vitex agnus-castus*, cuyo nombre en griego y en latín alude explícitamente a la castidad. Parke señala que los lechos de lygos tenían una función medicinal o mágica asociada a la inhibición del deseo sexual: las mujeres debían permanecer en abstinencia durante todo el festival. La sexualidad cotidiana quedaba suspendida para que el rito pudiera funcionar.
+Llevaban sus provisiones, sus mantas, sus colchones de ramas de _lygos_ —la planta conocida como árbol casto, _Vitex agnus-castus_, cuyo nombre en griego y en latín alude explícitamente a la castidad. Parke señala que los lechos de lygos tenían una función medicinal o mágica asociada a la inhibición del deseo sexual: las mujeres debían permanecer en abstinencia durante todo el festival. La sexualidad cotidiana quedaba suspendida para que el rito pudiera funcionar.
 
 El ascenso al Pnyx imitaba el movimiento ascendente de Perséfone desde el inframundo. Las mujeres subían en el mismo momento del año en que la diosa ascendía, reproduciendo con sus cuerpos el movimiento cósmico que devolvía la fertilidad a la tierra.
 
@@ -55,7 +55,7 @@ El ascenso al Pnyx imitaba el movimiento ascendente de Perséfone desde el infra
 
 Este es el día más oscuro y el más extraño.
 
-*Nesteia* significa "ayuno". Desde el amanecer del día 12 hasta el final del día, las mujeres no comían nada. Se sentaban en el suelo sobre sus colchones de lygos, en la postura que los textos describen como "sentarse en el suelo" —*khámadis hizesthai*— que era la postura del luto en la Grecia antigua. Imitaban a Deméter en su duelo por Perséfone: nueve días sin comer, sin beber, sin bañarse, buscando a su hija por toda la tierra.
+_Nesteia_ significa "ayuno". Desde el amanecer del día 12 hasta el final del día, las mujeres no comían nada. Se sentaban en el suelo sobre sus colchones de lygos, en la postura que los textos describen como "sentarse en el suelo" —_khámadis hizesthai_— que era la postura del luto en la Grecia antigua. Imitaban a Deméter en su duelo por Perséfone: nueve días sin comer, sin beber, sin bañarse, buscando a su hija por toda la tierra.
 
 Y entonces empezaba la aischrología.
 
@@ -67,9 +67,9 @@ Este era el único día declarado **apafhrades** —día nefasto, tabú— dentr
 
 ### Día 13 de Pyanepsion — Kalligeneia: la bella descendencia
 
-*Kalligeneia* significa "hermosa descendencia". Es el día del banquete, del alivio, de la esperanza recuperada.
+_Kalligeneia_ significa "hermosa descendencia". Es el día del banquete, del alivio, de la esperanza recuperada.
 
-Las **Antletriai** —"las que sacan del pozo"— descendían a unas cámaras subterráneas que las fuentes llaman *mégara*. En esas cavidades oscuras, desde el mes de Skiraphorion (cuatro meses antes), reposaban los restos de lechones arrojados vivos. Los cadáveres en descomposición mezclados con serpientes —guardianas del inframundo— y con modelos de serpientes y falos hechos de masa.
+Las **Antletriai** —"las que sacan del pozo"— descendían a unas cámaras subterráneas que las fuentes llaman _mégara_. En esas cavidades oscuras, desde el mes de Skiraphorion (cuatro meses antes), reposaban los restos de lechones arrojados vivos. Los cadáveres en descomposición mezclados con serpientes —guardianas del inframundo— y con modelos de serpientes y falos hechos de masa.
 
 Las Antletriai subían con las manos llenas de ese humus putrefacto y sagrado. Lo mezclaban con las semillas de trigo que se iban a sembrar en otoño. El contacto entre la muerte ctónica y la semilla viva era **magia simpática**: lo que había muerto y bajado al inframundo volvía transformado, como Perséfone, como el grano enterrado que se convierte en espiga.
 
@@ -77,22 +77,22 @@ Parke, con su habitual sobriedad, llama a esto "una práctica de fertilización 
 
 ---
 
-## V. Los *thesmoi*: ¿qué son exactamente?
+## V. Los _thesmoi_: ¿qué son exactamente?
 
-El nombre *Thesmophoria* viene de *thesmós*: "ley", "institución sagrada", o —en el contexto ritual— "las cosas depositadas". Las diosas se llamaban *Thesmophoroi*, "portadoras de leyes" o "portadoras de depósitos sagrados".
+El nombre _Thesmophoria_ viene de _thesmós_: "ley", "institución sagrada", o —en el contexto ritual— "las cosas depositadas". Las diosas se llamaban _Thesmophoroi_, "portadoras de leyes" o "portadoras de depósitos sagrados".
 
-Los filólogos han debatido durante dos siglos qué eran exactamente los *thesmoi*. Las dos interpretaciones principales no son contradictorias:
+Los filólogos han debatido durante dos siglos qué eran exactamente los _thesmoi_. Las dos interpretaciones principales no son contradictorias:
 
-1. **Los thesmoi como objetos rituales**: los lechones, los modelos de falos y serpientes que se guardaban en los *mégara* y se sacaban el día 13. Las "cosas depositadas" en el inframundo.
+1. **Los thesmoi como objetos rituales**: los lechones, los modelos de falos y serpientes que se guardaban en los _mégara_ y se sacaban el día 13. Las "cosas depositadas" en el inframundo.
 2. **Los thesmoi como leyes divinas**: Deméter no solo trajo el grano a la humanidad. Según una tradición griega muy extendida, trajo también las leyes del matrimonio, la propiedad y la vida civilizada. Las Tesmoforias celebrarían ese don.
 
-Deubner prefiere la primera interpretación. Parke acepta ambas como complementarias. Lo importante es que los *thesmoi* representaban el vínculo entre la tierra, las mujeres y el orden social: sin Deméter no había grano, sin grano no había ciudad, sin ciudad no había leyes.
+Deubner prefiere la primera interpretación. Parke acepta ambas como complementarias. Lo importante es que los _thesmoi_ representaban el vínculo entre la tierra, las mujeres y el orden social: sin Deméter no había grano, sin grano no había ciudad, sin ciudad no había leyes.
 
 ---
 
 ## VI. El origen según Heródoto
 
-El historiador Heródoto, escribiendo en el siglo V a.C., afirma en el libro segundo de sus *Historias* (2.171) que las Tesmoforias llegaron a Grecia traídas por las **hijas de Dánao** desde Egipto. Estas mujeres, emigradas forzosas que habían huido de un matrimonio forzado con sus primos, habrían enseñado el festival a las mujeres pelásgicas del Peloponeso, quienes a su vez lo transmitieron a las dorias.
+El historiador Heródoto, escribiendo en el siglo V a.C., afirma en el libro segundo de sus _Historias_ (2.171) que las Tesmoforias llegaron a Grecia traídas por las **hijas de Dánao** desde Egipto. Estas mujeres, emigradas forzosas que habían huido de un matrimonio forzado con sus primos, habrían enseñado el festival a las mujeres pelásgicas del Peloponeso, quienes a su vez lo transmitieron a las dorias.
 
 Heródoto añade que conoce los detalles secretos del rito pero no puede revelarlos.
 
@@ -107,12 +107,13 @@ Lo que sí es probable es que el núcleo del festival —los depósitos en el in
 Las Tesmoforias no eran solo un rito agrario. Eran también, inevitablemente, un experimento social.
 
 Durante tres días:
+
 - Las mujeres **abandonaban el oikos** (el hogar doméstico, el espacio que les era asignado) y ocupaban un espacio público.
 - Los hombres tenían que **hacerse cargo de los hijos** y de la casa.
-- Las mujeres **elegían a sus propias magistradas** —las *archousai*, las "que gobiernan"— para organizar el campamento, los turnos, los ritos.
+- Las mujeres **elegían a sus propias magistradas** —las _archousai_, las "que gobiernan"— para organizar el campamento, los turnos, los ritos.
 - El estado pagaba una parte de los gastos del festival.
 
-Aristófanes satirizó todo esto en su comedia *Las Tesmoforias* (Thesmophoriazusai, 411 a.C.), donde un hombre se infiltra disfrazado de mujer en el Tesmoforion para espiar. La comedia es una prueba de que el festival era lo suficientemente conocido y sólido en la imaginación colectiva ateniense como para ser parodiado. Pero también demuestra algo más: los hombres no podían entrar. El límite era real y serio.
+Aristófanes satirizó todo esto en su comedia _Las Tesmoforias_ (Thesmophoriazusai, 411 a.C.), donde un hombre se infiltra disfrazado de mujer en el Tesmoforion para espiar. La comedia es una prueba de que el festival era lo suficientemente conocido y sólido en la imaginación colectiva ateniense como para ser parodiado. Pero también demuestra algo más: los hombres no podían entrar. El límite era real y serio.
 
 La pregunta que los estudiosos modernos se siguen haciendo es si este "espacio de poder" femenino era una válvula de escape que reforzaba el sistema al darles a las mujeres tres días de autonomía simbólica, o si era un reconocimiento genuino de que ciertas funciones cosmológicas esenciales pertenecían a las mujeres y no podían pertenecer a nadie más.
 
@@ -128,7 +129,7 @@ Volvamos al comienzo. La noche del día 9, la Stenia: insultos, gritos, obscenid
 
 Parece que sí. La Stenia funcionaba como una preparación ritual: las mujeres practicaban juntas la aischrología antes de que comenzara el ciclo formal de las Tesmoforias. El insulto cómico-sagrado necesitaba ser "calentado", activado colectivamente, antes de que pudiera cumplir su función cosmológica en la Nesteia.
 
-Hay además una dimensión de **solidaridad femenina** que los textos no dicen explícitamente pero que el ritual implica. Las mujeres que se gritaban obscenidades en la Stenia eran las mismas que iban a ayunar juntas dos días después, que iban a sentarse en el suelo en luto colectivo, que iban a bajar a los *mégara* a sacar los restos de los lechones. El ritual construía una comunidad. La aischrología compartida —ese género de humor que en la vida cotidiana no tenía salida pública— era el pegamento social de esa comunidad.
+Hay además una dimensión de **solidaridad femenina** que los textos no dicen explícitamente pero que el ritual implica. Las mujeres que se gritaban obscenidades en la Stenia eran las mismas que iban a ayunar juntas dos días después, que iban a sentarse en el suelo en luto colectivo, que iban a bajar a los _mégara_ a sacar los restos de los lechones. El ritual construía una comunidad. La aischrología compartida —ese género de humor que en la vida cotidiana no tenía salida pública— era el pegamento social de esa comunidad.
 
 La obscenidad, en este contexto, no era una transgresión. Era la confirmación de un vínculo.
 
@@ -148,15 +149,15 @@ El ciclo seguía su curso. Y lo seguía, al menos en parte, porque cada año mil
 
 ## Fuentes principales
 
-- H. W. Parke, *Festivals of the Athenians* (Thames & Hudson, 1977), cap. "Thesmophoria" y "Pyanopsion"
-- L. Deubner, *Attische Feste* (Akademie-Verlag, 1932), cap. "Demeter"
-- J. D. Mikalson, *The Sacred and Civil Calendar of the Athenian Year* (Princeton UP, 1975), pp. 60–66, Calendar II
-- *Himno Homérico a Deméter*, vv. 195–205 (Iambe)
-- Heródoto, *Historias* 2.171 (origen egipcio)
-- Aristófanes, *Thesmophoriazusai* (411 a.C.)
-- Aristófanes, *Nubes* 408 (referencia a los lechos de lygos)
-- Iseo, *Sobre la herencia de Pirro* 3.80 (mujeres en el Tesmoforion)
+- H. W. Parke, _Festivals of the Athenians_ (Thames & Hudson, 1977), cap. "Thesmophoria" y "Pyanopsion"
+- L. Deubner, _Attische Feste_ (Akademie-Verlag, 1932), cap. "Demeter"
+- J. D. Mikalson, _The Sacred and Civil Calendar of the Athenian Year_ (Princeton UP, 1975), pp. 60–66, Calendar II
+- _Himno Homérico a Deméter_, vv. 195–205 (Iambe)
+- Heródoto, _Historias_ 2.171 (origen egipcio)
+- Aristófanes, _Thesmophoriazusai_ (411 a.C.)
+- Aristófanes, _Nubes_ 408 (referencia a los lechos de lygos)
+- Iseo, _Sobre la herencia de Pirro_ 3.80 (mujeres en el Tesmoforion)
 
 ---
 
-*Duración estimada de la conferencia: 25–35 minutos. Las citas en griego antiguo pueden omitirse para un público general o leerse en transliteración para añadir color.*
+_Duración estimada de la conferencia: 25–35 minutos. Las citas en griego antiguo pueden omitirse para un público general o leerse en transliteración para añadir color._

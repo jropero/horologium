@@ -1,4 +1,5 @@
 # Review: Maimakterion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -15,12 +16,14 @@ Date: 2026-10-25
 **Verdict**: WRONG_DAY | UNSOURCED_RITUAL | UNSOURCED_AITION
 
 **Issues**:
+
 1. **Day 10 is invented.** Neither Parke nor Deubner gives any day for the Maimakteria. The only dated entry for Maimakterion in the sources is the Pompaia (last third of month; private calendar: day 20). Assigning day 10 is undocumented guesswork.
 2. **Ram sacrifice is unattested.** No ancient source cited by Parke or Deubner records a ram sacrifice at the Maimakteria. Parke describes only prayers; Deubner records nothing of the ritual.
 3. **Nephálio (wineless) character is unattested.** Neither source says anything about wineless libations at this festival. The nephálio epithet belongs to Demeter's rites, not this ceremony.
 4. **Aition about ships and harvests** is a reasonable extrapolation of Parke's weather discussion, but is framed as fact rather than modern inference.
 
 **Fix**:
+
 - Remove day assignment (or note it as "day unknown, month uncertain").
 - Remove ram sacrifice. Replace ritual description with: prayers addressed to Zeus Maimaktes to moderate storm violence; no ritual details preserved.
 - Remove nephálio claim entirely.
@@ -39,6 +42,7 @@ Date: 2026-10-25
 **Verdict**: UNSOURCED_AITION | MISSING_DETAIL (×3) | WRONG_DETAIL (fleece origin)
 
 **Issues**:
+
 1. **Day 20 is defensible.** Deubner's private calendar entry places the Pompaia on Maimakterion 20. This is the only specific day in either source, and the app correctly uses it.
 2. **Fleece origin is wrong.** The app states the fleece came from the ram sacrificed at the Maimakteria. Deubner explicitly says it was "fleece from a Zeus Meilichios sacrifice." There is no source linking the Maimakteria ram to the Pompaia fleece; the app invents this connection to create a narrative bridge between the two festivals.
 3. **Left-foot detail missing.** Parke specifically records that those being purified stood on the sheepskin with their left foot — a notable and well-attested ritual detail absent from the app.
@@ -48,6 +52,7 @@ Date: 2026-10-25
 7. **Aition mixes the standing-on-fleece purification with the procession.** The purificatory standing belonged to specific individuals (those being formally purified, e.g. before the Eleusinian Mysteries, per Parke's parallel with the Daiduchos). The app generalizes this incorrectly to the whole city.
 
 **Fix**:
+
 - Change fleece origin: the fleece came from a sheep sacrificed **to Zeus Meilichios** (not from the Maimakteria ram).
 - Add left-foot detail: those being purified stood on the fleece with their left foot.
 - Add caduceus to the ritual description.

@@ -1,5 +1,6 @@
 # Augustus — Fowler (1899)
-**Source**: W. Warde Fowler, *The Roman Festivals of the Period of the Republic* (London, 1899)
+
+**Source**: W. Warde Fowler, _The Roman Festivals of the Period of the Republic_ (London, 1899)
 **PDF pages used**: 200–227 (printed pp. 189–216)
 **Chapter heading**: MENSIS SEXTILIS (= Augustus)
 
@@ -8,6 +9,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Nones Sacrifice to Salus (Aug. 5)
+
 - **Day**: 5 (Nonae Sextiles)
 - **Fasti status**: F (calendar MAFF./AMIT. mark NP; ANT. has F; contested)
 - **Deity**: Salus
@@ -19,6 +21,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Sol Indiges on the Quirinal (Aug. 9)
+
 - **Day**: 9 (VI Idus Sextiles)
 - **Fasti status**: F (ALLIF.); also IP (AMIT. MAFF. ETC.)
 - **Deity**: Sol Indiges
@@ -30,6 +33,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Hercules Invictus at the Ara Maxima (Aug. 12)
+
 - **Day**: 12 (Pridie Idus Sextiles)
 - **Fasti status**: C (ALLIF. AMIT.); a second entry HERCULI MAGNO CUSTODI IN CIRCO FLAMINIO (VALL.) is generally taken as a confusion with June 4.
 - **Deity**: Hercules (Invictus)
@@ -41,14 +45,15 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Ides of August — Diana, Vortumnus, and others (Aug. 13)
+
 - **Day**: 13 (Idus Sextiles)
 - **Fasti status**: NP (AMIT. VALL. ANT. ALLIF. for Diana; all Ides feriae Iovi)
 - **Deity**: Jupiter (Ides); Diana (primary, Aventine); Vortumnus (Aventine); Hercules Invictus (ad portam Trigeminam); Castor and Pollux (in Circo Flaminio); Flora (ad Circum Maximum)
 - **Ritual**:
-  - *Feriae Iovi*: all Ides sacred to Jupiter.
-  - *Diana in Aventino*: Best-known dedication of the day. Temple traditionally ascribed to Servius Tullius, who persuaded Latin chiefs to build it in common (Livy 1.45; Varro calls it "commune Latinorum Dianae templum"). The lex templi (ordinance for joint Roman-Latin worship) was written in Greek characters, seen by Dionysius. A xoanon (wooden statue) resembling Artemis at Massilia (itself derived from Ephesus) was housed in the temple. The day was a holiday for slaves. Roman women made a special point of washing their heads on this day. The horns of a cow hung in front of the temple gave rise to legends involving Sabines.
-  - *Vortumnus in Aventino*: Temple dedicated 264 BC by consul M. Fulvius Flaccus. Propertius (4.2) describes Vortumnus as presiding over gardens and fruit; Ovid tells of his love for Pomona (Metam. 14.623). A bronze statue stood in the Vicus Tuscus; Varro thought him an Etruscan import (L.L. 5.46), but his name is Latin and may indicate the "turn" of the year at fruit-season.
-  - *Hercules Invictus ad portam Trigeminam*, *Castor and Pollux in Circo Flaminio*, *Flora ad Circum Maximum*: Dedications noted in calendars; Fowler says nothing of special interest is known about these.
+  - _Feriae Iovi_: all Ides sacred to Jupiter.
+  - _Diana in Aventino_: Best-known dedication of the day. Temple traditionally ascribed to Servius Tullius, who persuaded Latin chiefs to build it in common (Livy 1.45; Varro calls it "commune Latinorum Dianae templum"). The lex templi (ordinance for joint Roman-Latin worship) was written in Greek characters, seen by Dionysius. A xoanon (wooden statue) resembling Artemis at Massilia (itself derived from Ephesus) was housed in the temple. The day was a holiday for slaves. Roman women made a special point of washing their heads on this day. The horns of a cow hung in front of the temple gave rise to legends involving Sabines.
+  - _Vortumnus in Aventino_: Temple dedicated 264 BC by consul M. Fulvius Flaccus. Propertius (4.2) describes Vortumnus as presiding over gardens and fruit; Ovid tells of his love for Pomona (Metam. 14.623). A bronze statue stood in the Vicus Tuscus; Varro thought him an Etruscan import (L.L. 5.46), but his name is Latin and may indicate the "turn" of the year at fruit-season.
+  - _Hercules Invictus ad portam Trigeminam_, _Castor and Pollux in Circo Flaminio_, _Flora ad Circum Maximum_: Dedications noted in calendars; Fowler says nothing of special interest is known about these.
 - **Aition**: Diana temple foundation legend (Servius Tullius, joint Latin-Roman cult). Slave holiday: Festus preserves a gloss of Verrius Flaccus linking the day to Servius Tullius's servile birth and Diana's protection of deer/fugitives.
 - **Page**: pp. 198–202
 - **Notes**: Fowler treats Diana as originally a spirit of holy trees/woods (like Silvanus), reclaimed into the Italian farmer's world. The Greek transformation (assimilation to Artemis) began very early; by 398 BC she was already paired with Apollo and Latona in the first lectisternium (Livy 5.13). The Aventine temple marked Rome's expansion from city-state to wider Italian influence: advance of Plebs, emancipation of slaves, Latin relations, Greek religious ideas.
@@ -56,6 +61,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Portunalia (Aug. 17)
+
 - **Day**: 17 (XVI Kal. Septembris)
 - **Fasti status**: NP (MAFF. AMIT. VALL.); called Tiberinalia in the Philocalus calendar
 - **Deity**: Portunus; also Janus (temple dedication: Iano ad theatrum Marcelli, VALL. ALLIF.)
@@ -67,6 +73,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Vinalia Rustica (Aug. 19)
+
 - **Day**: 19 (XIV Kal. Septembris)
 - **Fasti status**: PP (ANT. ALLIF.); IP (MAFF. AMIT.); also feriae Iovi (ALLIF.)
 - **Deity**: Jupiter (primary); Venus (temple dedication on this day: VENERI AD CIRCUM MAXIMUM, VALL.)
@@ -78,6 +85,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Consualia (Aug. 21)
+
 - **Day**: 21 (XII Kal. Septembris)
 - **Fasti status**: IP (PINC. MAFF. VALL. ETC.)
 - **Deity**: Consus
@@ -89,6 +97,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Volcanalia (Aug. 23)
+
 - **Day**: 23 (X Kal. Septembris)
 - **Fasti status**: IP (PINC. MAFF. VALL. ETC.)
 - **Deity**: Volcanus (Vulcan); also Ops Opifera and Nymphs (from a mutilated Arval Brothers fragment: "quib[ino] in colle, volk[ano] in comit[io] opi opifer[ae] in …, [nymp]his (?) in campo")
@@ -100,6 +109,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Mundus Patet (Aug. 24)
+
 - **Day**: 24 (IX Kal. Septembris)
 - **Fasti status**: Not in the main calendars; known from Festus (p.154, from Ateius Capito) and Macrobius (1.16.17)
 - **Deity**: Dis Pater / Manes (underworld deities)
@@ -111,6 +121,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Opiconsivia (Aug. 25)
+
 - **Day**: 25 (VIII Kal. Septembris)
 - **Fasti status**: IP (ALLIF. MAFF. VALL.); "OPICOID." (PINC.) is a cutter's error
 - **Deity**: Ops Consiva (= Ops with the cognomen/epithet Consiva; attested by Varro L.L. 6.21 and Festus 187)
@@ -122,6 +133,7 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 ---
 
 ## Volturnalia (Aug. 27)
+
 - **Day**: 27 (VI Kal. Septembris)
 - **Fasti status**: IP (ALLIF. MAFF. VALL.); noted in the Arval Brothers as "inter addita posteriora" (a later addition)
 - **Deity**: Volturnus (river god)
@@ -136,21 +148,22 @@ Fowler opens with a framing observation: August in Italy is when the final harve
 
 Fowler covers eleven named entries for August, which he frames as a cluster of harvest-completion and storage-protection festivals:
 
-| Day | Festival | Deity | Fasti status |
-|-----|----------|-------|--------------|
-| 5 | Sacrifice to Salus (Nones) | Salus | F (NP in some) |
-| 9 | Sol Indiges on Quirinal | Sol Indiges | F / IP |
-| 12 | Hercules Invictus at Ara Maxima | Hercules | C |
-| 13 | Ides: Diana, Vortumnus, etc. | Diana (primary); Vortumnus; Jupiter; Hercules; Castor & Pollux; Flora | NP |
-| 17 | Portunalia | Portunus (+Janus dedication) | NP |
-| 19 | Vinalia Rustica | Jupiter (primary); Venus (temple) | PP / IP |
-| 21 | Consualia | Consus | IP |
-| 23 | Volcanalia | Volcanus (+Ops Opifera, Nymphs) | IP |
-| 24 | Mundus Patet | Manes / Dis Pater | dies religiosus (not in fasti) |
-| 25 | Opiconsivia | Ops Consiva | IP |
-| 27 | Volturnalia | Volturnus | IP |
+| Day | Festival                        | Deity                                                                 | Fasti status                   |
+| --- | ------------------------------- | --------------------------------------------------------------------- | ------------------------------ |
+| 5   | Sacrifice to Salus (Nones)      | Salus                                                                 | F (NP in some)                 |
+| 9   | Sol Indiges on Quirinal         | Sol Indiges                                                           | F / IP                         |
+| 12  | Hercules Invictus at Ara Maxima | Hercules                                                              | C                              |
+| 13  | Ides: Diana, Vortumnus, etc.    | Diana (primary); Vortumnus; Jupiter; Hercules; Castor & Pollux; Flora | NP                             |
+| 17  | Portunalia                      | Portunus (+Janus dedication)                                          | NP                             |
+| 19  | Vinalia Rustica                 | Jupiter (primary); Venus (temple)                                     | PP / IP                        |
+| 21  | Consualia                       | Consus                                                                | IP                             |
+| 23  | Volcanalia                      | Volcanus (+Ops Opifera, Nymphs)                                       | IP                             |
+| 24  | Mundus Patet                    | Manes / Dis Pater                                                     | dies religiosus (not in fasti) |
+| 25  | Opiconsivia                     | Ops Consiva                                                           | IP                             |
+| 27  | Volturnalia                     | Volturnus                                                             | IP                             |
 
 **Fowler's key interpretive themes for August:**
+
 1. The late-August run (Consualia → Volcanalia → Opiconsivia → Volturnalia, each separated by two days) forms a coherent harvest-storage complex protecting corn from fire, water, and underworld dangers.
 2. Rites cluster geographically around the Aventine/Circus Maximus/Tiber bank — the area of earliest Roman cultivation and storage.
 3. Several rites are deliberately secret or chthonic (underground altar of Consus, Regia sacrarium of Ops, Mundus pit on Palatine).

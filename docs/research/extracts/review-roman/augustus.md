@@ -1,9 +1,11 @@
 # Review: Augustus (Month 7, August) — App vs. Sources
+
 **Date**: 2026-10-25
 **Sources compared**:
-- Scullard, H.H. *Festivals and Ceremonies of the Roman Republic*. Thames & Hudson, 1981. pp. 169–184.
-- Fowler, W.W. *The Roman Festivals of the Period of the Republic*. London, 1899. pp. 200–227.
-**App data**: `utils/romanYearData.ts`, keys "7-1" through "7-31".
+
+- Scullard, H.H. _Festivals and Ceremonies of the Roman Republic_. Thames & Hudson, 1981. pp. 169–184.
+- Fowler, W.W. _The Roman Festivals of the Period of the Republic_. London, 1899. pp. 200–227.
+  **App data**: `utils/romanYearData.ts`, keys "7-1" through "7-31".
 
 ---
 
@@ -35,9 +37,11 @@
 - **Fix**: Add a note in `festivalDesc` for "7-1" that includes the Victoria dedications on the Palatine, or extend `deity` to cover all three (Spes, Victoria, Victoria Virgo).
 
   Suggested festivalDesc addition:
+
   ```
   También se conmemoran en este día las dedicaciones del Templo de Victoria y del Templo de Victoria Virgo en el Palatino (294 a.C. y 193 a.C. respectivamente).
   ```
+
 - **Priority**: MEDIUM
 
 ---
@@ -114,9 +118,9 @@
 
 - **App**: key "7-13" | festivalName="Nemoralia" | festivalDesc="Festival de la luz y de Diana celebrado en el lago Nemi, popular entre las mujeres y los esclavos."
 - **Source**:
-  - Scullard p. 173–175: The calendar entry is **Dianae in Aventino** — the Aventine temple. The slave holiday and women's torch processions from Aricia are described, as is the founding by Servius Tullius. The Nemi sanctuary (Diana Nemorensis) is associated but the *fasti* entry is specifically for the Aventine temple.
+  - Scullard p. 173–175: The calendar entry is **Dianae in Aventino** — the Aventine temple. The slave holiday and women's torch processions from Aricia are described, as is the founding by Servius Tullius. The Nemi sanctuary (Diana Nemorensis) is associated but the _fasti_ entry is specifically for the Aventine temple.
   - Fowler p. 198–202: "Diana in Aventino: Temple traditionally ascribed to Servius Tullius … commune Latinorum Dianae templum." Fowler discusses Lake Nemi only as context for the Arician cult.
-- **Issue**: The app's festivalName "Nemoralia" and exclusive focus on Lake Nemi misrepresent the official Roman calendar entry, which records the Aventine temple of Diana. The Nemoralia at Nemi is the associated Latin festival; the *fasti* entry is "Dianae in Aventino."
+- **Issue**: The app's festivalName "Nemoralia" and exclusive focus on Lake Nemi misrepresent the official Roman calendar entry, which records the Aventine temple of Diana. The Nemoralia at Nemi is the associated Latin festival; the _fasti_ entry is "Dianae in Aventino."
 - **Fix**:
   - Change `festivalName` to `"Dianae in Aventino (Ides of August)"`.
   - Update `festivalDesc` to centre on the Aventine temple, mentioning the slave holiday (all masters obliged to give slaves the day off), the torchlit processions of women from Aricia, and the Latin origins of the cult under Servius Tullius; Nemi can be noted as the associated Latin sanctuary.
@@ -193,9 +197,9 @@
 ## WRONG_RITUAL: Mundus Patet described as "dies nefasto" — Day 24
 
 - **App**: key "7-24" | festivalDesc="Primera de las tres fechas del año en que el 'Mundo' (fosa ritual del más allá) quedaba abierto, siendo un día nefasto para cualquier labor militar o política mayor."
-- **Source**: Scullard p. 180–181 and Fowler p. 211–212: The Mundus Patet days (24 Aug., 5 Oct., 8 Nov.) are described as **dies religiosi** — a legal/religious category distinct from dies nefasti. On a dies religiosus no public business, battle, levy, marriage, or sea voyage was permitted, but the classification is *religiosus* not *nefastus* (which carries different calendar-law implications).
-- **Issue**: The app uses "nefasto" (dies nefastus) when sources specify *dies religiosus*. These are different categories in Roman calendrical law.
-- **Fix**: Change `festivalDesc` to: "Primera de las tres fechas del año en que el 'Mundo' (fosa ritual del Palatino) quedaba abierto. Era un *dies religiosus*: prohibido el combate, la leva, el matrimonio y la navegación. No un *dies nefastus* formal, sino un día de recogimiento al abrirse la puerta del inframundo (Macrobio 1.16.18)."
+- **Source**: Scullard p. 180–181 and Fowler p. 211–212: The Mundus Patet days (24 Aug., 5 Oct., 8 Nov.) are described as **dies religiosi** — a legal/religious category distinct from dies nefasti. On a dies religiosus no public business, battle, levy, marriage, or sea voyage was permitted, but the classification is _religiosus_ not _nefastus_ (which carries different calendar-law implications).
+- **Issue**: The app uses "nefasto" (dies nefastus) when sources specify _dies religiosus_. These are different categories in Roman calendrical law.
+- **Fix**: Change `festivalDesc` to: "Primera de las tres fechas del año en que el 'Mundo' (fosa ritual del Palatino) quedaba abierto. Era un _dies religiosus_: prohibido el combate, la leva, el matrimonio y la navegación. No un _dies nefastus_ formal, sino un día de recogimiento al abrirse la puerta del inframundo (Macrobio 1.16.18)."
 - **Priority**: MEDIUM
 
 ---
@@ -204,7 +208,7 @@
 
 - **App**: key "7-25" | festivalDesc="…celebrada en la Regia por las Vírgenes Vestales y el Pontifex Maximus…"
 - **Source**: Scullard p. 181: "Only the Vestal Virgins and the State-priest (wearing a white veil, the **suffibulum**)" — describes the priest as a public officiant in the Regia. He notes it corresponds to the store-cupboard (penus) of the king. Fowler p. 212–214 (citing Varro L.L. 6.21): "praeter Virgines Vestales et **sacerdotem publicum**" — the public priest, which Fowler glosses as "the rex sacrorum or a pontifex."
-- **Issue**: Both sources say the priest is the *Rex Sacrorum* (or possibly a pontifex acting in that role), not specifically the Pontifex Maximus. The Pontifex Maximus is not mentioned by either Scullard or Fowler for this rite. Naming him by the wrong title introduces an anachronism (the Pontifex Maximus was absorbed into the emperors' titles; the *rex sacrorum* would have been the Republican officiant).
+- **Issue**: Both sources say the priest is the _Rex Sacrorum_ (or possibly a pontifex acting in that role), not specifically the Pontifex Maximus. The Pontifex Maximus is not mentioned by either Scullard or Fowler for this rite. Naming him by the wrong title introduces an anachronism (the Pontifex Maximus was absorbed into the emperors' titles; the _rex sacrorum_ would have been the Republican officiant).
 - **Fix**: Change `festivalDesc` to read "…celebrada en la Regia por las Vírgenes Vestales y el Rex Sacrorum (sacerdos publicus), quien llevaba el suffibulum (velo blanco ritual). Todos los demás quedaban excluidos."
 - **Priority**: MEDIUM
 
@@ -222,17 +226,18 @@
 
 ## Summary
 
-| Category | Count | Days affected |
-|---|---|---|
-| WRONG_STATUS | 5 | 1, 9, 19, 21, 28 |
-| WRONG_DEITY | 1 | 1 (Mars Ultor ≠ Victoria) |
-| WRONG_DATE | 1 | 11 (Hercules belongs on 12) |
-| WRONG_RITUAL | 3 | 13 (Nemoralia vs. Aventine), 24 (nefastus vs. religiosus), 25 (Pontifex vs. Rex Sacrorum) |
-| MISSING_FESTIVAL | 6 | 1 (Victoria/Victoria Virgo), 12 (Hercules + Venus Victrix), 13 (Vortumnus + 4 others), 17 (Janus), 19 (Venus Libitina), 24 (Luna in Graecostasi) |
-| MINOR | 2 | 3 (Supplicia Canum incomplete), 5 ("altar" vs. "temple") |
-| **TOTAL** | **18** | |
+| Category         | Count  | Days affected                                                                                                                                    |
+| ---------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| WRONG_STATUS     | 5      | 1, 9, 19, 21, 28                                                                                                                                 |
+| WRONG_DEITY      | 1      | 1 (Mars Ultor ≠ Victoria)                                                                                                                        |
+| WRONG_DATE       | 1      | 11 (Hercules belongs on 12)                                                                                                                      |
+| WRONG_RITUAL     | 3      | 13 (Nemoralia vs. Aventine), 24 (nefastus vs. religiosus), 25 (Pontifex vs. Rex Sacrorum)                                                        |
+| MISSING_FESTIVAL | 6      | 1 (Victoria/Victoria Virgo), 12 (Hercules + Venus Victrix), 13 (Vortumnus + 4 others), 17 (Janus), 19 (Venus Libitina), 24 (Luna in Graecostasi) |
+| MINOR            | 2      | 3 (Supplicia Canum incomplete), 5 ("altar" vs. "temple")                                                                                         |
+| **TOTAL**        | **18** |                                                                                                                                                  |
 
 ### HIGH-priority fixes (break scholarly accuracy)
+
 1. 7-1: status NP → F
 2. 7-1: deity "Spes / Marte" → "Spes / Victoria" (remove Mars Ultor)
 3. 7-9: status NP → C
@@ -243,5 +248,6 @@
 8. 7-28: status NP / statusFull "Dies Nefastus" → status C / statusFull "Dies Comitialis"
 
 ### Cross-checks not yet done
+
 - Days 1–8 and 29–31 not covered by Scullard/Fowler extracts provided — no findings possible for those days beyond what is explicitly listed above.
 - The app's days 2, 4, 6, 7, 8, 10, 14, 15, 16, 18, 20, 22, 26, 29, 30, 31 (plain F/C without festivalName) appear consistent with sources as blank days; no correction needed unless a missing festival is discovered in future source coverage.

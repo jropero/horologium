@@ -6,48 +6,48 @@
 
 ---
 
-## WRONG_* Findings
+## WRONG\_\* Findings
 
-| Month | Key | Category | Priority | Field | Current Value | Correct Value | Source |
-|---|---|---|---|---|---|---|---|
-| Maius | "4-1" | WRONG_STATUS | HIGH | status | "NP" | "F" | Scullard p.116; Fowler p.101 |
-| Maius | "4-9" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard p.118; Fowler p.107 |
-| Maius | "4-11" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard p.118; Fowler p.107 |
-| Maius | "4-13" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard p.118; Fowler p.107 |
-| Maius | "4-29" | WRONG_DEITY | MEDIUM | deity | "Deidades agrarias" | "Marte / Ceres" | Scullard p.124; Fowler p.125 |
-| Maius | "4-9" | WRONG_RITUAL | MEDIUM | festivalDesc | "arrojaba habas negras a sus espaldas" | "escupiendo habas negras de su boca nueve veces" | Scullard p.118; Fowler p.107 |
-| Maius | "4-14" | WRONG_RITUAL | MEDIUM | festivalDesc | "efigies de paja" | "efigies de junco" | Scullard p.120; Fowler p.111 |
-| Maius | "4-14" | WRONG_RITUAL | MEDIUM | festivalDesc | date presented as certain on day 14 | date disputed (Scullard: 14; Fowler: 15) | Scullard p.120; Fowler p.111 |
-| Maius | "4-23" | WRONG_RITUAL | MEDIUM | festivalDesc | "dedicadas a Vulcano" | Tubilustrium had no deity; Feriae Volcano is a separate festival | Scullard p.123; Fowler pp.123–124 |
-| Maius | "4-24" | WRONG_RITUAL | MEDIUM | festivalDesc | "El Rex Sacrorum completaba sus deberes religiosos" | formal Comitia dismissal enabling legal acts (wills) | Scullard p.123; Fowler p.123 |
-| Iunius | "5-1" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard p.127; Fowler p.129 |
-| Iunius | "5-5" | WRONG_STATUS | HIGH | status | "F" | "N" | Scullard pp.147–148; Fowler p.135 |
-| Iunius | "5-9" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard pp.149–150; Fowler pp.146–154 |
-| Iunius | "5-11" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard pp.150–152; Fowler pp.154–157 |
-| Iunius | "5-15" | WRONG_STATUS | MEDIUM | status | "NP" | "N" (or "QSDF") | Scullard p.153; Fowler p.153 |
-| Iunius | "5-7" | WRONG_DEITY | HIGH | deity | "Tiberinus" | "Vulcanus" | Scullard p.148 |
-| Iunius | "5-9" | WRONG_RITUAL | MEDIUM | festivalDesc | "Comienza la principal purificación" | penus opened 7 June, not 9; day 9 is the principal feast day | Scullard p.148; Fowler pp.146–147 |
-| Iunius | "5-14" | WRONG_RITUAL | MEDIUM | festivalDesc | "Último día de labores previas a la apertura ritual total" | penus had been open since June 7; "apertura ritual" already happened | Scullard p.148 |
-| Iunius | "5-15" | WRONG_RITUAL | MEDIUM | festivalDesc | "cenizas purgadas" | "stercus (suciedad acumulada / floor-sweepings)" | Scullard p.153; Fowler p.153 |
-| Iunius | "5-20" | WRONG_RITUAL | MEDIUM | festivalDesc | "Sacrificio de expiación" | dies natalis offering (not a piaculum / expiatory rite) | Scullard pp.153–155; Fowler pp.160–161 |
-| Iulius | "6-24" | WRONG_DATE | HIGH | festivalName | Furrinalia on key "6-24" (July 24) | move to "6-25" (July 25); "6-24" should have no festival | Scullard p.169; Fowler p.187 |
-| Iulius | "6-7" | WRONG_STATUS | HIGH | status | "NP" | "N" | Scullard p.161; Fowler p.176 |
-| Iulius | "6-13" | WRONG_STATUS | HIGH | status | "NP" | "C" | Scullard p.164 |
-| Iulius | "6-1" | WRONG_STATUS | MEDIUM | status | "NP" | "N" | Scullard p.158 |
-| Iulius | "6-1" | WRONG_DEITY | MEDIUM | deity | "Juno" | "Juno / Felicitas" | Scullard pp.158–159 |
-| Iulius | "6-17" | WRONG_DEITY | MEDIUM | deity | "Honos" | "Honos y Virtus" | Scullard pp.165–166 |
-| Iulius | "6-18" | WRONG_RITUAL | MEDIUM | festivalDesc | omits defeat of Fabii on Cremera (479 BC) | include both disasters: Allia + Cremera ("Dies Alliae et Fabiorum") | Scullard p.166 |
-| Iulius | "6-5" | WRONG_RITUAL | MEDIUM | festivalDesc | "asaltos de pueblos vecinos en los albores de Roma" | rejected Fidenae aition presented as established fact | Scullard p.159; Fowler pp.174–176 |
-| Augustus | "7-1" | WRONG_STATUS | HIGH | status | "NP" | "F" | Scullard pp.169–170 |
-| Augustus | "7-9" | WRONG_STATUS | HIGH | status | "NP" | "C" | Scullard p.171; Fowler pp.191–193 |
-| Augustus | "7-19" | WRONG_STATUS | HIGH | status | "NP" | "F" | Scullard p.177; Fowler pp.204–206 |
-| Augustus | "7-21" | WRONG_STATUS | HIGH | status | "F" | "NP" | Scullard pp.177–178; Fowler pp.206–209 |
-| Augustus | "7-28" | WRONG_STATUS | HIGH | status | "NP" | "C" | Scullard p.182 |
-| Augustus | "7-1" | WRONG_DEITY | HIGH | deity | "Spes / Marte" | "Spes / Victoria" (Mars Ultor belongs on 12 May, not 1 Aug) | Scullard pp.169–170 |
-| Augustus | "7-11" | WRONG_DATE | HIGH | festivalName | Hercules/Ara Maxima on key "7-11" (Aug 11) | move to "7-12" (Aug 12); "7-11" should be plain dies comitialis | Scullard pp.171–173; Fowler pp.193–197 |
-| Augustus | "7-13" | WRONG_RITUAL | HIGH | festivalName | "Nemoralia" | "Dianae in Aventino" (fasti entry is Aventine temple, not Nemi) | Scullard pp.173–175; Fowler pp.198–202 |
-| Augustus | "7-24" | WRONG_RITUAL | MEDIUM | festivalDesc | "día nefasto" | "dies religiosus" (legally distinct category per Macrobius 1.16.18) | Scullard pp.180–181; Fowler pp.211–212 |
-| Augustus | "7-25" | WRONG_RITUAL | MEDIUM | festivalDesc | "Pontifex Maximus" | "Rex Sacrorum (sacerdos publicus)" | Scullard p.181; Fowler pp.212–214 |
+| Month    | Key    | Category     | Priority | Field        | Current Value                                              | Correct Value                                                        | Source                                 |
+| -------- | ------ | ------------ | -------- | ------------ | ---------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------- |
+| Maius    | "4-1"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "F"                                                                  | Scullard p.116; Fowler p.101           |
+| Maius    | "4-9"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard p.118; Fowler p.107           |
+| Maius    | "4-11" | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard p.118; Fowler p.107           |
+| Maius    | "4-13" | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard p.118; Fowler p.107           |
+| Maius    | "4-29" | WRONG_DEITY  | MEDIUM   | deity        | "Deidades agrarias"                                        | "Marte / Ceres"                                                      | Scullard p.124; Fowler p.125           |
+| Maius    | "4-9"  | WRONG_RITUAL | MEDIUM   | festivalDesc | "arrojaba habas negras a sus espaldas"                     | "escupiendo habas negras de su boca nueve veces"                     | Scullard p.118; Fowler p.107           |
+| Maius    | "4-14" | WRONG_RITUAL | MEDIUM   | festivalDesc | "efigies de paja"                                          | "efigies de junco"                                                   | Scullard p.120; Fowler p.111           |
+| Maius    | "4-14" | WRONG_RITUAL | MEDIUM   | festivalDesc | date presented as certain on day 14                        | date disputed (Scullard: 14; Fowler: 15)                             | Scullard p.120; Fowler p.111           |
+| Maius    | "4-23" | WRONG_RITUAL | MEDIUM   | festivalDesc | "dedicadas a Vulcano"                                      | Tubilustrium had no deity; Feriae Volcano is a separate festival     | Scullard p.123; Fowler pp.123–124      |
+| Maius    | "4-24" | WRONG_RITUAL | MEDIUM   | festivalDesc | "El Rex Sacrorum completaba sus deberes religiosos"        | formal Comitia dismissal enabling legal acts (wills)                 | Scullard p.123; Fowler p.123           |
+| Iunius   | "5-1"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard p.127; Fowler p.129           |
+| Iunius   | "5-5"  | WRONG_STATUS | HIGH     | status       | "F"                                                        | "N"                                                                  | Scullard pp.147–148; Fowler p.135      |
+| Iunius   | "5-9"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard pp.149–150; Fowler pp.146–154 |
+| Iunius   | "5-11" | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard pp.150–152; Fowler pp.154–157 |
+| Iunius   | "5-15" | WRONG_STATUS | MEDIUM   | status       | "NP"                                                       | "N" (or "QSDF")                                                      | Scullard p.153; Fowler p.153           |
+| Iunius   | "5-7"  | WRONG_DEITY  | HIGH     | deity        | "Tiberinus"                                                | "Vulcanus"                                                           | Scullard p.148                         |
+| Iunius   | "5-9"  | WRONG_RITUAL | MEDIUM   | festivalDesc | "Comienza la principal purificación"                       | penus opened 7 June, not 9; day 9 is the principal feast day         | Scullard p.148; Fowler pp.146–147      |
+| Iunius   | "5-14" | WRONG_RITUAL | MEDIUM   | festivalDesc | "Último día de labores previas a la apertura ritual total" | penus had been open since June 7; "apertura ritual" already happened | Scullard p.148                         |
+| Iunius   | "5-15" | WRONG_RITUAL | MEDIUM   | festivalDesc | "cenizas purgadas"                                         | "stercus (suciedad acumulada / floor-sweepings)"                     | Scullard p.153; Fowler p.153           |
+| Iunius   | "5-20" | WRONG_RITUAL | MEDIUM   | festivalDesc | "Sacrificio de expiación"                                  | dies natalis offering (not a piaculum / expiatory rite)              | Scullard pp.153–155; Fowler pp.160–161 |
+| Iulius   | "6-24" | WRONG_DATE   | HIGH     | festivalName | Furrinalia on key "6-24" (July 24)                         | move to "6-25" (July 25); "6-24" should have no festival             | Scullard p.169; Fowler p.187           |
+| Iulius   | "6-7"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "N"                                                                  | Scullard p.161; Fowler p.176           |
+| Iulius   | "6-13" | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "C"                                                                  | Scullard p.164                         |
+| Iulius   | "6-1"  | WRONG_STATUS | MEDIUM   | status       | "NP"                                                       | "N"                                                                  | Scullard p.158                         |
+| Iulius   | "6-1"  | WRONG_DEITY  | MEDIUM   | deity        | "Juno"                                                     | "Juno / Felicitas"                                                   | Scullard pp.158–159                    |
+| Iulius   | "6-17" | WRONG_DEITY  | MEDIUM   | deity        | "Honos"                                                    | "Honos y Virtus"                                                     | Scullard pp.165–166                    |
+| Iulius   | "6-18" | WRONG_RITUAL | MEDIUM   | festivalDesc | omits defeat of Fabii on Cremera (479 BC)                  | include both disasters: Allia + Cremera ("Dies Alliae et Fabiorum")  | Scullard p.166                         |
+| Iulius   | "6-5"  | WRONG_RITUAL | MEDIUM   | festivalDesc | "asaltos de pueblos vecinos en los albores de Roma"        | rejected Fidenae aition presented as established fact                | Scullard p.159; Fowler pp.174–176      |
+| Augustus | "7-1"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "F"                                                                  | Scullard pp.169–170                    |
+| Augustus | "7-9"  | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "C"                                                                  | Scullard p.171; Fowler pp.191–193      |
+| Augustus | "7-19" | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "F"                                                                  | Scullard p.177; Fowler pp.204–206      |
+| Augustus | "7-21" | WRONG_STATUS | HIGH     | status       | "F"                                                        | "NP"                                                                 | Scullard pp.177–178; Fowler pp.206–209 |
+| Augustus | "7-28" | WRONG_STATUS | HIGH     | status       | "NP"                                                       | "C"                                                                  | Scullard p.182                         |
+| Augustus | "7-1"  | WRONG_DEITY  | HIGH     | deity        | "Spes / Marte"                                             | "Spes / Victoria" (Mars Ultor belongs on 12 May, not 1 Aug)          | Scullard pp.169–170                    |
+| Augustus | "7-11" | WRONG_DATE   | HIGH     | festivalName | Hercules/Ara Maxima on key "7-11" (Aug 11)                 | move to "7-12" (Aug 12); "7-11" should be plain dies comitialis      | Scullard pp.171–173; Fowler pp.193–197 |
+| Augustus | "7-13" | WRONG_RITUAL | HIGH     | festivalName | "Nemoralia"                                                | "Dianae in Aventino" (fasti entry is Aventine temple, not Nemi)      | Scullard pp.173–175; Fowler pp.198–202 |
+| Augustus | "7-24" | WRONG_RITUAL | MEDIUM   | festivalDesc | "día nefasto"                                              | "dies religiosus" (legally distinct category per Macrobius 1.16.18)  | Scullard pp.180–181; Fowler pp.211–212 |
+| Augustus | "7-25" | WRONG_RITUAL | MEDIUM   | festivalDesc | "Pontifex Maximus"                                         | "Rex Sacrorum (sacerdos publicus)"                                   | Scullard p.181; Fowler pp.212–214      |
 
 ---
 
@@ -102,13 +102,13 @@
 
 ## Totals
 
-| Category | Count |
-|---|---|
-| WRONG_DATE | 2 |
-| WRONG_STATUS | 17 |
-| WRONG_DEITY | 5 |
-| WRONG_RITUAL | 14 |
-| MISSING_FESTIVAL | 21 |
-| INVENTED_AITION | 1 |
-| MINOR | 12 |
-| **TOTAL** | **72** |
+| Category         | Count  |
+| ---------------- | ------ |
+| WRONG_DATE       | 2      |
+| WRONG_STATUS     | 17     |
+| WRONG_DEITY      | 5      |
+| WRONG_RITUAL     | 14     |
+| MISSING_FESTIVAL | 21     |
+| INVENTED_AITION  | 1      |
+| MINOR            | 12     |
+| **TOTAL**        | **72** |

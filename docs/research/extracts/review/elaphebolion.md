@@ -1,4 +1,5 @@
 # Review: Elaphebolion
+
 Sources: Parke (1977), Deubner (1932)
 Date: 2026-10-25
 
@@ -6,9 +7,9 @@ Date: 2026-10-25
 
 ## Elaphebolia — Day 6
 
-**Parke**: Day 6 is presumed on the grounds that the 6th is Artemis's monthly sacred day; no ancient source states the day explicitly. Original sacrifices were stags; by the classical period these had been replaced by pastry substitutes called *elaphoi*, moulded from dough, honey, and sesame. Parke discusses **no aition** for this substitution. He notes the cult had "dropped into unimportance" by the classical period and the festival was overshadowed by the City Dionysia.
+**Parke**: Day 6 is presumed on the grounds that the 6th is Artemis's monthly sacred day; no ancient source states the day explicitly. Original sacrifices were stags; by the classical period these had been replaced by pastry substitutes called _elaphoi_, moulded from dough, honey, and sesame. Parke discusses **no aition** for this substitution. He notes the cult had "dropped into unimportance" by the classical period and the festival was overshadowed by the City Dionysia.
 
-**Deubner**: Month only — no day specified. Originally deer (*elaphoi*) were sacrificed to Artemis Elaphebolos; later, substitute cakes (*plakountes*) shaped like deer, made of wheat-dough, honey, and sesame. **No aition** discussed.
+**Deubner**: Month only — no day specified. Originally deer (_elaphoi_) were sacrificed to Artemis Elaphebolos; later, substitute cakes (_plakountes_) shaped like deer, made of wheat-dough, honey, and sesame. **No aition** discussed.
 
 **App**: Day 6. Deity "Artemisa Elaphebolos, Cazadora de ciervos." Description: pastries shaped like deer (elaphoi) made of dough, honey, and sesame. Aition: "Se hornean pasteles con forma de ciervos porque Artemisa exigía piezas reales, pero los atenienses las extinguieron cazando. El mito asegura que la diosa aceptó piadosamente estos sustitutos mágicos."
 
@@ -22,7 +23,7 @@ Date: 2026-10-25
 
 ## Asclepieia — Day 8
 
-**Parke**: **Day 9** (the same day as the Proagon). A considerable sacrifice, probably followed by a communal meal. No other ritual details known. Parke explicitly states the annual commemoration of Asclepius's *arrival* in Athens was the Epidauria in **Boedromion** (month 3), not this festival. The Elaphebolion Asclepieia is simply his local Athenian festival, positioned adjacent to the Dionysiac precinct. Parke speculates (with a "?") that Sophocles may have arranged the site and date.
+**Parke**: **Day 9** (the same day as the Proagon). A considerable sacrifice, probably followed by a communal meal. No other ritual details known. Parke explicitly states the annual commemoration of Asclepius's _arrival_ in Athens was the Epidauria in **Boedromion** (month 3), not this festival. The Elaphebolion Asclepieia is simply his local Athenian festival, positioned adjacent to the Dionysiac precinct. Parke speculates (with a "?") that Sophocles may have arranged the site and date.
 
 **Deubner**: **Day 8** — "sacrifice in the Asklepios sanctuary neighbouring the theater (just before the Dionysia, per hide-money accounts)." Deubner's source is the hide-money accounts that place it immediately before the Dionysia.
 
@@ -60,7 +61,7 @@ Date: 2026-10-25
 
 ## City Dionysia (Grandes Dionisias) — Days 10–13
 
-**Parke**: Day 10 = Pompe (main procession): bulls as victims; phalli carried; Metoikoi in purple carrying trays; a high-born Kanephoros; special loaves (*obeliai*); procession to the altar near the theater; 240 bulls offered in 333 BCE; followed by dinner and the Komos revel. Dramatic contests continued over multiple days. Organized by the **Archon Eponymos** (not the Basileus). The aition of the genital plague is from Pausanias: Athenians refused to honor the cult; Dionysus sent a genital disease; the oracle prescribed a phallus procession; the plague was cured.
+**Parke**: Day 10 = Pompe (main procession): bulls as victims; phalli carried; Metoikoi in purple carrying trays; a high-born Kanephoros; special loaves (_obeliai_); procession to the altar near the theater; 240 bulls offered in 333 BCE; followed by dinner and the Komos revel. Dramatic contests continued over multiple days. Organized by the **Archon Eponymos** (not the Basileus). The aition of the genital plague is from Pausanias: Athenians refused to honor the cult; Dionysus sent a genital disease; the oracle prescribed a phallus procession; the plague was cured.
 
 **Deubner**: Day 9 (morning) = Pompe; Day 9 (day) = dithyrambic choruses; Day 9 (evening) = Komos. Day 10 = comedies. Days 11–13 = tragedies. All organized by the Archon Eponymos.
 
@@ -70,7 +71,7 @@ Date: 2026-10-25
 
 **Issue (1) — Day range**: The app assigns days 10–13 to the Dionysia content. Per Deubner, the Pompe itself falls on **day 9** (morning), and per Parke on **day 10**. By assigning days 10–13 as a block, the app implicitly pushes the Pompe to day 10 (agreeing with Parke) but misses it as a named, discrete event. The Pompe is the central hieratic rite and should be named separately rather than absorbed into a generic block.
 
-**Issue (2) — Aition**: The genital-plague story is directly traceable to Parke (citing Pausanias). This is correctly sourced. However, "falos gigantes montados en carros" adds carts that neither Parke nor Deubner specifies for the City Dionysia. Phallus-carts are a feature of the **Rural Dionysia** (cf. Aristophanes' *Acharnians*); for the City Dionysia, Parke says phalli were "carried in procession," not mounted on carts. This is a minor but attributable conflation.
+**Issue (2) — Aition**: The genital-plague story is directly traceable to Parke (citing Pausanias). This is correctly sourced. However, "falos gigantes montados en carros" adds carts that neither Parke nor Deubner specifies for the City Dionysia. Phallus-carts are a feature of the **Rural Dionysia** (cf. Aristophanes' _Acharnians_); for the City Dionysia, Parke says phalli were "carried in procession," not mounted on carts. This is a minor but attributable conflation.
 
 **Issue (3) — Missing Komos as a named rite**: Deubner and Parke both describe the Komos (nocturnal revel with torches, flutes, harps, singing in the streets) as a distinct named event following the Pompe. The app mentions it only obliquely within the combined block.
 
@@ -82,7 +83,7 @@ Date: 2026-10-25
 
 **Parke**: Day uncertain — "almost immediately after the City Dionysia." "Almost nothing is known about it." Zeus festival. The tribe Pandionis had some special connection (evidenced by a decree). The myth of Pandion as eponymous founder "has vanished." Parke: "probably a survival from the archaic past which had become fossilized." No specific day given.
 
-**Deubner**: "A few days after the Dionysia (Wilamowitz suggests full moon)." Festival of Zeus; phyle Pandionis celebrated specially; the day *after* the Pandia = mandatory popular assembly in the theater to review the festival.
+**Deubner**: "A few days after the Dionysia (Wilamowitz suggests full moon)." Festival of Zeus; phyle Pandionis celebrated specially; the day _after_ the Pandia = mandatory popular assembly in the theater to review the festival.
 
 **App**: Day 14. "Festival de clausura tras las Dionisias, posiblemente un festival de la antigua tribu de Pandion." Aition: "Tras el éxtasis de las Dionisias, este festival honra al rey Pandión. Funcionaba como un freno psicológico: Atenas debía recordar la estricta moralidad y el dolor del mundo real tras días de locura báquica."
 
@@ -98,7 +99,7 @@ Date: 2026-10-25
 
 ## MISSING FESTIVAL: Eisagoge — Evening of Day 8
 
-**Parke**: Describes the pre-festival transfer of the *xoanon* (old wooden statue) of Dionysus Eleuthereus: removed from its city temple to the Academy sanctuary on the road to Boeotia (the route from Eleutherai); on the evening of the 8th or 9th it was brought back by torchlight escort to the theater precinct. Parke calls this the *eisagoge apo tes hestias* ("Bringing in from the sacrificial hearth") and explicitly distinguishes it from the main Pompe.
+**Parke**: Describes the pre-festival transfer of the _xoanon_ (old wooden statue) of Dionysus Eleuthereus: removed from its city temple to the Academy sanctuary on the road to Boeotia (the route from Eleutherai); on the evening of the 8th or 9th it was brought back by torchlight escort to the theater precinct. Parke calls this the _eisagoge apo tes hestias_ ("Bringing in from the sacrificial hearth") and explicitly distinguishes it from the main Pompe.
 
 **Deubner**: **Evening of Day 8** — "Eisagoge": epheboi escorted the image of Dionysos Eleuthereus by torchlight from the Eschara (chapel near the Academy) to the theater precinct, re-enacting the original transfer from Eleutherai; a general banquet preceded the procession.
 
@@ -116,7 +117,7 @@ Date: 2026-10-25
 
 **Parke**: Not mentioned.
 
-**Deubner**: "Month probable; inferred from the Delian month Galaxion = Attic Elaphebolion." Festival of Meter Theon (Mother of the Gods). A barley-and-milk porridge (*galaxia*) named the festival; epheboi sacrificed and dedicated a phiale to the goddess.
+**Deubner**: "Month probable; inferred from the Delian month Galaxion = Attic Elaphebolion." Festival of Meter Theon (Mother of the Gods). A barley-and-milk porridge (_galaxia_) named the festival; epheboi sacrificed and dedicated a phiale to the goddess.
 
 **App**: Not present.
 
@@ -130,16 +131,16 @@ Date: 2026-10-25
 
 ## Summary table
 
-| Festival | App day | Parke day | Deubner day | Day verdict | Aition verdict |
-|---|---|---|---|---|---|
-| Elaphebolia | 6 | 6 (presumed) | Unknown | OK (inferred) | UNSOURCED — invented |
-| Asclepieia | 8 | 9 | 8 | Contested (Deubner ok) | UNSOURCED — wrong festival (conflated with Epidauria) |
-| Proagon | 9 | 9 | 8 | OK per Parke | UNSOURCED — invented |
-| City Dionysia (Pompe) | missing | 10 | 9 | MISSING_DETAIL | aition sourced; "carros" embellishment |
-| City Dionysia (contests) | 10–13 | 10–13 | 10–13 | OK | — |
-| Pandia | 14 | uncertain | uncertain (full moon ~14) | Plausible, unattested | UNSOURCED — invented |
-| Eisagoge | missing | 8 eve | 8 eve | MISSING_FESTIVAL | — |
-| Galaxia | missing | — | Month (indef.) | MISSING_FESTIVAL (low) | — |
+| Festival                 | App day | Parke day    | Deubner day               | Day verdict            | Aition verdict                                        |
+| ------------------------ | ------- | ------------ | ------------------------- | ---------------------- | ----------------------------------------------------- |
+| Elaphebolia              | 6       | 6 (presumed) | Unknown                   | OK (inferred)          | UNSOURCED — invented                                  |
+| Asclepieia               | 8       | 9            | 8                         | Contested (Deubner ok) | UNSOURCED — wrong festival (conflated with Epidauria) |
+| Proagon                  | 9       | 9            | 8                         | OK per Parke           | UNSOURCED — invented                                  |
+| City Dionysia (Pompe)    | missing | 10           | 9                         | MISSING_DETAIL         | aition sourced; "carros" embellishment                |
+| City Dionysia (contests) | 10–13   | 10–13        | 10–13                     | OK                     | —                                                     |
+| Pandia                   | 14      | uncertain    | uncertain (full moon ~14) | Plausible, unattested  | UNSOURCED — invented                                  |
+| Eisagoge                 | missing | 8 eve        | 8 eve                     | MISSING_FESTIVAL       | —                                                     |
+| Galaxia                  | missing | —            | Month (indef.)            | MISSING_FESTIVAL (low) | —                                                     |
 
 ### Priority fixes
 

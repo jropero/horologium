@@ -1,5 +1,6 @@
 # Deubner — Demeter & Kore, Part 1 (Skira, Thesmophoria)
-Source: L. Deubner, *Attische Feste* (1932), printed p. 40–59 / PDF p. 39–58
+
+Source: L. Deubner, _Attische Feste_ (1932), printed p. 40–59 / PDF p. 39–58
 Extracted: 2026-10-25
 
 ---
@@ -15,6 +16,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Month/Day**: 12 Skirophorion
 **Deity**: Demeter and Kore (primary); Athena Polias and Poseidon-Erechtheus (secondary, via procession)
 **Ritual**:
+
 - Women threw piglets alive into underground chambers (Megara) sacred to Demeter and Kore
 - They also cast in mysterious ritual breads (ἄρρητα) shaped like snakes and phalli, and pine branches
 - At the same festival, the priestess of Athena Polias and the priest of Poseidon-Erechtheus processed from the Acropolis under a large white canopy (σκίρον, megas skiasdeion), carried by members of the Eteobutadai clan, to a place called Skiron on the sacred road to Eleusis, near the Kephisos
@@ -29,6 +31,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Participants**: Women (primary ritual actors for the Megara rite); the Eteobutadai (carrying the canopy); priestess of Athena Polias; priest of Poseidon-Erechtheus; priest of Helios (Deubner thinks Helios joined late, perhaps under Stoic influence)
 
 **Sources**:
+
 - Main: Schol. Lukian dial. meretr. p. 275–276 Rabe (key scholion)
 - Schol. Aristoph. Ekkl. 18 (names and date)
 - Aristoph. Thesm. 834; Ekkl. 18, 59; Menand. Epitr. p. 36, 14 Jensen
@@ -43,6 +46,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 - Polyaen 3, 10, 4 (myrtle garlands)
 
 **Notes**:
+
 - Major scholarly controversy: Gjerstad argued the Skira was an Athena Polias festival, not a Demeter festival, and treated all three names (Thesmophoria, Skirophoria, Arretophoria) as one festival. Deubner strongly refutes both positions, arguing from internal coherence of the Lukianscholion. Robert (Herrn. 20, 1885) had already correctly seen the scholion distinguishes three separate festivals.
 - Deubner rejects Buschor's "parasol-festival" interpretation: the Vasenbilder showing cross-dressed figures with parasols are not depictions of the Skira; elsewhere σκίρον never means a handheld parasol (always σκιάδειον), and the Lysimachides testimony refers specifically to a large baldachin (μέγα σκιάδειον).
 - The meaning of σκίρα remains uncertain: Robert suggested a connection to the appearance of the objects; Deubner notes it may parallel how Xόες and Χύτροι are named after objects used.
@@ -58,6 +62,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Month/Day**: 9 Pyanopsion (two days before the Thesmophoria proper)
 **Deity**: Demeter and Kore
 **Ritual**:
+
 - Night festival (vigil)
 - Women mocked and abused each other (aischrologia, ritual insult), described as σκώπτουσι καὶ λοιδοροῦσιν (Hesych)
 - The Prytanes sacrificed to Demeter and Kore on behalf of the Boule and Demos (IG 2² 674)
@@ -66,6 +71,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Participants**: Women of Athens (citizen status uncertain for the Stenia, unlike the Thesmophoria where citizen wives were required)
 
 **Sources**:
+
 - Hesych s.v. Στήνια; s.v. στηνιάσαι
 - Phot. s.v. Στήνια (also citing Eubulos: the Anodos of Demeter was thought to occur at the Stenia)
 - IG 2² 674, 6 (Prytanes' sacrifice)
@@ -84,6 +90,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Month/Day**: 10 Pyanopsion (later addition to the cycle; originally the Anodos was day 1)
 **Deity**: Demeter (of Halimus)
 **Ritual**:
+
 - The most distinguished women from Athens (πρῶται γυναῖκες) went to the deme Halimus (at Cape Kolias, east end of Phaleron Bay) for local Thesmophoria
 - They sacrificed and danced
 - The festival had a secret character (μυστήρια: Clem. Protr. 2, 34)
@@ -92,6 +99,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Participants**: The most distinguished women of Athens (Plut. Sol. 8, 4–5)
 
 **Sources**:
+
 - Schol. Aristoph. Thesm. 80 (δεκάτῃ ἐν Ἁλιμοῦντι Θεσμοφόρια ἄγεται)
 - Phot. s.v. Θεσμοφορίων ἡμέραι (confirms day 10 in Halimus)
 - Plut. Sol. 8, 4–5
@@ -108,6 +116,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Month/Day**: 11 Pyanopsion
 **Deity**: Demeter and Kore (Θεσμοφόρoι)
 **Ritual**:
+
 - Solemn procession (πομπή) of women up to the elevated Thesmophorion (on the Pnyx)
 - Sacrifice in the sanctuary upon arrival
 - Women erected booths (σκηναί/Laubhütten) and remained in the Thesmophorion for all three days
@@ -116,6 +125,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Participants**: Citizen wives (εὐγενεῖς γυναῖκες per Aristoph. Thesm. 330) of good birth; men excluded entirely
 
 **Sources**:
+
 - Hesych s.v. Ἄνοδος (= 11th of Pyanopsion, when women ascend to the Thesmophorion)
 - Schol. Aristoph. Thesm. 585 (Ἄνοδος: τὴν εἰς τὸ Θεσμοφόριον ἄφιξιν; ἐπὶ ὑψηλοῦ γὰρ κεῖται τὸ Θεσμοφόριον)
 - Phot. s.v. Θεσμοφορίων ἡμέραι (ἑνδεκάτῃ Κάθοδος — variant name)
@@ -135,6 +145,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Month/Day**: 12 Pyanopsion
 **Deity**: Demeter and Kore
 **Ritual**:
+
 - The day of fasting (νηστεία): the women fasted throughout, the darkest and most solemn day of the festival (Plut. Demosth. 30, 5)
 - Women sat on the ground (χαμαί) on beds of lygos (chaste-tree, Vitex agnus-castus)
 - Sexual abstinence required (same purpose as fasting: openness to the fertility forces expected to flow on day 3)
@@ -145,6 +156,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Participants**: Citizen wives; the antlētriai (Schöpfweiber) had to have observed sexual abstinence for three days before performing their office
 
 **Sources**:
+
 - Plut. Demosth. 30, 5 (ἐν ᾗ τὴν σκυθρωποτάτην τῶν Θεσμοφορίων ἡμέραν ἄγουσαι παρὰ τῇ θεῷ νηστεύουσιν αἱ γυναῖκες)
 - Aristoph. Thesm. 372, 984 (νηστεύομεν δὲ πάντως)
 - Aristoph. Vög. 1519 (ἀλλ' ὥσπερ Θεσμοφορίοις νηστεύομεν)
@@ -157,6 +169,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 - Steph. Byz. s.v. Μίλητος (pine branches used at Milesian Thesmophoria, with fertility meaning)
 
 **Notes**:
+
 - The lygos (chaste-tree) was used as bedding; later tradition rationalized its use as aphrodisiac-suppressing, but Deubner follows Nilsson in seeing this as a secondary reinterpretation: the original function was to promote female fertility (hence pine branches at Milesian Thesmophoria had same fertility meaning, not chastity meaning).
 - Sitting on the ground had no deep symbolic meaning (Deubner against symbolic over-reading); it was simply the natural result of sleeping on lygos-strew in booths.
 - The Nesteia in Aristophanes' play was a day of rest between ritual sacrifices, which is why it was suitable for a women's assembly.
@@ -170,6 +183,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Month/Day**: 13 Pyanopsion
 **Deity**: Kalligeneia (a deity derived from the festival's purpose); Demeter and Kore
 **Ritual**:
+
 - Name means "beautiful/good offspring": καλός taken in the broadest sense
 - Sacrifices (blood and cake offering); the antlētriai retrieved the decomposed remains (σαπέντα) from the Megara
 - The retrieved remains (decayed piglets, breads) were placed on the altars; worshippers took portions and mixed them with seed-grain for a fertile harvest
@@ -186,6 +200,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 **Participants**: Citizen wives of each deme; two elected ἄρχουσαι per deme; the ἀντλήτριαι (Schöpfweiber) who retrieved the remains (must be pure for 3 days beforehand)
 
 **Sources**:
+
 - Aristoph. Thesm. 298 (Kalligeneia invoked in the herald's address — also attested as a deity name: Usener, Götternamen 122ff.)
 - Schol. Aristoph. Thesm. 80 (three days: Anodos, Nesteia, Kalligeneia); Phot. s.v. Θεσμοφορίων ἡμέραι
 - Alkiphr. 2, 37, 1 Schepers (Kalligeneia on the day after Nesteia)
@@ -199,6 +214,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 - Lukianscholion p. 276, 3–7 (the antlētriai and the snakes in the megara)
 
 **Notes**:
+
 - Deubner links the antlētriai (Schöpfweiber) to the Thesmophoria, not the Skira: it is at the Thesmophoria that the decomposed remains are retrieved; they were thrown in at the Skira months earlier.
 - The Kalligeneia as a deity emerged from the name of the festival function (Usener: naming-from-function). She is invoked specifically on the third day.
 - Deubner is uncertain whether blood sacrifice (pig-slaughter, κρεοφαγεῖν) was a standard feature or only attested in Scholia.
@@ -213,6 +229,7 @@ Deubner treats the Skira and Thesmophoria as two closely connected festivals of 
 ### Relationship between Skira and Thesmophoria
 
 Deubner establishes the two festivals as formally linked:
+
 1. At the Skira (12 Skirophorion): piglets, bread-shapes, and pine branches are cast into the Megara
 2. At the Thesmophoria (Pyanopsion): the decomposed remains are retrieved and mixed with seed-grain
 
@@ -228,33 +245,33 @@ Deubner explains the name: θεσμός means "what is deposited" (cf. Anakreon 
 - **Buschor (Jahrb. 38/39, 1923/4)**: Argued the Skira was a "Schirmfest" (parasol festival); Wilamowitz accepted this. Deubner rejects it: the vase paintings showing cross-dressed figures with parasols cannot be assigned to the Skira; σκίρον never means an ordinary handheld parasol elsewhere.
 - **Robert (Herrn. 20, 1885)**: Deubner follows Robert on the structure of the Lukianscholion and on the Skiron procession as a compromise between the old agrarian Athena cult and the new Eleusinian goddesses.
 - **Nilsson**: Deubner follows Nilsson on the lygos reinterpretation (Gr. Feste 318).
-- On the meaning of fasting: Deubner distinguishes fasting as preparation for receiving fertility forces (not merely abstention), citing Deubner, *De incubatione* 14ff.
+- On the meaning of fasting: Deubner distinguishes fasting as preparation for receiving fertility forces (not merely abstention), citing Deubner, _De incubatione_ 14ff.
 
 ---
 
 ## Source Key (Ancient)
 
-| Source | Reference | Topic |
-|--------|-----------|-------|
-| Schol. Lukian dial. meretr. | p. 275–276 Rabe | Key scholion: Skirophoria, Thesmophoria, Arretophoria |
-| Aristoph. Thesm. | 80, 281, 298, 330, 585, 834 etc. | Thesmophoria days; Stenia; Skira |
-| Aristoph. Ekkl. | 18, 59 | Skira date; women's decision at Skira |
-| Menand. Epitr. | p. 36, 13–14 Jensen | Skira = women's festival alongside Thesmophoria |
-| Harpokr. s.v. σκίρον | — | Lysimachides on canopy procession |
-| IG 2² 1177 | — | Piraeus Thesmophorion; Skira listed with Demeter festivals |
-| IG 2² 1358b | 30ff., 51ff. | Marathon: pro Skira sacrifice calendar |
-| IG 2² 674 | — | Prytanes' Stenia sacrifice to Demeter and Kore |
-| IG 2² 1184 (= IG 2² 1184) | — | Cholargos deme decree on Thesmophoria offerings |
-| Paus. | 1, 36–37 | Skiron location; sanctuary of Demeter/Kore/Athena/Poseidon |
-| Plut. coniug. praec. | 144a | Three sacred ploughings of Attica |
-| Plut. Demosth. | 30, 5 | Nesteia = darkest day (16 Pyanopsion — Deubner notes this is an error in Plutarch) |
-| Plut. de Is. | 378e | Fasting and sitting on ground at Thesmophoria |
-| Isaeus | 8, 19; 3, 80 | ἄρχειν εἰς τὰ Θεσμοφόρια as technical term |
-| Apollod. | 1, 30 | Women's ritual mockery at Thesmophoria |
-| Clem. Protr. | 2, 17 (Skira); 2, 19, 3 (pomegranate); 2, 34 (Halimus) | Various |
-| Cornut. | 28 p. 55 Lang | Fasting and sowing season |
-| Theodoret. | gr. aff. cur. 3, 84 | Ritual cunni at Thesmophoria |
-| Phot. | s.v. τρωπιλίη | Philochoros: garlic and abstinence at Skira |
-| Hesych. | s.v. Ἄνοδος; s.v. Στήνια | Day names; Stenia |
-| Polyaen | 3, 10, 4 | Myrtle at Skira |
-| Schol. Soph. OC | 681 | No garlands at Thesmophoria |
+| Source                      | Reference                                              | Topic                                                                              |
+| --------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Schol. Lukian dial. meretr. | p. 275–276 Rabe                                        | Key scholion: Skirophoria, Thesmophoria, Arretophoria                              |
+| Aristoph. Thesm.            | 80, 281, 298, 330, 585, 834 etc.                       | Thesmophoria days; Stenia; Skira                                                   |
+| Aristoph. Ekkl.             | 18, 59                                                 | Skira date; women's decision at Skira                                              |
+| Menand. Epitr.              | p. 36, 13–14 Jensen                                    | Skira = women's festival alongside Thesmophoria                                    |
+| Harpokr. s.v. σκίρον        | —                                                      | Lysimachides on canopy procession                                                  |
+| IG 2² 1177                  | —                                                      | Piraeus Thesmophorion; Skira listed with Demeter festivals                         |
+| IG 2² 1358b                 | 30ff., 51ff.                                           | Marathon: pro Skira sacrifice calendar                                             |
+| IG 2² 674                   | —                                                      | Prytanes' Stenia sacrifice to Demeter and Kore                                     |
+| IG 2² 1184 (= IG 2² 1184)   | —                                                      | Cholargos deme decree on Thesmophoria offerings                                    |
+| Paus.                       | 1, 36–37                                               | Skiron location; sanctuary of Demeter/Kore/Athena/Poseidon                         |
+| Plut. coniug. praec.        | 144a                                                   | Three sacred ploughings of Attica                                                  |
+| Plut. Demosth.              | 30, 5                                                  | Nesteia = darkest day (16 Pyanopsion — Deubner notes this is an error in Plutarch) |
+| Plut. de Is.                | 378e                                                   | Fasting and sitting on ground at Thesmophoria                                      |
+| Isaeus                      | 8, 19; 3, 80                                           | ἄρχειν εἰς τὰ Θεσμοφόρια as technical term                                         |
+| Apollod.                    | 1, 30                                                  | Women's ritual mockery at Thesmophoria                                             |
+| Clem. Protr.                | 2, 17 (Skira); 2, 19, 3 (pomegranate); 2, 34 (Halimus) | Various                                                                            |
+| Cornut.                     | 28 p. 55 Lang                                          | Fasting and sowing season                                                          |
+| Theodoret.                  | gr. aff. cur. 3, 84                                    | Ritual cunni at Thesmophoria                                                       |
+| Phot.                       | s.v. τρωπιλίη                                          | Philochoros: garlic and abstinence at Skira                                        |
+| Hesych.                     | s.v. Ἄνοδος; s.v. Στήνια                               | Day names; Stenia                                                                  |
+| Polyaen                     | 3, 10, 4                                               | Myrtle at Skira                                                                    |
+| Schol. Soph. OC             | 681                                                    | No garlands at Thesmophoria                                                        |

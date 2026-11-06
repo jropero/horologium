@@ -1,7 +1,7 @@
 # Roman Calendar Review — Iulius (July)
 
 **App data**: `utils/romanYearData.ts`, keys `"6-1"` through `"6-31"`
-**Sources**: H.H. Scullard, *Festivals and Ceremonies of the Roman Republic* (1981), pp. 158–171; W. Warde Fowler, *The Roman Festivals of the Period of the Republic* (1899), pp. 174–188
+**Sources**: H.H. Scullard, _Festivals and Ceremonies of the Roman Republic_ (1981), pp. 158–171; W. Warde Fowler, _The Roman Festivals of the Period of the Republic_ (1899), pp. 174–188
 **Date**: 2026-10-25
 
 ---
@@ -63,7 +63,7 @@
 
 - **App**: key `"6-17"` | festivalName="Dedicación del Templo de Honos" | deity="Honos"
 - **Source**: Scullard p.165–166 — "Deity: Honos (and Virtus)". The temple complex comprised a restored temple of Honos (Fabius Cunctator, dedicated after 233 BC) and a new section for Virtus (dedicated by Marcellus' son in 205 BC). The two were architecturally joined just outside the Porta Capena.
-- **Issue**: The app names only Honos; Virtus is explicitly the co-deity of the same temple complex, and Scullard treats the dedication date as belonging to Honos *et* Virtus.
+- **Issue**: The app names only Honos; Virtus is explicitly the co-deity of the same temple complex, and Scullard treats the dedication date as belonging to Honos _et_ Virtus.
 - **Fix**: `deity: "Honos y Virtus"`, `deityDesc: "Dioses de la virtud militar y el honor, con templo conjunto fuera de la Porta Capena."`, `festivalName: "Dedicación del Templo de Honos et Virtus"`.
 - **Priority**: MEDIUM
 
@@ -102,7 +102,7 @@
 ## MISSING_FESTIVAL: Vitulatio — Day 8
 
 - **App**: key `"6-8"` | festivalName="Ludi Apollinares" — no mention of Vitulatio
-- **Source**: Scullard p.163–164 — "Day: 8, Fasti status: N Dies religiosus, Deity: Vitula. Sacrifices for the goddess Vitula, apparently an official ceremony attended by the pontiffs. The occasion was linked to a tradition of a Roman victory on 8 July." Fowler p.179 — "VIII Id. Quinct. ... *vitulatio* ... 'post victoriam certis sacrificiis fiat vitulatio' (Macrobius 3.9.11 citing Piso)."
+- **Source**: Scullard p.163–164 — "Day: 8, Fasti status: N Dies religiosus, Deity: Vitula. Sacrifices for the goddess Vitula, apparently an official ceremony attended by the pontiffs. The occasion was linked to a tradition of a Roman victory on 8 July." Fowler p.179 — "VIII Id. Quinct. ... _vitulatio_ ... 'post victoriam certis sacrificiis fiat vitulatio' (Macrobius 3.9.11 citing Piso)."
 - **Issue**: Vitulatio on July 8 is covered in both sources; the app records only the Ludi Apollinares for this day and omits Vitulatio entirely.
 - **Suggested entry** (to be noted alongside the Ludi entry):
   ```
@@ -134,9 +134,9 @@
 ## MISSING_FESTIVAL: Consus in Circo — Day 7
 
 - **App**: key `"6-7"` — no mention of Consus
-- **Source**: Scullard p.163 — "Day: 7, Deity: Consus. Sacrifice at the underground altar of Consus at the first turning-point (meta) in the Circus Maximus, performed by state-priests. The altar was kept covered and exposed only at the festival." Fowler p.178 cites Tertullian (*de Spect.* 5) for Consus' sacrifice on the same day as the Nonae Caprotinae.
+- **Source**: Scullard p.163 — "Day: 7, Deity: Consus. Sacrifice at the underground altar of Consus at the first turning-point (meta) in the Circus Maximus, performed by state-priests. The altar was kept covered and exposed only at the festival." Fowler p.178 cites Tertullian (_de Spect._ 5) for Consus' sacrifice on the same day as the Nonae Caprotinae.
 - **Issue**: Both sources attest a sacrifice to Consus at his underground altar on July 7. The app has no mention of this rite.
-- **Suggested addition** (to festivalDesc of `"6-7"`): append "En el mismo día, los sacerdotes públicos descubrían el altar subterráneo de Consualia en el Circo Máximo y realizaban un sacrificio a Consus (Tertuliano, *De spect.* 5)."
+- **Suggested addition** (to festivalDesc of `"6-7"`): append "En el mismo día, los sacerdotes públicos descubrían el altar subterráneo de Consualia en el Circo Máximo y realizaban un sacrificio a Consus (Tertuliano, _De spect._ 5)."
 - **Priority**: MEDIUM
 
 ---
@@ -146,7 +146,7 @@
 - **App**: key `"6-7"` — no mention of a second Parilia
 - **Source**: Scullard p.161 — "Day: 7, Fasti status: N, Deity: Pales. Recorded in the Antiate maiores as a second celebration in honour of Pales (cf. the Parilia on 21 April). Pales received a temple on the Palatine in 267 BC."
 - **Issue**: The Antiate maiores record a second Parilia (Palibus duobus) on July 7; absent from the app. This is a single-source (Antiate maiores) entry.
-- **Suggested addition**: Note in `festivalDesc` of `"6-7"` that the Antiate maiores also record a second celebration of Pales (*Palibus duobus*) on this day.
+- **Suggested addition**: Note in `festivalDesc` of `"6-7"` that the Antiate maiores also record a second celebration of Pales (_Palibus duobus_) on this day.
 - **Priority**: LOW
 
 ---
@@ -203,28 +203,29 @@
 
 ## Summary
 
-| # | Category | Festival / Day | Priority |
-|---|----------|---------------|----------|
-| 1 | WRONG_DATE | Furrinalia on July 24 (should be July 25) | HIGH |
-| 2 | WRONG_STATUS | Nonae Caprotinae, Day 7 (NP → N) | HIGH |
-| 3 | WRONG_STATUS | Ludi Apollinares chief day, Day 13 (NP → C) | HIGH |
-| 4 | MISSING_FESTIVAL | Vitulatio, Day 8 | HIGH |
-| 5 | WRONG_STATUS | Kalendae Iuliae, Day 1 (NP → N) | MEDIUM |
-| 6 | WRONG_DEITY | Kalendae Iuliae, Day 1 (Juno only → Juno + Felicitas) | MEDIUM |
-| 7 | WRONG_DEITY | Honori, Day 17 (Honos only → Honos et Virtus) | MEDIUM |
-| 8 | WRONG_RITUAL | Dies Alliensis, Day 18 (omits defeat of Fabii on Cremera) | MEDIUM |
-| 9 | INVENTED_AITION | Lucaria, Day 19 (aetiological legend presented as fact) | MEDIUM |
-| 10 | WRONG_RITUAL | Poplifugia, Day 5 (one dismissed aition presented as fact) | MEDIUM |
-| 11 | MISSING_FESTIVAL | Fortunae Muliebri, Day 6 | MEDIUM |
-| 12 | MISSING_FESTIVAL | Consus in Circo, Day 7 | MEDIUM |
-| 13 | MISSING_FESTIVAL | Victoriae in Capitolio, Day 17 | MEDIUM |
-| 14 | MISSING_FESTIVAL | Ludi Victoriae Caesaris, Days 20–30 | MEDIUM |
-| 15 | MISSING_FESTIVAL | Palibus duobus (second Parilia), Day 7 | LOW |
-| 16 | MINOR | Lucaria status (NP vs IP — sources disagree) | LOW |
-| 17 | MINOR | Neptunalia — Salacia as consort not listed | LOW |
-| 18 | MINOR | Concordia (Day 22) — "otra fundación" phrasing | LOW |
+| #   | Category         | Festival / Day                                             | Priority |
+| --- | ---------------- | ---------------------------------------------------------- | -------- |
+| 1   | WRONG_DATE       | Furrinalia on July 24 (should be July 25)                  | HIGH     |
+| 2   | WRONG_STATUS     | Nonae Caprotinae, Day 7 (NP → N)                           | HIGH     |
+| 3   | WRONG_STATUS     | Ludi Apollinares chief day, Day 13 (NP → C)                | HIGH     |
+| 4   | MISSING_FESTIVAL | Vitulatio, Day 8                                           | HIGH     |
+| 5   | WRONG_STATUS     | Kalendae Iuliae, Day 1 (NP → N)                            | MEDIUM   |
+| 6   | WRONG_DEITY      | Kalendae Iuliae, Day 1 (Juno only → Juno + Felicitas)      | MEDIUM   |
+| 7   | WRONG_DEITY      | Honori, Day 17 (Honos only → Honos et Virtus)              | MEDIUM   |
+| 8   | WRONG_RITUAL     | Dies Alliensis, Day 18 (omits defeat of Fabii on Cremera)  | MEDIUM   |
+| 9   | INVENTED_AITION  | Lucaria, Day 19 (aetiological legend presented as fact)    | MEDIUM   |
+| 10  | WRONG_RITUAL     | Poplifugia, Day 5 (one dismissed aition presented as fact) | MEDIUM   |
+| 11  | MISSING_FESTIVAL | Fortunae Muliebri, Day 6                                   | MEDIUM   |
+| 12  | MISSING_FESTIVAL | Consus in Circo, Day 7                                     | MEDIUM   |
+| 13  | MISSING_FESTIVAL | Victoriae in Capitolio, Day 17                             | MEDIUM   |
+| 14  | MISSING_FESTIVAL | Ludi Victoriae Caesaris, Days 20–30                        | MEDIUM   |
+| 15  | MISSING_FESTIVAL | Palibus duobus (second Parilia), Day 7                     | LOW      |
+| 16  | MINOR            | Lucaria status (NP vs IP — sources disagree)               | LOW      |
+| 17  | MINOR            | Neptunalia — Salacia as consort not listed                 | LOW      |
+| 18  | MINOR            | Concordia (Day 22) — "otra fundación" phrasing             | LOW      |
 
 **Counts by category**:
+
 - WRONG_DATE: 1
 - WRONG_STATUS: 3
 - WRONG_DEITY: 2
@@ -236,6 +237,7 @@
 **Total findings**: 18
 
 **Most critical fixes** (should be applied before next release):
+
 1. Move Furrinalia from July 24 to July 25.
 2. Correct Nonae Caprotinae status from NP to N.
 3. Correct Ludi Apollinares chief day (July 13) status from NP to C.
