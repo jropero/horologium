@@ -464,6 +464,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     deityName = dailyDeity.deity;
     deityDesc = dailyDeity.deityDesc;
   } else {
+    displayDeityTitle = '— Θεὸς τοῦ Μηνός —';
     deityName = defaultDeity.deity;
     deityDesc = defaultDeity.festivalDesc;
   }
