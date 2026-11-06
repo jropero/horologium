@@ -12,6 +12,24 @@ import { translateGreekUI } from '../utils/greekTranslations';
 import { OVID_ASTRONOMICAL_EVENTS } from '../utils/ovidFastiData';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
+import { getSunAltitude } from '../utils/solar';
+
+const lerpColor = (a: string, b: string, t: number): string => {
+  const ah = parseInt(a.slice(1), 16);
+  const bh = parseInt(b.slice(1), 16);
+  const ar = (ah >> 16) & 0xff,
+    ag = (ah >> 8) & 0xff,
+    ab = ah & 0xff;
+  const br = (bh >> 16) & 0xff,
+    bg = (bh >> 8) & 0xff,
+    bb = bh & 0xff;
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl2 = Math.round(ab + (bb - ab) * t);
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${bl2
+    .toString(16)
+    .padStart(2, '0')}`;
+};
 
 interface RomanClockProps {
   modernTime: Date;
@@ -79,6 +97,15 @@ function RomanClock({
     () => generateWeatherParticles(rainIntensity),
     [rainIntensity],
   );
+
+  // Sun altitude in degrees: positive = above horizon, 0 = horizon, -6 = civil twilight end
+  const sunAltitude = useMemo(
+    () => getSunAltitude(modernTime, currentLat, currentLng),
+    [modernTime, currentLat, currentLng],
+  );
+
+  // Stars fade in/out across civil twilight band: 0 at horizon, 1 at -6°
+  const starOpacity = sunAltitude > 0 ? 0 : Math.max(0, Math.min(1, -sunAltitude / 6));
 
   const progressPercent = useMemo(() => {
     if (!romanTime) return 0;
@@ -218,6 +245,16 @@ function RomanClock({
       }
       return 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)';
     }
+    // Civil twilight: sun between 0° and -6° below horizon
+    // warmth=1 just after sunset, warmth=0 at civil twilight end
+    if (sunAltitude > -6) {
+      const warmth = Math.max(0, Math.min(1, 1 + sunAltitude / 6));
+      const c1 = lerpColor('#060d1c', '#1b2f6e', warmth);
+      const c2 = lerpColor('#0d1117', '#3730a3', warmth);
+      const c3 = lerpColor('#0d1117', '#b45309', warmth);
+      const c4 = lerpColor('#0a1020', '#d97706', warmth);
+      return `linear-gradient(to bottom, ${c1} 0%, ${c2} 35%, ${c3} 65%, ${c4} 100%)`;
+    }
     return 'linear-gradient(to bottom, #0f172a 0%, var(--ink) 100%)';
   };
 
@@ -303,11 +340,7 @@ function RomanClock({
             <div className="absolute inset-0 flex items-center justify-center">
               <svg viewBox="0 0 300 200" className="w-full h-full">
                 {/* CAPA 1: Estrellas y arco */}
-                <g
-                  className={`transition-opacity duration-1000 ${
-                    romanTime.isDay ? 'opacity-0' : 'opacity-100'
-                  }`}
-                >
+                <g style={{ opacity: starOpacity, transition: 'opacity 2000ms ease-in-out' }}>
                   {stars.map((star, i) => (
                     <path
                       key={i}
