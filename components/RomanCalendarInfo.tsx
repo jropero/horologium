@@ -91,7 +91,7 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
         <div className="mt-4 w-full" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-center gap-3 mb-3">
                 <div className="h-px flex-1 bg-gold-dim/20" />
-                <span className="text-gold-dim text-[10px] uppercase tracking-[0.3em] font-serif">Calendarium Mensis</span>
+                <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">Calendarium Mensis</span>
                 <div className="h-px flex-1 bg-gold-dim/20" />
             </div>
 
@@ -112,8 +112,8 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                                 <div className="absolute -right-4 -top-4 w-16 h-16 bg-gold-leaf/5 rounded-full blur-xl pointer-events-none" />
                             )}
                             <div className="text-center mb-2 border-b border-gold-dim/20 pb-1.5">
-                                <div className={`text-[9px] font-bold uppercase tracking-widest ${active ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>{label}</div>
-                                <div className="text-[9px] font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">{sublabel}</div>
+                                <div className={`text-xs font-bold uppercase tracking-widest ${active ? 'text-gold-leaf' : 'text-gold-dim/60'}`}>{label}</div>
+                                <div className="text-xs font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">{sublabel}</div>
                             </div>
                             <div className={`grid gap-1 justify-items-center ${panelIdx === 2 ? 'grid-cols-3' : 'grid-cols-2'}`}>
                                 {days.filter(d => d <= daysInMonth).map(day => (
@@ -123,7 +123,7 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                                             className={`relative flex flex-col items-center justify-center rounded-sm py-1.5 w-full transition-all cursor-pointer select-none ${cellCls(day)}`}
                                             onClick={() => setSelectedDay(prev => prev === day ? null : day)}
                                         >
-                                            <span className={`text-[10px] font-serif leading-none font-bold ${numCls(day)}`}>{day}</span>
+                                            <span className={`text-xs font-serif leading-none font-bold ${numCls(day)}`}>{day}</span>
                                         </button>
                                 ))}
                             </div>
@@ -143,7 +143,7 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <span className="text-xs font-serif font-bold text-gold-leaf uppercase tracking-wider">Dies {selectedDay}</span>
-                                <span className={`text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${STATUS_BADGE_CLS[selEntry.status] ?? 'border-gold-dim/30 text-gold-dim bg-transparent'}`}>
+                                <span className={`text-xs font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${STATUS_BADGE_CLS[selEntry.status] ?? 'border-gold-dim/30 text-gold-dim bg-transparent'}`}>
                                     {STATUS_NAMES[selEntry.status] ?? selEntry.status}
                                 </span>
                             </div>
@@ -185,7 +185,7 @@ const RomanDayGrid: React.FC<{ month: number; year: number; today: number }> = (
                 ] as const).map(({ cls, label }) => (
                     <div key={label} className="flex items-center gap-1">
                         <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
-                        <span className="text-[9px] text-gold-dim/50 font-serif uppercase tracking-wide">{label}</span>
+                        <span className="text-xs text-gold-dim/50 font-serif uppercase tracking-wide">{label}</span>
                     </div>
                 ))}
             </div>
@@ -306,7 +306,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
 
                         {/* MAIN: Deus Diei */}
                         <div className="flex flex-col items-center gap-2 w-full bg-stone-900/40 p-6 rounded border border-gold-dim/20 shadow-inner">
-                            <div className="text-gold-dim text-[10px] uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
+                            <div className="text-gold-dim text-xs uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
                                 <span className="opacity-40">—</span>
                                 {labels.godOfDayTitle}
                                 <span className="opacity-40">—</span>
@@ -329,7 +329,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                         {/* BOTTOM: Festival */}
                         {info.festivalName && (
                             <div className="mt-1 w-full animate-fadeIn">
-                                <div className="text-festival opacity-80 text-[10px] uppercase tracking-widest mb-1">{labels.festivalLabel}</div>
+                                <div className="text-festival opacity-80 text-xs uppercase tracking-widest mb-1">{labels.festivalLabel}</div>
                                 <h2 className="font-serif text-xl font-bold text-festival mb-1 tracking-wide">
                                     {info.festivalName.toUpperCase()}
                                 </h2>
@@ -350,17 +350,17 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                     aria-expanded={fontesOpen}
                                 >
                                     <div className="flex items-center gap-2 min-w-0">
-                                        <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-gold-dim/70 flex-shrink-0">
+                                        <span className="text-xs font-serif uppercase tracking-[0.25em] text-gold-dim/70 flex-shrink-0">
                                             Fontes Antiqui
                                         </span>
                                         {!fontesOpen && (
-                                            <span className="text-[10px] font-serif text-parchment/50 truncate">
+                                            <span className="text-xs font-serif text-parchment/50 truncate">
                                                 · {info.fontes[0].author}, {info.fontes[0].work}{info.fontes[0].book ? ` ${info.fontes[0].book}` : ''}{info.fontes[0].lines ? `.${info.fontes[0].lines}` : ''}
                                             </span>
                                         )}
                                     </div>
                                     <span
-                                        className="text-gold-dim/60 text-[11px] flex-shrink-0 ml-2 transition-transform duration-200"
+                                        className="text-gold-dim/60 text-xs flex-shrink-0 ml-2 transition-transform duration-200"
                                         style={{ display: 'inline-block', transform: fontesOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
                                         aria-hidden="true"
                                     >▾</span>
@@ -382,24 +382,24 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                             return (
                                                 <div key={idx} className={idx > 0 ? 'border-t border-gold-dim/20 pt-3' : ''}>
                                                     <div className="flex items-start justify-between gap-2 mb-1.5">
-                                                        <span className="text-[9px] font-serif uppercase tracking-[0.2em] text-gold-dim/60 leading-tight">
+                                                        <span className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim/60 leading-tight">
                                                             {citHeader}
                                                         </span>
                                                         {typeBadge && (
-                                                            <span className="text-[8px] uppercase tracking-widest text-amber-700/70 border border-amber-700/30 px-1 py-0.5 rounded flex-shrink-0">
+                                                            <span className="text-xs uppercase tracking-widest text-amber-700/70 border border-amber-700/30 px-1 py-0.5 rounded flex-shrink-0">
                                                                 {typeBadge}
                                                             </span>
                                                         )}
                                                     </div>
                                                     {fonte.textLa && (
-                                                        <p className="text-[11px] md:text-[12px] font-serif italic text-parchment/85 leading-relaxed mb-1.5 whitespace-pre-line">
+                                                        <p className="text-xs font-serif italic text-parchment/85 leading-relaxed mb-1.5 whitespace-pre-line">
                                                             {fonte.textLa}
                                                         </p>
                                                     )}
                                                     {fonte.textLa && (
                                                         <div className="border-t border-gold-dim/15 my-1.5" />
                                                     )}
-                                                    <p className="text-[10px] md:text-[11px] font-serif text-parchment/55 leading-relaxed italic">
+                                                    <p className="text-xs font-serif text-parchment/55 leading-relaxed italic">
                                                         {fonte.textEs}
                                                     </p>
                                                 </div>
@@ -415,14 +415,14 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                             <div className="mt-4 p-4 bg-amber-900/20 border border-gold-dim/30 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xl">🍷</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-amber-500">
+                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-amber-500">
                                         Mos Maiorum: {mosMaiorum.title}
                                     </span>
                                 </div>
-                                <p className="text-[11px] md:text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
+                                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
                                     "{mosMaiorum.text}"
                                 </p>
-                                <span className="text-[8px] text-gold-dim/60 self-end uppercase tracking-widest">
+                                <span className="text-xs text-gold-dim/60 self-end uppercase tracking-widest">
                                     — Ovidio, {mosMaiorum.reference}
                                 </span>
                             </div>
@@ -433,14 +433,14 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                             <div className="mt-4 p-4 bg-roman-red/10 border border-roman-red/50 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xl">⚔️</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-roman-red">
+                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-roman-red">
                                         Annales Belli: {annalesBelli.title}
                                     </span>
                                 </div>
-                                <p className="text-[11px] md:text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
+                                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
                                     "{annalesBelli.text}"
                                 </p>
-                                <span className="text-[8px] text-roman-red/60 self-end uppercase tracking-widest">
+                                <span className="text-xs text-roman-red/60 self-end uppercase tracking-widest">
                                     — Ovidio, {annalesBelli.reference}
                                 </span>
                             </div>
@@ -451,7 +451,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                             <div className="mt-4 p-5 bg-stone-900/90 border-2 border-parchment/30 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-[0_0_15px_rgba(255,255,255,0.05)]">
                                 <div className="flex items-center justify-center gap-3 border-b border-parchment/20 pb-2 w-full">
                                     <span className="text-xl">{preces.icon || "🙏"}</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-parchment">
+                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-parchment">
                                         Preces et Sacra: {preces.title}
                                     </span>
                                     <span className="text-xl">{preces.icon || "🌬️"}</span>
@@ -459,7 +459,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                 <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-center italic w-full">
                                     "{preces.text}"
                                 </p>
-                                <span className="text-[8px] text-parchment/50 uppercase tracking-widest mt-1">
+                                <span className="text-xs text-parchment/50 uppercase tracking-widest mt-1">
                                     — Ovidio, {preces.reference}
                                 </span>
                             </div>
@@ -470,14 +470,14 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                             <div className="mt-4 p-4 bg-stone-800 border-x-4 border-stone-500 rounded-sm relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn shadow-sm">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xl">🏛️</span>
-                                    <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-stone-300">
+                                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300">
                                         Aedes et Monumenta: {monument.title}
                                     </span>
                                 </div>
-                                <p className="text-[11px] md:text-xs font-serif text-stone-400 leading-relaxed text-left border-l-2 border-stone-600 pl-3 italic">
+                                <p className="text-xs font-serif text-stone-400 leading-relaxed text-left border-l-2 border-stone-600 pl-3 italic">
                                     "{monument.text}"
                                 </p>
-                                <span className="text-[8px] text-stone-500 self-end uppercase tracking-widest font-bold">
+                                <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
                                     — Fasti, {monument.reference}
                                 </span>
                             </div>
@@ -522,7 +522,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                         {sacrificesForDay[activeSacrificeIdx].title}
                                     </span>
                                     {sacrificesForDay[activeSacrificeIdx].crime && (
-                                        <div className="mt-2 text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-roman-red bg-roman-red/10 px-3 py-1 rounded border border-roman-red/20 text-center max-w-full">
+                                        <div className="mt-2 text-xs uppercase font-bold tracking-widest text-roman-red bg-roman-red/10 px-3 py-1 rounded border border-roman-red/20 text-center max-w-full">
                                             Crimen: {sacrificesForDay[activeSacrificeIdx].crime}
                                         </div>
                                     )}
@@ -532,7 +532,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                     <blockquote className="italic text-[12px] md:text-[13px] font-serif text-parchment/90 border-l-2 border-roman-red/50 pl-4 py-2 leading-relaxed bg-stone-900/40 rounded-r shadow-inner text-left animate-fadeIn">
                                         "{sacrificesForDay[activeSacrificeIdx].text}"
                                     </blockquote>
-                                    <span className="text-[9px] text-stone-500 self-end uppercase tracking-widest font-bold">
+                                    <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
                                         — Ovidio, {sacrificesForDay[activeSacrificeIdx].reference}
                                     </span>
                                 </div>
@@ -615,7 +615,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                                     </span>
                                                 )}
                                             </span>
-                                            <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
+                                            <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
                                                 {isLemuria ? "Lemuria: Ofrenda Lustral" : `Sacrificia: ${sacrifice.title}`}
                                             </span>
                                         </div>
@@ -624,7 +624,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                         <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
                                             "{sacrifice.text}"
                                         </p>
-                                        <span className="text-[9px] text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
+                                        <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
                                             — Ovidio, {sacrifice.reference}
                                         </span>
                                     </div>
@@ -635,7 +635,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                         {/* EPHEMERIDES */}
                         {getHistoricalEvents(currentDate).length > 0 && (
                             <div className="mt-4 pt-4 border-t border-gold-dim/30 w-full animate-fadeIn">
-                                <div className="text-parchment/90 text-[10px] uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
+                                <div className="text-parchment/90 text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
                                     <span>📜</span> {labels.calendarInfoTitle} <span>📜</span>
                                 </div>
                                 <ul className="space-y-3">
@@ -668,7 +668,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                 <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
                                     Proxima Festa
                                 </h2>
-                                <p className="text-[10px] text-roman-red uppercase tracking-[0.3em] font-bold mt-1">
+                                <p className="text-xs text-roman-red uppercase tracking-[0.3em] font-bold mt-1">
                                     Calendarium Romanum
                                 </p>
                             </div>
@@ -682,7 +682,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                                 <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-roman-red transition-colors leading-tight">
                                                     {f.name}
                                                 </h4>
-                                                <span className="text-[10px] text-gold-dim/60 font-bold uppercase tracking-widest">
+                                                <span className="text-xs text-gold-dim/60 font-bold uppercase tracking-widest">
                                                     {f.date}
                                                 </span>
                                             </div>
@@ -735,7 +735,7 @@ const RomanCalendarInfo: React.FC<RomanCalendarInfoProps> = ({ currentDate = new
                                 <p className="font-serif text-parchment/90 italic leading-relaxed">
                                     "{statusExplanation.text}"
                                 </p>
-                                <span className="text-[10px] text-gold-dim/60 uppercase tracking-widest font-bold">
+                                <span className="text-xs text-gold-dim/60 uppercase tracking-widest font-bold">
                                     — Fastos, {statusExplanation.reference}
                                 </span>
                             </div>
