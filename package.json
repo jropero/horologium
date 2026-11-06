@@ -16,7 +16,9 @@
     "lint:css": "stylelint index.css",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "lint-staged": {
     "*.{ts,tsx,mts,js,mjs}": "eslint",
@@ -54,6 +56,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.1.0",
     "autoprefixer": "^10.4.27",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
@@ -67,10 +70,12 @@
     "stylelint": "^18.0.0",
     "stylelint-config-standard": "^41.0.0",
     "tailwindcss": "^4.2.2",
-    "typescript": "^7.0.2",
+    "ts-api-utils": "^2.5.0",
+    "typescript": "^5.7.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5",
     "vite-plugin-pwa": "^2.0.0",
+    "vitest": "^5.1.0",
     "workbox-window": "^7.4.0"
   }
 }

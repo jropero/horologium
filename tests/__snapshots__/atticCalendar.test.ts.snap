@@ -1,0 +1,49 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getAtticDate structural invariants > snapshot — 2024-07-15 1`] = `
+{
+  "anchorGregYear": 2024,
+  "dayOfMonth": 8,
+  "decade": 1,
+  "full": "Ἡμέρα ὀγδόη τοῦ μηνὸς ἱσταμένου, μηνὸς Ἑκατομβαιών",
+  "isIntercalaryMonth": false,
+  "monthIndex": 0,
+  "monthLength": 30,
+  "monthName": "Ἑκατομβαιών",
+  "short": "ὀγδόη ἱσταμένου, Ἑκατομβαιών",
+  "spanishFull": "Día 8 de la luna creciente, mes de Ἑκατομβαιών (Hekatombaion)",
+  "spanishShort": "Día 8 creciente, mes de Ἑκατομβαιών",
+}
+`;
+
+exports[`getAtticDate structural invariants > snapshot — 2024-10-01 1`] = `
+{
+  "anchorGregYear": 2024,
+  "dayOfMonth": 27,
+  "decade": 3,
+  "full": "τετάρτη φθίνοντος, μηνὸς Βοηδρομιών",
+  "isIntercalaryMonth": false,
+  "monthIndex": 2,
+  "monthLength": 30,
+  "monthName": "Βοηδρομιών",
+  "short": "τετάρτη φθίνοντος, Βοηδρομιών",
+  "spanishFull": "Día 4 desde el fin del mes, mes de Βοηδρομιών (Boedromion)",
+  "spanishShort": "Día 4 desde el fin, mes de Βοηδρομιών",
+}
+`;
+
+exports[`getAtticDate structural invariants > snapshot — 2025-01-15 1`] = `
+{
+  "anchorGregYear": 2024,
+  "dayOfMonth": 14,
+  "decade": 2,
+  "full": "Ἡμέρα τετάρτη ἐπὶ δέκα, μηνὸς Γαμηλιών",
+  "isIntercalaryMonth": false,
+  "monthIndex": 6,
+  "monthLength": 30,
+  "monthName": "Γαμηλιών",
+  "short": "τετάρτη μεσοῦντος, Γαμηλιών",
+  "spanishFull": "Día 14, mitad del mes, mes de Γαμηλιών (Gamelion)",
+  "spanishShort": "Día 14 (mes central), mes de Γαμηλιών",
+}
+`;

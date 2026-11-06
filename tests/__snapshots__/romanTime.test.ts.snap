@@ -1,0 +1,29 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`calculateRomanTime — computed Roman time > full return object matches snapshot (summer solstice noon, Rome) 1`] = `
+{
+  "civilDayPart": {
+    "desc": "Hacia el mediodía",
+    "name": "Ad Meridiem",
+  },
+  "dayOfWeek": "Dies Veneris",
+  "hourLengthMinutes": 76.15128333333332,
+  "hourName": "Sexta Hora",
+  "indiction": 2,
+  "isDay": true,
+  "isMarketDay": false,
+  "moonPhase": 0.47805616150198676,
+  "moonPhaseLabel": "Plenilunium",
+  "nextSunrise": 2024-06-22T03:35:14.506Z,
+  "nundinalLetter": "H",
+  "planetaryRuler": "Mars",
+  "romanDateFull": "Ante diem undecimum Kalendas Iulias anno ab urbe condita MMDCCLXXVII, Indictione II",
+  "romanDateString": "a.d. XI Kal Iul anno MMDCCLXXVII A.U.C.",
+  "romanHour": 6,
+  "sunrise": 2024-06-21T03:35:00.038Z,
+  "sunset": 2024-06-21T18:48:48.962Z,
+  "tutelaMensis": "Mercurius",
+  "vigilia": undefined,
+  "zodiacSign": "Cancro",
+}
+`;
