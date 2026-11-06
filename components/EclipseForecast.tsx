@@ -363,13 +363,32 @@ function getIcon(ev: AstroEvent, idx: number): React.ReactNode {
 
 // ─── Event row ────────────────────────────────────────────────────────────────
 
+function daysUntilLabel(evTime: Date, now: Date): string {
+  const msPerDay = 86_400_000;
+  const days = Math.ceil((evTime.getTime() - now.getTime()) / msPerDay);
+  if (days <= 0) return 'hodie';
+  if (days === 1) return 'cras';
+  return `post ${days} d.`;
+}
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
-function EventRow({ ev, idx, last }: { ev: AstroEvent; idx: number; last: boolean }) {
+function EventRow({
+  ev,
+  idx,
+  last,
+  currentDate,
+}: Readonly<{
+  ev: AstroEvent;
+  idx: number;
+  last: boolean;
+  currentDate: Date;
+}>) {
   const isLunarEclipse = ev.type === 'eclipse-lunar';
   const isSolarEclipse = ev.type === 'eclipse-solar';
 
   const dateFmt = ev.time.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
   const timeFmt = ev.time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  const daysLabel = daysUntilLabel(ev.time, currentDate);
 
   let catClass = 'text-gold-dim/60 border-gold-dim/20';
   if (isLunarEclipse) catClass = 'text-stone-400 border-stone-500/30';
@@ -425,6 +444,7 @@ function EventRow({ ev, idx, last }: { ev: AstroEvent; idx: number; last: boolea
           <span className="font-serif text-xs text-parchment/45">
             {dateFmt} · {timeFmt}
           </span>
+          <span className="font-serif text-xs text-gold-dim/55 italic">{daysLabel}</span>
           {detail}
         </div>
       </div>
@@ -476,7 +496,13 @@ const EclipseForecast: React.FC<Props> = ({ currentDate, latitude, longitude }) 
         {/* Event list */}
         <div>
           {events.map((ev, i) => (
-            <EventRow key={i} ev={ev} idx={i} last={i === events.length - 1} />
+            <EventRow
+              key={i}
+              ev={ev}
+              idx={i}
+              last={i === events.length - 1}
+              currentDate={currentDate}
+            />
           ))}
         </div>
       </div>
