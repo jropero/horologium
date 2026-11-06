@@ -148,8 +148,22 @@ export default [
       'sonarjs/todo-tag': 'error',
       // react-hooks/exhaustive-deps is 'warn' in recommended — promote to error
       'react-hooks/exhaustive-deps': 'error',
+      // Security-adjacent rules (matching coco IDE config)
+      'sonarjs/no-globals-shadowing': 'error',
+      'sonarjs/concise-regex': 'error',
+      'sonarjs/slow-regex': 'error',
+      'sonarjs/code-eval': 'error',
       // Math.random() is intentional for seeded procedural rendering (skylines, etc.)
       'sonarjs/pseudo-random': 'off',
+      // Rules inapplicable to this codebase (matching coco IDE config)
+      'sonarjs/no-commented-code': 'off',
+      'sonarjs/no-nested-functions': 'off',
+      'sonarjs/redundant-type-aliases': 'off',
+      'sonarjs/no-dead-store': 'off',
+      'sonarjs/anchor-precedence': 'off',
+      'sonarjs/no-clear-text-protocols': 'off',
+      'sonarjs/os-command': 'off',
+      'sonarjs/no-empty-test-file': 'off',
 
       // tsc --noEmit handles undefined references reliably for TypeScript; Babel leaks
       // `as const` artifacts that make no-undef fire on `const` itself as an identifier
