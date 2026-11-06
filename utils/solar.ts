@@ -90,6 +90,17 @@ export const getMoonPhase = (date: Date): number =>
     () => MoonPhase(date) / 360,
   );
 
+export const getSunAltitude = (date: Date, lat: number, lng: number): number => {
+  try {
+    const observer = new Observer(lat, lng, 0);
+    const eq = Equator(Body.Sun, date, observer, true, true);
+    const hz = Horizon(date, observer, eq.ra, eq.dec, 'normal');
+    return hz.altitude;
+  } catch {
+    return -90;
+  }
+};
+
 export const getMoonPosition = (
   date: Date,
   lat: number,
