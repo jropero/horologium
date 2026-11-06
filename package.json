@@ -44,6 +44,14 @@
       }
     }
   },
+  "overrides": {
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^8.1.0",
     "@babel/eslint-parser": "^8.0.7",
@@ -77,5 +85,9 @@
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.1.0",
     "workbox-window": "^7.4.0"
+  },
+  "allowScripts": {
+    "sharp@0.32.6": true,
+    "fsevents": false
   }
 }

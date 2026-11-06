@@ -16,7 +16,7 @@ export type CustomType =
   | 'Protección'
   | 'Costumbre Agrícola'
   | 'Protección / Salud'
-  | TYPE_CULINARY_TRADITION
+  | typeof TYPE_CULINARY_TRADITION
   | 'Costumbre Culinaria / Médica'
   | 'Rito Estacional'
   | 'Celebración de las Minorías (Dong)'
