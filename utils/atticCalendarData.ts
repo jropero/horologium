@@ -596,19 +596,33 @@ export const getAtticFestivalInfo = (monthIndex: number, dayOfMonth: number): At
 
 // Default deity for days without specific festival
 export const getDefaultAtticDeity = (monthIndex: number): AtticFestivalInfo => {
+  // Sources: Parke, Festivals of the Athenians (1977); Deubner, Attische Feste (1932).
+  // Decisions documented in docs/research/hellenic-festivals-sources.md.
   const monthDeities: Record<number, AtticFestivalInfo> = {
-    0: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la protectora de la ciudad.", deity: "Ἀθηνᾶ", deityDesc: "Protectora de Atenas, diosa de la sabiduría." },
-    1: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios de la luz.", deity: "Ἀπόλλων", deityDesc: "Dios de la luz, la música y la profecía." },
-    2: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la diosa de la cosecha.", deity: "Δημήτηρ", deityDesc: "Diosa de la cosecha y la tierra cultivada." },
+    // Hekatombaion (Jul-Aug): Parke pp. 29-50
+    0: { festivalName: "Día Sagrado", festivalDesc: "Mes de Atenea: las Panateneas (día 28) la honran como patrona de la ciudad con procesión del peplo, sacrificio y juegos panhelénicos; la Sinoikia (días 15–16) celebra la unión del Ática.", deity: "Ἀθηνᾶ", deityDesc: "Protectora de la ciudad, honrada en las Panateneas con procesión, peplo sagrado y juegos panhelénicos." },
+    // Metageitnion (Aug-Sep): Parke pp. 51-52. Apollo names the month (Metageitnios cult) but Heracleia is the main attested festival.
+    1: { festivalName: "Día Sagrado", festivalDesc: "Mes que toma su nombre del culto a Apolo Metageitnios; la Heracleia en Kynosarges era el festival de mayor entidad, dedicado a Heracles.", deity: "Ἀπόλλων", deityDesc: "Apolo Metageitnios da nombre al mes; la principal celebración era la Heracleia, dedicada a Heracles en Kynosarges." },
+    // Boedromion (Sep-Oct): Parke p. 53, pp. 55-72. Patron is Apollo Boedromios (etymological); Eleusinian Mysteries of Demeter dominate the calendar.
+    2: { festivalName: "Día Sagrado", festivalDesc: "Mes de Apolo Boedromio, 'el que socorre al grito de guerra' (día 7). Los Misterios Eleusinos de Deméter y Perséfone (días 15–20) dominan el calendario ritual del mes.", deity: "Ἀπόλλων", deityDesc: "Apolo Boedromios da nombre al mes; los Misterios Eleusinos (días 15–20) son el rito más importante del mes." },
+    // Pyanepsion (Oct-Nov): Parke pp. 73-94; Deubner pp. 197-201. Apollo names the month (Pyanopsia day 7); Demeter dominates calendar (Proerosia, Stenia, Thesmophoria).
     3: { festivalName: "Día Sagrado", festivalDesc: "Mes que toma su nombre de la Pyanopsia (día 7), festival de Apolo. Deméter preside también este mes con la Proerosia (día 5), la Stenia (día 9) y las Thesmophoria (días 11–13).", deity: "Ἀπόλλων", deityDesc: "Apolo da nombre al mes por su festival de la Pyanopsia; Deméter domina el calendario festivo del mes con tres ritos agrarios." },
-    4: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al rey de los dioses.", deity: "Ζεύς", deityDesc: "Padre de los dioses, señor del Olimpo." },
-    5: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios del mar.", deity: "Ποσειδῶν", deityDesc: "Dios de los mares y las aguas." },
-    6: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la reina de los dioses.", deity: "Ἥρα", deityDesc: "Reina de los dioses, protectora del matrimonio." },
-    7: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios del vino.", deity: "Διόνυσος", deityDesc: "Dios del vino, el éxtasis y el teatro." },
-    8: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la diosa de la caza.", deity: "Ἄρτεμις", deityDesc: "Diosa de la caza y los bosques." },
-    9: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la diosa de la luna.", deity: "Ἄρτεμις", deityDesc: "Diosa de la luna y la naturaleza salvaje." },
-    10: { festivalName: "Día Sagrado", festivalDesc: "Dedicado al dios sol.", deity: "Ἀπόλλων", deityDesc: "Dios sol, protector de las artes." },
-    11: { festivalName: "Día Sagrado", festivalDesc: "Dedicado a la diosa de la estrategia.", deity: "Ἀθηνᾶ", deityDesc: "Diosa de la estrategia y las artes." },
+    // Maimakterion (Nov-Dec): Parke pp. 95-96. Zeus of storms (not king), propitiated in Maimakteria and Pompaia.
+    4: { festivalName: "Día Sagrado", festivalDesc: "Maimakteria: plegarias para propiciar a Zeus tormentoso; Pompaia (última decena): procesión purificatoria con el Dion Koidion —piel de oveja sagrada de Zeus— y el caduceo, dedicada a Zeus Meilichios.", deity: "Ζεύς", deityDesc: "Zeus dios de las tormentas invernales, invocado en las Maimakteria para aplacar su furia sobre el viento y el tiempo." },
+    // Poseideon (Dec-Jan): Parke pp. 97-103. Poseidon names the month; main festivals are Dionysiac (Haloa, Rural Dionysia).
+    5: { festivalName: "Día Sagrado", festivalDesc: "Mes de Poseidón, el de menor navegación del año; los festivales principales son la Haloa (día 26, Deméter y Dioniso en Eleusis) y las Dionisias Rurales en los demos del Ática.", deity: "Ποσειδῶν", deityDesc: "Poseidón preside el mes de menor navegación; las Dionisias Rurales inician el ciclo dionisíaco festivo del invierno." },
+    // Gamelion (Jan-Feb): Parke pp. 104-106. Hera as marriage goddess; the month name means 'month of weddings'. Lenaia (Dionysus day 12) also prominent.
+    6: { festivalName: "Día Sagrado", festivalDesc: "Mes nupcial por excelencia: el Hieros Gamos (día 26) celebra la boda sagrada de Zeus y Hera; la Lenaia (día 12) honra a Dioniso con concursos dramáticos en el Lenaion.", deity: "Ἥρα", deityDesc: "Hera diosa del matrimonio, cuyo nombre inspira el mes de las bodas (γάμος), humanas y divinas." },
+    // Anthesterion (Feb-Mar): Parke pp. 107-116. Dionysus correct; description must include funerary Chytroi aspect, not just wine.
+    7: { festivalName: "Día Sagrado", festivalDesc: "Antesteria (días 11–13): Pithoigia (primera cata del vino nuevo), Choes (procesión de Dioniso en carro-nave e Hieros Gamos de la Basilinna con el dios), Chutroi (ofrendas a los difuntos; día de mal agüero, santuarios cerrados).", deity: "Διόνυσος", deityDesc: "Dioniso preside el mes de las flores y los espíritus; su festival tripartito celebra el vino nuevo y honra a los muertos." },
+    // Elaphebolion (Mar-Apr): Parke pp. 125-136; Deubner pp. 138-142, 209-210. Dionysus dominates (City Dionysia days 9-13); Artemis etymological only (Elaphebolia already minor by classical period).
+    8: { festivalName: "Día Sagrado", festivalDesc: "Grandes Dionisias (días 9–13): pompe, sacrificio de bueyes y concursos trágicos y cómicos en honor de Dioniso Eleutereo; Elafebolia (Artemis): ofrendas de tortas con forma de ciervo; Pandia (Zeus) al cierre del mes.", deity: "Διόνυσος", deityDesc: "Dioniso Eleutereo domina el mes por las Grandes Dionisias, el mayor festival teatral de Atenas; Artemis le da su nombre etimológico por la Elafebolia." },
+    // Mounichion (Apr-May): Parke pp. 137-145; Deubner pp. 201-202, 204-207. Artemis Munichia (headland goddess, not moon goddess).
+    9: { festivalName: "Día Sagrado", festivalDesc: "Delfinia (día 6): procesión de doncellas suplicantes al Delfinio; Muniquia (día 16, luna llena): pompe con tortas encendidas (anfifones) y sacrificio de cabra a Artemis Muniquia en el Pireo; Olimpieia (día 19): Zeus Olímpico.", deity: "Ἄρτεμις", deityDesc: "Artemis Muniquia, venerada en su santuario sobre el promontorio del Pireo, preside los festivales centrales del mes." },
+    // Thargelion (May-Jun): Parke pp. 146-155; Deubner pp. 17-22, 179-198. Apollo as harvest/ancestral deity, NOT sun god. Month named after Thargelia.
+    10: { festivalName: "Día Sagrado", festivalDesc: "Targelia (días 6–7): purificación por farmakos y ofrenda de primicias de la cosecha a Apolo; Plinterias (día 25): baño ritual del xoanon de Atenea Polias en el mar; Bendidia (día 20): procesión nocturna con carrera de antorchas en honor de Bendis.", deity: "Ἀπόλλων", deityDesc: "Apolo dios de las primicias y dios patrio de las fratrías, cuya Targelia (días 6–7) da nombre al mes." },
+    // Skirophorion (Jun-Jul): Parke pp. 156-169; Deubner pp. 9-17, 40-50, 158-174. Both Athena and Demeter share the Skira rite; "goddess of strategy" has no basis here.
+    11: { festivalName: "Día Sagrado", festivalDesc: "Esquiras (día 12): procesión con parasol sagrado desde la Acrópolis hasta el Esquiro y rito femenino de Deméter en el Tesmoforion; Dipolias/Bufonia (día 14): sacrificio de buey a Zeus Polieo y juicio ritual del hacha.", deity: "Ἀθηνᾶ καὶ Δημήτηρ", deityDesc: "Atenea y Deméter comparten el mes de clausura del año: la Skira une sus ritos cívicos y agrarios; Zeus Polieo preside la arcaica Bufonia." },
   };
   return monthDeities[monthIndex] || { festivalName: "Día Sagrado", festivalDesc: "Dedicado al padre de los dioses.", deity: "Ζεύς", deityDesc: "Padre de los dioses." };
 };

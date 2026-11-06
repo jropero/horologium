@@ -167,3 +167,26 @@ Low priority to add but it is a real gap.
 - Deubner pp. 197–201: Apollo is the deity of the Pyanopsia; the bean-dish and Eiresione procession are "pre-Apolline in origin" but firmly Apolline by the classical period. Demeter (Proerosia day 5, Stenia day 9, Thesmophoria days 11–13) and Athena together far outweigh Apollo's single day.
 
 **Decision:** Apollo retained as patron because the month is named after his festival (Pyanopsia). Description updated to reference the Pyanopsia etymology and note Demeter's prominence across the month. Neither source assigns a single overall patron to the month.
+
+---
+
+## Full `getDefaultAtticDeity` review — all 12 months (2026-11-06)
+
+Sources: Parke (pp. cited below); Deubner could not be read by agent (file >100 MB) except for months 8–11 where it was accessible.
+
+| Month | Index | App deity (before) | Decision | Key source |
+|-------|-------|--------------------|----------|------------|
+| Hekatombaion | 0 | Ἀθηνᾶ | ✓ keep — Panathenaia (day 28) is Apollo's month peak | Parke pp. 29–50 |
+| Metageitnion | 1 | Ἀπόλλων | ✓ keep — etymological (Metageitnios cult); main festival is Heracleia (Heracles at Kynosarges) | Parke pp. 51–52 |
+| Boedromion | 2 | Δημήτηρ → **Ἀπόλλων** | ✗ wrong — patron is Apollo Boedromios (etymological); Eleusinian Mysteries of Demeter dominate calendar (days 15–20) but do not make Demeter the patron | Parke p. 53, pp. 55–72 |
+| Pyanepsion | 3 | Ἀπόλλων | ✓ keep (see entry above) | Parke pp. 73–94; Deubner pp. 197–201 |
+| Maimakterion | 4 | Ζεύς | ✓ keep — Zeus of storms (Maimakteria + Pompaia/Dion Koidion); "king of gods" label was misleading | Parke pp. 95–96 |
+| Poseideon | 5 | Ποσειδῶν | ✓ keep — month named after Poseidon; Haloa and Rural Dionysia dominate the actual festival calendar | Parke pp. 97–103 |
+| Gamelion | 6 | Ἥρα | ✓ keep — month of weddings (γάμος), Hieros Gamos day 26; Lenaia (Dionysus day 12) also prominent | Parke pp. 104–106 |
+| Anthesterion | 7 | Διόνυσος | ✓ keep — Anthesteria (days 11–13) is wine + flowers + dead; "god of wine" label omitted the funerary Chytroi | Parke pp. 107–116 |
+| Elaphebolion | 8 | Ἄρτεμις → **Διόνυσος** | ✗ wrong — City Dionysia (days 9–13) dominates; Elaphebolia (Artemis) was minor by classical period | Parke pp. 125–136; Deubner pp. 138–142, 209–210 |
+| Mounichion | 9 | Ἄρτεμις | ✓ keep — Artemis Munichia (headland goddess, not moon goddess); Delphinia (day 6) + Munichia (day 16) | Parke pp. 137–145; Deubner pp. 201–202, 204–207 |
+| Thargelion | 10 | Ἀπόλλων | ✓ keep — Thargelia (days 6–7) names the month; Apollo as harvest/ancestral deity, NOT sun god | Parke pp. 146–155; Deubner pp. 17–22, 179–198 |
+| Skirophorion | 11 | Ἀθηνᾶ → **Ἀθηνᾶ καὶ Δημήτηρ** | ✗ wrong label ("estrategia") — Skira (day 12) is a shared Athena + Demeter rite; Bouphonia (Zeus Polieo day 14) | Parke pp. 156–169; Deubner pp. 9–17, 40–50, 158–174 |
+
+**Changes applied:** months 2, 8, 11 had deity corrections; all 12 descriptions rewritten to cite specific festivals and day numbers.
