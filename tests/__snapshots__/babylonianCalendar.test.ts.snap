@@ -1,0 +1,82 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getBabylonianDate > date = 2024-04-01T12:00:00.000Z > snapshot matches 1`] = `
+{
+  "day": 21,
+  "dayProgress": 0.730780273442844,
+  "hourName": "Māšaltu tiš",
+  "hourNameEs": "Hora 9.ª",
+  "isDay": true,
+  "isIntercalary": true,
+  "monthIndex": 12,
+  "monthName": "Addaru II",
+  "monthRegent": "Anu y Enlil",
+  "monthRegentDesc": "Anu, señor del cielo, y Enlil, señor del aire y de la tierra, comparten la regencia del primer mes: el de la renovación del año y el retorno de la vida.",
+  "moonPhase": 0.7280822860776244,
+  "moonPhaseName": "Šalšu",
+  "moonPhaseNameEs": "Cuarto menguante",
+  "planetaryRuler": "Ninurta",
+  "planetaryRulerEn": "Saturn",
+  "planetaryRulerEs": "Saturno",
+  "seYear": 2334,
+  "temporalHour": 9,
+  "watch": 3,
+  "watchDesc": "Guardia del atardecer",
+  "watchName": "Maṣṣarti līlâti",
+  "zodiacSign": "Agru",
+}
+`;
+
+exports[`getBabylonianDate > date = 2024-07-15T12:00:00.000Z > snapshot matches 1`] = `
+{
+  "day": 8,
+  "dayProgress": 0.7033033429392902,
+  "hourName": "Māšaltu tiš",
+  "hourNameEs": "Hora 9.ª",
+  "isDay": true,
+  "isIntercalary": false,
+  "monthIndex": 3,
+  "monthName": "Duʾūzu",
+  "monthRegent": "Ninurta",
+  "monthRegentDesc": "Ninurta (Ninib), dios del arado y de la guerra victoriosa, vencedor del Anzû, rige el cuarto mes.",
+  "moonPhase": 0.29760574417651725,
+  "moonPhaseName": "Šupûtu",
+  "moonPhaseNameEs": "Gibosa creciente",
+  "planetaryRuler": "Ninurta",
+  "planetaryRulerEn": "Saturn",
+  "planetaryRulerEs": "Saturno",
+  "seYear": 2335,
+  "temporalHour": 9,
+  "watch": 3,
+  "watchDesc": "Guardia del atardecer",
+  "watchName": "Maṣṣarti līlâti",
+  "zodiacSign": "Pulukku",
+}
+`;
+
+exports[`getBabylonianDate > date = 2024-12-25T12:00:00.000Z > snapshot matches 1`] = `
+{
+  "day": 23,
+  "dayProgress": 0.7949683275989349,
+  "hourName": "Māšaltu eser",
+  "hourNameEs": "Hora 10.ª",
+  "isDay": true,
+  "isIntercalary": false,
+  "monthIndex": 8,
+  "monthName": "Kislīmu",
+  "monthRegent": "Nergal",
+  "monthRegentDesc": "Nergal, señor del Inframundo, de la peste y de la guerra, rige el noveno mes.",
+  "moonPhase": 0.8270364679578545,
+  "moonPhaseName": "Qīštu",
+  "moonPhaseNameEs": "Luna menguante",
+  "planetaryRuler": "Ninurta",
+  "planetaryRulerEn": "Saturn",
+  "planetaryRulerEs": "Saturno",
+  "seYear": 2335,
+  "temporalHour": 10,
+  "watch": 3,
+  "watchDesc": "Guardia del atardecer",
+  "watchName": "Maṣṣarti līlâti",
+  "zodiacSign": "Suḫurmāšu",
+}
+`;

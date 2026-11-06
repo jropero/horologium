@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getEgyptianDate > snapshot > full return object matches snapshot for 2024-09-15 1`] = `
+{
+  "alexandrianYear": 2024,
+  "dayOfMonth": 5,
+  "dayOfYear": 5,
+  "decade": 1,
+  "isEpagomenal": false,
+  "isLeapYear": false,
+  "monthHieroglyphs": "𓁟𓇳𓎛𓏏𓏤",
+  "monthIndex": 0,
+  "monthName": "Thoth",
+  "seasonHieroglyphic": "𓇗",
+  "seasonName": "Akhet",
+  "seasonTranslation": "Inundación",
+}
+`;
+
+exports[`getEgyptianDate > snapshot > full return object matches snapshot for epagomenal day 2024-09-10 1`] = `
+{
+  "alexandrianYear": 2023,
+  "dayOfMonth": 5,
+  "dayOfYear": 365,
+  "decade": 0,
+  "isEpagomenal": true,
+  "isLeapYear": false,
+  "monthHieroglyphs": "𓁷𓏤𓂋𓈖𓄿𓊪𓏏𓇳",
+  "monthIndex": -1,
+  "monthName": "Epagomenai",
+  "seasonHieroglyphic": "𓇳𓏤𓏤𓏤𓏤𓏤",
+  "seasonName": "Epagomenai",
+  "seasonTranslation": "Días sobre el año",
+}
+`;

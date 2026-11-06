@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getSunTimes > matches snapshot for summer solstice (Rome) 1`] = `
+{
+  "sunrise": 2024-06-21T03:35:00.038Z,
+  "sunset": 2024-06-21T18:48:48.962Z,
+}
+`;
+
+exports[`getSunTimes > matches snapshot for winter solstice (Rome) 1`] = `
+{
+  "sunrise": 2024-12-21T06:34:27.713Z,
+  "sunset": 2024-12-21T15:42:05.297Z,
+}
+`;

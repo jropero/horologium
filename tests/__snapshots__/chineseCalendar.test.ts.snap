@@ -1,0 +1,160 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Chinese lunisolar date > spring equinox 2024 lunisolar date snapshot 1`] = `
+{
+  "dayBranch": "未",
+  "dayBranchIndex": 7,
+  "dayName": "十一",
+  "dayNumber": 11,
+  "dayStem": "癸",
+  "dayStemBranch": "癸未",
+  "dayStemIndex": 9,
+  "displayDate": "甲辰年二月十一",
+  "isLeapMonth": false,
+  "isLeapYear": false,
+  "lunarNewYear": "2024-02-10",
+  "monthBranch": "卯",
+  "monthBranchIndex": 3,
+  "monthName": "二月",
+  "monthNumber": 2,
+  "monthStem": "丁",
+  "monthStemBranch": "丁卯",
+  "monthStemIndex": 3,
+  "year": 2024,
+  "yearAnimal": "龙",
+  "yearBranch": "辰",
+  "yearBranchIndex": 4,
+  "yearStem": "甲",
+  "yearStemBranch": "甲辰",
+  "yearStemIndex": 0,
+}
+`;
+
+exports[`Chinese lunisolar date > summer solstice 2024 lunisolar date snapshot 1`] = `
+{
+  "dayBranch": "辰",
+  "dayBranchIndex": 4,
+  "dayName": "十六",
+  "dayNumber": 16,
+  "dayStem": "丙",
+  "dayStemBranch": "丙辰",
+  "dayStemIndex": 2,
+  "displayDate": "甲辰年五月十六",
+  "isLeapMonth": false,
+  "isLeapYear": false,
+  "lunarNewYear": "2024-02-10",
+  "monthBranch": "午",
+  "monthBranchIndex": 6,
+  "monthName": "五月",
+  "monthNumber": 5,
+  "monthStem": "庚",
+  "monthStemBranch": "庚午",
+  "monthStemIndex": 6,
+  "year": 2024,
+  "yearAnimal": "龙",
+  "yearBranch": "辰",
+  "yearBranchIndex": 4,
+  "yearStem": "甲",
+  "yearStemBranch": "甲辰",
+  "yearStemIndex": 0,
+}
+`;
+
+exports[`Solar terms (jiéqì) — deterministic from solar longitude > spring equinox solar term snapshot 1`] = `
+{
+  "approximateDates": "20 de Marzo - 3 de Abril",
+  "customs": [
+    {
+      "description": "En el momento de perfecto equilibrio entre día y noche, se intenta sostener un huevo crudo de pie sobre su base, sin apoyo alguno. El juego es más difícil de lo que parece; lograrlo se interpreta como señal de armonía entre el yin y el yang del hogar.",
+      "icon": "🥚",
+      "title": "立蛋 Li Dan (Equilibrar el Huevo)",
+      "type": "Juego / Celebración",
+    },
+    {
+      "description": "Los vientos del equinoccio son los más constantes del año. La tradición manda volar la cometa tanto de día como de noche y, llegado el momento, cortar el hilo: la cometa asciende llevándose consigo las enfermedades y los malos augurios, lejos del alcance de la familia.",
+      "icon": "🪁",
+      "title": "放风筝 Fang Feng Zheng (Volar Cometas)",
+      "type": "Celebración de la Naturaleza",
+    },
+    {
+      "description": "En el equinoccio de primavera, el Hijo del Cielo ofrendaba al Sol en el Altar del Sol (日坛) de Pekín, acto simétrico al 祭月 del equinoccio otoñal. Frutas, vino e incienso ante el astro naciente sellaban la alianza entre el poder imperial y las fuerzas del cielo.",
+      "icon": "☀️",
+      "title": "祭日 Ji Ri (Sacrificio al Sol)",
+      "type": "Veneración",
+    },
+  ],
+  "hanzi": "春分",
+  "healthAdvice": "Equilibrio. No comer alimentos excesivamente fríos ni muy calientes.",
+  "id": 4,
+  "pentads": [
+    {
+      "description": "Xuanniao Zhi (玄鸟至): Las golondrinas regresan del sur.",
+      "id": 1,
+    },
+    {
+      "description": "Lei Nai Fasheng (雷乃发声): El trueno suena en el cielo.",
+      "id": 2,
+    },
+    {
+      "description": "Shidian (始电): Comienzan a aparecer los primeros relámpagos.",
+      "id": 3,
+    },
+  ],
+  "pinyin": "Chūnfēn",
+  "traditionalFoods": [
+    "Verduras de primavera (春菜)",
+    "Té de primavera recién recolectado",
+  ],
+  "translation": "Equinoccio de Primavera",
+}
+`;
+
+exports[`Solar terms (jiéqì) — deterministic from solar longitude > summer solstice solar term snapshot 1`] = `
+{
+  "approximateDates": "21 de Junio - 6 de Julio",
+  "customs": [
+    {
+      "description": "El día más largo del año se celebra con fideos elaborados del trigo recién cosechado, servidos fríos con pepino y salsa de sésamo. 'Comer fideos en el solsticio' es dicho popular en toda la China septentrional; el refresco de los fideos fríos compensa el yang extremo del día.",
+      "icon": "🍜",
+      "title": "吃面 Chi Mian (Comer Fideos de Verano)",
+      "type": "Tradición Culinaria",
+    },
+    {
+      "description": "Cuando el yang alcanza su cima, el equilibrio es frágil. Las ofrendas al Dios de la Tierra (土地神) y a los ancestros pedían que la abundancia del verano no atrajera plagas, inundaciones o sequías que arruinaran la cosecha antes de que pudiera ser recogida.",
+      "icon": "🕯️",
+      "title": "祭神祭祖 Ji Shen Ji Zu (Ofrendas al Cielo y los Ancestros)",
+      "type": "Veneración",
+    },
+    {
+      "description": "Regalar abanicos en el solsticio era gesto de cortesía refinada entre familias y amistades. El abanico lleva brisa al receptor; los saquitos de hierbas aromáticas adjuntos ahuyentan el calor y los insectos. Un regalo que es a la vez práctico y poético, como pide la etiqueta china.",
+      "icon": "🪭",
+      "title": "赠扇 Zeng Shan (Regalar Abanicos)",
+      "type": "Salud y Bienestar",
+    },
+  ],
+  "hanzi": "夏至",
+  "healthAdvice": "Yang al máximo. Acuéstate tarde y levántate temprano. Proteger el corazón.",
+  "id": 10,
+  "pentads": [
+    {
+      "description": "Lujiao Jie (鹿角解): Los ciervos se desprenden de sus cuernos.",
+      "id": 1,
+    },
+    {
+      "description": "Tiao Shi Ming (蜩始鸣): Las cigarras cantan fuertemente.",
+      "id": 2,
+    },
+    {
+      "description": "Banxia Sheng (半夏生): Nace la Pinellia.",
+      "id": 3,
+    },
+  ],
+  "pinyin": "Xiàzhì",
+  "traditionalFoods": [
+    "Fideos de trigo nuevo",
+    "Sopa de judías mungo (绿豆汤)",
+    "Lichi",
+  ],
+  "translation": "Solsticio de Verano",
+}
+`;
