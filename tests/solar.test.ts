@@ -6,6 +6,7 @@ import {
   getMoonPosition,
   getPlanetPosition,
   getSolarLongitudeDeg,
+  getTwilightTimes,
   kForJDE,
   trueNewMoonJDE,
   prevNewMoonJDE,
@@ -156,6 +157,86 @@ describe('getSolarLongitudeDeg', () => {
     const lon = getSolarLongitudeDeg(new Date('2024-12-21T09:21:00Z'));
     expect(lon).toBeGreaterThan(265);
     expect(lon).toBeLessThan(275);
+  });
+});
+
+describe('getTwilightTimes', () => {
+  const REYKJAVIK_LAT = 64.13;
+  const REYKJAVIK_LNG = -21.9;
+
+  it('returns four Date fields (non-null) for Rome on a winter date', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    expect(t.nauticalMorning).toBeInstanceOf(Date);
+    expect(t.civilMorning).toBeInstanceOf(Date);
+    expect(t.civilEvening).toBeInstanceOf(Date);
+    expect(t.nauticalEvening).toBeInstanceOf(Date);
+  });
+
+  it('morning order: nauticalMorning < civilMorning (Rome, Nov)', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    expect(t.nauticalMorning!.getTime()).toBeLessThan(t.civilMorning!.getTime());
+  });
+
+  it('evening order: civilEvening < nauticalEvening (Rome, Nov)', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    expect(t.civilEvening!.getTime()).toBeLessThan(t.nauticalEvening!.getTime());
+  });
+
+  it('civilMorning is before sunrise (Rome, Nov)', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    const { sunrise } = getSunTimes(date, ROME_LAT, ROME_LNG);
+    expect(t.civilMorning!.getTime()).toBeLessThan(sunrise.getTime());
+  });
+
+  it('civilEvening is after sunset (Rome, Nov)', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    const { sunset } = getSunTimes(date, ROME_LAT, ROME_LNG);
+    expect(t.civilEvening!.getTime()).toBeGreaterThan(sunset.getTime());
+  });
+
+  it('civil twilight duration is 15–60 min (Rome, Nov)', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    const { sunrise, sunset } = getSunTimes(date, ROME_LAT, ROME_LNG);
+    const morningMinutes = (sunrise.getTime() - t.civilMorning!.getTime()) / 60000;
+    const eveningMinutes = (t.civilEvening!.getTime() - sunset.getTime()) / 60000;
+    expect(morningMinutes).toBeGreaterThan(15);
+    expect(morningMinutes).toBeLessThan(60);
+    expect(eveningMinutes).toBeGreaterThan(15);
+    expect(eveningMinutes).toBeLessThan(60);
+  });
+
+  it('nautical twilight is longer than civil twilight (Reykjavik, Nov)', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t = getTwilightTimes(date, REYKJAVIK_LAT, REYKJAVIK_LNG);
+    const { sunrise } = getSunTimes(date, REYKJAVIK_LAT, REYKJAVIK_LNG);
+    const civilMorning = sunrise.getTime() - t.civilMorning!.getTime();
+    const nauticalMorning = sunrise.getTime() - t.nauticalMorning!.getTime();
+    expect(nauticalMorning).toBeGreaterThan(civilMorning);
+  });
+
+  it('returns null for civil crossings during midnight sun (Tromsø, Jun)', () => {
+    // Tromsø (69.6°N) is in midnight sun around June 21: sun stays above -6°
+    const TROMSO_LAT = 69.65;
+    const TROMSO_LNG = 18.96;
+    const date = new Date('2024-06-21T12:00:00Z');
+    const t = getTwilightTimes(date, TROMSO_LAT, TROMSO_LNG);
+    // During midnight sun the sun never crosses -6°; SearchAltitude returns null
+    expect(t.civilMorning).toBeNull();
+    expect(t.civilEvening).toBeNull();
+  });
+
+  it('caches: same date+location returns identical object reference', () => {
+    const date = new Date('2024-11-07T12:00:00Z');
+    const t1 = getTwilightTimes(date, ROME_LAT, ROME_LNG);
+    const t2 = getTwilightTimes(new Date('2024-11-07T18:00:00Z'), ROME_LAT, ROME_LNG);
+    // Same UTC day bucket → same cached result
+    expect(t1).toBe(t2);
   });
 });
 
