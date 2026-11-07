@@ -297,6 +297,7 @@ const AppContent: React.FC = () => {
           onUpdateLocation={handleUpdateLocation}
           currentLat={latitude}
           currentLng={longitude}
+          locationTimezone={locationTimezone}
           isTimeTraveling={isTimeTraveling}
         />
       );
@@ -439,7 +440,14 @@ const AppContent: React.FC = () => {
         <div className="w-full max-w-xl mx-auto mt-2 flex items-center justify-between gap-2 bg-amber-950/50 border border-amber-700/40 rounded-lg px-3 py-1.5 text-xs z-10">
           <span className="font-serif text-amber-400/90 truncate">
             ⏳{' '}
-            {modernTime.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+            {modernTime.toLocaleString(undefined, {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+              timeZone: locationTimezone,
+            })}
+            {locationTimezone !== Intl.DateTimeFormat().resolvedOptions().timeZone && (
+              <span className="ml-1 opacity-60 text-[10px]">({currentLocationName})</span>
+            )}
           </span>
           <div className="flex items-center gap-2 shrink-0">
             <button

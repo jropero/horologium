@@ -12,7 +12,7 @@ import { translateGreekUI } from '../utils/greekTranslations';
 import { OVID_ASTRONOMICAL_EVENTS } from '../utils/ovidFastiData';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
-import { getSunAltitude } from '../utils/solar';
+import { getSunAltitude, getTwilightTimes } from '../utils/solar';
 
 const lerpColor = (a: string, b: string, t: number): string => {
   const ah = parseInt(a.slice(1), 16);
@@ -39,6 +39,7 @@ interface RomanClockProps {
   onUpdateLocation: (lat: number, lng: number) => void;
   currentLat: number;
   currentLng: number;
+  locationTimezone: string;
   isTimeTraveling?: boolean;
 }
 
@@ -51,6 +52,7 @@ function RomanClock({
   onUpdateLocation,
   currentLat,
   currentLng,
+  locationTimezone,
   isTimeTraveling = false,
 }: RomanClockProps) {
   const { civilization, labels } = useCivilization();
@@ -106,6 +108,39 @@ function RomanClock({
 
   // Stars fade in/out across civil twilight band: 0 at horizon, 1 at -6°
   const starOpacity = sunAltitude > 0 ? 0 : Math.max(0, Math.min(1, -sunAltitude / 6));
+
+  const calendarDay = Math.floor(modernTime.getTime() / 86400000);
+  const twilightTimes = useMemo(
+    () => getTwilightTimes(modernTime, currentLat, currentLng),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [calendarDay, currentLat, currentLng],
+  );
+
+  // Civil and nautical twilight windows, shown whenever sun is below horizon within nautical band
+  const twilightInfo = useMemo(() => {
+    if (romanTime.isDay || sunAltitude <= -12 || sunAltitude > 0) return null;
+    const isMorning = modernTime < romanTime.sunrise;
+    const fmt = (d: Date | null) =>
+      d
+        ? d.toLocaleTimeString(undefined, {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            timeZone: locationTimezone,
+          })
+        : null;
+
+    return {
+      civil: {
+        start: fmt(isMorning ? twilightTimes.civilMorning : romanTime.sunset),
+        end: fmt(isMorning ? romanTime.sunrise : twilightTimes.civilEvening),
+      },
+      nautical: {
+        start: fmt(isMorning ? twilightTimes.nauticalMorning : twilightTimes.civilEvening),
+        end: fmt(isMorning ? twilightTimes.civilMorning : twilightTimes.nauticalEvening),
+      },
+    };
+  }, [romanTime, modernTime, sunAltitude, twilightTimes, locationTimezone]);
 
   const progressPercent = useMemo(() => {
     if (!romanTime) return 0;
@@ -219,14 +254,34 @@ function RomanClock({
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const getSkyGradient = () => {
     if (weatherCond === 'fog') {
-      return romanTime.isDay
-        ? 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)'
-        : 'linear-gradient(to bottom, #1f2937 0%, #374151 100%)';
+      if (romanTime.isDay)
+        return 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)';
+      if (sunAltitude > -18) {
+        const warmth = Math.max(0, Math.min(1, 1 + sunAltitude / 6));
+        const dim = Math.max(0, Math.min(1, 1 + sunAltitude / 18));
+        const base = Math.max(warmth, dim * 0.5);
+        return `linear-gradient(to bottom, ${lerpColor(
+          '#1f2937',
+          '#374151',
+          1 - base,
+        )} 0%, ${lerpColor('#1f2937', '#6b7280', base * 0.4)} 100%)`;
+      }
+      return 'linear-gradient(to bottom, #1f2937 0%, #374151 100%)';
     }
     if (weatherCond === 'snow') {
-      return romanTime.isDay
-        ? 'linear-gradient(to bottom, #6b7280 0%, #9ca3af 40%, #e5e7eb 100%)'
-        : 'linear-gradient(to bottom, #111827 0%, #1f2937 60%, #374151 100%)';
+      if (romanTime.isDay)
+        return 'linear-gradient(to bottom, #6b7280 0%, #9ca3af 40%, #e5e7eb 100%)';
+      if (sunAltitude > -18) {
+        const warmth = Math.max(0, Math.min(1, 1 + sunAltitude / 6));
+        const dim = Math.max(0, Math.min(1, 1 + sunAltitude / 18));
+        const base = Math.max(warmth, dim * 0.5);
+        return `linear-gradient(to bottom, ${lerpColor(
+          '#111827',
+          '#1f2937',
+          1 - base,
+        )} 0%, ${lerpColor('#1f2937', '#6b7280', base * 0.5)} 60%, #374151 100%)`;
+      }
+      return 'linear-gradient(to bottom, #111827 0%, #1f2937 60%, #374151 100%)';
     }
     if (romanTime.isDay) {
       if (progressPercent < 0.15) {
@@ -245,12 +300,13 @@ function RomanClock({
       }
       return 'linear-gradient(to bottom, #4a90e2 0%, #87ceeb 60%, var(--parchment) 100%)';
     }
-    // Civil twilight: sun between 0° and -6° below horizon
-    // warmth=1 just after sunset, warmth=0 at civil twilight end
-    if (sunAltitude > -6) {
+    // Twilight: cover civil (-6°), nautical (-12°), and astronomical (-18°) bands.
+    // warmth drives amber/gold (civil only); dim drives the blue glow through all bands.
+    if (sunAltitude > -18) {
       const warmth = Math.max(0, Math.min(1, 1 + sunAltitude / 6));
-      const c1 = lerpColor('#060d1c', '#1b2f6e', warmth);
-      const c2 = lerpColor('#0d1117', '#3730a3', warmth);
+      const dim = Math.max(0, Math.min(1, 1 + sunAltitude / 18));
+      const c1 = lerpColor('#060d1c', '#1b2f6e', Math.max(warmth, dim * 0.5));
+      const c2 = lerpColor('#0d1117', '#3730a3', Math.max(warmth * 0.9, dim * 0.4));
       const c3 = lerpColor('#0d1117', '#b45309', warmth);
       const c4 = lerpColor('#0a1020', '#d97706', warmth);
       return `linear-gradient(to bottom, ${c1} 0%, ${c2} 35%, ${c3} 65%, ${c4} 100%)`;
@@ -817,8 +873,12 @@ function RomanClock({
                     Ortus Solis
                   </div>
                   <div className="font-serif font-bold text-ink text-sm">
-                    {String(romanTime.sunrise.getHours()).padStart(2, '0')}:
-                    {String(romanTime.sunrise.getMinutes()).padStart(2, '0')}
+                    {romanTime.sunrise.toLocaleTimeString(undefined, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                      timeZone: locationTimezone,
+                    })}
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-0.5 border-x border-ink/10 px-1">
@@ -836,11 +896,33 @@ function RomanClock({
                     Occasus Solis
                   </div>
                   <div className="font-serif font-bold text-ink text-sm">
-                    {String(romanTime.sunset.getHours()).padStart(2, '0')}:
-                    {String(romanTime.sunset.getMinutes()).padStart(2, '0')}
+                    {romanTime.sunset.toLocaleTimeString(undefined, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                      timeZone: locationTimezone,
+                    })}
                   </div>
                 </div>
               </div>
+
+              {twilightInfo && (
+                <div className="w-full border-t border-ink/10 mt-2 pt-2 flex flex-col gap-1">
+                  {[
+                    { label: 'Crepusculum civile', ...twilightInfo.civil },
+                    { label: 'Crepusculum nauticum', ...twilightInfo.nautical },
+                  ].map(({ label, start, end }) => (
+                    <div key={label} className="flex items-center justify-center gap-3">
+                      <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim w-40 text-right">
+                        {label}
+                      </div>
+                      <div className="font-serif text-ink text-xs">
+                        {start} → {end}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

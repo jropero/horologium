@@ -2,6 +2,7 @@ import {
   MoonPhase,
   SearchMoonPhase,
   SearchRiseSet,
+  SearchAltitude,
   SunPosition,
   Seasons,
   Body,
@@ -99,6 +100,45 @@ export const getSunAltitude = (date: Date, lat: number, lng: number): number => 
   } catch {
     return -90;
   }
+};
+
+export interface TwilightTimes {
+  civilMorning: Date | null; // sun crosses -6° rising (morning civil start)
+  nauticalMorning: Date | null; // sun crosses -12° rising (nautical civil start)
+  civilEvening: Date | null; // sun crosses -6° setting (civil end)
+  nauticalEvening: Date | null; // sun crosses -12° setting (nautical end)
+}
+
+const _twilightCache = new Map<string, TwilightTimes>();
+const _TWILIGHT_CACHE_MAX = 32;
+
+export const getTwilightTimes = (date: Date, lat: number, lng: number): TwilightTimes => {
+  const dayKey = `${Math.floor(date.getTime() / 86400000)}-${lat.toFixed(3)}-${lng.toFixed(3)}`;
+  return boundedMemo(_twilightCache, dayKey, _TWILIGHT_CACHE_MAX, () => {
+    try {
+      const observer = new Observer(lat, lng, 0);
+      // Start search from midnight UTC of this calendar day (device-local date)
+      const d = new Date(date);
+      const startOfDay = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const noon = new Date(startOfDay.getTime() + 12 * 3600000);
+
+      const toDate = (r: { date: Date } | null) => (r ? new Date(r.date) : null);
+
+      return {
+        nauticalMorning: toDate(SearchAltitude(Body.Sun, observer, +1, startOfDay, 1, -12)),
+        civilMorning: toDate(SearchAltitude(Body.Sun, observer, +1, startOfDay, 1, -6)),
+        civilEvening: toDate(SearchAltitude(Body.Sun, observer, -1, noon, 1, -6)),
+        nauticalEvening: toDate(SearchAltitude(Body.Sun, observer, -1, noon, 1, -12)),
+      };
+    } catch {
+      return {
+        civilMorning: null,
+        nauticalMorning: null,
+        civilEvening: null,
+        nauticalEvening: null,
+      };
+    }
+  });
 };
 
 export const getMoonPosition = (
