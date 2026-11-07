@@ -556,10 +556,6 @@ const AppContent: React.FC = () => {
             </div>
           )}
 
-          {civilization !== 'zhongguo' && civilization === 'rome' ? (
-            <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
-          ) : null}
-
           {civilization !== 'zhongguo' &&
             civilization !== 'babylonia' &&
             todaysSunTimes &&
@@ -577,6 +573,9 @@ const AppContent: React.FC = () => {
         {/* RIGHT COLUMN — supplementary content */}
         <div className="flex flex-col gap-4 mt-4 lg:mt-0">
           {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
+          {civilization !== 'zhongguo' && civilization === 'rome' ? (
+            <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
+          ) : null}
           {hourPanel}
           {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
           {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
