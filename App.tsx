@@ -567,6 +567,7 @@ const AppContent: React.FC = () => {
                 timezone={locationTimezone}
               />
             )}
+          {hourPanel}
         </div>
         {/* end LEFT COLUMN */}
 
@@ -576,7 +577,6 @@ const AppContent: React.FC = () => {
           {civilization !== 'zhongguo' && civilization === 'rome' ? (
             <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
           ) : null}
-          {hourPanel}
           {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
           {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
             <OvidianLore modernTime={modernTime} />
