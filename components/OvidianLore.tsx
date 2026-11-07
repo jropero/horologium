@@ -68,7 +68,7 @@ const OvidianLore: React.FC<OvidianLoreProps> = ({ modernTime }) => {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-6 mb-2 animate-fadeIn">
+    <div className="w-full max-w-none mx-auto mt-6 mb-2 animate-fadeIn">
       <div className="flex flex-col gap-4 w-full items-center p-6 bg-ink/80 backdrop-blur-sm border border-gold-dim/30 rounded-xl shadow-lg relative overflow-hidden">
         <div className="absolute inset-0 bg-stone-900/40 pointer-events-none"></div>
 

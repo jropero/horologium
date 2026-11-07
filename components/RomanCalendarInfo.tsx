@@ -391,7 +391,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
         'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]';
 
     return (
-      <div className="w-full max-w-md mx-auto mt-6 mb-6">
+      <div className="w-full max-w-none mx-auto mt-6 mb-6">
         <div
           role="button"
           tabIndex={0}
