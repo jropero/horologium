@@ -10,7 +10,7 @@ npm run build    # TypeScript compile + Vite build → dist/
 npm run preview  # Preview the production build locally
 ```
 
-There are no lint or test scripts. `scripts/buildRomanRoads.ts` regenerates the bundled Roman roads (see "Roman roads layer"). Verification scripts in the root (`verify_moon.ts`, `verify_descriptions.ts`, `verify_translation.ts`) can be run with `npx tsx <file>` for ad-hoc checks.
+Unit tests live in `tests/solar.test.ts` (Vitest, `npx vitest run`). There are no lint scripts. `scripts/buildRomanRoads.ts` regenerates the bundled Roman roads (see "Roman roads layer"). Verification scripts in the root (`verify_moon.ts`, `verify_descriptions.ts`, `verify_translation.ts`) can be run with `npx tsx <file>` for ad-hoc checks.
 
 ### Android (Capacitor)
 
@@ -231,7 +231,11 @@ The active civilization (`rome` | `hellas` | `aegyptus` | `babylonia` | `zhonggu
 
 ### Astronomical core
 
-`utils/solar.ts` wraps `astronomy-engine` (sunrise/sunset via `SearchRiseSet`, moon phase via `MoonPhase`, conjunctions via `SearchMoonPhase`, equinoxes/solstices via `Seasons`). All `*TimeUtils` files depend on `getSunTimes` and `getMoonPhase` from this module. `getSunTimes(date)` takes the device-local Y/M/D of `date` but places the day window at the observer's mean solar midnight, so a device in a far-away timezone still gets exactly one sunrise and one sunset per day.
+`utils/solar.ts` wraps `astronomy-engine` (sunrise/sunset via `SearchRiseSet`, moon phase via `MoonPhase`, conjunctions via `SearchMoonPhase`, equinoxes/solstices via `Seasons`, twilight crossings via `SearchAltitude`). All `*TimeUtils` files depend on `getSunTimes` and `getMoonPhase` from this module. `getSunTimes(date)` takes the device-local Y/M/D of `date` but places the day window at the observer's mean solar midnight, so a device in a far-away timezone still gets exactly one sunrise and one sunset per day.
+
+`getTwilightTimes(date, lat, lng)` returns `{ civilMorning, nauticalMorning, civilEvening, nauticalEvening }` — the UTC moments when the sun crosses -6° (civil) and -12° (nautical) on a given calendar day. Any field is `null` during polar phenomena (midnight sun / polar night). Results are cached per UTC day × coordinates. Used by `RomanClock` to draw the sky gradient across the full three-band twilight window (-18° → 0°) and to display the crepusculum schedule in the info bar.
+
+`RomanClockProps` includes `locationTimezone: string` (IANA timezone of the selected location). Ortus/Occasus Solis and the time-travel banner both format times in this timezone so values match the observer's local clock regardless of device timezone.
 
 **Day boundaries and planetary hours (all civilizations).** Planetary hours run continuously in Chaldean order and the planetary day begins at sunrise: night hours (also those after midnight) belong to the weekday of the preceding daylight. The weekday is taken at the observer's mean local solar time from the sunrise/sunset that opened the current 12-hour period, never from `now.getDay()`.
 
