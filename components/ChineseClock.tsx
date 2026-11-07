@@ -54,7 +54,7 @@ const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime, weather }) => {
   const getTermIndex = (termId: number) => termId - 1;
 
   return (
-    <div className="flex flex-col items-center px-4 pb-24 text-parchment w-full max-w-lg mx-auto">
+    <div className="flex flex-col items-center px-4 text-parchment w-full max-w-none mx-auto">
       {/* 1. Término solar */}
       <div className="w-full bg-ink/90 border border-gold-leaf/30 rounded-lg p-6 text-center shadow-xl mb-8">
         <div className="text-gold-leaf font-serif text-sm uppercase tracking-[0.3em] mb-3">

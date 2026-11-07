@@ -70,7 +70,7 @@ const EgyptianClock: React.FC<EgyptianClockProps> = ({
 
   return (
     <div
-      className="w-full max-w-2xl mx-auto shadow-2xl animate-fadeIn"
+      className="w-full max-w-none mx-auto shadow-2xl animate-fadeIn"
       style={{
         background: '#0c0804',
         border: '4px solid rgba(24,64,160,0.55)',
