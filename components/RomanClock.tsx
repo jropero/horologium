@@ -255,7 +255,7 @@ function RomanClock({
   const getSkyGradient = () => {
     if (weatherCond === 'fog') {
       if (romanTime.isDay)
-        return 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)';
+        return 'linear-gradient(to bottom, #8aabcc 0%, #c5d8e4 55%, #e5e7eb 100%)';
       if (sunAltitude > -18) {
         const warmth = Math.max(0, Math.min(1, 1 + sunAltitude / 6));
         const dim = Math.max(0, Math.min(1, 1 + sunAltitude / 18));
@@ -391,6 +391,17 @@ function RomanClock({
 
             {weatherCond === 'storm' && (
               <div className="absolute inset-0 bg-white opacity-0 anim-lightning pointer-events-none z-10" />
+            )}
+
+            {weatherCond === 'fog' && !romanTime.isDay && (
+              <div
+                className="absolute inset-x-0 bottom-0 pointer-events-none"
+                style={{
+                  top: '57.5%',
+                  background:
+                    'linear-gradient(to bottom, transparent 0%, rgba(209,213,219,0.60) 40%, rgba(229,231,235,0.81) 100%)',
+                }}
+              />
             )}
 
             <div className="absolute inset-0 flex items-center justify-center">

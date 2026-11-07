@@ -163,21 +163,6 @@ const WeatherSvgEffects: React.FC<Props> = ({
 
           {condition === 'fog' && (
             <g>
-              <defs>
-                <linearGradient id={fogGradientId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#d1d5db" stopOpacity="0" />
-                  <stop offset="40%" stopColor="#d1d5db" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#e5e7eb" stopOpacity="0.95" />
-                </linearGradient>
-              </defs>
-              <rect
-                x="-10"
-                y="115"
-                width="320"
-                height="90"
-                fill={`url(#${fogGradientId})`}
-                opacity="0.85"
-              />
               <ellipse
                 cx="70"
                 cy="105"
