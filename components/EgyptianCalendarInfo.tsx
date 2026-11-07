@@ -930,7 +930,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
   return (
     <>
       <div
-        className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2 cursor-pointer"
+        className="w-full max-w-none mx-auto mt-6 mb-6 px-2 cursor-pointer"
         role="button"
         tabIndex={0}
         onClick={onClick}

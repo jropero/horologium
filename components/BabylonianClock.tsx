@@ -255,7 +255,7 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
 
   return (
     <>
-      <div className="w-full max-w-2xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
+      <div className="w-full max-w-none mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
         {/* Top Bar */}
         <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-blue-500/30 bg-ink">
           {weather && (

@@ -427,7 +427,7 @@ const AppContent: React.FC = () => {
         )}
       </div>
 
-      <header className="text-center relative z-10 w-full max-w-xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
+      <header className="text-center relative z-10 w-full max-w-xl lg:max-w-4xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
         <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
           {labels.appTitle}{' '}
           <span className="text-gold-dim font-normal text-xl md:text-2xl">
@@ -437,7 +437,7 @@ const AppContent: React.FC = () => {
       </header>
 
       {isTimeTraveling && (
-        <div className="w-full max-w-xl mx-auto mt-2 flex items-center justify-between gap-2 bg-amber-950/50 border border-amber-700/40 rounded-lg px-3 py-1.5 text-xs z-10">
+        <div className="w-full max-w-xl lg:max-w-4xl mx-auto mt-2 flex items-center justify-between gap-2 bg-amber-950/50 border border-amber-700/40 rounded-lg px-3 py-1.5 text-xs z-10">
           <span className="font-serif text-amber-400/90 truncate">
             ⏳{' '}
             {modernTime.toLocaleString(undefined, {
@@ -467,61 +467,154 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {civilization !== 'zhongguo' && civilization === 'hellas' && (
-        <HellenicCalendarInfo
-          atticDate={romanTimeData?.atticDate}
-          weather={effectiveWeather}
-          currentLat={latitude}
-          currentLng={longitude}
-          currentDate={modernTime}
-        />
-      )}
-      {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
-        <Suspense fallback={null}>
-          <EgyptianCalendarInfo
-            currentDate={modernTime}
-            lat={latitude}
-            lng={longitude}
-            weather={effectiveWeather}
-          />
-        </Suspense>
-      )}
+      {/* Two-column zone — left: clock area, right: supplementary + controls */}
+      <div className="w-full lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
+        {/* LEFT COLUMN — CalendarInfo + Clock + RomanCalendarInfo + SolarTimes */}
+        <div className="flex flex-col items-center lg:items-stretch">
+          {civilization !== 'zhongguo' && civilization === 'hellas' && (
+            <HellenicCalendarInfo
+              atticDate={romanTimeData?.atticDate}
+              weather={effectiveWeather}
+              currentLat={latitude}
+              currentLng={longitude}
+              currentDate={modernTime}
+            />
+          )}
+          {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
+            <Suspense fallback={null}>
+              <EgyptianCalendarInfo
+                currentDate={modernTime}
+                lat={latitude}
+                lng={longitude}
+                weather={effectiveWeather}
+              />
+            </Suspense>
+          )}
+          {civilization !== 'zhongguo' && civilization === 'babylonia' && (
+            <Suspense fallback={null}>
+              <BabylonianCalendarInfo
+                currentDate={modernTime}
+                weather={effectiveWeather}
+                currentLat={latitude}
+                currentLng={longitude}
+              />
+            </Suspense>
+          )}
 
-      {civilization !== 'zhongguo' && civilization === 'babylonia' && (
-        <Suspense fallback={null}>
-          <BabylonianCalendarInfo
-            currentDate={modernTime}
-            weather={effectiveWeather}
-            currentLat={latitude}
-            currentLng={longitude}
-          />
-        </Suspense>
-      )}
+          {clockComponent && (
+            <div className="w-full mx-auto max-w-2xl lg:max-w-none">
+              <Suspense fallback={null}>{clockComponent}</Suspense>
+            </div>
+          )}
 
-      {clockComponent && (
-        <div className="w-full max-w-2xl mx-auto">
-          <Suspense fallback={null}>{clockComponent}</Suspense>
+          {civilization !== 'zhongguo' && civilization === 'rome' ? (
+            <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
+          ) : null}
+
+          {civilization !== 'zhongguo' &&
+            civilization !== 'babylonia' &&
+            todaysSunTimes &&
+            romanTimeData && (
+              <SolarTimes
+                sunrise={todaysSunTimes.sunrise}
+                sunset={todaysSunTimes.sunset}
+                currentHourLength={romanTimeData.hourLengthMinutes}
+                timezone={locationTimezone}
+              />
+            )}
         </div>
-      )}
+        {/* end LEFT COLUMN */}
 
-      {civilization !== 'zhongguo' && civilization === 'rome' ? (
-        <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
-      ) : null}
+        {/* RIGHT COLUMN — desktop control panel + supplementary content */}
+        <div className="flex flex-col gap-4 mt-4 lg:mt-0">
+          {/* Desktop control panel — ONLY visible at lg+, hidden on mobile */}
+          <div className="hidden lg:flex flex-col bg-ink/50 border border-gold-dim/20 rounded-xl overflow-hidden">
+            <button
+              onClick={() => setIsLocationModalOpen(true)}
+              className="flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 transition-colors w-full"
+            >
+              <MapPin className="w-4 h-4 shrink-0 text-gold-dim/70" />
+              <span className="flex flex-col min-w-0">
+                {menuHeading('Locus', BABYLONIAN_UI_TERMS.place)}
+                <span className="font-serif text-xs text-parchment/90 truncate">
+                  {currentLocationName}
+                </span>
+              </span>
+            </button>
+            <button
+              onClick={() => setIsCustomWeatherOpen(true)}
+              className="flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 transition-colors w-full"
+            >
+              <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
+              <span className="flex flex-col min-w-0">
+                {menuHeading('Caelum', BABYLONIAN_UI_TERMS.sky)}
+                <span
+                  className={`font-serif text-xs truncate ${
+                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
+                  }`}
+                >
+                  {customWeatherLabel(customWeather)}
+                </span>
+              </span>
+            </button>
+            <button
+              onClick={() => {
+                toggleAurora();
+              }}
+              aria-pressed={customWeather.aurora}
+              className="flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 transition-colors w-full"
+            >
+              <Sparkles
+                className={`w-4 h-4 shrink-0 ${
+                  customWeather.aurora ? 'text-emerald-300' : 'text-gold-dim/70'
+                }`}
+              />
+              <span className="flex flex-col min-w-0">
+                {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
+                <span
+                  className={`font-serif text-xs truncate ${
+                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
+                  }`}
+                >
+                  {customWeather.aurora ? 'Activada' : 'Desactivada'}
+                </span>
+              </span>
+            </button>
+            <button
+              onClick={openTravelModal}
+              className="flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gold-leaf/10 transition-colors w-full"
+            >
+              <Hourglass
+                className={`w-4 h-4 shrink-0 ${
+                  isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'
+                }`}
+              />
+              <span className="flex flex-col min-w-0">
+                {menuHeading('Tempus', BABYLONIAN_UI_TERMS.day)}
+                <span
+                  className={`font-serif text-xs truncate ${
+                    isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'
+                  }`}
+                >
+                  {isTimeTraveling ? 'Viajando' : 'Fecha actual'}
+                </span>
+              </span>
+            </button>
+          </div>
 
-      {civilization !== 'zhongguo' &&
-        civilization !== 'babylonia' &&
-        todaysSunTimes &&
-        romanTimeData && (
-          <SolarTimes
-            sunrise={todaysSunTimes.sunrise}
-            sunset={todaysSunTimes.sunset}
-            currentHourLength={romanTimeData.hourLengthMinutes}
-            timezone={locationTimezone}
-          />
-        )}
+          {hourPanel}
 
-      {hourPanel}
+          {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
+          {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
+          {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+            <OvidianLore modernTime={modernTime} />
+          )}
+        </div>
+        {/* end RIGHT COLUMN */}
+      </div>
+      {/* end two-column grid */}
 
+      {/* FULL-WIDTH items below both columns */}
       {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
         <ProvinciaInfo
           latitude={latitude}
@@ -531,33 +624,29 @@ const AppContent: React.FC = () => {
         />
       )}
 
-      {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
-
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
-
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
-        <OvidianLore modernTime={modernTime} />
-      )}
-
       {civilization === 'rome' && (
         <EclipseForecast currentDate={modernTime} latitude={latitude} longitude={longitude} />
       )}
 
       {civilization !== 'zhongguo' && (
-        <Controls
-          latitude={latitude}
-          longitude={longitude}
-          onUpdateLocation={handleUpdateLocation}
-          onRefreshTime={() => setModernTime(new Date())}
-        />
+        <div className="lg:hidden w-full">
+          <Controls
+            latitude={latitude}
+            longitude={longitude}
+            onUpdateLocation={handleUpdateLocation}
+            onRefreshTime={() => setModernTime(new Date())}
+          />
+        </div>
       )}
 
       {civilization !== 'zhongguo' && (
-        <LocationSelector
-          onUpdateLocation={handleUpdateLocation}
-          currentLat={latitude}
-          currentLng={longitude}
-        />
+        <div className="lg:hidden w-full">
+          <LocationSelector
+            onUpdateLocation={handleUpdateLocation}
+            currentLat={latitude}
+            currentLng={longitude}
+          />
+        </div>
       )}
 
       <InfoSection />

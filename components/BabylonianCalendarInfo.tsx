@@ -1029,7 +1029,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   })();
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2">
+    <div className="w-full max-w-none mx-auto mt-6 mb-6 px-2">
       <div className="bg-ink/90 border-[4px] border-blue-600/60 p-0 rounded-sm shadow-2xl relative overflow-hidden hover:border-blue-400 transition-colors">
         <CuneiformBorder id="cun-top" />
 
