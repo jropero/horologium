@@ -41,7 +41,7 @@ const SortesVergilianae: React.FC = () => {
   const hasSors = currentSors || currentDiosemeia || currentAegyptiaca;
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-6 px-4 animate-fadeIn">
+    <div className="w-full max-w-none mx-auto mt-6 px-4 animate-fadeIn">
       <div
         className={`border overflow-hidden shadow-2xl relative group ${
           civilization === 'aegyptus'
