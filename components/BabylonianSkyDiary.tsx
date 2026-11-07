@@ -239,7 +239,7 @@ const BabylonianSkyDiary: React.FC<Props> = ({ currentDate, lat, lng }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto mt-6 mb-2">
+    <div className="w-full max-w-none mx-auto mt-6 mb-2">
       <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
         <div className="flex items-center justify-center gap-3 mb-3">
           <div className="h-px flex-1 bg-gold-dim/20" />

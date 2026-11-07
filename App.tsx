@@ -467,7 +467,56 @@ const AppContent: React.FC = () => {
         </div>
       )}
 
-      {/* Two-column zone — left: clock area, right: supplementary + controls */}
+      {/* Desktop control toolbar — compact pill buttons, hidden on mobile */}
+      <div className="hidden lg:flex justify-center gap-2 py-2 w-full max-w-7xl mx-auto flex-wrap">
+        <button
+          onClick={() => setIsLocationModalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm text-parchment/80 border border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10 transition-all"
+        >
+          <MapPin className="w-3.5 h-3.5 text-gold-dim/60" />
+          {currentLocationName}
+        </button>
+        <button
+          onClick={() => setIsCustomWeatherOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm text-parchment/80 border border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10 transition-all"
+        >
+          <CloudSun className="w-3.5 h-3.5 text-gold-dim/60" />
+          <span className={customWeather.aurora ? 'text-emerald-300' : ''}>
+            {customWeatherLabel(customWeather)}
+          </span>
+        </button>
+        <button
+          onClick={toggleAurora}
+          aria-pressed={customWeather.aurora}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm border transition-all ${
+            customWeather.aurora
+              ? 'text-emerald-300 border-emerald-700/40 hover:bg-emerald-900/20'
+              : 'text-parchment/80 border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10'
+          }`}
+        >
+          <Sparkles
+            className={`w-3.5 h-3.5 ${
+              customWeather.aurora ? 'text-emerald-400' : 'text-gold-dim/60'
+            }`}
+          />
+          Aurora
+        </button>
+        <button
+          onClick={openTravelModal}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm border transition-all ${
+            isTimeTraveling
+              ? 'text-amber-400 border-amber-700/40 hover:bg-amber-950/30'
+              : 'text-parchment/80 border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10'
+          }`}
+        >
+          <Hourglass
+            className={`w-3.5 h-3.5 ${isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/60'}`}
+          />
+          {isTimeTraveling ? 'Viajando' : 'Tempus'}
+        </button>
+      </div>
+
+      {/* Two-column zone — left: clock area, right: supplementary content */}
       <div className="w-full lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
         {/* LEFT COLUMN — CalendarInfo + Clock + RomanCalendarInfo + SolarTimes */}
         <div className="flex flex-col items-center lg:items-stretch">
@@ -525,86 +574,10 @@ const AppContent: React.FC = () => {
         </div>
         {/* end LEFT COLUMN */}
 
-        {/* RIGHT COLUMN — desktop control panel + supplementary content */}
+        {/* RIGHT COLUMN — supplementary content */}
         <div className="flex flex-col gap-4 mt-4 lg:mt-0">
-          {/* Desktop control panel — ONLY visible at lg+, hidden on mobile */}
-          <div className="hidden lg:flex flex-col bg-ink/50 border border-gold-dim/20 rounded-xl overflow-hidden">
-            <button
-              onClick={() => setIsLocationModalOpen(true)}
-              className="flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 transition-colors w-full"
-            >
-              <MapPin className="w-4 h-4 shrink-0 text-gold-dim/70" />
-              <span className="flex flex-col min-w-0">
-                {menuHeading('Locus', BABYLONIAN_UI_TERMS.place)}
-                <span className="font-serif text-xs text-parchment/90 truncate">
-                  {currentLocationName}
-                </span>
-              </span>
-            </button>
-            <button
-              onClick={() => setIsCustomWeatherOpen(true)}
-              className="flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 transition-colors w-full"
-            >
-              <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
-              <span className="flex flex-col min-w-0">
-                {menuHeading('Caelum', BABYLONIAN_UI_TERMS.sky)}
-                <span
-                  className={`font-serif text-xs truncate ${
-                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
-                  }`}
-                >
-                  {customWeatherLabel(customWeather)}
-                </span>
-              </span>
-            </button>
-            <button
-              onClick={() => {
-                toggleAurora();
-              }}
-              aria-pressed={customWeather.aurora}
-              className="flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 transition-colors w-full"
-            >
-              <Sparkles
-                className={`w-4 h-4 shrink-0 ${
-                  customWeather.aurora ? 'text-emerald-300' : 'text-gold-dim/70'
-                }`}
-              />
-              <span className="flex flex-col min-w-0">
-                {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
-                <span
-                  className={`font-serif text-xs truncate ${
-                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
-                  }`}
-                >
-                  {customWeather.aurora ? 'Activada' : 'Desactivada'}
-                </span>
-              </span>
-            </button>
-            <button
-              onClick={openTravelModal}
-              className="flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gold-leaf/10 transition-colors w-full"
-            >
-              <Hourglass
-                className={`w-4 h-4 shrink-0 ${
-                  isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'
-                }`}
-              />
-              <span className="flex flex-col min-w-0">
-                {menuHeading('Tempus', BABYLONIAN_UI_TERMS.day)}
-                <span
-                  className={`font-serif text-xs truncate ${
-                    isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'
-                  }`}
-                >
-                  {isTimeTraveling ? 'Viajando' : 'Fecha actual'}
-                </span>
-              </span>
-            </button>
-          </div>
-
-          {hourPanel}
-
           {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
+          {hourPanel}
           {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
           {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
             <OvidianLore modernTime={modernTime} />

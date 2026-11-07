@@ -684,7 +684,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto mt-6 mb-2 flex flex-col gap-4">
+    <div className="w-full max-w-none mx-auto mt-6 mb-2 flex flex-col gap-4">
       {/* ── Parapegma ────────────────────────────────────────────── */}
       {(civilization === 'rome' || civilization === 'hellas') && (
         <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">

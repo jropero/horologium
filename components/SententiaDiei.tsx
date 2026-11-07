@@ -81,7 +81,7 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   if (!quoteText) return null;
 
   return (
-    <div className="w-full max-w-2xl mx-auto my-6 px-4">
+    <div className="w-full max-w-none mx-auto my-6 px-4">
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         onClick={handleRandomize}
