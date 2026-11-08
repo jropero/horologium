@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import './GreekDaysList.css';
 import { getAtticDateForDisplay } from '../utils/atticCalendarUtils';
 import {
   getAtticFestivalInfo,
@@ -47,12 +48,10 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
   }, [startDate, lat, lng]);
 
   return (
-    <div className="w-full flex flex-col">
-      <div className="font-serif text-xs uppercase tracking-widest text-sky-400 flex items-center justify-center gap-3 border-y border-sky-700/30 py-2 bg-ink/20">
-        {labels.calendarSubtitle}
-      </div>
+    <div className="greek-days-list">
+      <div className="greek-days-list__subtitle">{labels.calendarSubtitle}</div>
 
-      <div className="flex flex-col">
+      <div className="greek-days-list__days">
         {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
         {nextDays.map((day, idx) => {
           const isToday = idx === 0;
@@ -65,50 +64,42 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
           const isNewMonth =
             idx > 0 && day.atticDate.monthName !== nextDays[idx - 1].atticDate.monthName;
 
-          let rowClass: string;
+          let rowModifier: string;
           if (isToday) {
-            rowClass = 'bg-gold-leaf/10 border-l-4 border-l-gold-leaf';
+            rowModifier = 'greek-days-list__day-row--today';
           } else if (isSacredDay) {
-            rowClass = 'bg-amber-950/20 border-l-4 border-l-amber-500/50';
+            rowModifier = 'greek-days-list__day-row--sacred';
           } else if (hasFestival) {
-            rowClass = 'bg-sky-950/20 border-l-4 border-l-sky-400/60';
+            rowModifier = 'greek-days-list__day-row--festival';
           } else {
-            rowClass = 'border-l-4 border-l-transparent hover:bg-white/[0.02]';
+            rowModifier = 'greek-days-list__day-row--plain';
           }
 
           return (
             <React.Fragment key={idx}>
               {/* Month boundary marker */}
               {isNewMonth && (
-                <div className="flex items-center gap-4 px-2 py-4 bg-sky-950/40 border-y border-sky-400/20">
-                  <div className="h-px flex-1 bg-sky-400/30" />
-                  <span className="text-sky-400 font-serif text-sm font-black uppercase tracking-[0.3em]">
+                <div className="greek-days-list__month-boundary">
+                  <div className="greek-days-list__month-boundary-line" />
+                  <span className="greek-days-list__month-boundary-name">
                     {day.atticDate.monthName} — {transliterateGreek(day.atticDate.monthName)}
                   </span>
-                  <div className="h-px flex-1 bg-sky-400/30" />
+                  <div className="greek-days-list__month-boundary-line" />
                 </div>
               )}
 
-              <div
-                className={`flex items-start gap-4 px-1 py-5 border-b border-gold-dim/10 transition-all text-left ${rowClass}`}
-              >
+              <div className={`greek-days-list__day-row ${rowModifier}`}>
                 {/* LEFT: Day number + moon */}
-                <div className="flex flex-col items-center w-14 shrink-0 pt-1">
-                  <span
-                    className={`font-serif text-2xl font-black leading-none ${
-                      isToday ? 'text-gold-leaf' : 'text-parchment/80'
-                    }`}
-                  >
+                <div className="greek-days-list__day-num">
+                  <span className="greek-days-list__day-numeral">
                     {day.atticDate.dayOfMonth}
                   </span>
-                  <span className="text-xl mt-1">{moonEmoji(day.moonPhase)}</span>
+                  <span className="greek-days-list__moon">{moonEmoji(day.moonPhase)}</span>
                   {isToday && (
-                    <span className="text-[8px] text-gold-leaf font-bold uppercase tracking-widest mt-2 bg-gold-leaf/20 px-1.5 py-0.5 rounded border border-gold-leaf/30">
-                      {labels.todayLabel}
-                    </span>
+                    <span className="greek-days-list__today-badge">{labels.todayLabel}</span>
                   )}
                   {isSacredDay && !isToday && (
-                    <span className="text-[7px] text-amber-500/80 font-bold uppercase tracking-widest mt-2 border border-amber-500/30 px-1 py-0.5 rounded leading-none text-center">
+                    <span className="greek-days-list__sacred-badge">
                       Día
                       <br />
                       Sagrado
@@ -117,87 +108,65 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
                 </div>
 
                 {/* RIGHT: Day info */}
-                <div className="flex-1 min-w-0">
+                <div className="greek-days-list__day-info">
                   {/* Day name (Attic) */}
-                  <div className="flex items-baseline gap-3 flex-wrap">
-                    <h3
-                      className={`font-serif text-lg sm:text-xl font-bold leading-tight ${
-                        isToday ? 'text-parchment' : 'text-parchment/90'
-                      }`}
-                    >
-                      {day.atticDate.short}
-                    </h3>
-                    <span className="text-gold-dim font-body text-xs sm:text-sm italic">
+                  <div className="greek-days-list__day-heading">
+                    <h3 className="greek-days-list__day-title">{day.atticDate.short}</h3>
+                    <span className="greek-days-list__day-subtitle">
                       {day.atticDate.spanishShort}
                     </span>
                   </div>
 
                   {/* Deity line - MORE PROMINENT */}
                   <div
-                    className={`mt-2 p-3 rounded border transition-all ${
-                      isSacredDay
-                        ? 'bg-amber-950/30 border-amber-500/30 shadow-[inset_0_0_10px_rgba(245,158,11,0.1)]'
-                        : 'bg-white/5 border-white/10'
+                    className={`greek-days-list__deity-box${
+                      isSacredDay ? ' greek-days-list__deity-box--sacred' : ''
                     }`}
                   >
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-gold-dim text-[10px] uppercase tracking-widest font-black">
-                        Θεός:
-                      </span>
-                      <span
-                        className={`font-serif text-base sm:text-lg font-black tracking-wide ${
-                          isSacredDay ? 'text-gold-leaf' : 'text-parchment'
-                        }`}
-                      >
-                        {deity}
-                      </span>
-                      <span className="text-gold-dim/50 text-xs font-serif">
+                    <div className="greek-days-list__deity-row">
+                      <span className="greek-days-list__deity-label">Θεός:</span>
+                      <span className="greek-days-list__deity-name">{deity}</span>
+                      <span className="greek-days-list__deity-translit">
                         ({transliterateGreek(deity)})
                       </span>
                     </div>
-                    <div className="text-sky-400 font-serif text-sm font-bold italic mt-1 flex items-center gap-2">
-                      <span className="w-4 h-px bg-sky-400/30" />
+                    <div className="greek-days-list__deity-translation">
+                      <span className="greek-days-list__deity-sep" />
                       {translateGreekUI(deity)}
                     </div>
 
                     {/* Deity description */}
                     {deityDesc && (
-                      <p
-                        className={`font-serif text-xs sm:text-sm italic mt-2 leading-relaxed ${
-                          isSacredDay ? 'text-parchment/90' : 'text-parchment/60'
-                        }`}
-                      >
-                        &quot;{deityDesc}&quot;
-                      </p>
+                      <p className="greek-days-list__deity-desc">&quot;{deityDesc}&quot;</p>
                     )}
                   </div>
 
                   {/* ═══ FESTIVAL BLOCK ═══ */}
                   {hasFestival && (
-                    <div className="mt-3 p-4 bg-sky-950/40 border border-sky-400/40 rounded-lg shadow-lg">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-2xl text-sky-400 drop-shadow-glow">🏛️</span>
-                        <span className="text-sky-300 font-serif text-base sm:text-lg font-black uppercase tracking-widest">
+                    <div className="greek-days-list__festival">
+                      <div className="greek-days-list__festival-header">
+                        <span className="greek-days-list__festival-icon">🏛️</span>
+                        <span className="greek-days-list__festival-title">
                           {day.festival!.festivalName}
                         </span>
                       </div>
 
                       {/* Festival day name */}
                       {day.festival!.festivalDayName && (
-                        <span className="text-sky-400/80 font-serif text-xs font-black uppercase tracking-[0.2em] block mb-2 border-l-2 border-sky-400/40 pl-3">
+                        <span className="greek-days-list__festival-day-name">
                           {day.festival!.festivalDayName}
                         </span>
                       )}
 
                       {/* Tags row: category + apaphrades */}
-                      <div className="flex flex-wrap gap-2 mb-3">
+                      <div className="greek-days-list__festival-tags">
                         {day.festival!.category && (
-                          <span className="px-2 py-1 bg-ink/60 border border-gold-dim/40 text-gold-dim font-serif text-[10px] uppercase tracking-widest rounded shadow-sm">
+                          <span className="greek-days-list__festival-tag">
                             {day.festival!.category}
                           </span>
                         )}
                         {day.festival!.isApaphrades && (
-                          <span className="px-2 py-1 bg-rose-900/40 border border-rose-500/50 text-rose-300 font-serif text-[10px] uppercase tracking-widest rounded shadow-sm animate-pulse">
+                          <span className="greek-days-list__festival-apaphrades">
                             🏺 Día Tabú (Apaphrades)
                           </span>
                         )}
@@ -205,47 +174,51 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
 
                       {/* Festival description */}
                       {day.festival!.festivalDesc && (
-                        <p className="font-serif text-sm sm:text-base text-parchment/80 italic leading-relaxed bg-white/5 p-3 rounded border border-white/5">
+                        <p className="greek-days-list__festival-desc">
                           &quot;{day.festival!.festivalDesc}&quot;
                         </p>
                       )}
 
                       {/* Compact festival extras */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 text-xs font-serif">
+                      <div className="greek-days-list__festival-extras">
                         {day.festival!.ritualOffering && (
-                          <div className="flex items-center gap-2 p-2 bg-amber-950/20 border border-amber-500/20 rounded">
-                            <span className="text-xl">{day.festival!.ritualOffering.icon}</span>
-                            <div className="flex flex-col">
-                              <span className="text-[9px] uppercase font-bold text-amber-500/60">
+                          <div className="greek-days-list__festival-extra greek-days-list__festival-extra--offering">
+                            <span className="greek-days-list__festival-extra-icon">
+                              {day.festival!.ritualOffering.icon}
+                            </span>
+                            <div className="greek-days-list__festival-extra-content">
+                              <span className="greek-days-list__festival-extra-label">
                                 Ofrenda
                               </span>
-                              <span className="text-amber-100/80">
+                              <span className="greek-days-list__festival-extra-text">
                                 {day.festival!.ritualOffering.item}
                               </span>
                             </div>
                           </div>
                         )}
                         {day.festival!.pannychisDesc && (
-                          <div className="flex items-center gap-2 p-2 bg-indigo-950/20 border border-indigo-500/20 rounded">
-                            <span className="text-xl animate-pulse">🕯️</span>
-                            <div className="flex flex-col">
-                              <span className="text-[9px] uppercase font-bold text-indigo-400/60">
+                          <div className="greek-days-list__festival-extra greek-days-list__festival-extra--vigil">
+                            <span className="greek-days-list__festival-extra-icon greek-days-list__festival-extra-icon--pulse">
+                              🕯️
+                            </span>
+                            <div className="greek-days-list__festival-extra-content">
+                              <span className="greek-days-list__festival-extra-label">
                                 Vigilia
                               </span>
-                              <span className="text-indigo-100/80">
+                              <span className="greek-days-list__festival-extra-text">
                                 {day.festival!.pannychisDesc}
                               </span>
                             </div>
                           </div>
                         )}
                         {day.festival!.agonDesc && (
-                          <div className="flex items-center gap-2 p-2 bg-emerald-950/20 border border-emerald-500/20 rounded">
-                            <span className="text-xl">🌿</span>
-                            <div className="flex flex-col">
-                              <span className="text-[9px] uppercase font-bold text-emerald-400/60">
+                          <div className="greek-days-list__festival-extra greek-days-list__festival-extra--agon">
+                            <span className="greek-days-list__festival-extra-icon">🌿</span>
+                            <div className="greek-days-list__festival-extra-content">
+                              <span className="greek-days-list__festival-extra-label">
                                 Competición
                               </span>
-                              <span className="text-emerald-100/80">
+                              <span className="greek-days-list__festival-extra-text">
                                 {day.festival!.agonDesc}
                               </span>
                             </div>
@@ -255,9 +228,11 @@ const GreekDaysList: React.FC<GreekDaysListProps> = ({ startDate, lat, lng }) =>
 
                       {/* Aition */}
                       {day.festival!.aition && (
-                        <div className="mt-4 pt-3 border-t border-sky-400/20 text-xs font-serif text-stone-400 italic flex gap-2 items-start">
-                          <span className="text-base">📜</span>
-                          <span className="leading-relaxed">{day.festival!.aition}</span>
+                        <div className="greek-days-list__festival-aition">
+                          <span className="greek-days-list__festival-aition-icon">📜</span>
+                          <span className="greek-days-list__festival-aition-text">
+                            {day.festival!.aition}
+                          </span>
                         </div>
                       )}
                     </div>
