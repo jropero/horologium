@@ -403,22 +403,22 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
           </text>
           <text
             x={CX}
-            y={CY + 9}
+            y={CY + 11}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#9ca3af"
-            fontSize={7}
+            fontSize={12}
             fontFamily="sans-serif"
           >
             {activeTerm?.pinyin}
           </text>
           <text
             x={CX}
-            y={CY + 20}
+            y={CY + 27}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#6b7280"
-            fontSize={6}
+            fontSize={12}
             fontFamily="sans-serif"
           >
             {activeTerm?.translation}
