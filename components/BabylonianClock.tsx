@@ -105,7 +105,7 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
             className="babylonian-calendar-modal-close"
             aria-label="Cerrar"
           >
-            <X className="w-5 h-5" />
+            <X />
           </button>
           <div className="babylonian-calendar-modal-dingir">𒀭</div>
           <h2 className="babylonian-calendar-modal-title">{babDate.monthName}</h2>

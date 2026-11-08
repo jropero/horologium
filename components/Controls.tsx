@@ -77,7 +77,7 @@ const Controls: React.FC<ControlsProps> = ({
               <label className="controls-label">
                 <MapPin className="controls-label-pin" />
                 {civilization === 'babylonia' ? (
-                  <GlossedTerm term={BAB.latitude} align="start" className="text-sm" />
+                  <GlossedTerm term={BAB.latitude} align="start" className="controls-gloss" />
                 ) : (
                   'Latitudo'
                 )}
@@ -93,7 +93,7 @@ const Controls: React.FC<ControlsProps> = ({
               <label className="controls-label">
                 <MapPin className="controls-label-pin" />
                 {civilization === 'babylonia' ? (
-                  <GlossedTerm term={BAB.longitude} align="start" className="text-sm" />
+                  <GlossedTerm term={BAB.longitude} align="start" className="controls-gloss" />
                 ) : (
                   'Longitudo'
                 )}

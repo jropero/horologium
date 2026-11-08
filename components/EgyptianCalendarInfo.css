@@ -1905,3 +1905,13 @@
   bottom: 4rem;
   right: 0.5rem;
 }
+
+.eci-icon--emerald {
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.eci-icon--amber {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
