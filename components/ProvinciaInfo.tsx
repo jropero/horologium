@@ -6,6 +6,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
+import './ProvinciaInfo.css';
 import { createPortal } from 'react-dom';
 import { MapPin, Milestone, X } from 'lucide-react';
 import {
@@ -134,16 +135,10 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-6 px-2 animate-fadeIn">
+    <div className="provincia-info animate-fadeIn">
       <div
-        className={`border p-6 shadow-2xl flex flex-col sm:flex-row gap-6 items-stretch relative overflow-hidden group ${
-          civilization === 'aegyptus'
-            ? ''
-            : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md'
-        } ${
-          canOpenMap
-            ? 'cursor-pointer hover:border-gold-leaf/60 transition-colors focus-visible:outline-2 focus-visible:outline-gold-leaf'
-            : ''
+        className={`pi-card${civilization !== 'aegyptus' ? ' pi-card--default' : ''}${
+          canOpenMap ? ' pi-card--clickable' : ''
         }`}
         style={
           civilization === 'aegyptus'
@@ -168,59 +163,45 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({
           },
         })}
       >
-        {civilization !== 'aegyptus' && (
-          <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
-        )}
+        {civilization !== 'aegyptus' && <div className="pi-hatch woodcut-hatch"></div>}
 
         {/* Provincia / Region */}
-        <div className="flex-1 flex items-start gap-3 sm:border-r sm:border-gold-dim/20 sm:pr-4 z-10">
-          <div className="p-2 bg-white/5 rounded-full mt-1">
-            <MapPin className="w-5 h-5 text-gold-leaf" />
+        <div className="pi-province">
+          <div className="pi-icon-wrap">
+            <MapPin className="pi-icon" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-serif text-xs md:text-sm uppercase tracking-[0.3em] text-gold-dim/80 mb-1">
-              {labels.regionTitle}
-            </span>
+          <div className="pi-text-stack">
+            <span className="pi-section-label">{labels.regionTitle}</span>
             {regionName ? (
               <>
-                <span className="font-serif text-xl md:text-2xl text-parchment font-bold leading-tight drop-shadow-sm">
-                  {regionName}
-                </span>
-                <span className="font-body text-lg text-parchment/60 italic leading-snug mt-1">
-                  {regionDesc}
-                </span>
+                <span className="pi-region-name">{regionName}</span>
+                <span className="pi-region-desc">{regionDesc}</span>
               </>
             ) : (
               <>
-                <span className="font-serif text-xl text-parchment/50 italic">
-                  {labels.regionFallback}
-                </span>
-                <span className="font-body text-lg text-parchment/40 italic">
-                  {labels.regionFallbackDesc}
-                </span>
+                <span className="pi-region-fallback">{labels.regionFallback}</span>
+                <span className="pi-region-fallback-desc">{labels.regionFallbackDesc}</span>
               </>
             )}
           </div>
         </div>
 
         {/* Miliarium / Stadia */}
-        <div className="flex items-start gap-3 sm:pl-2 border-t sm:border-t-0 border-gold-dim/20 pt-4 sm:pt-0 z-10">
-          <div className="p-2 bg-white/5 rounded-full mt-1">
-            <Milestone className="w-5 h-5 text-gold-leaf" />
+        <div className="pi-distance">
+          <div className="pi-icon-wrap">
+            <Milestone className="pi-icon" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-serif text-xs md:text-sm uppercase tracking-[0.3em] text-gold-dim/80 mb-1">
-              {labels.distanceTitle}
-            </span>
+          <div className="pi-text-stack">
+            <span className="pi-section-label">{labels.distanceTitle}</span>
             {distanceDisplay && (
               <>
-                <span className="font-serif text-xl md:text-2xl text-parchment font-bold leading-tight drop-shadow-sm">
+                <span className="pi-distance-value">
                   {distanceDisplay.value} {labels.distanceUnit}
                 </span>
-                <span className="font-body text-lg text-parchment/60 italic leading-snug mt-1">
+                <span className="pi-distance-detail">
                   {distanceDisplay.detail}
                   <br />
-                  <span className="text-sm opacity-60">
+                  <span className="pi-distance-km">
                     ({distanceDisplay.km.toLocaleString()} km)
                   </span>
                 </span>
@@ -234,7 +215,7 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({
         createPortal(
           // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
           <div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-ink/85 overflow-y-auto overscroll-contain animate-fadeIn"
+            className="pi-modal-overlay animate-fadeIn"
             role="dialog"
             aria-modal="true"
             aria-label="Mapa del Imperio Romano"
@@ -242,27 +223,23 @@ const ProvinciaInfo: React.FC<ProvinciaInfoProps> = ({
               if (e.target === e.currentTarget) setMapOpen(false);
             }}
           >
-            <div className="w-full max-w-6xl flex flex-col gap-2">
-              <div className="flex items-center justify-between px-1">
-                <span className="font-serif text-sm md:text-base uppercase tracking-[0.3em] text-gold-leaf">
-                  Imperium Romanum
-                </span>
+            <div className="pi-modal-inner">
+              <div className="pi-modal-header">
+                <span className="pi-modal-title">Imperium Romanum</span>
                 <button
                   type="button"
                   onClick={() => setMapOpen(false)}
-                  className="w-9 h-9 flex items-center justify-center rounded-full text-parchment/70 hover:text-gold-leaf hover:bg-white/5"
+                  className="pi-modal-close"
                   aria-label="Cerrar el mapa"
                   // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                 >
-                  <X className="w-5 h-5" />
+                  <X className="pi-modal-close-icon" />
                 </button>
               </div>
               <Suspense
                 fallback={
-                  <div className="font-body italic text-lg text-parchment/70 text-center py-24">
-                    Desplegando el mapa del Imperio…
-                  </div>
+                  <div className="pi-modal-fallback">Desplegando el mapa del Imperio…</div>
                 }
               >
                 <RomanMapCanvas

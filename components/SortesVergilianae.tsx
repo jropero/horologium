@@ -4,6 +4,7 @@ import { getRandomSors, SorsVergiliana } from '../utils/sortesVergilianae';
 import { getRandomDiosemeia, Diosemeia } from '../utils/diosemeiaData';
 import { EGYPTIAN_WISDOM, EgyptianWisdom } from '../utils/egyptianWisdomData';
 import { useCivilization } from '../contexts/CivilizationContext';
+import './SortesVergilianae.css';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const SortesVergilianae: React.FC = () => {
@@ -41,13 +42,9 @@ const SortesVergilianae: React.FC = () => {
   const hasSors = currentSors || currentDiosemeia || currentAegyptiaca;
 
   return (
-    <div className="w-full max-w-none mx-auto mt-6 px-4 animate-fadeIn">
+    <div className="sortes-vergilianae animate-fadeIn">
       <div
-        className={`border overflow-hidden shadow-2xl relative group ${
-          civilization === 'aegyptus'
-            ? ''
-            : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md'
-        }`}
+        className={`sv-card${civilization !== 'aegyptus' ? ' sv-card--default' : ''}`}
         style={
           civilization === 'aegyptus'
             ? {
@@ -58,140 +55,92 @@ const SortesVergilianae: React.FC = () => {
             : undefined
         }
       >
-        {civilization !== 'aegyptus' && (
-          <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
-        )}
+        {civilization !== 'aegyptus' && <div className="sv-hatch woodcut-hatch"></div>}
 
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gold-dim/20 bg-white/5 relative z-10">
-          <div className="flex items-center gap-3">
-            <BookOpen className="w-5 h-5 text-gold-leaf" />
-            <span className="font-serif text-sm md:text-base uppercase tracking-[0.3em] text-gold-leaf font-bold">
-              {labels.oracleTitle}
-            </span>
+        <div className="sv-header">
+          <div className="sv-header-left">
+            <BookOpen />
+            <span className="sv-header-title">{labels.oracleTitle}</span>
           </div>
-          <span className="font-body text-sm md:text-base text-parchment/40 italic">
-            {labels.oracleSubtitle}
-          </span>
+          <span className="sv-header-subtitle">{labels.oracleSubtitle}</span>
         </div>
 
         {/* Oracle content */}
-        <div className="p-8 flex flex-col items-center gap-6 min-h-[180px] justify-center relative z-10">
+        <div className="sv-content">
           {/* Revealed verse — Roman */}
           {currentSors && !isRevealing && (
-            <div className="text-center animate-fadeIn">
-              <blockquote className="font-body text-parchment text-2xl md:text-4xl italic leading-relaxed mb-4 drop-shadow-glow">
-                «{currentSors.latin}»
-              </blockquote>
-              <div className="w-1/4 h-px bg-gold-dim/30 mx-auto mb-4"></div>
-              <p className="font-serif italic text-lg md:text-xl text-parchment/70 mb-4 leading-relaxed">
-                {currentSors.spanish}
-              </p>
-              <cite className="font-serif text-sm md:text-base uppercase tracking-[0.2em] text-gold-dim/80 not-italic font-bold">
-                — {currentSors.source} —
-              </cite>
+            <div className="sv-roman-verse animate-fadeIn">
+              <blockquote className="sv-blockquote">«{currentSors.latin}»</blockquote>
+              <div className="sv-divider"></div>
+              <p className="sv-translation">{currentSors.spanish}</p>
+              <cite className="sv-source">— {currentSors.source} —</cite>
             </div>
           )}
 
           {/* Revealed omen — Greek (Diosemeia) */}
           {currentDiosemeia && !isRevealing && (
-            <div className="text-center animate-fadeIn flex flex-col gap-4 relative w-full max-w-lg mx-auto bg-ink/40 p-6 md:p-8 rounded-xl border border-sky-400/30 shadow-[inset_0_0_20px_rgba(56,189,248,0.05)]">
+            <div className="sv-greek-omen animate-fadeIn">
               {/* Esquinas ornamentales */}
-              <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-sky-400/50"></div>
-              <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-sky-400/50"></div>
-              <div className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-sky-400/50"></div>
-              <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-sky-400/50"></div>
+              <div className="sv-omen-corner sv-omen-corner--tl"></div>
+              <div className="sv-omen-corner sv-omen-corner--tr"></div>
+              <div className="sv-omen-corner sv-omen-corner--bl"></div>
+              <div className="sv-omen-corner sv-omen-corner--br"></div>
 
-              <div className="flex flex-col items-center justify-center gap-1 mb-2">
-                <span className="text-3xl animate-pulse filter drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]">
-                  🌩️
-                </span>
-                <span className="font-serif text-sm md:text-base uppercase tracking-[0.3em] font-bold text-sky-400 mt-2">
-                  Diosemeia
-                </span>
-                <span className="font-serif text-[10px] uppercase tracking-widest text-sky-400/60">
-                  (Señal Divina)
-                </span>
+              <div className="sv-omen-header">
+                <span className="sv-omen-icon animate-pulse">🌩️</span>
+                <span className="sv-omen-label">Diosemeia</span>
+                <span className="sv-omen-sublabel">(Señal Divina)</span>
               </div>
 
-              <div className="relative">
-                <span className="absolute -left-2 -top-2 text-3xl text-sky-400/20 font-serif">
-                  «
-                </span>
-                <p className="font-serif italic text-base md:text-lg text-parchment leading-relaxed text-left border-l-2 border-sky-500/50 pl-4 py-1 z-10 relative">
-                  {currentDiosemeia.event}
-                </p>
+              <div className="sv-omen-quote-wrapper">
+                <span className="sv-omen-quote-mark">«</span>
+                <p className="sv-omen-event">{currentDiosemeia.event}</p>
               </div>
 
-              <div className="w-1/3 h-px bg-gradient-to-r from-transparent via-sky-400/40 to-transparent mx-auto my-2"></div>
+              <div className="sv-omen-sky-divider"></div>
 
-              <div className="bg-roman-red/10 border border-roman-red/20 rounded p-3">
-                <span className="font-serif text-[10px] uppercase tracking-[0.2em] font-bold text-roman-red/80 block mb-1">
-                  Pronóstico del Oráculo:
-                </span>
-                <p className="font-body font-black text-sm md:text-base text-roman-red uppercase tracking-wide">
-                  {currentDiosemeia.meaning}
-                </p>
+              <div className="sv-omen-meaning">
+                <span className="sv-omen-meaning-label">Pronóstico del Oráculo:</span>
+                <p className="sv-omen-meaning-text">{currentDiosemeia.meaning}</p>
               </div>
 
-              <cite className="font-serif text-xs md:text-sm text-stone-500 mt-2">
-                — {currentDiosemeia.source} —
-              </cite>
+              <cite className="sv-omen-source">— {currentDiosemeia.source} —</cite>
             </div>
           )}
 
           {/* Revealed verse — Egyptian */}
           {currentAegyptiaca && !isRevealing && (
-            <div className="text-center animate-fadeIn flex flex-col gap-2 relative">
-              <blockquote className="font-body text-parchment text-2xl md:text-4xl italic leading-relaxed mb-4 drop-shadow-glow">
-                «{currentAegyptiaca.text}»
-              </blockquote>
-              <div className="w-1/4 h-px bg-emerald-600/30 mx-auto mb-4"></div>
-              <cite className="font-serif text-sm md:text-base uppercase tracking-[0.2em] text-gold-dim/80 not-italic font-bold">
-                — {currentAegyptiaca.author} —
-              </cite>
-              <p className="font-serif italic text-sm md:text-base text-parchment/50 mt-1 leading-relaxed">
-                ({currentAegyptiaca.source})
-              </p>
+            <div className="sv-egyptian-verse animate-fadeIn">
+              <blockquote className="sv-blockquote">«{currentAegyptiaca.text}»</blockquote>
+              <div className="sv-egyptian-divider"></div>
+              <cite className="sv-source">— {currentAegyptiaca.author} —</cite>
+              <p className="sv-egyptian-note">({currentAegyptiaca.source})</p>
             </div>
           )}
 
           {/* Loading state */}
           {isRevealing && (
-            <div className="text-center py-4">
-              <Sparkles className="w-10 h-10 text-gold-leaf animate-spin mx-auto mb-4" />
-              <span className="font-serif text-lg uppercase tracking-[0.3em] text-gold-dim font-bold animate-pulse">
-                {labels.oracleConsulting}
-              </span>
+            <div className="sv-loading">
+              <Sparkles className="animate-spin" />
+              <span className="sv-loading-text animate-pulse">{labels.oracleConsulting}</span>
             </div>
           )}
 
           {/* Initial state */}
           {!hasSors && !isRevealing && (
-            <div className="text-center max-w-sm flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-full border border-gold-dim/20 flex items-center justify-center bg-white/5">
-                <BookOpen className="w-8 h-8 text-gold-dim opacity-30" />
+            <div className="sv-initial">
+              <div className="sv-book-circle">
+                <BookOpen />
               </div>
-              <p className="font-body text-lg md:text-xl text-parchment/40 italic">
-                {labels.oraclePrompt}
-              </p>
+              <p className="sv-prompt">{labels.oraclePrompt}</p>
             </div>
           )}
 
           {/* Consult button */}
-          <button
-            onClick={handleConsult}
-            disabled={isRevealing}
-            className="
-              group relative px-8 py-3 mt-4 font-serif text-lg uppercase tracking-[0.3em]
-              text-parchment border border-gold-dim/50 rounded-lg
-              bg-white/5 hover:bg-gold-dim/20 hover:border-gold-leaf
-              transition-all duration-500 active:scale-95
-              disabled:opacity-50 disabled:cursor-wait shadow-lg
-            "
-          >
-            <span className="flex items-center gap-3">
-              <BookOpen className="w-5 h-5 text-gold-dim group-hover:text-gold-leaf transition-colors" />
+          <button onClick={handleConsult} disabled={isRevealing} className="sv-consult-btn">
+            <span className="sv-consult-btn-inner">
+              <BookOpen className="sv-consult-icon" />
               {hasConsulted ? labels.oracleConsultAgain : labels.oracleOpenBook}
             </span>
           </button>

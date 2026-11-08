@@ -1,0 +1,1661 @@
+/* ─── RomanCalendarInfo & RomanDayGrid ──────────────────────────────────────── */
+
+/* ── Day Grid ─────────────────────────────────────────────────────────────── */
+
+.roman-day-grid {
+  margin-top: 1rem;
+  width: 100%;
+
+  .rdg-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .rdg-divider {
+    height: 1px;
+    flex: 1;
+    background-color: color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  }
+
+  .rdg-title {
+    color: var(--gold-dim);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-family: Cinzel, serif;
+  }
+
+  .rdg-panels {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.375rem;
+    width: 100%;
+  }
+
+  .rdg-panel {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    background-color: color-mix(in srgb, var(--ink) 30%, transparent);
+    transition: all 500ms ease;
+    position: relative;
+    overflow: hidden;
+
+    &.rdg-panel--active {
+      border-color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+      background-color: rgb(69 26 3 / 20%);
+      box-shadow: 0 0 15px rgb(212 175 55 / 8%);
+      transform: scale(1.02);
+      z-index: 10;
+    }
+  }
+
+  .rdg-panel-glow {
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    width: 4rem;
+    height: 4rem;
+    background-color: color-mix(in srgb, var(--gold-leaf) 5%, transparent);
+    border-radius: 9999px;
+    filter: blur(20px);
+    pointer-events: none;
+  }
+
+  .rdg-panel-head {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    padding-bottom: 0.375rem;
+  }
+
+  .rdg-panel-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+
+    &.rdg-panel-label--active {
+      color: var(--gold-leaf);
+    }
+  }
+
+  .rdg-panel-sublabel {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    font-style: italic;
+    color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    margin-top: 0.125rem;
+  }
+
+  .rdg-cells {
+    display: grid;
+    gap: 0.25rem;
+    justify-items: center;
+    grid-template-columns: repeat(2, 1fr);
+
+    &.rdg-cells--wide {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .rdg-cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.125rem;
+    padding-block: 0.375rem;
+    width: 100%;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    user-select: none;
+
+    &.rdg-cell--selected {
+      background-color: color-mix(in srgb, var(--gold-leaf) 20%, transparent);
+      box-shadow: 0 0 0 2px var(--gold-leaf), 0 0 8px rgb(212 175 55 / 40%);
+    }
+
+    &.rdg-cell--today {
+      background-color: color-mix(in srgb, var(--gold-leaf) 25%, transparent);
+      box-shadow: 0 0 0 2px var(--gold-leaf), 0 0 12px rgb(212 175 55 / 50%);
+    }
+
+    &.rdg-cell--no-entry {
+      background-color: color-mix(in srgb, var(--ink) 40%, transparent);
+    }
+
+    &.rdg-cell--NP-fest {
+      background-color: rgb(245 158 11 / 20%);
+      box-shadow: 0 0 0 1px rgb(251 191 36 / 60%);
+    }
+
+    &.rdg-cell--NP {
+      background-color: rgb(120 53 15 / 20%);
+      box-shadow: 0 0 0 1px rgb(180 83 9 / 40%);
+    }
+
+    &.rdg-cell--N {
+      background-color: rgb(136 19 55 / 25%);
+      box-shadow: 0 0 0 1px rgb(239 68 68 / 40%);
+    }
+
+    &.rdg-cell--EN {
+      background-color: rgb(67 20 7 / 20%);
+      box-shadow: 0 0 0 1px rgb(249 115 22 / 35%);
+    }
+
+    &.rdg-cell--F {
+      background-color: rgb(6 95 70 / 15%);
+      box-shadow: 0 0 0 1px rgb(5 150 105 / 30%);
+    }
+
+    &.rdg-cell--C {
+      background-color: color-mix(in srgb, var(--ink) 30%, transparent);
+    }
+
+    &.rdg-cell--default {
+      background-color: color-mix(in srgb, var(--ink) 30%, transparent);
+    }
+  }
+
+  .rdg-cell-num {
+    font-size: 0.75rem;
+    font-family: Cinzel, serif;
+    line-height: 1;
+    font-weight: 700;
+
+    &.rdg-num--selected {
+      color: var(--gold-leaf);
+      font-weight: 900;
+    }
+
+    &.rdg-num--today {
+      color: var(--gold-leaf);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    &.rdg-num--past {
+      color: color-mix(in srgb, var(--parchment) 30%, transparent);
+    }
+
+    &.rdg-num--NP {
+      color: #fbbf24;
+    }
+
+    &.rdg-num--N {
+      color: #f87171;
+    }
+
+    &.rdg-num--EN {
+      color: #fb923c;
+    }
+
+    &.rdg-num--F {
+      color: #34d399;
+    }
+
+    &.rdg-num--C {
+      color: #60a5fa;
+    }
+
+    &.rdg-num--default {
+      color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    }
+  }
+
+  /* Info panel */
+  .rdg-info {
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    background-color: transparent;
+    padding-block: 0.5rem;
+    padding-inline: 0.75rem;
+    transition: all 0.15s ease;
+
+    &.rdg-info--open {
+      border-color: color-mix(in srgb, var(--gold-dim) 40%, transparent);
+      background-color: rgb(69 26 3 / 15%);
+      padding: 0.75rem;
+    }
+  }
+
+  .rdg-info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .rdg-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rdg-info-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rdg-info-day {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    color: var(--gold-leaf);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .rdg-badge {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-inline: 0.375rem;
+    padding-block: 0.125rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+
+    &.rdg-badge--NP {
+      border-color: rgb(245 158 11 / 40%);
+      color: #fbbf24;
+      background-color: rgb(120 53 15 / 20%);
+    }
+
+    &.rdg-badge--N {
+      border-color: rgb(239 68 68 / 40%);
+      color: #f87171;
+      background-color: rgb(136 19 55 / 20%);
+    }
+
+    &.rdg-badge--EN {
+      border-color: rgb(249 115 22 / 40%);
+      color: #fb923c;
+      background-color: rgb(67 20 7 / 20%);
+    }
+
+    &.rdg-badge--F {
+      border-color: rgb(16 185 129 / 40%);
+      color: #34d399;
+      background-color: rgb(6 95 70 / 20%);
+    }
+
+    &.rdg-badge--C {
+      border-color: rgb(59 130 246 / 40%);
+      color: #60a5fa;
+      background-color: rgb(30 58 138 / 20%);
+    }
+
+    &.rdg-badge--default {
+      border-color: color-mix(in srgb, var(--gold-dim) 30%, transparent);
+      color: var(--gold-dim);
+      background-color: transparent;
+    }
+  }
+
+  .rdg-info-close {
+    color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding-inline: 0.25rem;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--gold-dim);
+    }
+  }
+
+  .rdg-info-festival-name {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    color: #fbbf24;
+  }
+
+  .rdg-info-festival-desc {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+    margin-top: 0.25rem;
+    line-height: 1.375;
+  }
+
+  .rdg-info-statusfull {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  }
+
+  .rdg-info-deity {
+    border-top: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    padding-top: 0.5rem;
+  }
+
+  .rdg-info-deity-name {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    color: var(--gold-dim);
+  }
+
+  .rdg-info-deity-desc {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    margin-top: 0.125rem;
+    line-height: 1.375;
+  }
+
+  .rdg-info-empty {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    text-align: center;
+  }
+
+  /* Legend */
+  .rdg-legend {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 0.25rem;
+    justify-content: center;
+  }
+
+  .rdg-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .rdg-legend-swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 0.125rem;
+    display: inline-block;
+
+    &.rdg-swatch--NP-fest {
+      background-color: rgb(245 158 11 / 25%);
+      box-shadow: 0 0 0 1px rgb(251 191 36 / 60%);
+    }
+
+    &.rdg-swatch--NP {
+      background-color: rgb(120 53 15 / 25%);
+      box-shadow: 0 0 0 1px rgb(180 83 9 / 40%);
+    }
+
+    &.rdg-swatch--N {
+      background-color: rgb(136 19 55 / 25%);
+      box-shadow: 0 0 0 1px rgb(239 68 68 / 40%);
+    }
+
+    &.rdg-swatch--EN {
+      background-color: rgb(67 20 7 / 20%);
+      box-shadow: 0 0 0 1px rgb(249 115 22 / 35%);
+    }
+  }
+
+  .rdg-legend-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+}
+
+/* ── RomanCalendarInfo ────────────────────────────────────────────────────── */
+
+.roman-calendar-info {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .rci-card {
+    background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+    border: 1px solid var(--gold-dim);
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+
+    &:hover {
+      border-color: var(--roman-red);
+    }
+  }
+
+  .rci-festival-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    background: radial-gradient(circle at center, var(--gold-leaf), transparent, transparent);
+  }
+
+  .rci-inner {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Status bar */
+  .rci-status-bar {
+    border-bottom: 1px solid color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    padding-bottom: 0.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .rci-status-icon {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .rci-status-name {
+    font-family: Cinzel, serif;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+
+    &.rci-status-color--F {
+      color: #34d399;
+    }
+
+    &.rci-status-color--C {
+      color: #60a5fa;
+    }
+
+    &.rci-status-color--N {
+      color: #f87171;
+    }
+
+    &.rci-status-color--NP {
+      color: #fbbf24;
+    }
+
+    &.rci-status-color--default {
+      color: var(--gold-leaf);
+    }
+  }
+
+  .rci-info-btn {
+    padding: 0.25rem;
+    border-radius: 9999px;
+    transition: background-color 0.15s ease;
+    display: flex;
+    flex-shrink: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+
+    &:hover {
+      background-color: rgb(255 255 255 / 10%);
+    }
+
+    .rci-info-icon {
+      width: 1rem;
+      height: 1rem;
+      color: var(--gold-dim);
+      transition: color 0.15s ease;
+    }
+
+    &:hover .rci-info-icon {
+      color: var(--gold-leaf);
+    }
+  }
+
+  /* God of the day */
+  .rci-god-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    background-color: rgb(28 25 23 / 40%);
+    padding: 1.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 5%);
+  }
+
+  .rci-god-label {
+    color: var(--gold-dim);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .rci-god-label-dash {
+    opacity: 0.4;
+  }
+
+  .rci-god-name {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-family: Cinzel, serif;
+    font-weight: 900;
+    color: var(--parchment);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    @media (width >= 768px) {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  .rci-god-desc {
+    font-family: 'IM Fell English', serif;
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+    font-style: italic;
+    padding-inline: 1rem;
+    margin-top: 0.5rem;
+    line-height: 1.625;
+
+    @media (width >= 768px) {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  /* Festival */
+  .rci-festival-section {
+    margin-top: 0.25rem;
+    width: 100%;
+  }
+
+  .rci-festival-label {
+    color: var(--festival-text);
+    opacity: 0.8;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  .rci-festival-name {
+    font-family: Cinzel, serif;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: var(--festival-text);
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.025em;
+  }
+
+  /* Fontes Antiqui */
+  .rci-fontes {
+    width: 100%;
+    margin-top: 1rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+    border-radius: 0.375rem;
+    overflow: hidden;
+  }
+
+  .rci-fontes-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 0.75rem;
+    padding-block: 0.5rem;
+    background-color: rgb(28 25 23 / 60%);
+    transition: background-color 0.15s ease;
+    cursor: pointer;
+    border: none;
+
+    &:hover {
+      background-color: rgb(28 25 23 / 80%);
+    }
+  }
+
+  .rci-fontes-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .rci-fontes-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+    flex-shrink: 0;
+  }
+
+  .rci-fontes-preview {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rci-fontes-chevron {
+    color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+    display: inline-block;
+    transition: transform 200ms ease;
+  }
+
+  .rci-fontes-body {
+    background-color: rgb(12 10 9 / 60%);
+    padding-inline: 0.75rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rci-fonte-item {
+    &.rci-fonte-item--sep {
+      border-top: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+      padding-top: 0.75rem;
+    }
+  }
+
+  .rci-fonte-cit-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .rci-fonte-cit-label {
+    font-size: 0.75rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    line-height: 1.25;
+  }
+
+  .rci-fonte-type-badge {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgb(180 83 9 / 70%);
+    border: 1px solid rgb(180 83 9 / 30%);
+    padding-inline: 0.25rem;
+    padding-block: 0.125rem;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .rci-fonte-latin {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: color-mix(in srgb, var(--parchment) 85%, transparent);
+    line-height: 1.625;
+    margin-bottom: 0.375rem;
+    white-space: pre-line;
+  }
+
+  .rci-fonte-divider {
+    border-top: 1px solid color-mix(in srgb, var(--gold-dim) 15%, transparent);
+    margin-block: 0.375rem;
+  }
+
+  .rci-fonte-es {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 55%, transparent);
+    line-height: 1.625;
+    font-style: italic;
+  }
+
+  /* Mos Maiorum */
+  .rci-mos {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgb(120 53 15 / 20%);
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+    border-radius: 0.375rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .rci-mos-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rci-mos-icon {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .rci-mos-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 900;
+    color: #f59e0b;
+  }
+
+  .rci-mos-text {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    line-height: 1.625;
+    text-align: left;
+    font-style: italic;
+  }
+
+  .rci-mos-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Annales Belli */
+  .rci-annales {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: color-mix(in srgb, var(--roman-red) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--roman-red) 50%, transparent);
+    border-radius: 0.375rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .rci-annales-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rci-annales-icon {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .rci-annales-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 900;
+    color: var(--roman-red);
+  }
+
+  .rci-annales-text {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    line-height: 1.625;
+    text-align: left;
+    font-style: italic;
+  }
+
+  .rci-annales-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--roman-red) 60%, transparent);
+    align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Preces et Sacra */
+  .rci-preces {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background-color: rgb(28 25 23 / 90%);
+    border: 2px solid color-mix(in srgb, var(--parchment) 30%, transparent);
+    border-radius: 0.375rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    box-shadow: 0 0 15px rgb(255 255 255 / 5%);
+  }
+
+  .rci-preces-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--parchment) 20%, transparent);
+    padding-bottom: 0.5rem;
+    width: 100%;
+  }
+
+  .rci-preces-icon {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .rci-preces-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 900;
+    color: var(--parchment);
+  }
+
+  .rci-preces-text {
+    font-size: 12px;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    line-height: 1.625;
+    text-align: center;
+    font-style: italic;
+    width: 100%;
+
+    @media (width >= 768px) {
+      font-size: 13px;
+    }
+  }
+
+  .rci-preces-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+  }
+
+  /* Aedes et Monumenta */
+  .rci-monument {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #292524;
+    border-left: 4px solid #78716c;
+    border-right: 4px solid #78716c;
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0.125rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+  }
+
+  .rci-monument-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rci-monument-icon {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .rci-monument-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 900;
+    color: #d6d3d1;
+  }
+
+  .rci-monument-text {
+    font-size: 0.75rem;
+    font-family: 'IM Fell English', serif;
+    color: #a8a29e;
+    line-height: 1.625;
+    text-align: left;
+    border-left: 2px solid #57534e;
+    padding-left: 0.75rem;
+    font-style: italic;
+  }
+
+  .rci-monument-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #78716c;
+    align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+
+  /* Hostiae — multi sacrifice */
+  .rci-sac-multi {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    border-radius: 0.375rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    background-color: rgb(12 10 9 / 90%);
+    border: 2px solid color-mix(in srgb, var(--roman-red) 40%, transparent);
+    box-shadow: 0 0 20px rgb(183 28 28 / 20%);
+
+    &.rci-sac-multi--april {
+      background-color: color-mix(in srgb, var(--roman-red) 15%, transparent);
+      border-color: color-mix(in srgb, var(--roman-red) 50%, transparent);
+      box-shadow: 0 0 25px rgb(183 28 28 / 35%);
+    }
+
+    &.rci-sac-multi--floralia {
+      background-color: rgb(6 95 70 / 20%);
+      border-color: rgb(16 185 129 / 30%);
+      box-shadow: 0 0 25px rgb(16 185 129 / 15%);
+    }
+
+    &.rci-sac-multi--lemuria {
+      background-color: rgb(30 27 75 / 40%);
+      border-color: rgb(99 102 241 / 50%);
+      box-shadow: 0 0 25px rgb(99 102 241 / 25%);
+    }
+
+    &.rci-sac-multi--june {
+      background-color: rgb(67 20 7 / 20%);
+      border-color: rgb(249 115 22 / 40%);
+      box-shadow: 0 0 25px rgb(249 115 22 / 20%);
+    }
+  }
+
+  .rci-sac-multi-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid color-mix(in srgb, var(--roman-red) 20%, transparent);
+    padding-bottom: 0.5rem;
+  }
+
+  .rci-sac-multi-icon {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    filter: drop-shadow(0 0 8px rgb(239 68 68 / 50%));
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .rci-sac-multi-secondary {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    filter: drop-shadow(0 0 5px rgb(239 68 68 / 40%));
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .rci-sac-multi-secondary--lemuria {
+    filter: drop-shadow(0 0 5px rgb(99 102 241 / 40%));
+  }
+
+  .rci-sac-multi-secondary--june {
+    filter: drop-shadow(0 0 5px rgb(249 115 22 / 40%));
+  }
+
+  .rci-sac-multi-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-weight: 900;
+    color: var(--roman-red);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .rci-sac-multi-crime {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--roman-red);
+    background-color: color-mix(in srgb, var(--roman-red) 10%, transparent);
+    padding-inline: 0.75rem;
+    padding-block: 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid color-mix(in srgb, var(--roman-red) 20%, transparent);
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .rci-sac-multi-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rci-sac-multi-quote {
+    font-style: italic;
+    font-size: 12px;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    border-left: 2px solid color-mix(in srgb, var(--roman-red) 50%, transparent);
+    padding-left: 1rem;
+    padding-block: 0.5rem;
+    line-height: 1.625;
+    background-color: rgb(28 25 23 / 40%);
+    border-radius: 0 0.25rem 0.25rem 0;
+    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 5%);
+    text-align: left;
+
+    @media (width >= 768px) {
+      font-size: 13px;
+    }
+  }
+
+  .rci-sac-multi-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #78716c;
+    align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+
+  .rci-sac-multi-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #292524;
+  }
+
+  .rci-sac-nav-btn {
+    padding: 0.375rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--roman-red) 30%, transparent);
+    background-color: rgb(28 25 23 / 80%);
+    color: var(--roman-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--roman-red) 20%, transparent);
+      border-color: color-mix(in srgb, var(--roman-red) 70%, transparent);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    .rci-nav-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .rci-sac-dots {
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rci-sac-dot {
+    height: 0.5rem;
+    width: 0.5rem;
+    border-radius: 9999px;
+    transition: all 300ms ease;
+    cursor: pointer;
+    background-color: #44403c;
+    border: none;
+
+    &:hover {
+      background-color: #78716c;
+    }
+
+    &.rci-sac-dot--active {
+      width: 1rem;
+      background-color: var(--roman-red);
+      box-shadow: 0 0 6px rgb(239 68 68 / 70%);
+    }
+  }
+
+  /* Single sacrifice */
+  .rci-sac-single {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    border-radius: 0.375rem;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    background-color: rgb(28 25 23 / 60%);
+    border: 1px solid #57534e4c;
+
+    &.rci-sac-single--april {
+      background-color: color-mix(in srgb, var(--roman-red) 15%, transparent);
+      border: 1px solid color-mix(in srgb, var(--roman-red) 50%, transparent);
+      box-shadow: 0 0 20px rgb(183 28 28 / 25%);
+    }
+
+    &.rci-sac-single--floralia {
+      background-color: rgb(6 95 70 / 20%);
+      border: 1px solid rgb(16 185 129 / 30%);
+      box-shadow: 0 0 20px rgb(16 185 129 / 15%);
+    }
+
+    &.rci-sac-single--lemuria {
+      background-color: rgb(30 27 75 / 40%);
+      border: 1px solid rgb(99 102 241 / 50%);
+      box-shadow: 0 0 20px rgb(99 102 241 / 25%);
+    }
+
+    &.rci-sac-single--june {
+      background-color: rgb(67 20 7 / 20%);
+      border: 1px solid rgb(249 115 22 / 30%);
+      box-shadow: 0 0 20px rgb(249 115 22 / 15%);
+    }
+  }
+
+  .rci-sac-single-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    width: 100%;
+  }
+
+  .rci-sac-single-icon-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .rci-sac-single-icon {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 5%));
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rci-sac-single-secondary {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 5%));
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .rci-sac-single-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 900;
+    color: #d6d3d1;
+    text-align: center;
+  }
+
+  .rci-sac-single-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    border-left: 2px solid rgb(120 113 108 / 30%);
+    padding-left: 1rem;
+    padding-block: 0.25rem;
+  }
+
+  .rci-sac-single-text {
+    font-size: 12px;
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    line-height: 1.625;
+    text-align: left;
+    font-style: italic;
+
+    @media (width >= 768px) {
+      font-size: 13px;
+    }
+  }
+
+  .rci-sac-single-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #78716c;
+    align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+
+  /* Ephemerides */
+  .rci-ephemerides {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+    width: 100%;
+  }
+
+  .rci-ephem-title {
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .rci-ephem-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .rci-ephem-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rci-ephem-latin {
+    color: var(--gold-leaf);
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .rci-ephem-es {
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+}
+
+/* ── Festivals Modal ──────────────────────────────────────────────────────── */
+
+.rci-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: color-mix(in srgb, var(--ink) 80%, transparent);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+
+  &.rci-status-modal-overlay {
+    z-index: 110;
+    background-color: rgb(0 0 0 / 70%);
+    backdrop-filter: blur(4px);
+  }
+}
+
+.rci-festivals-modal {
+  width: 100%;
+  max-width: 32rem;
+  background-color: var(--ink);
+  border: 4px solid var(--roman-red);
+  border-radius: 0.125rem;
+  box-shadow: 0 0 50px rgb(153 27 27 / 30%);
+  overflow: hidden;
+  position: relative;
+  cursor: default;
+
+  .rci-festivals-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--roman-red);
+    background-color: rgb(136 19 55 / 20%);
+    text-align: center;
+  }
+
+  .rci-festivals-icon {
+    color: var(--roman-red);
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .rci-festivals-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-family: Cinzel, serif;
+    font-weight: 900;
+    color: var(--parchment);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+  }
+
+  .rci-festivals-subtitle {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--roman-red);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+
+  .rci-festivals-list {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    background-color: color-mix(in srgb, var(--ink) 20%, transparent);
+  }
+
+  .rci-festival-item {
+    .rci-festival-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .rci-festival-item-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .rci-festival-item-name {
+      color: var(--gold-leaf);
+      font-family: Cinzel, serif;
+      font-size: 1.125rem;
+      font-weight: 700;
+      transition: color 0.15s ease;
+      line-height: 1.25;
+
+      &:hover {
+        color: var(--roman-red);
+      }
+    }
+
+    .rci-festival-item-date {
+      font-size: 0.75rem;
+      line-height: 1rem;
+      color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .rci-festival-countdown {
+      background-color: color-mix(in srgb, var(--roman-red) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--roman-red) 30%, transparent);
+      border-radius: 0.25rem;
+      padding-inline: 0.5rem;
+      padding-block: 0.25rem;
+      text-align: right;
+    }
+
+    .rci-festival-countdown-num {
+      font-size: 14px;
+      color: var(--roman-red);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .rci-festival-countdown-label {
+      font-size: 7px;
+      color: color-mix(in srgb, var(--roman-red) 60%, transparent);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    .rci-festival-item-desc {
+      color: color-mix(in srgb, var(--parchment) 80%, transparent);
+      font-family: 'IM Fell English', serif;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      line-height: 1.625;
+      font-style: italic;
+      border-left: 2px solid color-mix(in srgb, var(--roman-red) 20%, transparent);
+      padding-left: 1rem;
+      padding-block: 0.25rem;
+    }
+  }
+
+  .rci-festivals-close {
+    width: 100%;
+    padding: 1rem;
+    background-color: color-mix(in srgb, var(--roman-red) 10%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--roman-red) 30%, transparent);
+    color: var(--roman-red);
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--roman-red) 20%, transparent);
+    }
+  }
+}
+
+/* ── Status Info Modal ────────────────────────────────────────────────────── */
+
+.rci-status-modal {
+  width: 100%;
+  max-width: 24rem;
+  background-color: #1c1917;
+  border: 1px solid color-mix(in srgb, var(--gold-leaf) 50%, transparent);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  position: relative;
+  cursor: default;
+
+  .rci-status-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--gold-dim);
+    transition: color 0.15s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--gold-leaf);
+    }
+
+    .rci-close-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  .rci-status-modal-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .rci-status-modal-icon {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .rci-status-modal-title {
+    font-family: Cinzel, serif;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-weight: 900;
+
+    &.rci-status-color--F {
+      color: #34d399;
+    }
+
+    &.rci-status-color--C {
+      color: #60a5fa;
+    }
+
+    &.rci-status-color--N {
+      color: #f87171;
+    }
+
+    &.rci-status-color--NP {
+      color: #fbbf24;
+    }
+
+    &.rci-status-color--default {
+      color: var(--gold-leaf);
+    }
+  }
+
+  .rci-status-modal-divider {
+    width: 4rem;
+    height: 1px;
+    background-color: color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+  }
+
+  .rci-status-modal-text {
+    font-family: 'IM Fell English', serif;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    font-style: italic;
+    line-height: 1.625;
+  }
+
+  .rci-status-modal-ref {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
