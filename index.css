@@ -20,6 +20,52 @@
   --animate-fadeIn: fadein 0.6s ease-out;
 }
 
+/* CSS reset — replaces Tailwind preflight so Tailwind can be removed later */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+}
+
+html {
+  line-height: 1.5;
+  text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+}
+
 :root {
   --ink: #1a1a1a;
   --gold-leaf: #cfb53b;

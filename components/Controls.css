@@ -233,3 +233,7 @@
   line-height: 1.25rem;
   color: var(--parchment);
 }
+
+.controls-gloss {
+  font-size: 0.875rem;
+}

@@ -1002,7 +1002,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                   <div className="eci-ephemerides-list">
                     {civilFestivals.map((f, i) => (
                       <div key={`civ-ephem-${i}`} className="eci-civil-fest-item">
-                        <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
+                        <FestivalIcon name={f.icon} className="eci-icon--emerald" />
                         <div className="eci-fest-min-w">
                           <div className="eci-fest-type">
                             <span>𓊹 Festival Civil</span>
@@ -1015,7 +1015,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                     ))}
                     {lunarFestivals.map((f, i) => (
                       <div key={`lun-ephem-${i}`} className="eci-lunar-fest-item">
-                        <FestivalIcon name={f.icon} className="text-amber-400 shrink-0" />
+                        <FestivalIcon name={f.icon} className="eci-icon--amber" />
                         <div className="eci-fest-min-w">
                           <div className="eci-fest-type">
                             <span>𓊹 Festival Lunar</span>
@@ -1561,7 +1561,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                             <span className="eci-fest-card-fixed">Fijo</span>
                           </div>
                           <div className="eci-fest-card-name">
-                            <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
+                            <FestivalIcon name={f.icon} className="eci-icon--emerald" />
                             <span>{f.name}</span>
                           </div>
                           <p className="eci-fest-card-desc">{f.description}</p>
@@ -1575,7 +1575,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                             <span className="eci-fest-card-fixed">Día {lunarDay}</span>
                           </div>
                           <div className="eci-fest-card-name">
-                            <FestivalIcon name={f.icon} className="text-amber-400 shrink-0" />
+                            <FestivalIcon name={f.icon} className="eci-icon--amber" />
                             <span>{f.name}</span>
                           </div>
                           <p className="eci-fest-card-desc">{f.description}</p>
@@ -1698,7 +1698,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                   <div className="festival-entry-header">
                     <div className="festival-entry-name-col">
                       <h4 className="festival-entry-name">
-                        <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
+                        <FestivalIcon name={f.icon} className="eci-icon--emerald" />
                         <span>{f.name}</span>
                       </h4>
                       <span className="festival-entry-date">{f.date}</span>

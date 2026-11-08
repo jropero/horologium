@@ -909,7 +909,7 @@ function RomanClock({
                 <WeatherWidget
                   weather={weather}
                   onClick={() => setIsWeatherOpen(true)}
-                  className="cursor-pointer"
+                  className="clickable"
                 />
               </div>
             )}
