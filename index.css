@@ -92,6 +92,8 @@
 }
 
 :root {
+  color-scheme: dark;
+
   --ink: #1a1a1a;
   --gold-leaf: #cfb53b;
   --gold-dim: #a09040;
