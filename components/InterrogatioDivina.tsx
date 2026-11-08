@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './InterrogatioDivina.css';
 import { X, MessageSquare, Sparkles } from 'lucide-react';
 import { OvidDialogue } from '../utils/ovidFastiData';
 
@@ -55,87 +56,69 @@ const InterrogatioDivina: React.FC<InterrogatioDivinaProps> = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div
-      className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fadeIn"
-      onClick={onClose}
-    >
+    <div className="interrogatio-divina animate-fadeIn" onClick={onClose}>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div
-        className="bg-stone-900 border-2 border-gold-leaf rounded-2xl shadow-[0_0_50px_rgba(207,181,59,0.3)] w-full max-w-lg h-[80vh] flex flex-col overflow-hidden relative"
-        onClick={e => e.stopPropagation()}
-      >
+      <div className="interrogatio-divina__dialog" onClick={e => e.stopPropagation()}>
         {/* Aged Paper Texture Overlay */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('/assets/textures/aged-paper.png')]"></div>
+        <div className="interrogatio-divina__texture" />
 
         {/* Header */}
-        <div className="p-4 border-b border-gold-leaf/30 flex justify-between items-center bg-stone-950/50 z-10">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gold-leaf/10 rounded-full border border-gold-leaf/40">
-              <Sparkles className="w-5 h-5 text-gold-leaf" />
+        <div className="interrogatio-divina__header">
+          <div className="interrogatio-divina__header-left">
+            <div className="interrogatio-divina__icon-badge">
+              <Sparkles className="interrogatio-divina__sparkles-icon" />
             </div>
             <div>
-              <h2 className="font-serif text-xl font-bold text-gold-leaf uppercase tracking-widest">
-                Interrogatio Divina
-              </h2>
-              <p className="text-[10px] text-parchment/60 uppercase tracking-tighter">
-                Coloquio con {dialogue.god}
-              </p>
+              <h2 className="interrogatio-divina__title">Interrogatio Divina</h2>
+              <p className="interrogatio-divina__subtitle">Coloquio con {dialogue.god}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-parchment/50 hover:text-roman-red p-2 transition-colors"
-          >
-            <X className="w-6 h-6" />
+          <button onClick={onClose} className="interrogatio-divina__close-btn">
+            <X className="interrogatio-divina__close-icon" />
           </button>
         </div>
 
         {/* Chat History Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar relative z-10">
+        <div className="interrogatio-divina__chat custom-scrollbar">
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`flex flex-col ${
-                msg.type === 'user' ? 'items-end' : 'items-start'
-              } animate-slideUp`}
+              className={`interrogatio-divina__message animate-slideUp${
+                msg.type === 'user'
+                  ? ' interrogatio-divina__message--user'
+                  : ' interrogatio-divina__message--god'
+              }`}
             >
               <div
-                className={`max-w-[85%] p-4 rounded-2xl font-serif text-sm relative shadow-xl
-                                ${
-                                  msg.type === 'user'
-                                    ? 'bg-stone-800 border border-gold-dim/30 text-parchment rounded-tr-none'
-                                    : 'bg-gold-leaf/10 border border-gold-leaf/40 text-gold-leaf rounded-tl-none'
-                                }`}
+                className={`interrogatio-divina__msg-bubble${
+                  msg.type === 'user'
+                    ? ' interrogatio-divina__msg-bubble--user'
+                    : ' interrogatio-divina__msg-bubble--god'
+                }`}
               >
-                <div className="flex items-start gap-2">
-                  <span className="text-lg shrink-0">{msg.type === 'user' ? '🪶' : '🏛️'}</span>
-                  <p className="leading-relaxed pt-0.5">{msg.text}</p>
+                <div className="interrogatio-divina__msg-content">
+                  <span className="interrogatio-divina__msg-icon">
+                    {msg.type === 'user' ? '🪶' : '🏛️'}
+                  </span>
+                  <p className="interrogatio-divina__msg-text">{msg.text}</p>
                 </div>
-                {msg.ref && (
-                  <div
-                    className={`text-[9px] mt-2 uppercase tracking-widest opacity-50 font-bold ${
-                      msg.type === 'user' ? 'text-right' : 'text-left'
-                    }`}
-                  >
-                    — {msg.ref}
-                  </div>
-                )}
+                {msg.ref && <div className="interrogatio-divina__msg-ref">— {msg.ref}</div>}
               </div>
             </div>
           ))}
           {isTyping && (
-            <div className="flex items-center gap-2 text-gold-leaf/50 animate-pulse ml-2">
-              <Sparkles className="w-4 h-4" />
-              <span className="text-xs font-serif italic">El dios responde...</span>
+            <div className="interrogatio-divina__typing">
+              <Sparkles className="interrogatio-divina__typing-icon" />
+              <span className="interrogatio-divina__typing-text">El dios responde...</span>
             </div>
           )}
         </div>
 
         {/* User Options / Question Selector Area */}
-        <div className="p-4 border-t border-gold-leaf/30 bg-stone-900/90 z-10">
+        <div className="interrogatio-divina__footer">
           {availableQuestions.length > 0 ? (
-            <div className="space-y-2">
-              <p className="text-[9px] text-gold-dim uppercase tracking-widest font-black mb-2 opacity-70">
+            <div className="interrogatio-divina__questions">
+              <p className="interrogatio-divina__questions-label">
                 Selecciona tu interrogación:
               </p>
               {availableQuestions.map((q, i) => (
@@ -143,17 +126,17 @@ const InterrogatioDivina: React.FC<InterrogatioDivinaProps> = ({
                   key={i}
                   onClick={() => handleAsk(i)}
                   disabled={isTyping}
-                  className="w-full text-left p-3 rounded-xl border border-gold-dim/20 bg-white/5 hover:bg-gold-leaf/10 hover:border-gold-leaf/50 transition-all text-xs font-serif italic text-parchment/80 flex items-start gap-3 group shadow-sm"
+                  className="interrogatio-divina__question-btn"
                 >
-                  <MessageSquare className="w-4 h-4 mt-0.5 text-gold-dim group-hover:text-gold-leaf shrink-0" />
+                  <MessageSquare className="interrogatio-divina__question-icon" />
                   <span>{q.question}</span>
                 </button>
               ))}
             </div>
           ) : (
-            <div className="text-center py-6">
-              <div className="text-2xl mb-2 opacity-30">✨</div>
-              <p className="text-xs font-serif italic text-gold-dim/80">
+            <div className="interrogatio-divina__empty">
+              <div className="interrogatio-divina__empty-icon">✨</div>
+              <p className="interrogatio-divina__empty-text">
                 El numen se retira. El coloquio ha concluido.
               </p>
             </div>

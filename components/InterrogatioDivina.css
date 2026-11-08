@@ -1,0 +1,305 @@
+/* InterrogatioDivina.css — plain CSS migration from Tailwind */
+
+@keyframes id-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes id-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-slideUp {
+  animation: id-slide-up 0.3s ease-out;
+}
+
+.interrogatio-divina {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgb(0 0 0 / 90%);
+  backdrop-filter: blur(12px);
+
+  .interrogatio-divina__dialog {
+    background-color: #1c1917;
+    border: 2px solid var(--gold-leaf);
+    border-radius: 1rem;
+    box-shadow: 0 0 50px rgb(207 181 59 / 30%);
+    width: 100%;
+    max-width: 32rem;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .interrogatio-divina__texture {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    pointer-events: none;
+    background-image: url('/assets/textures/aged-paper.png');
+  }
+
+  .interrogatio-divina__header {
+    padding: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(12 10 9 / 50%);
+    z-index: 10;
+  }
+
+  .interrogatio-divina__header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .interrogatio-divina__icon-badge {
+    padding: 0.5rem;
+    background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--gold-leaf) 40%, transparent);
+  }
+
+  .interrogatio-divina__sparkles-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--gold-leaf);
+  }
+
+  .interrogatio-divina__title {
+    font-family: Cinzel, serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold-leaf);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .interrogatio-divina__subtitle {
+    font-size: 10px;
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+  }
+
+  .interrogatio-divina__close-btn {
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+    padding: 0.5rem;
+    transition: color 0.15s ease, background-color 0.15s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--roman-red);
+    }
+  }
+
+  .interrogatio-divina__close-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .interrogatio-divina__chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    position: relative;
+    z-index: 10;
+
+    & > * + * {
+      margin-top: 1.5rem;
+    }
+  }
+
+  .interrogatio-divina__message {
+    display: flex;
+    flex-direction: column;
+
+    &.interrogatio-divina__message--user {
+      align-items: flex-end;
+
+      & .interrogatio-divina__msg-ref {
+        text-align: right;
+      }
+    }
+
+    &.interrogatio-divina__message--god {
+      align-items: flex-start;
+
+      & .interrogatio-divina__msg-ref {
+        text-align: left;
+      }
+    }
+  }
+
+  .interrogatio-divina__msg-bubble {
+    max-width: 85%;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-family: Cinzel, serif;
+    font-size: 0.875rem;
+    position: relative;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+
+    &.interrogatio-divina__msg-bubble--user {
+      background-color: #292524;
+      border: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+      color: var(--parchment);
+      border-top-right-radius: 0;
+    }
+
+    &.interrogatio-divina__msg-bubble--god {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--gold-leaf) 40%, transparent);
+      color: var(--gold-leaf);
+      border-top-left-radius: 0;
+    }
+  }
+
+  .interrogatio-divina__msg-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .interrogatio-divina__msg-icon {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .interrogatio-divina__msg-text {
+    line-height: 1.625;
+    padding-top: 0.125rem;
+  }
+
+  .interrogatio-divina__msg-ref {
+    font-size: 9px;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+    font-weight: 700;
+  }
+
+  .interrogatio-divina__typing {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: color-mix(in srgb, var(--gold-leaf) 50%, transparent);
+    animation: id-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    margin-left: 0.5rem;
+  }
+
+  .interrogatio-divina__typing-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .interrogatio-divina__typing-text {
+    font-size: 0.75rem;
+    font-family: Cinzel, serif;
+    font-style: italic;
+  }
+
+  .interrogatio-divina__footer {
+    padding: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+    background-color: rgb(28 25 23 / 90%);
+    z-index: 10;
+  }
+
+  .interrogatio-divina__questions {
+    & > * + * {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .interrogatio-divina__questions-label {
+    font-size: 9px;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .interrogatio-divina__question-btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    background-color: rgb(255 255 255 / 5%);
+    font-size: 0.75rem;
+    font-family: Cinzel, serif;
+    font-style: italic;
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+    transition: all 0.15s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+      border-color: color-mix(in srgb, var(--gold-leaf) 50%, transparent);
+
+      & .interrogatio-divina__question-icon {
+        color: var(--gold-leaf);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .interrogatio-divina__question-icon {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.125rem;
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+  }
+
+  .interrogatio-divina__empty {
+    text-align: center;
+    padding-block: 1.5rem;
+  }
+
+  .interrogatio-divina__empty-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.3;
+  }
+
+  .interrogatio-divina__empty-text {
+    font-size: 0.75rem;
+    font-family: Cinzel, serif;
+    font-style: italic;
+    color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+  }
+}
