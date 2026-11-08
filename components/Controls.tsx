@@ -4,6 +4,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { useCivilization } from '../contexts/CivilizationContext';
 import GlossedTerm from './GlossedTerm';
 import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
+import './Controls.css';
 
 interface ControlsProps {
   latitude: number;
@@ -56,27 +57,25 @@ const Controls: React.FC<ControlsProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-8 mb-8 px-2 animate-fadeIn">
-      <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
+    <div className="controls animate-fadeIn">
+      <div className="controls-card">
         {/* Decorative background hatch */}
-        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+        <div className="controls-hatch woodcut-hatch"></div>
 
         {/* Header decoration */}
-        <div className="flex flex-col items-center mb-8 relative z-10">
-          <div className="text-gold-leaf/60 mb-2">
-            <RefreshCw className="w-6 h-6" />
+        <div className="controls-header">
+          <div className="controls-header-icon">
+            <RefreshCw className="controls-header-refresh" />
           </div>
-          <h3 className="font-serif text-lg md:text-xl text-gold-leaf uppercase tracking-[0.4em] font-bold">
-            {labels.controlsTitle}
-          </h3>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold-dim to-transparent mt-2"></div>
+          <h3 className="controls-title">{labels.controlsTitle}</h3>
+          <div className="controls-divider"></div>
         </div>
 
-        <div className="flex flex-col gap-8 relative z-10 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-2">
-              <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
-                <MapPin className="w-3 h-3" />
+        <div className="controls-fields">
+          <div className="controls-grid">
+            <div className="controls-field">
+              <label className="controls-label">
+                <MapPin className="controls-label-pin" />
                 {civilization === 'babylonia' ? (
                   <GlossedTerm term={BAB.latitude} align="start" className="text-sm" />
                 ) : (
@@ -87,12 +86,12 @@ const Controls: React.FC<ControlsProps> = ({
                 type="text"
                 value={latInput}
                 onChange={e => setLatInput(e.target.value)}
-                className="w-full bg-white/5 border border-gold-dim/30 rounded-lg py-3 px-4 font-serif text-lg text-parchment focus:outline-none focus:border-gold-leaf focus:bg-white/10 transition-all text-center"
+                className="controls-input"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-serif text-xs uppercase tracking-widest text-gold-dim ml-2 flex items-center gap-2">
-                <MapPin className="w-3 h-3" />
+            <div className="controls-field">
+              <label className="controls-label">
+                <MapPin className="controls-label-pin" />
                 {civilization === 'babylonia' ? (
                   <GlossedTerm term={BAB.longitude} align="start" className="text-sm" />
                 ) : (
@@ -103,32 +102,26 @@ const Controls: React.FC<ControlsProps> = ({
                 type="text"
                 value={lngInput}
                 onChange={e => setLngInput(e.target.value)}
-                className="w-full bg-white/5 border border-gold-dim/30 rounded-lg py-3 px-4 font-serif text-lg text-parchment focus:outline-none focus:border-gold-leaf focus:bg-white/10 transition-all text-center"
+                className="controls-input"
               />
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 relative z-10">
-          <button
-            onClick={handleManualUpdate}
-            className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-ink bg-parchment rounded-lg transition-all hover:scale-[1.02] active:scale-95 shadow-lg border border-gold-leaf"
-          >
-            <RefreshCw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700" />
+        <div className="controls-buttons">
+          <button onClick={handleManualUpdate} className="controls-btn-compute">
+            <RefreshCw className="controls-btn-compute-icon" />
             {labels.computeBtn}
           </button>
 
-          <button
-            onClick={handleGeolocation}
-            className="group relative flex items-center justify-center gap-3 px-6 py-4 font-serif font-bold text-sm md:text-base uppercase tracking-widest text-parchment bg-roman-red/80 rounded-lg border border-roman-red hover:bg-roman-red transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
-          >
-            <Navigation className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+          <button onClick={handleGeolocation} className="controls-btn-geo">
+            <Navigation className="controls-btn-geo-icon" />
             {labels.findMeBtn}
           </button>
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="font-body italic text-sm text-parchment">{labels.controlsFooter}</p>
+        <div className="controls-footer">
+          <p className="controls-footer-text">{labels.controlsFooter}</p>
         </div>
       </div>
     </div>

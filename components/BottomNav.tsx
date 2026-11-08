@@ -1,9 +1,10 @@
 import React from 'react';
 import { useCivilization, Civilization } from '../contexts/CivilizationContext';
+import './BottomNav.css';
 
 // Roman temple with pediment, entablature, and fluted columns
 const RomeIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="nav-icon">
     {/* Pediment triangle */}
     <path
       d="M4 11 L14 3 L24 11 Z"
@@ -71,7 +72,7 @@ const RomeIcon: React.FC<{ active: boolean }> = ({ active }) => (
 // Greek Ionic column with volute capital and abacus
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const HellasIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="nav-icon">
     {/* Abacus (top slab) */}
     <rect
       x="6"
@@ -153,7 +154,7 @@ const HellasIcon: React.FC<{ active: boolean }> = ({ active }) => (
 // Egyptian obelisk with pyramidion and cartouche band
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const AegyptusIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="nav-icon">
     {/* Pyramidion apex */}
     <path
       d="M14 2 L10.5 7.5 L17.5 7.5 Z"
@@ -225,7 +226,7 @@ const AegyptusIcon: React.FC<{ active: boolean }> = ({ active }) => (
 // Chinese pagoda (3-tier) with upturned eaves
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const ZhongguoIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="nav-icon">
     {/* Spire */}
     <line
       x1="14"
@@ -347,7 +348,7 @@ const ZhongguoIcon: React.FC<{ active: boolean }> = ({ active }) => (
 
 // Babylonian ziggurat with 3 tiers and eight-pointed Ishtar star above
 const BabiloniaIcon: React.FC<{ active: boolean }> = ({ active }) => (
-  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="nav-icon">
     {/* 8-pointed Ishtar star — two overlapping filled diamonds, stroked for crispness */}
     {/* Vertical diamond */}
     <path d="M14 1 L15.6 5.4 L14 9.8 L12.4 5.4 Z" fill="currentColor" opacity="0.9" />
@@ -432,83 +433,35 @@ const civs: {
   id: Civilization;
   Icon: React.FC<{ active: boolean }>;
   label: string;
-  activeColor: string;
-  activeGlow: string;
 }[] = [
-  {
-    id: 'rome',
-    Icon: RomeIcon,
-    label: 'Roma',
-    activeColor: 'text-roman-red',
-    activeGlow: 'shadow-[0_0_12px_rgba(255,82,82,0.4)]',
-  },
-  {
-    id: 'hellas',
-    Icon: HellasIcon,
-    label: 'Ἑλλάς',
-    activeColor: 'text-sky-400',
-    activeGlow: 'shadow-[0_0_12px_rgba(56,189,248,0.4)]',
-  },
-  {
-    id: 'aegyptus',
-    Icon: AegyptusIcon,
-    label: 'Kemet',
-    activeColor: 'text-emerald-400',
-    activeGlow: 'shadow-[0_0_12px_rgba(52,211,153,0.4)]',
-  },
-
-  {
-    id: 'babylonia',
-    Icon: BabiloniaIcon,
-    label: 'Bābilim',
-    activeColor: 'text-blue-400',
-    activeGlow: 'shadow-[0_0_12px_rgba(96,165,250,0.4)]',
-  },
-  {
-    id: 'zhongguo',
-    Icon: ZhongguoIcon,
-    label: '中国',
-    activeColor: 'text-rose-600',
-    activeGlow: 'shadow-[0_0_12px_rgba(225,29,72,0.4)]',
-  },
+  { id: 'rome', Icon: RomeIcon, label: 'Roma' },
+  { id: 'hellas', Icon: HellasIcon, label: 'Ἑλλάς' },
+  { id: 'aegyptus', Icon: AegyptusIcon, label: 'Kemet' },
+  { id: 'babylonia', Icon: BabiloniaIcon, label: 'Bābilim' },
+  { id: 'zhongguo', Icon: ZhongguoIcon, label: '中国' },
 ];
 
 const BottomNav: React.FC = () => {
   const { civilization, setCivilization } = useCivilization();
 
   return (
-    <nav className="fixed bottom-0 lg:bottom-8 left-0 right-0 z-50 px-0 lg:px-4 pb-[env(safe-area-inset-bottom)] pointer-events-none">
-      <div className="bg-ink/95 border-t lg:border border-gold-dim/20 lg:rounded-2xl lg:shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-xl mx-auto overflow-hidden pointer-events-auto transition-all duration-500 hover:border-gold-dim/40">
-        <div className="flex items-stretch justify-around h-[60px] lg:h-[70px]">
-          {civs.map(({ id, Icon, label, activeColor, activeGlow }) => {
+    <nav className="bottom-nav">
+      <div className="nav-container">
+        <div className="tabs">
+          {civs.map(({ id, Icon, label }) => {
             const isActive = civilization === id;
             return (
               <button
                 key={id}
+                data-civ={id}
                 onClick={() => setCivilization(id)}
-                className={`
-                  relative flex-1 flex flex-col items-center justify-center gap-1
-                  transition-all duration-300 active:scale-90 lg:hover:bg-white/5
-                  ${isActive ? activeColor : 'text-parchment/55 lg:hover:text-parchment/80'}
-                `}
+                className={`tab${isActive ? ' active' : ''}`}
               >
-                {isActive && (
-                  <div
-                    className={`absolute top-1.5 lg:top-2 w-1 h-1 rounded-full bg-current ${activeGlow}`}
-                  />
-                )}
-                <div
-                  className={`transition-transform duration-300 ${isActive ? 'scale-110' : ''}`}
-                >
+                {isActive && <div className="tab-indicator" />}
+                <div className="tab-icon">
                   <Icon active={isActive} />
                 </div>
-                <span
-                  className={`text-xs font-serif uppercase tracking-wider transition-all ${
-                    isActive ? 'opacity-100 font-bold' : 'opacity-80'
-                  }`}
-                >
-                  {label}
-                </span>
+                <span className="tab-label">{label}</span>
               </button>
             );
           })}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { WeatherCondition } from '../types';
 import { WeatherParticles } from '../utils/weatherParticles';
 import AuroraSvg from './AuroraSvg';
+import './WeatherSvgEffects.css';
 
 /** Crossfade between the aurora placeholder and the real weather effects. */
 const AURORA_FADE_MS = 1500;
@@ -194,7 +195,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
           )}
 
           {(condition === 'storm' || condition === 'rain') && (
-            <g className="animate-[pulse_10s_ease-in-out_infinite]" opacity={stormOpacity}>
+            <g className="weather-storm-clouds" opacity={stormOpacity}>
               <path
                 d="M -200 50 Q 30 20 80 40 T 180 30 T 280 50 T 500 30 L 500 -20 L -200 -20 Z"
                 fill="#1e293b"

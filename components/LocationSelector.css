@@ -1,0 +1,200 @@
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.location-selector {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  padding-inline: 0.5rem;
+}
+
+.location-selector-panel {
+  background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 40%, transparent);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.location-selector-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.location-selector-map-icon {
+  color: color-mix(in srgb, var(--gold-leaf) 40%, transparent);
+  margin-bottom: 0.5rem;
+
+  & svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.location-selector-title {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--gold-leaf);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+
+  @media (width >= 768px) {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+.location-selector-divider {
+  width: 6rem;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  margin-top: 0.5rem;
+}
+
+.location-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+
+  @media (width >= 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.location-selector-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: all 500ms ease;
+  font-family: Cinzel, serif;
+  border: 1px solid;
+  cursor: pointer;
+
+  &.location-selector-btn--active {
+    background-color: var(--parchment);
+    color: var(--ink);
+    border-color: var(--gold-leaf);
+    box-shadow: 0 0 15px rgb(207 181 59 / 40%);
+    transform: scale(1.02);
+  }
+
+  &.location-selector-btn--inactive {
+    background-color: rgb(255 255 255 / 5%);
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
+    border-color: color-mix(in srgb, var(--gold-dim) 20%, transparent);
+
+    &:hover {
+      border-color: var(--gold-leaf);
+      color: var(--parchment);
+      background-color: rgb(255 255 255 / 10%);
+    }
+  }
+
+  &.location-selector-btn--gps {
+    background-color: color-mix(in srgb, var(--roman-red) 10%, transparent);
+    color: var(--parchment);
+    border-color: color-mix(in srgb, var(--roman-red) 40%, transparent);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--roman-red) 20%, transparent);
+      border-color: var(--roman-red);
+    }
+  }
+}
+
+.location-selector-icon-wrap {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  transition: background-color 300ms ease;
+
+  & svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &.location-selector-icon-wrap--active {
+    background-color: color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+
+  &.location-selector-icon-wrap--inactive {
+    background-color: rgb(255 255 255 / 5%);
+  }
+
+  &.location-selector-icon-wrap--gps {
+    background-color: color-mix(in srgb, var(--roman-red) 20%, transparent);
+  }
+}
+
+.location-selector-icon--active {
+  color: var(--roman-red);
+}
+
+.location-selector-icon--inactive {
+  color: var(--gold-leaf);
+}
+
+.location-selector-icon--gps {
+  color: var(--roman-red);
+}
+
+.location-selector-name {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+
+  @media (width >= 768px) {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+.location-selector-active-dot {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--roman-red);
+  border-radius: 9999px;
+  box-shadow: 0 0 5px #8b2500;
+}
+
+.location-selector-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.location-selector-quote {
+  font-family: 'IM Fell English', serif;
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+  font-style: italic;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
