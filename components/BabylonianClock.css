@@ -167,7 +167,7 @@
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-family: Cinzel, serif;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--parchment);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -323,7 +323,7 @@
   font-size: 1.125rem;
   line-height: 1.75rem;
   font-family: Cinzel, serif;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--parchment);
 }
 

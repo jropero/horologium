@@ -735,14 +735,14 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               >
                 {atticDate.monthName}
                 {atticDate.isIntercalaryMonth && (
-                  <span className="hel-intercalary" style={{ fontSize: '40%' }}>
+                  <span className="hel-intercalary" style={{ fontSize: 'max(0.75rem, 40%)' }}>
                     (Ἐμβόλιμος)
                   </span>
                 )}
               </span>
               <span
                 className="hel-month-translation"
-                style={{ fontSize: 'clamp(0.75rem,2vw,0.85rem)' }}
+                style={{ fontSize: 'clamp(0.875rem,2.5vw,1.1rem)' }}
               >
                 {translateGreekUI(atticDate.monthName)}
               </span>
@@ -751,14 +751,11 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
             {/* Day name only — strip ", MonthName" suffix to avoid repetition */}
             <div
               className="hel-day-name-overlay"
-              style={{ fontSize: 'clamp(0.75rem,2.3vw,0.95rem)', letterSpacing: '0.12em' }}
+              style={{ fontSize: 'clamp(0.9rem,3vw,1.25rem)', letterSpacing: '0.12em' }}
             >
               {atticDate.short.split(',')[0].trim()}
             </div>
-            <div
-              className="hel-day-name-es"
-              style={{ fontSize: 'clamp(0.75rem,1.8vw,0.85rem)' }}
-            >
+            <div className="hel-day-name-es" style={{ fontSize: 'clamp(0.8rem,2.2vw,1rem)' }}>
               {atticDate.spanishShort.split(',')[0].trim()}
             </div>
           </div>

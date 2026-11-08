@@ -118,7 +118,7 @@
 .bci-month-name {
   font-family: Cinzel, serif;
   color: var(--parchment);
-  font-weight: 900;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
@@ -1203,7 +1203,7 @@
 .bci-deity-name {
   font-size: 1.5rem;
   font-family: Cinzel, serif;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--parchment);
   filter: drop-shadow(0 4px 3px rgb(0 0 0 / 7%)) drop-shadow(0 2px 2px rgb(0 0 0 / 6%));
   line-height: 1.25;
@@ -1381,7 +1381,7 @@
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-family: Cinzel, serif;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--parchment);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1448,7 +1448,7 @@
 
 .bci-festival-days-num {
   font-size: 1rem;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--gold-dim);
   line-height: 1;
 }

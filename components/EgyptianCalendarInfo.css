@@ -548,7 +548,7 @@
   font-style: italic;
   color: color-mix(in srgb, var(--parchment) 70%, transparent);
   margin-top: 0.25rem;
-  font-size: clamp(0.75rem, 2vw, 0.85rem);
+  font-size: clamp(0.875rem, 2.5vw, 1.1rem);
   letter-spacing: 0.2em;
 }
 

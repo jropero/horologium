@@ -1055,7 +1055,10 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                   >
                     {babData.monthName}
                     {babData.isIntercalary && (
-                      <span className="bci-intercalary" style={{ fontSize: '40%' }}>
+                      <span
+                        className="bci-intercalary"
+                        style={{ fontSize: 'max(0.75rem, 40%)' }}
+                      >
                         (intercalar)
                       </span>
                     )}
@@ -1063,7 +1066,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 </div>
                 <span
                   className="bci-warhum"
-                  style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)' }}
+                  style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1.1rem)' }}
                 >
                   Warḫum {babData.monthIndex + 1}
                 </span>
@@ -1077,13 +1080,13 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
               </div>
               <div
                 className="bci-hour-name"
-                style={{ fontSize: 'clamp(0.75rem, 2.2vw, 0.9rem)' }}
+                style={{ fontSize: 'clamp(0.875rem, 3vw, 1.25rem)' }}
               >
                 {babData.hourName}
               </div>
               <div
                 className="bci-planet-watch"
-                style={{ fontSize: 'clamp(0.75rem, 2vw, 0.8rem)' }}
+                style={{ fontSize: 'clamp(0.8rem, 2.2vw, 1rem)' }}
               >
                 {babData.planetaryRuler} · {babData.watchName}
               </div>
