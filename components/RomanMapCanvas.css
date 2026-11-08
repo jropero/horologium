@@ -1,0 +1,421 @@
+.roman-map-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .rmc-container {
+    position: relative;
+    width: 100%;
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    border-radius: 0.125rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 40%, transparent);
+  }
+
+  .rmc-wrapper {
+    position: relative;
+    margin-inline: auto;
+  }
+
+  .rmc-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    user-select: none;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .rmc-creature-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .rmc-creature-el {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .rmc-creature-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .rmc-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+
+  .rmc-ping {
+    position: absolute;
+    left: -0.75rem;
+    top: -0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    border: 2px solid;
+  }
+
+  .rmc-status-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    pointer-events: none;
+  }
+
+  .rmc-status-text {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  }
+
+  .rmc-retry-btn {
+    pointer-events: auto;
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    color: var(--gold-leaf);
+    border-radius: 0.125rem;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    }
+  }
+
+  .rmc-card {
+    position: absolute;
+    z-index: 10;
+    width: 15rem;
+    padding: 0.75rem;
+    border-radius: 0.125rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    background-color: color-mix(in srgb, var(--ink) 95%, transparent);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+
+    &.rmc-card--road {
+      width: 18rem;
+      max-height: 60%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
+  .rmc-city-name {
+    font-family: Cinzel, serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold-leaf);
+    line-height: 1.25;
+  }
+
+  .rmc-city-modern {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+    line-height: 1.375;
+  }
+
+  .rmc-city-type {
+    font-family: 'IM Fell English', serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    margin-top: 0.25rem;
+  }
+
+  .rmc-city-select-btn {
+    margin-top: 0.75rem;
+    width: 100%;
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding-inline: 0.75rem;
+    padding-block: 0.5rem;
+    border-radius: 0.125rem;
+    border: 1px solid color-mix(in srgb, var(--gold-leaf) 60%, transparent);
+    color: var(--gold-leaf);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    }
+  }
+
+  .rmc-creature-name {
+    font-family: Cinzel, serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold-leaf);
+    line-height: 1.25;
+  }
+
+  .rmc-creature-desc {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: color-mix(in srgb, var(--parchment) 85%, transparent);
+    line-height: 1.375;
+    margin-top: 0.25rem;
+  }
+
+  .rmc-creature-source {
+    font-family: 'IM Fell English', serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+    margin-top: 0.25rem;
+  }
+
+  .rmc-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-inline: 0.25rem;
+  }
+
+  .rmc-attribution {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+    line-height: 1.25;
+  }
+
+  .rmc-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .rmc-road-toggle {
+    height: 2.25rem;
+    padding-inline: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.125rem;
+    border: 1px solid;
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border-color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    }
+
+    &.rmc-road-toggle--active {
+      border-color: color-mix(in srgb, var(--gold-leaf) 60%, transparent);
+      color: var(--gold-leaf);
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    }
+  }
+
+  .rmc-zoom-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.125rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    color: var(--gold-leaf);
+    font-size: 1.125rem;
+    line-height: 1;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+    }
+  }
+
+  .rmc-legend-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    padding-inline: 0.25rem;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    line-height: 1.25;
+  }
+
+  .rmc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .rmc-inline-btn {
+    font-style: normal;
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding-inline: 0.5rem;
+    padding-block: 0.25rem;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 60%, transparent);
+    color: var(--gold-leaf);
+    border-radius: 0.125rem;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+    }
+  }
+
+  .rmc-legend-attr {
+    flex-basis: 100%;
+    color: color-mix(in srgb, var(--parchment) 45%, transparent);
+  }
+
+  .rmc-legend-link {
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--gold-leaf);
+    }
+  }
+}
+
+/* Road card — rendered inside .rmc-card */
+.rmc-road-name {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--gold-leaf);
+  line-height: 1.25;
+}
+
+.rmc-road-dl {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.5rem;
+  font-family: 'IM Fell English', serif;
+  font-size: 0.875rem;
+  line-height: 1.375;
+}
+
+.rmc-road-dt {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+  padding-top: 0.125rem;
+}
+
+.rmc-road-dd {
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+}
+
+.rmc-road-slider-section {
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+}
+
+.rmc-road-slider-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.rmc-road-slider-label {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+}
+
+.rmc-road-year-display {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--gold-leaf);
+}
+
+.rmc-road-slider {
+  width: 100%;
+  margin-top: 0.25rem;
+  accent-color: var(--gold-leaf);
+}
+
+.rmc-road-status-label {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+  line-height: 1.375;
+}
+
+.rmc-road-btn-row {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rmc-road-btn {
+  flex: 1;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding-inline: 0.5rem;
+  padding-block: 0.375rem;
+  border-radius: 0.125rem;
+  border: 1px solid;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+  }
+
+  &.rmc-road-btn--primary {
+    border-color: color-mix(in srgb, var(--gold-leaf) 60%, transparent);
+    color: var(--gold-leaf);
+  }
+
+  &.rmc-road-btn--secondary {
+    border-color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  }
+}
