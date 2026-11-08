@@ -174,7 +174,7 @@
   }
 
   .cci-footnote-text {
-    font-size: 10px;
+    font-size: 12px;
     color: color-mix(in srgb, var(--ink) 35%, transparent);
     line-height: 1.625;
   }

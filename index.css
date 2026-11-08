@@ -103,6 +103,12 @@
   --hatch-color: #000;
   --festival-text: #fbbf24; /* amber-400 */
   --roman-red: #ff5252; /* Lighter red for dark background contrast */
+  --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  --shadow-card: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  --blur-modal: blur(12px);
+  --blur-card: blur(4px);
+  --modal-max-w: 32rem;
+  --lh-prose: 1.625;
   --app-bg-pattern: url('/assets/textures/wood-pattern.png');
   --app-bg-size: auto;
 }
@@ -270,6 +276,10 @@
   :focus-visible {
     outline: 2px solid var(--gold-leaf);
     outline-offset: 3px;
+  }
+
+  button {
+    cursor: pointer;
   }
 }
 
@@ -659,16 +669,13 @@
   }
 }
 
-/* Respect the user's motion preference: disable UI fade-in. */
+/* Respect the user's motion preference: disable animations */
 @media (prefers-reduced-motion: reduce) {
   .animate-fadeIn {
     animation: none;
     opacity: 1;
   }
-}
 
-/* Respect the user's motion preference: freeze weather cloud, lightning and rain animations. */
-@media (prefers-reduced-motion: reduce) {
   .anim-cloud-fast,
   .anim-cloud-slow {
     animation: none;
@@ -679,35 +686,24 @@
     animation: none;
     opacity: 0;
   }
-}
 
-/* Respect the user's motion preference: freeze fog/sandstorm background drift. */
-@media (prefers-reduced-motion: reduce) {
   .anim-cloud-bg {
     animation: none;
     opacity: 0;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
   .anim-wind,
   .anim-mist {
     animation: none;
   }
-}
 
-/* Respect the user's motion preference: freeze the Nilometer shimmer. */
-@media (prefers-reduced-motion: reduce) {
   .anim-nile-surface,
   .anim-nile-caustic-a,
   .anim-nile-caustic-b,
   .anim-nile-caustic-c {
     animation: none;
   }
-}
 
-/* Respect the user's motion preference: freeze aurora animations. */
-@media (prefers-reduced-motion: reduce) {
   .anim-aurora-drift,
   .aurora-fade-in,
   .aurora-fade-out {
@@ -763,22 +759,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'IM Fell English';
-  src: url('/assets/fonts/im-fell-english-v14-latin-regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IM Fell English';
-  src: url('/assets/fonts/im-fell-english-v14-latin-italic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
 /* Responsive Fixes for Small Screens */
 @media (width <= 375px) {
   .calendar-header-widget div {
@@ -790,11 +770,6 @@
 
   .calendar-header-widget {
     padding: 0.5rem;
-  }
-
-  .calendar-header-widget .flex {
-    flex-wrap: wrap;
-    justify-content: center;
   }
 }
 

@@ -146,7 +146,7 @@
     transform: translateX(-50%);
     background-color: var(--ink);
     padding-inline: 0.75rem;
-    font-size: 0.625rem;
+    font-size: 0.75rem;
     color: var(--gold-dim);
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -167,7 +167,7 @@
 
   .rcm-ovid-attribution {
     margin-top: 0.5rem;
-    font-size: 0.5625rem;
+    font-size: 0.75rem;
     color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -222,7 +222,7 @@
 
   .rcm-day-date-text {
     color: var(--parchment);
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 1rem;
     line-height: 1.5rem;
     font-weight: 700;
@@ -273,7 +273,7 @@
   }
 
   .rcm-nundinal-letter {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
     border: 1px solid color-mix(in srgb, var(--gold-dim) 50%, transparent);
     border-radius: 0.125rem;
@@ -285,7 +285,7 @@
   }
 
   .rcm-nundinae-badge {
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
     border: 2px solid var(--roman-red);
     background-color: var(--roman-red);
@@ -388,7 +388,7 @@
     font-style: normal;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-size: 0.625rem;
+    font-size: 0.75rem;
     font-weight: 700;
   }
 

@@ -14,10 +14,10 @@
   border: 1px solid color-mix(in srgb, var(--gold-dim) 40%, transparent);
   border-radius: 0.5rem;
   padding: 1.5rem;
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(12px);
+  backdrop-filter: var(--blur-modal);
 }
 
 .controls-hatch {
@@ -161,7 +161,7 @@
   letter-spacing: 0.1em;
   border-radius: 0.5rem;
   transition: all 0.15s ease;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-card);
   cursor: pointer;
 }
 
@@ -227,7 +227,7 @@
 }
 
 .controls-footer-text {
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-style: italic;
   font-size: 0.875rem;
   line-height: 1.25rem;

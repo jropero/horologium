@@ -122,7 +122,7 @@
   }
 
   .greek-days-list__today-badge {
-    font-size: 8px;
+    font-size: 12px;
     color: var(--gold-leaf);
     font-weight: 700;
     text-transform: uppercase;
@@ -136,7 +136,7 @@
   }
 
   .greek-days-list__sacred-badge {
-    font-size: 7px;
+    font-size: 12px;
     color: rgb(245 158 11 / 80%);
     font-weight: 700;
     text-transform: uppercase;
@@ -176,7 +176,7 @@
 
   .greek-days-list__day-subtitle {
     color: var(--gold-dim);
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 0.75rem;
     font-style: italic;
 
@@ -217,7 +217,7 @@
 
   .greek-days-list__deity-label {
     color: var(--gold-dim);
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 900;
@@ -334,7 +334,7 @@
     border: 1px solid color-mix(in srgb, var(--gold-dim) 40%, transparent);
     color: var(--gold-dim);
     font-family: Cinzel, serif;
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     border-radius: 0.25rem;
@@ -348,7 +348,7 @@
     border: 1px solid rgb(244 63 94 / 50%);
     color: #fda4af;
     font-family: Cinzel, serif;
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     border-radius: 0.25rem;
@@ -446,7 +446,7 @@
   }
 
   .greek-days-list__festival-extra-label {
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
     font-weight: 700;
   }

@@ -27,7 +27,7 @@
 
   .scc__header-subtitle {
     color: color-mix(in srgb, var(--parchment) 60%, transparent);
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-top: 0.125rem;
@@ -58,7 +58,7 @@
 
   .scc__section-sub {
     color: color-mix(in srgb, var(--parchment) 50%, transparent);
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .scc__chip-grid {
@@ -120,12 +120,12 @@
   }
 
   .scc__chip-pinyin {
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.25;
   }
 
   .scc__chip-element {
-    font-size: 8px;
+    font-size: 12px;
     line-height: 1.25;
   }
 
@@ -187,7 +187,7 @@
   }
 
   .scc__branch-pinyin {
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.25;
   }
 
@@ -249,7 +249,7 @@
   }
 
   .scc__legend-label {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   /* Explanation */
@@ -260,7 +260,7 @@
 
   .scc__explanation-text {
     color: color-mix(in srgb, var(--parchment) 60%, transparent);
-    font-size: 11px;
+    font-size: 12px;
     font-style: italic;
     line-height: 1.625;
   }

@@ -1,26 +1,5 @@
 /* components/RomanClock.css */
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
 /* Loading state */
 .roman-clock__loading {
   width: 100%;
@@ -142,7 +121,7 @@
 .roman-clock__cal-hellas-translit {
   color: var(--gold-dim);
   font-family: Cinzel, serif;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   opacity: 0.8;
@@ -187,9 +166,9 @@
   margin-inline: auto;
   padding: 0.25rem;
   background-color: color-mix(in srgb, var(--ink) 50%, transparent);
-  backdrop-filter: blur(4px);
+  backdrop-filter: var(--blur-card);
   border-radius: 0.75rem;
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-xl);
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -306,7 +285,7 @@
 
 .roman-clock__ovid-widget {
   width: 100%;
-  max-width: 32rem;
+  max-width: var(--modal-max-w);
   background-color: rgb(30 27 75 / 40%);
   border: 1px solid color-mix(in srgb, var(--gold-leaf) 30%, transparent);
   border-radius: 0.5rem;
@@ -330,7 +309,7 @@
 }
 
 .roman-clock__ovid-label {
-  font-size: 9px;
+  font-size: 12px;
   font-family: Cinzel, serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -339,17 +318,17 @@
 }
 
 .roman-clock__ovid-text {
-  font-size: 11px;
+  font-size: 12px;
   font-family: Cinzel, serif;
   font-style: italic;
   color: color-mix(in srgb, var(--parchment) 90%, transparent);
-  line-height: 1.625;
+  line-height: var(--lh-prose);
   border-left: 1px solid color-mix(in srgb, var(--gold-leaf) 20%, transparent);
   padding-left: 0.5rem;
 }
 
 .roman-clock__ovid-ref {
-  font-size: 8px;
+  font-size: 12px;
   color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
   align-self: flex-end;
   text-transform: uppercase;
@@ -406,7 +385,7 @@
 }
 
 .roman-clock__hellas-translation {
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 700;
@@ -473,7 +452,7 @@
 
 /* Section heading label */
 .roman-clock__section-heading {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.25em;
@@ -492,7 +471,7 @@
 
 /* Civil day part description (Rome) */
 .roman-clock__civil-desc {
-  font-size: 11px;
+  font-size: 12px;
   font-style: italic;
   color: color-mix(in srgb, var(--ink) 60%, transparent);
   margin-top: 0.125rem;
@@ -502,7 +481,7 @@
 /* Civil day transliteration (Hellas) */
 .roman-clock__civil-translit {
   font-family: Cinzel, serif;
-  font-size: 9px;
+  font-size: 12px;
   opacity: 0.7;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -511,7 +490,7 @@
 
 /* Civil day description (Hellas — roman-red italic) */
 .roman-clock__civil-desc-hellas {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   font-style: italic;
   color: var(--roman-red);
@@ -546,7 +525,7 @@
 
 /* Column sub-heading */
 .roman-clock__col-heading {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -575,7 +554,7 @@
 /* Greek transliteration below name */
 .roman-clock__greek-translit {
   font-family: Cinzel, serif;
-  font-size: 9px;
+  font-size: 12px;
   opacity: 0.7;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -621,7 +600,7 @@
 }
 
 .roman-clock__time-heading {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -656,7 +635,7 @@
 }
 
 .roman-clock__twilight-label {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -695,7 +674,7 @@
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
-  max-width: 32rem;
+  max-width: var(--modal-max-w);
 }
 
 /* Calendar header widget base */
@@ -704,9 +683,9 @@
   border: 1px solid;
   padding: 0.75rem;
   border-radius: 0.25rem;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-card);
   width: 100%;
-  max-width: 32rem;
+  max-width: var(--modal-max-w);
   display: flex;
   flex-direction: column;
   align-items: center;

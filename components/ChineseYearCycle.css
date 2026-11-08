@@ -116,7 +116,7 @@
   }
 
   .cyc__term-id {
-    font-size: 10px;
+    font-size: 12px;
     color: color-mix(in srgb, var(--parchment) 70%, transparent);
   }
 

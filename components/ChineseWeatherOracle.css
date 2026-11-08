@@ -32,7 +32,7 @@
   }
 
   .cwo__sky-label-text {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--parchment) 30%, transparent);
@@ -108,7 +108,7 @@
   }
 
   .cwo__badge-label {
-    font-size: 9px;
+    font-size: 12px;
     margin-top: 0.125rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -122,7 +122,7 @@
   }
 
   .cwo__badge-temp {
-    font-size: 9px;
+    font-size: 12px;
     margin-top: 0.125rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -130,14 +130,14 @@
   }
 
   .cwo__badge-wind-name {
-    font-size: 10px;
+    font-size: 12px;
     font-family: Cinzel, serif;
     line-height: 1.375;
     text-align: center;
   }
 
   .cwo__badge-wind-speed {
-    font-size: 9px;
+    font-size: 12px;
     margin-top: 0.125rem;
     opacity: 0.6;
     letter-spacing: 0.025em;
@@ -166,7 +166,7 @@
   }
 
   .cwo__official-title {
-    font-size: 9px;
+    font-size: 12px;
     color: color-mix(in srgb, var(--parchment) 40%, transparent);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -185,7 +185,7 @@
   }
 
   .cwo__wind-footer-text {
-    font-size: 10px;
+    font-size: 12px;
     color: color-mix(in srgb, var(--parchment) 30%, transparent);
     letter-spacing: 0.1em;
   }

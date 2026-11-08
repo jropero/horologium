@@ -192,7 +192,7 @@
     }
 
     &.rdg-num--NP {
-      color: #fbbf24;
+      color: var(--festival-text);
     }
 
     &.rdg-num--N {
@@ -275,7 +275,7 @@
 
     &.rdg-badge--NP {
       border-color: rgb(245 158 11 / 40%);
-      color: #fbbf24;
+      color: var(--festival-text);
       background-color: rgb(120 53 15 / 20%);
     }
 
@@ -333,7 +333,7 @@
 
   .rdg-info-festival-desc {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 80%, transparent);
     margin-top: 0.25rem;
     line-height: 1.375;
@@ -342,7 +342,7 @@
   .rdg-info-statusfull {
     font-size: 0.75rem;
     line-height: 1rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 70%, transparent);
   }
 
@@ -361,7 +361,7 @@
 
   .rdg-info-deity-desc {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 60%, transparent);
     margin-top: 0.125rem;
     line-height: 1.375;
@@ -370,7 +370,7 @@
   .rdg-info-empty {
     font-size: 0.75rem;
     line-height: 1rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
     text-align: center;
   }
@@ -505,7 +505,7 @@
     }
 
     &.rci-status-color--NP {
-      color: #fbbf24;
+      color: var(--festival-text);
     }
 
     &.rci-status-color--default {
@@ -586,13 +586,13 @@
   }
 
   .rci-god-desc {
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 0.875rem;
     color: color-mix(in srgb, var(--parchment) 80%, transparent);
     font-style: italic;
     padding-inline: 1rem;
     margin-top: 0.5rem;
-    line-height: 1.625;
+    line-height: var(--lh-prose);
 
     @media (width >= 768px) {
       font-size: 1rem;
@@ -672,7 +672,7 @@
   .rci-fontes-preview {
     font-size: 0.75rem;
     line-height: 1rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 50%, transparent);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -738,10 +738,10 @@
 
   .rci-fonte-latin {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-style: italic;
     color: color-mix(in srgb, var(--parchment) 85%, transparent);
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     margin-bottom: 0.375rem;
     white-space: pre-line;
   }
@@ -753,9 +753,9 @@
 
   .rci-fonte-es {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 55%, transparent);
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     font-style: italic;
   }
 
@@ -798,9 +798,9 @@
 
   .rci-mos-text {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     text-align: left;
     font-style: italic;
   }
@@ -853,9 +853,9 @@
 
   .rci-annales-text {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     text-align: left;
     font-style: italic;
   }
@@ -913,9 +913,9 @@
 
   .rci-preces-text {
     font-size: 12px;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     text-align: center;
     font-style: italic;
     width: 100%;
@@ -977,9 +977,9 @@
 
   .rci-monument-text {
     font-size: 0.75rem;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: #a8a29e;
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     text-align: left;
     border-left: 2px solid #57534e;
     padding-left: 0.75rem;
@@ -1114,12 +1114,12 @@
   .rci-sac-multi-quote {
     font-style: italic;
     font-size: 12px;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     border-left: 2px solid color-mix(in srgb, var(--roman-red) 50%, transparent);
     padding-left: 1rem;
     padding-block: 0.5rem;
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     background-color: rgb(28 25 23 / 40%);
     border-radius: 0 0.25rem 0.25rem 0;
     box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 5%);
@@ -1217,7 +1217,7 @@
     align-items: center;
     gap: 0.75rem;
     width: 100%;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    box-shadow: var(--shadow-card);
     background-color: rgb(28 25 23 / 60%);
     border: 1px solid #57534e4c;
 
@@ -1303,9 +1303,9 @@
 
   .rci-sac-single-text {
     font-size: 12px;
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
-    line-height: 1.625;
+    line-height: var(--lh-prose);
     text-align: left;
     font-style: italic;
 
@@ -1363,7 +1363,7 @@
 
   .rci-ephem-latin {
     color: var(--gold-leaf);
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-style: italic;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -1387,19 +1387,19 @@
   justify-content: center;
   padding: 1rem;
   background-color: color-mix(in srgb, var(--ink) 80%, transparent);
-  backdrop-filter: blur(12px);
+  backdrop-filter: var(--blur-modal);
   cursor: pointer;
 
   &.rci-status-modal-overlay {
     z-index: 110;
     background-color: rgb(0 0 0 / 70%);
-    backdrop-filter: blur(4px);
+    backdrop-filter: var(--blur-card);
   }
 }
 
 .rci-festivals-modal {
   width: 100%;
-  max-width: 32rem;
+  max-width: var(--modal-max-w);
   background-color: var(--ink);
   border: 4px solid var(--roman-red);
   border-radius: 0.125rem;
@@ -1506,7 +1506,7 @@
     }
 
     .rci-festival-countdown-label {
-      font-size: 7px;
+      font-size: 12px;
       color: color-mix(in srgb, var(--roman-red) 60%, transparent);
       text-transform: uppercase;
       font-weight: 700;
@@ -1515,10 +1515,9 @@
 
     .rci-festival-item-desc {
       color: color-mix(in srgb, var(--parchment) 80%, transparent);
-      font-family: 'IM Fell English', serif;
+      font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
       font-size: 0.875rem;
-      line-height: 1.25rem;
-      line-height: 1.625;
+      line-height: var(--lh-prose);
       font-style: italic;
       border-left: 2px solid color-mix(in srgb, var(--roman-red) 20%, transparent);
       padding-left: 1rem;
@@ -1559,7 +1558,7 @@
   border: 1px solid color-mix(in srgb, var(--gold-leaf) 50%, transparent);
   padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-xl);
   position: relative;
   cursor: default;
 
@@ -1618,7 +1617,7 @@
     }
 
     &.rci-status-color--NP {
-      color: #fbbf24;
+      color: var(--festival-text);
     }
 
     &.rci-status-color--default {
@@ -1633,10 +1632,10 @@
   }
 
   .rci-status-modal-text {
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     font-style: italic;
-    line-height: 1.625;
+    line-height: var(--lh-prose);
   }
 
   .rci-status-modal-ref {
@@ -1646,16 +1645,5 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 700;
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
   }
 }

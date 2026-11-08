@@ -56,7 +56,7 @@
   }
 
   .cac__branch-text {
-    font-size: 10px;
+    font-size: 12px;
 
     &.cac__branch-text--active {
       fill: var(--gold-leaf);
@@ -148,7 +148,7 @@
     font-style: normal;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .chinese-animal-clock__progress-track {

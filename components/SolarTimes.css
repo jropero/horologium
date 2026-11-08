@@ -99,7 +99,7 @@
 }
 
 .solar-times-time {
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--parchment);
@@ -165,5 +165,5 @@
   line-height: 1.25rem;
   font-weight: 400;
   color: color-mix(in srgb, var(--parchment) 60%, transparent);
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }

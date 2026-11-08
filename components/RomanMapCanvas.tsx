@@ -1185,7 +1185,7 @@ function RomanMapCanvas({
       // skipped where the road bends too sharply or leaves the strip.
       if (roadScene && z >= ROAD_LABEL_ZOOM) {
         const fontPx = Math.round(clamp(9 + z, 12, 15)); // never under 12 px
-        const font = `italic ${fontPx}px "IM Fell English", serif`;
+        const font = `italic ${fontPx}px ".SF NS", ui-sans-serif, system-ui, -apple-system, sans-serif`;
         ctx.font = font;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';

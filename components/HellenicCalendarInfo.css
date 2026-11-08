@@ -15,23 +15,12 @@
   }
 }
 
-@keyframes hel-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
 .hel-anim-bounce {
   animation: hel-bounce 1s infinite;
 }
 
 .hel-anim-pulse {
-  animation: hel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* ── Meander border ─────────────────────────────────────────────────────────── */
@@ -453,7 +442,7 @@
   transition: border-color 0.15s ease;
   padding: 0;
   border-radius: 0.125rem;
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
 }
@@ -600,8 +589,8 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   border-radius: 0.125rem;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  backdrop-filter: var(--blur-modal);
+  box-shadow: var(--shadow-card);
   font-family: Cinzel, serif;
   z-index: 20;
 }
@@ -710,7 +699,7 @@
   font-style: italic;
   padding-inline: 1rem;
   margin-top: 0.75rem;
-  line-height: 1.625;
+  line-height: var(--lh-prose);
   position: relative;
   z-index: 10;
 }
@@ -962,7 +951,7 @@
   font-size: 12px;
   font-family: Cinzel, serif;
   color: rgb(168 162 158 / 90%);
-  line-height: 1.625;
+  line-height: var(--lh-prose);
   text-align: left;
   border-left: 2px solid rgb(87 83 78 / 50%);
   padding-left: 0.75rem;
@@ -1118,7 +1107,7 @@
   font-size: 0.75rem;
   font-family: Cinzel, serif;
   color: rgb(254 205 211 / 90%);
-  line-height: 1.625;
+  line-height: var(--lh-prose);
   text-align: left;
   font-style: italic;
 
@@ -1278,7 +1267,7 @@
 }
 
 .hel-fest-countdown-label {
-  font-size: 7px;
+  font-size: 12px;
   color: rgb(56 189 248 / 60%);
   text-transform: uppercase;
   font-weight: 700;
@@ -1290,7 +1279,7 @@
   font-family: Cinzel, serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  line-height: 1.625;
+  line-height: var(--lh-prose);
   font-style: italic;
   border-left: 2px solid rgb(56 189 248 / 20%);
   padding-left: 0.75rem;
@@ -1393,13 +1382,13 @@
   font-size: 0.75rem;
   color: rgb(56 189 248 / 70%);
   font-family: Cinzel, serif;
-  line-height: 1.625;
+  line-height: var(--lh-prose);
 }
 
 .hel-footer-disclaimer {
   font-size: 0.75rem;
   color: rgb(56 189 248 / 55%);
   font-family: Cinzel, serif;
-  line-height: 1.625;
+  line-height: var(--lh-prose);
   font-style: italic;
 }
