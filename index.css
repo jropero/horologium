@@ -107,6 +107,31 @@
   --app-bg-size: auto;
 }
 
+/* === SKIP LINK === */
+
+.skip-link {
+  position: absolute;
+  transform: translateY(-100%);
+  left: 0;
+  top: 0;
+  padding: 0.5rem 1rem;
+  background: var(--gold-leaf);
+  color: var(--ink);
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  z-index: 9999;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skip-link {
+    transition: transform 0.2s;
+  }
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 /* === ZHONGGUO THEME === */
 
 /* Chinese Dark Mode (Vermillion & Ink) */
