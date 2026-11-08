@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { X, Wind, Thermometer, CloudSun, History, Gauge, Map, Hourglass } from 'lucide-react';
 import { WeatherData, WeatherSnapshot } from '../types';
 import { LOCATIONS } from '../utils/locations';
@@ -192,10 +192,17 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
 }) => {
   const { civilization, labels } = useCivilization();
   const [isLocLoading, setIsLocLoading] = React.useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  if (!isOpen || !weather) return null;
-
-  const { current, historical } = weather;
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (isOpen && weather) {
+      dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
+    }
+  }, [isOpen, weather]);
 
   const handleLocationSelect = async (loc: (typeof LOCATIONS)[0]) => {
     if (loc.id === 'gps') {
@@ -225,13 +232,25 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
     );
   };
 
+  const dialogProps = {
+    ref: dialogRef,
+    className: 'weather-modal animate-fadeIn',
+    onClose,
+    onClick: (e: React.MouseEvent<HTMLDialogElement>) => {
+      if (e.target === dialogRef.current) onClose();
+    },
+  } as const;
+
+  if (!weather) {
+    return <dialog {...dialogProps} />;
+  }
+
+  const { current, historical } = weather;
   const statusLabel = isTimeTraveling ? 'Status Temporis' : 'Status Praesens';
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div className="weather-modal animate-fadeIn" onClick={onClose}>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div className="weather-modal__panel" onClick={e => e.stopPropagation()}>
+    <dialog {...dialogProps}>
+      <div className="weather-modal__panel">
         {/* Decorative background hatch */}
         <div className="weather-modal__hatch woodcut-hatch"></div>
 
@@ -473,7 +492,7 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 };
 

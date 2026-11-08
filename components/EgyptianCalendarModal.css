@@ -1,22 +1,25 @@
 /* EgyptianCalendarModal — plain CSS migration */
 
-/* ── Overlay ── */
+/* ── Dialog reset + sizing ── */
 .egyptian-calendar-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: none;
   padding: 0.5rem;
-  background-color: rgb(0 0 0 / 80%);
-  backdrop-filter: blur(4px);
+  background: transparent;
+  width: 100%;
+  max-width: calc(36rem + 1rem);
+  box-sizing: border-box;
 }
 
 @media (width >= 768px) {
   .egyptian-calendar-modal {
     padding: 1rem;
+    max-width: calc(36rem + 2rem);
   }
+}
+
+.egyptian-calendar-modal::backdrop {
+  background-color: rgb(0 0 0 / 80%);
+  backdrop-filter: blur(4px);
 }
 
 /* ── Panel ── */

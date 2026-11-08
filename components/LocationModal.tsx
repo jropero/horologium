@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Map } from 'lucide-react';
 import { Geolocation } from '@capacitor/geolocation';
 import { LOCATIONS } from '../utils/locations';
@@ -24,8 +24,17 @@ const LocationModal: React.FC<LocationModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { civilization } = useCivilization();
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (isOpen) {
+      dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
+    }
+  }, [isOpen]);
 
   const handleLocationSelect = async (loc: (typeof LOCATIONS)[0]) => {
     if (loc.id === 'gps') {
@@ -58,10 +67,13 @@ const LocationModal: React.FC<LocationModalProps> = ({
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div className="location-modal animate-fadeIn" onClick={onClose}>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div className="location-modal__panel" onClick={e => e.stopPropagation()}>
+    <dialog
+      ref={dialogRef}
+      className="location-modal animate-fadeIn"
+      onClose={onClose}
+      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
+    >
+      <div className="location-modal__panel">
         <button onClick={onClose} className="location-modal__close" aria-label="Cerrar">
           <X />
         </button>
@@ -122,7 +134,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 };
 
