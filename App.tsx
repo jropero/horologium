@@ -314,6 +314,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="app">
+      <a href="#main-content" className="skip-link">Saltar al contenido</a>
       {/* Mobile menu — burger button with dropdown (location, weather, date) */}
       <div className="mobile-menu">
         {isMobileMenuOpen && (
@@ -414,6 +415,7 @@ const AppContent: React.FC = () => {
         </h1>
       </header>
 
+      <main id="main-content" tabIndex={-1}>
       {isTimeTraveling && (
         <div className="travel-banner">
           <span className="travel-banner-time">
@@ -637,6 +639,8 @@ const AppContent: React.FC = () => {
 
       {/* Background vignette effect */}
       <div className="bg-vignette"></div>
+
+      </main>
 
       <footer className="app-footer">
         {labels.footerMotto}
