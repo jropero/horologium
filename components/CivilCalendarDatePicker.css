@@ -1,0 +1,410 @@
+/* ── Per-civilization accent tokens ─────────────────── */
+
+.civil-calendar-date-picker[data-civilization='hellas'] {
+  --civ-text: #38bdf8;
+  --civ-soft: color-mix(in srgb, #38bdf8 25%, transparent);
+  --civ-border: color-mix(in srgb, #38bdf8 60%, transparent);
+  --civ-chip-bg: color-mix(in srgb, #38bdf8 10%, transparent);
+  --civ-chip-text: #7dd3fc;
+  --civ-chip-border: color-mix(in srgb, #38bdf8 30%, transparent);
+  --civ-fill-bg: #38bdf8;
+  --civ-fill-border: #38bdf8;
+}
+
+.civil-calendar-date-picker[data-civilization='aegyptus'] {
+  --civ-text: #34d399;
+  --civ-soft: color-mix(in srgb, #34d399 25%, transparent);
+  --civ-border: color-mix(in srgb, #34d399 60%, transparent);
+  --civ-chip-bg: color-mix(in srgb, #34d399 10%, transparent);
+  --civ-chip-text: #6ee7b7;
+  --civ-chip-border: color-mix(in srgb, #34d399 30%, transparent);
+  --civ-fill-bg: #34d399;
+  --civ-fill-border: #34d399;
+}
+
+.civil-calendar-date-picker[data-civilization='babylonia'] {
+  --civ-text: #60a5fa;
+  --civ-soft: color-mix(in srgb, #60a5fa 25%, transparent);
+  --civ-border: color-mix(in srgb, #60a5fa 60%, transparent);
+  --civ-chip-bg: color-mix(in srgb, #60a5fa 10%, transparent);
+  --civ-chip-text: #93c5fd;
+  --civ-chip-border: color-mix(in srgb, #60a5fa 30%, transparent);
+  --civ-fill-bg: #60a5fa;
+  --civ-fill-border: #60a5fa;
+}
+
+/* ── Overlay ─────────────────────────────────────────── */
+
+.civil-calendar-date-picker {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: rgb(0 0 0 / 80%);
+  backdrop-filter: blur(4px);
+
+  @media (width >= 640px) {
+    padding: 1rem;
+  }
+}
+
+/* ── Inner panel ─────────────────────────────────────── */
+
+.ccp-panel {
+  background-color: var(--ink);
+  border: 2px solid var(--civ-soft);
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  width: 100%;
+  max-width: 28rem;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+
+.ccp-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--civ-soft);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.ccp-title {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--civ-text);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+}
+
+.ccp-civ-name {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--parchment);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  margin-top: 0.25rem;
+
+  @media (width >= 640px) {
+    font-size: 1.25rem;
+  }
+}
+
+.ccp-gloss {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  font-style: italic;
+}
+
+.ccp-instruction {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  margin-top: 0.125rem;
+  letter-spacing: 0.025em;
+}
+
+/* ── Year navigation ─────────────────────────────────── */
+
+.ccp-year-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  border-bottom: 1px solid var(--civ-soft);
+  flex-shrink: 0;
+}
+
+.ccp-nav-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+  transition: color 0.15s ease, background-color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  & svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &:hover {
+    color: var(--parchment);
+    background-color: rgb(255 255 255 / 5%);
+  }
+}
+
+.ccp-year-center {
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+}
+
+.ccp-year-label {
+  font-family: Cinzel, serif;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  color: var(--civ-text);
+}
+
+.ccp-year-subtitle {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  letter-spacing: 0.025em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Month list ──────────────────────────────────────── */
+
+.ccp-months {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline: 0.75rem;
+  padding-block: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ccp-month {
+  border-radius: 0.5rem;
+  border: 1px solid var(--civ-soft);
+  background-color: rgb(0 0 0 / 20%);
+  overflow: hidden;
+
+  &.ccp-month--intercalary {
+    box-shadow: 0 0 0 1px color-mix(in srgb, #f59e0b 30%, transparent);
+  }
+}
+
+.ccp-month-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  border-bottom: 1px solid var(--civ-soft);
+  background-color: rgb(255 255 255 / 3%);
+}
+
+.ccp-month-name {
+  font-family: Cinzel, serif;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+  color: var(--civ-text);
+}
+
+.ccp-month-latin {
+  font-family: Cinzel, serif;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ccp-month-translation {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ccp-month-badge {
+  margin-left: auto;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding-inline: 0.375rem;
+  padding-block: 0.125rem;
+  border-radius: 0.25rem;
+  border: 1px solid color-mix(in srgb, #f59e0b 40%, transparent);
+  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Day grid ────────────────────────────────────────── */
+
+.ccp-day-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+.ccp-day {
+  height: 2rem;
+  border-radius: 0.375rem;
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: none;
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &.ccp-day--selected {
+    background-color: var(--civ-fill-bg);
+    color: var(--ink);
+    font-weight: 700;
+    border-color: var(--civ-fill-border);
+    box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+  }
+
+  &.ccp-day--today {
+    color: var(--civ-text);
+    border-color: var(--civ-border);
+    background-color: rgb(255 255 255 / 5%);
+  }
+
+  &.ccp-day--default {
+    color: color-mix(in srgb, var(--parchment) 85%, transparent);
+
+    &:hover {
+      background-color: rgb(255 255 255 / 10%);
+      color: var(--parchment);
+    }
+  }
+}
+
+/* ── Action bar ──────────────────────────────────────── */
+
+.ccp-actions {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  border-top: 1px solid var(--civ-soft);
+}
+
+.ccp-summary {
+  margin-inline: auto;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  font-variant-numeric: tabular-nums;
+  background-color: rgb(255 255 255 / 5%);
+  border: 1px solid var(--civ-soft);
+  border-radius: 9999px;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+}
+
+.ccp-confirm {
+  width: 100%;
+  padding-block: 0.625rem;
+  border-radius: 0.5rem;
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: 1px solid;
+
+  &.ccp-confirm--active {
+    background-color: var(--civ-chip-bg);
+    color: var(--civ-chip-text);
+    border-color: var(--civ-chip-border);
+
+    &:hover {
+      background-color: rgb(255 255 255 / 10%);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &.ccp-confirm--disabled {
+    background: none;
+    border-color: color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    color: color-mix(in srgb, var(--gold-dim) 40%, transparent);
+    cursor: not-allowed;
+  }
+}
+
+.ccp-return {
+  width: 100%;
+  padding-block: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, #b45309 40%, transparent);
+  color: #fbbf24;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  background: none;
+
+  &:hover {
+    background-color: color-mix(in srgb, #78350f 20%, transparent);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.ccp-cancel {
+  width: 100%;
+  text-align: center;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--gold-dim) 75%, transparent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-block: 0.375rem;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--gold-dim);
+  }
+}

@@ -7,6 +7,7 @@ import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import GlossedTerm from './GlossedTerm';
 import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
+import './WeatherModal.css';
 
 interface WeatherModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ interface WeatherModalProps {
 
 const WeatherIcon = ({
   condition,
-  className = 'w-12 h-12',
+  className = 'weather-icon--md',
 }: {
   condition: string;
   className?: string;
@@ -33,7 +34,7 @@ const WeatherIcon = ({
       return (
         <svg
           viewBox="0 0 24 24"
-          className={`${className} text-gold-leaf filter drop-shadow-glow`}
+          className={`${className} weather-icon--gold`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -46,7 +47,7 @@ const WeatherIcon = ({
       return (
         <svg
           viewBox="0 0 24 24"
-          className={`${className} text-parchment`}
+          className={`${className} weather-icon--parchment`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -65,7 +66,7 @@ const WeatherIcon = ({
       return (
         <svg
           viewBox="0 0 24 24"
-          className={`${className} text-parchment`}
+          className={`${className} weather-icon--parchment`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -78,7 +79,7 @@ const WeatherIcon = ({
       return (
         <svg
           viewBox="0 0 24 24"
-          className={`${className} text-sky-400`}
+          className={`${className} weather-icon--rain`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -91,7 +92,7 @@ const WeatherIcon = ({
       return (
         <svg
           viewBox="0 0 24 24"
-          className={`${className} text-white`}
+          className={`${className} weather-icon--white`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -108,7 +109,7 @@ const WeatherIcon = ({
       return (
         <svg
           viewBox="0 0 24 24"
-          className={`${className} text-yellow-500`}
+          className={`${className} weather-icon--storm`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -127,25 +128,19 @@ const ChronosItem: React.FC<{
   isCurrent?: boolean;
   civilization: string;
 }> = ({ data, isCurrent, civilization }) => (
-  <div
-    className={`p-4 rounded-lg border-2 transition-all duration-300 ${
-      isCurrent
-        ? 'border-gold-leaf bg-gold-leaf/10 shadow-[0_0_15px_rgba(207,181,59,0.1)]'
-        : 'border-gold-dim/20 bg-ink/40 hover:border-gold-dim/50'
-    }`}
-  >
-    <div className="flex justify-between items-start mb-3">
+  <div className={`chronos-item ${isCurrent ? 'chronos-item--current' : 'chronos-item--past'}`}>
+    <div className="chronos-item__header">
       <span
-        className={`font-serif text-lg font-bold tracking-widest ${
-          isCurrent ? 'text-gold-leaf' : 'text-gold-dim'
+        className={`chronos-item__year ${
+          isCurrent ? 'chronos-item__year--current' : 'chronos-item__year--past'
         }`}
       >
         {data.yearLabel}
       </span>
       {isCurrent && (
-        <span className="text-xs uppercase tracking-widest font-black px-1.5 py-0.5 border border-gold-leaf bg-gold-leaf/20 text-gold-leaf rounded">
+        <span className="chronos-item__today-badge">
           {civilization === 'babylonia' ? (
-            <GlossedTerm term={BAB.today} className="text-sm" />
+            <GlossedTerm term={BAB.today} className="chronos-gloss-sm" />
           ) : (
             'Hodie'
           )}
@@ -153,32 +148,30 @@ const ChronosItem: React.FC<{
       )}
     </div>
 
-    <div className="flex items-center gap-4">
-      <WeatherIcon condition={data.condition} className="w-10 h-10 shrink-0" />
-      <div className="flex-1 min-w-0">
-        <div className="text-parchment font-serif text-base italic leading-tight truncate">
+    <div className="chronos-item__body">
+      <WeatherIcon condition={data.condition} className="weather-icon--sm" />
+      <div className="chronos-item__content">
+        <div className="chronos-item__desc">
           {civilization === 'hellas' && data.greekDescription
             ? data.greekDescription
             : data.description}
         </div>
         {civilization === 'hellas' && data.greekDescription && (
-          <div className="flex items-baseline gap-2 mt-0.5 truncate">
-            <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">
+          <div className="chronos-item__hellas-row">
+            <span className="chronos-item__trans">
               {transliterateGreek(data.greekDescription)}
             </span>
-            <span className="text-roman-red font-body italic text-xs font-bold uppercase">
-              {data.description}
-            </span>
+            <span className="chronos-item__latin">{data.description}</span>
           </div>
         )}
-        <div className="flex items-center gap-4 mt-1">
-          <div className="flex items-center gap-1 text-gold-dim">
-            <Thermometer className="w-3 h-3" />
-            <span className="text-sm font-bold">{Math.round(data.temperature)}°C</span>
+        <div className="chronos-item__stats">
+          <div className="chronos-item__temp">
+            <Thermometer className="chronos-item__temp-icon" />
+            <span className="chronos-item__temp-val">{Math.round(data.temperature)}°C</span>
           </div>
-          <div className="flex items-center gap-1 text-stone-500">
-            <Wind className="w-3 h-3" />
-            <span className="text-xs">{Math.round(data.windSpeed)} km/h</span>
+          <div className="chronos-item__wind">
+            <Wind className="chronos-item__wind-icon" />
+            <span className="chronos-item__wind-val">{Math.round(data.windSpeed)} km/h</span>
           </div>
         </div>
       </div>
@@ -236,23 +229,17 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
-      onClick={onClose}
-    >
+    <div className="weather-modal animate-fadeIn" onClick={onClose}>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div
-        className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col relative overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
+      <div className="weather-modal__panel" onClick={e => e.stopPropagation()}>
         {/* Decorative background hatch */}
-        <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
+        <div className="weather-modal__hatch woodcut-hatch"></div>
 
         {/* Header */}
-        <div className="bg-ink p-4 border-b border-gold-dim/50 flex justify-between items-center relative z-10 shadow-md">
-          <div className="flex items-center gap-3 text-gold-leaf">
-            <CloudSun className="w-6 h-6" />
-            <h2 className="font-serif text-xl font-bold uppercase tracking-[0.3em]">
+        <div className="weather-modal__header">
+          <div className="weather-modal__header-title">
+            <CloudSun className="weather-modal__header-cloud-icon" />
+            <h2>
               {civilization === 'babylonia' ? (
                 <GlossedTerm term={BAB.skyRecords} align="start" />
               ) : (
@@ -260,25 +247,20 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
               )}
             </h2>
           </div>
-          <button
-            onClick={onClose}
-            className="text-parchment/80 hover:text-roman-red hover:bg-gold-leaf/10 transition-colors p-2 rounded-full"
-          >
-            <X className="w-6 h-6" />
+          <button onClick={onClose} className="weather-modal__close">
+            <X className="weather-modal__close-icon" />
           </button>
         </div>
 
-        {/* Time-travel banner (mirrors the app's amber Viaje Temporal bar) */}
+        {/* Time-travel banner */}
         {isTimeTraveling && (
-          <div className="relative z-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 bg-amber-950/60 border-b border-amber-700/40 px-4 py-2 text-amber-300">
-            <Hourglass className="w-3.5 h-3.5 shrink-0" />
-            <span className="font-serif text-xs uppercase tracking-[0.25em] font-bold">
-              Viaje Temporal
-            </span>
+          <div className="weather-modal__banner">
+            <Hourglass className="weather-modal__banner-icon" />
+            <span className="weather-modal__banner-label">Viaje Temporal</span>
             {travelDate && (
               <>
-                <span className="text-amber-700/60">·</span>
-                <span className="font-serif text-xs tabular-nums text-amber-400/90">
+                <span className="weather-modal__banner-sep">·</span>
+                <span className="weather-modal__banner-date">
                   {travelDate.toLocaleString(undefined, {
                     dateStyle: 'medium',
                     timeStyle: 'short',
@@ -286,56 +268,54 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                 </span>
               </>
             )}
-            <span className="ml-1 text-xs uppercase tracking-widest px-1.5 py-0.5 rounded border border-amber-700/40 text-amber-400/80">
+            <span className="weather-modal__banner-badge">
               {weather.isHistorical ? 'Datos históricos' : 'Sin registro · actual'}
             </span>
           </div>
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto p-4 sm:p-6 custom-scrollbar relative z-10">
-          {/* Compact Location Selector */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-3 text-gold-dim">
-              <Map className="w-4 h-4" />
+        <div className="weather-modal__content custom-scrollbar">
+          {/* Location Selector */}
+          <div className="weather-modal__location">
+            <div className="weather-modal__location-header">
+              <Map className="weather-modal__loc-map-icon" />
               {civilization === 'babylonia' ? (
                 <GlossedTerm
                   term={BAB.place}
                   align="start"
-                  className="font-serif text-sm uppercase tracking-[0.2em] font-bold"
+                  className="weather-modal__location-label"
                 />
               ) : (
-                <span className="font-serif text-xs uppercase tracking-[0.2em] font-bold">
-                  Mutare Locum:
-                </span>
+                <span className="weather-modal__location-label">Mutare Locum:</span>
               )}
             </div>
-            <div className="flex overflow-x-auto gap-2 pb-2 custom-scrollbar-thin">
+            <div className="weather-modal__location-scroll custom-scrollbar-thin">
               {LOCATIONS.map(loc => {
                 const active = isLocActive(loc);
                 const Icon = loc.icon;
                 const isGps = loc.id === 'gps';
-                const inactiveLocClass = isGps
-                  ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20'
-                  : 'bg-gold-leaf/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:bg-gold-leaf/10';
+
+                let locMod = 'weather-modal__loc-btn--inactive';
+                if (active) locMod = 'weather-modal__loc-btn--active';
+                else if (isGps) locMod = 'weather-modal__loc-btn--gps';
+
+                const btnClass = [
+                  'weather-modal__loc-btn',
+                  locMod,
+                  isLocLoading && isGps ? 'animate-pulse' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ');
 
                 return (
                   <button
                     key={loc.id}
                     onClick={() => handleLocationSelect(loc)}
                     disabled={isLocLoading}
-                    className={`
-                                            flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300
-                                            font-serif text-xs uppercase tracking-widest
-                                            ${
-                                              active
-                                                ? 'bg-gold-leaf text-ink border-gold-leaf shadow-lg'
-                                                : inactiveLocClass
-                                            }
-                                            ${isLocLoading && isGps ? 'animate-pulse' : ''}
-                                        `}
+                    className={btnClass}
                   >
-                    <Icon className={`w-3 h-3 ${active ? 'text-ink' : 'text-gold-leaf'}`} />
+                    <Icon className="loc-btn-icon" />
                     <span>{loc.name}</span>
                   </button>
                 );
@@ -344,59 +324,55 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
           </div>
 
           {/* Hero Section: Current Weather */}
-          <div className="bg-gradient-to-br from-gold-leaf/5 to-transparent border border-gold-leaf/30 rounded-2xl p-6 mb-8 shadow-inner">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.4em] mb-2 font-bold">
+          <div className="weather-modal__hero">
+            <div className="weather-modal__hero-main">
+              <div className="weather-modal__hero-info">
+                <span className="weather-modal__status-label">
                   {civilization === 'babylonia' ? (
                     <GlossedTerm
                       term={isTimeTraveling ? BAB.day : BAB.today}
                       align="start"
-                      glossClassName="tracking-normal"
+                      glossClassName="gloss-tracking-normal"
                     />
                   ) : (
                     statusLabel
                   )}
                 </span>
-                <h3 className="text-3xl md:text-4xl font-serif font-bold text-parchment italic mb-2">
+                <h3 className="weather-modal__hero-title">
                   {civilization === 'hellas' && current.greekDescription
                     ? current.greekDescription
                     : current.description}
                 </h3>
                 {civilization === 'hellas' && current.greekDescription && (
-                  <div className="flex flex-col items-center md:items-start mb-2">
-                    <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">
+                  <div className="weather-modal__hellas-row">
+                    <span className="weather-modal__wind-trans">
                       {transliterateGreek(current.greekDescription)}
                     </span>
-                    <span className="text-roman-red font-body italic text-sm font-bold uppercase">
-                      {current.description}
-                    </span>
+                    <span className="weather-modal__wind-latin">{current.description}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-3 mt-2">
+                <div className="weather-modal__wind-row">
                   {civilization === 'babylonia' ? (
                     <GlossedTerm
                       term={BAB.wind}
-                      className="text-gold-dim font-serif text-sm tracking-widest uppercase"
-                      glossClassName="text-gold-dim"
+                      className="weather-modal__wind-label"
+                      glossClassName="weather-modal__wind-gloss"
                     />
                   ) : (
-                    <span className="text-gold-dim font-serif text-sm tracking-widest uppercase">
-                      {labels.windLabel}:
-                    </span>
+                    <span className="weather-modal__wind-label">{labels.windLabel}:</span>
                   )}
-                  <div className="flex flex-col items-start leading-tight">
-                    <span className="text-parchment font-serif italic text-lg">
+                  <div className="weather-modal__wind-name-col">
+                    <span className="weather-modal__wind-name">
                       {civilization === 'hellas' && current.greekWindName
                         ? current.greekWindName
                         : current.latinWindName}
                     </span>
                     {civilization === 'hellas' && current.greekWindName && (
                       <>
-                        <span className="font-serif text-xs opacity-70 tracking-widest uppercase text-gold-dim">
+                        <span className="weather-modal__wind-trans">
                           {transliterateGreek(current.greekWindName)}
                         </span>
-                        <span className="text-roman-red font-body italic text-xs font-bold">
+                        <span className="weather-modal__wind-latin">
                           {current.latinWindName}
                         </span>
                       </>
@@ -405,73 +381,63 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-8">
-                <WeatherIcon
-                  condition={current.condition}
-                  className="w-24 h-24 filter drop-shadow-glow"
-                />
-                <div className="flex flex-col items-center">
-                  <span className="text-5xl md:text-6xl font-serif font-bold text-parchment">
+              <div className="weather-modal__hero-right">
+                <WeatherIcon condition={current.condition} className="weather-icon--lg" />
+                <div className="weather-modal__temp-col">
+                  <span className="weather-modal__temp">
                     {Math.round(current.temperature)}°
                   </span>
-                  <span className="text-gold-dim font-serif text-xs uppercase tracking-widest mt-1">
-                    Celsius
-                  </span>
+                  <span className="weather-modal__celsius">Celsius</span>
                 </div>
               </div>
             </div>
 
             {/* Detailed Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gold-dim/20">
-              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
-                <Wind className="w-5 h-5 text-gold-dim mb-2" />
-                <span className="text-xs uppercase text-stone-500 tracking-widest">
+            <div className="weather-modal__metrics">
+              <div className="weather-modal__metric">
+                <Wind className="weather-modal__metric-icon" />
+                <span className="weather-modal__metric-label">
                   {civilization === 'babylonia' ? 'Velocidad' : 'Velocitas'}
                 </span>
-                <span className="text-parchment font-bold">
+                <span className="weather-modal__metric-value">
                   {Math.round(current.windSpeed)} km/h
                 </span>
               </div>
-              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
+              <div className="weather-modal__metric">
                 <div
-                  className="w-5 h-5 mb-2 relative"
+                  className="weather-modal__wind-arrow"
                   style={{ transform: `rotate(${current.windDirection}deg)` }}
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-full h-full text-gold-leaf fill-current"
-                  >
+                  <svg viewBox="0 0 24 24" className="weather-modal__wind-arrow-svg">
                     <path d="M12 2 L16 22 L12 18 L8 22 Z" />
                   </svg>
                 </div>
-                <span className="text-xs uppercase text-stone-500 tracking-widest">
+                <span className="weather-modal__metric-label">
                   {civilization === 'babylonia' ? 'Dirección' : 'Directio'}
                 </span>
-                <span className="text-parchment font-bold">{current.windDirection}°</span>
+                <span className="weather-modal__metric-value">{current.windDirection}°</span>
               </div>
-              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10">
-                <Gauge className="w-5 h-5 text-gold-dim mb-2" />
-                <span className="text-xs uppercase text-stone-500 tracking-widest">
+              <div className="weather-modal__metric">
+                <Gauge className="weather-modal__metric-icon" />
+                <span className="weather-modal__metric-label">
                   {civilization === 'babylonia' ? 'Presión' : 'Pressio'}
                 </span>
-                <span className="text-parchment font-bold">
+                <span className="weather-modal__metric-value">
                   {Math.round(current.surfacePressure)} hPa
                 </span>
               </div>
-              <div className="flex flex-col items-center p-3 bg-gold-leaf/5 rounded-lg border border-gold-dim/10 text-center">
-                <CloudSun className="w-5 h-5 text-gold-dim mb-2" />
+              <div className="weather-modal__metric">
+                <CloudSun className="weather-modal__metric-icon" />
                 {civilization === 'babylonia' ? (
                   <GlossedTerm
                     term={BAB.sky}
-                    className="text-sm uppercase text-stone-500 tracking-widest"
+                    className="weather-modal__metric-label"
                     glossClassName="text-stone-500"
                   />
                 ) : (
-                  <span className="text-xs uppercase text-stone-500 tracking-widest">
-                    {labels.skyLabel}
-                  </span>
+                  <span className="weather-modal__metric-label">{labels.skyLabel}</span>
                 )}
-                <span className="text-parchment font-bold">
+                <span className="weather-modal__metric-value">
                   {current.condition === 'clear' && 'Serenum'}
                   {current.condition === 'partly-cloudy' && 'Nubes Sparsae'}
                   {current.condition === 'cloudy' && 'Nubilum'}
@@ -485,9 +451,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
           </div>
 
           {/* Historical Comparison */}
-          <div className="flex items-center gap-3 mb-6">
-            <History className="w-5 h-5 text-gold-dim" />
-            <h4 className="font-serif text-lg text-gold-leaf uppercase tracking-[0.2em] font-bold">
+          <div className="weather-modal__history-header">
+            <History className="weather-modal__history-icon" />
+            <h4 className="weather-modal__history-title">
               {civilization === 'babylonia' ? (
                 <GlossedTerm term={BAB.formerDays} align="start" />
               ) : (
@@ -496,16 +462,14 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
             </h4>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
+          <div className="weather-modal__history-grid">
             {historical.map(snap => (
               <ChronosItem key={snap.yearLabel} data={snap} civilization={civilization} />
             ))}
           </div>
 
-          <div className="mt-8 text-center pt-6 border-t border-gold-dim/20">
-            <p className="text-xs font-serif text-stone-500 italic uppercase tracking-[0.3em]">
-              Comparatio temporis in eodem loco per annos
-            </p>
+          <div className="weather-modal__footer">
+            <p>Comparatio temporis in eodem loco per annos</p>
           </div>
         </div>
       </div>
