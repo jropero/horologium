@@ -1,0 +1,169 @@
+.solar-times {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+  margin-top: 1rem;
+  padding-inline: 0.5rem;
+}
+
+.solar-times-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid;
+  padding: 1.25rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+  gap: 1.5rem;
+  color: var(--parchment);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.15s ease;
+
+  &:not(.solar-times-panel--egypt) {
+    background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+    border-color: color-mix(in srgb, var(--gold-dim) 40%, transparent);
+    border-radius: 0.5rem;
+  }
+
+  &:not(.solar-times-panel--egypt):hover {
+    background-color: color-mix(in srgb, var(--ink) 95%, transparent);
+  }
+
+  @media (width >= 768px) {
+    flex-direction: row;
+  }
+}
+
+.solar-times-hatch {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.solar-times-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+  flex: 1;
+  justify-content: center;
+
+  @media (width >= 768px) {
+    flex-direction: row;
+
+    &.solar-times-side--reversed {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+.solar-times-icon--sun {
+  color: var(--gold-leaf);
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  filter: drop-shadow(0 0 6px var(--gold-leaf));
+}
+
+.solar-times-icon--moon {
+  color: var(--roman-red);
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  filter: drop-shadow(0 0 6px var(--roman-red));
+}
+
+.solar-times-text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  @media (width >= 768px) {
+    text-align: left;
+
+    &.solar-times-text--right {
+      text-align: right;
+    }
+  }
+}
+
+.solar-times-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  margin-bottom: 0.25rem;
+}
+
+.solar-times-time {
+  font-family: 'IM Fell English', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--parchment);
+  line-height: 1;
+
+  @media (width >= 768px) {
+    font-size: 1.875rem;
+  }
+}
+
+.solar-times-divider {
+  height: 1px;
+  width: 6rem;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--gold-dim) 40%, transparent),
+    transparent
+  );
+  z-index: 10;
+
+  @media (width >= 768px) {
+    width: 1px;
+    height: 3rem;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--gold-dim) 40%, transparent),
+      transparent
+    );
+  }
+}
+
+.solar-times-hour-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  min-width: 8rem;
+}
+
+.solar-times-hour-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  margin-bottom: 0.5rem;
+}
+
+.solar-times-hour-value {
+  font-family: Cinzel, serif;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: var(--gold-leaf);
+  font-weight: 700;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 7%)) drop-shadow(0 2px 2px rgb(0 0 0 / 6%));
+}
+
+.solar-times-minute-unit {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  font-family: 'IM Fell English', serif;
+}
