@@ -5,6 +5,7 @@ import { getPlanetSkyStates, NakedEyePlanet, PlanetSkyState } from '../utils/pla
 import { BABYLONIAN_ZODIAC, BABYLONIAN_ZODIAC_ES } from '../types/babylonia';
 import { BABYLONIAN_UI_TERMS } from '../utils/civLabels';
 import GlossedTerm from './GlossedTerm';
+import './BabylonianSkyDiary.css';
 
 // The Babylonians had no planetary week and no planetary hours ("No weeks … are
 // attested", Sachs & Hunger, Astronomical Diaries I, 1988, intro p. 13; the week is
@@ -185,53 +186,52 @@ const BabylonianSkyDiary: React.FC<Props> = ({ currentDate, lat, lng }) => {
         s.apparition === 'morning' ? 'al este, al alba' : 'al oeste, al anochecer';
     }
     return (
-      <div
-        key={def.key}
-        className="grid grid-cols-[minmax(0,1fr)_5.5rem_7rem] gap-x-2 items-start px-2 py-2"
-      >
-        <div className="flex items-start gap-2 min-w-0">
+      <div key={def.key} className="babylonian-sky-diary-planet-row">
+        <div className="babylonian-sky-diary-planet-name-col">
           <span
             aria-hidden
-            className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
-              s.visible ? 'bg-gold-leaf' : 'border border-parchment/40'
+            className={`babylonian-sky-diary-planet-dot ${
+              s.visible
+                ? 'babylonian-sky-diary-planet-dot--visible'
+                : 'babylonian-sky-diary-planet-dot--hidden'
             }`}
           />
-          <div className="flex flex-col min-w-0">
+          <div className="babylonian-sky-diary-planet-name-stack">
             <span
-              className={`font-serif text-sm leading-snug ${
-                s.visible ? 'text-parchment' : 'text-parchment/60'
+              className={`babylonian-sky-diary-planet-logogram${
+                s.visible ? '' : ' babylonian-sky-diary-planet-logogram--dim'
               }`}
             >
               {def.logogram}
-              {def.akk && <span className="text-gold-dim/80"> · {def.akk}</span>}
+              {def.akk && <span className="babylonian-sky-diary-planet-akk"> · {def.akk}</span>}
             </span>
-            <span className="text-xs italic text-parchment/60 leading-tight">{def.es}</span>
+            <span className="babylonian-sky-diary-planet-es">{def.es}</span>
           </div>
         </div>
-        <div className="flex flex-col items-end text-right">
-          <span className="font-serif text-sm text-gold-dim leading-snug tabular-nums">
+        <div className="babylonian-sky-diary-planet-pos-col">
+          <span className="babylonian-sky-diary-planet-sign">
             {SIGN_ABBR[s.signIndex]} {Math.floor(s.degreeInSign)}°
           </span>
-          <span className="text-xs italic text-parchment/60 leading-tight">
+          <span className="babylonian-sky-diary-planet-sign-gloss">
             {sign} · {BABYLONIAN_ZODIAC_ES[sign]}
           </span>
         </div>
-        <div className="flex flex-col items-end text-right">
+        <div className="babylonian-sky-diary-planet-apparition-col">
           {s.visible && !allNight ? (
-            <span className="font-serif text-sm text-parchment leading-snug">
+            <span className="babylonian-sky-diary-planet-apparition-akk">
               {s.apparition === 'morning' ? 'ina NIM' : 'ina ŠÚ'}
             </span>
           ) : (
-            <span className="text-xs text-parchment/70 leading-snug">
+            <span className="babylonian-sky-diary-planet-apparition-vis">
               {s.visible ? 'visible' : 'invisible'}
             </span>
           )}
-          <span className="text-xs italic text-parchment/60 leading-tight">
-            {apparitionText}
-          </span>
-          <span className="mt-1 px-1.5 rounded-full border border-gold-dim/25 text-xs leading-tight text-parchment/70">
-            {motion.akk && <span className="font-serif text-gold-dim/80">{motion.akk} · </span>}
-            <span className="italic">{motion.es}</span>
+          <span className="babylonian-sky-diary-planet-apparition-desc">{apparitionText}</span>
+          <span className="babylonian-sky-diary-planet-motion">
+            {motion.akk && (
+              <span className="babylonian-sky-diary-planet-motion-akk">{motion.akk} · </span>
+            )}
+            <span className="babylonian-sky-diary-planet-motion-es">{motion.es}</span>
           </span>
         </div>
       </div>
@@ -239,94 +239,92 @@ const BabylonianSkyDiary: React.FC<Props> = ({ currentDate, lat, lng }) => {
   };
 
   return (
-    <div className="w-full max-w-none mx-auto mt-6 mb-2">
-      <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <div className="h-px flex-1 bg-gold-dim/20" />
+    <div className="babylonian-sky-diary">
+      <div className="babylonian-sky-diary-inner">
+        <div className="babylonian-sky-diary-title-row">
+          <div className="babylonian-sky-diary-divider" />
           <GlossedTerm
             term={BABYLONIAN_UI_TERMS.skyRecords}
-            className="text-gold-dim text-sm uppercase tracking-[0.3em] font-serif"
+            className="babylonian-sky-diary-title-term"
           />
-          <div className="h-px flex-1 bg-gold-dim/20" />
+          <div className="babylonian-sky-diary-divider" />
         </div>
-        <p className="-mt-1 mb-2 text-center text-xs italic text-parchment/65">
+        <p className="babylonian-sky-diary-subtitle">
           Lo que los Diarios Astronómicos registrarían esta noche
         </p>
-        <div className="mb-3 text-center">
+        <div className="babylonian-sky-diary-help-toggle">
           <button
             type="button"
             onClick={() => setShowHelp(v => !v)}
             aria-expanded={showHelp}
-            className="text-xs font-serif text-gold-dim underline underline-offset-2 hover:text-gold-leaf"
+            className="babylonian-sky-diary-help-btn"
           >
             {showHelp ? 'Cerrar explicación' : '¿Cómo leer este panel?'}
           </button>
         </div>
         {showHelp && (
-          <dl className="mb-3 px-3 py-2 rounded-lg bg-parchment/5 border border-gold-dim/20 flex flex-col gap-2">
+          <dl className="babylonian-sky-diary-help-dl">
             {HELP.map(h => (
               <div key={h.term}>
-                <dt className="font-serif text-sm text-gold-dim">{h.term}</dt>
-                <dd className="text-xs text-parchment/80 leading-snug">{h.text}</dd>
+                <dt className="babylonian-sky-diary-help-dt">{h.term}</dt>
+                <dd className="babylonian-sky-diary-help-dd">{h.text}</dd>
               </div>
             ))}
           </dl>
         )}
 
         {/* ── Time since sunset / sunrise, and the watch ── */}
-        <h3 className="mb-1.5 text-xs uppercase tracking-[0.2em] text-parchment/60 font-serif">
-          El tiempo
-        </h3>
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          <div className="flex flex-col items-center text-center px-2 py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/30">
-            <span className="text-xs text-parchment/60">Hora babilónica</span>
-            <span className="font-serif text-lg text-parchment tabular-nums leading-snug mt-0.5">
-              {beru} <span className="text-gold-dim text-sm">{TERMS.beru.akk}</span> {usRest}{' '}
-              <span className="text-gold-dim text-sm">{TERMS.us.akk}</span>
+        <h3 className="babylonian-sky-diary-section-title">El tiempo</h3>
+        <div className="babylonian-sky-diary-time-grid">
+          <div className="babylonian-sky-diary-time-cell">
+            <span className="babylonian-sky-diary-time-label">Hora babilónica</span>
+            <span className="babylonian-sky-diary-beru">
+              {beru} <span className="babylonian-sky-diary-beru-unit">{TERMS.beru.akk}</span>{' '}
+              {usRest} <span className="babylonian-sky-diary-beru-unit">{TERMS.us.akk}</span>
             </span>
-            <span className="text-xs text-parchment/75 tabular-nums">
+            <span className="babylonian-sky-diary-time-approx">
               ≈ {Math.floor(minutesSince / 60)} h {minutesSince % 60} min{' '}
               {time.isDay ? 'tras la salida del sol' : 'tras la puesta del sol'}
             </span>
-            <span className="text-xs italic text-parchment/55 mt-1 leading-tight">
+            <span className="babylonian-sky-diary-time-terms">
               {TERMS.beru.akk} = {TERMS.beru.es} · {TERMS.us.akk} = {TERMS.us.es}
             </span>
           </div>
-          <div className="flex flex-col items-center text-center px-2 py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/30">
-            <span className="text-xs text-parchment/60">Guardia</span>
-            <span className="font-serif text-lg text-parchment leading-snug mt-0.5">
-              {watch.name}
-            </span>
-            <span className="text-xs italic text-parchment/75">{watch.desc}</span>
-            <span className="text-xs text-parchment/55 mt-1 leading-tight">
+          <div className="babylonian-sky-diary-time-cell">
+            <span className="babylonian-sky-diary-time-label">Guardia</span>
+            <span className="babylonian-sky-diary-watch-name">{watch.name}</span>
+            <span className="babylonian-sky-diary-watch-desc">{watch.desc}</span>
+            <span className="babylonian-sky-diary-watch-ordinal">
               {watch.watch}.ª de 3 guardias {time.isDay ? 'del día' : 'de la noche'}
             </span>
           </div>
         </div>
 
         {/* ── The planets, Diaries style ── */}
-        <h3 className="mb-1.5 text-xs uppercase tracking-[0.2em] text-parchment/60 font-serif">
-          Los planetas
-        </h3>
-        <div className="grid grid-cols-[minmax(0,1fr)_5.5rem_7rem] gap-x-2 px-2 pb-1 border-b border-gold-dim/20 text-xs text-parchment/55">
+        <h3 className="babylonian-sky-diary-section-title">Los planetas</h3>
+        <div className="babylonian-sky-diary-planets-header">
           <span>Planeta</span>
-          <span className="text-right">Posición</span>
-          <span className="text-right">Dónde se ve</span>
+          <span className="babylonian-sky-diary-planets-header-right">Posición</span>
+          <span className="babylonian-sky-diary-planets-header-right">Dónde se ve</span>
         </div>
-        <div className="flex flex-col divide-y divide-gold-dim/10">
-          {PLANETS.map(renderPlanet)}
-        </div>
-        <div className="mt-2 flex justify-center gap-4 text-xs text-parchment/55">
-          <span className="flex items-center gap-1.5">
-            <span aria-hidden className="h-2 w-2 rounded-full bg-gold-leaf" />
+        <div className="babylonian-sky-diary-planets-list">{PLANETS.map(renderPlanet)}</div>
+        <div className="babylonian-sky-diary-legend">
+          <span className="babylonian-sky-diary-legend-item">
+            <span
+              aria-hidden
+              className="babylonian-sky-diary-legend-dot babylonian-sky-diary-legend-dot--visible"
+            />
             visible a simple vista
           </span>
-          <span className="flex items-center gap-1.5">
-            <span aria-hidden className="h-2 w-2 rounded-full border border-parchment/40" />
+          <span className="babylonian-sky-diary-legend-item">
+            <span
+              aria-hidden
+              className="babylonian-sky-diary-legend-dot babylonian-sky-diary-legend-dot--hidden"
+            />
             oculto por el Sol
           </span>
         </div>
-        <p className="mt-2 text-center text-xs italic text-parchment/45">
+        <p className="babylonian-sky-diary-footer-note">
           Según los Diarios Astronómicos de Babilonia
         </p>
       </div>

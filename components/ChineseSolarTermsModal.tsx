@@ -1,5 +1,6 @@
 import React from 'react';
 import { SOLAR_TERMS } from '../utils/chineseCalendarData';
+import './ChineseSolarTermsModal.css';
 
 interface Props {
   isOpen: boolean;
@@ -11,43 +12,34 @@ const ChineseSolarTermsModal: React.FC<Props> = ({ isOpen, onClose, currentTermI
   if (!isOpen) return null;
 
   const seasons = [
-    { name: 'Primavera', color: 'border-emerald-600', terms: SOLAR_TERMS.slice(0, 6) },
-    { name: 'Verano', color: 'border-rose-600', terms: SOLAR_TERMS.slice(6, 12) },
-    { name: 'Otoño', color: 'border-amber-600', terms: SOLAR_TERMS.slice(12, 18) },
-    { name: 'Invierno', color: 'border-sky-600', terms: SOLAR_TERMS.slice(18, 24) },
+    { name: 'Primavera', seasonKey: 'spring', terms: SOLAR_TERMS.slice(0, 6) },
+    { name: 'Verano', seasonKey: 'summer', terms: SOLAR_TERMS.slice(6, 12) },
+    { name: 'Otoño', seasonKey: 'autumn', terms: SOLAR_TERMS.slice(12, 18) },
+    { name: 'Invierno', seasonKey: 'winter', terms: SOLAR_TERMS.slice(18, 24) },
   ];
 
   return (
     <div
       role="button"
       tabIndex={0}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      className="chinese-solar-terms-modal"
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
       }}
     >
-      <div
-        role="presentation"
-        className="bg-parchment text-ink w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl p-6 shadow-2xl relative border border-gold-dim/40"
-        onClick={e => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-ink hover:text-rose-800 font-bold transition-transform hover:scale-110 text-xl"
-        >
+      <div role="presentation" className="cstm__inner" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="cstm__close-btn">
           ✕
         </button>
 
-        <h2 className="text-2xl font-serif font-bold text-center text-ink mb-8 uppercase tracking-widest">
-          24 Términos Solares
-        </h2>
+        <h2 className="cstm__title">24 Términos Solares</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="cstm__seasons-grid">
           {seasons.map((season, sIdx) => (
-            <div key={season.name} className={`border-t-4 ${season.color} pt-4`}>
-              <h3 className="font-serif font-bold text-lg mb-4 text-ink/80">{season.name}</h3>
-              <div className="grid grid-cols-2 gap-2">
+            <div key={season.name} className={`cstm__season cstm__season--${season.seasonKey}`}>
+              <h3 className="cstm__season-heading">{season.name}</h3>
+              <div className="cstm__terms-grid">
                 {season.terms.map((term, tIdx) => {
                   const globalIndex = sIdx * 6 + tIdx;
                   const isActive = globalIndex === currentTermIndex;
@@ -56,23 +48,19 @@ const ChineseSolarTermsModal: React.FC<Props> = ({ isOpen, onClose, currentTermI
                   return (
                     <div
                       key={term.id}
-                      className={`
-                        p-3 rounded border transition-all duration-300
-                        ${
-                          isActive
-                            ? 'bg-gold-dim/20 border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.3)] animate-pulse'
-                            : 'bg-white/50 border-ink/10'
-                        }
-                        ${isPast ? 'opacity-40' : 'opacity-100'}
-                      `}
+                      className={[
+                        'cstm__term',
+                        isActive ? 'cstm__term--active' : 'cstm__term--inactive',
+                        isPast ? 'cstm__term--past' : '',
+                      ]
+                        .join(' ')
+                        .trim()}
                     >
-                      <div className="flex justify-between items-start">
-                        <span className="text-lg font-bold text-ink">{term.hanzi}</span>
-                        <span className="text-[10px] text-ink/60 font-bold">{term.pinyin}</span>
+                      <div className="cstm__term-header">
+                        <span className="cstm__term-hanzi">{term.hanzi}</span>
+                        <span className="cstm__term-pinyin">{term.pinyin}</span>
                       </div>
-                      <div className="text-[10px] text-ink/70 mt-1 italic">
-                        {term.translation}
-                      </div>
+                      <div className="cstm__term-translation">{term.translation}</div>
                     </div>
                   );
                 })}

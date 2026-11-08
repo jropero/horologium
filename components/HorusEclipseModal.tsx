@@ -3,6 +3,7 @@ import { X, Eye, Sun } from 'lucide-react';
 import { getAlgolEclipses } from '../utils/egyptianAstronomy';
 import { getEgyptianDate } from '../utils/egyptianCalendarUtils';
 import { getHemerologyForDate } from '../utils/egyptianHemerologyData';
+import './HorusEclipseModal.css';
 
 interface HorusEclipseModalProps {
   isOpen: boolean;
@@ -81,35 +82,27 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
-      onClick={onClose}
-    >
+    <div className="horus-eclipse-modal animate-fadeIn" onClick={onClose}>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div
-        className="bg-ink border-2 border-gold-dim rounded-xl shadow-[0_0_30px_rgba(207,181,59,0.2)] w-full max-w-xl max-h-[85vh] flex flex-col relative overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
+      <div className="horus-eclipse-modal__panel" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="bg-ink p-4 border-b border-gold-dim/50 flex justify-between items-center sticky top-0 z-10 shadow-md">
-          <div className="flex items-center gap-3 text-gold-leaf">
-            <Eye className="w-6 h-6" />
-            <h2 className="font-serif text-xl font-bold uppercase tracking-widest">
-              Próximos Eventos de Horus
-            </h2>
+        <div className="horus-eclipse-modal__header">
+          <div className="horus-eclipse-modal__header-left">
+            <Eye className="horus-eclipse-modal__header-icon" />
+            <h2 className="horus-eclipse-modal__header-title">Próximos Eventos de Horus</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-parchment/80 hover:text-roman-red hover:bg-white/10 transition-colors p-2 rounded-full"
+            className="horus-eclipse-modal__close-btn"
             aria-label="Cerrar modal"
           >
-            <X className="w-6 h-6" />
+            <X className="horus-eclipse-modal__header-icon" />
           </button>
         </div>
 
         {/* List */}
-        <div className="overflow-y-auto p-4 space-y-3 custom-scrollbar bg-ink/5">
-          <div className="grid grid-cols-1 gap-3">
+        <div className="horus-eclipse-modal__body custom-scrollbar">
+          <div className="horus-eclipse-modal__grid">
             {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
             {exceptionalDays.map((day, idx) => {
               const eDate = getEgyptianDate(day.date);
@@ -118,16 +111,16 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${
+                  className={`horus-eclipse-modal__event-card ${
                     isBad
-                      ? 'border-roman-red/50 bg-roman-red/10 shadow-[0_0_10px_rgba(220,38,38,0.1)]'
-                      : 'border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.1)]'
+                      ? 'horus-eclipse-modal__event-card--bad'
+                      : 'horus-eclipse-modal__event-card--good'
                   }`}
                 >
-                  <div className="flex-1 flex flex-col">
-                    <div className="flex justify-between items-start gap-2">
-                      <div className="flex flex-col">
-                        <span className="text-parchment font-body text-base font-bold uppercase tracking-tight">
+                  <div className="horus-eclipse-modal__event-inner">
+                    <div className="horus-eclipse-modal__event-top">
+                      <div className="horus-eclipse-modal__event-dates">
+                        <span className="horus-eclipse-modal__gregorian-date">
                           {day.date.toLocaleDateString('es-ES', {
                             weekday: 'short',
                             month: 'short',
@@ -136,47 +129,49 @@ const HorusEclipseModal: React.FC<HorusEclipseModalProps> = ({
                             minute: isBad ? '2-digit' : undefined,
                           })}
                         </span>
-                        <span className="text-gold-leaf font-serif text-[11px] font-bold uppercase tracking-widest mt-0.5">
+                        <span className="horus-eclipse-modal__egyptian-date">
                           {eDate.isEpagomenal
                             ? `Epagomenai ${eDate.dayOfMonth}`
                             : `${eDate.dayOfMonth} de ${eDate.monthName}`}
                         </span>
                       </div>
 
-                      <div className="flex flex-col items-end gap-1">
+                      <div className="horus-eclipse-modal__event-badges">
                         <div
-                          className={`mobile-fit-content flex items-center gap-1.5 px-2 py-0.5 rounded-sm border text-[10px] font-black uppercase tracking-widest ${
+                          className={`horus-eclipse-modal__badge ${
                             isBad
-                              ? 'border-roman-red/50 text-roman-red bg-roman-red/20'
-                              : 'border-emerald-500/50 text-emerald-400 bg-emerald-500/20'
+                              ? 'horus-eclipse-modal__badge--bad'
+                              : 'horus-eclipse-modal__badge--good'
                           }`}
                         >
-                          {isBad ? <Eye className="w-3 h-3" /> : <Sun className="w-3 h-3" />}
+                          {isBad ? (
+                            <Eye className="horus-eclipse-modal__badge-icon" />
+                          ) : (
+                            <Sun className="horus-eclipse-modal__badge-icon" />
+                          )}
                           {isBad ? 'Eclipse Nefasto' : 'Suerte Suprema'}
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 mt-3 pt-2 border-t border-gold-dim/10">
-                      <div className="text-[10px] text-parchment/60 font-serif uppercase tracking-widest">
-                        Pronóstico:
-                      </div>
-                      <div className="flex gap-1">
+                    <div className="horus-eclipse-modal__forecast-row">
+                      <div className="horus-eclipse-modal__forecast-label">Pronóstico:</div>
+                      <div className="horus-eclipse-modal__forecast-icons">
                         {isBad ? (
                           <>
-                            <span className="text-roman-red text-xs">🦂</span>
-                            <span className="text-roman-red text-xs">🦂</span>
-                            <span className="text-roman-red text-xs">🦂</span>
+                            <span className="horus-eclipse-modal__forecast-icon--bad">🦂</span>
+                            <span className="horus-eclipse-modal__forecast-icon--bad">🦂</span>
+                            <span className="horus-eclipse-modal__forecast-icon--bad">🦂</span>
                           </>
                         ) : (
                           <>
-                            <span className="text-emerald-500 text-xs">☀️</span>
-                            <span className="text-emerald-500 text-xs">☀️</span>
-                            <span className="text-emerald-500 text-xs">☀️</span>
+                            <span className="horus-eclipse-modal__forecast-icon--good">☀️</span>
+                            <span className="horus-eclipse-modal__forecast-icon--good">☀️</span>
+                            <span className="horus-eclipse-modal__forecast-icon--good">☀️</span>
                           </>
                         )}
                       </div>
-                      <div className="ml-auto text-[10px] italic text-parchment/70">
+                      <div className="horus-eclipse-modal__forecast-desc">
                         {isBad
                           ? 'El Ojo de Horus se oscurece'
                           : 'El Ojo de Horus brilla con fuerza'}

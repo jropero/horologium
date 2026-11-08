@@ -1,0 +1,372 @@
+/* BabylonianSkyDiary */
+
+.babylonian-sky-diary {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.babylonian-sky-diary-inner {
+  background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 25%, transparent);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+}
+
+.babylonian-sky-diary-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.babylonian-sky-diary-divider {
+  height: 1px;
+  flex: 1;
+  background-color: color-mix(in srgb, var(--gold-dim) 20%, transparent);
+}
+
+.babylonian-sky-diary-title-term {
+  color: var(--gold-dim);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-family: Cinzel, serif;
+}
+
+.babylonian-sky-diary-subtitle {
+  margin-top: -0.25rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 65%, transparent);
+}
+
+.babylonian-sky-diary-help-toggle {
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.babylonian-sky-diary-help-btn {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: var(--gold-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--gold-leaf);
+  }
+}
+
+.babylonian-sky-diary-help-dl {
+  margin-bottom: 0.75rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: color-mix(in srgb, var(--parchment) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.babylonian-sky-diary-help-dt {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--gold-dim);
+}
+
+.babylonian-sky-diary-help-dd {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  line-height: 1.375;
+}
+
+.babylonian-sky-diary-section-title {
+  margin-bottom: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  font-family: Cinzel, serif;
+}
+
+.babylonian-sky-diary-time-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.babylonian-sky-diary-time-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-inline: 0.5rem;
+  padding-block: 0.625rem;
+  border-radius: 0.5rem;
+  background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+}
+
+.babylonian-sky-diary-time-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+}
+
+.babylonian-sky-diary-beru {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  color: var(--parchment);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.375;
+  margin-top: 0.125rem;
+}
+
+.babylonian-sky-diary-beru-unit {
+  color: var(--gold-dim);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.babylonian-sky-diary-time-approx {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+.babylonian-sky-diary-time-terms {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+  margin-top: 0.25rem;
+  line-height: 1.25;
+}
+
+.babylonian-sky-diary-watch-name {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  color: var(--parchment);
+  line-height: 1.375;
+  margin-top: 0.125rem;
+}
+
+.babylonian-sky-diary-watch-desc {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+}
+
+.babylonian-sky-diary-watch-ordinal {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+  margin-top: 0.25rem;
+  line-height: 1.25;
+}
+
+.babylonian-sky-diary-planets-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 5.5rem 7rem;
+  column-gap: 0.5rem;
+  padding-inline: 0.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+}
+
+.babylonian-sky-diary-planets-header-right {
+  text-align: right;
+}
+
+.babylonian-sky-diary-planets-list {
+  display: flex;
+  flex-direction: column;
+
+  & > * + * {
+    border-top: 1px solid color-mix(in srgb, var(--gold-dim) 10%, transparent);
+  }
+}
+
+.babylonian-sky-diary-planet-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 5.5rem 7rem;
+  column-gap: 0.5rem;
+  align-items: start;
+  padding-inline: 0.5rem;
+  padding-block: 0.5rem;
+}
+
+.babylonian-sky-diary-planet-name-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.babylonian-sky-diary-planet-dot {
+  margin-top: 0.375rem;
+  height: 0.5rem;
+  width: 0.5rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+}
+
+.babylonian-sky-diary-planet-dot--visible {
+  background-color: var(--gold-leaf);
+}
+
+.babylonian-sky-diary-planet-dot--hidden {
+  border: 1px solid color-mix(in srgb, var(--parchment) 40%, transparent);
+}
+
+.babylonian-sky-diary-planet-name-stack {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.babylonian-sky-diary-planet-logogram {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.375;
+  color: var(--parchment);
+}
+
+.babylonian-sky-diary-planet-logogram--dim {
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+}
+
+.babylonian-sky-diary-planet-akk {
+  color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+}
+
+.babylonian-sky-diary-planet-es {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  line-height: 1.25;
+}
+
+.babylonian-sky-diary-planet-pos-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.babylonian-sky-diary-planet-sign {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  color: var(--gold-dim);
+  line-height: 1.375;
+  font-variant-numeric: tabular-nums;
+}
+
+.babylonian-sky-diary-planet-sign-gloss {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  line-height: 1.25;
+}
+
+.babylonian-sky-diary-planet-apparition-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.babylonian-sky-diary-planet-apparition-akk {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  color: var(--parchment);
+  line-height: 1.375;
+}
+
+.babylonian-sky-diary-planet-apparition-vis {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  line-height: 1.375;
+}
+
+.babylonian-sky-diary-planet-apparition-desc {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  line-height: 1.25;
+}
+
+.babylonian-sky-diary-planet-motion {
+  margin-top: 0.25rem;
+  padding-inline: 0.375rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 25%, transparent);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+}
+
+.babylonian-sky-diary-planet-motion-akk {
+  font-family: Cinzel, serif;
+  color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+}
+
+.babylonian-sky-diary-planet-motion-es {
+  font-style: italic;
+}
+
+.babylonian-sky-diary-legend {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+}
+
+.babylonian-sky-diary-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.babylonian-sky-diary-legend-dot {
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+}
+
+.babylonian-sky-diary-legend-dot--visible {
+  background-color: var(--gold-leaf);
+}
+
+.babylonian-sky-diary-legend-dot--hidden {
+  border: 1px solid color-mix(in srgb, var(--parchment) 40%, transparent);
+}
+
+.babylonian-sky-diary-footer-note {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 45%, transparent);
+}

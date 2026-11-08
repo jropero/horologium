@@ -7,6 +7,7 @@ import { BABYLONIAN_ZODIAC_ES } from '../types/babylonia';
 import WeatherWidget from './WeatherWidget';
 import WeatherModal from './WeatherModal';
 import { useCivilization } from '../contexts/CivilizationContext';
+import './BabylonianClock.css';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -52,25 +53,27 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
   const third2 = days.slice(10, 20);
   const third3 = days.slice(20);
 
-  const renderThird = (ds: number[], label: string, phase: string, color: string) => (
-    <div className="flex-1 min-w-0">
-      <div className={`text-center text-xs uppercase tracking-widest font-bold mb-2 ${color}`}>
-        {label} <span className="opacity-60">· {phase}</span>
+  const renderThird = (
+    ds: number[],
+    label: string,
+    phase: string,
+    colorMod: 'light' | 'main',
+  ) => (
+    <div className="babylonian-calendar-third">
+      <div
+        className={`babylonian-calendar-third-label babylonian-calendar-third-label--${colorMod}`}
+      >
+        {label} <span className="babylonian-calendar-third-phase">· {phase}</span>
       </div>
-      <div className="grid grid-cols-5 gap-1">
+      <div className="babylonian-calendar-day-grid">
         {ds.map(d => {
           const isToday = d === babDate.day;
           const isPast = d < babDate.day;
-          let cls = 'bg-ink/40 text-blue-400 border border-blue-800/20';
-          if (isToday)
-            cls =
-              'bg-blue-400 text-ink font-bold shadow-[0_0_8px_rgba(96,165,250,0.6)] ring-1 ring-blue-300 scale-110';
-          else if (isPast) cls = 'bg-blue-900/30 text-blue-300 border border-blue-700/20';
+          let dayClass = 'babylonian-calendar-day';
+          if (isToday) dayClass += ' babylonian-calendar-day--today';
+          else if (isPast) dayClass += ' babylonian-calendar-day--past';
           return (
-            <div
-              key={d}
-              className={`w-6 h-6 rounded flex items-center justify-center text-xs font-serif transition-all ${cls}`}
-            >
+            <div key={d} className={dayClass}>
               {d}
             </div>
           );
@@ -83,7 +86,7 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
     <div
       role="button"
       tabIndex={0}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/85 backdrop-blur-md animate-fadeIn cursor-pointer"
+      className="babylonian-calendar-modal-backdrop animate-fadeIn"
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
@@ -91,96 +94,89 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
     >
       <div
         role="presentation"
-        className="w-full max-w-lg bg-ink border-4 border-blue-500/60 rounded-sm shadow-[0_0_50px_rgba(96,165,250,0.15)] overflow-hidden relative cursor-auto"
+        className="babylonian-calendar-modal"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 border-b border-blue-500/30 bg-blue-950/20 text-center relative">
+        <div className="babylonian-calendar-modal-header">
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-3 right-3 text-blue-300 hover:text-blue-300 transition-colors p-2 rounded-full hover:bg-blue-400/10"
+            className="babylonian-calendar-modal-close"
             aria-label="Cerrar"
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="text-blue-300 text-2xl mb-1">𒀭</div>
-          <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
-            {babDate.monthName}
-          </h2>
-          <p className="text-xs font-serif italic text-blue-200/70">
+          <div className="babylonian-calendar-modal-dingir">𒀭</div>
+          <h2 className="babylonian-calendar-modal-title">{babDate.monthName}</h2>
+          <p className="babylonian-calendar-modal-gloss">
             {babDate.isIntercalary ? 'Mes intercalar' : lore?.monthGloss}
           </p>
-          <p className="text-xs text-blue-300 uppercase tracking-[0.3em] mt-0.5">
+          <p className="babylonian-calendar-modal-era">
             Era Seléucida {babDate.seYear} · Mes {babDate.monthIndex + 1}
           </p>
         </div>
 
         {/* Body */}
-        <div className="p-5 flex flex-col gap-5 max-h-[65vh] overflow-y-auto custom-scrollbar overscroll-behavior-contain">
+        <div className="babylonian-calendar-modal-body custom-scrollbar">
           {/* Month grid */}
           <div>
-            <h3 className="text-xs font-serif uppercase tracking-widest text-blue-400 mb-3 text-center flex items-center justify-center gap-2 border-y border-blue-500/20 py-2">
+            <h3 className="babylonian-calendar-cycle-heading">
               <span>☾</span> Ciclo Lunar de {babDate.monthName} <span>☽</span>
             </h3>
-            <div className="flex gap-2">
-              {renderThird(third1, 'Ūrhu', 'Creciente', 'text-blue-300')}
-              {renderThird(third2, 'Nanduru', 'Llena', 'text-blue-400')}
-              {renderThird(third3, 'Šalšu', 'Menguante', 'text-blue-400')}
+            <div className="babylonian-calendar-thirds">
+              {renderThird(third1, 'Ūrhu', 'Creciente', 'light')}
+              {renderThird(third2, 'Nanduru', 'Llena', 'main')}
+              {renderThird(third3, 'Šalšu', 'Menguante', 'main')}
             </div>
           </div>
 
           {/* Deity & festival */}
           {lore && (
-            <div className="bg-blue-900/15 border border-blue-500/30 rounded p-4 flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">{lore.icon}</span>
+            <div className="babylonian-calendar-deity">
+              <div className="babylonian-calendar-deity-header">
+                <span className="babylonian-calendar-deity-icon">{lore.icon}</span>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-blue-400">
-                    Deidad del Mes
-                  </div>
-                  <div className="text-lg font-serif font-black text-parchment">
-                    {lore.festivalDeity}
-                  </div>
+                  <div className="babylonian-calendar-deity-label">Deidad del Mes</div>
+                  <div className="babylonian-calendar-deity-name">{lore.festivalDeity}</div>
                   {lore.festivalDeityGloss && (
-                    <div className="text-xs font-serif italic text-blue-200/70">
+                    <div className="babylonian-calendar-deity-gloss">
                       {lore.festivalDeityGloss}
                     </div>
                   )}
                 </div>
               </div>
-              <p className="text-xs font-serif text-parchment/80 italic leading-relaxed">
+              <p className="babylonian-calendar-deity-desc">
                 {'"'}
                 {lore.description}
                 {'"'}
               </p>
-              <div className="grid gap-2 sm:grid-cols-2">
-                <div className="p-2 bg-blue-800/20 border border-blue-600/20 rounded text-left">
-                  <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
-                    Regente del Mes
-                  </div>
-                  <div className="text-xs font-serif text-blue-100/90">
+              <div className="babylonian-calendar-deity-grid">
+                <div className="babylonian-calendar-deity-card">
+                  <div className="babylonian-calendar-deity-card-label">Regente del Mes</div>
+                  <div className="babylonian-calendar-deity-card-content">
                     {lore.monthRegent}
                     {lore.regentNote && (
-                      <span className="text-blue-300/70 italic"> · {lore.regentNote}</span>
+                      <span className="babylonian-calendar-regent-note">
+                        {' '}
+                        · {lore.regentNote}
+                      </span>
                     )}
                   </div>
-                  <div className="mt-1 text-xs font-serif text-blue-200/70 leading-relaxed">
+                  <div className="babylonian-calendar-regent-desc">
                     {babDate.monthRegentDesc}
                   </div>
                 </div>
-                <div className="p-2 bg-blue-800/20 border border-blue-600/20 rounded text-left">
-                  <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
-                    Festival / Ritual
-                  </div>
-                  <div className="text-xs font-serif text-blue-100/90">{lore.festival}</div>
+                <div className="babylonian-calendar-deity-card">
+                  <div className="babylonian-calendar-deity-card-label">Festival / Ritual</div>
+                  <div className="babylonian-calendar-deity-card-content">{lore.festival}</div>
                 </div>
               </div>
-              <div className="text-xs text-blue-400 font-serif">
+              <div className="babylonian-calendar-zodiac">
                 Signo zodiacal:{' '}
-                <span className="text-blue-300 font-bold">{lore.zodiacSign}</span>
+                <span className="babylonian-calendar-zodiac-sign">{lore.zodiacSign}</span>
                 {lore.zodiacSign in BABYLONIAN_ZODIAC_ES && (
-                  <span className="italic text-blue-300/60">
+                  <span className="babylonian-calendar-zodiac-gloss">
                     {' '}
                     ≈{' '}
                     {BABYLONIAN_ZODIAC_ES[lore.zodiacSign as keyof typeof BABYLONIAN_ZODIAC_ES]}
@@ -191,7 +187,7 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
           )}
 
           {/* Current day stats */}
-          <div className="grid grid-cols-2 gap-3 text-center">
+          <div className="babylonian-calendar-stats">
             {[
               { label: 'Hora temporal', value: babDate.hourName, gloss: babDate.hourNameEs },
               { label: 'Guardia', value: babDate.watchName, gloss: babDate.watchDesc },
@@ -206,23 +202,17 @@ const BabylonianCalendarModal: React.FC<BabylonianCalendarModalProps> = ({
                 gloss: babDate.moonPhaseNameEs,
               },
             ].map(({ label, value, gloss }) => (
-              <div key={label} className="bg-blue-900/15 border border-blue-500/20 rounded p-2">
-                <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-0.5">
-                  {label}
-                </div>
-                <div className="text-sm font-serif text-parchment">{value}</div>
-                <div className="text-xs font-serif italic text-blue-200/65">{gloss}</div>
+              <div key={label} className="babylonian-calendar-stat">
+                <div className="babylonian-calendar-stat-label">{label}</div>
+                <div className="babylonian-calendar-stat-value">{value}</div>
+                <div className="babylonian-calendar-stat-gloss">{gloss}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Footer */}
-        <button
-          type="button"
-          className="w-full p-3 bg-blue-500/10 border-t border-blue-500/30 text-blue-400 font-serif text-xs uppercase tracking-widest hover:bg-blue-500/20 transition-all font-bold"
-          onClick={onClose}
-        >
+        <button type="button" className="babylonian-calendar-modal-footer" onClick={onClose}>
           Cerrar la Tablilla
         </button>
       </div>
@@ -247,22 +237,22 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
 
   if (loading) {
     return (
-      <div className="w-full h-96 flex items-center justify-center bg-ink border-4 border-blue-500/30 rounded-lg">
-        <span className="font-serif text-2xl text-blue-400">{labels.loadingText}</span>
+      <div className="babylonian-clock-loading">
+        <span className="babylonian-clock-loading-text">{labels.loadingText}</span>
       </div>
     );
   }
 
   return (
     <>
-      <div className="w-full max-w-none mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
+      <div className="babylonian-clock animate-fadeIn">
         {/* Top Bar */}
-        <div className="flex flex-col lg:flex-row h-full justify-between items-start lg:items-center gap-4 p-4 border-b-2 border-blue-500/30 bg-ink">
+        <div className="babylonian-clock-topbar">
           {weather && (
             <WeatherWidget
               weather={weather}
               onClick={() => setIsWeatherOpen(true)}
-              className="cursor-pointer"
+              className="babylonian-clock-weather-widget"
             />
           )}
 
@@ -273,12 +263,14 @@ const BabylonianClock: React.FC<BabylonianClockProps> = ({
             onKeyDown={e => {
               if (e.key === 'Enter' || e.key === ' ') setIsCalendarOpen(true);
             }}
-            className="bg-ink/80 border border-blue-500/30 p-3 rounded shadow-lg w-full md:w-auto flex flex-col items-center md:items-end cursor-pointer hover:bg-white/5 hover:border-blue-400 transition-all ml-auto"
+            className="babylonian-clock-calendar-trigger"
           >
-            <div className="text-blue-400 font-serif text-sm uppercase tracking-widest flex items-center gap-2 font-bold">
-              <span className="text-blue-300">Ver Calendario Babilonio</span>
-              <span className="text-blue-400 text-xs">•</span>
-              <span className="text-blue-200">Era Seléucida</span>
+            <div className="babylonian-clock-calendar-label">
+              <span className="babylonian-clock-calendar-label-primary">
+                Ver Calendario Babilonio
+              </span>
+              <span className="babylonian-clock-calendar-label-sep">•</span>
+              <span className="babylonian-clock-calendar-label-secondary">Era Seléucida</span>
             </div>
           </div>
         </div>

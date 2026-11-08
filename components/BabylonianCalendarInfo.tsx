@@ -17,6 +17,7 @@ import { WeatherData } from '../types';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
 import { getMoonPosition } from '../utils/solar';
+import './BabylonianCalendarInfo.css';
 
 interface BabylonianCalendarInfoProps {
   currentDate?: Date;
@@ -80,27 +81,15 @@ const TinyMoon: React.FC<{ phase: number; size?: number; dim?: boolean }> = ({
 const BabylonianFontePanel: React.FC<{ fonte: BabylonianFonte }> = ({ fonte }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mt-2 border-t" style={{ borderColor: 'rgba(96,165,250,0.20)' }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between pt-2 text-left gap-2"
-      >
-        <span className="text-xs font-bold uppercase tracking-widest text-blue-400/70">
-          𒀭 {fonte.title}
-        </span>
-        <span className="text-blue-500/60 text-xs shrink-0">{open ? '▴' : '▾'}</span>
+    <div className="bci-fonte-panel">
+      <button onClick={() => setOpen(o => !o)} className="bci-fonte-toggle">
+        <span className="bci-fonte-title">𒀭 {fonte.title}</span>
+        <span className="bci-fonte-chevron">{open ? '▴' : '▾'}</span>
       </button>
       {open && (
-        <div className="mt-2 pb-1">
-          <p
-            className="font-serif text-xs text-parchment/85 italic leading-relaxed border-l-2 pl-3 py-1"
-            style={{ borderColor: 'rgba(96,165,250,0.35)' }}
-          >
-            {fonte.excerpt}
-          </p>
-          <p className="text-xs text-blue-400/40 mt-1.5 tracking-wider uppercase leading-relaxed">
-            {fonte.source}
-          </p>
+        <div className="bci-fonte-body">
+          <p className="bci-fonte-excerpt">{fonte.excerpt}</p>
+          <p className="bci-fonte-source">{fonte.source}</p>
         </div>
       )}
     </div>
@@ -128,13 +117,6 @@ const SPECIAL_DAYS: Record<number, SpecialDay> = {
   28: { label: 'Ūm nūḥi libbi', es: 'Día de apaciguamiento', dot: 'rest' },
 };
 
-const DOT_COLORS: Record<SpecialDay['dot'], string> = {
-  sapatu: 'bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.7)]',
-  rest: 'bg-indigo-500',
-  quarter: 'bg-sky-300',
-  new: 'bg-indigo-500',
-};
-
 const SPECIAL_DAY_ICON: Record<SpecialDay['dot'], string> = {
   new: '🌑',
   quarter: '☽',
@@ -147,29 +129,39 @@ const SPECIAL_DAY_THEME: Record<
   { text: string; border: string; bg: string; glow: string }
 > = {
   new: {
-    text: 'text-indigo-400',
-    border: 'border-indigo-500/40',
-    bg: 'bg-indigo-900/15',
+    text: 'bci-color-indigo',
+    border: 'bci-border-indigo',
+    bg: 'bci-bg-indigo',
     glow: '',
   },
-  quarter: { text: 'text-sky-400', border: 'border-sky-500/35', bg: 'bg-sky-900/15', glow: '' },
-  sapatu: {
-    text: 'text-amber-400',
-    border: 'border-amber-500/50',
-    bg: 'bg-amber-900/15',
-    glow: 'shadow-[0_0_30px_rgba(251,191,36,0.08)]',
+  quarter: {
+    text: 'bci-color-sky',
+    border: 'bci-border-sky',
+    bg: 'bci-bg-sky',
+    glow: '',
   },
-  rest: { text: 'text-blue-400', border: 'border-blue-600/35', bg: 'bg-blue-900/10', glow: '' },
+  sapatu: {
+    text: 'bci-color-amber',
+    border: 'bci-border-amber',
+    bg: 'bci-bg-amber',
+    glow: 'bci-glow-amber',
+  },
+  rest: {
+    text: 'bci-color-blue',
+    border: 'bci-border-rest',
+    bg: 'bci-bg-rest',
+    glow: '',
+  },
 };
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
-  akitu: 'text-sky-400',
-  procession: 'text-violet-400',
-  mourning: 'text-slate-400',
-  marriage: 'text-pink-400',
-  ritual: 'text-blue-300',
-  festival: 'text-emerald-400',
-  astronomy: 'text-cyan-400',
+  akitu: 'bci-color-sky',
+  procession: 'bci-color-violet',
+  mourning: 'bci-color-slate',
+  marriage: 'bci-color-pink',
+  ritual: 'bci-color-blue-light',
+  festival: 'bci-color-emerald',
+  astronomy: 'bci-color-cyan',
 };
 
 // ─── Day status card (Babylonian "Nonae" equivalent) ─────────────────────────
@@ -182,56 +174,34 @@ const DayStatusCard: React.FC<{
   const event = lore?.dayEvents?.[day] ?? null;
   const theme = special
     ? SPECIAL_DAY_THEME[special.dot]
-    : { text: 'text-blue-400', border: 'border-blue-700/30', bg: 'bg-blue-900/10', glow: '' };
+    : { text: 'bci-color-blue', border: 'bci-border-default', bg: 'bci-bg-default', glow: '' };
 
   // Plain day with no special designation and no event — just a text label
   if (!special && !event) {
-    return (
-      <p className="font-serif text-xs uppercase tracking-[0.25em] text-blue-500/60 text-center">
-        Día {day} del mes
-      </p>
-    );
+    return <p className="bci-day-plain">Día {day} del mes</p>;
   }
 
   return (
-    <div
-      className={`w-full border ${theme.border} ${theme.bg} ${theme.glow} rounded-sm shadow-lg text-center flex flex-col items-center gap-4 p-5 relative overflow-hidden`}
-    >
-      {special?.dot === 'sapatu' && (
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-400 via-transparent to-transparent pointer-events-none" />
-      )}
+    <div className={`bci-day-card ${theme.border} ${theme.bg} ${theme.glow}`}>
+      {special?.dot === 'sapatu' && <div className="bci-sapatu-glow-overlay" />}
 
       {special && (
-        <div
-          className={`border-b border-blue-600/40 pb-2 w-full flex items-center justify-center gap-3`}
-        >
-          <span className="text-2xl filter drop-shadow-md">
-            {SPECIAL_DAY_ICON[special.dot]}
-          </span>
-          <div className="flex flex-col items-center">
-            <h3
-              className={`font-serif text-lg uppercase tracking-[0.2em] font-bold ${theme.text}`}
-            >
-              {special.label}
-            </h3>
-            <span className="text-xs font-serif italic text-blue-200/70">{special.es}</span>
+        <div className="bci-day-special-header">
+          <span className="bci-day-special-icon">{SPECIAL_DAY_ICON[special.dot]}</span>
+          <div className="bci-day-special-info">
+            <h3 className={`bci-day-special-title ${theme.text}`}>{special.label}</h3>
+            <span className="bci-day-special-es">{special.es}</span>
           </div>
         </div>
       )}
 
       {/* Day event — equivalent to Roman "Festum" */}
       {event && (
-        <div className="mt-1 w-full animate-fadeIn">
-          <div
-            className={`text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2 ${
-              EVENT_TYPE_COLORS[event.type] ?? theme.text
-            }`}
-          >
+        <div className="bci-day-event animate-fadeIn">
+          <div className={`bci-day-event-type ${EVENT_TYPE_COLORS[event.type] ?? theme.text}`}>
             <span>✧</span> {event.shortLabel} <span>✧</span>
           </div>
-          <p className="font-serif text-sm text-parchment/85 leading-relaxed px-2">
-            {event.description}
-          </p>
+          <p className="bci-day-event-desc">{event.description}</p>
         </div>
       )}
     </div>
@@ -315,8 +285,8 @@ const PanelMoonSvg: React.FC<{ type: 'waxing' | 'full' | 'waning'; active: boole
   type,
   active,
 }) => {
-  const cls = `w-5 h-5 mx-auto mb-1 transition-all ${
-    active ? 'text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.6)]' : 'text-blue-500/50'
+  const cls = `bci-panel-moon ${
+    active ? 'bci-panel-moon--active' : 'bci-panel-moon--inactive'
   }`;
   if (type === 'waxing')
     return (
@@ -386,7 +356,7 @@ const DayGrid: React.FC<{
 
   return (
     <div>
-      <div className="flex flex-row justify-center gap-1.5 sm:gap-2 w-full">
+      <div className="bci-panels-row">
         {panels.map(({ days, moonType, title, subtitle }) => {
           let panelIdx = 0;
           if (moonType === 'full') panelIdx = 1;
@@ -395,32 +365,23 @@ const DayGrid: React.FC<{
           return (
             <div
               key={moonType}
-              className={`p-2 sm:p-3 flex-1 rounded-lg border transition-all duration-500 relative overflow-hidden
-                ${
-                  active
-                    ? 'border-blue-400/50 bg-blue-900/10 shadow-[0_0_15px_rgba(96,165,250,0.1)] scale-[1.02] z-10'
-                    : 'border-blue-800/30 bg-ink/30'
-                }`}
+              className={`bci-panel ${active ? 'bci-panel--active' : 'bci-panel--inactive'}`}
             >
-              {active && (
-                <div className="absolute -right-4 -top-4 w-16 h-16 bg-blue-400/10 rounded-full blur-xl pointer-events-none" />
-              )}
+              {active && <div className="bci-panel-glow" />}
 
-              <div className="text-center mb-2 relative z-10 border-b border-blue-700/30 pb-2">
+              <div className="bci-panel-header">
                 <PanelMoonSvg type={moonType} active={active} />
                 <h4
-                  className={`text-xs font-bold uppercase tracking-wide ${
-                    active ? 'text-blue-300' : 'text-blue-500'
+                  className={`bci-panel-title ${
+                    active ? 'bci-panel-title--active' : 'bci-panel-title--inactive'
                   }`}
                 >
                   {title}
                 </h4>
-                <div className="text-xs font-serif italic text-blue-400/60 mt-0.5">
-                  {subtitle}
-                </div>
+                <div className="bci-panel-subtitle">{subtitle}</div>
               </div>
 
-              <div className="grid grid-cols-2 gap-1 justify-items-center relative z-10">
+              <div className="bci-day-cells">
                 {/* eslint-disable sonarjs/cognitive-complexity */}
                 {days.map(day => {
                   const isToday = day === today;
@@ -429,24 +390,18 @@ const DayGrid: React.FC<{
                   const special = SPECIAL_DAYS[day];
                   const hasFestival = dayEvents?.[day] !== undefined;
 
-                  let cellClass = 'bg-ink/40 active:bg-blue-900/30';
-                  if (isSelected)
-                    cellClass =
-                      'bg-blue-400/20 ring-2 ring-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.4)]';
-                  else if (isToday) cellClass = 'bg-blue-400/15 ring-1 ring-blue-400/70';
-                  else if (special?.dot === 'sapatu')
-                    cellClass = 'bg-amber-500/20 ring-1 ring-amber-400/60';
-                  else if (special?.dot === 'quarter')
-                    cellClass = 'bg-sky-900/30 ring-1 ring-sky-400/40';
-                  else if (special?.dot === 'rest')
-                    cellClass = 'bg-indigo-900/30 ring-1 ring-indigo-400/40';
-                  else if (hasFestival)
-                    cellClass = 'bg-emerald-900/25 ring-1 ring-emerald-500/40';
+                  let cellClass = 'bci-day-btn--default';
+                  if (isSelected) cellClass = 'bci-day-btn--selected';
+                  else if (isToday) cellClass = 'bci-day-btn--today';
+                  else if (special?.dot === 'sapatu') cellClass = 'bci-day-btn--sapatu';
+                  else if (special?.dot === 'quarter') cellClass = 'bci-day-btn--quarter';
+                  else if (special?.dot === 'rest') cellClass = 'bci-day-btn--rest';
+                  else if (hasFestival) cellClass = 'bci-day-btn--festival';
 
-                  let numClass = 'text-blue-300';
-                  if (isSelected) numClass = 'text-white';
-                  else if (isToday) numClass = 'text-blue-200';
-                  else if (isPast) numClass = 'text-blue-400/50';
+                  let numClass = 'bci-day-num';
+                  if (isSelected) numClass = 'bci-day-num bci-day-num--selected';
+                  else if (isToday) numClass = 'bci-day-num bci-day-num--today';
+                  else if (isPast) numClass = 'bci-day-num bci-day-num--past';
 
                   const phase = (day - 1) / monthLen;
 
@@ -454,41 +409,35 @@ const DayGrid: React.FC<{
                     <button
                       key={day}
                       type="button"
-                      className={`relative flex flex-col items-center justify-center rounded-sm pt-1 pb-2 w-full gap-0 transition-all cursor-pointer select-none ${cellClass}`}
+                      className={`bci-day-btn ${cellClass}`}
                       onClick={() => handleTap(day)}
                     >
                       <TinyMoon phase={phase} size={11} dim={isPast && !isToday} />
-                      <span className={`text-xs font-serif leading-none font-bold ${numClass}`}>
-                        {day}
-                      </span>
+                      <span className={numClass}>{day}</span>
                     </button>
                   );
                 })}
               </div>
+              {/* eslint-enable sonarjs/cognitive-complexity */}
             </div>
           );
         })}
-        {/* eslint-enable sonarjs/cognitive-complexity */}
       </div>
 
       {/* Info panel */}
       <div
-        className={`mt-3 rounded-lg border transition-all ${
-          hasInfo && selectedDay !== null
-            ? 'border-blue-500/40 bg-blue-900/20 p-3'
-            : 'border-blue-800/30 bg-transparent py-2 px-3'
+        className={`bci-info-panel ${
+          hasInfo && selectedDay !== null ? 'bci-info-panel--open' : 'bci-info-panel--closed'
         }`}
       >
         {hasInfo && selectedDay !== null ? (
-          <div className="flex flex-col gap-2 text-left">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-serif font-bold text-blue-400 uppercase tracking-wider">
-                Día {selectedDay}
-              </span>
+          <div className="bci-info-panel-content">
+            <div className="bci-info-panel-top">
+              <span className="bci-info-panel-day">Día {selectedDay}</span>
               <button
                 type="button"
                 onClick={() => setSelectedDay(null)}
-                className="text-blue-500 hover:text-blue-300 text-xs leading-none px-1"
+                className="bci-info-panel-close"
                 aria-label="Cerrar"
               >
                 ✕
@@ -496,63 +445,51 @@ const DayGrid: React.FC<{
             </div>
             {selSpecial && (
               <div>
-                <span className="text-xs font-serif font-bold text-blue-300">
-                  {selSpecial.label}
-                </span>
-                <p className="text-xs font-serif text-blue-100/90 mt-0.5 leading-snug">
-                  {selSpecial.es}
-                </p>
+                <span className="bci-info-special-label">{selSpecial.label}</span>
+                <p className="bci-info-special-es">{selSpecial.es}</p>
               </div>
             )}
             {selEvent && (
-              <div className={selSpecial ? 'border-t border-blue-700/40 pt-2' : ''}>
+              <div className={selSpecial ? 'bci-info-event--with-special' : ''}>
                 <span
-                  className={`text-xs font-serif font-bold ${
-                    EVENT_TYPE_COLORS[selEvent.type] ?? 'text-blue-300'
+                  className={`bci-info-event-label ${
+                    EVENT_TYPE_COLORS[selEvent.type] ?? 'bci-color-blue-light'
                   }`}
                 >
                   {selEvent.shortLabel}
                 </span>
-                <p className="text-xs font-serif text-blue-100/90 mt-0.5 leading-snug">
-                  {selEvent.description}
-                </p>
+                <p className="bci-info-event-desc">{selEvent.description}</p>
                 {selEvent.fonte && <BabylonianFontePanel fonte={selEvent.fonte} />}
               </div>
             )}
           </div>
         ) : (
-          <p className="text-xs font-serif text-blue-300 text-center">
-            Toca un día para ver su significado
-          </p>
+          <p className="bci-empty-hint">Toca un día para ver su significado</p>
         )}
       </div>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
+      <div className="bci-legend">
         {(
           [
-            { cls: 'bg-sky-900/50 ring-1 ring-sky-400/50', label: 'Cuartos lunares' },
+            { cls: 'bci-legend-swatch--quarter', label: 'Cuartos lunares' },
             {
-              cls: 'bg-amber-500/25 ring-1 ring-amber-400/70',
+              cls: 'bci-legend-swatch--sapatu',
               label: 'Šapattu',
               gloss: SPECIAL_DAYS[15].es,
             },
             {
-              cls: 'bg-indigo-900/40 ring-1 ring-indigo-400/50',
+              cls: 'bci-legend-swatch--rest',
               label: 'Ūm nūḥi',
               gloss: SPECIAL_DAYS[28].es,
             },
-            { cls: 'bg-emerald-900/35 ring-1 ring-emerald-500/50', label: 'Festival' },
+            { cls: 'bci-legend-swatch--festival', label: 'Festival' },
           ] as Array<{ cls: string; label: string; gloss?: string }>
         ).map(({ cls, label, gloss }) => (
-          <div key={label} className="flex items-center gap-1">
-            <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
-            <span className="text-xs text-blue-400 font-serif uppercase tracking-wide">
-              {label}
-            </span>
-            {gloss && (
-              <span className="text-xs text-blue-300/60 font-serif italic">· {gloss}</span>
-            )}
+          <div key={label} className="bci-legend-item">
+            <span className={`bci-legend-swatch ${cls}`} />
+            <span className="bci-legend-label">{label}</span>
+            {gloss && <span className="bci-legend-gloss">· {gloss}</span>}
           </div>
         ))}
       </div>
@@ -563,7 +500,7 @@ const DayGrid: React.FC<{
           e.stopPropagation();
           onShowFestivals();
         }}
-        className="mt-3 w-full py-1.5 text-xs font-serif font-bold uppercase tracking-widest text-blue-400/70 border border-blue-600/30 rounded hover:border-blue-400/50 hover:text-blue-300 transition-all"
+        className="bci-festivals-btn"
       >
         𒀭 Ver Próximos Festivales
       </button>
@@ -573,7 +510,6 @@ const DayGrid: React.FC<{
 
 // ─── Lunisolar drift bar ──────────────────────────────────────────────────────
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const LuniSolarBar: React.FC<{ meta: BabylonianCalendarMeta }> = ({ meta }) => {
   const {
     driftDays,
@@ -588,54 +524,47 @@ const LuniSolarBar: React.FC<{ meta: BabylonianCalendarMeta }> = ({ meta }) => {
   const fmtDate = (d: Date) =>
     d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
-  const barColor =
-    // eslint-disable-next-line sonarjs/no-nested-conditional
-    driftDays <= 10 ? 'bg-sky-400' : driftDays <= 20 ? 'bg-blue-400' : 'bg-indigo-400';
-  const driftTextColor =
-    // eslint-disable-next-line sonarjs/no-nested-conditional
-    driftDays <= 10 ? 'text-sky-400' : driftDays <= 20 ? 'text-blue-400' : 'text-indigo-400';
+  let barClass = 'bci-bar--indigo';
+  if (driftDays <= 10) barClass = 'bci-bar--sky';
+  else if (driftDays <= 20) barClass = 'bci-bar--blue';
+
+  let driftClass = 'bci-color-indigo';
+  if (driftDays <= 10) driftClass = 'bci-color-sky';
+  else if (driftDays <= 20) driftClass = 'bci-color-blue';
 
   return (
-    <div className="w-full mt-3">
-      <div className="flex items-center justify-between text-xs text-blue-400 font-serif uppercase tracking-wider mb-1">
+    <div className="bci-lunar-bar">
+      <div className="bci-lunar-bar-header">
         <span>Equinoccio vernal</span>
-        <span className="flex flex-col items-center">
-          <span className="text-blue-300 font-bold">Nisannu I</span>
-          <span className="normal-case tracking-normal italic text-blue-300/60">
-            {getBabylonianLore('Nisannu')?.monthGloss}
-          </span>
+        <span className="bci-lunar-bar-nisannu">
+          <span className="bci-lunar-bar-nisannu-label">Nisannu I</span>
+          <span className="bci-warhum-gloss">{getBabylonianLore('Nisannu')?.monthGloss}</span>
         </span>
         <span>+30 días</span>
       </div>
 
-      <div className="relative w-full h-3 bg-blue-900/30 rounded-full border border-blue-700/30 overflow-hidden">
-        <div
-          className={`absolute inset-y-0 left-0 ${barColor} opacity-60 rounded-full transition-all`}
-          style={{ width: `${pct * 100}%` }}
-        />
-        <div
-          className="absolute top-0 bottom-0 w-0.5 bg-blue-300 shadow-[0_0_4px_rgba(147,197,253,0.8)]"
-          style={{ left: `${pct * 100}%` }}
-        />
+      <div className="bci-lunar-track">
+        <div className={`bci-lunar-fill ${barClass}`} style={{ width: `${pct * 100}%` }} />
+        <div className="bci-lunar-cursor" style={{ left: `${pct * 100}%` }} />
       </div>
 
-      <div className="flex items-start justify-between mt-1 text-xs font-serif">
-        <span className="text-blue-500">{fmtDate(springEquinoxDate)}</span>
-        <div className="text-center">
-          <span className={`font-bold ${driftTextColor}`}>+{driftDays}d</span>
-          <span className="text-blue-400 ml-1">{fmtDate(nisannu1Date)}</span>
+      <div className="bci-lunar-labels">
+        <span className="bci-lunar-equinox-date">{fmtDate(springEquinoxDate)}</span>
+        <div className="bci-lunar-center">
+          <span className={`bci-lunar-drift ${driftClass}`}>+{driftDays}d</span>
+          <span className="bci-lunar-nisannu-date">{fmtDate(nisannu1Date)}</span>
         </div>
-        <span className="text-blue-400/60">+30d</span>
+        <span className="bci-lunar-30d">+30d</span>
       </div>
 
       {isIntercalaryYear && (
-        <div className="mt-2 text-xs font-serif text-indigo-400 text-center bg-indigo-900/15 border border-indigo-500/30 rounded px-2 py-1">
-          Este año contiene <span className="font-bold">Addaru II</span> — el décimotercero mes
-          intercalar.
+        <div className="bci-intercalary-note">
+          Este año contiene <span style={{ fontWeight: 700 }}>Addaru II</span> — el
+          décimotercero mes intercalar.
         </div>
       )}
       {!isIntercalaryYear && nextYearIsIntercalary && (
-        <div className="mt-2 text-xs font-serif text-blue-400 text-center">
+        <div className="bci-next-intercalary">
           El próximo año (SE {seYear + 1}) requerirá un mes intercalar Addaru II.
         </div>
       )}
@@ -656,62 +585,53 @@ const MetonicCycle: React.FC<{ meta: BabylonianCalendarMeta }> = ({ meta }) => {
     const isIntercalary = intercalaryPositions.includes(pos);
     const isCurrent = pos === metonicPosition;
 
-    let cls = 'bg-blue-900/20 border border-blue-800/30';
-    if (isCurrent)
-      cls =
-        'ring-2 ring-blue-400 bg-blue-400/20 shadow-[0_0_8px_rgba(96,165,250,0.4)] z-10 scale-110';
-    else if (isIntercalary) cls = 'bg-indigo-900/30 border border-indigo-500/40';
+    let cellClass = 'bci-metonic-cell--default';
+    if (isCurrent) cellClass = 'bci-metonic-cell--current';
+    else if (isIntercalary) cellClass = 'bci-metonic-cell--intercalary';
 
-    let numCls = 'text-blue-300';
-    if (isCurrent) numCls = 'text-white';
-    else if (isIntercalary) numCls = 'text-indigo-400';
+    let numClass = 'bci-metonic-num bci-metonic-num--default';
+    if (isCurrent) numClass = 'bci-metonic-num bci-metonic-num--current';
+    else if (isIntercalary) numClass = 'bci-metonic-num bci-metonic-num--intercalary';
 
     return (
       <div
         key={pos}
         title={`SE ${cycleStartSE + pos - 1}${isIntercalary ? ' — Addaru II' : ''}`}
-        className={`relative flex flex-col items-center justify-center rounded transition-all ${cls}`}
-        style={{ width: 28, height: 32 }}
+        className={`bci-metonic-cell ${cellClass}`}
       >
-        <span className={`text-xs font-bold leading-none ${numCls}`}>{pos}</span>
-        {isIntercalary && (
-          <span className="text-xs text-indigo-400 leading-none mt-0.5">II</span>
-        )}
-        {isCurrent && (
-          <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_4px_rgba(96,165,250,0.8)]" />
-        )}
+        <span className={numClass}>{pos}</span>
+        {isIntercalary && <span className="bci-metonic-addaru">II</span>}
+        {isCurrent && <span className="bci-metonic-dot" />}
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full">
-      <div className="text-center">
-        <div className="text-xs text-blue-400 uppercase tracking-widest font-serif font-bold">
-          Ciclo de Metón — 19 años · 7 intercalares
-        </div>
-        <div className="text-xs text-blue-300 font-serif mt-0.5">
+    <div className="bci-metonic">
+      <div className="bci-metonic-header">
+        <div className="bci-metonic-title">Ciclo de Metón — 19 años · 7 intercalares</div>
+        <div className="bci-metonic-range">
           SE {cycleStartSE} — SE {cycleStartSE + 18} · Año {metonicPosition} de 19
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-1.5">
-        <div className="flex gap-1 justify-center">{row1.map(renderCell)}</div>
-        <div className="flex gap-1 justify-center">{row2.map(renderCell)}</div>
+      <div className="bci-metonic-rows">
+        <div className="bci-metonic-row">{row1.map(renderCell)}</div>
+        <div className="bci-metonic-row">{row2.map(renderCell)}</div>
       </div>
 
-      <div className="flex gap-4 text-xs font-serif text-center">
-        <div className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-blue-400/20 ring-1 ring-blue-400 inline-block" />
-          <span className="text-blue-400">Año actual (SE {seYear})</span>
+      <div className="bci-metonic-legend">
+        <div className="bci-metonic-legend-item">
+          <span className="bci-metonic-swatch-current" />
+          <span className="bci-metonic-label">Año actual (SE {seYear})</span>
         </div>
-        <div className="flex items-center gap-1">
-          <span className="w-3 h-3 rounded bg-indigo-900/30 border border-indigo-500/40 inline-block" />
-          <span className="text-blue-400">Año intercalar (Addaru II)</span>
+        <div className="bci-metonic-legend-item">
+          <span className="bci-metonic-swatch-intercalary" />
+          <span className="bci-metonic-label">Año intercalar (Addaru II)</span>
         </div>
       </div>
 
-      <div className="text-xs font-serif text-blue-300 italic text-center leading-relaxed px-2">
+      <div className="bci-metonic-note">
         En 19 años solares hay exactamente 235 meses lunares (7 meses extra).
         <br />
         Los astrónomos del Esagila descubrieron este ciclo en el siglo V a. C.
@@ -726,7 +646,7 @@ const MetonicCycle: React.FC<{ meta: BabylonianCalendarMeta }> = ({ meta }) => {
 //     them, all on a deep cobalt/lapis ground with amber brick strips top+bottom.
 
 const CuneiformBorder: React.FC<{ id: string }> = ({ id }) => (
-  <svg className="w-full h-14 block" viewBox="0 0 200 36" preserveAspectRatio="none">
+  <svg className="bci-frieze-svg" viewBox="0 0 200 36" preserveAspectRatio="none">
     <defs>
       {/* === Tile: 50 × 36 units === */}
       <pattern id={id} x="0" y="0" width="50" height="36" patternUnits="userSpaceOnUse">
@@ -1029,26 +949,18 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
   })();
 
   return (
-    <div className="w-full max-w-none mx-auto mt-6 mb-6 px-2">
-      <div className="bg-ink/90 border-[4px] border-blue-600/60 p-0 rounded-sm shadow-2xl relative overflow-hidden hover:border-blue-400 transition-colors">
+    <div className="babylonian-calendar-info">
+      <div className="bci-outer-card">
         <CuneiformBorder id="cun-top" />
 
-        <div className="p-5 md:p-8 flex flex-col items-center gap-5 text-center">
+        <div className="bci-inner">
           {/* Sky scene */}
-          <div
-            className="relative w-full overflow-hidden border border-blue-500/30 rounded-sm"
-            style={{ aspectRatio: '16/9' }}
-          >
-            <div
-              className="absolute inset-0 transition-all duration-2000"
-              style={{ background: skyGradient }}
-            />
+          <div className="bci-sky-scene">
+            <div className="bci-sky-bg" style={{ background: skyGradient }} />
 
-            {/* Stars + weather + Moon — same frame as the ziggurat skyline (bottom-anchored, xMidYMax meet),
-                so the Moon aligns with the horizon. Painted BEFORE the skyline, so it sits behind the
-                ziggurats, and before the text overlay, so it sits behind the hero text. */}
+            {/* Stars + weather + Moon */}
             <svg
-              className="absolute bottom-0 left-0 w-full pointer-events-none"
+              className="bci-sky-svg-layer"
               viewBox="0 0 300 200"
               preserveAspectRatio="xMidYMax meet"
             >
@@ -1094,7 +1006,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
             {/* Ziggurat skyline — bottom-anchored, original proportions */}
             <svg
-              className="absolute bottom-0 left-0 w-full"
+              className="bci-skyline-svg"
               viewBox="0 0 300 200"
               preserveAspectRatio="xMidYMax meet"
               style={condition === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
@@ -1127,30 +1039,30 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 </>
               )}
             </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-center px-4">
+            <div className="bci-sky-overlay">
               {/* 𒀭 + month name — prominent, inline */}
-              <div className="flex flex-col items-center leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                <div className="flex items-baseline gap-2">
+              <div className="bci-hero-heading">
+                <div className="bci-hero-dingir-row">
                   <span
-                    className="text-parchment/70"
+                    className="bci-dingir"
                     style={{ fontSize: 'clamp(1.4rem, 5.5vw, 2.2rem)' }}
                   >
                     𒀭
                   </span>
                   <span
-                    className="font-serif text-parchment font-black uppercase tracking-[0.15em]"
+                    className="bci-month-name"
                     style={{ fontSize: 'clamp(2rem, 8vw, 3.5rem)', lineHeight: 1 }}
                   >
                     {babData.monthName}
                     {babData.isIntercalary && (
-                      <span className="ml-2 text-orange-300" style={{ fontSize: '40%' }}>
+                      <span className="bci-intercalary" style={{ fontSize: '40%' }}>
                         (intercalar)
                       </span>
                     )}
                   </span>
                 </div>
                 <span
-                  className="font-serif text-parchment/60 italic tracking-widest"
+                  className="bci-warhum"
                   style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)' }}
                 >
                   Warḫum {babData.monthIndex + 1}
@@ -1158,19 +1070,19 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
               </div>
               {/* SE year — smaller, below */}
               <div
-                className="font-serif text-parchment/55 font-bold drop-shadow-md mt-1"
+                className="bci-se-year"
                 style={{ fontSize: 'clamp(0.75rem, 2.8vw, 1.1rem)', letterSpacing: '0.2em' }}
               >
                 SE {babData.seYear}
               </div>
               <div
-                className="font-serif text-parchment/75 italic mt-1"
+                className="bci-hour-name"
                 style={{ fontSize: 'clamp(0.75rem, 2.2vw, 0.9rem)' }}
               >
                 {babData.hourName}
               </div>
               <div
-                className="font-serif text-parchment/60 tracking-wide"
+                className="bci-planet-watch"
                 style={{ fontSize: 'clamp(0.75rem, 2vw, 0.8rem)' }}
               >
                 {babData.planetaryRuler} · {babData.watchName}
@@ -1178,64 +1090,52 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
             </div>
           </div>
 
-          {/* ── Efemérides del día + deidad del mes (bajo el hero, sobre el calendario) ── */}
-          <div className="w-full flex flex-col gap-4">
+          {/* ── Efemérides del día + deidad del mes ── */}
+          <div className="bci-daily-info">
             <DayStatusCard day={babData.day} lore={lore} />
 
             {lore && (
-              <div className="w-full bg-blue-900/15 p-5 rounded-lg border-2 border-blue-500/25 shadow-sm">
-                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
+              <div className="bci-lore-card">
+                <div className="bci-lore-header">
                   <span>𒀭</span> Deidad del Mes <span>𒀭</span>
                 </div>
-                <div className="flex items-center justify-center gap-3 mb-3">
-                  <span className="text-3xl">{lore.icon}</span>
-                  <div className="flex flex-col items-center">
-                    <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight">
-                      {lore.festivalDeity}
-                    </h2>
+                <div className="bci-lore-deity-row">
+                  <span className="bci-deity-icon">{lore.icon}</span>
+                  <div className="bci-deity-info">
+                    <h2 className="bci-deity-name">{lore.festivalDeity}</h2>
                     {lore.festivalDeityGloss && (
-                      <span className="text-xs font-serif italic text-blue-200/70">
-                        {lore.festivalDeityGloss}
-                      </span>
+                      <span className="bci-deity-gloss">{lore.festivalDeityGloss}</span>
                     )}
                   </div>
                 </div>
-                <p className="font-serif text-sm text-parchment/90 italic px-4 leading-relaxed">
+                <p className="bci-lore-desc">
                   {'"'}
                   {lore.description}
                   {'"'}
                 </p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <div className="p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
-                    <span className="text-xl mt-0.5 text-blue-300">𒀭</span>
-                    <div className="flex flex-col text-left">
-                      <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
-                        Regente del Mes
-                      </span>
-                      <span className="text-sm font-serif text-blue-100/95 leading-snug">
+                <div className="bci-lore-grid">
+                  <div className="bci-lore-item">
+                    <span className="bci-lore-item-dingir">𒀭</span>
+                    <div className="bci-lore-item-body">
+                      <span className="bci-lore-item-label">Regente del Mes</span>
+                      <span className="bci-lore-item-value">
                         {lore.monthRegent}
                         {lore.regentNote && (
-                          <span className="text-blue-300/70 italic"> · {lore.regentNote}</span>
+                          <span className="bci-regent-note"> · {lore.regentNote}</span>
                         )}
                       </span>
-                      <span className="mt-1 text-xs font-serif text-blue-200/75 leading-relaxed">
-                        {babData.monthRegentDesc}
-                      </span>
+                      <span className="bci-regent-desc">{babData.monthRegentDesc}</span>
                     </div>
                   </div>
-                  <div className="p-3 bg-blue-800/20 border border-blue-600/25 rounded flex items-start gap-3">
-                    <span className="text-xl mt-0.5">🏛️</span>
-                    <div className="flex flex-col text-left">
-                      <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-blue-400 mb-0.5">
-                        Festival / Ritual Principal
-                      </span>
-                      <span className="text-sm font-serif text-blue-100/95 leading-snug">
-                        {lore.festival}
-                      </span>
+                  <div className="bci-lore-item">
+                    <span className="bci-lore-item-dingir">🏛️</span>
+                    <div className="bci-lore-item-body">
+                      <span className="bci-lore-item-label">Festival / Ritual Principal</span>
+                      <span className="bci-lore-item-value">{lore.festival}</span>
                     </div>
                   </div>
                 </div>
-                <p className="mt-3 text-xs font-serif italic text-blue-300/60 text-center leading-snug">
+                <p className="bci-lore-footnote">
                   Regente según las listas cuneiformes de los meses (IV R 33 · Astrolabio B).
                 </p>
               </div>
@@ -1243,18 +1143,15 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
           </div>
 
           {/* View toggle */}
-          <div className="flex gap-0 rounded-lg overflow-hidden border border-blue-600/40 w-full max-w-xs">
+          <div className="bci-view-toggle">
             {(['month', 'cycle'] as ViewMode[]).map(v => (
               <button
                 key={v}
                 type="button"
                 onClick={() => setView(v)}
-                className={`flex-1 py-2 text-xs font-serif uppercase tracking-widest font-bold transition-all
-                  ${
-                    view === v
-                      ? 'bg-blue-500/20 text-blue-300 border-r border-blue-600/40'
-                      : 'text-blue-500 hover:text-blue-300 hover:bg-blue-900/20'
-                  }`}
+                className={`bci-toggle-btn ${
+                  view === v ? 'bci-toggle-btn--active' : 'bci-toggle-btn--inactive'
+                }`}
               >
                 {v === 'month' ? '☽ Mes Lunar' : '⟳ Ciclo de Metón'}
               </button>
@@ -1263,12 +1160,21 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
           {/* Month view */}
           {view === 'month' && (
-            <div className="w-full flex flex-col gap-1">
-              <div className="font-serif text-xs uppercase tracking-widest text-blue-400 flex items-center justify-center gap-3 border-y border-blue-700/30 py-2 bg-ink/20 mb-2">
+            <div className="bci-view-panel">
+              <div className="bci-view-header">
                 <span>☾</span>
                 <span>
-                  Warḫum <span className="normal-case italic text-blue-300/60">(mes)</span>:{' '}
-                  {meta.monthLengthDays} días lunares
+                  Warḫum{' '}
+                  <span
+                    style={{
+                      textTransform: 'none',
+                      fontStyle: 'italic',
+                      color: 'rgb(147 197 253 / 60%)',
+                    }}
+                  >
+                    (mes)
+                  </span>
+                  : {meta.monthLengthDays} días lunares
                 </span>
                 <span>☽</span>
               </div>
@@ -1280,10 +1186,8 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 onShowFestivals={() => setShowFestivals(true)}
               />
 
-              <div className="border-t border-blue-700/30 pt-3 mt-1">
-                <div className="text-xs text-blue-400 uppercase tracking-widest font-serif font-bold mb-1 text-center">
-                  Sincronía Lunar–Solar
-                </div>
+              <div className="bci-lunar-sync-section">
+                <div className="bci-lunar-sync-title">Sincronía Lunar–Solar</div>
                 <LuniSolarBar meta={meta} />
               </div>
             </div>
@@ -1291,8 +1195,8 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
           {/* Cycle view */}
           {view === 'cycle' && (
-            <div className="w-full flex flex-col gap-1">
-              <div className="font-serif text-xs uppercase tracking-widest text-blue-400 flex items-center justify-center gap-3 border-y border-blue-700/30 py-2 bg-ink/20 mb-2">
+            <div className="bci-view-panel">
+              <div className="bci-view-header">
                 <span>𒀭</span>
                 Ciclo de 19 años (Ciclo de Metón)
                 <span>𒀭</span>
@@ -1302,7 +1206,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
           )}
 
           {/* Planetary ruler / watch / hour */}
-          <div className="flex gap-4 w-full justify-center text-center">
+          <div className="bci-info-row">
             {[
               {
                 title: 'Planeta Rector',
@@ -1312,17 +1216,10 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
               { title: 'Guardia', main: babData.watchName, sub: babData.watchDesc },
               { title: 'Hora Temporal', main: babData.hourName, sub: babData.hourNameEs },
             ].map(({ title, main, sub }) => (
-              <div
-                key={title}
-                className="flex-1 bg-blue-900/15 border border-blue-500/25 rounded p-3"
-              >
-                <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-1">
-                  {title}
-                </div>
-                <div className="font-serif text-parchment font-bold text-sm leading-tight">
-                  {main}
-                </div>
-                {sub && <div className="text-xs text-blue-300 mt-0.5">{sub}</div>}
+              <div key={title} className="bci-info-cell">
+                <div className="bci-info-cell-label">{title}</div>
+                <div className="bci-info-cell-main">{main}</div>
+                {sub && <div className="bci-info-cell-sub">{sub}</div>}
               </div>
             ))}
           </div>
@@ -1336,84 +1233,48 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
         <div
           role="button"
           tabIndex={0}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ background: 'rgba(6,14,34,0.88)' }}
+          className="bci-modal-backdrop"
           onClick={() => setShowFestivals(false)}
           onKeyDown={e => {
             if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')
               setShowFestivals(false);
           }}
         >
-          <div
-            role="presentation"
-            className="w-full max-w-lg rounded shadow-2xl overflow-hidden relative cursor-default"
-            style={{ background: '#060e1c', border: '3px solid rgba(96,165,250,0.35)' }}
-            onClick={e => e.stopPropagation()}
-          >
+          <div role="presentation" className="bci-modal" onClick={e => e.stopPropagation()}>
             {/* Header */}
-            <div
-              className="p-5 border-b text-center"
-              style={{
-                borderColor: 'rgba(96,165,250,0.20)',
-                background: 'rgba(96,165,250,0.06)',
-              }}
-            >
-              <div className="text-3xl mb-2">𒀭</div>
-              <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
-                Próximos Festivales
-              </h2>
-              <p className="text-xs uppercase tracking-[0.3em] font-bold mt-1 text-blue-400/60">
-                Calendario Sacro Babilónico
-              </p>
+            <div className="bci-modal-header">
+              <div className="bci-modal-dingir">𒀭</div>
+              <h2 className="bci-modal-title">Próximos Festivales</h2>
+              <p className="bci-modal-subtitle">Calendario Sacro Babilónico</p>
             </div>
 
             {/* List */}
-            <div className="p-5 flex flex-col gap-5 max-h-[60vh] overflow-y-auto">
+            <div className="bci-modal-list">
               {getNextBabylonianFestivals(babData.monthIndex, babData.day, 5).map((f, i) => (
                 <div key={i}>
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex flex-col gap-1">
-                      <h4 className="font-serif text-base font-bold text-parchment flex items-center gap-2">
+                  <div className="bci-festival-header">
+                    <div className="bci-festival-info">
+                      <h4 className="bci-festival-name">
                         <span>{f.monthIcon}</span>
                         <span>{f.shortLabel}</span>
                       </h4>
-                      <span className="text-xs font-bold uppercase tracking-widest text-blue-400/60">
+                      <span className="bci-festival-day">
                         Día {f.day} de {f.monthName}
                       </span>
                     </div>
-                    <div
-                      className="p-2 rounded text-right shrink-0"
-                      style={{
-                        background: 'rgba(96,165,250,0.10)',
-                        border: '1px solid rgba(96,165,250,0.25)',
-                      }}
-                    >
-                      <div className="text-base font-black text-blue-300 leading-none">
-                        {f.daysRemaining}
-                      </div>
-                      <div className="text-xs text-parchment/40 font-serif">días</div>
+                    <div className="bci-festival-countdown">
+                      <div className="bci-festival-days-num">{f.daysRemaining}</div>
+                      <div className="bci-festival-days-label">días</div>
                     </div>
                   </div>
-                  <p
-                    className="font-serif text-xs text-parchment/70 leading-relaxed italic border-l-2 pl-3 py-1"
-                    style={{ borderColor: 'rgba(96,165,250,0.30)' }}
-                  >
-                    {f.description.split('(')[0].trim()}
-                  </p>
+                  <p className="bci-festival-desc">{f.description.split('(')[0].trim()}</p>
                   {f.fonte && <BabylonianFontePanel fonte={f.fonte} />}
                 </div>
               ))}
             </div>
 
             {/* Footer */}
-            <button
-              className="w-full p-4 border-t font-serif text-xs uppercase tracking-widest font-bold text-blue-400/60 hover:text-blue-300 transition-all"
-              style={{
-                borderColor: 'rgba(96,165,250,0.20)',
-                background: 'rgba(96,165,250,0.04)',
-              }}
-              onClick={() => setShowFestivals(false)}
-            >
+            <button className="bci-modal-footer" onClick={() => setShowFestivals(false)}>
               Cerrar Calendario Sacro
             </button>
           </div>

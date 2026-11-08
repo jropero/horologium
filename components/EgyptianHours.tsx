@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import './EgyptianHours.css';
 import { getSunTimes } from '../utils/solar';
 import { NIGHT_HOURS, DAY_HOURS, HOURS_HEADING } from '../utils/egyptianHoursData';
 
@@ -50,7 +51,6 @@ const EgyptianHours: React.FC<Props> = ({ currentDate, lat, lng }) => {
   const heading = half.isDay ? HOURS_HEADING.day : HOURS_HEADING.night;
   const book = half.isDay ? 'Libro del Día (Müller-Roth 2008)' : 'Amduat (Hornung 1963–67)';
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   const renderHour = (h: (typeof DAY_HOURS)[0], i: number) => {
     const isCurrent = i === idx;
     const isPast = i < idx;
@@ -63,53 +63,23 @@ const EgyptianHours: React.FC<Props> = ({ currentDate, lat, lng }) => {
     return (
       <div
         key={i}
-        className={`flex flex-col px-2 py-1.5 rounded-lg ${
-          isCurrent ? 'bg-gold-leaf/10 border border-gold-leaf/30' : 'border border-transparent'
-        } ${isPast ? 'opacity-50' : ''}`}
+        className={`egyptian-hours__hour-row${
+          isCurrent ? ' egyptian-hours__hour-row--current' : ''
+        }${isPast ? ' egyptian-hours__hour-row--past' : ''}`}
       >
-        <div className="flex items-start gap-2">
-          <span
-            className={`font-serif text-xs w-6 text-right tabular-nums mt-0.5 ${
-              isCurrent ? 'text-gold-leaf' : 'text-gold-dim/80'
-            }`}
-          >
-            {i + 1}
-          </span>
-          <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-            {h.translit && (
-              <span
-                className={`font-serif text-xs italic leading-snug ${
-                  isCurrent ? 'text-gold-dim' : 'text-gold-dim/70'
-                }`}
-              >
-                {h.translit}
-              </span>
-            )}
-            <span
-              className={`text-xs leading-snug ${
-                isCurrent ? 'text-parchment' : 'text-parchment/75'
-              }`}
-            >
-              {h.name}
-            </span>
-            {isCurrent && (
-              <span className="text-xs leading-snug text-parchment/80 italic mt-0.5">
-                {h.ra}
-              </span>
-            )}
+        <div className="egyptian-hours__hour-top">
+          <span className="egyptian-hours__hour-num">{i + 1}</span>
+          <div className="egyptian-hours__hour-body">
+            {h.translit && <span className="egyptian-hours__hour-translit">{h.translit}</span>}
+            <span className="egyptian-hours__hour-name">{h.name}</span>
+            {isCurrent && <span className="egyptian-hours__hour-ra">{h.ra}</span>}
           </div>
-          <span
-            className={`font-serif text-xs tabular-nums shrink-0 mt-0.5 ${
-              isCurrent ? 'text-gold-dim' : 'text-gold-dim/70'
-            }`}
-          >
-            {timeStr}
-          </span>
+          <span className="egyptian-hours__hour-time">{timeStr}</span>
         </div>
         {isCurrent && (
-          <div className="ml-8 mt-1.5 h-1 rounded-full bg-gold-dim/15 overflow-hidden">
+          <div className="egyptian-hours__progress-bg">
             <div
-              className="h-full bg-gold-leaf/70 rounded-full"
+              className="egyptian-hours__progress-fill"
               style={{ width: `${progress * 100}%` }}
             />
           </div>
@@ -119,27 +89,27 @@ const EgyptianHours: React.FC<Props> = ({ currentDate, lat, lng }) => {
   };
 
   return (
-    <div className="w-full max-w-none mx-auto mt-6 mb-2">
-      <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
-        <div className="flex items-center justify-center gap-3 mb-1">
-          <div className="h-px flex-1 bg-gold-dim/20" />
-          <span className="flex flex-col items-center leading-tight">
-            <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">
-              {heading.translit}
-            </span>
-            <span className="text-xs italic text-parchment/60">{heading.es}</span>
+    <div className="egyptian-hours">
+      <div className="egyptian-hours__card">
+        <div className="egyptian-hours__header">
+          <div className="egyptian-hours__header-line" />
+          <span className="egyptian-hours__header-text">
+            <span className="egyptian-hours__header-translit">{heading.translit}</span>
+            <span className="egyptian-hours__header-es">{heading.es}</span>
           </span>
-          <div className="h-px flex-1 bg-gold-dim/20" />
+          <div className="egyptian-hours__header-line" />
         </div>
-        <p className="text-center text-xs font-serif tabular-nums text-gold-dim/80 mb-3">
-          <span className={half.isDay ? 'text-amber-400' : 'text-sky-400'}>
+        <p className="egyptian-hours__meta">
+          <span
+            className={half.isDay ? 'egyptian-hours__meta-sun' : 'egyptian-hours__meta-moon'}
+          >
             {half.isDay ? '☀' : '☽'}
           </span>{' '}
           wnwt · {Math.round(hourMs / 60000)}′
         </p>
 
-        <div className="flex flex-col gap-1">{hours.map(renderHour)}</div>
-        <p className="mt-2 text-center text-xs italic text-parchment/45">{book}</p>
+        <div className="egyptian-hours__list">{hours.map(renderHour)}</div>
+        <p className="egyptian-hours__book">{book}</p>
       </div>
     </div>
   );
