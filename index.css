@@ -142,12 +142,12 @@
   html,
   body,
   #root {
-    @apply h-full m-0;
+    height: 100%;
+    margin: 0;
   }
 
   body {
-    @apply bg-ink;
-
+    background-color: var(--ink);
     transition: background-color 0.5s ease;
   }
 
