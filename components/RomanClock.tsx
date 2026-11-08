@@ -850,7 +850,7 @@ function RomanClock({
               {/* Ortus / Occasus / Longitudo Horae */}
               <div className="roman-clock__grid-3">
                 <div className="roman-clock__time-col">
-                  <span className="roman-clock__time-icon">☀</span>
+                  <span className="roman-clock__time-icon">☀︎</span>
                   <div className="roman-clock__time-heading">Ortus Solis</div>
                   <div className="roman-clock__time-val">
                     {romanTime.sunrise.toLocaleTimeString(undefined, {
