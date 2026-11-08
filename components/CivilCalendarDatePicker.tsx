@@ -7,6 +7,7 @@ import {
   getBabylonianYearAnchor,
 } from '../utils/babylonianCalendarUtils';
 import type { CivilCalendarYear } from '../types/civilCalendar';
+import './CivilCalendarDatePicker.css';
 
 export type CivilPickerCivilization = 'hellas' | 'aegyptus' | 'babylonia';
 
@@ -26,39 +27,6 @@ interface Selection {
   monthName: string;
   day: number;
 }
-
-const ACCENTS: Record<
-  CivilPickerCivilization,
-  {
-    text: string;
-    border: string;
-    soft: string;
-    chip: string;
-    fill: string;
-  }
-> = {
-  hellas: {
-    text: 'text-sky-400',
-    border: 'border-sky-400/60',
-    soft: 'border-sky-400/25',
-    chip: 'bg-sky-400/10 text-sky-300 border-sky-400/30',
-    fill: 'bg-sky-400 text-ink border-sky-400',
-  },
-  aegyptus: {
-    text: 'text-emerald-400',
-    border: 'border-emerald-400/60',
-    soft: 'border-emerald-400/25',
-    chip: 'bg-emerald-400/10 text-emerald-300 border-emerald-400/30',
-    fill: 'bg-emerald-400 text-ink border-emerald-400',
-  },
-  babylonia: {
-    text: 'text-blue-400',
-    border: 'border-blue-400/60',
-    soft: 'border-blue-400/25',
-    chip: 'bg-blue-400/10 text-blue-300 border-blue-400/30',
-    fill: 'bg-blue-400 text-ink border-blue-400',
-  },
-};
 
 const TITLES: Record<CivilPickerCivilization, string> = {
   hellas: 'Ἡμερολόγιον Ἀττικόν',
@@ -122,7 +90,6 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
   onClose,
   onReturnToLive,
 }) => {
-  const accent = ACCENTS[civilization];
   const initialAnchor = useMemo(
     () => getAnchor(civilization, initialDate, lat, lng),
     [civilization, initialDate, lat, lng],
@@ -170,69 +137,50 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
     <div
       role="button"
       tabIndex={0}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      className="civil-calendar-date-picker animate-fadeIn"
+      data-civilization={civilization}
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
       }}
     >
-      <div
-        role="presentation"
-        className={`bg-ink border-2 ${accent.soft} rounded-xl shadow-2xl w-full max-w-md max-h-[92vh] flex flex-col overflow-hidden`}
-        onClick={e => e.stopPropagation()}
-      >
+      <div role="presentation" className="ccp-panel" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className={`p-4 border-b ${accent.soft} text-center shrink-0`}>
-          <h3
-            className={`font-serif text-sm uppercase tracking-[0.3em] font-bold ${accent.text}`}
-          >
-            ⏳ Viaje Temporal
-          </h3>
-          <p className="font-serif text-lg sm:text-xl text-parchment font-bold tracking-wide mt-1">
-            {TITLES[civilization]}
-          </p>
+        <div className="ccp-header">
+          <h3 className="ccp-title">⏳ Viaje Temporal</h3>
+          <p className="ccp-civ-name">{TITLES[civilization]}</p>
           {TITLE_GLOSSES[civilization] && (
-            <p className="text-xs text-parchment/60 font-serif italic">
-              {TITLE_GLOSSES[civilization]}
-            </p>
+            <p className="ccp-gloss">{TITLE_GLOSSES[civilization]}</p>
           )}
-          <p className="text-xs text-parchment/60 font-serif mt-0.5 tracking-wide">
-            Elige un día del calendario anual · sin hora
-          </p>
+          <p className="ccp-instruction">Elige un día del calendario anual · sin hora</p>
         </div>
 
         {/* Year navigation */}
-        <div
-          className={`flex items-center justify-between gap-1 px-3 py-2 border-b ${accent.soft} shrink-0`}
-        >
+        <div className="ccp-year-nav">
           <button
             onClick={() => setYear(y => y - 1)}
-            className="p-2 rounded-lg text-gold-dim/70 hover:text-parchment hover:bg-white/5 transition-colors"
+            className="ccp-nav-btn"
             aria-label="Año anterior"
           >
-            <ChevronsLeft className="w-5 h-5" />
+            <ChevronsLeft />
           </button>
-          <div className="flex-1 text-center min-w-0">
-            <div className={`font-serif text-base font-bold tracking-wide ${accent.text}`}>
-              {calendar.yearLabel}
-            </div>
+          <div className="ccp-year-center">
+            <div className="ccp-year-label">{calendar.yearLabel}</div>
             {calendar.yearSubtitle && (
-              <div className="text-xs text-parchment/60 font-serif tracking-wide truncate">
-                {calendar.yearSubtitle}
-              </div>
+              <div className="ccp-year-subtitle">{calendar.yearSubtitle}</div>
             )}
           </div>
           <button
             onClick={() => setYear(y => y + 1)}
-            className="p-2 rounded-lg text-gold-dim/70 hover:text-parchment hover:bg-white/5 transition-colors"
+            className="ccp-nav-btn"
             aria-label="Año siguiente"
           >
-            <ChevronsRight className="w-5 h-5" />
+            <ChevronsRight />
           </button>
         </div>
 
         {/* Months */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain px-3 py-3 space-y-4">
+        <div className="ccp-months custom-scrollbar">
           {calendar.months.map(month => {
             const containsSelected =
               !!selected && month.days.some(d => sameDate(d.gregorian, selected.date));
@@ -240,57 +188,41 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
               <div
                 key={month.key}
                 ref={containsSelected ? selectedMonthRef : undefined}
-                className={`rounded-lg border ${accent.soft} bg-black/20 overflow-hidden ${
-                  month.kind === 'intercalary' ? 'ring-1 ring-amber-500/30' : ''
+                className={`ccp-month${
+                  month.kind === 'intercalary' ? ' ccp-month--intercalary' : ''
                 }`}
               >
                 {/* Month header */}
-                <div
-                  className={`flex items-baseline gap-2 flex-wrap px-3 py-2 border-b ${accent.soft} bg-white/[0.03]`}
-                >
-                  <span className={`font-serif text-base font-bold ${accent.text}`}>
-                    {month.name}
-                  </span>
-                  {month.latin && (
-                    <span className="text-parchment/85 font-serif text-[13px] uppercase tracking-widest">
-                      {month.latin}
-                    </span>
-                  )}
+                <div className="ccp-month-header">
+                  <span className="ccp-month-name">{month.name}</span>
+                  {month.latin && <span className="ccp-month-latin">{month.latin}</span>}
                   {month.translation && (
-                    <span className="text-parchment/70 font-body text-xs italic truncate">
-                      {month.translation}
-                    </span>
+                    <span className="ccp-month-translation">{month.translation}</span>
                   )}
                   {month.kind === 'intercalary' && (
-                    <span className="ml-auto text-xs px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-400 uppercase tracking-widest">
-                      Intercalar
-                    </span>
+                    <span className="ccp-month-badge">Intercalar</span>
                   )}
                   {month.kind === 'epagomenal' && (
-                    <span className="ml-auto text-xs px-1.5 py-0.5 rounded border border-amber-500/40 text-amber-400 uppercase tracking-widest">
-                      Epagómenos
-                    </span>
+                    <span className="ccp-month-badge">Epagómenos</span>
                   )}
                 </div>
 
                 {/* Day grid */}
-                <div className="grid grid-cols-10 gap-1 p-2">
+                <div className="ccp-day-grid">
                   {month.days.map(d => {
                     const isSelected = !!selected && sameDate(d.gregorian, selected.date);
                     const isToday = sameDate(d.gregorian, now);
+                    const dayMod = isSelected
+                      ? 'ccp-day--selected'
+                      : // eslint-disable-next-line sonarjs/no-nested-conditional
+                      isToday
+                      ? 'ccp-day--today'
+                      : 'ccp-day--default';
                     return (
                       <button
                         key={d.day}
                         onClick={() => pick(month.name, d.day, d.gregorian)}
-                        className={`h-8 rounded-md font-serif text-sm tabular-nums transition-all active:scale-90 border
-                          ${
-                            isSelected
-                              ? accent.fill + ' font-bold shadow-[0_0_10px_rgba(0,0,0,0.4)]'
-                              : // eslint-disable-next-line sonarjs/no-nested-conditional
-                              isToday
-                              ? `${accent.text} ${accent.border} bg-white/5`
-                              : `text-parchment/85 border-transparent hover:bg-white/10 hover:text-parchment`
-                          }`}
+                        className={`ccp-day ${dayMod}`}
                       >
                         {d.day}
                       </button>
@@ -303,36 +235,23 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
         </div>
 
         {/* Actions */}
-        <div className={`p-4 flex flex-col gap-2 shrink-0 border-t ${accent.soft}`}>
-          <div
-            className={`mx-auto w-fit max-w-full truncate font-serif text-xs text-parchment/80 tabular-nums bg-white/5 border ${accent.soft} rounded-full px-3 py-1`}
-          >
-            {summary}
-          </div>
+        <div className="ccp-actions">
+          <div className="ccp-summary">{summary}</div>
           <button
             onClick={() => selected && onConfirm(selected.date)}
             disabled={!selected}
-            className={`w-full py-2.5 rounded-lg font-serif text-sm uppercase tracking-widest font-bold transition-all active:scale-[0.98] border
-              ${
-                selected
-                  ? `${accent.chip} hover:bg-white/10`
-                  : 'border-gold-dim/20 text-gold-dim/40 cursor-not-allowed'
-              }`}
+            className={`ccp-confirm ${
+              selected ? 'ccp-confirm--active' : 'ccp-confirm--disabled'
+            }`}
           >
             Viajar a esta fecha
           </button>
           {onReturnToLive && (
-            <button
-              onClick={onReturnToLive}
-              className="w-full py-2 rounded-lg border border-amber-700/40 text-amber-400 font-serif text-xs uppercase tracking-widest hover:bg-amber-900/20 transition-all active:scale-[0.98]"
-            >
+            <button onClick={onReturnToLive} className="ccp-return">
               Volver al presente
             </button>
           )}
-          <button
-            onClick={onClose}
-            className="w-full text-center text-xs text-gold-dim/75 font-serif uppercase tracking-widest py-1.5 hover:text-gold-dim transition-colors"
-          >
+          <button onClick={onClose} className="ccp-cancel">
             Cancelar
           </button>
         </div>
