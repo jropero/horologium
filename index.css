@@ -241,6 +241,11 @@
     background-size: var(--app-bg-size);
     background-repeat: var(--app-bg-repeat, repeat);
   }
+
+  :focus-visible {
+    outline: 2px solid var(--gold-leaf);
+    outline-offset: 3px;
+  }
 }
 
 @layer components {
