@@ -1,5 +1,5 @@
 // EgyptianCalendarModal.tsx — 7-day Alexandrian calendar modal
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { X, CalendarDays } from 'lucide-react';
 import { getEgyptianDate, EGYPTIAN_SEASONS } from '../utils/egyptianCalendarUtils';
 import {
@@ -46,6 +46,17 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
   startDate,
 }) => {
   const { labels } = useCivilization();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (isOpen) {
+      dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
+    }
+  }, [isOpen]);
 
   const nextDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
@@ -65,23 +76,14 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
     });
   }, [startDate]);
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <dialog
+      ref={dialogRef}
       className="egyptian-calendar-modal animate-fadeIn"
-      onClick={onClose}
-      onKeyDown={e => {
-        if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
-      }}
+      onClose={onClose}
+      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
     >
-      <div
-        role="presentation"
-        className="egyptian-calendar-modal__panel"
-        onClick={e => e.stopPropagation()}
-      >
+      <div className="egyptian-calendar-modal__panel">
         {/* Header */}
         <div className="egyptian-calendar-modal__header">
           <div className="egyptian-calendar-modal__header-left">
@@ -251,7 +253,7 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
           {/* eslint-enable sonarjs/cognitive-complexity, sonarjs/no-nested-conditional */}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 };
 

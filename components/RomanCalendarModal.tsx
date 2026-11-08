@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { X, CalendarDays } from 'lucide-react';
 import {
   getRomanDate,
@@ -21,6 +21,18 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
   onClose,
   startDate,
 }) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (isOpen) {
+      dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
+    }
+  }, [isOpen]);
+
   // Generar solo los próximos 7 días (una semana)
   const nextDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
@@ -49,13 +61,14 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
     return OVID_MONTH_ETYMOLOGIES.find(m => m.month === currentMonth);
   }, [startDate]);
 
-  if (!isOpen) return null;
-
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div className="roman-calendar-modal animate-fadeIn" onClick={onClose}>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div className="rcm-panel" onClick={e => e.stopPropagation()}>
+    <dialog
+      ref={dialogRef}
+      className="roman-calendar-modal animate-fadeIn"
+      onClose={onClose}
+      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
+    >
+      <div className="rcm-panel">
         {/* Header del Modal */}
         <div className="rcm-header">
           <div className="rcm-header-title">
@@ -152,7 +165,7 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
           })}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 };
 
