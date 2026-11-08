@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import './DateTimePicker.css';
 
 interface DateTimePickerProps {
   initialDate: Date;
@@ -99,42 +100,34 @@ const WheelColumn = forwardRef<WheelColumnHandle, WheelColumnProps>(
     const fmt = format ?? pad2;
 
     return (
-      <div className="flex-1 min-w-0">
-        <div className="text-center font-serif text-[10px] uppercase tracking-[0.25em] text-gold-dim/70 mb-1.5">
-          {label}
-        </div>
-        <div className="relative">
-          <div className="h-[132px] overflow-hidden rounded-lg border border-gold-dim/20 bg-black/30">
-            <div
-              ref={listRef}
-              onScroll={handleScroll}
-              className="h-full overflow-y-auto snap-y snap-mandatory overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
+      <div className="wheel-col">
+        <div className="wheel-col__label">{label}</div>
+        <div className="wheel-col__track-wrap">
+          <div className="wheel-col__track">
+            <div ref={listRef} onScroll={handleScroll} className="wheel-col__scroll">
               {/* One-row spacers so the first and last items can reach the centre bar;
                 item i is centred at scrollTop = i * ITEM_H. */}
-              <div aria-hidden="true" className="h-[44px] shrink-0" />
+              <div aria-hidden="true" className="wheel-col__spacer" />
               {items.map(it => (
                 <div
                   key={it}
-                  className={`h-[44px] snap-center flex items-center justify-center font-serif text-lg tabular-nums select-none transition-colors ${
-                    it === value ? 'text-gold-leaf font-bold' : 'text-parchment/45'
+                  className={`wheel-col__item ${
+                    it === value ? 'wheel-item--selected' : 'wheel-item--inactive'
                   }`}
                 >
                   {fmt(it)}
                 </div>
               ))}
-              <div aria-hidden="true" className="h-[44px] shrink-0" />
+              <div aria-hidden="true" className="wheel-col__spacer" />
             </div>
           </div>
           {/* Center selection bar */}
-          <div className="pointer-events-none absolute inset-x-0 top-[44px] h-[44px] border-y border-gold-leaf/40 bg-gold-leaf/5" />
+          <div className="wheel-col__bar" />
           {/* Edge fades */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-[44px] bg-gradient-to-b from-ink to-transparent rounded-t-lg" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[44px] bg-gradient-to-t from-ink to-transparent rounded-b-lg" />
+          <div className="wheel-col__fade-top" />
+          <div className="wheel-col__fade-bottom" />
         </div>
-        <div className="mt-1.5 text-center font-serif text-sm text-gold-leaf tabular-nums">
-          {fmt(value)}
-        </div>
+        <div className="wheel-col__value">{fmt(value)}</div>
       </div>
     );
   },
@@ -250,18 +243,14 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
 
   const renderDay = (day: number | null, i: number) => {
     if (day === null) return <div key={i} />;
-    const cls = isSelected(day)
-      ? 'bg-gold-leaf text-ink font-bold shadow-[0_0_10px_rgba(207,181,59,0.35)]'
+    const dayMod = isSelected(day)
+      ? 'dtp-day--selected'
       : // eslint-disable-next-line sonarjs/no-nested-conditional
       isToday(day)
-      ? 'text-gold-leaf border border-gold-leaf/50 hover:bg-gold-leaf/10'
-      : 'text-parchment/70 hover:bg-gold-leaf/10 hover:text-parchment';
+      ? 'dtp-day--today'
+      : 'dtp-day--default';
     return (
-      <button
-        key={i}
-        onClick={() => pickDay(day)}
-        className={`h-9 rounded-lg font-serif text-sm transition-all active:scale-90 ${cls}`}
-      >
+      <button key={i} onClick={() => pickDay(day)} className={`dtp-day ${dayMod}`}>
         {day}
       </button>
     );
@@ -271,51 +260,41 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     <div
       role="button"
       tabIndex={0}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      className="date-time-picker animate-fadeIn"
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
       }}
     >
-      <div
-        role="presentation"
-        className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-sm max-h-[92vh] flex flex-col overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
+      <div role="presentation" className="dtp-panel" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="p-4 border-b border-gold-dim/30 text-center shrink-0">
-          <h3 className="font-serif text-sm text-gold-leaf uppercase tracking-[0.3em] font-bold">
-            ⏳ Viaje Temporal
-          </h3>
-          <p className="text-[10px] text-gold-dim/60 font-serif mt-1 tracking-wide">
-            Simula cualquier fecha y hora
-          </p>
-          <div className="mt-2 mx-auto w-fit font-serif text-xs text-parchment/80 tabular-nums bg-gold-leaf/5 border border-gold-dim/20 rounded-full px-3 py-1">
-            {summary}
-          </div>
+        <div className="dtp-header">
+          <h3 className="dtp-title">⏳ Viaje Temporal</h3>
+          <p className="dtp-subtitle">Simula cualquier fecha y hora</p>
+          <div className="dtp-summary">{summary}</div>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+        <div className="dtp-body">
           {/* Month / year navigation */}
-          <div className="flex items-center justify-between gap-1">
+          <div className="dtp-nav">
             <button
               onClick={() => shiftYear(-1)}
               disabled={view.y <= MIN_YEAR}
-              className="p-2 rounded-lg text-gold-dim/70 hover:text-gold-leaf hover:bg-white/5 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="dtp-nav-btn"
               aria-label="Año anterior"
             >
-              <ChevronsLeft className="w-5 h-5" />
+              <ChevronsLeft />
             </button>
             <button
               onClick={() => shiftMonth(-1)}
-              className="p-2 rounded-lg text-gold-dim/70 hover:text-gold-leaf hover:bg-white/5 transition-colors"
+              className="dtp-nav-btn"
               aria-label="Mes anterior"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft />
             </button>
-            <div className="flex-1 text-center">
-              <div className="font-serif text-sm text-parchment font-bold tracking-wide capitalize">
+            <div className="dtp-nav-center">
+              <div className="dtp-month-year">
                 {monthLabel}{' '}
                 {yearEditing ? (
                   <input
@@ -335,7 +314,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
                         setYearEditing(false);
                       }
                     }}
-                    className="w-16 text-center bg-black/30 border border-gold-leaf/40 rounded px-1 font-serif text-sm text-gold-leaf tabular-nums focus:outline-none"
+                    className="dtp-year-input"
                   />
                 ) : (
                   <button
@@ -343,7 +322,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
                       setYearInput(String(view.y));
                       setYearEditing(true);
                     }}
-                    className="text-gold-leaf hover:underline underline-offset-2 tabular-nums"
+                    className="dtp-year-btn"
                     aria-label="Cambiar año"
                   >
                     {view.y}
@@ -353,28 +332,25 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
             </div>
             <button
               onClick={() => shiftMonth(1)}
-              className="p-2 rounded-lg text-gold-dim/70 hover:text-gold-leaf hover:bg-white/5 transition-colors"
+              className="dtp-nav-btn"
               aria-label="Mes siguiente"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight />
             </button>
             <button
               onClick={() => shiftYear(1)}
               disabled={view.y >= MAX_YEAR}
-              className="p-2 rounded-lg text-gold-dim/70 hover:text-gold-leaf hover:bg-white/5 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="dtp-nav-btn"
               aria-label="Año siguiente"
             >
-              <ChevronsRight className="w-5 h-5" />
+              <ChevronsRight />
             </button>
           </div>
 
           {/* Calendar grid */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="dtp-weekday-grid">
             {WEEKDAYS.map(w => (
-              <div
-                key={w}
-                className="text-center font-serif text-[10px] uppercase tracking-wider text-gold-dim/60 py-1"
-              >
+              <div key={w} className="dtp-weekday">
                 {w}
               </div>
             ))}
@@ -382,7 +358,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
           </div>
 
           {/* Time wheels */}
-          <div className="flex items-stretch gap-3 pt-1 border-t border-gold-dim/20">
+          <div className="dtp-time-section">
             <WheelColumn
               ref={hourWheelRef}
               items={hours}
@@ -390,9 +366,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
               onChange={setTime}
               label="Hora"
             />
-            <div className="flex items-center justify-center font-serif text-2xl text-gold-dim/50 pt-6">
-              :
-            </div>
+            <div className="dtp-time-sep">:</div>
             <WheelColumn
               ref={minuteWheelRef}
               items={minutes}
@@ -404,25 +378,16 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="p-4 pt-0 flex flex-col gap-2 shrink-0">
-          <button
-            onClick={confirm}
-            className="w-full py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/40 text-gold-leaf font-serif text-sm uppercase tracking-widest hover:bg-gold-leaf/20 transition-all font-bold active:scale-[0.98]"
-          >
+        <div className="dtp-actions">
+          <button onClick={confirm} className="dtp-confirm">
             Viajar a esta fecha
           </button>
           {onReturnToLive && (
-            <button
-              onClick={onReturnToLive}
-              className="w-full py-2 rounded-lg border border-amber-700/40 text-amber-400 font-serif text-xs uppercase tracking-widest hover:bg-amber-900/20 transition-all active:scale-[0.98]"
-            >
+            <button onClick={onReturnToLive} className="dtp-return">
               Volver al presente
             </button>
           )}
-          <button
-            onClick={onClose}
-            className="w-full text-center text-[10px] text-gold-dim/50 font-serif uppercase tracking-widest py-1.5 hover:text-gold-dim transition-colors"
-          >
+          <button onClick={onClose} className="dtp-cancel">
             Cancelar
           </button>
         </div>

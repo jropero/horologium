@@ -1,0 +1,390 @@
+/* EgyptianClock.css — plain CSS migration from Tailwind */
+
+.egyptian-clock--loading {
+  width: 100%;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ink);
+  border: 4px solid var(--gold-dim);
+  border-radius: 0.5rem;
+
+  .egyptian-clock__loading-text {
+    font-family: Cinzel, serif;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: var(--gold-leaf);
+  }
+}
+
+.egyptian-clock {
+  width: 100%;
+  margin-inline: auto;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  background: #0c0804;
+  border: 4px solid rgb(24 64 160 / 55%);
+  border-radius: 2px;
+
+  .egyptian-clock__body {
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  /* Hour heading */
+  .egyptian-clock__hour-heading {
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    color: var(--parchment);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+
+    @media (width >= 480px) {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+      gap: 1rem;
+    }
+
+    @media (width >= 768px) {
+      font-size: 3rem;
+      line-height: 1;
+    }
+  }
+
+  /* Prognosis badge */
+  .egyptian-clock__prognosis-badge {
+    font-size: 9px;
+    padding-inline: 0.5rem;
+    padding-block: 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    transition: all 0.15s ease;
+
+    @media (width >= 480px) {
+      font-size: 10px;
+    }
+
+    @media (width >= 768px) {
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+
+    &.egyptian-clock__prognosis-badge--nefer {
+      background-color: rgb(6 78 59 / 30%);
+      color: #6ee7b7;
+      border-color: rgb(16 185 129 / 40%);
+    }
+
+    &.egyptian-clock__prognosis-badge--aha {
+      background-color: rgb(127 29 29 / 20%);
+      color: #fca5a5;
+      border-color: rgb(239 68 68 / 35%);
+    }
+  }
+
+  .egyptian-clock__prognosis-icon {
+    font-size: 0.75rem;
+    line-height: 1rem;
+
+    @media (width >= 480px) {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+  }
+
+  .egyptian-clock__prognosis-text {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Epagomenal section */
+  .egyptian-clock__epagomenal {
+    margin-bottom: 1.25rem;
+  }
+
+  .egyptian-clock__epagomenal-label {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: color-mix(in srgb, var(--gold-leaf) 85%, transparent);
+  }
+
+  .egyptian-clock__epagomenal-day {
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    margin-top: 0.25rem;
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  }
+
+  /* Track section (season / month / decade) */
+  .egyptian-clock__tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 24rem;
+    margin-inline: auto;
+    margin-bottom: 1.25rem;
+    padding-inline: 0.5rem;
+  }
+
+  .egyptian-clock__track-row {
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .egyptian-clock__track-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    width: 3.5rem;
+    text-align: right;
+    color: color-mix(in srgb, var(--gold-leaf) 60%, transparent);
+  }
+
+  .egyptian-clock__track-bars {
+    display: flex;
+    flex: 1;
+    gap: 0.25rem;
+  }
+
+  .egyptian-clock__track-bar {
+    height: 0.375rem;
+    flex: 1;
+    border-radius: 0.125rem;
+    transition: all 0.5s ease;
+    background-color: rgb(24 64 160 / 10%);
+
+    &.egyptian-clock__track-bar--season-active {
+      background-color: #10b981;
+      box-shadow: 0 0 8px rgb(52 211 153 / 40%);
+    }
+
+    &.egyptian-clock__track-bar--season-done {
+      background-color: rgb(4 120 87 / 40%);
+    }
+
+    &.egyptian-clock__track-bar--month-active {
+      background-color: #1840a0;
+      box-shadow: 0 0 8px rgb(24 64 160 / 50%);
+    }
+
+    &.egyptian-clock__track-bar--month-done {
+      background-color: rgb(24 64 160 / 30%);
+    }
+
+    &.egyptian-clock__track-bar--decade-active {
+      background-color: var(--gold-leaf);
+      box-shadow: 0 0 8px rgb(212 168 50 / 40%);
+    }
+
+    &.egyptian-clock__track-bar--decade-done {
+      background-color: color-mix(in srgb, var(--gold-leaf) 25%, transparent);
+    }
+  }
+
+  .egyptian-clock__track-text {
+    width: 4rem;
+    text-align: left;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    color: color-mix(in srgb, var(--parchment) 75%, transparent);
+    font-weight: 700;
+  }
+
+  /* Day/night section */
+  .egyptian-clock__daynight {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .egyptian-clock__daynight-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .egyptian-clock__daynight-label {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--egypt-primary);
+  }
+
+  .egyptian-clock__daynight-ornament {
+    color: color-mix(in srgb, var(--gold-leaf) 55%, transparent);
+  }
+
+  .egyptian-clock__vigilia {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--egypt-primary);
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+
+  /* Civil day part box */
+  .egyptian-clock__civil-part {
+    font-family: Cinzel, serif;
+    margin: 0.5rem auto;
+    padding-inline: 1.5rem;
+    padding-block: 0.625rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgb(24 64 160 / 35%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 260px;
+    background: rgb(24 64 160 / 12%);
+  }
+
+  .egyptian-clock__civil-part-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.25rem;
+    color: color-mix(in srgb, var(--gold-leaf) 65%, transparent);
+
+    @media (width >= 768px) {
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+  }
+
+  .egyptian-clock__civil-part-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-inline: 0.25rem;
+  }
+
+  .egyptian-clock__civil-part-name {
+    font-weight: 700;
+    color: var(--parchment);
+    font-size: 1rem;
+    line-height: 1.25;
+
+    @media (width >= 768px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .egyptian-clock__civil-part-desc {
+    font-size: 11px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--egypt-primary);
+    margin-top: 0.25rem;
+    line-height: 1.375;
+
+    @media (width >= 768px) {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+  }
+
+  /* Planetary ruler / deity row */
+  .egyptian-clock__info-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    padding-inline: 1rem;
+    padding-bottom: 0.5rem;
+
+    @media (width >= 640px) {
+      flex-direction: row;
+      gap: 2.5rem;
+    }
+  }
+
+  .egyptian-clock__info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .egyptian-clock__info-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.25rem;
+    color: color-mix(in srgb, var(--gold-leaf) 55%, transparent);
+  }
+
+  .egyptian-clock__ruler-name {
+    font-weight: 700;
+    color: var(--parchment);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+  }
+
+  .egyptian-clock__divider-v {
+    display: none;
+    width: 1px;
+    height: 2.5rem;
+    background: rgb(24 64 160 / 30%);
+
+    @media (width >= 640px) {
+      display: block;
+    }
+  }
+
+  .egyptian-clock__divider-h {
+    width: 4rem;
+    height: 1px;
+    background: rgb(24 64 160 / 30%);
+
+    @media (width >= 640px) {
+      display: none;
+    }
+  }
+
+  .egyptian-clock__deity-name {
+    font-weight: 700;
+    color: var(--parchment);
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .egyptian-clock__deity-hieroglyphic {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    color: var(--gold-leaf);
+  }
+}

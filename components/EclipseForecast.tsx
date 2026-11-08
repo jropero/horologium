@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import './EclipseForecast.css';
 import { getAstronomicalEvents, AstroEvent, AstroEventType } from '../utils/astronomicalEvents';
 
 interface Props {
@@ -390,31 +391,33 @@ function EventRow({
   const timeFmt = ev.time.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   const daysLabel = daysUntilLabel(ev.time, currentDate);
 
-  let catClass = 'text-gold-dim/60 border-gold-dim/20';
-  if (isLunarEclipse) catClass = 'text-stone-400 border-stone-500/30';
-  else if (isSolarEclipse) catClass = 'text-amber-400 border-amber-600/25';
+  let catBadgeClass = 'eclipse-forecast__cat-badge';
+  if (isLunarEclipse) catBadgeClass += ' eclipse-forecast__cat-badge--lunar';
+  else if (isSolarEclipse) catBadgeClass += ' eclipse-forecast__cat-badge--solar';
 
   let detail: React.ReactNode = null;
   if ((ev.type === 'moon-perigee' || ev.type === 'moon-apogee') && ev.distKm) {
     detail = (
-      <span className="font-serif text-xs text-parchment/38">
+      <span className="eclipse-forecast__detail eclipse-forecast__detail--apsis">
         {ev.distKm.toLocaleString()} km
       </span>
     );
   } else if (ev.type === 'elongation' && ev.elongationDeg != null) {
     const dir = ev.elongationDir === 'morning' ? 'Matut.' : 'Vespert.';
     detail = (
-      <span className="font-serif text-xs text-gold-dim/50">
+      <span className="eclipse-forecast__detail eclipse-forecast__detail--dim">
         {ev.elongationDeg}° · {dir}
       </span>
     );
   } else if (ev.type === 'eclipse-lunar' && ev.sdTotal != null) {
     detail = (
-      <span className="font-serif text-xs text-gold-dim/50">±{Math.round(ev.sdTotal)} min</span>
+      <span className="eclipse-forecast__detail eclipse-forecast__detail--dim">
+        ±{Math.round(ev.sdTotal)} min
+      </span>
     );
   } else if (ev.type === 'eclipse-solar' && ev.obscuration != null) {
     detail = (
-      <span className="font-serif text-xs text-amber-500/55">
+      <span className="eclipse-forecast__detail eclipse-forecast__detail--solar">
         {Math.round(ev.obscuration * 100)}% obscuratio
       </span>
     );
@@ -422,29 +425,21 @@ function EventRow({
 
   return (
     <div
-      className={`px-3 py-2.5 flex items-center gap-3${
-        last ? '' : ' border-b border-gold-dim/10'
+      className={`eclipse-forecast__event-row${
+        last ? ' eclipse-forecast__event-row--last' : ''
       }`}
     >
-      <div className="flex-shrink-0 flex items-center justify-center w-10 h-10">
-        {getIcon(ev, idx)}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="mb-0.5">
-          <span
-            className={`font-serif text-xs uppercase tracking-widest px-1.5 py-0.5 rounded-sm border ${catClass}`}
-          >
-            {CATEGORY[ev.type]}
-          </span>
+      <div className="eclipse-forecast__event-icon">{getIcon(ev, idx)}</div>
+      <div className="eclipse-forecast__event-body">
+        <div className="eclipse-forecast__cat-wrap">
+          <span className={catBadgeClass}>{CATEGORY[ev.type]}</span>
         </div>
-        <p className="font-serif text-sm text-parchment leading-tight truncate">
-          {eventLabel(ev)}
-        </p>
-        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-          <span className="font-serif text-xs text-parchment/45">
+        <p className="eclipse-forecast__event-name">{eventLabel(ev)}</p>
+        <div className="eclipse-forecast__event-meta">
+          <span className="eclipse-forecast__event-date">
             {dateFmt} · {timeFmt}
           </span>
-          <span className="font-serif text-xs text-gold-dim/55 italic">{daysLabel}</span>
+          <span className="eclipse-forecast__event-days">{daysLabel}</span>
           {detail}
         </div>
       </div>
@@ -467,11 +462,11 @@ const EclipseForecast: React.FC<Props> = ({ currentDate, latitude, longitude }) 
   if (events.length === 0) return null;
 
   return (
-    <div className="w-full max-w-md mx-auto mt-6 mb-2">
-      <div className="bg-ink/90 border border-gold-dim/40 rounded-lg shadow-xl overflow-hidden">
+    <div className="eclipse-forecast">
+      <div className="eclipse-forecast__card">
         {/* Header */}
-        <div className="px-5 pt-4 pb-3 border-b border-gold-dim/20">
-          <div className="flex items-center justify-center gap-2.5">
+        <div className="eclipse-forecast__header">
+          <div className="eclipse-forecast__header-row">
             {/* Star */}
             <svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true">
               <polygon
@@ -479,18 +474,14 @@ const EclipseForecast: React.FC<Props> = ({ currentDate, latitude, longitude }) 
                 fill="rgba(210,165,55,0.72)"
               />
             </svg>
-            <p className="font-serif text-xs uppercase tracking-[0.28em] text-gold-dim">
-              Phaenomena Caeli
-            </p>
+            <p className="eclipse-forecast__header-title">Phaenomena Caeli</p>
             {/* Moon */}
             <svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true">
               <circle cx="10" cy="10" r="7" fill="rgba(175,155,125,0.65)" />
               <circle cx="14.5" cy="8" r="7" fill="rgba(7,16,29,0.95)" />
             </svg>
           </div>
-          <p className="font-serif text-xs text-gold-dim/40 text-center tracking-wider mt-0.5">
-            Tricinta Dies Proximi
-          </p>
+          <p className="eclipse-forecast__header-subtitle">Tricinta Dies Proximi</p>
         </div>
 
         {/* Event list */}

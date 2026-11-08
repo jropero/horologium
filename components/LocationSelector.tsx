@@ -5,6 +5,7 @@ import { LOCATIONS } from '../utils/locations';
 import { useCivilization } from '../contexts/CivilizationContext';
 import GlossedTerm from './GlossedTerm';
 import { BABYLONIAN_UI_TERMS as BAB } from '../utils/civLabels';
+import './LocationSelector.css';
 
 interface LocationSelectorProps {
   onUpdateLocation: (lat: number, lng: number) => void;
@@ -48,72 +49,70 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-8 mb-12 px-2 animate-fadeIn">
-      <div className="bg-ink/90 border border-gold-dim/40 rounded-lg p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
+    <div className="location-selector animate-fadeIn">
+      <div className="location-selector-panel">
         {/* Header decoration */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="text-gold-leaf/40 mb-2">
-            <Map className="w-6 h-6" />
+        <div className="location-selector-header">
+          <div className="location-selector-map-icon">
+            <Map />
           </div>
-          <h3 className="font-serif text-lg md:text-xl text-gold-leaf uppercase tracking-[0.3em] font-bold">
+          <h3 className="location-selector-title">
             {civilization === 'babylonia' ? <GlossedTerm term={BAB.place} /> : 'Selectio Loci'}
           </h3>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold-dim to-transparent mt-2"></div>
+          <div className="location-selector-divider"></div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="location-selector-grid">
           {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
           {LOCATIONS.map(loc => {
             const active = isActive(loc);
             const Icon = loc.icon;
             const isGps = loc.id === 'gps';
-            const inactiveContainerClass = isGps
-              ? 'bg-roman-red/10 text-parchment border-roman-red/40 hover:bg-roman-red/20 hover:border-roman-red'
-              : 'bg-white/5 text-parchment/70 border-gold-dim/20 hover:border-gold-leaf hover:text-parchment hover:bg-white/10';
-            const inactiveIconBg = isGps ? 'bg-roman-red/20' : 'bg-white/5';
-            const inactiveIconColor = isGps ? 'text-roman-red' : 'text-gold-leaf';
+
+            const inactiveBtnMod = isGps
+              ? 'location-selector-btn--gps'
+              : 'location-selector-btn--inactive';
+            const inactiveIconWrapMod = isGps
+              ? 'location-selector-icon-wrap--gps'
+              : 'location-selector-icon-wrap--inactive';
+            const inactiveIconMod = isGps
+              ? 'location-selector-icon--gps'
+              : 'location-selector-icon--inactive';
+
+            const btnClass = [
+              'location-selector-btn',
+              active ? 'location-selector-btn--active' : inactiveBtnMod,
+              loading && isGps ? 'animate-pulse' : '',
+            ]
+              .filter(Boolean)
+              .join(' ');
+
+            const iconWrapClass = `location-selector-icon-wrap ${
+              active ? 'location-selector-icon-wrap--active' : inactiveIconWrapMod
+            }`;
+            const iconClass = active ? 'location-selector-icon--active' : inactiveIconMod;
 
             return (
               <button
                 key={loc.id}
                 onClick={() => handleLocationSelect(loc)}
                 disabled={loading}
-                className={`
-                  relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg transition-all duration-500
-                  font-serif border group
-                  ${
-                    active
-                      ? 'bg-parchment text-ink border-gold-leaf shadow-[0_0_15px_rgba(207,181,59,0.4)] scale-[1.02]'
-                      : inactiveContainerClass
-                  }
-                  ${loading && isGps ? 'animate-pulse' : ''}
-                `}
+                className={btnClass}
               >
-                <div
-                  className={`
-                  p-2 rounded-full transition-colors duration-300
-                  ${active ? 'bg-ink/10' : inactiveIconBg}
-                `}
-                >
-                  <Icon
-                    className={`w-5 h-5 ${active ? 'text-roman-red' : inactiveIconColor}`}
-                  />
+                <div className={iconWrapClass}>
+                  <Icon className={iconClass} />
                 </div>
 
-                <span className="text-sm md:text-base uppercase tracking-widest font-bold">
-                  {loc.name}
-                </span>
+                <span className="location-selector-name">{loc.name}</span>
 
-                {active && (
-                  <div className="absolute top-2 right-2 w-2 h-2 bg-roman-red rounded-full animate-pulse shadow-[0_0_5px_#8b2500]"></div>
-                )}
+                {active && <div className="location-selector-active-dot animate-pulse"></div>}
               </button>
             );
           })}
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="font-body text-parchment/40 italic text-sm">
+        <div className="location-selector-footer">
+          <p className="location-selector-quote">
             &quot;Ubi bene, ibi patria&quot; — Donde se está bien, allí está la patria.
           </p>
         </div>

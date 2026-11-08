@@ -1,4 +1,5 @@
 import React from 'react';
+import './WeatherWidget.css';
 import { WeatherData } from '../types';
 import { useCivilization } from '../contexts/CivilizationContext';
 import GlossedTerm from './GlossedTerm';
@@ -37,16 +38,13 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     civilization === 'aegyptus' && egyptianWindName ? egyptianWindName : latinWindName;
   const displayWind = civilization === 'hellas' && greekWindName ? greekWindName : fallbackWind;
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   const renderIcon = () => {
     switch (condition) {
       case 'clear':
         return (
           <svg
             viewBox="0 0 24 24"
-            className={`w-8 h-8 ${
-              civilization === 'aegyptus' ? 'text-amber-400' : 'text-gold-leaf'
-            }`}
+            className="ww-svg-icon ww-svg-clear"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -59,7 +57,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         return (
           <svg
             viewBox="0 0 24 24"
-            className="w-8 h-8 text-parchment"
+            className="ww-svg-icon ww-svg-cloud"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -83,7 +81,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         return (
           <svg
             viewBox="0 0 24 24"
-            className="w-8 h-8 text-parchment"
+            className="ww-svg-icon ww-svg-cloud"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -96,9 +94,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         return (
           <svg
             viewBox="0 0 24 24"
-            className={`w-8 h-8 ${
-              civilization === 'aegyptus' ? 'text-emerald-400' : 'text-sky-400'
-            }`}
+            className="ww-svg-icon ww-svg-rain"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -111,7 +107,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         return (
           <svg
             viewBox="0 0 24 24"
-            className="w-8 h-8 text-white"
+            className="ww-svg-icon ww-svg-snow"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -128,7 +124,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
         return (
           <svg
             viewBox="0 0 24 24"
-            className="w-8 h-8 text-yellow-500"
+            className="ww-svg-icon ww-svg-storm"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -142,92 +138,50 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
     }
   };
 
-  const hoverBorderClass =
-    civilization === 'aegyptus' ? 'hover:border-emerald-500' : 'hover:border-gold-leaf';
-
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       onClick={onClick}
-      className={`flex justify-evenly w-full md:w-auto items-center gap-3 bg-ink/80 border p-2 rounded shadow-lg transition-all
-            ${civilization === 'aegyptus' ? 'border-emerald-500/30' : 'border-gold-dim'}
-            ${
-              onClick ? `cursor-pointer hover:bg-white/5 group/weather ${hoverBorderClass}` : ''
-            } ${className}`}
+      className={`weather-widget${civilization === 'aegyptus' ? ' ww-aegyptus' : ''}${
+        onClick ? ' clickable' : ''
+      } ${className}`.trim()}
     >
-      <div
-        className={`${
-          civilization === 'aegyptus' ? 'text-emerald-400' : 'text-gold-leaf'
-        } flex-shrink-0`}
-      >
-        {renderIcon()}
-      </div>
-      <div
-        className={`flex flex-col border-r justify-center pr-3 ${
-          civilization === 'aegyptus' ? 'border-emerald-500/20' : 'border-gold-dim/30'
-        }`}
-      >
-        <span
-          className={`font-serif text-xs uppercase tracking-widest leading-none mb-1 transition-colors ${
-            civilization === 'aegyptus'
-              ? 'text-emerald-600 group-hover/weather:text-emerald-400'
-              : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'
-          }`}
-        >
+      <div className="ww-icon-container">{renderIcon()}</div>
+      <div className="ww-desc-section">
+        <span className="ww-sky-label">
           {civilization === 'babylonia' ? (
-            <GlossedTerm term={BAB.sky} align="start" className="text-sm" />
+            <GlossedTerm term={BAB.sky} align="start" className="ww-glossed-sm" />
           ) : (
             labels.skyLabel
           )}
         </span>
-        <span className="text-parchment font-serif text-sm font-bold leading-tight">
-          {displayDesc}
-        </span>
+        <span className="ww-display-desc">{displayDesc}</span>
         {civilization === 'hellas' && greekDescription && (
-          <div className="flex flex-col mb-1">
-            <span className="font-serif text-[9px] tracking-widest uppercase text-gold-dim mt-0.5">
-              {transliterateGreek(displayDesc)}
-            </span>
-            <span className="text-roman-red font-body italic text-[10px] font-bold uppercase mt-0.5 leading-none">
-              {description}
-            </span>
+          <div className="ww-greek-desc">
+            <span className="ww-greek-transliteration">{transliterateGreek(displayDesc)}</span>
+            <span className="ww-greek-latin">{description}</span>
           </div>
         )}
         {civilization === 'aegyptus' && (
-          <span className="text-emerald-500 font-serif text-xs font-bold mt-1 drop-shadow-sm">
-            {egyptianDescription?.split(' ')[1]}
-          </span>
+          <span className="ww-egypt-desc">{egyptianDescription?.split(' ')[1]}</span>
         )}
-        <span className="text-stone-400 font-serif text-xs mt-0.5">
-          {Math.round(temperature)}°C
-        </span>
+        <span className="ww-temperature">{Math.round(temperature)}°C</span>
       </div>
 
       {/* SECCIÓN DE VIENTO */}
       {displayWind && (
-        <div className="flex flex-col pl-2 items-center justify-center min-w-[75px]">
-          <span
-            className={`font-serif text-xs uppercase tracking-widest mb-1 transition-colors ${
-              civilization === 'aegyptus'
-                ? 'text-emerald-600 group-hover/weather:text-emerald-400'
-                : 'text-gold-leaf group-hover/weather:text-gold-leaf/80'
-            }`}
-          >
+        <div className="ww-wind-section">
+          <span className="ww-wind-label">
             {civilization === 'babylonia' ? (
-              <GlossedTerm term={BAB.wind} className="text-sm" />
+              <GlossedTerm term={BAB.wind} className="ww-glossed-sm" />
             ) : (
               labels.windLabel
             )}
           </span>
 
-          <div className="relative w-8 h-8 flex items-center justify-center mb-1">
+          <div className="ww-compass">
             {/* Rosa de los vientos de fondo */}
-            <svg
-              viewBox="0 0 24 24"
-              className={`absolute inset-0 w-full h-full opacity-40 ${
-                civilization === 'aegyptus' ? 'text-emerald-500/50' : 'text-gold-dim'
-              }`}
-            >
+            <svg viewBox="0 0 24 24" className="ww-compass-bg">
               <circle
                 cx="12"
                 cy="12"
@@ -246,7 +200,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
             {/* Aguja 3D dinámica */}
             <svg
               viewBox="0 0 24 24"
-              className="absolute inset-0 w-full h-full transition-transform duration-1000 ease-out drop-shadow-md"
+              className="ww-compass-needle"
               style={{ transform: `rotate(${windDirection}deg)` }}
             >
               <g transform="translate(12,12)">
@@ -278,34 +232,24 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ weather, className = '', 
             </svg>
           </div>
 
-          <span className="text-stone-300 font-serif text-xs text-center leading-tight">
-            {displayWind.split(' ')[0]}
-          </span>
+          <span className="ww-wind-name">{displayWind.split(' ')[0]}</span>
           {civilization === 'hellas' && greekWindName && (
-            <div className="flex flex-col items-center">
-              <span className="font-serif text-[8px] tracking-widest uppercase text-gold-dim">
+            <div className="ww-greek-wind">
+              <span className="ww-greek-wind-translit">
                 {transliterateGreek(displayWind.split(' ')[0])}
               </span>
-              <span className="text-roman-red font-body italic text-[9px] font-bold leading-none">
-                {latinWindName.split(' ')[0]}
-              </span>
+              <span className="ww-greek-wind-latin">{latinWindName.split(' ')[0]}</span>
             </div>
           )}
           {civilization === 'aegyptus' && (
-            <div className="flex flex-col items-center">
-              <span className="text-emerald-500 font-serif text-sm mt-0.5 drop-shadow-sm">
-                {displayWind.split(' ').pop()}
-              </span>
-              <span className="text-emerald-600/60 font-body italic text-[8px] font-bold leading-none uppercase mt-0.5">
-                {latinWindName.split(' ')[0]}
-              </span>
+            <div className="ww-egypt-wind">
+              <span className="ww-egypt-wind-icon">{displayWind.split(' ').pop()}</span>
+              <span className="ww-egypt-wind-latin">{latinWindName.split(' ')[0]}</span>
             </div>
           )}
 
           {windSpeed !== undefined && (
-            <span className="text-gold-dim font-serif text-xs mt-0.5 tracking-wider">
-              {Math.round(windSpeed)} km/h
-            </span>
+            <span className="ww-wind-speed">{Math.round(windSpeed)} km/h</span>
           )}
         </div>
       )}

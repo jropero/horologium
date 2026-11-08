@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { SOLAR_TERMS } from '../utils/chineseCalendarData';
 import { WeatherData } from '../types';
 import { generateWeatherParticles, RAIN_INTENSITY } from '../utils/weatherParticles';
+import './ChineseYearWheel.css';
 
 interface Props {
   currentTermIndex: number; // 0-based (0=立春 … 23=大寒)
@@ -98,11 +99,7 @@ const WheelWeatherOverlay: React.FC<WheelWeatherProps> = ({ condition, rain, sno
   const showLightning = condition === 'storm';
 
   return (
-    <svg
-      aria-hidden
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      viewBox="0 0 320 320"
-    >
+    <svg aria-hidden className="cyw__weather-overlay" viewBox="0 0 320 320">
       <defs>
         <clipPath id="wheel-clip-zh">
           <circle cx={CX} cy={CY} r={OUTER_R + 12} />
@@ -254,12 +251,10 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
   );
 
   return (
-    <div className="w-full bg-ink/90 border border-gold-dim/20 rounded-xl p-4 shadow-xl">
-      <h3 className="text-center text-gold-leaf font-serif text-sm uppercase tracking-widest mb-1">
-        节气 · Ciclo Solar
-      </h3>
+    <div className="chinese-year-wheel">
+      <h3 className="cyw__heading">节气 · Ciclo Solar</h3>
 
-      <div className="relative mx-auto max-w-xs">
+      <div className="cyw__svg-wrapper">
         <svg width="100%" viewBox="0 0 320 320">
           {/* ── Sectors ── */}
           {/* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-conditional */}
@@ -441,11 +436,11 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
       </div>
 
       {/* ── Season legend ── */}
-      <div className="flex justify-center gap-3 mt-1 mb-4">
+      <div className="cyw__legend">
         {SEASONS.map(s => (
-          <div key={s.hanzi} className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: s.bright }} />
-            <span className="text-xs text-parchment/50">
+          <div key={s.hanzi} className="cyw__legend-item">
+            <div className="cyw__legend-dot" style={{ backgroundColor: s.bright }} />
+            <span className="cyw__legend-text">
               {s.hanzi} {s.es}
             </span>
           </div>
@@ -453,18 +448,18 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
       </div>
 
       {/* ── Term list by season ── */}
-      <div className="grid grid-cols-2 gap-x-3 gap-y-4">
+      <div className="cyw__term-grid">
         {SEASONS.map((season, sIdx) => {
           const seasonTerms = SOLAR_TERMS.slice(sIdx * 6, sIdx * 6 + 6);
           return (
-            <div key={season.hanzi}>
+            <div key={season.hanzi} className="cyw__season-block">
               <div
-                className="text-sm font-bold uppercase tracking-widest mb-1.5 pb-0.5 border-b"
+                className="cyw__season-block-heading"
                 style={{ color: season.accent, borderColor: season.accent + '40' }}
               >
                 {season.hanzi} {season.es}
               </div>
-              <div className="space-y-1">
+              <div className="cyw__term-list">
                 {/* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-conditional */}
                 {seasonTerms.map((term, tIdx) => {
                   const globalIdx = sIdx * 6 + tIdx;
@@ -473,12 +468,10 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
                   return (
                     <div
                       key={term.id}
-                      className={`flex items-baseline gap-1.5 rounded px-1.5 py-0.5 ${
-                        isActive ? 'bg-white/10' : ''
-                      }`}
+                      className={`cyw__term-row${isActive ? ' cyw__term-row--active' : ''}`}
                     >
                       <span
-                        className="font-bold text-base shrink-0 font-serif"
+                        className="cyw__term-hanzi"
                         style={{
                           color: isActive
                             ? season.accent
@@ -490,21 +483,18 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
                         {term.hanzi}
                       </span>
                       <span
-                        className={`text-xs leading-tight ${
+                        className={`cyw__term-translation ${
                           isActive
-                            ? 'text-parchment/90'
+                            ? 'cyw__term-translation--active'
                             : isNext
-                            ? 'text-parchment/60'
-                            : 'text-parchment/35'
+                            ? 'cyw__term-translation--next'
+                            : 'cyw__term-translation--inactive'
                         }`}
                       >
                         {term.translation}
                       </span>
                       {isActive && (
-                        <span
-                          className="ml-auto text-xs shrink-0"
-                          style={{ color: season.accent }}
-                        >
+                        <span className="cyw__term-arrow" style={{ color: season.accent }}>
                           ◀
                         </span>
                       )}

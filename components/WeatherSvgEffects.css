@@ -1,0 +1,9 @@
+@keyframes weather-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.weather-storm-clouds {
+  animation: weather-pulse 10s ease-in-out infinite;
+}

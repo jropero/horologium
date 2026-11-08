@@ -1,0 +1,136 @@
+/* ChineseYearCycle.css — plain CSS migration from Tailwind */
+
+@keyframes cyc-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.chinese-year-cycle {
+  width: 100%;
+  background: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+  margin-top: 2rem;
+
+  .cyc__heading {
+    text-align: center;
+    color: var(--gold-leaf);
+    font-family: Cinzel, serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .cyc__seasons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    @media (width >= 768px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .cyc__season {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cyc__season-heading {
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+
+    &.cyc__season-heading--spring {
+      color: #10b981;
+    }
+
+    &.cyc__season-heading--summer {
+      color: #f43f5e;
+    }
+
+    &.cyc__season-heading--autumn {
+      color: #f59e0b;
+    }
+
+    &.cyc__season-heading--winter {
+      color: #0ea5e9;
+    }
+  }
+
+  .cyc__terms-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.375rem;
+  }
+
+  .cyc__term {
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+
+    &.cyc__term--past {
+      opacity: 0.6;
+    }
+
+    &.cyc__term--active {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgb(255 255 255 / 10%);
+      animation: cyc-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    &.cyc__term--active-spring {
+      background: rgb(5 150 105 / 20%);
+      border-color: rgb(5 150 105 / 50%);
+    }
+
+    &.cyc__term--active-summer {
+      background: rgb(225 29 72 / 20%);
+      border-color: rgb(225 29 72 / 50%);
+    }
+
+    &.cyc__term--active-autumn {
+      background: rgb(217 119 6 / 20%);
+      border-color: rgb(217 119 6 / 50%);
+    }
+
+    &.cyc__term--active-winter {
+      background: rgb(14 165 233 / 20%);
+      border-color: rgb(14 165 233 / 50%);
+    }
+  }
+
+  .cyc__term-id {
+    font-size: 10px;
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  }
+
+  .cyc__term-hanzi {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    color: var(--parchment);
+  }
+
+  .cyc__term-translation {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+    font-style: italic;
+  }
+}

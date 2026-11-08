@@ -6,6 +6,7 @@ import {
   OVID_TABOOS,
 } from '../utils/ovidFastiData';
 import InterrogatioDivina from './InterrogatioDivina';
+import './OvidianLore.css';
 
 interface OvidianLoreProps {
   modernTime: Date;
@@ -68,65 +69,44 @@ const OvidianLore: React.FC<OvidianLoreProps> = ({ modernTime }) => {
   }
 
   return (
-    <div className="w-full max-w-none mx-auto mt-6 mb-2 animate-fadeIn">
-      <div className="flex flex-col gap-4 w-full items-center p-6 bg-ink/80 backdrop-blur-sm border border-gold-dim/30 rounded-xl shadow-lg relative overflow-hidden">
-        <div className="absolute inset-0 bg-stone-900/40 pointer-events-none"></div>
+    <div className="ovidian-lore animate-fadeIn">
+      <div className="ov-container">
+        <div className="ov-bg-overlay"></div>
 
-        <div className="text-center w-full border-b border-gold-dim/20 pb-3 mb-2 relative z-10 flex items-center justify-center gap-3">
-          <span className="text-gold-dim">❧</span>
-          <span className="font-serif text-sm uppercase tracking-widest text-gold-leaf font-bold">
-            Fasti Ovidiani
-          </span>
-          <span className="text-gold-dim">☙</span>
+        <div className="ov-title-row">
+          <span className="ov-title-ornament">❧</span>
+          <span className="ov-title-text">Fasti Ovidiani</span>
+          <span className="ov-title-ornament">☙</span>
         </div>
 
         {/* Epic 1: Month Etymology Subtitle */}
         {ovidMonthInfo && (
-          <div className="text-center max-w-md mx-auto relative z-10">
-            <p className="text-[11px] md:text-sm font-serif italic text-parchment/80 leading-relaxed">
-              &quot;{ovidMonthInfo.text}&quot;
-            </p>
-            <div className="text-[9px] text-gold-dim/60 uppercase tracking-widest mt-2 font-bold">
-              — Fasti, {ovidMonthInfo.reference}
-            </div>
+          <div className="ov-etymology">
+            <p className="ov-etymology-text">&quot;{ovidMonthInfo.text}&quot;</p>
+            <div className="ov-etymology-attr">— Fasti, {ovidMonthInfo.reference}</div>
           </div>
         )}
 
         {/* Epic 4: Divine Dialogue Trigger */}
         {ovidDialogue && (
-          <button
-            onClick={() => setIsDialogueOpen(true)}
-            className="w-full max-w-lg flex items-center gap-4 bg-stone-800/60 border border-gold-leaf/40 hover:bg-gold-leaf/10 hover:border-gold-leaf p-4 rounded-lg shadow-lg transition-all group text-left mt-2 relative z-10"
-          >
-            <span className="text-2xl group-hover:scale-125 transition-transform shrink-0 drop-shadow-md">
-              🏛️
-            </span>
-            <div className="flex flex-col items-start">
-              <span className="text-xs font-serif uppercase tracking-widest text-gold-leaf font-black">
-                Coloquio Divino
-              </span>
-              <span className="text-[10px] font-serif italic text-parchment/60 leading-tight mt-1">
-                Interrogar a {ovidDialogue.god}
-              </span>
+          <button onClick={() => setIsDialogueOpen(true)} className="ov-dialogue-btn">
+            <span className="ov-btn-icon">🏛️</span>
+            <div className="ov-btn-labels">
+              <span className="ov-btn-label">Coloquio Divino</span>
+              <span className="ov-btn-sublabel">Interrogar a {ovidDialogue.god}</span>
             </div>
           </button>
         )}
 
         {/* Epic 3: Omina et Signa (Taboos) */}
         {activeTaboos.length > 0 && (
-          <div className="w-full max-w-lg bg-roman-red/10 border border-roman-red/40 rounded-lg p-4 flex flex-col gap-2 shadow-sm mt-2 relative z-10">
-            <div className="flex items-center gap-2 text-roman-red">
-              <span className="text-lg">⚠️</span>
-              <span className="text-[10px] font-serif uppercase tracking-widest font-black">
-                {activeTaboos[0].title}
-              </span>
+          <div className="ov-taboos">
+            <div className="ov-taboos-header">
+              <span className="ov-taboos-warning">⚠️</span>
+              <span className="ov-taboos-title">{activeTaboos[0].title}</span>
             </div>
-            <p className="text-xs font-serif italic text-roman-red leading-relaxed border-l-2 border-roman-red/30 pl-3">
-              &quot;{activeTaboos[0].text}&quot;
-            </p>
-            <span className="text-[9px] text-roman-red/70 self-end uppercase tracking-tighter font-bold mt-1">
-              — Ovidio, {activeTaboos[0].reference}
-            </span>
+            <p className="ov-taboos-text">&quot;{activeTaboos[0].text}&quot;</p>
+            <span className="ov-taboos-attr">— Ovidio, {activeTaboos[0].reference}</span>
           </div>
         )}
       </div>

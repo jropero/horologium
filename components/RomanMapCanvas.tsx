@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import './RomanMapCanvas.css';
 import {
   getProvinceMeta,
   getRomanProvince,
@@ -797,26 +798,22 @@ const RoadCard: React.FC<{
   })();
   return (
     <>
-      <div className="font-serif text-lg font-bold text-gold-leaf leading-tight">
+      <div className="rmc-road-name">
         {road.viae.length ? road.viae.join(' · ') : RL.unnamed}
       </div>
-      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 font-body text-sm leading-snug">
+      <dl className="rmc-road-dl">
         {rows.map(([k, v]) => (
           <React.Fragment key={k}>
-            <dt className="font-serif text-xs uppercase tracking-[0.12em] text-gold-dim/80 pt-0.5">
-              {k}
-            </dt>
-            <dd className="text-parchment/85">{v}</dd>
+            <dt className="rmc-road-dt">{k}</dt>
+            <dd className="rmc-road-dd">{v}</dd>
           </React.Fragment>
         ))}
       </dl>
 
-      <div className="mt-3 pt-2 border-t border-gold-dim/30">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="font-serif text-xs uppercase tracking-[0.12em] text-gold-dim/80">
-            {RL.iterTemporum}
-          </span>
-          <span className="font-serif text-sm text-gold-leaf">
+      <div className="rmc-road-slider-section">
+        <div className="rmc-road-slider-header">
+          <span className="rmc-road-slider-label">{RL.iterTemporum}</span>
+          <span className="rmc-road-year-display">
             {year === null ? RL.omnesViae : RL.latinYear(year)}
           </span>
         </div>
@@ -829,21 +826,17 @@ const RoadCard: React.FC<{
           onChange={e => onYear(toHistorical(Number(e.target.value)))}
           aria-label={RL.annusViarum}
           aria-valuetext={year === null ? RL.omnesViae : RL.latinYear(year)}
-          className="w-full mt-1 accent-[var(--gold-leaf)]"
+          className="rmc-road-slider"
           // A horizontal drag here moves the year, not the map's native scroll.
           style={{ touchAction: 'none' }}
         />
-        {year !== null && (
-          <div className="font-body italic text-sm text-parchment/75 leading-snug">
-            {roadStatusLabel}
-          </div>
-        )}
-        <div className="mt-2 flex gap-2">
+        {year !== null && <div className="rmc-road-status-label">{roadStatusLabel}</div>}
+        <div className="rmc-road-btn-row">
           {road.from !== null && (
             <button
               type="button"
               onClick={() => onYear(road.from)}
-              className="flex-1 font-serif text-xs uppercase tracking-[0.12em] px-2 py-1.5 rounded-sm border border-gold-leaf/60 text-gold-leaf hover:bg-gold-leaf/10"
+              className="rmc-road-btn rmc-road-btn--primary"
             >
               {RL.adConditum}
             </button>
@@ -852,7 +845,7 @@ const RoadCard: React.FC<{
             <button
               type="button"
               onClick={() => onYear(null)}
-              className="flex-1 font-serif text-xs uppercase tracking-[0.12em] px-2 py-1.5 rounded-sm border border-gold-dim/50 text-parchment/70 hover:bg-gold-leaf/10"
+              className="rmc-road-btn rmc-road-btn--secondary"
             >
               {RL.redire}
             </button>
@@ -1750,10 +1743,10 @@ function RomanMapCanvas({
     selected?.kind === 'city' ? getRomanProvince(selected.city.lat, selected.city.lng) : null;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="roman-map-canvas">
       <div
         ref={containerRef}
-        className="relative w-full overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-sm border border-gold-dim/40"
+        className="rmc-container"
         // pan-x: native horizontal scrolling pans east–west; vertical drags and pinches come to the canvas.
         style={
           {
@@ -1763,10 +1756,10 @@ function RomanMapCanvas({
         }
       >
         {/* Sea background: shows only if a fast fling outruns the canvas strip for a frame. */}
-        <div ref={wrapperRef} className="relative mx-auto" style={{ background: SEA }}>
+        <div ref={wrapperRef} className="rmc-wrapper" style={{ background: SEA }}>
           <canvas
             ref={canvasRef}
-            className="absolute left-0 top-0 block select-none cursor-grab active:cursor-grabbing"
+            className="rmc-canvas"
             role="img"
             aria-label="Mapa del Imperio Romano — toque una ciudad para elegirla como ubicación"
             onPointerDown={onPointerDown}
@@ -1775,18 +1768,14 @@ function RomanMapCanvas({
             onPointerCancel={e => endPointer(e, true)}
           />
           {creaturesShown && (
-            <div
-              ref={creatureLayerRef}
-              className="absolute inset-0 overflow-hidden pointer-events-none"
-              aria-hidden="true"
-            >
+            <div ref={creatureLayerRef} className="rmc-creature-layer" aria-hidden="true">
               {CREATURES.map((creature, i) => (
                 <div
                   key={creature.key}
                   ref={el => {
                     creatureElsRef.current[i] = el;
                   }}
-                  className="absolute left-0 top-0"
+                  className="rmc-creature-el"
                   style={{
                     width: CREATURE_ART_PX,
                     height: CREATURE_ART_PX,
@@ -1800,11 +1789,11 @@ function RomanMapCanvas({
                         el.dataset.painted = '1';
                       }
                     }}
-                    className={`block ${creature.sea ? 'creature-bob' : 'creature-breathe'}`}
+                    className={`rmc-creature-canvas ${
+                      creature.sea ? 'creature-bob' : 'creature-breathe'
+                    }`}
                     // Staggered so the creatures never move in step.
                     style={{
-                      width: '100%',
-                      height: '100%',
                       animationDuration: `${5 + (i % 4) * 0.9}s`,
                       animationDelay: `${-i * 0.73}s`,
                     }}
@@ -1813,20 +1802,13 @@ function RomanMapCanvas({
               ))}
             </div>
           )}
-          <div
-            ref={markerRef}
-            className="absolute left-0 top-0 pointer-events-none"
-            style={{ display: 'none' }}
-          >
-            <span
-              className="absolute -left-3 -top-3 w-6 h-6 rounded-full border-2 animate-ping"
-              style={{ borderColor: MARKER }}
-            />
+          <div ref={markerRef} className="rmc-marker" style={{ display: 'none' }}>
+            <span className="rmc-ping animate-ping" style={{ borderColor: MARKER }} />
           </div>
 
           {status !== 'ready' && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
-              <span className="font-body italic text-lg text-parchment/80">
+            <div className="rmc-status-overlay">
+              <span className="rmc-status-text">
                 {status === 'loading'
                   ? 'Desplegando el mapa del Imperio…'
                   : 'No se pudo cargar el mapa.'}
@@ -1835,7 +1817,7 @@ function RomanMapCanvas({
                 <button
                   type="button"
                   onClick={() => setLoadAttempt(n => n + 1)}
-                  className="pointer-events-auto font-serif text-xs uppercase tracking-[0.25em] px-4 py-2 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
+                  className="rmc-retry-btn"
                 >
                   Reintentar
                 </button>
@@ -1846,11 +1828,7 @@ function RomanMapCanvas({
           {selected && (
             <div
               ref={cardRef}
-              className={`absolute z-10 ${
-                selected.kind === 'road'
-                  ? 'w-72 max-h-[60%] overflow-y-auto overscroll-contain'
-                  : 'w-60'
-              } p-3 rounded-sm border border-gold-dim/60 bg-ink/95 shadow-2xl`}
+              className={`rmc-card${selected.kind === 'road' ? ' rmc-card--road' : ''}`}
               style={{ left: 0, top: 0 }}
               role="dialog"
               aria-label={(() => {
@@ -1869,13 +1847,9 @@ function RomanMapCanvas({
               ) : // eslint-disable-next-line sonarjs/no-nested-conditional
               selected.kind === 'city' ? (
                 <>
-                  <div className="font-serif text-xl font-bold text-gold-leaf leading-tight">
-                    {selected.city.latin}
-                  </div>
-                  <div className="font-body italic text-base text-parchment/80 leading-snug">
-                    {selected.city.modern}
-                  </div>
-                  <div className="font-body text-sm text-parchment/60 mt-1">
+                  <div className="rmc-city-name">{selected.city.latin}</div>
+                  <div className="rmc-city-modern">{selected.city.modern}</div>
+                  <div className="rmc-city-type">
                     {selected.city.fortress ? 'Castra' : 'Urbs'}
                     {province ? ` · ${province.name}` : ''}
                   </div>
@@ -1885,22 +1859,16 @@ function RomanMapCanvas({
                       onLocationChange(selected.city.lat, selected.city.lng);
                       onClose();
                     }}
-                    className="mt-3 w-full font-serif text-xs uppercase tracking-[0.2em] px-3 py-2 rounded-sm border border-gold-leaf/60 text-gold-leaf hover:bg-gold-leaf/10"
+                    className="rmc-city-select-btn"
                   >
                     Fijar como mi ubicación
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="font-serif text-lg font-bold tracking-[0.12em] text-gold-leaf leading-tight">
-                    {selected.creature.name}
-                  </div>
-                  <div className="font-body italic text-base text-parchment/85 leading-snug mt-1">
-                    {selected.creature.desc}
-                  </div>
-                  <div className="font-body text-sm text-parchment/50 mt-1">
-                    {selected.creature.source}
-                  </div>
+                  <div className="rmc-creature-name">{selected.creature.name}</div>
+                  <div className="rmc-creature-desc">{selected.creature.desc}</div>
+                  <div className="rmc-creature-source">{selected.creature.source}</div>
                 </>
               )}
             </div>
@@ -1908,22 +1876,18 @@ function RomanMapCanvas({
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-3 px-1">
-        <span className="font-body italic text-sm text-parchment/50 leading-tight">
+      <div className="rmc-bottom-bar">
+        <span className="rmc-attribution">
           Imperium Romanum, 117 d. C. · Datos: Digital Atlas of the Roman Empire (DARE), vía
           klokantech/roman-empire
         </span>
-        <div className="flex gap-2 shrink-0">
+        <div className="rmc-controls">
           <button
             type="button"
             onClick={() => setRoadsOn(v => !v)}
             aria-pressed={roadsOn}
             title={roadsOn ? RL.toggleHide : RL.toggleShow}
-            className={`h-9 px-3 flex items-center gap-2 rounded-sm border font-serif text-xs uppercase tracking-[0.2em] ${
-              roadsOn
-                ? 'border-gold-leaf/60 text-gold-leaf bg-gold-leaf/10'
-                : 'border-gold-dim/50 text-parchment/60 hover:bg-gold-leaf/10'
-            }`}
+            className={`rmc-road-toggle${roadsOn ? ' rmc-road-toggle--active' : ''}`}
           >
             <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
               <path
@@ -1949,7 +1913,7 @@ function RomanMapCanvas({
               disabled={disabled}
               aria-label={label}
               title={label}
-              className="w-9 h-9 flex items-center justify-center rounded-sm border border-gold-dim/50 text-gold-leaf text-lg leading-none hover:bg-gold-leaf/10 disabled:opacity-30"
+              className="rmc-zoom-btn"
             >
               {glyph}
             </button>
@@ -1958,7 +1922,7 @@ function RomanMapCanvas({
       </div>
 
       {roadsOn && (
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 font-body italic text-sm text-parchment/60 leading-tight">
+        <div className="rmc-legend-bar">
           {roadStatus === 'ready' ? (
             <>
               {(
@@ -1971,7 +1935,7 @@ function RomanMapCanvas({
               )
                 /* eslint-disable react-hooks/refs */
                 .map(([label, width, opacity, dash]) => (
-                  <span key={label} className="flex items-center gap-1.5">
+                  <span key={label} className="rmc-legend-item">
                     <svg width="28" height="8" viewBox="0 0 28 8" aria-hidden="true">
                       <rect width="28" height="8" rx="1" fill={colorsRef.current.parchment} />
                       <line
@@ -1995,7 +1959,7 @@ function RomanMapCanvas({
                 <button
                   type="button"
                   onClick={() => setCardYear(null)}
-                  className="not-italic font-serif text-xs uppercase tracking-[0.2em] px-2 py-1 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
+                  className="rmc-inline-btn"
                 >
                   {RL.redire}
                 </button>
@@ -2005,24 +1969,24 @@ function RomanMapCanvas({
           roadStatus === 'loading' ? (
             <span>{RL.loading}</span>
           ) : (
-            <span className="flex items-center gap-2">
+            <span className="rmc-legend-item">
               {RL.error}
               <button
                 type="button"
                 onClick={() => setRoadAttempt(n => n + 1)}
-                className="not-italic font-serif text-xs uppercase tracking-[0.2em] px-2 py-1 border border-gold-dim/60 text-gold-leaf hover:bg-gold-leaf/10 rounded-sm"
+                className="rmc-inline-btn"
               >
                 {RL.retry}
               </button>
             </span>
           )}
-          <span className="basis-full text-parchment/45">
+          <span className="rmc-legend-attr">
             {RL.attribution}, doi:{' '}
             <a
               href="https://doi.org/10.5281/zenodo.17122148"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-gold-leaf"
+              className="rmc-legend-link"
             >
               10.5281/zenodo.17122148
             </a>{' '}
@@ -2031,7 +1995,7 @@ function RomanMapCanvas({
               href="https://creativecommons.org/licenses/by/4.0/"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-gold-leaf"
+              className="rmc-legend-link"
             >
               CC BY 4.0
             </a>{' '}

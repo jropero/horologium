@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { SHICHEN_DATA, getCurrentShichen } from '../utils/chineseTimeUtils';
+import './ChineseAnimalClock.css';
 
 interface ChineseAnimalClockProps {
   modernTime: Date;
@@ -20,12 +21,15 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
   const radius = 120;
 
   return (
-    <div className="flex flex-col items-center w-full max-w-sm mx-auto p-4 bg-ink/80 rounded-xl border border-rose-600/30 shadow-2xl">
-      <h3 className="text-gold-leaf font-serif text-sm uppercase tracking-widest mb-4">
-        时辰 · Shíchen
-      </h3>
+    <div className="chinese-animal-clock">
+      <h3 className="chinese-animal-clock__heading">时辰 · Shíchen</h3>
 
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mb-6">
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="chinese-animal-clock__svg"
+      >
         {/* Sectors */}
         {SHICHEN_DATA.map((shichen, index) => {
           const isActive = shichen.id === current.id;
@@ -55,11 +59,7 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
               {/* Sector Background */}
               <path
                 d={`M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`}
-                className={`${
-                  isActive
-                    ? 'fill-gold-leaf/30 stroke-gold-leaf'
-                    : 'fill-ink/10 stroke-parchment/20'
-                }`}
+                className={isActive ? 'cac__sector--active' : 'cac__sector--inactive'}
                 strokeWidth={isActive ? 2 : 1}
               />
               {/* Emoji & Hanzi */}
@@ -68,7 +68,9 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
                 y={ty}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={`text-xl ${isActive ? 'fill-gold-leaf' : 'fill-parchment/60'}`}
+                className={`cac__emoji-text ${
+                  isActive ? 'cac__emoji-text--active' : 'cac__emoji-text--inactive'
+                }`}
                 transform={`rotate(${midAngle} ${tx} ${ty})`}
               >
                 {shichen.animalEmoji}
@@ -78,7 +80,9 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
                 y={ty + 18}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={`text-[10px] ${isActive ? 'fill-gold-leaf' : 'fill-parchment/60'}`}
+                className={`cac__branch-text ${
+                  isActive ? 'cac__branch-text--active' : 'cac__branch-text--inactive'
+                }`}
                 transform={`rotate(${midAngle} ${tx} ${ty + 18})`}
               >
                 {shichen.branchHanzi}
@@ -94,7 +98,7 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
             y1={center}
             x2={center}
             y2={center - radius + 30}
-            className="stroke-gold-leaf"
+            className="cac__needle-line"
             strokeWidth="4"
             strokeLinecap="round"
           />
@@ -102,42 +106,40 @@ const ChineseAnimalClock: React.FC<ChineseAnimalClockProps> = ({ modernTime }) =
             cx={center}
             cy={center}
             r="6"
-            className="fill-gold-leaf stroke-parchment"
+            className="cac__needle-center"
             strokeWidth="2"
           />
         </g>
       </svg>
 
       {/* Info Card */}
-      <div className="w-full bg-ink border border-rose-600/30 rounded-lg p-4 text-center">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-2xl">{current.animalEmoji}</span>
-          <div className="text-right">
-            <div className="text-gold-leaf font-bold text-lg">
+      <div className="chinese-animal-clock__info-card">
+        <div className="chinese-animal-clock__info-header">
+          <span className="chinese-animal-clock__emoji">{current.animalEmoji}</span>
+          <div className="chinese-animal-clock__info-right">
+            <div className="chinese-animal-clock__name">
               {current.branchHanzi} {current.animalHanzi}
             </div>
-            <div className="text-parchment/70 text-xs uppercase">{current.animalName}</div>
+            <div className="chinese-animal-clock__animal-label">{current.animalName}</div>
           </div>
         </div>
 
-        <div className="text-sm text-parchment/70 mb-3 font-serif italic">
+        <div className="chinese-animal-clock__time-range">
           {current.startHour.toString().padStart(2, '0')}:00 —{' '}
           {current.endHour.toString().padStart(2, '0')}:00
         </div>
 
         {/* Meaning block */}
-        <div className="text-left bg-rose-900/10 border-l-2 border-rose-600/50 p-3 mb-4 rounded-r">
-          <p className="text-xs text-parchment/80 italic font-serif leading-relaxed">
-            <span className="font-bold text-rose-400 mr-1 not-italic tracking-wider uppercase text-[10px]">
-              📜 Tradición:
-            </span>
+        <div className="chinese-animal-clock__meaning-block">
+          <p className="chinese-animal-clock__meaning-text">
+            <span className="chinese-animal-clock__tradition-label">📜 Tradición:</span>
             {current.meaning}
           </p>
         </div>
 
-        <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-gold-dim/10">
+        <div className="chinese-animal-clock__progress-track">
           <div
-            className="h-full bg-rose-600 transition-all duration-1000"
+            className="chinese-animal-clock__progress-fill"
             style={{ width: `${progressPercent * 100}%` }}
           />
         </div>

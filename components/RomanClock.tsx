@@ -13,6 +13,7 @@ import { OVID_ASTRONOMICAL_EVENTS } from '../utils/ovidFastiData';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
 import { getSunAltitude, getTwilightTimes } from '../utils/solar';
+import './RomanClock.css';
 
 const lerpColor = (a: string, b: string, t: number): string => {
   const ah = parseInt(a.slice(1), 16);
@@ -236,8 +237,8 @@ function RomanClock({
 
   if (loading) {
     return (
-      <div className="w-full h-96 flex items-center justify-center bg-ink border-4 border-gold-dim rounded-lg ">
-        <span className="font-serif text-2xl text-gold-leaf">{labels.loadingText}</span>
+      <div className="roman-clock__loading">
+        <span className="roman-clock__loading-text">{labels.loadingText}</span>
       </div>
     );
   }
@@ -318,23 +319,17 @@ function RomanClock({
   if (civilization === 'rome') {
     calendarWidgetContent = (
       <>
-        <div className="text-gold-leaf font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
-          <span className="text-xs opacity-90">{romanTime.dayOfWeek}</span>
-          <span className="opacity-40 text-xs">|</span>
+        <div className="roman-clock__cal-date-row">
+          <span className="roman-clock__cal-dow">{romanTime.dayOfWeek}</span>
+          <span className="roman-clock__cal-sep">|</span>
           <span>{romanTime.romanDateString}</span>
-          {romanTime.isMarketDay && (
-            <span className="text-xs opacity-90 text-amber-500">Nundinae</span>
-          )}
+          {romanTime.isMarketDay && <span className="roman-clock__cal-nundinae">Nundinae</span>}
         </div>
-        <div className="text-gold-dim font-serif text-xs italic mb-2 opacity-80 text-center w-full">
-          {romanTime.romanDateFull}
-        </div>
-        <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1 w-full">
-          <span className="text-xs px-2 py-0.5 border border-gold-dim/40 rounded bg-gold-dim/10 uppercase font-bold text-gold-leaf">
-            {romanTime.nundinalLetter}
-          </span>
+        <div className="roman-clock__cal-date-full">{romanTime.romanDateFull}</div>
+        <div className="roman-clock__cal-moon-row">
+          <span className="roman-clock__cal-nundinal">{romanTime.nundinalLetter}</span>
           <span>{romanTime.moonPhaseLabel}</span>
-          <span className="text-gold-dim">•</span>
+          <span className="roman-clock__cal-sep-dot">•</span>
           <span>Sol in {romanTime.zodiacSign}</span>
         </div>
       </>
@@ -342,20 +337,20 @@ function RomanClock({
   } else if (romanTime.atticDate) {
     calendarWidgetContent = (
       <>
-        <div className="text-sky-400 font-serif text-sm uppercase tracking-widest flex items-center justify-center gap-3 font-bold w-full">
-          <span className="text-lg">☾</span>
+        <div className="roman-clock__cal-hellas-header">
+          <span className="roman-clock__cal-hellas-moon-icon">☾</span>
           <span>{romanTime.atticDate.monthName}</span>
         </div>
-        <div className="text-gold-dim font-serif text-[10px] tracking-widest uppercase opacity-80">
+        <div className="roman-clock__cal-hellas-translit">
           {transliterateGreek(romanTime.atticDate.monthName)}
         </div>
-        <div className="text-parchment font-serif text-xs italic mt-1 font-bold">
-          {romanTime.atticDate.spanishShort}
-        </div>
-        <div className="flex items-center gap-3 justify-center text-parchment font-serif text-sm italic mt-1.5 w-full">
+        <div className="roman-clock__cal-hellas-short">{romanTime.atticDate.spanishShort}</div>
+        <div className="roman-clock__cal-hellas-moon-row">
           <span>{romanTime.moonPhaseLabel}</span>
-          <span className="text-sky-400/40">•</span>
-          <span className="text-sky-300">{translateGreekUI(romanTime.zodiacSign)}</span>
+          <span className="roman-clock__cal-hellas-sep">•</span>
+          <span className="roman-clock__cal-hellas-zodiac">
+            {translateGreekUI(romanTime.zodiacSign)}
+          </span>
         </div>
       </>
     );
@@ -363,14 +358,14 @@ function RomanClock({
 
   return (
     <>
-      <div className="w-full max-w-4xl mx-auto p-1 bg-ink/50 backdrop-blur-sm rounded-xl shadow-2xl animate-fadeIn">
-        <div className="woodcut-border p-2 bg-ink relative overflow-hidden">
-          <div className="relative w-full aspect-[16/9] bg-midnight overflow-hidden border-2 border-gold-dim/30">
-            <div className="absolute inset-0 woodcut-hatch opacity-20 pointer-events-none"></div>
-            <div className="absolute inset-0 bg-stardust opacity-30 pointer-events-none"></div>
+      <div className="roman-clock">
+        <div className="woodcut-border roman-clock__inner">
+          <div className="roman-clock__hero">
+            <div className="woodcut-hatch roman-clock__sky-hatch"></div>
+            <div className="roman-clock__stardust"></div>
 
             <div
-              className="absolute inset-0 transition-all duration-1000"
+              className="roman-clock__sky"
               style={{
                 background: getSkyGradient(),
                 opacity: 1,
@@ -380,7 +375,7 @@ function RomanClock({
             {/* Offline / slow-fetch aurora sky — an opacity layer so it crossfades with the real sky
                 (gradients can't be transitioned). Matches AURORA_FADE_MS in WeatherSvgEffects. */}
             <div
-              className="absolute inset-0 pointer-events-none transition-opacity duration-[1500ms]"
+              className="roman-clock__aurora"
               style={{
                 background: romanTime.isDay
                   ? 'linear-gradient(to bottom, #1a3526 0%, #27503a 55%, #1e4030 100%)'
@@ -390,12 +385,12 @@ function RomanClock({
             />
 
             {weatherCond === 'storm' && (
-              <div className="absolute inset-0 bg-white opacity-0 anim-lightning pointer-events-none z-10" />
+              <div className="anim-lightning roman-clock__lightning" />
             )}
 
             {weatherCond === 'fog' && !romanTime.isDay && (
               <div
-                className="absolute inset-x-0 bottom-0 pointer-events-none"
+                className="roman-clock__fog-night"
                 style={{
                   top: '57.5%',
                   background:
@@ -404,8 +399,8 @@ function RomanClock({
               />
             )}
 
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg viewBox="0 0 300 200" className="w-full h-full">
+            <div className="roman-clock__svg-container">
+              <svg viewBox="0 0 300 200" className="roman-clock__svg">
                 {/* CAPA 1: Estrellas y arco */}
                 <g style={{ opacity: starOpacity, transition: 'opacity 2000ms ease-in-out' }}>
                   {stars.map((star, i) => (
@@ -470,7 +465,7 @@ function RomanClock({
                   }
                 >
                   {romanTime.isDay ? (
-                    <g className="animate-[spin_20s_linear_infinite]">
+                    <g className="roman-clock__sun">
                       <circle r="10" fill="#cfb53b" stroke="#8a7826" strokeWidth="1" />
                       {[...Array(12)].map((_, i) => (
                         <React.Fragment key={i}>
@@ -498,7 +493,7 @@ function RomanClock({
 
                 {/* CAPA 2.5: Efectos climáticos (Lluvia, Nieve, Nubes y Rayos) */}
                 {/* Always mounted (also for 'clear') so the aurora can crossfade out */}
-                <g className="weather-effects pointer-events-none">
+                <g className="roman-clock__weather-effects">
                   <WeatherSvgEffects
                     condition={weatherCond}
                     weatherParticles={weatherParticles}
@@ -587,7 +582,7 @@ function RomanClock({
                         strokeWidth="6"
                         strokeLinecap="round"
                         opacity="0.4"
-                        className="transition-all duration-1000"
+                        className="roman-clock__svg-transition"
                       />
 
                       {/* El Gnomon de bronce */}
@@ -600,7 +595,7 @@ function RomanClock({
                       <circle cx="150" cy="145" r="3" fill="#e3d6b3" />
                     </g>
                   ) : (
-                    <g className="transition-all duration-1000">
+                    <g className="roman-clock__svg-transition">
                       {/* Pedestal atenuado para la clepsidra */}
                       <ellipse cx="150" cy="180" rx="30" ry="6" fill="#8a7826" opacity="0.1" />
 
@@ -748,20 +743,16 @@ function RomanClock({
 
           {/* Ovidian Lore Widgets (Moved below solar clock) */}
           {civilization === 'rome' && ovidAstroEvent && (
-            <div className="flex flex-col gap-4 w-full items-center p-4 bg-ink border-y border-gold-dim/20">
+            <div className="roman-clock__ovid-container">
               {/* Epic 2: Astronomical Omen */}
               {ovidAstroEvent && (
-                <div className="w-full max-w-lg bg-indigo-950/40 border border-gold-leaf/30 rounded-lg p-3 flex flex-col gap-1 shadow-inner animate-pulse duration-[4000ms]">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm">✨</span>
-                    <span className="text-[9px] font-serif uppercase tracking-widest font-black text-gold-leaf">
-                      Omen Astrorum
-                    </span>
+                <div className="roman-clock__ovid-widget">
+                  <div className="roman-clock__ovid-header">
+                    <span className="roman-clock__ovid-emoji">✨</span>
+                    <span className="roman-clock__ovid-label">Omen Astrorum</span>
                   </div>
-                  <p className="text-[11px] font-serif italic text-parchment/90 leading-relaxed border-l border-gold-leaf/20 pl-2">
-                    &quot;{ovidAstroEvent.text}&quot;
-                  </p>
-                  <span className="text-[8px] text-gold-dim/60 self-end uppercase tracking-tighter mt-auto pt-1">
+                  <p className="roman-clock__ovid-text">&quot;{ovidAstroEvent.text}&quot;</p>
+                  <span className="roman-clock__ovid-ref">
                     — Fasti, {ovidAstroEvent.reference}
                   </span>
                 </div>
@@ -769,30 +760,28 @@ function RomanClock({
             </div>
           )}
 
-          <div className="bg-parchment border-t-4 border-double border-ink/20 p-4 text-center pb-6">
-            <h2 className="responsive-wrap text-2xl xs:text-3xl md:text-5xl font-serif font-bold text-ink mb-1 uppercase tracking-wide drop-shadow-sm items-center justify-center gap-2">
-              {romanTime.hourName}
-            </h2>
+          <div className="roman-clock__info">
+            <h2 className="responsive-wrap roman-clock__hour-name">{romanTime.hourName}</h2>
             {civilization === 'hellas' && (
-              <div className="mb-4">
-                <div className="font-serif text-xs opacity-70 tracking-widest uppercase text-ink/80">
+              <div className="roman-clock__hellas-block">
+                <div className="roman-clock__hellas-translit">
                   {transliterateGreek(romanTime.hourName)}
                 </div>
-                <div className="font-body text-sm font-bold opacity-90 italic text-roman-red mt-1">
+                <div className="roman-clock__hellas-translation">
                   {translateGreekUI(romanTime.hourName)}
                 </div>
               </div>
             )}
-            <div className="flex flex-col items-center w-full">
+            <div className="roman-clock__content">
               {/* Dies / Nox */}
-              <div className="flex flex-col items-center gap-1 mt-1">
-                <div className="flex items-center gap-6 text-roman-red font-serif font-bold tracking-[0.3em] text-base">
-                  <span className="text-woodcut-green">❧</span>
+              <div className="roman-clock__dies-nox-wrapper">
+                <div className="roman-clock__dies-nox-label">
+                  <span className="roman-clock__fleuron">❧</span>
                   <span>{romanTime.isDay ? labels.dayLabel : labels.nightLabel}</span>
-                  <span className="text-woodcut-green">☙</span>
+                  <span className="roman-clock__fleuron">☙</span>
                 </div>
                 {romanTime.vigilia && (
-                  <div className="text-xs font-serif uppercase tracking-[0.2em] text-roman-red drop-shadow-sm font-bold mt-1">
+                  <div className="roman-clock__vigilia">
                     {civilization === 'rome' ? '⚔' : '🛡'} {romanTime.vigilia.name}{' '}
                     {civilization === 'rome' ? '⚔' : '🛡'}
                   </div>
@@ -800,28 +789,20 @@ function RomanClock({
               </div>
 
               {/* Pars Diei Civilis */}
-              <div className="w-full border-t border-ink/10 mt-4 pt-3">
-                <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold-dim mb-1.5">
-                  {labels.civilDayPartLabel}
-                </div>
+              <div className="roman-clock__section">
+                <div className="roman-clock__section-heading">{labels.civilDayPartLabel}</div>
                 {civilization === 'rome' ? (
                   <>
-                    <div className="font-serif font-bold text-ink text-base leading-tight">
-                      {romanTime.civilDayPart.name}
-                    </div>
-                    <div className="text-[11px] italic text-ink/60 mt-0.5 leading-snug">
-                      {romanTime.civilDayPart.desc}
-                    </div>
+                    <div className="roman-clock__civil-name">{romanTime.civilDayPart.name}</div>
+                    <div className="roman-clock__civil-desc">{romanTime.civilDayPart.desc}</div>
                   </>
                 ) : (
                   <>
-                    <div className="font-serif font-bold text-ink text-base leading-tight">
-                      {romanTime.civilDayPart.name}
-                    </div>
-                    <div className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">
+                    <div className="roman-clock__civil-name">{romanTime.civilDayPart.name}</div>
+                    <div className="roman-clock__civil-translit">
                       {transliterateGreek(romanTime.civilDayPart.name)}
                     </div>
-                    <div className="text-[11px] font-bold italic text-roman-red mt-0.5 leading-snug">
+                    <div className="roman-clock__civil-desc-hellas">
                       {romanTime.civilDayPart.desc}
                     </div>
                   </>
@@ -829,46 +810,36 @@ function RomanClock({
               </div>
 
               {/* Rector Horae + Tutela Mensis — always side by side */}
-              <div className="w-full border-t border-ink/10 mt-4 pt-3 grid grid-cols-2">
-                <div className="flex flex-col items-center border-r border-ink/10 px-2">
-                  <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1.5">
-                    {labels.planetaryRulerLabel}
-                  </div>
+              <div className="roman-clock__grid-2">
+                <div className="roman-clock__col-left">
+                  <div className="roman-clock__col-heading">{labels.planetaryRulerLabel}</div>
                   {civilization === 'rome' ? (
-                    <span className="font-serif font-bold text-ink text-sm uppercase">
-                      {romanTime.planetaryRuler}
-                    </span>
+                    <span className="roman-clock__latin-val">{romanTime.planetaryRuler}</span>
                   ) : (
                     <>
-                      <span className="font-bold text-ink text-base">
+                      <span className="roman-clock__greek-name">
                         {romanTime.planetaryRuler}
                       </span>
-                      <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">
+                      <span className="roman-clock__greek-translit">
                         {transliterateGreek(romanTime.planetaryRuler)}
                       </span>
-                      <span className="text-xs font-bold italic text-roman-red">
+                      <span className="roman-clock__greek-translation">
                         {translateGreekUI(romanTime.planetaryRuler)}
                       </span>
                     </>
                   )}
                 </div>
-                <div className="flex flex-col items-center px-2">
-                  <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gold-dim mb-1.5">
-                    {labels.monthTutelaLabel}
-                  </div>
+                <div className="roman-clock__col-right">
+                  <div className="roman-clock__col-heading">{labels.monthTutelaLabel}</div>
                   {civilization === 'rome' ? (
-                    <span className="font-serif font-bold text-ink text-sm uppercase">
-                      {romanTime.tutelaMensis}
-                    </span>
+                    <span className="roman-clock__latin-val">{romanTime.tutelaMensis}</span>
                   ) : (
                     <>
-                      <span className="font-bold text-ink text-base">
-                        {romanTime.tutelaMensis}
-                      </span>
-                      <span className="font-serif text-[9px] opacity-70 tracking-widest uppercase mt-0.5">
+                      <span className="roman-clock__greek-name">{romanTime.tutelaMensis}</span>
+                      <span className="roman-clock__greek-translit">
                         {transliterateGreek(romanTime.tutelaMensis)}
                       </span>
-                      <span className="text-xs font-bold italic text-roman-red">
+                      <span className="roman-clock__greek-translation">
                         {translateGreekUI(romanTime.tutelaMensis)}
                       </span>
                     </>
@@ -877,13 +848,11 @@ function RomanClock({
               </div>
 
               {/* Ortus / Occasus / Longitudo Horae */}
-              <div className="w-full border-t border-ink/10 mt-4 pt-3 grid grid-cols-3 text-center">
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-base leading-none">☀</span>
-                  <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim mt-1">
-                    Ortus Solis
-                  </div>
-                  <div className="font-serif font-bold text-ink text-sm">
+              <div className="roman-clock__grid-3">
+                <div className="roman-clock__time-col">
+                  <span className="roman-clock__time-icon">☀</span>
+                  <div className="roman-clock__time-heading">Ortus Solis</div>
+                  <div className="roman-clock__time-val">
                     {romanTime.sunrise.toLocaleTimeString(undefined, {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -892,21 +861,17 @@ function RomanClock({
                     })}
                   </div>
                 </div>
-                <div className="flex flex-col items-center gap-0.5 border-x border-ink/10 px-1">
-                  <span className="text-base leading-none">⧗</span>
-                  <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim mt-1">
-                    Longitudo Horae
-                  </div>
-                  <div className="font-serif font-bold text-ink text-sm">
+                <div className="roman-clock__time-col roman-clock__time-col--mid">
+                  <span className="roman-clock__time-icon">⧗</span>
+                  <div className="roman-clock__time-heading">Longitudo Horae</div>
+                  <div className="roman-clock__time-val">
                     {Math.round(romanTime.hourLengthMinutes)} minuta
                   </div>
                 </div>
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-base leading-none">☾</span>
-                  <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim mt-1">
-                    Occasus Solis
-                  </div>
-                  <div className="font-serif font-bold text-ink text-sm">
+                <div className="roman-clock__time-col">
+                  <span className="roman-clock__time-icon">☾</span>
+                  <div className="roman-clock__time-heading">Occasus Solis</div>
+                  <div className="roman-clock__time-val">
                     {romanTime.sunset.toLocaleTimeString(undefined, {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -918,16 +883,14 @@ function RomanClock({
               </div>
 
               {twilightInfo && (
-                <div className="w-full border-t border-ink/10 mt-2 pt-2 flex flex-col gap-1">
+                <div className="roman-clock__twilight">
                   {[
                     { label: 'Crepusculum civile', ...twilightInfo.civil },
                     { label: 'Crepusculum nauticum', ...twilightInfo.nautical },
                   ].map(({ label, start, end }) => (
-                    <div key={label} className="flex items-center justify-center gap-3">
-                      <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gold-dim w-40 text-right">
-                        {label}
-                      </div>
-                      <div className="font-serif text-ink text-xs">
+                    <div key={label} className="roman-clock__twilight-row">
+                      <div className="roman-clock__twilight-label">{label}</div>
+                      <div className="roman-clock__twilight-time">
                         {start} → {end}
                       </div>
                     </div>
@@ -938,15 +901,15 @@ function RomanClock({
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 p-4 border-t-2 border-gold-dim/30 bg-ink">
+        <div className="roman-clock__widgets">
           {/* Single Column Layout for all Widgets */}
-          <div className="flex flex-col w-full items-center gap-4">
+          <div className="roman-clock__widgets-inner">
             {weather && (civilization === 'rome' || civilization === 'hellas') && (
-              <div className="flex flex-col gap-2 w-full max-w-lg">
+              <div className="roman-clock__weather-wrap">
                 <WeatherWidget
                   weather={weather}
                   onClick={() => setIsWeatherOpen(true)}
-                  className="cursor-pointer"
+                  className="clickable"
                 />
               </div>
             )}
@@ -962,11 +925,11 @@ function RomanClock({
                     }
                   : undefined
               }
-              className={`calendar-header-widget bg-ink/80 border p-3 rounded shadow-lg w-full max-w-lg flex flex-col items-center ${
+              className={`calendar-header-widget roman-clock__cal-widget ${
                 civilization === 'hellas'
-                  ? 'border-sky-400/30'
-                  : 'border-gold-dim hover:border-gold-leaf cursor-pointer hover:bg-white/5'
-              } transition-all group relative`}
+                  ? 'roman-clock__cal-widget--hellas'
+                  : 'roman-clock__cal-widget--rome'
+              }`}
               title={civilization === 'rome' ? 'Ver Calendario' : undefined}
             >
               {calendarWidgetContent}

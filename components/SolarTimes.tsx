@@ -1,4 +1,5 @@
 import React from 'react';
+import './SolarTimes.css';
 import { useCivilization } from '../contexts/CivilizationContext';
 
 interface SolarTimesProps {
@@ -23,11 +24,9 @@ const SolarTimes: React.FC<SolarTimesProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-4 px-2">
+    <div className="solar-times">
       <div
-        className={`flex flex-col md:flex-row justify-between items-center border p-5 shadow-xl gap-6 text-parchment relative overflow-hidden group transition-all ${
-          isEgypt ? '' : 'bg-ink/90 border-gold-dim/40 rounded-lg hover:bg-ink/95'
-        }`}
+        className={`solar-times-panel${isEgypt ? ' solar-times-panel--egypt' : ''}`}
         style={
           isEgypt
             ? {
@@ -38,48 +37,34 @@ const SolarTimes: React.FC<SolarTimesProps> = ({
             : undefined
         }
       >
-        {!isEgypt && (
-          <div className="absolute inset-0 woodcut-hatch opacity-10 pointer-events-none"></div>
-        )}
+        {!isEgypt && <div className="solar-times-hatch woodcut-hatch"></div>}
 
-        <div className="flex flex-col md:flex-row items-center gap-4 z-10 flex-1 justify-center">
-          <div className="text-gold-leaf text-3xl filter drop-shadow-glow">☀</div>
-          <div className="text-center md:text-left flex flex-col">
-            <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-1">
-              {labels.sunriseLabel}
-            </div>
-            <div className="font-body text-2xl md:text-3xl font-bold text-parchment leading-none">
-              {format(sunrise)}
-            </div>
+        <div className="solar-times-side">
+          <div className="solar-times-icon--sun">☀</div>
+          <div className="solar-times-text">
+            <div className="solar-times-label">{labels.sunriseLabel}</div>
+            <div className="solar-times-time">{format(sunrise)}</div>
           </div>
         </div>
 
-        <div className="h-px w-24 md:w-px md:h-12 bg-gradient-to-r md:bg-gradient-to-b from-transparent via-gold-dim/40 to-transparent z-10"></div>
+        <div className="solar-times-divider"></div>
 
         {/* Hour Length Section */}
-        <div className="flex flex-col items-center z-10 min-w-32">
-          <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-2">
-            {labels.hourLengthLabel}
-          </div>
-          <div className="font-serif text-2xl text-gold-leaf font-bold drop-shadow-md">
+        <div className="solar-times-hour-section">
+          <div className="solar-times-hour-label">{labels.hourLengthLabel}</div>
+          <div className="solar-times-hour-value">
             {Math.round(currentHourLength)}{' '}
-            <span className="text-sm font-normal text-parchment/60 font-body">
-              {labels.minuteUnit}
-            </span>
+            <span className="solar-times-minute-unit">{labels.minuteUnit}</span>
           </div>
         </div>
 
-        <div className="h-px w-24 md:w-px md:h-12 bg-gradient-to-r md:bg-gradient-to-b from-transparent via-gold-dim/40 to-transparent z-10"></div>
+        <div className="solar-times-divider"></div>
 
-        <div className="flex flex-col md:flex-row-reverse items-center gap-4 z-10 flex-1 justify-center">
-          <div className="text-roman-red text-3xl filter drop-shadow-glow">☾</div>
-          <div className="text-center md:text-right flex flex-col">
-            <div className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim mb-1">
-              {labels.sunsetLabel}
-            </div>
-            <div className="font-body text-2xl md:text-3xl font-bold text-parchment leading-none">
-              {format(sunset)}
-            </div>
+        <div className="solar-times-side solar-times-side--reversed">
+          <div className="solar-times-icon--moon">☾</div>
+          <div className="solar-times-text solar-times-text--right">
+            <div className="solar-times-label">{labels.sunsetLabel}</div>
+            <div className="solar-times-time">{format(sunset)}</div>
           </div>
         </div>
       </div>

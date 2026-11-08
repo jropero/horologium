@@ -22,32 +22,33 @@ import {
   OVID_SACRIFICIA,
 } from '../utils/ovidFastiData';
 import { Info, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import './RomanCalendarInfo.css';
 
 // ─── Roman Monthly Day Grid ──────────────────────────────────────────────────
 
 const STATUS_RING: Record<string, string> = {
-  NP_fest: 'bg-amber-500/20 ring-1 ring-amber-400/60',
-  NP: 'bg-amber-900/20 ring-1 ring-amber-700/40',
-  N: 'bg-rose-900/25 ring-1 ring-rose-500/40',
-  EN: 'bg-orange-900/20 ring-1 ring-orange-500/35',
-  F: 'bg-emerald-900/15 ring-1 ring-emerald-600/30',
-  C: 'bg-ink/30',
+  NP_fest: 'rdg-cell--NP-fest',
+  NP: 'rdg-cell--NP',
+  N: 'rdg-cell--N',
+  EN: 'rdg-cell--EN',
+  F: 'rdg-cell--F',
+  C: 'rdg-cell--C',
 };
 
 const STATUS_TEXT_COLOR: Record<string, string> = {
-  NP: 'text-amber-400',
-  N: 'text-rose-400',
-  EN: 'text-orange-400',
-  F: 'text-emerald-400',
-  C: 'text-blue-400',
+  NP: 'rdg-num--NP',
+  N: 'rdg-num--N',
+  EN: 'rdg-num--EN',
+  F: 'rdg-num--F',
+  C: 'rdg-num--C',
 };
 
 const STATUS_BADGE_CLS: Record<string, string> = {
-  NP: 'border-amber-500/40 text-amber-400 bg-amber-900/20',
-  N: 'border-rose-500/40 text-rose-400 bg-rose-900/20',
-  EN: 'border-orange-500/40 text-orange-400 bg-orange-900/20',
-  F: 'border-emerald-500/40 text-emerald-400 bg-emerald-900/20',
-  C: 'border-blue-500/40 text-blue-400 bg-blue-900/20',
+  NP: 'rdg-badge--NP',
+  N: 'rdg-badge--N',
+  EN: 'rdg-badge--EN',
+  F: 'rdg-badge--F',
+  C: 'rdg-badge--C',
 };
 
 const STATUS_NAMES: Record<string, string> = {
@@ -97,88 +98,61 @@ function RomanDayGrid({ month, year, today }: { month: number; year: number; tod
 
   const cellCls = (day: number): string => {
     const entry = getDayEntry(day);
-    if (day === selectedDay)
-      return 'bg-gold-leaf/20 ring-2 ring-gold-leaf shadow-[0_0_8px_rgba(212,175,55,0.4)]';
-    if (day === today)
-      return 'bg-gold-leaf/25 ring-2 ring-gold-leaf shadow-[0_0_12px_rgba(212,175,55,0.5)]';
-    if (!entry) return 'bg-ink/40';
+    if (day === selectedDay) return 'rdg-cell--selected';
+    if (day === today) return 'rdg-cell--today';
+    if (!entry) return 'rdg-cell--no-entry';
     const key = entry.status === 'NP' && entry.festivalName ? 'NP_fest' : entry.status;
-    return STATUS_RING[key] ?? 'bg-ink/30';
+    return STATUS_RING[key] ?? 'rdg-cell--default';
   };
 
   const numCls = (day: number): string => {
     const entry = getDayEntry(day);
-    if (day === selectedDay) return 'text-gold-leaf font-black';
-    if (day === today) return 'text-gold-leaf font-black text-[13px]';
-    if (day < today) return 'text-parchment/30';
-    return STATUS_TEXT_COLOR[entry?.status ?? ''] ?? 'text-parchment/60';
+    if (day === selectedDay) return 'rdg-num--selected';
+    if (day === today) return 'rdg-num--today';
+    if (day < today) return 'rdg-num--past';
+    return STATUS_TEXT_COLOR[entry?.status ?? ''] ?? 'rdg-num--default';
   };
 
   return (
     <div
       role="presentation"
-      className="mt-4 w-full"
+      className="roman-day-grid"
       onClick={e => e.stopPropagation()}
       onKeyDown={e => e.stopPropagation()}
     >
-      <div className="flex items-center justify-center gap-3 mb-3">
-        <div className="h-px flex-1 bg-gold-dim/20" />
-        <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">
-          Calendarium Mensis
-        </span>
-        <div className="h-px flex-1 bg-gold-dim/20" />
+      <div className="rdg-header">
+        <div className="rdg-divider" />
+        <span className="rdg-title">Calendarium Mensis</span>
+        <div className="rdg-divider" />
       </div>
 
-      <div className="flex flex-row justify-center gap-1.5 w-full">
+      <div className="rdg-panels">
         {panels.map(({ days, label, sublabel }, panelIdx) => {
           const active = panelIdx === activePanel;
           return (
             <div
               key={label}
               style={{ flex: days.length }}
-              className={`p-2 rounded-lg border transition-all duration-500 relative overflow-hidden
-                                ${
-                                  active
-                                    ? 'border-gold-dim/50 bg-amber-950/20 shadow-[0_0_15px_rgba(212,175,55,0.08)] scale-[1.02] z-10'
-                                    : 'border-gold-dim/20 bg-ink/30'
-                                }`}
+              className={`rdg-panel${active ? ' rdg-panel--active' : ''}`}
             >
-              {active && (
-                <div className="absolute -right-4 -top-4 w-16 h-16 bg-gold-leaf/5 rounded-full blur-xl pointer-events-none" />
-              )}
-              <div className="text-center mb-2 border-b border-gold-dim/20 pb-1.5">
-                <div
-                  className={`text-xs font-bold uppercase tracking-widest ${
-                    active ? 'text-gold-leaf' : 'text-gold-dim/60'
-                  }`}
-                >
+              {active && <div className="rdg-panel-glow" />}
+              <div className="rdg-panel-head">
+                <div className={`rdg-panel-label${active ? ' rdg-panel-label--active' : ''}`}>
                   {label}
                 </div>
-                <div className="text-xs font-serif italic text-gold-dim/70 tracking-wide uppercase mt-0.5">
-                  {sublabel}
-                </div>
+                <div className="rdg-panel-sublabel">{sublabel}</div>
               </div>
-              <div
-                className={`grid gap-1 justify-items-center ${
-                  panelIdx === 2 ? 'grid-cols-3' : 'grid-cols-2'
-                }`}
-              >
+              <div className={`rdg-cells${panelIdx === 2 ? ' rdg-cells--wide' : ''}`}>
                 {days
                   .filter(d => d <= daysInMonth)
                   .map(day => (
                     <button
                       key={day}
                       type="button"
-                      className={`relative flex flex-col items-center justify-center rounded-sm py-1.5 w-full transition-all cursor-pointer select-none ${cellCls(
-                        day,
-                      )}`}
+                      className={`rdg-cell ${cellCls(day)}`}
                       onClick={() => setSelectedDay(prev => (prev === day ? null : day))}
                     >
-                      <span
-                        className={`text-xs font-serif leading-none font-bold ${numCls(day)}`}
-                      >
-                        {day}
-                      </span>
+                      <span className={`rdg-cell-num ${numCls(day)}`}>{day}</span>
                     </button>
                   ))}
               </div>
@@ -188,24 +162,15 @@ function RomanDayGrid({ month, year, today }: { month: number; year: number; tod
       </div>
 
       {/* Info panel */}
-      <div
-        className={`mt-2 rounded-lg border transition-all ${
-          selEntry && selectedDay !== null
-            ? 'border-gold-dim/40 bg-amber-950/15 p-3'
-            : 'border-gold-dim/20 bg-transparent py-2 px-3'
-        }`}
-      >
+      <div className={`rdg-info${selEntry && selectedDay !== null ? ' rdg-info--open' : ''}`}>
         {selEntry && selectedDay !== null ? (
-          <div className="flex flex-col gap-2 text-left">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-serif font-bold text-gold-leaf uppercase tracking-wider">
-                  Dies {selectedDay}
-                </span>
+          <div className="rdg-info-content">
+            <div className="rdg-info-row">
+              <div className="rdg-info-left">
+                <span className="rdg-info-day">Dies {selectedDay}</span>
                 <span
-                  className={`text-xs font-bold uppercase tracking-widest px-1.5 py-0.5 rounded border ${
-                    STATUS_BADGE_CLS[selEntry.status] ??
-                    'border-gold-dim/30 text-gold-dim bg-transparent'
+                  className={`rdg-badge ${
+                    STATUS_BADGE_CLS[selEntry.status] ?? 'rdg-badge--default'
                   }`}
                 >
                   {STATUS_NAMES[selEntry.status] ?? selEntry.status}
@@ -214,60 +179,46 @@ function RomanDayGrid({ month, year, today }: { month: number; year: number; tod
               <button
                 type="button"
                 onClick={() => setSelectedDay(null)}
-                className="text-gold-dim/50 hover:text-gold-dim text-xs leading-none px-1 cursor-pointer"
+                className="rdg-info-close"
               >
                 ✕
               </button>
             </div>
             {selEntry.festivalName ? (
               <div>
-                <span className="text-sm font-serif font-bold text-amber-400">
-                  {selEntry.festivalName}
-                </span>
+                <span className="rdg-info-festival-name">{selEntry.festivalName}</span>
                 {selEntry.festivalDesc && (
-                  <p className="text-xs font-serif text-parchment/80 mt-1 leading-snug">
-                    {selEntry.festivalDesc}
-                  </p>
+                  <p className="rdg-info-festival-desc">{selEntry.festivalDesc}</p>
                 )}
               </div>
             ) : (
-              <span className="text-xs font-serif text-parchment/70">
-                {selEntry.statusFull}
-              </span>
+              <span className="rdg-info-statusfull">{selEntry.statusFull}</span>
             )}
             {selEntry.deity && selEntry.deity !== 'Ninguna' && (
-              <div className="border-t border-gold-dim/20 pt-2">
-                <span className="text-xs font-serif font-bold text-gold-dim">
-                  {selEntry.deity}
-                </span>
-                <p className="text-xs font-serif text-parchment/60 mt-0.5 leading-snug">
-                  {selEntry.deityDesc}
-                </p>
+              <div className="rdg-info-deity">
+                <span className="rdg-info-deity-name">{selEntry.deity}</span>
+                <p className="rdg-info-deity-desc">{selEntry.deityDesc}</p>
               </div>
             )}
           </div>
         ) : (
-          <p className="text-xs font-serif text-gold-dim/50 text-center">
-            Toca un día para ver su información
-          </p>
+          <p className="rdg-info-empty">Toca un día para ver su información</p>
         )}
       </div>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
+      <div className="rdg-legend">
         {(
           [
-            { cls: 'bg-amber-500/25 ring-1 ring-amber-400/60', label: 'Festum NP' },
-            { cls: 'bg-amber-900/25 ring-1 ring-amber-700/40', label: 'NP' },
-            { cls: 'bg-rose-900/25 ring-1 ring-rose-500/40', label: 'Nefastus' },
-            { cls: 'bg-orange-900/20 ring-1 ring-orange-500/35', label: 'Endotercissus' },
+            { swatchCls: 'rdg-swatch--NP-fest', label: 'Festum NP' },
+            { swatchCls: 'rdg-swatch--NP', label: 'NP' },
+            { swatchCls: 'rdg-swatch--N', label: 'Nefastus' },
+            { swatchCls: 'rdg-swatch--EN', label: 'Endotercissus' },
           ] as const
-        ).map(({ cls, label }) => (
-          <div key={label} className="flex items-center gap-1">
-            <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
-            <span className="text-xs text-gold-dim/50 font-serif uppercase tracking-wide">
-              {label}
-            </span>
+        ).map(({ swatchCls, label }) => (
+          <div key={label} className="rdg-legend-item">
+            <span className={`rdg-legend-swatch ${swatchCls}`} />
+            <span className="rdg-legend-label">{label}</span>
           </div>
         ))}
       </div>
@@ -332,11 +283,11 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
   };
 
   const getStatusColor = (status: string) => {
-    if (status === 'F') return 'text-emerald-600 dark:text-emerald-400';
-    if (status === 'C') return 'text-blue-600 dark:text-blue-400';
-    if (status === 'N') return 'text-rose-600 dark:text-rose-400';
-    if (status === 'NP') return 'text-amber-500 dark:text-amber-400';
-    return 'text-gold-leaf';
+    if (status === 'F') return 'rci-status-color--F';
+    if (status === 'C') return 'rci-status-color--C';
+    if (status === 'N') return 'rci-status-color--N';
+    if (status === 'NP') return 'rci-status-color--NP';
+    return 'rci-status-color--default';
   };
 
   const mosMaiorum = OVID_MOS_MAIORUM.find(e => e.month === month && e.day === day);
@@ -361,61 +312,36 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
 
   // Roman mode
   if (civilization === 'rome' && info) {
-    let sacBoxClsMulti =
-      'bg-stone-950/90 border-2 border-roman-red/40 shadow-[0_0_20px_rgba(183,28,28,0.2)]';
-    if (isApril)
-      sacBoxClsMulti =
-        'bg-roman-red/15 border-2 border-roman-red/50 shadow-[0_0_25px_rgba(183,28,28,0.35)]';
-    else if (isFloralia)
-      sacBoxClsMulti =
-        'bg-emerald-900/20 border-2 border-emerald-500/30 shadow-[0_0_25px_rgba(16,185,129,0.15)]';
-    else if (isLemuria)
-      sacBoxClsMulti =
-        'bg-indigo-950/40 border-2 border-indigo-500/50 shadow-[0_0_25px_rgba(99,102,241,0.25)]';
-    else if (isJune)
-      sacBoxClsMulti =
-        'bg-orange-950/20 border-2 border-orange-500/40 shadow-[0_0_25px_rgba(249,115,22,0.2)]';
+    let sacBoxClsMulti = 'rci-sac-multi';
+    if (isApril) sacBoxClsMulti = 'rci-sac-multi rci-sac-multi--april';
+    else if (isFloralia) sacBoxClsMulti = 'rci-sac-multi rci-sac-multi--floralia';
+    else if (isLemuria) sacBoxClsMulti = 'rci-sac-multi rci-sac-multi--lemuria';
+    else if (isJune) sacBoxClsMulti = 'rci-sac-multi rci-sac-multi--june';
 
-    let sacBoxClsSingle = 'bg-stone-900/60 border border-stone-500/30';
-    if (isApril)
-      sacBoxClsSingle =
-        'bg-roman-red/15 border border-roman-red/50 shadow-[0_0_20px_rgba(183,28,28,0.25)]';
-    else if (isFloralia)
-      sacBoxClsSingle =
-        'bg-emerald-900/20 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.15)]';
-    else if (isLemuria)
-      sacBoxClsSingle =
-        'bg-indigo-950/40 border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.25)]';
-    else if (isJune)
-      sacBoxClsSingle =
-        'bg-orange-950/20 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.15)]';
+    let sacBoxClsSingle = 'rci-sac-single';
+    if (isApril) sacBoxClsSingle = 'rci-sac-single rci-sac-single--april';
+    else if (isFloralia) sacBoxClsSingle = 'rci-sac-single rci-sac-single--floralia';
+    else if (isLemuria) sacBoxClsSingle = 'rci-sac-single rci-sac-single--lemuria';
+    else if (isJune) sacBoxClsSingle = 'rci-sac-single rci-sac-single--june';
 
     return (
-      <div className="w-full max-w-none mx-auto mt-6 mb-6">
+      <div className="roman-calendar-info">
         <div
           role="button"
           tabIndex={0}
-          className="bg-ink/90 border border-gold-dim p-5 rounded-lg shadow-xl relative overflow-hidden text-center group cursor-pointer hover:border-roman-red transition-colors"
+          className="rci-card"
           onClick={() => setShowFestivals(true)}
           onKeyDown={e => {
             if (e.key === 'Enter' || e.key === ' ') setShowFestivals(true);
           }}
         >
-          {info.isMajorFestival && (
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-leaf via-transparent to-transparent" />
-          )}
+          {info.isMajorFestival && <div className="rci-festival-glow" />}
 
-          <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="rci-inner">
             {/* TOP: Status & Date Type */}
-            <div className="border-b border-gold-dim/50 pb-2 w-full flex items-center justify-center gap-3">
-              <span className="text-2xl filter drop-shadow-glow">
-                {getStatusIcon(info.status)}
-              </span>
-              <h3
-                className={`font-serif text-lg uppercase tracking-[0.2em] ${getStatusColor(
-                  info.status,
-                )}`}
-              >
+            <div className="rci-status-bar">
+              <span className="rci-status-icon">{getStatusIcon(info.status)}</span>
+              <h3 className={`rci-status-name ${getStatusColor(info.status)}`}>
                 {info.statusFull}
               </h3>
               {statusExplanation && (
@@ -424,27 +350,23 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                     e.stopPropagation();
                     setShowStatusInfo(true);
                   }}
-                  className="p-1 hover:bg-white/10 rounded-full transition-colors group flex-shrink-0"
+                  className="rci-info-btn"
                   title="Explicación de Ovidio"
                 >
-                  <Info className="w-4 h-4 text-gold-dim group-hover:text-gold-leaf" />
+                  <Info className="rci-info-icon" />
                 </button>
               )}
             </div>
 
             {/* MAIN: Deus Diei */}
-            <div className="flex flex-col items-center gap-2 w-full bg-stone-900/40 p-6 rounded border border-gold-dim/20 shadow-inner">
-              <div className="text-gold-dim text-xs uppercase tracking-[0.3em] mb-1 flex items-center gap-3">
-                <span className="opacity-40">—</span>
+            <div className="rci-god-box">
+              <div className="rci-god-label">
+                <span className="rci-god-label-dash">—</span>
                 {labels.godOfDayTitle}
-                <span className="opacity-40">—</span>
+                <span className="rci-god-label-dash">—</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-serif font-black text-parchment drop-shadow-md uppercase tracking-wider">
-                {info.god}
-              </h2>
-              <p className="font-serif text-sm md:text-base text-parchment/80 italic px-4 mt-2 leading-relaxed">
-                &quot;{info.description}&quot;
-              </p>
+              <h2 className="rci-god-name">{info.god}</h2>
+              <p className="rci-god-desc">&quot;{info.description}&quot;</p>
             </div>
 
             {/* MONTHLY CALENDAR */}
@@ -456,13 +378,9 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
 
             {/* BOTTOM: Festival */}
             {info.festivalName && (
-              <div className="mt-1 w-full animate-fadeIn">
-                <div className="text-festival opacity-80 text-xs uppercase tracking-widest mb-1">
-                  {labels.festivalLabel}
-                </div>
-                <h2 className="font-serif text-xl font-bold text-festival mb-1 tracking-wide">
-                  {info.festivalName.toUpperCase()}
-                </h2>
+              <div className="rci-festival-section animate-fadeIn">
+                <div className="rci-festival-label">{labels.festivalLabel}</div>
+                <h2 className="rci-festival-name">{info.festivalName.toUpperCase()}</h2>
               </div>
             )}
 
@@ -470,23 +388,21 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
             {info.fontes && info.fontes.length > 0 && (
               <div
                 role="presentation"
-                className="w-full mt-4 border border-gold-dim/30 rounded-md overflow-hidden"
+                className="rci-fontes"
                 onClick={e => e.stopPropagation()}
                 onKeyDown={e => e.stopPropagation()}
               >
                 {/* Collapsed header — always visible */}
                 <button
                   type="button"
-                  className="w-full flex items-center justify-between px-3 py-2 bg-stone-900/60 hover:bg-stone-900/80 transition-colors cursor-pointer"
+                  className="rci-fontes-toggle"
                   onClick={() => setFontesOpen(o => !o)}
                   aria-expanded={fontesOpen}
                 >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-xs font-serif uppercase tracking-[0.25em] text-gold-dim/70 flex-shrink-0">
-                      Fontes Antiqui
-                    </span>
+                  <div className="rci-fontes-toggle-left">
+                    <span className="rci-fontes-label">Fontes Antiqui</span>
                     {!fontesOpen && (
-                      <span className="text-xs font-serif text-parchment/50 truncate">
+                      <span className="rci-fontes-preview">
                         · {info.fontes[0].author}, {info.fontes[0].work}
                         {info.fontes[0].book ? ` ${info.fontes[0].book}` : ''}
                         {info.fontes[0].lines ? `.${info.fontes[0].lines}` : ''}
@@ -494,11 +410,8 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                     )}
                   </div>
                   <span
-                    className="text-gold-dim/60 text-xs flex-shrink-0 ml-2 transition-transform duration-200"
-                    style={{
-                      display: 'inline-block',
-                      transform: fontesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    }}
+                    className="rci-fontes-chevron"
+                    style={{ transform: fontesOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
                     aria-hidden="true"
                   >
                     ▾
@@ -507,7 +420,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
 
                 {/* Expanded body */}
                 {fontesOpen && (
-                  <div className="bg-stone-950/60 px-3 pt-3 pb-2 flex flex-col gap-3">
+                  <div className="rci-fontes-body">
                     {info.fontes.map((fonte, idx) => {
                       const typeBadge =
                         fonte.type !== 'description'
@@ -524,29 +437,17 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                       return (
                         <div
                           key={idx}
-                          className={idx > 0 ? 'border-t border-gold-dim/20 pt-3' : ''}
+                          className={`rci-fonte-item${idx > 0 ? ' rci-fonte-item--sep' : ''}`}
                         >
-                          <div className="flex items-start justify-between gap-2 mb-1.5">
-                            <span className="text-xs font-serif uppercase tracking-[0.2em] text-gold-dim/60 leading-tight">
-                              {citHeader}
-                            </span>
+                          <div className="rci-fonte-cit-row">
+                            <span className="rci-fonte-cit-label">{citHeader}</span>
                             {typeBadge && (
-                              <span className="text-xs uppercase tracking-widest text-amber-700/70 border border-amber-700/30 px-1 py-0.5 rounded flex-shrink-0">
-                                {typeBadge}
-                              </span>
+                              <span className="rci-fonte-type-badge">{typeBadge}</span>
                             )}
                           </div>
-                          {fonte.textLa && (
-                            <p className="text-xs font-serif italic text-parchment/85 leading-relaxed mb-1.5 whitespace-pre-line">
-                              {fonte.textLa}
-                            </p>
-                          )}
-                          {fonte.textLa && (
-                            <div className="border-t border-gold-dim/15 my-1.5" />
-                          )}
-                          <p className="text-xs font-serif text-parchment/55 leading-relaxed italic">
-                            {fonte.textEs}
-                          </p>
+                          {fonte.textLa && <p className="rci-fonte-latin">{fonte.textLa}</p>}
+                          {fonte.textLa && <div className="rci-fonte-divider" />}
+                          <p className="rci-fonte-es">{fonte.textEs}</p>
                         </div>
                       );
                     })}
@@ -557,74 +458,52 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
 
             {/* EPIC 4: Mos Maiorum (Curiosidad del Día) */}
             {mosMaiorum && (
-              <div className="mt-4 p-4 bg-amber-900/20 border border-gold-dim/30 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">🍷</span>
-                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-amber-500">
-                    Mos Maiorum: {mosMaiorum.title}
-                  </span>
+              <div className="rci-mos animate-fadeIn">
+                <div className="rci-mos-header">
+                  <span className="rci-mos-icon">🍷</span>
+                  <span className="rci-mos-title">Mos Maiorum: {mosMaiorum.title}</span>
                 </div>
-                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
-                  &quot;{mosMaiorum.text}&quot;
-                </p>
-                <span className="text-xs text-gold-dim/60 self-end uppercase tracking-widest">
-                  — Ovidio, {mosMaiorum.reference}
-                </span>
+                <p className="rci-mos-text">&quot;{mosMaiorum.text}&quot;</p>
+                <span className="rci-mos-ref">— Ovidio, {mosMaiorum.reference}</span>
               </div>
             )}
 
             {/* EPIC 5: Annales Belli (Memoria del Imperio) */}
             {annalesBelli && (
-              <div className="mt-4 p-4 bg-roman-red/10 border border-roman-red/50 rounded-md relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">⚔️</span>
-                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-roman-red">
-                    Annales Belli: {annalesBelli.title}
-                  </span>
+              <div className="rci-annales animate-fadeIn">
+                <div className="rci-annales-header">
+                  <span className="rci-annales-icon">⚔️</span>
+                  <span className="rci-annales-title">Annales Belli: {annalesBelli.title}</span>
                 </div>
-                <p className="text-xs font-serif text-parchment/90 leading-relaxed text-left italic">
-                  &quot;{annalesBelli.text}&quot;
-                </p>
-                <span className="text-xs text-roman-red/60 self-end uppercase tracking-widest">
-                  — Ovidio, {annalesBelli.reference}
-                </span>
+                <p className="rci-annales-text">&quot;{annalesBelli.text}&quot;</p>
+                <span className="rci-annales-ref">— Ovidio, {annalesBelli.reference}</span>
               </div>
             )}
 
             {/* EPIC 6: Preces et Sacra */}
             {preces && (
-              <div className="mt-4 p-5 bg-stone-900/90 border-2 border-parchment/30 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                <div className="flex items-center justify-center gap-3 border-b border-parchment/20 pb-2 w-full">
-                  <span className="text-xl">{preces.icon || '🙏'}</span>
-                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-parchment">
-                    Preces et Sacra: {preces.title}
-                  </span>
-                  <span className="text-xl">{preces.icon || '🌬️'}</span>
+              <div className="rci-preces animate-fadeIn">
+                <div className="rci-preces-header">
+                  <span className="rci-preces-icon">{preces.icon || '🙏'}</span>
+                  <span className="rci-preces-title">Preces et Sacra: {preces.title}</span>
+                  <span className="rci-preces-icon">{preces.icon || '🌬️'}</span>
                 </div>
-                <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-center italic w-full">
-                  &quot;{preces.text}&quot;
-                </p>
-                <span className="text-xs text-parchment/50 uppercase tracking-widest mt-1">
-                  — Ovidio, {preces.reference}
-                </span>
+                <p className="rci-preces-text">&quot;{preces.text}&quot;</p>
+                <span className="rci-preces-ref">— Ovidio, {preces.reference}</span>
               </div>
             )}
 
             {/* EPIC 7: Aedes et Monumenta */}
             {monument && (
-              <div className="mt-4 p-4 bg-stone-800 border-x-4 border-stone-500 rounded-sm relative z-10 flex flex-col items-start gap-2 w-full animate-fadeIn shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">🏛️</span>
-                  <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300">
+              <div className="rci-monument animate-fadeIn">
+                <div className="rci-monument-header">
+                  <span className="rci-monument-icon">🏛️</span>
+                  <span className="rci-monument-title">
                     Aedes et Monumenta: {monument.title}
                   </span>
                 </div>
-                <p className="text-xs font-serif text-stone-400 leading-relaxed text-left border-l-2 border-stone-600 pl-3 italic">
-                  &quot;{monument.text}&quot;
-                </p>
-                <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
-                  — Fasti, {monument.reference}
-                </span>
+                <p className="rci-monument-text">&quot;{monument.text}&quot;</p>
+                <span className="rci-monument-ref">— Fasti, {monument.reference}</span>
               </div>
             )}
 
@@ -632,16 +511,16 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
             {hasMultipleSacrifices ? (
               <div
                 role="presentation"
-                className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-4 w-full animate-fadeIn ${sacBoxClsMulti}`}
+                className={`${sacBoxClsMulti} animate-fadeIn`}
                 onClick={e => e.stopPropagation()}
                 onKeyDown={e => e.stopPropagation()}
               >
-                <div className="flex flex-col items-center w-full border-b border-roman-red/20 pb-2">
-                  <div className="text-4xl filter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all duration-300 hover:scale-110 flex items-center gap-2">
+                <div className="rci-sac-multi-top">
+                  <div className="rci-sac-multi-icon">
                     {sacrificesForDay[activeSacrificeIdx].icon || '🗡️'}
                     {isApril && (
                       <span
-                        className="text-2xl filter drop-shadow-[0_0_5px_rgba(239,68,68,0.4)] animate-pulse"
+                        className="rci-sac-multi-secondary"
                         title="Sangre purificadora o Fuego lustral de Abril"
                       >
                         {sacrificesForDay[activeSacrificeIdx].icon?.includes('🔥') ||
@@ -654,7 +533,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                     )}
                     {isLemuria && (
                       <span
-                        className="text-2xl filter drop-shadow-[0_0_5px_rgba(99,102,241,0.4)] animate-pulse"
+                        className="rci-sac-multi-secondary rci-sac-multi-secondary--lemuria"
                         title="Espectro / Lemur de los Muertos"
                       >
                         👻
@@ -662,33 +541,33 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                     )}
                     {isJune && sacrificesForDay[activeSacrificeIdx].icon === '🫏' && (
                       <span
-                        className="text-2xl filter drop-shadow-[0_0_5px_rgba(249,115,22,0.4)] animate-pulse"
+                        className="rci-sac-multi-secondary rci-sac-multi-secondary--june"
                         title="Pan de la Vestalia"
                       >
                         🍞
                       </span>
                     )}
                   </div>
-                  <span className="text-xs font-serif uppercase tracking-[0.22em] font-black text-roman-red text-center mt-2">
+                  <span className="rci-sac-multi-title">
                     {sacrificesForDay[activeSacrificeIdx].title}
                   </span>
                   {sacrificesForDay[activeSacrificeIdx].crime && (
-                    <div className="mt-2 text-xs uppercase font-bold tracking-widest text-roman-red bg-roman-red/10 px-3 py-1 rounded border border-roman-red/20 text-center max-w-full">
+                    <div className="rci-sac-multi-crime">
                       Crimen: {sacrificesForDay[activeSacrificeIdx].crime}
                     </div>
                   )}
                 </div>
 
-                <div className="w-full flex flex-col gap-2">
-                  <blockquote className="italic text-[12px] md:text-[13px] font-serif text-parchment/90 border-l-2 border-roman-red/50 pl-4 py-2 leading-relaxed bg-stone-900/40 rounded-r shadow-inner text-left animate-fadeIn">
+                <div className="rci-sac-multi-body">
+                  <blockquote className="rci-sac-multi-quote animate-fadeIn">
                     &quot;{sacrificesForDay[activeSacrificeIdx].text}&quot;
                   </blockquote>
-                  <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold">
+                  <span className="rci-sac-multi-ref">
                     — Ovidio, {sacrificesForDay[activeSacrificeIdx].reference}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between w-full mt-1 pt-2 border-t border-stone-800">
+                <div className="rci-sac-multi-nav">
                   <button
                     onClick={e => {
                       e.stopPropagation();
@@ -696,13 +575,13 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                         prev === 0 ? sacrificesForDay.length - 1 : prev - 1,
                       );
                     }}
-                    className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
+                    className="rci-sac-nav-btn"
                     title="Anterior"
                   >
-                    <ChevronLeft className="w-4 h-4" />
+                    <ChevronLeft className="rci-nav-icon" />
                   </button>
 
-                  <div className="flex gap-1.5 items-center justify-center">
+                  <div className="rci-sac-dots">
                     {sacrificesForDay.map((item, idx) => (
                       <button
                         key={idx}
@@ -710,10 +589,8 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                           e.stopPropagation();
                           setActiveSacrificeIdx(idx);
                         }}
-                        className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                          idx === activeSacrificeIdx
-                            ? 'w-4 bg-roman-red shadow-[0_0_6px_rgba(239,68,68,0.7)]'
-                            : 'w-2 bg-stone-700 hover:bg-stone-500'
+                        className={`rci-sac-dot${
+                          idx === activeSacrificeIdx ? ' rci-sac-dot--active' : ''
                         }`}
                         title={item.title}
                       />
@@ -727,10 +604,10 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                         prev === sacrificesForDay.length - 1 ? 0 : prev + 1,
                       );
                     }}
-                    className="p-1.5 rounded-full border border-roman-red/30 bg-stone-900/80 text-roman-red hover:bg-roman-red/20 hover:border-roman-red/70 transition-all hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
+                    className="rci-sac-nav-btn"
                     title="Siguiente"
                   >
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="rci-nav-icon" />
                   </button>
                 </div>
               </div>
@@ -738,17 +615,17 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
               sacrifice && (
                 <div
                   role="presentation"
-                  className={`mt-4 p-5 rounded-md relative z-10 flex flex-col items-center gap-3 w-full animate-fadeIn shadow-lg ${sacBoxClsSingle}`}
+                  className={`${sacBoxClsSingle} animate-fadeIn`}
                   onClick={e => e.stopPropagation()}
                   onKeyDown={e => e.stopPropagation()}
                 >
-                  <div className="flex flex-col items-center gap-1.5 w-full">
-                    <div className="flex items-center justify-center gap-3 w-full flex-wrap">
-                      <span className="text-2xl filter drop-shadow-md flex items-center gap-2">
+                  <div className="rci-sac-single-header">
+                    <div className="rci-sac-single-icon-row">
+                      <span className="rci-sac-single-icon">
                         {sacrifice.icon || '🗡️'}
                         {isApril && (
                           <span
-                            className="text-lg filter drop-shadow-md animate-pulse"
+                            className="rci-sac-single-secondary"
                             title="Sangre purificadora o Fuego lustral de Abril"
                           >
                             {sacrifice.icon?.includes('🔥') ||
@@ -759,35 +636,28 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                         )}
                         {isLemuria && (
                           <span
-                            className="text-lg filter drop-shadow-md animate-pulse"
+                            className="rci-sac-single-secondary"
                             title="Espectro / Lemur de los Muertos"
                           >
                             👻
                           </span>
                         )}
                         {isJune && sacrifice.icon === '🫏' && (
-                          <span
-                            className="text-lg filter drop-shadow-md animate-pulse"
-                            title="Pan de la Vestalia"
-                          >
+                          <span className="rci-sac-single-secondary" title="Pan de la Vestalia">
                             🍞
                           </span>
                         )}
                       </span>
-                      <span className="text-xs font-serif uppercase tracking-[0.2em] font-black text-stone-300 text-center">
+                      <span className="rci-sac-single-title">
                         {isLemuria
                           ? 'Lemuria: Ofrenda Lustral'
                           : `Sacrificia: ${sacrifice.title}`}
                       </span>
                     </div>
                   </div>
-                  <div className="w-full flex flex-col items-start gap-2 border-l-2 border-stone-500/30 pl-4 py-1">
-                    <p className="text-[12px] md:text-[13px] font-serif text-parchment/90 leading-relaxed text-left italic">
-                      &quot;{sacrifice.text}&quot;
-                    </p>
-                    <span className="text-xs text-stone-500 self-end uppercase tracking-widest font-bold mt-1">
-                      — Ovidio, {sacrifice.reference}
-                    </span>
+                  <div className="rci-sac-single-body">
+                    <p className="rci-sac-single-text">&quot;{sacrifice.text}&quot;</p>
+                    <span className="rci-sac-single-ref">— Ovidio, {sacrifice.reference}</span>
                   </div>
                 </div>
               )
@@ -795,17 +665,15 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
 
             {/* EPHEMERIDES */}
             {getHistoricalEvents(currentDate).length > 0 && (
-              <div className="mt-4 pt-4 border-t border-gold-dim/30 w-full animate-fadeIn">
-                <div className="text-parchment/90 text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
+              <div className="rci-ephemerides animate-fadeIn">
+                <div className="rci-ephem-title">
                   <span>📜</span> {labels.calendarInfoTitle} <span>📜</span>
                 </div>
-                <ul className="space-y-3">
+                <ul className="rci-ephem-list">
                   {getHistoricalEvents(currentDate).map((evt: any, i: number) => (
-                    <li key={i} className="flex flex-col text-center">
-                      <span className="text-gold-leaf font-serif italic text-sm">
-                        &quot;{evt.latin}&quot;
-                      </span>
-                      <span className="text-parchment/70 text-xs">{evt.spanish}</span>
+                    <li key={i} className="rci-ephem-item">
+                      <span className="rci-ephem-latin">&quot;{evt.latin}&quot;</span>
+                      <span className="rci-ephem-es">{evt.spanish}</span>
                     </li>
                   ))}
                 </ul>
@@ -818,7 +686,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
         {showFestivals && (
           <div
             role="presentation"
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-md animate-fadeIn cursor-pointer"
+            className="rci-modal-overlay animate-fadeIn"
             onClick={() => setShowFestivals(false)}
             onKeyDown={e => {
               if (e.key === 'Escape') setShowFestivals(false);
@@ -826,55 +694,38 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
           >
             <div
               role="presentation"
-              className="w-full max-w-lg bg-ink border-4 border-roman-red rounded-sm shadow-[0_0_50px_rgba(153,27,27,0.3)] overflow-hidden relative cursor-pointer"
+              className="rci-festivals-modal"
               onClick={e => e.stopPropagation()}
               onKeyDown={e => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="p-6 border-b border-roman-red bg-rose-950/20 text-center">
-                <div className="text-roman-red text-3xl mb-2">🏛️</div>
-                <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest drop-shadow-sm">
-                  Proxima Festa
-                </h2>
-                <p className="text-xs text-roman-red uppercase tracking-[0.3em] font-bold mt-1">
-                  Calendarium Romanum
-                </p>
+              <div className="rci-festivals-header">
+                <div className="rci-festivals-icon">🏛️</div>
+                <h2 className="rci-festivals-title">Proxima Festa</h2>
+                <p className="rci-festivals-subtitle">Calendarium Romanum</p>
               </div>
 
               {/* List */}
-              <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto custom-scrollbar bg-ink/20">
+              <div className="rci-festivals-list custom-scrollbar">
                 {getNextRomanFestivals(currentDate, 3).map((f, i) => (
-                  <div key={i} className="group/fest">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex flex-col gap-1">
-                        <h4 className="text-gold-leaf font-serif text-lg font-bold group-hover/fest:text-roman-red transition-colors leading-tight">
-                          {f.name}
-                        </h4>
-                        <span className="text-xs text-gold-dim/60 font-bold uppercase tracking-widest">
-                          {f.date}
-                        </span>
+                  <div key={i} className="rci-festival-item">
+                    <div className="rci-festival-item-header">
+                      <div className="rci-festival-item-left">
+                        <h4 className="rci-festival-item-name">{f.name}</h4>
+                        <span className="rci-festival-item-date">{f.date}</span>
                       </div>
-                      <div className="bg-roman-red/10 border border-roman-red/30 rounded px-2 py-1 text-right">
-                        <div className="text-[14px] text-roman-red font-black leading-none">
-                          {f.daysRemaining}
-                        </div>
-                        <div className="text-[7px] text-roman-red/60 uppercase font-bold tracking-tighter">
-                          dies
-                        </div>
+                      <div className="rci-festival-countdown">
+                        <div className="rci-festival-countdown-num">{f.daysRemaining}</div>
+                        <div className="rci-festival-countdown-label">dies</div>
                       </div>
                     </div>
-                    <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-roman-red/20 pl-4 py-1">
-                      {f.description}
-                    </p>
+                    <p className="rci-festival-item-desc">{f.description}</p>
                   </div>
                 ))}
               </div>
 
               {/* Footer */}
-              <button
-                className="w-full p-4 bg-roman-red/10 border-t border-roman-red/30 text-roman-red font-serif text-xs uppercase tracking-widest hover:bg-roman-red/20 transition-all font-bold"
-                onClick={() => setShowFestivals(false)}
-              >
+              <button className="rci-festivals-close" onClick={() => setShowFestivals(false)}>
                 Claudere Fastos
               </button>
             </div>
@@ -885,7 +736,7 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
         {showStatusInfo && statusExplanation && (
           <div
             role="presentation"
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn cursor-pointer"
+            className="rci-modal-overlay rci-status-modal-overlay animate-fadeIn"
             onClick={() => setShowStatusInfo(false)}
             onKeyDown={e => {
               if (e.key === 'Escape') setShowStatusInfo(false);
@@ -893,33 +744,25 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
           >
             <div
               role="presentation"
-              className="w-full max-w-sm bg-stone-900 border border-gold-leaf/50 p-6 rounded-lg shadow-2xl relative cursor-default"
+              className="rci-status-modal"
               onClick={e => e.stopPropagation()}
               onKeyDown={e => e.stopPropagation()}
             >
               <button
                 onClick={() => setShowStatusInfo(false)}
-                className="absolute top-4 right-4 text-gold-dim hover:text-gold-leaf transition-colors"
+                className="rci-status-modal-close"
               >
-                <X className="w-5 h-5" />
+                <X className="rci-close-icon" />
               </button>
 
-              <div className="flex flex-col items-center gap-4 text-center">
-                <div className="text-4xl filter drop-shadow-glow mb-2">
-                  {getStatusIcon(info.status)}
-                </div>
-                <h3
-                  className={`font-serif text-2xl uppercase tracking-[0.3em] font-black ${getStatusColor(
-                    info.status,
-                  )}`}
-                >
+              <div className="rci-status-modal-inner">
+                <div className="rci-status-modal-icon">{getStatusIcon(info.status)}</div>
+                <h3 className={`rci-status-modal-title ${getStatusColor(info.status)}`}>
                   Día {info.statusFull}
                 </h3>
-                <div className="w-16 h-px bg-gold-leaf/30" />
-                <p className="font-serif text-parchment/90 italic leading-relaxed">
-                  &quot;{statusExplanation.text}&quot;
-                </p>
-                <span className="text-xs text-gold-dim/60 uppercase tracking-widest font-bold">
+                <div className="rci-status-modal-divider" />
+                <p className="rci-status-modal-text">&quot;{statusExplanation.text}&quot;</p>
+                <span className="rci-status-modal-ref">
                   — Fastos, {statusExplanation.reference}
                 </span>
               </div>

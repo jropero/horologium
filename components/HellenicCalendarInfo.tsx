@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import './HellenicCalendarInfo.css';
 import { getAtticDate, AtticDateResult } from '../utils/atticCalendarUtils';
 import {
   getAtticFestivalInfo,
@@ -35,7 +36,7 @@ const MEANDER_URI = `data:image/svg+xml,${encodeURIComponent(
 
 const GreekMeanderBorder: React.FC = () => (
   <div
-    className="w-full h-14 block"
+    className="hel-meander-border"
     style={{
       backgroundImage: `url("${MEANDER_URI}")`,
       backgroundSize: 'auto 100%',
@@ -157,8 +158,8 @@ const PanelMoonSvg: React.FC<{ type: 'waxing' | 'full' | 'waning'; active: boole
   type,
   active,
 }) => {
-  const cls = `w-5 h-5 mx-auto mb-1 transition-all ${
-    active ? 'text-sky-300 drop-shadow-[0_0_6px_rgba(125,211,252,0.6)]' : 'text-sky-500/50'
+  const cls = `hel-panel-moon-icon${
+    active ? ' hel-panel-moon-icon--active' : ' hel-panel-moon-icon--inactive'
   }`;
   if (type === 'waxing')
     return (
@@ -223,13 +224,14 @@ const DayGrid: React.FC<{
   const selHoly = selectedDay !== null ? getDailyAtticDeity(selectedDay, monthLen) : null;
 
   const hasSelection = selectedDay !== null && (selFest || selHoly);
-  let infoPanelClass = 'border-sky-800/30 bg-transparent py-2 px-3';
-  if (hasSelection && selFest) infoPanelClass = 'border-sky-500/40 bg-sky-900/20 p-3';
-  else if (hasSelection) infoPanelClass = 'border-amber-500/40 bg-amber-900/15 p-3';
+
+  let infoPanelMod = 'hel-info-panel--empty';
+  if (hasSelection && selFest) infoPanelMod = 'hel-info-panel--festival';
+  else if (hasSelection) infoPanelMod = 'hel-info-panel--holy';
 
   return (
     <div>
-      <div className="flex flex-row justify-center gap-1.5 sm:gap-2 w-full">
+      <div className="hel-panels-row">
         {panels.map(({ days, moonType, title, subtitle }) => {
           let panelIdx = 0;
           if (moonType === 'full') panelIdx = 1;
@@ -239,32 +241,23 @@ const DayGrid: React.FC<{
           return (
             <div
               key={moonType}
-              className={`p-2 sm:p-3 flex-1 rounded-lg border transition-all duration-500 relative overflow-hidden
-                ${
-                  active
-                    ? 'border-sky-400/50 bg-sky-900/10 shadow-[0_0_15px_rgba(56,189,248,0.1)] scale-[1.02] z-10'
-                    : 'border-sky-800/30 bg-ink/30'
-                }`}
+              className={`hel-panel ${active ? 'hel-panel--active' : 'hel-panel--inactive'}`}
             >
-              {active && (
-                <div className="absolute -right-4 -top-4 w-16 h-16 bg-sky-400/10 rounded-full blur-xl pointer-events-none" />
-              )}
+              {active && <div className="hel-panel-glow" />}
 
-              <div className="text-center mb-2 relative z-10 border-b border-sky-700/30 pb-2">
+              <div className="hel-panel-header">
                 <PanelMoonSvg type={moonType} active={active} />
                 <h4
-                  className={`text-xs sm:text-xs font-bold uppercase tracking-widest ${
-                    active ? 'text-sky-300' : 'text-sky-500'
+                  className={`hel-panel-title ${
+                    active ? 'hel-panel-title--active' : 'hel-panel-title--inactive'
                   }`}
                 >
                   {title}
                 </h4>
-                <div className="text-xs font-serif italic text-sky-400/60 tracking-wide uppercase mt-0.5">
-                  {subtitle}
-                </div>
+                <div className="hel-panel-subtitle">{subtitle}</div>
               </div>
 
-              <div className="grid grid-cols-2 gap-1 justify-items-center relative z-10">
+              <div className="hel-day-cells">
                 {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
                 {days.map(day => {
                   const isToday = day === today;
@@ -273,30 +266,24 @@ const DayGrid: React.FC<{
                   const hasFest = getAtticFestivalInfo(monthIndex, day) !== null;
                   const hasHoly = getDailyAtticDeity(day, monthLen) !== null;
 
-                  let cellClass = 'bg-ink/40 active:bg-sky-900/30';
-                  if (isSelected)
-                    cellClass =
-                      'bg-sky-400/20 ring-2 ring-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.4)]';
-                  else if (isToday) cellClass = 'bg-sky-400/15 ring-1 ring-sky-400/70';
-                  else if (hasFest && !isPast)
-                    cellClass = 'bg-sky-700/30 ring-1 ring-sky-400/45';
-                  else if (hasFest && isPast)
-                    cellClass = 'bg-sky-900/30 ring-1 ring-sky-600/35';
-                  else if (hasHoly && !isPast)
-                    cellClass = 'bg-amber-900/20 ring-1 ring-amber-500/40';
-                  else if (hasHoly && isPast)
-                    cellClass = 'bg-amber-950/15 ring-1 ring-amber-700/30';
+                  let stateClass = 'hel-day-btn--plain';
+                  if (isSelected) stateClass = 'hel-day-btn--selected';
+                  else if (isToday) stateClass = 'hel-day-btn--today';
+                  else if (hasFest && !isPast) stateClass = 'hel-day-btn--festival-upcoming';
+                  else if (hasFest && isPast) stateClass = 'hel-day-btn--festival-past';
+                  else if (hasHoly && !isPast) stateClass = 'hel-day-btn--holy-upcoming';
+                  else if (hasHoly && isPast) stateClass = 'hel-day-btn--holy-past';
 
-                  let numClass = 'text-sky-300';
-                  if (isSelected) numClass = 'text-white';
-                  else if (isToday) numClass = 'text-sky-200';
-                  else if (isPast) numClass = 'text-sky-400/50';
+                  let numStateClass = 'hel-day-num--default';
+                  if (isSelected) numStateClass = 'hel-day-num--selected';
+                  else if (isToday) numStateClass = 'hel-day-num--today';
+                  else if (isPast) numStateClass = 'hel-day-num--past';
 
                   return (
                     <button
                       key={day}
                       type="button"
-                      className={`relative flex flex-col items-center justify-center rounded-sm pt-1 pb-2 w-full gap-0 transition-all cursor-pointer select-none ${cellClass}`}
+                      className={`hel-day-btn ${stateClass}`}
                       onClick={() => setSelectedDay(prev => (prev === day ? null : day))}
                     >
                       <TinyMoon
@@ -304,9 +291,7 @@ const DayGrid: React.FC<{
                         size={11}
                         dim={isPast && !isToday}
                       />
-                      <span className={`text-xs font-serif leading-none font-bold ${numClass}`}>
-                        {day}
-                      </span>
+                      <span className={`hel-day-num ${numStateClass}`}>{day}</span>
                     </button>
                   );
                 })}
@@ -317,31 +302,27 @@ const DayGrid: React.FC<{
       </div>
 
       {/* Info panel */}
-      <div className={`mt-3 rounded-lg border transition-all ${infoPanelClass}`}>
+      <div className={`hel-info-panel ${infoPanelMod}`}>
         {(() => {
           if (!hasSelection) {
             if (selectedDay !== null)
               return (
-                <p className="text-xs font-serif text-sky-400/50 text-center">
+                <p className="hel-info-panel-empty-msg">
                   Sin celebración registrada para este día.
                 </p>
               );
             return (
-              <p className="text-xs font-serif text-sky-400/50 text-center">
-                Toca un día para ver su significado
-              </p>
+              <p className="hel-info-panel-empty-msg">Toca un día para ver su significado</p>
             );
           }
           return (
-            <div className="flex flex-col gap-2 text-left animate-fadeIn">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-serif font-bold text-sky-400 uppercase tracking-wider">
-                  Ἡμέρα {selectedDay}
-                </span>
+            <div className="hel-info-panel-content animate-fadeIn">
+              <div className="hel-info-panel-row">
+                <span className="hel-info-panel-day-label">Ἡμέρα {selectedDay}</span>
                 <button
                   type="button"
                   onClick={() => setSelectedDay(null)}
-                  className="text-sky-500 hover:text-sky-300 text-xs leading-none px-1"
+                  className="hel-info-panel-close"
                   aria-label="Cerrar"
                 >
                   ✕
@@ -349,43 +330,29 @@ const DayGrid: React.FC<{
               </div>
               {selFest ? (
                 <div>
-                  <span className="text-xs font-serif font-bold text-sky-300">
-                    {selFest.festivalName}
-                  </span>
+                  <span className="hel-info-panel-fest-name">{selFest.festivalName}</span>
                   {selFest.festivalDayName && (
-                    <span className="ml-2 text-xs uppercase tracking-widest text-sky-400/70">
+                    <span className="hel-info-panel-fest-day-name">
                       {selFest.festivalDayName}
                     </span>
                   )}
-                  <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">
-                    {selFest.festivalDesc}
-                  </p>
+                  <p className="hel-info-panel-fest-desc">{selFest.festivalDesc}</p>
                   {selFest.deity && (
-                    <span className="text-xs text-gold-dim font-serif mt-1 block">
-                      Deidad: {selFest.deity}
-                    </span>
+                    <span className="hel-info-panel-deity">Deidad: {selFest.deity}</span>
                   )}
                 </div>
               ) : (
                 <div>
-                  <span className="text-xs font-serif font-bold text-amber-300">
-                    {selHoly!.festivalName}
-                  </span>
-                  <span className="ml-2 text-xs uppercase tracking-widest text-amber-400/70">
-                    Día Sagrado
-                  </span>
-                  <p className="text-xs font-serif text-parchment/80 mt-0.5 leading-snug">
-                    {selHoly!.festivalDesc}
-                  </p>
+                  <span className="hel-info-panel-holy-name">{selHoly!.festivalName}</span>
+                  <span className="hel-info-panel-holy-also">Día Sagrado</span>
+                  <p className="hel-info-panel-fest-desc">{selHoly!.festivalDesc}</p>
                   {selHoly!.deity && (
-                    <span className="text-xs text-gold-dim font-serif mt-1 block">
-                      Deidad: {selHoly!.deity}
-                    </span>
+                    <span className="hel-info-panel-deity">Deidad: {selHoly!.deity}</span>
                   )}
                 </div>
               )}
               {selFest && selHoly && (
-                <span className="text-xs font-serif text-amber-400/80 leading-snug">
+                <span className="hel-info-panel-also">
                   También hoy: {selHoly.festivalName} — {selHoly.deity}
                 </span>
               )}
@@ -395,19 +362,17 @@ const DayGrid: React.FC<{
       </div>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
+      <div className="hel-legend">
         {(
           [
-            { cls: 'bg-sky-400/15 ring-1 ring-sky-400/70', label: 'Hoy' },
-            { cls: 'bg-sky-700/30 ring-1 ring-sky-400/45', label: 'Festival' },
-            { cls: 'bg-amber-900/20 ring-1 ring-amber-500/40', label: 'Día Sagrado' },
-          ] as { cls: string; label: string }[]
-        ).map(({ cls, label }) => (
-          <div key={label} className="flex items-center gap-1">
-            <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
-            <span className="text-xs text-sky-400 font-serif uppercase tracking-wide">
-              {label}
-            </span>
+            { mod: 'hel-swatch--today', label: 'Hoy' },
+            { mod: 'hel-swatch--festival', label: 'Festival' },
+            { mod: 'hel-swatch--holy', label: 'Día Sagrado' },
+          ] as { mod: string; label: string }[]
+        ).map(({ mod, label }) => (
+          <div key={label} className="hel-legend-item">
+            <span className={`hel-swatch ${mod}`} />
+            <span className="hel-legend-label">{label}</span>
           </div>
         ))}
       </div>
@@ -651,23 +616,17 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
   const nextFests = getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 5);
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-6 mb-6 px-2">
-      <div className="bg-ink/90 border-[4px] border-gold-dim hover:border-gold-leaf transition-colors p-0 rounded-sm shadow-2xl relative overflow-hidden group">
+    <div className="hellenic-calendar-info">
+      <div className="hel-card">
         <GreekMeanderBorder />
 
         {/* ── Sky scene (full width) ─────────────────────────────────────── */}
-        <div
-          className="relative w-full overflow-hidden border-b border-sky-500/30"
-          style={{ aspectRatio: '16/9' }}
-        >
-          <div
-            className="absolute inset-0 transition-all duration-2000"
-            style={{ background: skyGradient }}
-          />
+        <div className="hel-sky-scene">
+          <div className="hel-sky-bg" style={{ background: skyGradient }} />
 
           {/* Stars + weather overlay */}
           <svg
-            className="absolute inset-0 w-full h-full pointer-events-none"
+            className="hel-weather-svg"
             viewBox="0 0 300 200"
             preserveAspectRatio="xMidYMid slice"
           >
@@ -715,7 +674,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
           {/* Greek skyline */}
           <svg
-            className="absolute bottom-0 left-0 w-full"
+            className="hel-skyline-svg"
             viewBox="0 0 300 200"
             preserveAspectRatio="xMidYMax meet"
             style={condition === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
@@ -760,7 +719,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
           {/* Dark scrim for text contrast — radial so sky edges remain visible */}
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="hel-dark-scrim"
             style={{
               background:
                 'radial-gradient(ellipse 80% 65% at 50% 50%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 65%, transparent 100%)',
@@ -768,21 +727,21 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           />
 
           {/* Month name overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-center px-4 pb-[20%]">
-            <div className="flex flex-col items-center leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
+          <div className="hel-month-overlay">
+            <div className="hel-month-name-wrap">
               <span
-                className="font-serif text-white font-black uppercase tracking-[0.15em]"
+                className="hel-month-name"
                 style={{ fontSize: 'clamp(1.8rem,7.5vw,3.2rem)', lineHeight: 1 }}
               >
                 {atticDate.monthName}
                 {atticDate.isIntercalaryMonth && (
-                  <span className="ml-2 text-sky-300" style={{ fontSize: '40%' }}>
+                  <span className="hel-intercalary" style={{ fontSize: '40%' }}>
                     (Ἐμβόλιμος)
                   </span>
                 )}
               </span>
               <span
-                className="font-serif text-sky-200/80 italic tracking-widest"
+                className="hel-month-translation"
                 style={{ fontSize: 'clamp(0.75rem,2vw,0.85rem)' }}
               >
                 {translateGreekUI(atticDate.monthName)}
@@ -791,13 +750,13 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
             {/* Day name only — strip ", MonthName" suffix to avoid repetition */}
             <div
-              className="font-serif text-white/80 font-bold mt-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
+              className="hel-day-name-overlay"
               style={{ fontSize: 'clamp(0.75rem,2.3vw,0.95rem)', letterSpacing: '0.12em' }}
             >
               {atticDate.short.split(',')[0].trim()}
             </div>
             <div
-              className="font-serif text-parchment/70 italic drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
+              className="hel-day-name-es"
               style={{ fontSize: 'clamp(0.75rem,1.8vw,0.85rem)' }}
             >
               {atticDate.spanishShort.split(',')[0].trim()}
@@ -805,30 +764,26 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           </div>
         </div>
 
-        <div className="p-5 md:p-8 flex flex-col items-center gap-5 text-center">
+        <div className="hel-content">
           {/* ── Deity / festival of the day (always visible) ─────────────── */}
           {deityName && (
-            <div className="w-full bg-sky-900/15 p-5 rounded-lg border-2 border-sky-500/25 shadow-sm relative mt-4">
+            <div className="hel-deity-card">
               {festival?.category && (
-                <div className="absolute -top-3 right-4 px-2 py-0.5 bg-sky-900/80 border border-sky-400/50 text-sky-300 text-xs uppercase tracking-[0.1em] rounded-sm backdrop-blur-md shadow-lg font-serif z-20">
-                  {getCategoryBadge(festival.category)}
-                </div>
+                <div className="hel-category-badge">{getCategoryBadge(festival.category)}</div>
               )}
-              {festival?.isApaphrades && (
-                <div className="absolute inset-0 bg-rose-950/20 pointer-events-none rounded-lg" />
-              )}
+              {festival?.isApaphrades && <div className="hel-apaphrades-overlay" />}
 
-              <div className="text-sky-400 text-xs font-bold uppercase tracking-widest mb-1 relative z-10 flex flex-col items-center gap-1">
-                <div className="flex items-center gap-2">
-                  {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+              <div className="hel-deity-title-row">
+                <div className="hel-deity-title-row-inner">
+                  {hasFestival && <span className="hel-title-emoji">🏛️</span>}
                   {displayDeityTitle}
-                  {hasFestival && <span className="text-sky-400/70 text-lg">🏛️</span>}
+                  {hasFestival && <span className="hel-title-emoji">🏛️</span>}
                 </div>
                 {hasFestival && (
-                  <div className="flex gap-3 mt-1 px-3 py-1 bg-sky-400/5 rounded-full border border-sky-400/20">
+                  <div className="hel-festival-icons">
                     {festival?.ritualOffering && <span title="Ofrenda Ritual">🏺</span>}
                     {festival?.pannychisDesc && (
-                      <span title="Pannychis" className="animate-pulse">
+                      <span title="Pannychis" className="hel-anim-pulse">
                         🕯️
                       </span>
                     )}
@@ -839,101 +794,69 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                 )}
               </div>
 
-              <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment drop-shadow-md leading-tight relative z-10 mt-1">
-                {deityName}
-              </h2>
-              <div className="font-serif text-xs text-sky-300/70 tracking-widest uppercase mb-1 relative z-10">
-                {transliterateGreek(deityName)}
-              </div>
+              <h2 className="hel-deity-name">{deityName}</h2>
+              <div className="hel-transliteration">{transliterateGreek(deityName)}</div>
 
               {festival?.festivalDayName && (
-                <div className="mt-3 mb-1 inline-block px-4 py-1.5 bg-sky-900/30 border-t border-b border-sky-400/30 text-sky-400 font-serif text-sm font-bold tracking-widest uppercase relative z-10 shadow-inner">
-                  {festival.festivalDayName}
-                </div>
+                <div className="hel-festival-day-name">{festival.festivalDayName}</div>
               )}
 
-              <p className="font-serif text-sm text-parchment/90 italic px-4 mt-3 leading-relaxed relative z-10">
-                &quot;{deityDesc}&quot;
-              </p>
+              <p className="hel-deity-desc">&quot;{deityDesc}&quot;</p>
 
               {festival?.participants && (
-                <div className="mt-4 pt-3 border-t border-sky-800/30 w-full text-center relative z-10 flex flex-col items-center">
-                  <span className="text-sky-400/60 text-xs uppercase tracking-[0.2em] mb-1 font-bold">
-                    Participantes:
-                  </span>
-                  <span className="text-xs font-serif text-sky-200 font-bold">
-                    {festival.participants}
-                  </span>
+                <div className="hel-participants">
+                  <span className="hel-participants-label">Participantes:</span>
+                  <span className="hel-participants-value">{festival.participants}</span>
                 </div>
               )}
 
               {festival?.ritualOffering && (
-                <div className="mt-4 p-3 bg-amber-900/20 border border-amber-500/30 rounded-md relative z-10 flex items-start gap-3 shadow-sm">
-                  <span className="text-2xl">{festival.ritualOffering.icon}</span>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-amber-500 mb-0.5">
-                      Ofrenda Tradicional
-                    </span>
-                    <span className="text-xs font-serif text-amber-100/90 leading-snug">
-                      {festival.ritualOffering.item}
-                    </span>
+                <div className="hel-offering-box">
+                  <span className="hel-offering-icon">{festival.ritualOffering.icon}</span>
+                  <div className="hel-offering-text">
+                    <span className="hel-offering-label">Ofrenda Tradicional</span>
+                    <span className="hel-offering-item">{festival.ritualOffering.item}</span>
                   </div>
                 </div>
               )}
 
               {festival?.pannychisDesc && (
-                <div className="mt-3 p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
-                  <span className="text-xl animate-pulse">🕯️</span>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-indigo-400 mb-0.5">
-                      Pannychis (Vigilia Sagrada)
-                    </span>
-                    <span className="text-xs font-serif text-indigo-200/80 leading-snug italic">
-                      {festival.pannychisDesc}
-                    </span>
+                <div className="hel-pannychis-box">
+                  <span className="hel-pannychis-icon hel-anim-pulse">🕯️</span>
+                  <div className="hel-pannychis-text">
+                    <span className="hel-pannychis-label">Pannychis (Vigilia Sagrada)</span>
+                    <span className="hel-pannychis-desc">{festival.pannychisDesc}</span>
                   </div>
                 </div>
               )}
 
               {festival?.agonDesc && (
-                <div className="mt-3 p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
-                  <span className="text-xl">🌿</span>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-emerald-400 mb-0.5">
-                      Agōn (Competición)
-                    </span>
-                    <span className="text-xs font-serif text-emerald-100/80 leading-snug">
-                      {festival.agonDesc}
-                    </span>
+                <div className="hel-agon-box">
+                  <span className="hel-agon-icon">🌿</span>
+                  <div className="hel-agon-text">
+                    <span className="hel-agon-label">Agōn (Competición)</span>
+                    <span className="hel-agon-desc">{festival.agonDesc}</span>
                   </div>
                 </div>
               )}
 
               {festival?.economyDesc && (
-                <div className="mt-3 p-3 bg-yellow-950/30 border border-yellow-500/40 rounded-md relative z-10 flex items-start gap-3 shadow-inner">
-                  <span className="text-xl">🪙</span>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-serif uppercase tracking-[0.15em] font-bold text-yellow-500 mb-0.5">
-                      El Precio de la Piedad
-                    </span>
-                    <span className="text-xs font-serif text-yellow-100/80 leading-snug italic">
-                      {festival.economyDesc}
-                    </span>
+                <div className="hel-economy-box">
+                  <span className="hel-economy-icon">🪙</span>
+                  <div className="hel-economy-text">
+                    <span className="hel-economy-label">El Precio de la Piedad</span>
+                    <span className="hel-economy-desc">{festival.economyDesc}</span>
                   </div>
                 </div>
               )}
 
               {festival?.aition && (
-                <div className="mt-4 p-4 bg-stone-900/80 border border-stone-700/50 rounded-md relative z-10 flex flex-col items-start gap-2 shadow-inner">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">📜</span>
-                    <span className="text-xs font-serif uppercase tracking-[0.2em] font-bold text-stone-300">
-                      Aition: El Mito Fundacional
-                    </span>
+                <div className="hel-aition-box">
+                  <div className="hel-aition-header">
+                    <span className="hel-aition-header-icon">📜</span>
+                    <span className="hel-aition-header-label">Aition: El Mito Fundacional</span>
                   </div>
-                  <p className="text-[12px] font-serif text-stone-400/90 leading-relaxed text-left border-l-2 border-stone-600/50 pl-3 italic">
-                    {festival.aition}
-                  </p>
+                  <p className="hel-aition-text">{festival.aition}</p>
                 </div>
               )}
             </div>
@@ -941,21 +864,15 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
           {/* ── View toggle ──────────────────────────────────────────────── */}
           {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-          <div
-            className="flex gap-0 rounded-lg overflow-hidden border border-sky-600/40 w-full max-w-sm"
-            onClick={e => e.stopPropagation()}
-          >
+          <div className="hel-view-toggle" onClick={e => e.stopPropagation()}>
             {(['month', 'festivals', 'days'] as ViewMode[]).map(v => (
               <button
                 key={v}
                 type="button"
                 onClick={() => setView(v)}
-                className={`flex-1 py-2 text-xs font-serif uppercase tracking-widest font-bold transition-all
-                  ${
-                    view === v
-                      ? 'bg-sky-500/20 text-sky-300'
-                      : 'text-sky-500 hover:text-sky-300 hover:bg-sky-900/20'
-                  }`}
+                className={`hel-view-btn ${
+                  view === v ? 'hel-view-btn--active' : 'hel-view-btn--inactive'
+                }`}
               >
                 {VIEW_LABELS[v]}
               </button>
@@ -965,8 +882,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           {/* ── MONTH VIEW ────────────────────────────────────────────────── */}
           {view === 'month' && (
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <div className="w-full flex flex-col gap-4" onClick={e => e.stopPropagation()}>
-              <div className="font-serif text-xs uppercase tracking-widest text-sky-400 flex items-center justify-center gap-3 border-y border-sky-700/30 py-2 bg-ink/20">
+            <div className="hel-month-view" onClick={e => e.stopPropagation()}>
+              <div className="hel-section-header">
                 <span>☾</span>
                 Μήν: {atticDate.monthLength} días lunares
                 <span>☽</span>
@@ -980,31 +897,24 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
 
               {/* Apaphrades warning */}
               {apaphrades.isTaboo && (
-                <div className="w-full bg-rose-950/60 border-2 border-rose-900/80 p-4 sm:p-5 rounded-md flex flex-col gap-3 shadow-[inset_0_0_30px_rgba(225,29,72,0.15)] relative z-10">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#881337_10px,#881337_20px)] opacity-50 rounded-t-sm" />
-                  <div className="flex items-center gap-4 border-b border-rose-900/50 pb-3">
-                    <span className="text-4xl filter drop-shadow-[0_0_10px_rgba(225,29,72,0.8)] animate-bounce">
+                <div className="hel-apaphrades-box">
+                  <div className="hel-apaphrades-stripe" />
+                  <div className="hel-apaphrades-header">
+                    <span className="hel-apaphrades-icon hel-anim-bounce">
                       {apaphrades.icon}
                     </span>
-                    <div className="text-left flex flex-col">
-                      <span className="text-base font-serif uppercase tracking-[0.15em] font-black text-rose-500 leading-none mb-1">
-                        Apaphrades Hemera
-                      </span>
-                      <span className="text-xs font-serif text-rose-300/80 tracking-widest uppercase">
-                        (Día Nefasto y Prohibido)
-                      </span>
+                    <div className="hel-apaphrades-title-wrap">
+                      <span className="hel-apaphrades-name">Apaphrades Hemera</span>
+                      <span className="hel-apaphrades-subtitle">(Día Nefasto y Prohibido)</span>
                     </div>
                   </div>
-                  <p className="text-xs sm:text-sm font-serif text-rose-200/90 leading-relaxed text-left italic">
-                    {apaphrades.reason}
-                  </p>
+                  <p className="hel-apaphrades-reason">{apaphrades.reason}</p>
                   {apaphrades.instruction && (
-                    <div className="bg-rose-900/30 border border-rose-500/40 rounded p-3 mt-2 shadow-inner">
-                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-rose-400 mb-1.5 flex items-center gap-2">
-                        <span className="text-rose-500 animate-pulse">⚠️</span> Instrucción de
-                        Supervivencia:
+                    <div className="hel-apaphrades-instruction">
+                      <span className="hel-instruction-label">
+                        <span className="hel-anim-pulse">⚠️</span> Instrucción de Supervivencia:
                       </span>
-                      <p className="font-serif text-xs text-rose-100/90 leading-snug text-left">
+                      <p className="hel-instruction-text">
                         &quot;{apaphrades.instruction}&quot;
                       </p>
                     </div>
@@ -1013,7 +923,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               )}
 
               {/* Bottom info cards */}
-              <div className="flex gap-3 w-full justify-center text-center">
+              <div className="hel-info-cards">
                 {(
                   [
                     { title: 'Δεκάς', main: decadeLabel.title, sub: decadeLabel.subtitle },
@@ -1031,17 +941,10 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                     },
                   ] as { title: string; main: string; sub: string }[]
                 ).map(({ title, main, sub }) => (
-                  <div
-                    key={title}
-                    className="flex-1 bg-sky-900/15 border border-sky-500/25 rounded p-3"
-                  >
-                    <div className="text-xs font-bold uppercase tracking-widest text-sky-400 mb-1">
-                      {title}
-                    </div>
-                    <div className="font-serif text-parchment font-bold text-sm leading-tight">
-                      {main}
-                    </div>
-                    <div className="text-xs text-sky-300 mt-0.5">{sub}</div>
+                  <div key={title} className="hel-info-card">
+                    <div className="hel-info-card-title">{title}</div>
+                    <div className="hel-info-card-main">{main}</div>
+                    <div className="hel-info-card-sub">{sub}</div>
                   </div>
                 ))}
               </div>
@@ -1051,7 +954,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           {/* ── DAYS VIEW (7 following days — folded modal) ────────────────── */}
           {view === 'days' && (
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <div className="w-full flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="hel-days-view" onClick={e => e.stopPropagation()}>
               <GreekDaysList
                 startDate={currentDate ?? new Date()}
                 lat={currentLat}
@@ -1063,79 +966,59 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
           {/* ── FESTIVALS VIEW ─────────────────────────────────────────────── */}
           {view === 'festivals' && (
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <div className="w-full flex flex-col gap-5" onClick={e => e.stopPropagation()}>
-              <div className="font-serif text-xs uppercase tracking-widest text-sky-400 flex items-center justify-center gap-3 border-y border-sky-700/30 py-2 bg-ink/20">
+            <div className="hel-festivals-view" onClick={e => e.stopPropagation()}>
+              <div className="hel-section-header">
                 <span>🏛️</span> Próximos Festivales · Ἀθήναι <span>🏛️</span>
               </div>
 
               {nextFests.length === 0 ? (
-                <p className="text-xs font-serif text-sky-400/50 text-center py-4">
+                <p className="hel-info-panel-empty-msg" style={{ padding: '1rem 0' }}>
                   No hay festivales próximos registrados.
                 </p>
               ) : (
                 nextFests.map((f, i) => (
-                  <div key={i} className="border-b border-sky-800/20 pb-5 last:border-0">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex flex-col gap-0.5 text-left">
-                        <h4 className="text-gold-leaf font-serif text-base font-bold leading-tight">
-                          {f.name}
-                        </h4>
-                        <span className="text-xs text-sky-400/60 font-bold uppercase tracking-widest">
-                          {f.date}
-                        </span>
+                  <div key={i} className="hel-fest-item">
+                    <div className="hel-fest-item-top">
+                      <div className="hel-fest-name-col">
+                        <h4 className="hel-fest-name">{f.name}</h4>
+                        <span className="hel-fest-date">{f.date}</span>
                       </div>
-                      <div className="bg-sky-400/10 border border-sky-400/30 rounded px-2 py-1 text-right ml-2 shrink-0">
-                        <div className="text-sm text-sky-400 font-black leading-none">
-                          {f.daysRemaining}
-                        </div>
-                        <div className="text-[7px] text-sky-400/60 uppercase font-bold tracking-tighter">
-                          días
-                        </div>
+                      <div className="hel-fest-countdown">
+                        <div className="hel-fest-countdown-num">{f.daysRemaining}</div>
+                        <div className="hel-fest-countdown-label">días</div>
                       </div>
                     </div>
-                    <p className="text-parchment/80 font-serif text-sm leading-relaxed italic border-l-2 border-sky-400/20 pl-3 py-1 text-left mb-2">
-                      {f.description}
-                    </p>
-                    <div className="flex flex-col gap-1.5 pl-3">
+                    <p className="hel-fest-desc">{f.description}</p>
+                    <div className="hel-fest-details">
                       {f.fullFestival?.ritualOffering && (
-                        <div className="text-xs font-serif text-amber-200/70 flex items-center gap-2">
+                        <div className="hel-fest-offering-row">
                           <span>{f.fullFestival.ritualOffering.icon}</span>
                           <span>
-                            <b className="text-amber-500/80 uppercase tracking-tighter">
-                              Ofrenda:
-                            </b>{' '}
-                            {f.fullFestival.ritualOffering.item}
+                            <b>Ofrenda:</b> {f.fullFestival.ritualOffering.item}
                           </span>
                         </div>
                       )}
                       {f.fullFestival?.pannychisDesc && (
-                        <div className="text-xs font-serif text-indigo-200/70 flex items-center gap-2">
-                          <span className="animate-pulse">🕯️</span>
+                        <div className="hel-fest-vigilia-row">
+                          <span className="hel-anim-pulse">🕯️</span>
                           <span>
-                            <b className="text-indigo-400/80 uppercase tracking-tighter">
-                              Vigilia:
-                            </b>{' '}
-                            {f.fullFestival.pannychisDesc}
+                            <b>Vigilia:</b> {f.fullFestival.pannychisDesc}
                           </span>
                         </div>
                       )}
                       {f.fullFestival?.agonDesc && (
-                        <div className="text-xs font-serif text-emerald-200/70 flex items-center gap-2">
+                        <div className="hel-fest-agon-row">
                           <span>🌿</span>
                           <span>
-                            <b className="text-emerald-400/80 uppercase tracking-tighter">
-                              Agōn:
-                            </b>{' '}
-                            {f.fullFestival.agonDesc}
+                            <b>Agōn:</b> {f.fullFestival.agonDesc}
                           </span>
                         </div>
                       )}
                       {f.fullFestival?.aition && (
-                        <div className="text-xs font-serif text-stone-300/70 flex items-start gap-2 bg-stone-900/40 p-2 rounded mt-1 border-l-2 border-stone-600/50">
+                        <div className="hel-fest-aition-row">
                           <span>📜</span>
                           <span>
-                            <b className="text-stone-300 uppercase tracking-tighter">Aition:</b>{' '}
-                            {f.fullFestival.aition}
+                            <b>Aition:</b> {f.fullFestival.aition}
                           </span>
                         </div>
                       )}
@@ -1148,13 +1031,13 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
         </div>
 
         {/* Footer note */}
-        <div className="px-5 pt-3 pb-4 border-t border-sky-900/30 text-center space-y-2">
-          <p className="text-xs text-sky-400/70 font-serif leading-relaxed">
+        <div className="hel-footer">
+          <p className="hel-footer-note">
             Νουμηνία (día 1) es el primer creciente visible, un día tras la conjunción
             astronómica. El día ático comienza al atardecer — por ello esta fecha puede diferir
             ~2 días de otros cómputos lunares.
           </p>
-          <p className="text-xs text-sky-400/55 font-serif leading-relaxed italic">
+          <p className="hel-footer-disclaimer">
             Fecha según un modelo astronómico idealizado. El calendario civil ateniense se
             fijaba por decisión de los magistrados y podía diferir en días, o incluso en un mes
             entero, de este cálculo.
