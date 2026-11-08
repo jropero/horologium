@@ -36,7 +36,7 @@ interface FestivalFonte {
 }
 ```
 
-`HALL_OF_MAATI` (array of 42 `MaatiAssessor` entries) comes from Ch. CXXV, Papiro de Nebseni (BM 9,900). It drives the Hall of Maāti modal in `EgyptianCalendarInfo.tsx`. Minimum font size in that modal: **12px** (`text-xs`); never use `text-[8px]`, `text-[9px]`, `text-[10px]`, or `text-[11px]` inside it.
+`HALL_OF_MAATI` (array of 42 `MaatiAssessor` entries) comes from Ch. CXXV, Papiro de Nebseni (BM 9,900). It drives the Hall of Maāti modal in `EgyptianCalendarInfo.tsx`. Minimum font size in that modal: **12px**; never go below `font-size: 0.75rem` (12px) inside it. The 12px minimum applies globally throughout the entire app.
 
 Sources cross-referenced for festival entries:
 
@@ -212,7 +212,7 @@ UI features built on this data:
 1. **`fonte` is sourced, not invented.** Only add a `BabylonianFonte` if a verbatim cuneiform text passage is directly linked to the rite of that specific day. Cite edition and line numbers.
 2. **Uncertain days must be flagged.** Many month-level rites have no attested day number. Mark them as approximate in `description` — do not silently assign a day.
 3. **Do not conflate city traditions.** Uruk and Babylon often held parallel rites; check Cohen and Linssen separately. Note the city in `description`.
-4. **Minimum font size: `text-xs` (12px)** throughout the Babylonian page. Never use sub-12px classes.
+4. **Minimum font size: 12px** (`font-size: 0.75rem`) throughout the Babylonian page.
 
 ---
 
@@ -260,7 +260,7 @@ Heavy static datasets live in `utils/`:
 - **Names**: the dataset's `Itinerary` field is split into three groups. Latin road names (`Via …`, `Strata …`) are the only ones used as map labels. Ancient itineraries (Tabula Peutingeriana, Itinerarium Antonini, Stadiasmus Patarensis…) are listed in the card. Modern names (Watling Street, Fosse Way, Limesweg…) are shown in the card only as _Nomina recentiora_: never as labels and never translated. Builders (`Cons_per_e`, English in the dataset) map to their standard Latin names. Period labels with no ancient form ("Tetrarchy", "Severan"…) are dropped, and only their dates are shown. The segment name (`Tractus`) mixes ancient and modern toponyms as the dataset gives them.
 - **Dating**: Itiner-e dates only 477 segments (`Lower/Upper_Date` with error margins, 9999 = unknown). The build adds the start year of `Cons_per_e` (≈ 2 800 more), giving 3 300 dated segments; 11 469 have no date. Errata are fixed in `DATE_FIX` with their source (Via Aemilia 187 BCE, Livy 39.2.10). `roadExistence()` returns `yes`/`no`/`unknown`, with the error margins read as "may have existed".
 - **Time-awareness**: live, every road is drawn. When the app is time-travelling (`travelDate` App → ProvinciaInfo → `year` prop), dated roads outside their range are hidden. Undated roads are **drawn faded, not hidden**: the dataset can't say they did not exist, and we don't guess. The road card's _Iter per tempora_ slider sets a map-only year (`cardYear`) that overrides the app date for the roads layer. It resets when the app date changes.
-- **Drawing** (`RomanMapCanvas`): roads are grouped into 5° tiles, each road in the tile of its bbox centre. Path2Ds are built lazily per level of detail (`ROAD_LODS`, chosen to stay under ½ px) × tile × style, and cleared when the year changes. Styles: main roads wider; certainty certain > conjectured (lighter) > hypothetical (dotted); undated roads faded while time-travelling; secondary roads fade in with zoom. Road names are set letter by letter along chained segments of the same via (`buildRoadChains`), from zoom 2.5. They are placed after the city names in the same collision grid, in IM Fell English italic at ≥ 12 px. A tap hits a city or creature first, then the nearest road within 10 px.
+- **Drawing** (`RomanMapCanvas`): roads are grouped into 5° tiles, each road in the tile of its bbox centre. Path2Ds are built lazily per level of detail (`ROAD_LODS`, chosen to stay under ½ px) × tile × style, and cleared when the year changes. Styles: main roads wider; certainty certain > conjectured (lighter) > hypothetical (dotted); undated roads faded while time-travelling; secondary roads fade in with zoom. Road names are set letter by letter along chained segments of the same via (`buildRoadChains`), from zoom 2.5. They are placed after the city names in the same collision grid, in `.SF NS` italic at ≥ 12 px. A tap hits a city or creature first, then the nearest road within 10 px.
 - **Strings**: all Latin, in `ROMAN_ROAD_LABELS` (`utils/civLabels.ts`).
 - **Performance** (Chrome, 6× CPU throttle, dev build): vertical pan median 5.8 ms / max 9.6 ms per frame with roads (1.7 ms without). Warm zoom max 9.2 ms. The first visit to a new level of detail costs one ~60 ms frame while its paths are built.
 
@@ -270,7 +270,7 @@ Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egypt
 
 ### Theming
 
-A single dark theme is driven by the `data-civ` HTML attribute (set in `App.tsx`), which selects civilization-specific CSS variable overrides in `index.css`. Custom Tailwind tokens: `ink`, `gold-leaf`, `gold-dim`, `parchment`, `parchment-dark`, `midnight`. Fonts: `Cinzel` (serif headings) and `IM Fell English` (body). See `tailwind.config.js`.
+A single dark theme is driven by the `data-civ` HTML attribute (set in `App.tsx`), which selects civilization-specific CSS variable overrides in `index.css`. CSS custom properties on `:root`: `--ink`, `--gold-leaf`, `--gold-dim`, `--parchment`, `--parchment-dark`, `--midnight`, `--roman-red`, `--festival-text`, plus shared utility vars `--shadow-xl`, `--shadow-card`, `--blur-modal`, `--blur-card`, `--modal-max-w`, `--lh-prose`. Each `[data-civ="…"]` block overrides the colour tokens for its palette. Styling is plain CSS — no Tailwind; component-scoped CSS files live alongside each component in `components/`. Fonts: `Cinzel` (serif headings) and `.SF NS` system sans-serif (body).
 
 ### Weather
 
@@ -388,11 +388,11 @@ CSS variables are overridden in `[data-civ="babylonia"]` block in `index.css`:
 - `--parchment`: `#e8edf8` (cool linen for readable text)
 - `--roman-red`: `#818cf8` (indigo-400, secondary accent)
 
-Tailwind utility classes used in Babylonian components should use `blue-*` / `indigo-*` tones, **not** amber/orange (those belong to Egypt). Minimum font size: `text-xs` (12px) throughout.
+Babylonian components use `blue-*` / `indigo-*` colour tones, **not** amber/orange (those belong to Egypt). Minimum font size: 12px throughout.
 
 ### Akkadian text and Spanish glosses
 
-Every Akkadian term or heading on the Babylonian page is shown with its Spanish translation below or beside it, in a smaller, lighter italic (`text-xs`). The Akkadian stays the prominent element and is never replaced. UI text is Spanish or Akkadian only, never English, and no font may be under 12px on this page.
+Every Akkadian term or heading on the Babylonian page is shown with its Spanish translation below or beside it, in a smaller, lighter italic (12px minimum). The Akkadian stays the prominent element and is never replaced. UI text is Spanish or Akkadian only, never English, and no font may be under 12px anywhere in the app.
 
 - **Sources.** Glosses are quoted from Spanish text already in the repo (`MONTH_REGENT_DESCS`, the month descriptions, `SPECIAL_DAYS`), or derived from mappings the code already makes (Akkadian planet → planet, hour number). Do not invent translations. If a term has no source, leave it unglossed and flag it.
 - **Hero exception.** The 16:9 hero carries no glosses, by the user's decision. Its month, hour, ruler and watch are glossed in the cards below it.
@@ -456,4 +456,4 @@ CSS variables are overridden in `[data-civ="zhongguo"]` block in `index.css`:
 - `--roman-red`: `#e11d48` (same as gold-leaf here)
 - Background: radial ink-wash gradients simulating brushed ink depth.
 
-Tailwind utility classes in Chinese components use `red-*` / `rose-*` for primary accents and `amber-*` / `yellow-*` for secondary. Minimum font size: `text-xs` throughout.
+Chinese components use `red-*` / `rose-*` colour tones for primary accents and `amber-*` / `yellow-*` for secondary. Minimum font size: 12px throughout.
