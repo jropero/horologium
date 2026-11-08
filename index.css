@@ -113,6 +113,12 @@
   --app-bg-size: auto;
 }
 
+/* === MAIN LANDMARK === */
+
+main {
+  width: 100%;
+}
+
 /* === SKIP LINK === */
 
 .skip-link {
