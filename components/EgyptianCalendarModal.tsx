@@ -9,6 +9,7 @@ import {
 } from '../utils/egyptianCalendarData';
 import { getAlgolPhase } from '../utils/egyptianAstronomy';
 import { useCivilization } from '../contexts/CivilizationContext';
+import './EgyptianCalendarModal.css';
 
 // Decade progress bar for each day card
 const DecadeProgress: React.FC<{ dayOfMonth: number; isEpagomenal: boolean }> = ({
@@ -17,15 +18,15 @@ const DecadeProgress: React.FC<{ dayOfMonth: number; isEpagomenal: boolean }> = 
 }) => {
   if (isEpagomenal) return null;
   return (
-    <div className="w-full mt-3 pt-3 border-t border-gold-dim/20">
-      <div className="flex justify-between items-center text-xs sm:text-xs text-gold-dim uppercase tracking-widest mb-1 font-bold">
+    <div className="decade-progress">
+      <div className="decade-progress__labels">
         <span>Déc. I (1)</span>
         <span>Déc. II (11)</span>
         <span>Déc. III (21-30)</span>
       </div>
-      <div className="w-full h-1.5 bg-ink/50 border border-gold-dim/30 rounded-full overflow-hidden flex">
+      <div className="decade-progress__track">
         <div
-          className="h-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+          className="decade-progress__fill"
           style={{ width: `${(dayOfMonth / 30) * 100}%` }}
         />
       </div>
@@ -70,7 +71,7 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
     <div
       role="button"
       tabIndex={0}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      className="egyptian-calendar-modal animate-fadeIn"
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
@@ -78,31 +79,27 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
     >
       <div
         role="presentation"
-        className="bg-ink border-2 border-gold-dim rounded-xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col relative overflow-hidden"
+        className="egyptian-calendar-modal__panel"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-ink p-3 sm:p-4 border-b border-gold-dim/50 flex justify-between items-center sticky top-0 z-10 shadow-md">
-          <div className="flex items-center gap-2 sm:gap-3 text-gold-leaf">
-            <CalendarDays className="w-5 h-5 sm:w-6 sm:h-6" />
-            <h2 className="font-serif text-base sm:text-xl font-bold uppercase tracking-widest">
-              {labels.calendarTitle}
-            </h2>
+        <div className="egyptian-calendar-modal__header">
+          <div className="egyptian-calendar-modal__header-left">
+            <CalendarDays className="egyptian-calendar-modal__header-icon" />
+            <h2 className="egyptian-calendar-modal__header-title">{labels.calendarTitle}</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-parchment/80 hover:text-roman-red hover:bg-white/10 transition-colors p-2 rounded-full"
+            className="egyptian-calendar-modal__close-btn"
             aria-label="Cerrar calendario"
           >
-            <X className="w-6 h-6" />
+            <X className="egyptian-calendar-modal__close-icon" />
           </button>
         </div>
 
         {/* Days list */}
-        <div className="overflow-y-auto p-3 sm:p-5 space-y-4 custom-scrollbar bg-ink/5">
-          <div className="text-center text-gold-dim font-serif text-xs uppercase tracking-[0.3em] mb-4">
-            {labels.calendarSubtitle}
-          </div>
+        <div className="egyptian-calendar-modal__body custom-scrollbar">
+          <div className="egyptian-calendar-modal__subtitle">{labels.calendarSubtitle}</div>
 
           {/* eslint-disable sonarjs/cognitive-complexity, sonarjs/no-nested-conditional */}
           {nextDays.map((day, idx) => {
@@ -113,77 +110,79 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
               ? null
               : EGYPTIAN_SEASONS[Math.floor(day.egyptianDate.monthIndex / 4)];
 
+            const cardClass = [
+              'egyptian-calendar-modal__day-card',
+              isToday
+                ? 'egyptian-calendar-modal__day-card--today'
+                : isEpag
+                ? 'egyptian-calendar-modal__day-card--epagomenal'
+                : hasFestival
+                ? 'egyptian-calendar-modal__day-card--festival'
+                : '',
+            ]
+              .filter(Boolean)
+              .join(' ');
+
             return (
-              <div
-                key={idx}
-                className={`p-4 sm:p-5 rounded-lg border-2 flex flex-col sm:flex-row gap-4 transition-all duration-300 ${
-                  isToday
-                    ? 'border-emerald-500 bg-emerald-500/15 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                    : isEpag
-                    ? 'border-amber-600/60 bg-amber-900/30'
-                    : hasFestival
-                    ? 'border-emerald-600/40 bg-emerald-900/20'
-                    : 'border-gold-dim/30 bg-ink/40'
-                }`}
-              >
+              <div key={idx} className={cardClass}>
                 {/* Gregorian date (left) */}
-                <div className="flex sm:flex-col items-center sm:items-start sm:w-24 shrink-0 gap-2 sm:gap-1 border-b sm:border-b-0 sm:border-r border-gold-dim/40 pb-3 sm:pb-0 sm:pr-4">
-                  <span className="text-parchment font-body text-base font-bold uppercase tracking-tight">
+                <div className="egyptian-calendar-modal__date-col">
+                  <span className="egyptian-calendar-modal__date-text">
                     {day.gregorianDate.toLocaleDateString('es-ES', {
                       month: 'short',
                       day: 'numeric',
                     })}
                   </span>
                   {isToday && (
-                    <span className="text-emerald-400 text-xs uppercase tracking-[0.2em] font-black border border-emerald-500/40 px-1.5 rounded-sm bg-emerald-500/10">
+                    <span className="egyptian-calendar-modal__today-badge">
                       {labels.todayLabel}
                     </span>
                   )}
                 </div>
 
                 {/* Egyptian date info (right) */}
-                <div className="flex-1 flex flex-col">
+                <div className="egyptian-calendar-modal__info-col">
                   {/* Season & Month */}
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="flex flex-col">
-                      <span className="text-gold-leaf font-serif text-xs uppercase tracking-[0.2em] font-bold">
+                  <div className="egyptian-calendar-modal__month-row">
+                    <div className="egyptian-calendar-modal__month-name-group">
+                      <span className="egyptian-calendar-modal__month-name">
                         {day.egyptianDate.isEpagomenal
                           ? 'Epagomenai'
                           : day.egyptianDate.monthName}
                       </span>
-                      <span className="text-gold-leaf/80 font-serif text-base uppercase tracking-widest mt-0.5 font-bold drop-shadow-sm">
+                      <span className="egyptian-calendar-modal__month-glyphs">
                         {day.egyptianDate.monthHieroglyphs}
                       </span>
                       {season && (
-                        <span className="text-parchment/80 font-body text-xs italic mt-0.5">
+                        <span className="egyptian-calendar-modal__season">
                           {season.name} ({season.translation}) {season.hieroglyphic}
                         </span>
                       )}
                     </div>
                     {!isEpag && (
-                      <span className="text-xs px-2 py-0.5 border border-emerald-500/50 rounded-sm bg-emerald-500/10 text-emerald-400 font-serif self-start mt-1">
+                      <span className="egyptian-calendar-modal__decade-badge">
                         Déc. {day.egyptianDate.decade}
                       </span>
                     )}
                   </div>
 
                   {/* Day display */}
-                  <div className="flex flex-col mb-1">
+                  <div className="egyptian-calendar-modal__day-display">
                     {isEpag && day.epagomenalInfo ? (
                       <>
-                        <h3 className="font-serif text-base sm:text-lg font-bold text-amber-400 leading-tight drop-shadow-sm">
+                        <h3 className="egyptian-calendar-modal__day-title egyptian-calendar-modal__day-title--epag">
                           𓊹 {day.epagomenalInfo.celebration}
                         </h3>
-                        <span className="text-gold-leaf/90 font-body text-sm italic mt-1 font-bold">
+                        <span className="egyptian-calendar-modal__day-subtitle">
                           {day.epagomenalInfo.deity} — {day.epagomenalInfo.domain}
                         </span>
                       </>
                     ) : (
                       <>
-                        <h3 className="font-serif text-base sm:text-lg font-bold text-parchment leading-tight drop-shadow-sm">
+                        <h3 className="egyptian-calendar-modal__day-title">
                           Día {day.egyptianDate.dayOfMonth} de {day.egyptianDate.monthName}
                         </h3>
-                        <span className="text-gold-leaf/90 font-body text-sm italic mt-1 font-bold">
+                        <span className="egyptian-calendar-modal__day-subtitle">
                           Día {day.egyptianDate.dayOfYear} del año
                         </span>
                       </>
@@ -192,28 +191,27 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
 
                   {/* Festival */}
                   {hasFestival && (
-                    <div className="flex flex-col mt-2">
-                      <div className="text-emerald-400 font-serif text-sm sm:text-base uppercase tracking-[0.2em] font-black flex items-center gap-2 drop-shadow-md">
-                        <span className="text-lg">𓊹</span> {day.festival!.festivalName}{' '}
-                        <span className="text-lg">𓊹</span>
+                    <div className="egyptian-calendar-modal__festival-row">
+                      <div className="egyptian-calendar-modal__festival-name">
+                        <span className="egyptian-calendar-modal__festival-icon">𓊹</span>{' '}
+                        {day.festival!.festivalName}{' '}
+                        <span className="egyptian-calendar-modal__festival-icon">𓊹</span>
                       </div>
                     </div>
                   )}
 
                   {/* Deity */}
-                  <div className="text-parchment/90 font-serif text-xs sm:text-sm mt-3 flex flex-col gap-1">
-                    <div className="flex items-center gap-2 flex-wrap text-sm">
-                      <span className="text-gold-dim uppercase tracking-widest text-xs font-black">
-                        Netjer:
-                      </span>
-                      <span className="text-parchment font-bold tracking-wide">
+                  <div className="egyptian-calendar-modal__deity-section">
+                    <div className="egyptian-calendar-modal__deity-row">
+                      <span className="egyptian-calendar-modal__deity-label">Netjer:</span>
+                      <span className="egyptian-calendar-modal__deity-name">
                         {day.deity.deity}
                       </span>
-                      <span className="text-gold-dim text-xs font-bold">
+                      <span className="egyptian-calendar-modal__deity-glyph">
                         {day.deity.deityHieroglyphic}
                       </span>
                     </div>
-                    <div className="text-emerald-500 font-bold font-body italic text-sm">
+                    <div className="egyptian-calendar-modal__deity-domain">
                       {day.deity.domain}
                     </div>
                   </div>
@@ -221,8 +219,8 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
                   {/* Festival or Epagomenal description */}
                   {(day.festival?.description ||
                     (isEpag && day.epagomenalInfo?.description)) && (
-                    <div className="mt-3 pt-3 border-t border-gold-dim/30">
-                      <p className="font-serif text-xs sm:text-sm text-parchment leading-relaxed text-justify opacity-90 italic">
+                    <div className="egyptian-calendar-modal__description">
+                      <p className="egyptian-calendar-modal__description-text">
                         {'"'}
                         {day.festival?.description || day.epagomenalInfo?.description}
                         {'"'}
@@ -232,10 +230,10 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
 
                   {/* Algol Warning */}
                   {day.algol.isEclipsed && (
-                    <div className="mt-3 pt-3 border-t border-roman-red/30">
-                      <div className="bg-roman-red/10 border border-roman-red/20 p-2 rounded flex items-center gap-2 shadow-inner">
-                        <span className="text-sm animate-pulse">✨</span>
-                        <p className="text-xs font-serif font-bold text-roman-red leading-tight">
+                    <div className="egyptian-calendar-modal__algol-warning">
+                      <div className="egyptian-calendar-modal__algol-inner">
+                        <span className="ecm-algol-pulse">✨</span>
+                        <p className="egyptian-calendar-modal__algol-text">
                           Algol en eclipse. El Ojo de Horus se oscurece.
                         </p>
                       </div>

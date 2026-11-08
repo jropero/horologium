@@ -1,0 +1,1907 @@
+/* EgyptianCalendarInfo.css — plain CSS migration */
+
+/* ── LotusFreizeBorder ───────────────────────────────────────────────────── */
+
+.lotus-frieze {
+  width: 100%;
+  height: 3.5rem;
+  display: block;
+}
+
+/* ── FestivalFontePanel ───────────────────────────────────────────────────── */
+
+.fonte-panel {
+  margin-top: 0.5rem;
+  border-top: 1px solid;
+  border-color: rgb(24 64 160 / 25%);
+}
+
+.fonte-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  text-align: left;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.fonte-spell {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(212 168 50 / 60%);
+}
+
+.fonte-chevron {
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  flex-shrink: 0;
+}
+
+.fonte-body {
+  margin-top: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.fonte-excerpt {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1.625;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  font-style: italic;
+  border-left: 2px solid;
+  border-color: rgb(212 168 50 / 40%);
+  padding-left: 0.75rem;
+  padding-block: 0.25rem;
+}
+
+.fonte-source {
+  font-size: 0.75rem;
+  line-height: 1.625;
+  color: color-mix(in srgb, var(--parchment) 35%, transparent);
+  margin-top: 0.375rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── SectionHeader ───────────────────────────────────────────────────────── */
+
+.eci-section-header {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-align: center;
+  color: rgb(212 168 50 / 85%);
+}
+
+/* ── DecadeGrid ──────────────────────────────────────────────────────────── */
+
+.decade-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (width >= 640px) {
+  .decade-panels {
+    flex-direction: row;
+  }
+}
+
+.decade-panel {
+  flex: 1;
+  padding: 0.625rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  transition: border-color 300ms ease, background-color 300ms ease, box-shadow 300ms ease,
+    scale 300ms ease;
+}
+
+.decade-panel--active {
+  border-color: color-mix(in srgb, var(--gold-leaf) 50%, transparent);
+  background: rgb(24 64 160 / 10%);
+  box-shadow: 0 0 12px rgb(212 168 50 / 8%);
+  scale: 1.01;
+}
+
+.decade-panel--inactive {
+  border-color: rgb(24 64 160 / 20%);
+  background: rgb(12 8 4 / 50%);
+}
+
+.decade-panel-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgb(24 64 160 / 20%);
+  padding-bottom: 0.375rem;
+}
+
+.decade-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.decade-label--active {
+  color: var(--gold-leaf);
+}
+
+.decade-label--inactive {
+  color: color-mix(in srgb, var(--gold-leaf) 50%, transparent);
+}
+
+.decade-sub {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  margin-top: 0.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.decade-sub--active {
+  color: color-mix(in srgb, var(--gold-leaf) 70%, transparent);
+}
+
+.decade-sub--inactive {
+  color: color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+}
+
+.decade-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.day-dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 0.125rem;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+@media (width >= 640px) {
+  .day-dot {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.day-dot--selected {
+  background: #fbbf24;
+  box-shadow: 0 0 8px rgb(212 168 50 / 70%);
+  scale: 1.25;
+  z-index: 10;
+  outline: 2px solid #fcd34d;
+  outline-offset: 1px;
+}
+
+.day-dot--today {
+  background: #34d399;
+  box-shadow: 0 0 8px rgb(52 211 153 / 60%);
+  scale: 1.25;
+  z-index: 10;
+}
+
+.day-dot--fest-active {
+  background: rgb(245 158 11 / 60%);
+  outline: 1px solid rgb(251 191 36 / 70%);
+  outline-offset: 1px;
+}
+
+.day-dot--fest-inactive {
+  background: rgb(180 83 9 / 45%);
+  outline: 1px solid rgb(217 119 6 / 50%);
+  outline-offset: 1px;
+}
+
+.day-dot--blue-active {
+  background: rgb(24 64 160 / 55%);
+  outline: 1px solid rgb(34 85 192 / 50%);
+  outline-offset: 1px;
+}
+
+.day-dot--plain {
+  background: color-mix(in srgb, var(--parchment) 20%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--parchment) 25%, transparent);
+  outline-offset: 1px;
+}
+
+.day-info-panel {
+  margin-top: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.day-info-panel--open {
+  border-color: rgb(217 119 6 / 40%);
+  background: rgb(69 26 3 / 20%);
+  padding: 0.75rem;
+}
+
+.day-info-panel--closed {
+  border-color: rgb(24 64 160 / 20%);
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
+}
+
+.day-info-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.375rem;
+}
+
+.day-info-day-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: #fcd34d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.day-info-close {
+  color: rgb(217 119 6 / 60%);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding-inline: 0.25rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 150ms ease;
+
+  &:hover {
+    color: #fcd34d;
+  }
+}
+
+.day-info-fest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.day-info-fest-name {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: #fde68a;
+}
+
+.day-info-fest-desc {
+  font-size: 0.75rem;
+  font-family: 'IM Fell English', serif;
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  line-height: 1.375;
+}
+
+.day-info-empty {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: color-mix(in srgb, var(--parchment) 50%, transparent);
+}
+
+.day-info-hint {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  text-align: center;
+  color: rgb(212 168 50 / 50%);
+}
+
+.decade-legend {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  justify-content: center;
+}
+
+.decade-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.decade-legend-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.125rem;
+  display: inline-block;
+}
+
+.decade-legend-dot--today {
+  background: #34d399;
+}
+
+.decade-legend-dot--fest {
+  background: rgb(217 119 6 / 50%);
+  outline: 1px solid rgb(251 191 36 / 60%);
+  outline-offset: 1px;
+}
+
+.decade-legend-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: color-mix(in srgb, var(--parchment) 50%, transparent);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.decade-view-festivals-btn {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  border: 1px solid rgb(24 64 160 / 30%);
+  border-radius: 0.25rem;
+  background: none;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--gold-leaf) 40%, transparent);
+    color: color-mix(in srgb, var(--gold-leaf) 80%, transparent);
+  }
+}
+
+/* ── PrognosisCard ───────────────────────────────────────────────────────── */
+
+.prognosis-card {
+  flex: 1;
+  min-width: 90px;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.prognosis-card--nefer {
+  background: rgb(6 78 59 / 25%);
+  border-color: rgb(16 185 129 / 40%);
+}
+
+.prognosis-card--aha {
+  background: rgb(127 29 29 / 20%);
+  border-color: rgb(239 68 68 / 35%);
+}
+
+.prognosis-card--neutral {
+  background: rgb(12 8 4 / 50%);
+  border-color: rgb(24 64 160 / 15%);
+}
+
+.prognosis-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: rgb(212 168 50 / 60%);
+}
+
+.prognosis-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.prognosis-text {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.prognosis-text--nefer {
+  color: #6ee7b7;
+}
+
+.prognosis-text--aha {
+  color: #fca5a5;
+}
+
+.prognosis-text--neutral {
+  color: color-mix(in srgb, var(--parchment) 30%, transparent);
+}
+
+.prognosis-sub {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  opacity: 0.75;
+}
+
+/* ── Outer wrapper ───────────────────────────────────────────────────────── */
+
+.eci-wrapper {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  margin-block: 1.5rem;
+  padding-inline: 0.5rem;
+  cursor: pointer;
+}
+
+/* ── Main card ───────────────────────────────────────────────────────────── */
+
+.eci-card {
+  border: 4px solid rgb(24 64 160 / 65%);
+  padding: 0;
+  border-radius: 0.125rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  position: relative;
+  overflow: hidden;
+  background: #0c0804;
+  transition: border-color 150ms ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--gold-leaf) 70%, transparent);
+  }
+}
+
+/* ── Sky scene ───────────────────────────────────────────────────────────── */
+
+.eci-sky {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 2px solid rgb(24 64 160 / 35%);
+  aspect-ratio: 16 / 9;
+}
+
+.eci-sky-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #010408 0%, #040c18 55%, #0c0804 100%);
+}
+
+.eci-weather-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.eci-skyline-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.eci-sky-text {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  text-align: center;
+  padding-inline: 1rem;
+  filter: drop-shadow(0 2px 10px rgb(0 0 0 / 95%));
+}
+
+.eci-season-glyph {
+  font-size: clamp(2.2rem, 9vw, 4rem);
+  line-height: 1;
+  color: rgb(238 228 200 / 55%);
+}
+
+.eci-month-name {
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--parchment);
+  line-height: 1;
+  font-size: clamp(1.6rem, 6.5vw, 3rem);
+}
+
+.eci-month-hieroglyphs {
+  font-size: clamp(1rem, 4vw, 1.6rem);
+  color: rgb(238 228 200 / 45%);
+}
+
+.eci-season-label {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  margin-top: 0.25rem;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
+  letter-spacing: 0.2em;
+}
+
+/* ── Date strip ──────────────────────────────────────────────────────────── */
+
+.eci-date-strip {
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  border-bottom: 1px solid rgb(24 64 160 / 30%);
+  background: rgb(12 8 4 / 70%);
+}
+
+.eci-date-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (width >= 640px) {
+  .eci-date-row {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+
+.eci-date-primary {
+  font-size: 0.75rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: var(--parchment);
+  text-align: center;
+  line-height: 1.375;
+}
+
+.eci-date-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+@media (width >= 640px) {
+  .eci-date-secondary {
+    margin-top: 0;
+  }
+}
+
+.eci-date-sep-sm {
+  display: none;
+  color: rgb(24 64 160 / 50%);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  user-select: none;
+}
+
+@media (width >= 640px) {
+  .eci-date-sep-sm {
+    display: inline;
+  }
+}
+
+.eci-date-sep {
+  color: rgb(24 64 160 / 50%);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  user-select: none;
+}
+
+.eci-date-day-of-year {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: rgb(212 168 50 / 75%);
+}
+
+.eci-date-lunar {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+}
+
+.eci-epa-row {
+  text-align: center;
+}
+
+.eci-epa-label {
+  font-size: 0.75rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: var(--parchment);
+  line-height: 1.375;
+}
+
+/* ── Main content ────────────────────────────────────────────────────────── */
+
+.eci-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (width >= 768px) {
+  .eci-content {
+    padding: 1.75rem;
+  }
+}
+
+/* ── Ephemerides (today's festivals below hero) ──────────────────────────── */
+
+.eci-ephemerides {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.eci-ephemerides-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.eci-civil-fest-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(24 64 160 / 35%);
+  text-align: left;
+  background: rgb(24 64 160 / 10%);
+}
+
+.eci-lunar-fest-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(212 168 50 / 30%);
+  text-align: left;
+  background: rgb(212 168 50 / 6%);
+}
+
+.eci-fest-min-w {
+  min-width: 0;
+}
+
+.eci-fest-type {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: Cinzel, serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgb(212 168 50 / 60%);
+}
+
+.eci-fest-type-fixed {
+  color: color-mix(in srgb, var(--parchment) 25%, transparent);
+}
+
+.eci-fest-name-sm {
+  color: var(--parchment);
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.eci-fest-desc-sm {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  font-style: italic;
+  line-height: 1.375;
+  margin-top: 0.125rem;
+}
+
+/* ── Deity card ──────────────────────────────────────────────────────────── */
+
+.eci-deity-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-radius: 0.25rem;
+  border: 2px solid rgb(212 168 50 / 22%);
+  text-align: center;
+  background: rgb(212 168 50 / 5%);
+}
+
+.eci-deity-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(212 168 50 / 65%);
+}
+
+.eci-deity-glyph {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  color: rgb(212 168 50 / 90%);
+}
+
+.eci-deity-name {
+  font-size: 1.5rem;
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  color: var(--parchment);
+  line-height: 1.25;
+}
+
+@media (width >= 768px) {
+  .eci-deity-name {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+.eci-deity-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #34d399;
+}
+
+.eci-deity-quote {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  font-style: italic;
+  padding-inline: 1rem;
+  margin-top: 0.25rem;
+  line-height: 1.625;
+}
+
+/* ── Epagomenal highlight ─────────────────────────────────────────────────── */
+
+.eci-epa-highlight {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 0.25rem;
+  border: 2px solid rgb(212 168 50 / 40%);
+  text-align: center;
+  background: rgb(24 64 160 / 12%);
+}
+
+.eci-epa-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(212 168 50 / 75%);
+  margin-bottom: 0.75rem;
+}
+
+.eci-epa-celebration {
+  font-size: 1.5rem;
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  color: var(--parchment);
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+
+@media (width >= 768px) {
+  .eci-epa-celebration {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+.eci-epa-deity-line {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #6ee7b7;
+  font-style: italic;
+}
+
+.eci-epa-desc {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  font-style: italic;
+  margin-top: 0.75rem;
+  line-height: 1.625;
+}
+
+/* ── View toggle ─────────────────────────────────────────────────────────── */
+
+.eci-view-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  border: 1px solid rgb(24 64 160 / 45%);
+  width: 100%;
+  max-width: 20rem;
+  margin-inline: auto;
+}
+
+.eci-view-btn {
+  flex: 1;
+  padding-block: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.eci-view-btn--active {
+  color: var(--parchment);
+  border-right: 1px solid rgb(24 64 160 / 45%);
+  background: rgb(24 64 160 / 25%);
+}
+
+.eci-view-btn--inactive {
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+
+  &:hover {
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  }
+}
+
+/* ── Calendar / Rites view containers ───────────────────────────────────── */
+
+.eci-calendar-view,
+.eci-rites-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Nilometer separator ─────────────────────────────────────────────────── */
+
+.eci-nilometer-sep {
+  border-top: 1px solid rgb(24 64 160 / 25%);
+  padding-top: 1rem;
+}
+
+/* ── Sopdet panels ───────────────────────────────────────────────────────── */
+
+.eci-sopdet-sep {
+  border-top: 1px solid rgb(24 64 160 / 25%);
+  padding-top: 1rem;
+}
+
+.eci-sopdet-btn {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  cursor: pointer;
+  background: none;
+}
+
+.eci-sopdet-btn--invisible {
+  background: rgb(30 20 60 / 35%);
+  border-color: rgb(80 60 160 / 30%);
+}
+
+.eci-sopdet-btn--rising {
+  background: rgb(80 50 10 / 40%);
+  border-color: rgb(212 168 50 / 65%);
+  border-width: 2px;
+  box-shadow: 0 0 16px rgb(212 168 50 / 20%);
+}
+
+.eci-sopdet-btn--visible {
+  background: rgb(10 40 20 / 35%);
+  border-color: rgb(52 180 100 / 30%);
+}
+
+.eci-sopdet-icon--invisible {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  color: rgb(180 160 240 / 85%);
+}
+
+.eci-sopdet-icon--rising {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  color: #fcd34d;
+}
+
+.eci-sopdet-icon--visible {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  color: #34d399;
+}
+
+.eci-sopdet-flex {
+  flex: 1;
+  min-width: 0;
+}
+
+.eci-sopdet-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.eci-sopdet-title--invisible {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #a5b4fc;
+}
+
+.eci-sopdet-title--rising {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fcd34d;
+}
+
+.eci-sopdet-title--visible {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6ee7b7;
+}
+
+.eci-sopdet-chevron {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 35%, transparent);
+  flex-shrink: 0;
+}
+
+.eci-sopdet-desc {
+  font-size: 0.75rem;
+  font-family: Cinzel, serif;
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+  font-style: italic;
+  line-height: 1.375;
+  margin-top: 0.125rem;
+}
+
+.eci-sopdet-expanded {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgb(255 255 255 / 8%);
+}
+
+.eci-time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.625rem;
+}
+
+.eci-time-cell {
+  text-align: center;
+}
+
+.eci-time-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--parchment) 45%, transparent);
+  font-family: Cinzel, serif;
+}
+
+.eci-time-value {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+}
+
+.eci-elong-row {
+  margin-bottom: 0.5rem;
+}
+
+.eci-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.125rem;
+}
+
+.eci-bar-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--parchment) 45%, transparent);
+  font-family: Cinzel, serif;
+}
+
+.eci-bar-value {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+}
+
+.eci-bar-track {
+  width: 100%;
+  height: 0.25rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 8%);
+}
+
+.eci-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.eci-bar-hint {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 35%, transparent);
+  font-family: Cinzel, serif;
+  margin-top: 0.125rem;
+  font-style: italic;
+}
+
+.eci-alt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eci-alt-visible {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, #34d399 75%, transparent);
+}
+
+.eci-alt-hidden {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 35%, transparent);
+}
+
+.eci-alt-hint {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 35%, transparent);
+  font-family: Cinzel, serif;
+  font-style: italic;
+  margin-top: 0.125rem;
+}
+
+/* ── Hemerology ──────────────────────────────────────────────────────────── */
+
+.eci-heme-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.eci-heme-instruction {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(192 57 26 / 35%);
+  background: rgb(80 10 10 / 25%);
+}
+
+.eci-heme-instruction-text {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #fca5a5;
+  font-family: Cinzel, serif;
+  line-height: 1.375;
+  text-align: left;
+}
+
+/* ── Algol panel ─────────────────────────────────────────────────────────── */
+
+.eci-algol-panel {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.eci-algol-toggle {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.eci-algol-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.eci-algol-flex {
+  flex: 1;
+  min-width: 0;
+}
+
+.eci-algol-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: #fca5a5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eci-algol-state {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+  font-style: italic;
+}
+
+.eci-algol-chevron {
+  color: color-mix(in srgb, var(--parchment) 30%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.eci-algol-expanded {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgb(192 57 26 / 18%);
+}
+
+.eci-algol-alt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.eci-algol-alt-visible {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, #fcd34d 75%, transparent);
+}
+
+.eci-algol-alt-hidden {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 35%, transparent);
+}
+
+.eci-cycle-track {
+  width: 100%;
+  height: 0.375rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  background: rgb(255 255 255 / 8%);
+}
+
+.eci-cycle-marker {
+  position: absolute;
+  top: 0;
+  width: 0.125rem;
+  height: 100%;
+  background: rgb(239 68 68 / 60%);
+  border-radius: 0.25rem;
+}
+
+.eci-cycle-marker--left {
+  left: 0;
+}
+
+.eci-cycle-marker--right {
+  right: 0;
+}
+
+.eci-cycle-minima {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.125rem;
+}
+
+.eci-cycle-min-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(248 113 113 / 50%);
+  font-family: Cinzel, serif;
+}
+
+.eci-minima-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.eci-minima-cell {
+  text-align: center;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  background: rgb(255 255 255 / 4%);
+}
+
+.eci-minima-cell-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+  font-family: Cinzel, serif;
+}
+
+.eci-minima-cell-value {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+}
+
+.eci-minima-cell-value--urgent {
+  color: rgb(248 113 113 / 90%);
+}
+
+.eci-mag-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.125rem;
+}
+
+.eci-mag-label-bright {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(252 211 77 / 40%);
+  font-family: Cinzel, serif;
+}
+
+.eci-mag-label-dim {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(248 113 113 / 40%);
+  font-family: Cinzel, serif;
+}
+
+.eci-algol-modal-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 0.625rem;
+  padding-block: 0.375rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(192 57 26 / 25%);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+  background: rgb(192 57 26 / 8%);
+
+  &:hover {
+    border-color: rgb(239 68 68 / 40%);
+  }
+}
+
+.eci-algol-modal-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  color: rgb(252 165 165 / 80%);
+  font-style: italic;
+}
+
+.eci-algol-modal-arrow {
+  color: color-mix(in srgb, var(--parchment) 30%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* ── Astronomical alerts ─────────────────────────────────────────────────── */
+
+.eci-astro-sep {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid rgb(24 64 160 / 25%);
+  padding-top: 1rem;
+}
+
+.eci-astro-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.eci-astro-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+}
+
+.eci-astro-item--moon {
+  background: rgb(212 168 50 / 8%);
+  border-color: rgb(212 168 50 / 35%);
+}
+
+.eci-astro-item--algol {
+  background: rgb(80 10 10 / 25%);
+  border-color: rgb(192 57 26 / 35%);
+}
+
+.eci-astro-item--newmoon {
+  background: rgb(20 10 50 / 30%);
+  border-color: rgb(80 60 160 / 35%);
+}
+
+.eci-astro-item--fullmoon {
+  background: rgb(212 168 50 / 5%);
+  border-color: rgb(212 168 50 / 20%);
+}
+
+.eci-astro-icon {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.eci-astro-text {
+  font-size: 0.75rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  line-height: 1.375;
+}
+
+.eci-astro-text--algol {
+  color: #fca5a5;
+}
+
+.eci-astro-text--newmoon {
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.eci-astro-text--fullmoon {
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  font-style: italic;
+}
+
+/* ── Festival cards (rites view) ─────────────────────────────────────────── */
+
+.eci-festivals-sep {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 1px solid rgb(24 64 160 / 25%);
+  padding-top: 1rem;
+}
+
+.eci-festivals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.eci-civil-fest-card {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border: 2px solid rgb(24 64 160 / 35%);
+  text-align: left;
+  background: rgb(24 64 160 / 10%);
+}
+
+.eci-lunar-fest-card {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border: 2px solid rgb(212 168 50 / 30%);
+  text-align: left;
+  background: rgb(212 168 50 / 6%);
+}
+
+.eci-fest-card-type {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.375rem;
+  display: flex;
+  justify-content: space-between;
+  color: rgb(212 168 50 / 70%);
+}
+
+.eci-fest-card-fixed {
+  color: color-mix(in srgb, var(--parchment) 30%, transparent);
+}
+
+.eci-fest-card-name {
+  color: var(--parchment);
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eci-fest-card-desc {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+  font-style: italic;
+  line-height: 1.625;
+}
+
+/* ── Hall of Maāti button ────────────────────────────────────────────────── */
+
+.eci-maati-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid rgb(24 64 160 / 25%);
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  color: rgb(212 168 50 / 55%);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  cursor: pointer;
+  transition: color 150ms ease;
+
+  &:hover {
+    color: rgb(212 168 50 / 85%);
+  }
+}
+
+/* ── Hall of Maāti Modal ─────────────────────────────────────────────────── */
+
+.eci-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.eci-modal-maati {
+  width: 100%;
+  max-width: 32rem;
+  border-radius: 0.125rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  overflow: hidden;
+  position: relative;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  background: #080510;
+  border: 4px solid rgb(24 64 160 / 55%);
+  max-height: 85vh;
+}
+
+.eci-modal-festivals {
+  width: 100%;
+  max-width: 32rem;
+  border-radius: 0.125rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  overflow: hidden;
+  position: relative;
+  cursor: default;
+  background: #0c0804;
+  border: 4px solid rgb(24 64 160 / 55%);
+}
+
+.eci-modal-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid rgb(24 64 160 / 30%);
+  text-align: center;
+  flex-shrink: 0;
+  background: rgb(24 64 160 / 12%);
+}
+
+.eci-modal-header--festivals {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgb(24 64 160 / 30%);
+  text-align: center;
+  background: rgb(24 64 160 / 10%);
+}
+
+.eci-modal-glyph {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 0.25rem;
+  color: rgb(212 168 50 / 85%);
+}
+
+.eci-modal-glyph--lg {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-bottom: 0.5rem;
+  color: rgb(212 168 50 / 85%);
+}
+
+.eci-modal-title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  color: var(--parchment);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.eci-modal-title--festivals {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  color: var(--parchment);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.eci-modal-subtitle {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: rgb(212 168 50 / 50%);
+}
+
+.eci-modal-subtitle--festivals {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: rgb(212 168 50 / 55%);
+}
+
+.eci-modal-papyrus {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  margin-top: 0.5rem;
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+  font-style: italic;
+}
+
+.eci-modal-preamble {
+  padding-inline: 1.25rem;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgb(24 64 160 / 20%);
+}
+
+.eci-modal-preamble-text {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 65%, transparent);
+  font-style: italic;
+  line-height: 1.625;
+}
+
+.eci-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 1rem;
+}
+
+.eci-modal-body--festivals {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.maati-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.maati-assessor-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding-block: 0.5rem;
+  border-bottom: 1px solid rgb(24 64 160 / 12%);
+}
+
+.maati-num {
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: right;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  padding-top: 0.125rem;
+  color: rgb(212 168 50 / 55%);
+}
+
+.maati-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.maati-desc {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 90%, transparent);
+  line-height: 1.375;
+}
+
+.maati-origin {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+  margin-top: 0.125rem;
+  font-style: italic;
+}
+
+.maati-sin {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  margin-top: 0.25rem;
+  font-family: Cinzel, serif;
+  font-style: italic;
+  line-height: 1.375;
+}
+
+.eci-modal-footer-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-top: 1px solid rgb(24 64 160 / 30%);
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 50%, transparent);
+  background: rgb(24 64 160 / 8%);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+  flex-shrink: 0;
+
+  &:hover {
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  }
+}
+
+.eci-modal-footer-btn--festivals {
+  width: 100%;
+  padding: 1rem;
+  border-top: 1px solid rgb(24 64 160 / 30%);
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  background: rgb(24 64 160 / 8%);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:hover {
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+  }
+}
+
+/* ── Festival entry in next-festivals modal ───────────────────────────────── */
+
+.festival-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.festival-entry-name-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.festival-entry-name {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: var(--parchment);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.festival-entry-date {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(212 168 50 / 55%);
+}
+
+.festival-entry-days {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  text-align: right;
+  background: rgb(24 64 160 / 15%);
+  border: 1px solid rgb(24 64 160 / 35%);
+}
+
+.festival-days-num {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #6ee7b7;
+  line-height: 1;
+}
+
+.festival-days-label {
+  font-size: 0.4375rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+}
+
+.festival-entry-desc {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+  line-height: 1.625;
+  font-style: italic;
+  border-left: 2px solid rgb(24 64 160 / 35%);
+  padding-left: 1rem;
+  padding-block: 0.25rem;
+}
+
+.festivals-corner {
+  position: absolute;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: rgb(24 64 160 / 25%);
+}
+
+.festivals-corner--tl {
+  top: 0.5rem;
+  left: 0.5rem;
+}
+
+.festivals-corner--tr {
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.festivals-corner--bl {
+  bottom: 4rem;
+  left: 0.5rem;
+}
+
+.festivals-corner--br {
+  bottom: 4rem;
+  right: 0.5rem;
+}

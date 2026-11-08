@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import { WeatherData, WeatherCondition } from '../types';
+import './ChineseWeatherOracle.css';
 
 // ─── Celestial Bureaucracy Oracle Data ───────────────────────────────────────
 
 interface ConditionOracle {
   chars: string[];
-  charColor: string;
+  charColor: string; // CSS color value
   charAnimation:
     | 'fall'
     | 'drift-slow'
@@ -14,10 +15,10 @@ interface ConditionOracle {
     | 'dragon'
     | 'glow'
     | 'lightning';
-  skyGradient: string;
+  skyGradient: string; // CSS gradient value
   elementHanzi: string;
   elementName: string;
-  elementColor: string;
+  elementColor: string; // CSS color value
   official: string;
   officialTitle: string;
   dispatch: string;
@@ -26,12 +27,13 @@ interface ConditionOracle {
 const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   clear: {
     chars: ['日', '光', '曦'],
-    charColor: 'text-amber-300',
+    charColor: '#fcd34d',
     charAnimation: 'glow',
-    skyGradient: 'from-amber-950/80 via-orange-900/60 to-sky-950/80',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(69 26 3 / 80%), rgb(124 45 18 / 60%), rgb(8 47 73 / 80%))',
     elementHanzi: '金',
     elementName: 'Metal',
-    elementColor: 'text-amber-300',
+    elementColor: '#fcd34d',
     official: '太陽星官',
     officialTitle: 'Oficial Estelar Solar',
     dispatch:
@@ -39,12 +41,13 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   },
   cloudy: {
     chars: ['雲', '雲', '雲', '雲'],
-    charColor: 'text-slate-300',
+    charColor: '#cbd5e1',
     charAnimation: 'drift-slow',
-    skyGradient: 'from-slate-800/90 via-stone-800/70 to-slate-900/90',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(30 41 59 / 90%), rgb(41 37 36 / 70%), rgb(15 23 42 / 90%))',
     elementHanzi: '土',
     elementName: 'Tierra',
-    elementColor: 'text-stone-400',
+    elementColor: '#a8a29e',
     official: '雲師',
     officialTitle: 'Maestro de las Nubes',
     dispatch:
@@ -52,12 +55,13 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   },
   'partly-cloudy': {
     chars: ['雲', '雲'],
-    charColor: 'text-slate-300',
+    charColor: '#cbd5e1',
     charAnimation: 'drift-slow',
-    skyGradient: 'from-slate-800/90 via-stone-800/70 to-slate-900/90',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(30 41 59 / 90%), rgb(41 37 36 / 70%), rgb(15 23 42 / 90%))',
     elementHanzi: '土',
     elementName: 'Tierra',
-    elementColor: 'text-amber-300',
+    elementColor: '#fcd34d',
     official: '雲師',
     officialTitle: 'Maestro de las Nubes',
     dispatch:
@@ -65,12 +69,13 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   },
   rain: {
     chars: ['雨', '雨', '雨', '雨', '雨', '雨', '雨', '雨'],
-    charColor: 'text-blue-300',
+    charColor: '#93c5fd',
     charAnimation: 'fall',
-    skyGradient: 'from-slate-800/90 via-blue-900/70 to-slate-950/90',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(30 41 59 / 90%), rgb(30 58 95 / 70%), rgb(2 6 23 / 90%))',
     elementHanzi: '水',
     elementName: 'Agua',
-    elementColor: 'text-blue-300',
+    elementColor: '#93c5fd',
     official: '龍王',
     officialTitle: 'Rey Dragón',
     dispatch:
@@ -78,12 +83,13 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   },
   storm: {
     chars: ['雷', '龍', '電', '雷'],
-    charColor: 'text-rose-400',
+    charColor: '#fb7185',
     charAnimation: 'dragon',
-    skyGradient: 'from-zinc-900/90 via-slate-900/90 to-zinc-950/90',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(24 24 27 / 90%), rgb(15 23 42 / 90%), rgb(9 9 11 / 90%))',
     elementHanzi: '木',
     elementName: 'Madera',
-    elementColor: 'text-rose-400',
+    elementColor: '#fb7185',
     official: '雷公電母',
     officialTitle: 'Duque del Trueno y Señora del Relámpago',
     dispatch:
@@ -91,12 +97,13 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   },
   snow: {
     chars: ['雪', '雪', '雪', '雪', '雪'],
-    charColor: 'text-sky-100',
+    charColor: '#e0f2fe',
     charAnimation: 'fall',
-    skyGradient: 'from-slate-700/80 via-sky-900/70 to-slate-900/90',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(51 65 85 / 80%), rgb(12 74 110 / 70%), rgb(15 23 42 / 90%))',
     elementHanzi: '水',
     elementName: 'Agua',
-    elementColor: 'text-sky-200',
+    elementColor: '#bae6fd',
     official: '雪官',
     officialTitle: 'Oficial de la Nieve',
     dispatch:
@@ -104,12 +111,13 @@ const ORACLE: Record<WeatherCondition, ConditionOracle> = {
   },
   fog: {
     chars: ['霧', '雲', '霧'],
-    charColor: 'text-stone-300',
+    charColor: '#d6d3d1',
     charAnimation: 'drift-slow',
-    skyGradient: 'from-stone-700/70 via-stone-800/80 to-stone-900/90',
+    skyGradient:
+      'linear-gradient(to bottom, rgb(68 64 60 / 70%), rgb(41 37 36 / 80%), rgb(28 25 23 / 90%))',
     elementHanzi: '土',
     elementName: 'Tierra',
-    elementColor: 'text-stone-300',
+    elementColor: '#d6d3d1',
     official: '霧神',
     officialTitle: 'Espíritu de la Niebla',
     dispatch:
@@ -168,9 +176,9 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
   const pinyin = pinyinParts.join(' ');
 
   return (
-    <div className="w-full max-w-lg rounded-xl overflow-hidden shadow-2xl border border-rose-900/40 mb-8">
+    <div className="chinese-weather-oracle">
       {/* ── Animated sky panel ── */}
-      <div className={`relative h-28 overflow-hidden bg-gradient-to-b ${oracle.skyGradient}`}>
+      <div className="cwo__sky-panel" style={{ background: oracle.skyGradient }}>
         {/* Floating / drifting / falling characters */}
         {/* eslint-disable sonarjs/cognitive-complexity */}
         {oracle.chars.map((char, i) => {
@@ -181,9 +189,10 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
             return (
               <span
                 key={i}
-                className={`absolute select-none pointer-events-none font-serif ${oracle.charColor} anim-fall`}
+                className="cwo__char anim-fall"
                 style={
                   {
+                    color: oracle.charColor,
                     left: `${p.x}%`,
                     top: '-1.5rem',
                     fontSize: `${p.size * 1.4}rem`,
@@ -203,11 +212,12 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
             return (
               <span
                 key={i}
-                className={`absolute select-none pointer-events-none font-serif ${
-                  oracle.charColor
-                } ${anim === 'drift-fast' ? 'anim-cloud-fast' : 'anim-cloud-slow'}`}
+                className={`cwo__char ${
+                  anim === 'drift-fast' ? 'anim-cloud-fast' : 'anim-cloud-slow'
+                }`}
                 style={
                   {
+                    color: oracle.charColor,
                     left: `${p.x}%`,
                     top: `${15 + (i % 3) * 22}%`,
                     fontSize: `${p.size * 1.8}rem`,
@@ -225,9 +235,10 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
             return (
               <span
                 key={i}
-                className={`absolute select-none pointer-events-none font-serif ${oracle.charColor} anim-glow-pulse anim-float`}
+                className="cwo__char anim-glow-pulse anim-float"
                 style={
                   {
+                    color: oracle.charColor,
                     left: `${15 + i * 28}%`,
                     top: '20%',
                     fontSize: `${2.2 + i * 0.3}rem`,
@@ -246,9 +257,10 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
               return (
                 <span
                   key={i}
-                  className={`absolute select-none pointer-events-none font-serif text-rose-300 anim-dragon`}
+                  className="cwo__char anim-dragon"
                   style={
                     {
+                      color: '#fda4af',
                       top: '30%',
                       left: 0,
                       fontSize: '2rem',
@@ -264,9 +276,10 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
             return (
               <span
                 key={i}
-                className={`absolute select-none pointer-events-none font-serif ${oracle.charColor} anim-lightning`}
+                className="cwo__char anim-lightning"
                 style={
                   {
+                    color: oracle.charColor,
                     left: `${20 + i * 22}%`,
                     top: `${10 + (i % 2) * 30}%`,
                     fontSize: '1.8rem',
@@ -283,58 +296,42 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
         })}
 
         {/* Overlay label */}
-        <div className="absolute bottom-0 left-0 right-0 text-center pb-1">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-parchment/30 font-serif">
-            天氣 · TIĀNQÌ
-          </span>
+        <div className="cwo__sky-overlay-label">
+          <span className="cwo__sky-label-text">天氣 · TIĀNQÌ</span>
         </div>
       </div>
 
       {/* ── Oracle body ── */}
-      <div className="bg-ink/95 px-4 pt-4 pb-5">
+      <div className="cwo__body">
         {/* Idiom + condition */}
-        <div className="text-center mb-4">
-          <div className="text-3xl font-serif tracking-wider text-gold-leaf mb-0.5">
-            {idiom}
-          </div>
-          <div className="text-xs text-parchment/50 italic tracking-wide">{pinyin}</div>
+        <div className="cwo__idiom-section">
+          <div className="cwo__idiom">{idiom}</div>
+          <div className="cwo__pinyin">{pinyin}</div>
         </div>
 
         {/* Five Elements + Yin/Yang row */}
-        <div className="flex justify-center gap-4 mb-4">
-          <div
-            className={`flex flex-col items-center px-3 py-1.5 rounded-lg border border-current/20 bg-current/5 ${oracle.elementColor}`}
-          >
-            <span className="text-2xl font-serif leading-none">{oracle.elementHanzi}</span>
-            <span className="text-[9px] mt-0.5 tracking-widest uppercase opacity-70">
-              {oracle.elementName}
-            </span>
+        <div className="cwo__badges">
+          <div className="cwo__badge cwo__element-badge" style={{ color: oracle.elementColor }}>
+            <span className="cwo__badge-hanzi">{oracle.elementHanzi}</span>
+            <span className="cwo__badge-label">{oracle.elementName}</span>
           </div>
-          <div className="flex flex-col items-center px-3 py-1.5 rounded-lg border border-parchment/10 bg-parchment/5 text-parchment/60">
-            <span className="text-xs font-serif">{yinYang}</span>
-            <span className="text-[9px] mt-0.5 tracking-widest uppercase opacity-70">
-              {Math.round(temperature)}°C
-            </span>
+          <div className="cwo__badge cwo__neutral-badge">
+            <span className="cwo__badge-yin-yang">{yinYang}</span>
+            <span className="cwo__badge-temp">{Math.round(temperature)}°C</span>
           </div>
-          <div className="flex flex-col items-center px-3 py-1.5 rounded-lg border border-parchment/10 bg-parchment/5 text-parchment/50">
-            <span className="text-[10px] font-serif leading-snug text-center">
-              {windName.split(' ')[0]}
-            </span>
-            <span className="text-[9px] mt-0.5 opacity-60 tracking-wide">
-              {Math.round(windSpeed)} km/h
-            </span>
+          <div className="cwo__badge cwo__wind-badge">
+            <span className="cwo__badge-wind-name">{windName.split(' ')[0]}</span>
+            <span className="cwo__badge-wind-speed">{Math.round(windSpeed)} km/h</span>
           </div>
         </div>
 
         {/* Official + dispatch */}
-        <div className="rounded-lg border border-rose-900/30 bg-rose-950/20 px-3 py-3">
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-base font-serif text-gold-leaf">{oracle.official}</span>
-            <span className="text-[9px] text-parchment/40 uppercase tracking-widest">
-              {oracle.officialTitle}
-            </span>
+        <div className="cwo__dispatch">
+          <div className="cwo__official-row">
+            <span className="cwo__official-name">{oracle.official}</span>
+            <span className="cwo__official-title">{oracle.officialTitle}</span>
           </div>
-          <p className="text-xs text-parchment/75 leading-relaxed italic">
+          <p className="cwo__dispatch-text">
             {'"'}
             {oracle.dispatch}
             {'"'}
@@ -342,10 +339,8 @@ const ChineseWeatherOracle: React.FC<Props> = ({ weather }) => {
         </div>
 
         {/* Wind name full */}
-        <div className="mt-3 text-center">
-          <span className="text-[10px] text-parchment/30 tracking-widest">
-            八風 · {windName}
-          </span>
+        <div className="cwo__wind-footer">
+          <span className="cwo__wind-footer-text">八風 · {windName}</span>
         </div>
       </div>
     </div>

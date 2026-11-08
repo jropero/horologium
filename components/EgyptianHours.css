@@ -1,0 +1,193 @@
+/* EgyptianHours.css — plain CSS migration from Tailwind */
+
+.egyptian-hours {
+  width: 100%;
+  margin-inline: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+
+  .egyptian-hours__card {
+    background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 25%, transparent);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  }
+
+  .egyptian-hours__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .egyptian-hours__header-line {
+    height: 1px;
+    flex: 1;
+    background-color: color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  }
+
+  .egyptian-hours__header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.25;
+  }
+
+  .egyptian-hours__header-translit {
+    color: var(--gold-dim);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-family: Cinzel, serif;
+  }
+
+  .egyptian-hours__header-es {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-style: italic;
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  }
+
+  .egyptian-hours__meta {
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: Cinzel, serif;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+    margin-bottom: 0.75rem;
+  }
+
+  .egyptian-hours__meta-sun {
+    color: #fbbf24;
+  }
+
+  .egyptian-hours__meta-moon {
+    color: #38bdf8;
+  }
+
+  .egyptian-hours__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .egyptian-hours__book {
+    margin-top: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-style: italic;
+    color: color-mix(in srgb, var(--parchment) 45%, transparent);
+  }
+
+  /* Hour row */
+  .egyptian-hours__hour-row {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 0.5rem;
+    padding-block: 0.375rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+
+    &.egyptian-hours__hour-row--current {
+      background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+      border-color: color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+    }
+
+    &.egyptian-hours__hour-row--past {
+      opacity: 0.5;
+    }
+  }
+
+  .egyptian-hours__hour-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .egyptian-hours__hour-num {
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    width: 1.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    margin-top: 0.125rem;
+    color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+
+    .egyptian-hours__hour-row--current & {
+      color: var(--gold-leaf);
+    }
+  }
+
+  .egyptian-hours__hour-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 0.125rem;
+  }
+
+  .egyptian-hours__hour-translit {
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    font-style: italic;
+    line-height: 1.375;
+    color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+
+    .egyptian-hours__hour-row--current & {
+      color: var(--gold-dim);
+    }
+  }
+
+  .egyptian-hours__hour-name {
+    font-size: 0.75rem;
+    line-height: 1.375;
+    color: color-mix(in srgb, var(--parchment) 75%, transparent);
+
+    .egyptian-hours__hour-row--current & {
+      color: var(--parchment);
+    }
+  }
+
+  .egyptian-hours__hour-ra {
+    font-size: 0.75rem;
+    line-height: 1.375;
+    color: color-mix(in srgb, var(--parchment) 80%, transparent);
+    font-style: italic;
+    margin-top: 0.125rem;
+  }
+
+  .egyptian-hours__hour-time {
+    font-family: Cinzel, serif;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+
+    .egyptian-hours__hour-row--current & {
+      color: var(--gold-dim);
+    }
+  }
+
+  .egyptian-hours__progress-bg {
+    margin-left: 2rem;
+    margin-top: 0.375rem;
+    height: 0.25rem;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--gold-dim) 15%, transparent);
+    overflow: hidden;
+  }
+
+  .egyptian-hours__progress-fill {
+    height: 100%;
+    background-color: color-mix(in srgb, var(--gold-leaf) 70%, transparent);
+    border-radius: 9999px;
+  }
+}
