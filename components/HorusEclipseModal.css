@@ -151,7 +151,7 @@
 .horus-eclipse-modal__egyptian-date {
   color: var(--gold-leaf);
   font-family: Cinzel, serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -174,7 +174,7 @@
   padding-block: 0.125rem;
   border-radius: 0.125rem;
   border: 1px solid transparent;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -213,7 +213,7 @@
 }
 
 .horus-eclipse-modal__forecast-label {
-  font-size: 10px;
+  font-size: 12px;
   color: color-mix(in srgb, var(--parchment) 60%, transparent);
   font-family: Cinzel, serif;
   text-transform: uppercase;
@@ -239,7 +239,7 @@
 
 .horus-eclipse-modal__forecast-desc {
   margin-left: auto;
-  font-size: 10px;
+  font-size: 12px;
   font-style: italic;
   color: color-mix(in srgb, var(--parchment) 70%, transparent);
 }

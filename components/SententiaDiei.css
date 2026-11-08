@@ -175,7 +175,7 @@
   }
 
   .sd-author-text {
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 700;

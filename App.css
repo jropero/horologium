@@ -54,7 +54,7 @@
   color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
   background-color: color-mix(in srgb, var(--ink) 90%, transparent);
   border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-card);
   transition: all 0.15s ease;
   cursor: pointer;
 
@@ -75,7 +75,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 9999px;
-  background-color: #fbbf24;
+  background-color: var(--festival-text);
   box-shadow: 0 0 6px rgb(251 191 36 / 80%);
 }
 
@@ -85,9 +85,9 @@
   background-color: color-mix(in srgb, var(--ink) 95%, transparent);
   border: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
   border-radius: 0.75rem;
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-xl);
   overflow: hidden;
-  backdrop-filter: blur(12px);
+  backdrop-filter: var(--blur-modal);
 }
 
 .menu-item-btn {
@@ -174,7 +174,7 @@
 
 /* Applied to icons when time-travel is active */
 .is-travel {
-  color: #fbbf24;
+  color: var(--festival-text);
 }
 
 /* ── App header ─────────────────────────────────────────────────────── */
@@ -263,7 +263,7 @@
 .travel-location-note {
   margin-left: 0.25rem;
   opacity: 0.6;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .travel-banner-controls {
@@ -356,7 +356,7 @@
 }
 
 .toolbar-btn--traveling {
-  color: #fbbf24;
+  color: var(--festival-text);
   border-color: rgb(180 83 9 / 40%);
 
   &:hover {
@@ -376,7 +376,7 @@
 }
 
 .toolbar-btn-icon--travel {
-  color: #fbbf24;
+  color: var(--festival-text);
 }
 
 .toolbar-aurora-label--active {

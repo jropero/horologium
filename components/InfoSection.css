@@ -89,7 +89,7 @@
 
 /* Text content wrapper */
 .info-section-content {
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 1.25rem;
   color: var(--ink);
   line-height: 1.625;
@@ -203,7 +203,7 @@
 
 /* Civ block body text */
 .info-section-civ-text {
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
   color: color-mix(in srgb, var(--ink) 80%, transparent);
   line-height: 1.625;

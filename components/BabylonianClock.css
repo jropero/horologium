@@ -15,7 +15,7 @@
   font-family: Cinzel, serif;
   font-size: 1.5rem;
   line-height: 2rem;
-  color: #60a5fa;
+  color: var(--gold-leaf);
 }
 
 .babylonian-clock {
@@ -24,9 +24,9 @@
   margin-inline: auto;
   padding: 0.25rem;
   background-color: color-mix(in srgb, var(--ink) 50%, transparent);
-  backdrop-filter: blur(4px);
+  backdrop-filter: var(--blur-card);
   border-radius: 0.75rem;
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-xl);
 }
 
 .babylonian-clock-topbar {
@@ -55,7 +55,7 @@
   border: 1px solid rgb(59 130 246 / 30%);
   padding: 0.75rem;
   border-radius: 0.25rem;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-card);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -66,7 +66,7 @@
 
   &:hover {
     background-color: rgb(255 255 255 / 5%);
-    border-color: #60a5fa;
+    border-color: var(--gold-leaf);
   }
 
   @media (width >= 768px) {
@@ -76,7 +76,7 @@
 }
 
 .babylonian-clock-calendar-label {
-  color: #60a5fa;
+  color: var(--gold-leaf);
   font-family: Cinzel, serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -89,11 +89,11 @@
 }
 
 .babylonian-clock-calendar-label-primary {
-  color: #93c5fd;
+  color: var(--gold-dim);
 }
 
 .babylonian-clock-calendar-label-sep {
-  color: #60a5fa;
+  color: var(--gold-leaf);
   font-size: 0.75rem;
   line-height: 1rem;
 }
@@ -113,13 +113,13 @@
   justify-content: center;
   padding: 1rem;
   background-color: color-mix(in srgb, var(--ink) 85%, transparent);
-  backdrop-filter: blur(12px);
+  backdrop-filter: var(--blur-modal);
   cursor: pointer;
 }
 
 .babylonian-calendar-modal {
   width: 100%;
-  max-width: 32rem;
+  max-width: var(--modal-max-w);
   background-color: var(--ink);
   border: 4px solid rgb(59 130 246 / 60%);
   border-radius: 0.125rem;
@@ -141,7 +141,7 @@
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
-  color: #93c5fd;
+  color: var(--gold-dim);
   transition: color 0.15s ease;
   padding: 0.5rem;
   border-radius: 9999px;
@@ -157,7 +157,7 @@
 }
 
 .babylonian-calendar-modal-dingir {
-  color: #93c5fd;
+  color: var(--gold-dim);
   font-size: 1.5rem;
   line-height: 2rem;
   margin-bottom: 0.25rem;
@@ -184,7 +184,7 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-family: Cinzel, serif;
-  color: #93c5fd;
+  color: var(--gold-dim);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin-top: 0.25rem;
@@ -206,7 +206,7 @@
   font-family: Cinzel, serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #60a5fa;
+  color: var(--gold-leaf);
   margin-bottom: 0.75rem;
   text-align: center;
   display: flex;
@@ -239,11 +239,11 @@
 }
 
 .babylonian-calendar-third-label--light {
-  color: #93c5fd;
+  color: var(--gold-dim);
 }
 
 .babylonian-calendar-third-label--main {
-  color: #60a5fa;
+  color: var(--gold-leaf);
 }
 
 .babylonian-calendar-third-phase {
@@ -268,21 +268,21 @@
   font-family: Cinzel, serif;
   transition: all 0.15s ease;
   background-color: color-mix(in srgb, var(--ink) 40%, transparent);
-  color: #60a5fa;
+  color: var(--gold-leaf);
   border: 1px solid rgb(30 64 175 / 20%);
 }
 
 .babylonian-calendar-day--today {
-  background-color: #60a5fa;
+  background-color: var(--gold-leaf);
   color: var(--ink);
   font-weight: 700;
-  box-shadow: 0 0 8px rgb(96 165 250 / 60%), 0 0 0 1px #93c5fd;
+  box-shadow: 0 0 8px rgb(96 165 250 / 60%), 0 0 0 1px var(--gold-dim);
   transform: scale(1.1);
 }
 
 .babylonian-calendar-day--past {
   background-color: rgb(30 58 138 / 30%);
-  color: #93c5fd;
+  color: var(--gold-dim);
   border: 1px solid rgb(29 78 216 / 20%);
 }
 
@@ -316,7 +316,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #60a5fa;
+  color: var(--gold-leaf);
 }
 
 .babylonian-calendar-deity-name {
@@ -338,7 +338,7 @@
   font-size: 0.75rem;
   color: color-mix(in srgb, var(--parchment) 80%, transparent);
   font-style: italic;
-  line-height: 1.625;
+  line-height: var(--lh-prose);
 }
 
 .babylonian-calendar-deity-grid {
@@ -365,7 +365,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #60a5fa;
+  color: var(--gold-leaf);
   margin-bottom: 0.125rem;
 }
 
@@ -384,17 +384,17 @@
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: rgb(191 219 254 / 70%);
-  line-height: 1.625;
+  line-height: var(--lh-prose);
 }
 
 .babylonian-calendar-zodiac {
   font-size: 0.75rem;
   line-height: 1rem;
-  color: #60a5fa;
+  color: var(--gold-leaf);
 }
 
 .babylonian-calendar-zodiac-sign {
-  color: #93c5fd;
+  color: var(--gold-dim);
   font-weight: 700;
 }
 
@@ -425,7 +425,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #60a5fa;
+  color: var(--gold-leaf);
   margin-bottom: 0.125rem;
 }
 
@@ -450,7 +450,7 @@
   padding: 0.75rem;
   background-color: rgb(59 130 246 / 10%);
   border-top: 1px solid rgb(59 130 246 / 30%);
-  color: #60a5fa;
+  color: var(--gold-leaf);
   font-family: Cinzel, serif;
   font-size: 0.75rem;
   line-height: 1rem;

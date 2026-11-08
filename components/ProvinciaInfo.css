@@ -124,7 +124,7 @@
   }
 
   .pi-region-desc {
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 1.125rem;
     color: color-mix(in srgb, var(--parchment) 60%, transparent);
     font-style: italic;
@@ -141,7 +141,7 @@
   }
 
   .pi-region-fallback-desc {
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 1.125rem;
     line-height: 1.75rem;
     color: color-mix(in srgb, var(--parchment) 40%, transparent);
@@ -163,7 +163,7 @@
   }
 
   .pi-distance-detail {
-    font-family: 'IM Fell English', serif;
+    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
     font-size: 1.125rem;
     color: color-mix(in srgb, var(--parchment) 60%, transparent);
     font-style: italic;
@@ -246,7 +246,7 @@
 }
 
 .pi-modal-fallback {
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-style: italic;
   font-size: 1.125rem;
   line-height: 1.75rem;

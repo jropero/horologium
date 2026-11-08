@@ -268,7 +268,7 @@
 
 .egyptian-calendar-modal__season {
   color: color-mix(in srgb, var(--parchment) 80%, transparent);
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 0.75rem;
   line-height: 1rem;
   font-style: italic;
@@ -316,7 +316,7 @@
 
 .egyptian-calendar-modal__day-subtitle {
   color: color-mix(in srgb, var(--gold-leaf) 90%, transparent);
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-style: italic;
@@ -406,7 +406,7 @@
 
 .egyptian-calendar-modal__deity-domain {
   color: #10b981;
-  font-family: 'IM Fell English', serif;
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-style: italic;
   font-size: 0.875rem;
   line-height: 1.25rem;
