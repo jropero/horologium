@@ -53,6 +53,13 @@ const CivilCalendarDatePicker = lazy(() => import('./components/CivilCalendarDat
 const DEFAULT_LAT = 47.5632;
 const DEFAULT_LNG = 7.5744;
 
+async function yieldToMain(): Promise<void> {
+  if ('scheduler' in window && 'yield' in (window as any).scheduler) {
+    return await (window as any).scheduler.yield();
+  }
+  return new Promise(resolve => setTimeout(resolve, 0));
+}
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const AppContent: React.FC = () => {
   const { civilization, labels } = useCivilization();
@@ -133,7 +140,7 @@ const AppContent: React.FC = () => {
 
   // Recalculate time when location, minute, or civilization changes
   useEffect(() => {
-    const updateTime = () => {
+    const updateTime = async () => {
       let data;
       if (civilization === 'hellas') {
         data = calculateHellenicTime(modernTime, latitude, longitude);
@@ -146,6 +153,10 @@ const AppContent: React.FC = () => {
       }
       setRomanTimeData(data);
 
+      // When time-travelling, yield between computation blocks so the browser can
+      // render the date-picker UI update before the next heavy calculation runs.
+      if (isTimeTraveling) await yieldToMain();
+
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
       setTodaysSunTimes(sunTimes);
 
@@ -156,8 +167,8 @@ const AppContent: React.FC = () => {
       }
     };
 
-    updateTime();
-  }, [modernTime, latitude, longitude, loading, civilization]);
+    void updateTime();
+  }, [modernTime, latitude, longitude, loading, civilization, isTimeTraveling]);
 
   // Weather Data — when time-traveling, load the weather recorded on that day/time.
   const {
