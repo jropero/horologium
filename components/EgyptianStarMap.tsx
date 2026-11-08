@@ -218,6 +218,7 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, horiz
   const dragRef = useRef<{ id: number; lastX: number; lastT: number; velocity: number } | null>(
     null,
   );
+  const isVisibleRef = useRef(true);
 
   const [mode, setMode] = useState<SkyMode>('curated');
   const [catalog, setCatalog] = useState<readonly number[] | null>(null);
@@ -551,6 +552,26 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, horiz
     });
     ro.observe(container);
     return () => ro.disconnect();
+  }, [scheduleDraw]);
+
+  // Pause the inertia rAF when the canvas scrolls out of view.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          scheduleDraw();
+        } else if (inertiaRef.current !== null) {
+          cancelAnimationFrame(inertiaRef.current);
+          inertiaRef.current = null;
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(canvas);
+    return () => observer.disconnect();
   }, [scheduleDraw]);
 
   // Re-render once web fonts arrive so canvas labels use Cinzel.
