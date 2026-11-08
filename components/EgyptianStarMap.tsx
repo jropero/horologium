@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import './EgyptianStarMap.css';
 import { computeSky, projectCatalog, SkySnapshot } from '../utils/egyptianSkyMap';
 import { getSunAltitude } from '../utils/solar';
 
@@ -612,10 +613,10 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, horiz
   };
 
   return (
-    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden">
+    <div ref={containerRef} className="egyptian-star-map">
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing select-none"
+        className="egyptian-star-map__canvas"
         // pan-y: horizontal drags scroll the sky, vertical swipes still scroll the page.
         style={{ touchAction: 'pan-y' }}
         role="img"
@@ -632,12 +633,7 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, horiz
           e.stopPropagation();
           setMode(m => (m === 'curated' ? 'full' : 'curated'));
         }}
-        className="absolute top-2 right-2 z-[4] pointer-events-auto w-8 h-8 flex items-center justify-center rounded-sm text-base leading-none transition-opacity opacity-60 hover:opacity-100 focus-visible:opacity-100"
-        style={{
-          background: 'rgba(12,8,4,0.6)',
-          border: '1px solid rgba(24,64,160,0.55)',
-          color: 'rgba(212,168,50,0.9)',
-        }}
+        className="egyptian-star-map__toggle"
         title={mode === 'curated' ? 'Mostrar el cielo completo' : 'Mostrar el cielo egipcio'}
         aria-label={
           mode === 'curated' ? 'Mostrar el cielo completo' : 'Mostrar el cielo egipcio'

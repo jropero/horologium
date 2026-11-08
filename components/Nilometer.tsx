@@ -5,6 +5,7 @@
 // double frame border (gold + Egyptian blue), caustic shimmer.
 
 import React from 'react';
+import './Nilometer.css';
 
 interface NilometerProps {
   monthIndex: number;
@@ -145,24 +146,18 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
   const courseH = 18; // stone block course height
 
   return (
-    <div
-      className="w-full p-4 rounded-sm"
-      style={{ background: '#08100a', border: '1.5px solid rgba(24,64,160,0.45)' }}
-    >
+    <div className="nilometer">
       {/* Header */}
-      <h3
-        className="font-serif text-xs uppercase tracking-widest mb-4 text-center flex items-center justify-center gap-2"
-        style={{ color: 'rgba(212,168,50,0.85)' }}
-      >
-        <span style={{ color: '#10b981' }}>𓈗</span>
+      <h3 className="nilometer__header">
+        <span className="nilometer__header-icon">𓈗</span>
         Nilómetro — Isla de Roda
-        <span style={{ color: '#10b981' }}>𓈗</span>
+        <span className="nilometer__header-icon">𓈗</span>
       </h3>
 
-      <div className="flex items-stretch gap-4">
+      <div className="nilometer__layout">
         {/* ── SVG Nilometer ── */}
-        <div className="flex-shrink-0">
-          <svg width={VW} height={VH} viewBox={`0 0 ${VW} ${VH}`} className="drop-shadow-2xl">
+        <div className="nilometer__svg-wrap">
+          <svg width={VW} height={VH} viewBox={`0 0 ${VW} ${VH}`} className="nilometer__svg">
             <defs>
               {/* Pit interior: deep lapis darkness */}
               <linearGradient id="nm-pit" x1="0" y1="0" x2="0" y2="1">
@@ -600,47 +595,22 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
         </div>
 
         {/* ── Info panel ── */}
-        <div className="flex-1 flex flex-col justify-center gap-2.5">
+        <div className="nilometer__info">
           {/* Hieroglyphic season icon */}
-          <div
-            className="text-2xl tracking-widest drop-shadow-sm"
-            style={{ color: 'rgba(212,168,50,0.9)' }}
-          >
-            {nile.icon}
-          </div>
+          <div className="nilometer__icon">{nile.icon}</div>
 
           {/* Season label */}
-          <div
-            className="font-serif text-xs font-bold uppercase tracking-widest"
-            style={{ color: 'rgba(240,220,180,0.9)' }}
-          >
-            {seasonName}
-          </div>
+          <div className="nilometer__season">{seasonName}</div>
 
           {/* Level bar */}
-          <div className="w-full">
-            <div
-              className="flex justify-between mb-1"
-              style={{
-                fontSize: '12px',
-                fontFamily: 'serif',
-                color: 'rgba(207,181,59,0.5)',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-              }}
-            >
+          <div className="nilometer__level-bar">
+            <div className="nilometer__level-labels">
               <span>Seco</span>
               <span>Pleno</span>
             </div>
-            <div
-              className="w-full h-2 rounded-full overflow-hidden"
-              style={{
-                background: 'rgba(6,12,22,0.7)',
-                border: '1px solid rgba(24,64,160,0.3)',
-              }}
-            >
+            <div className="nilometer__level-track">
               <div
-                className="h-full rounded-full transition-all duration-1000 ease-out"
+                className="nilometer__level-fill"
                 style={{
                   width: `${nile.level}%`,
                   background: `linear-gradient(90deg, ${nile.waterColor}, ${nile.waterColorLight})`,
@@ -651,32 +621,10 @@ const Nilometer: React.FC<NilometerProps> = ({ monthIndex, seasonName }) => {
           </div>
 
           {/* Description */}
-          <p
-            style={{
-              fontSize: '12px',
-              fontFamily: 'serif',
-              color: 'rgba(207,181,59,0.72)',
-              fontStyle: 'italic',
-              lineHeight: 1.4,
-            }}
-          >
-            {nile.sublabel}
-          </p>
+          <p className="nilometer__sublabel">{nile.sublabel}</p>
 
           {/* Fact — Egyptian blue left border accent */}
-          <div
-            style={{
-              marginTop: '2px',
-              fontSize: '12px',
-              fontFamily: 'serif',
-              color: 'rgba(240,220,180,0.45)',
-              lineHeight: 1.4,
-              borderLeft: '2px solid rgba(24,64,160,0.45)',
-              paddingLeft: '8px',
-            }}
-          >
-            {nile.fact}
-          </div>
+          <div className="nilometer__fact">{nile.fact}</div>
         </div>
       </div>
     </div>

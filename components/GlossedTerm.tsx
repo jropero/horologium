@@ -1,5 +1,6 @@
 import React from 'react';
 import type { GlossedTerm as Term } from '../utils/civLabels';
+import './GlossedTerm.css';
 
 interface GlossedTermProps {
   term: Term;
@@ -17,17 +18,9 @@ const GlossedTerm: React.FC<GlossedTermProps> = ({
   glossClassName = '',
   align = 'center',
 }) => (
-  <span
-    className={`inline-flex flex-col leading-tight ${
-      align === 'center' ? 'items-center text-center' : 'items-start text-left'
-    }`}
-  >
+  <span className={`glossed-term ${align === 'center' ? 'align-center' : 'align-start'}`}>
     <span className={className}>{term.akk}</span>
-    <span
-      className={`text-xs font-serif italic normal-case tracking-normal font-normal opacity-70 ${glossClassName}`}
-    >
-      {term.es}
-    </span>
+    <span className={`glossed-term-gloss ${glossClassName}`}>{term.es}</span>
   </span>
 );
 

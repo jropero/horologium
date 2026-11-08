@@ -2,6 +2,7 @@
 // Palette: lotus-papyrus SVG — Egyptian blue #1840a0, red-ochre #c0391a, gold, dark ground
 
 import React, { useState, useMemo } from 'react';
+import './EgyptianCalendarInfo.css';
 import {
   getEgyptianDate,
   EgyptianDateResult,
@@ -130,30 +131,15 @@ const FestivalIcon = ({ name, className }: { name?: string; className?: string }
 const FestivalFontePanel: React.FC<{ fonte: FestivalFonteData }> = ({ fonte }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mt-2 border-t" style={{ borderColor: BORDER_BLUE_FAINT }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between pt-2 text-left gap-2"
-      >
-        <span
-          className="text-xs font-bold uppercase tracking-widest"
-          style={{ color: 'rgba(212,168,50,0.60)' }}
-        >
-          𓂀 {fonte.spell}
-        </span>
-        <span className="text-parchment/40 text-xs shrink-0">{open ? '▴' : '▾'}</span>
+    <div className="fonte-panel">
+      <button onClick={() => setOpen(o => !o)} className="fonte-toggle-btn">
+        <span className="fonte-spell">𓂀 {fonte.spell}</span>
+        <span className="fonte-chevron">{open ? '▴' : '▾'}</span>
       </button>
       {open && (
-        <div className="mt-2 pb-1">
-          <p
-            className="font-serif text-xs text-parchment/85 italic leading-relaxed border-l-2 pl-3 py-1"
-            style={{ borderColor: 'rgba(212,168,50,0.40)' }}
-          >
-            {fonte.excerpt}
-          </p>
-          <p className="text-xs text-parchment/35 mt-1.5 tracking-wider uppercase leading-relaxed">
-            {fonte.source}
-          </p>
+        <div className="fonte-body">
+          <p className="fonte-excerpt">{fonte.excerpt}</p>
+          <p className="fonte-source">{fonte.source}</p>
         </div>
       )}
     </div>
@@ -162,7 +148,7 @@ const FestivalFontePanel: React.FC<{ fonte: FestivalFonteData }> = ({ fonte }) =
 
 // ─── Temple lotus-papyrus frieze border ───────────────────────────────────────
 const LotusFreizeBorder: React.FC<{ id: string }> = ({ id }) => (
-  <svg className="w-full h-14 block" viewBox="0 0 200 36" preserveAspectRatio="none">
+  <svg className="lotus-frieze" viewBox="0 0 200 36" preserveAspectRatio="none">
     <defs>
       <pattern id={id} x="0" y="0" width="50" height="36" patternUnits="userSpaceOnUse">
         <rect width="50" height="36" fill="#0c0804" />
@@ -519,12 +505,7 @@ const LotusFreizeBorder: React.FC<{ id: string }> = ({ id }) => (
 
 // ─── Section header ──────────────────────────────────────────────────────────
 const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h3
-    className="font-serif text-xs uppercase tracking-widest font-bold text-center"
-    style={{ color: 'rgba(212,168,50,0.85)' }}
-  >
-    {children}
-  </h3>
+  <h3 className="eci-section-header">{children}</h3>
 );
 
 // ─── Decade day grid ─────────────────────────────────────────────────────────
@@ -559,36 +540,33 @@ const DecadeGrid: React.FC<{
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row gap-2 w-full">
+      <div className="decade-panels">
         {panels.map(({ days, decade, label, sub }) => {
           const isActive = decade === activeDecade;
           return (
             <div
               key={decade}
-              className={`flex-1 p-2.5 rounded border transition-all duration-300
-                ${
-                  isActive
-                    ? 'border-gold-leaf/50 bg-[#1840a0]/10 shadow-[0_0_12px_rgba(212,168,50,0.08)] scale-[1.01]'
-                    : 'border-[#1840a0]/20 bg-[#0c0804]/50'
-                }`}
+              className={`decade-panel ${
+                isActive ? 'decade-panel--active' : 'decade-panel--inactive'
+              }`}
             >
-              <div className="text-center mb-2 border-b border-[#1840a0]/20 pb-1.5">
+              <div className="decade-panel-header">
                 <div
-                  className={`text-xs font-bold uppercase tracking-widest ${
-                    isActive ? 'text-gold-leaf' : 'text-gold-leaf/50'
+                  className={`decade-label ${
+                    isActive ? 'decade-label--active' : 'decade-label--inactive'
                   }`}
                 >
                   {label}
                 </div>
                 <div
-                  className={`text-xs font-serif italic mt-0.5 uppercase tracking-wide ${
-                    isActive ? 'text-gold-leaf/70' : 'text-gold-leaf/30'
+                  className={`decade-sub ${
+                    isActive ? 'decade-sub--active' : 'decade-sub--inactive'
                   }`}
                 >
                   {sub}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-1 justify-center">
+              <div className="decade-dots">
                 {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
                 {days.map(day => {
                   const isToday = !egyptianDate.isEpagomenal && day === egyptianDate.dayOfMonth;
@@ -601,19 +579,11 @@ const DecadeGrid: React.FC<{
                   const hasFest = civilFestivals.length > 0;
 
                   let cls: string;
-                  if (isSelected)
-                    cls =
-                      'bg-amber-400 shadow-[0_0_8px_rgba(212,168,50,0.7)] scale-125 z-10 ring-2 ring-amber-300';
-                  else if (isToday)
-                    cls = 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)] scale-125 z-10';
+                  if (isSelected) cls = 'day-dot--selected';
+                  else if (isToday) cls = 'day-dot--today';
                   else if (hasFest)
-                    cls = isActive
-                      ? 'bg-amber-500/60 ring-1 ring-amber-400/70'
-                      : 'bg-amber-700/45 ring-1 ring-amber-600/50';
-                  else
-                    cls = isActive
-                      ? 'bg-[#1840a0]/55 ring-1 ring-[#2255c0]/50'
-                      : 'bg-parchment/20 ring-1 ring-parchment/25';
+                    cls = isActive ? 'day-dot--fest-active' : 'day-dot--fest-inactive';
+                  else cls = isActive ? 'day-dot--blue-active' : 'day-dot--plain';
 
                   return (
                     <button
@@ -623,7 +593,7 @@ const DecadeGrid: React.FC<{
                         e.stopPropagation();
                         setSelectedDay(prev => (prev === day ? null : day));
                       }}
-                      className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-sm transition-all cursor-pointer ${cls}`}
+                      className={`day-dot ${cls}`}
                     />
                   );
                 })}
@@ -635,10 +605,8 @@ const DecadeGrid: React.FC<{
 
       {/* Selected day info panel */}
       <div
-        className={`mt-2 rounded border transition-all ${
-          selectedDay !== null
-            ? 'border-amber-600/40 bg-amber-950/20 p-3'
-            : 'border-[#1840a0]/20 py-2 px-3'
+        className={`day-info-panel ${
+          selectedDay !== null ? 'day-info-panel--open' : 'day-info-panel--closed'
         }`}
       >
         {selectedDay !== null ? (
@@ -649,32 +617,26 @@ const DecadeGrid: React.FC<{
               0,
             );
             return (
-              <div className="text-left">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-serif font-bold text-amber-300 uppercase tracking-wider">
-                    Día {selectedDay}
-                  </span>
+              <div>
+                <div className="day-info-title-row">
+                  <span className="day-info-day-label">Día {selectedDay}</span>
                   <button
                     type="button"
                     onClick={() => setSelectedDay(null)}
-                    className="text-amber-600/60 hover:text-amber-300 text-xs px-1 cursor-pointer"
+                    className="day-info-close"
                   >
                     ✕
                   </button>
                 </div>
                 {sf.length > 0 ? (
                   sf.map((f, i) => (
-                    <div key={i} className="flex flex-col gap-0.5">
-                      <span className="text-sm font-serif font-bold text-amber-200">
-                        {f.name}
-                      </span>
-                      <p className="text-xs font-serif text-parchment/80 leading-snug">
-                        {f.description}
-                      </p>
+                    <div key={i} className="day-info-fest">
+                      <span className="day-info-fest-name">{f.name}</span>
+                      <p className="day-info-fest-desc">{f.description}</p>
                     </div>
                   ))
                 ) : (
-                  <span className="text-xs font-serif text-parchment/50">
+                  <span className="day-info-empty">
                     Sin festival civil registrado para este día.
                   </span>
                 )}
@@ -682,28 +644,20 @@ const DecadeGrid: React.FC<{
             );
           })()
         ) : (
-          <p
-            className="text-xs font-serif text-center"
-            style={{ color: 'rgba(212,168,50,0.5)' }}
-          >
-            Toca un día para ver su festival
-          </p>
+          <p className="day-info-hint">Toca un día para ver su festival</p>
         )}
       </div>
 
       {/* Legend */}
-      <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 justify-center">
-        {[
-          { cls: 'bg-emerald-400', label: 'Hoy' },
-          { cls: 'bg-amber-600/50 ring-1 ring-amber-400/60', label: 'Festival' },
-        ].map(({ cls, label }) => (
-          <div key={label} className="flex items-center gap-1">
-            <span className={`w-3 h-3 rounded-sm inline-block ${cls}`} />
-            <span className="text-xs font-serif text-parchment/50 uppercase tracking-wide">
-              {label}
-            </span>
-          </div>
-        ))}
+      <div className="decade-legend">
+        <div className="decade-legend-item">
+          <span className="decade-legend-dot decade-legend-dot--today" />
+          <span className="decade-legend-label">Hoy</span>
+        </div>
+        <div className="decade-legend-item">
+          <span className="decade-legend-dot decade-legend-dot--fest" />
+          <span className="decade-legend-label">Festival</span>
+        </div>
       </div>
 
       <button
@@ -712,7 +666,7 @@ const DecadeGrid: React.FC<{
           e.stopPropagation();
           onShowFestivals();
         }}
-        className="mt-3 w-full py-1.5 text-xs font-serif font-bold uppercase tracking-widest text-parchment/60 border border-[#1840a0]/30 rounded hover:border-gold-leaf/40 hover:text-gold-leaf/80 transition-all"
+        className="decade-view-festivals-btn"
       >
         ✨ Ver Próximos Festivales
       </button>
@@ -725,52 +679,19 @@ const PrognosisCard: React.FC<{ title: string; prognosis: Prognosis }> = ({
   title,
   prognosis,
 }) => {
-  const isNefer = prognosis === 'nefer';
-  const isAha = prognosis === 'aha';
-
-  const theme = isNefer
-    ? {
-        bg: 'bg-emerald-900/25',
-        border: 'border-emerald-500/40',
-        label: 'text-emerald-300',
-        icon: '☀️',
-        text: 'Nefer',
-        sub: 'Favorable',
-      }
-    : // eslint-disable-next-line sonarjs/no-nested-conditional
-    isAha
-    ? {
-        bg: 'bg-red-900/20',
-        border: 'border-red-500/35',
-        label: 'text-red-300',
-        icon: '🦂',
-        text: 'Aha',
-        sub: 'Adverso',
-      }
-    : {
-        bg: 'bg-[#0c0804]/50',
-        border: 'border-[#1840a0]/15',
-        label: 'text-parchment/30',
-        icon: '—',
-        text: '—',
-        sub: '—',
-      };
+  const PROGNOSIS_DATA = {
+    nefer: { variant: 'nefer', icon: '☀️', text: 'Nefer', sub: 'Favorable' },
+    aha: { variant: 'aha', icon: '🦂', text: 'Aha', sub: 'Adverso' },
+    neutral: { variant: 'neutral', icon: '—', text: '—', sub: '—' },
+  } as const;
+  const { variant, icon, text, sub } = PROGNOSIS_DATA[prognosis] ?? PROGNOSIS_DATA.neutral;
 
   return (
-    <div
-      className={`flex-1 min-w-[90px] p-3 rounded border flex flex-col items-center gap-1 ${theme.bg} ${theme.border}`}
-    >
-      <span
-        className="text-xs uppercase tracking-widest font-bold"
-        style={{ color: 'rgba(212,168,50,0.6)' }}
-      >
-        {title}
-      </span>
-      <span className="text-lg leading-none">{theme.icon}</span>
-      <span className={`text-xs font-serif font-bold uppercase tracking-wide ${theme.label}`}>
-        {theme.text}
-      </span>
-      <span className={`text-xs ${theme.label} opacity-75`}>{theme.sub}</span>
+    <div className={`prognosis-card prognosis-card--${variant}`}>
+      <span className="prognosis-title">{title}</span>
+      <span className="prognosis-icon">{icon}</span>
+      <span className={`prognosis-text prognosis-text--${variant}`}>{text}</span>
+      <span className={`prognosis-sub prognosis-text--${variant}`}>{sub}</span>
     </div>
   );
 };
@@ -930,7 +851,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
   return (
     <>
       <div
-        className="w-full max-w-none mx-auto mt-6 mb-6 px-2 cursor-pointer"
+        className="eci-wrapper"
         role="button"
         tabIndex={0}
         onClick={onClick}
@@ -939,34 +860,22 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
         }}
       >
         {/* Main card */}
-        <div
-          className="border-[4px] p-0 rounded-sm shadow-2xl relative overflow-hidden group hover:border-gold-leaf/70 transition-colors"
-          style={{ background: '#0c0804', borderColor: 'rgba(24,64,160,0.65)' }}
-        >
+        <div className="eci-card">
           <LotusFreizeBorder id="lotus-top" />
 
           {/* ── Sky scene ─────────────────────────────────────────────────── */}
-          <div
-            className="relative w-full overflow-hidden border-b-2"
-            style={{ aspectRatio: '16/9', borderColor: 'rgba(24,64,160,0.35)' }}
-          >
+          <div className="eci-sky">
             {/* Layers: star map (z-0, owns horizontal drag) → skyline → weather → text.
               Everything above the star map is pointer-events:none so drags reach it. */}
             {sunTimes ? (
               <EgyptianStarMap date={currentDate} lat={lat!} lng={lng!} horizon={0.9} />
             ) : (
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(to bottom, #010408 0%, #040c18 55%, #0c0804 100%)',
-                }}
-              />
+              <div className="eci-sky-fallback" />
             )}
 
             {/* Weather effects */}
             <svg
-              className="absolute inset-0 w-full h-full pointer-events-none"
+              className="eci-weather-svg"
               viewBox="0 0 300 200"
               preserveAspectRatio="xMidYMid slice"
             >
@@ -996,7 +905,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
 
             {/* Egyptian skyline */}
             <svg
-              className="absolute bottom-0 left-0 w-full pointer-events-none"
+              className="eci-skyline-svg"
               viewBox="0 0 300 200"
               preserveAspectRatio="xMidYMax meet"
               style={
@@ -1048,68 +957,35 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
             </svg>
 
             {/* Text overlay */}
-            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center gap-0.5 text-center px-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
-              <div
-                style={{
-                  fontSize: 'clamp(2.2rem, 9vw, 4rem)',
-                  lineHeight: 1,
-                  color: 'rgba(238,228,200,0.55)',
-                }}
-              >
-                {egyptianDate.seasonHieroglyphic}
-              </div>
-              <h3
-                className="font-serif font-black uppercase tracking-[0.15em] text-parchment leading-none"
-                style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}
-              >
+            <div className="eci-sky-text">
+              <div className="eci-season-glyph">{egyptianDate.seasonHieroglyphic}</div>
+              <h3 className="eci-month-name">
                 {egyptianDate.isEpagomenal ? 'Epagomenai' : egyptianDate.monthName}
               </h3>
-              <div
-                style={{
-                  fontSize: 'clamp(1rem, 4vw, 1.6rem)',
-                  color: 'rgba(238,228,200,0.45)',
-                }}
-              >
-                {egyptianDate.monthHieroglyphs}
-              </div>
-              <div
-                className="font-serif italic text-parchment/70 mt-1"
-                style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', letterSpacing: '0.2em' }}
-              >
+              <div className="eci-month-hieroglyphs">{egyptianDate.monthHieroglyphs}</div>
+              <div className="eci-season-label">
                 {egyptianDate.seasonName} — {egyptianDate.seasonTranslation}
               </div>
             </div>
           </div>
 
           {/* ── Date strip ──────────────────────────────────────────────────── */}
-          <div
-            className="py-2 px-4 border-b"
-            style={{ borderColor: 'rgba(24,64,160,0.30)', background: 'rgba(12,8,4,0.7)' }}
-          >
+          <div className="eci-date-strip">
             {!egyptianDate.isEpagomenal ? (
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center sm:gap-4">
-                {/* Full date — centred on mobile, inline on desktop */}
-                <span className="text-xs font-serif font-bold text-parchment text-center leading-snug">
-                  {formatEgyptianDate(egyptianDate)}
-                </span>
-                {/* Secondary stats: compact row on both breakpoints */}
-                <div className="flex items-center justify-center gap-3 mt-1 sm:mt-0">
-                  <span className="hidden sm:inline text-[#1840a0]/50 text-xs select-none">
-                    ·
-                  </span>
-                  <span
-                    className="text-xs font-serif"
-                    style={{ color: 'rgba(212,168,50,0.75)' }}
-                  >
+              <div className="eci-date-row">
+                <span className="eci-date-primary">{formatEgyptianDate(egyptianDate)}</span>
+                <div className="eci-date-secondary">
+                  <span className="eci-date-sep-sm">·</span>
+                  <span className="eci-date-day-of-year">
                     Día {egyptianDate.dayOfYear} del año
                   </span>
-                  <span className="text-[#1840a0]/50 text-xs select-none">·</span>
-                  <span className="text-xs font-serif text-parchment/55">Luna {lunarDay}</span>
+                  <span className="eci-date-sep">·</span>
+                  <span className="eci-date-lunar">Luna {lunarDay}</span>
                 </div>
               </div>
             ) : (
-              <div className="text-center">
-                <span className="text-xs font-serif font-bold text-parchment leading-snug">
+              <div className="eci-epa-row">
+                <span className="eci-epa-label">
                   𓊹 Día Epagómeno {epagomenalInfo?.dayNumber} — {epagomenalInfo?.deity} 𓊹
                 </span>
               </div>
@@ -1117,64 +993,36 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
           </div>
 
           {/* ── Main content ─────────────────────────────────────────────────── */}
-          <div className="p-5 md:p-7 flex flex-col gap-5">
+          <div className="eci-content">
             {/* ── Efemérides del día (bajo el hero, sobre el calendario) ──────── */}
             {!egyptianDate.isEpagomenal &&
               (civilFestivals.length > 0 || lunarFestivals.length > 0) && (
-                <div className="flex flex-col gap-3">
+                <div className="eci-ephemerides">
                   <SectionHeader>Festividades de Hoy</SectionHeader>
-                  <div className="flex flex-col gap-2 mt-1">
+                  <div className="eci-ephemerides-list">
                     {civilFestivals.map((f, i) => (
-                      <div
-                        key={`civ-ephem-${i}`}
-                        className="flex items-start gap-3 p-3 rounded border text-left"
-                        style={{
-                          background: 'rgba(24,64,160,0.10)',
-                          borderColor: 'rgba(24,64,160,0.35)',
-                        }}
-                      >
-                        <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
-                        <div className="min-w-0">
-                          <div
-                            className="text-xs uppercase tracking-widest font-serif flex items-center gap-2"
-                            style={{ color: 'rgba(212,168,50,0.60)' }}
-                          >
+                      <div key={`civ-ephem-${i}`} className="eci-civil-fest-item">
+                        <FestivalIcon name={f.icon} className="eci-icon--emerald" />
+                        <div className="eci-fest-min-w">
+                          <div className="eci-fest-type">
                             <span>𓊹 Festival Civil</span>
-                            <span className="text-parchment/25">· Fijo</span>
+                            <span className="eci-fest-type-fixed">· Fijo</span>
                           </div>
-                          <div className="text-parchment font-serif font-bold text-sm">
-                            {f.name}
-                          </div>
-                          <p className="font-serif text-xs text-parchment/70 italic leading-snug mt-0.5">
-                            {f.description}
-                          </p>
+                          <div className="eci-fest-name-sm">{f.name}</div>
+                          <p className="eci-fest-desc-sm">{f.description}</p>
                         </div>
                       </div>
                     ))}
                     {lunarFestivals.map((f, i) => (
-                      <div
-                        key={`lun-ephem-${i}`}
-                        className="flex items-start gap-3 p-3 rounded border text-left"
-                        style={{
-                          background: 'rgba(212,168,50,0.06)',
-                          borderColor: 'rgba(212,168,50,0.30)',
-                        }}
-                      >
-                        <FestivalIcon name={f.icon} className="text-amber-400 shrink-0" />
-                        <div className="min-w-0">
-                          <div
-                            className="text-xs uppercase tracking-widest font-serif flex items-center gap-2"
-                            style={{ color: 'rgba(212,168,50,0.60)' }}
-                          >
+                      <div key={`lun-ephem-${i}`} className="eci-lunar-fest-item">
+                        <FestivalIcon name={f.icon} className="eci-icon--amber" />
+                        <div className="eci-fest-min-w">
+                          <div className="eci-fest-type">
                             <span>𓊹 Festival Lunar</span>
-                            <span className="text-parchment/25">· Día {lunarDay}</span>
+                            <span className="eci-fest-type-fixed">· Día {lunarDay}</span>
                           </div>
-                          <div className="text-parchment font-serif font-bold text-sm">
-                            {f.name}
-                          </div>
-                          <p className="font-serif text-xs text-parchment/70 italic leading-snug mt-0.5">
-                            {f.description}
-                          </p>
+                          <div className="eci-fest-name-sm">{f.name}</div>
+                          <p className="eci-fest-desc-sm">{f.description}</p>
                         </div>
                       </div>
                     ))}
@@ -1183,29 +1031,14 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
               )}
 
             {/* ── Deity card (always shown) ──────────────────────────────── */}
-            <div
-              className="flex flex-col items-center gap-2 p-5 rounded border-2 text-center"
-              style={{
-                background: 'rgba(212,168,50,0.05)',
-                borderColor: 'rgba(212,168,50,0.22)',
-              }}
-            >
-              <div
-                className="text-xs font-bold uppercase tracking-widest"
-                style={{ color: 'rgba(212,168,50,0.65)' }}
-              >
+            <div className="eci-deity-card">
+              <div className="eci-deity-label">
                 {egyptianDate.isEpagomenal ? '— Madre Celeste —' : labels.godOfDayTitle}
               </div>
-              <div className="text-3xl" style={{ color: 'rgba(212,168,50,0.90)' }}>
-                𓊹
-              </div>
-              <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment leading-tight">
-                {deity.name}
-              </h2>
-              <div className="text-xs font-bold uppercase tracking-widest text-emerald-400">
-                {deity.title}
-              </div>
-              <p className="font-serif text-sm text-parchment/85 italic px-4 mt-1 leading-relaxed">
+              <div className="eci-deity-glyph">𓊹</div>
+              <h2 className="eci-deity-name">{deity.name}</h2>
+              <div className="eci-deity-title">{deity.title}</div>
+              <p className="eci-deity-quote">
                 {'"'}
                 {deity.description}
                 {'"'}
@@ -1214,26 +1047,13 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
 
             {/* EPAGOMENAL highlight (shown instead of view toggle) */}
             {egyptianDate.isEpagomenal && epagomenalInfo && (
-              <div
-                className="w-full p-6 rounded border-2 text-center"
-                style={{
-                  background: 'rgba(24,64,160,0.12)',
-                  borderColor: 'rgba(212,168,50,0.40)',
-                }}
-              >
-                <div
-                  className="text-xs font-bold uppercase tracking-widest mb-3"
-                  style={{ color: 'rgba(212,168,50,0.75)' }}
-                >
-                  𓊹 Celebración Epagómenal 𓊹
-                </div>
-                <h2 className="text-2xl md:text-3xl font-serif font-black text-parchment leading-tight mb-2">
-                  {epagomenalInfo.celebration}
-                </h2>
-                <p className="font-serif text-sm text-emerald-300 font-bold italic">
+              <div className="eci-epa-highlight">
+                <div className="eci-epa-title">𓊹 Celebración Epagómenal 𓊹</div>
+                <h2 className="eci-epa-celebration">{epagomenalInfo.celebration}</h2>
+                <p className="eci-epa-deity-line">
                   {epagomenalInfo.deity} — {epagomenalInfo.domain}
                 </p>
-                <p className="font-serif text-sm text-parchment/85 italic mt-3 leading-relaxed">
+                <p className="eci-epa-desc">
                   {'"'}
                   {epagomenalInfo.description}
                   {'"'}
@@ -1248,10 +1068,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
 
             {/* View toggle (regular months only) */}
             {!egyptianDate.isEpagomenal && (
-              <div
-                className="flex gap-0 rounded overflow-hidden border w-full max-w-xs mx-auto"
-                style={{ borderColor: 'rgba(24,64,160,0.45)' }}
-              >
+              <div className="eci-view-toggle">
                 {(['calendar', 'rites'] as ViewMode[]).map(v => (
                   <button
                     key={v}
@@ -1260,20 +1077,9 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                       e.stopPropagation();
                       setView(v);
                     }}
-                    className={`flex-1 py-2 text-xs font-serif uppercase tracking-widest font-bold transition-all
-                    ${
-                      view === v
-                        ? 'text-parchment border-r'
-                        : 'text-parchment/40 hover:text-parchment/70'
+                    className={`eci-view-btn ${
+                      view === v ? 'eci-view-btn--active' : 'eci-view-btn--inactive'
                     }`}
-                    style={
-                      view === v
-                        ? {
-                            background: BORDER_BLUE_FAINT,
-                            borderColor: 'rgba(24,64,160,0.45)',
-                          }
-                        : {}
-                    }
                   >
                     {v === 'calendar' ? '☽ Calendario' : '𓊹 Ritos del Día'}
                   </button>
@@ -1284,11 +1090,11 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
             {/* ═══ CALENDAR VIEW ═══ */}
             {(view === 'calendar' || egyptianDate.isEpagomenal) &&
               !egyptianDate.isEpagomenal && (
-                <div className="flex flex-col gap-5">
+                <div className="eci-calendar-view">
                   {/* Decade grid */}
                   <div role="presentation" onClick={e => e.stopPropagation()}>
                     <SectionHeader>Las Tres Décadas del Mes</SectionHeader>
-                    <div className="mt-3">
+                    <div style={{ marginTop: '0.75rem' }}>
                       <DecadeGrid
                         egyptianDate={egyptianDate}
                         onShowFestivals={() => setShowFestivals(true)}
@@ -1297,7 +1103,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                   </div>
 
                   {/* Nilometer */}
-                  <div className="border-t pt-4" style={{ borderColor: BORDER_BLUE_FAINT }}>
+                  <div className="eci-nilometer-sep">
                     <Nilometer
                       monthIndex={egyptianDate.monthIndex}
                       seasonName={egyptianDate.seasonName}
@@ -1331,11 +1137,8 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                           altitudeAtMidnight,
                         } = sopdetDaily;
                         return (
-                          <div
-                            className="mt-2 pt-2 border-t"
-                            style={{ borderColor: 'rgba(255,255,255,0.08)' }}
-                          >
-                            <div className="grid grid-cols-3 gap-1 mb-2.5">
+                          <div className="eci-sopdet-expanded">
+                            <div className="eci-time-grid">
                               {(
                                 [
                                   { label: 'Salida', value: fmtTime(riseTime) },
@@ -1343,31 +1146,20 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                   { label: 'Ocaso', value: fmtTime(setTime) },
                                 ] as const
                               ).map(({ label, value }) => (
-                                <div key={label} className="text-center">
-                                  <p className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
-                                    {label}
-                                  </p>
-                                  <p className="text-xs font-mono font-bold text-parchment/80">
-                                    {value}
-                                  </p>
+                                <div key={label} className="eci-time-cell">
+                                  <p className="eci-time-label">{label}</p>
+                                  <p className="eci-time-value">{value}</p>
                                 </div>
                               ))}
                             </div>
-                            <div className="mb-2">
-                              <div className="flex justify-between items-center mb-0.5">
-                                <span className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
-                                  Elongación del Sol
-                                </span>
-                                <span className="text-xs font-mono font-bold text-parchment/80">
-                                  {elongation.toFixed(1)}°
-                                </span>
+                            <div className="eci-elong-row">
+                              <div className="eci-bar-header">
+                                <span className="eci-bar-label">Elongación del Sol</span>
+                                <span className="eci-bar-value">{elongation.toFixed(1)}°</span>
                               </div>
-                              <div
-                                className="w-full h-1 rounded-full overflow-hidden"
-                                style={{ background: 'rgba(255,255,255,0.08)' }}
-                              >
+                              <div className="eci-bar-track">
                                 <div
-                                  className="h-full rounded-full transition-all"
+                                  className="eci-bar-fill"
                                   style={{
                                     width: `${(elongation / 180) * 100}%`,
                                     background:
@@ -1377,7 +1169,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                   }}
                                 />
                               </div>
-                              <p className="text-xs text-parchment/35 font-serif mt-0.5 italic">
+                              <p className="eci-bar-hint">
                                 {elongation < 17
                                   ? 'Sumergida en el resplandor solar (umbral helíaco 17°)'
                                   : `${elongation.toFixed(
@@ -1385,25 +1177,19 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                     )}° del Sol · separada del resplandor solar`}
                               </p>
                             </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
-                                Altitud a medianoche
-                              </span>
+                            <div className="eci-alt-row">
+                              <span className="eci-bar-label">Altitud a medianoche</span>
                               <span
-                                className={`text-xs font-mono font-bold ${
-                                  altitudeAtMidnight >= 0
-                                    ? 'text-emerald-400/75'
-                                    : 'text-parchment/35'
-                                }`}
+                                className={
+                                  altitudeAtMidnight >= 0 ? 'eci-alt-visible' : 'eci-alt-hidden'
+                                }
                               >
                                 {altitudeAtMidnight >= 0 ? '+' : ''}
                                 {altitudeAtMidnight.toFixed(1)}°
                               </span>
                             </div>
                             {altitudeAtMidnight < 0 && (
-                              <p className="text-xs text-parchment/35 font-serif italic mt-0.5">
-                                Bajo el horizonte esta noche
-                              </p>
+                              <p className="eci-alt-hint">Bajo el horizonte esta noche</p>
                             )}
                           </div>
                         );
@@ -1412,36 +1198,24 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                       if (sopdet.phase === 'invisible') {
                         const daysUntil = -sopdet.daysSinceRising;
                         return (
-                          <div
-                            className="border-t pt-4"
-                            style={{ borderColor: BORDER_BLUE_FAINT }}
-                          >
+                          <div className="eci-sopdet-sep">
                             <button
-                              className="w-full text-left flex items-start gap-3 p-3 rounded border cursor-pointer"
-                              style={{
-                                background: 'rgba(30,20,60,0.35)',
-                                borderColor: 'rgba(80,60,160,0.30)',
-                              }}
+                              className="eci-sopdet-btn eci-sopdet-btn--invisible"
                               onClick={() => setSopdetExpanded(v => !v)}
                             >
-                              <span
-                                className="text-lg shrink-0"
-                                style={{ color: 'rgba(180,160,240,0.85)' }}
-                              >
-                                ✦
-                              </span>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between gap-1">
-                                  <p className="text-xs font-serif font-bold uppercase tracking-widest text-indigo-300">
+                              <span className="eci-sopdet-icon--invisible">✦</span>
+                              <div className="eci-sopdet-flex">
+                                <div className="eci-sopdet-title-row">
+                                  <p className="eci-sopdet-title--invisible">
                                     Sopdet (Sirio) — invisible
                                   </p>
-                                  <span className="text-xs text-parchment/35 shrink-0">
+                                  <span className="eci-sopdet-chevron">
                                     {sopdetExpanded ? '▴' : '▾'}
                                   </span>
                                 </div>
-                                <p className="text-xs font-serif text-parchment/75 italic leading-snug mt-0.5">
+                                <p className="eci-sopdet-desc">
                                   Oculta en el resplandor solar.{' '}
-                                  <strong className="text-indigo-300">Peret Sopdet</strong> en{' '}
+                                  <strong style={{ color: '#a5b4fc' }}>Peret Sopdet</strong> en{' '}
                                   {daysUntil} día{daysUntil !== 1 ? 's' : ''} ({dateStr}).
                                 </p>
                                 <SopdetExpandedPanel />
@@ -1453,30 +1227,28 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                       const days = sopdet.daysSinceRising;
                       if (days === 0)
                         return (
-                          <div
-                            className="border-t pt-4"
-                            style={{ borderColor: BORDER_BLUE_FAINT }}
-                          >
+                          <div className="eci-sopdet-sep">
                             <button
-                              className="w-full text-left flex items-start gap-3 p-3 rounded border-2 animate-pulse cursor-pointer"
-                              style={{
-                                background: 'rgba(80,50,10,0.40)',
-                                borderColor: 'rgba(212,168,50,0.65)',
-                                boxShadow: '0 0 16px rgba(212,168,50,0.2)',
-                              }}
+                              className="eci-sopdet-btn eci-sopdet-btn--rising animate-pulse"
                               onClick={() => setSopdetExpanded(v => !v)}
                             >
-                              <span className="text-lg shrink-0 text-amber-300">✦</span>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between gap-1">
-                                  <p className="text-xs font-serif font-bold uppercase tracking-widest text-amber-300">
+                              <span className="eci-sopdet-icon--rising">✦</span>
+                              <div className="eci-sopdet-flex">
+                                <div className="eci-sopdet-title-row">
+                                  <p className="eci-sopdet-title--rising">
                                     ¡Peret Sopdet! — Salida helíaca de Sopdet
                                   </p>
-                                  <span className="text-xs text-parchment/35 shrink-0">
+                                  <span className="eci-sopdet-chevron">
                                     {sopdetExpanded ? '▴' : '▾'}
                                   </span>
                                 </div>
-                                <p className="text-xs font-serif text-parchment/90 italic leading-snug mt-0.5">
+                                <p
+                                  className="eci-sopdet-desc"
+                                  style={{
+                                    color:
+                                      'color-mix(in srgb, var(--parchment) 90%, transparent)',
+                                  }}
+                                >
                                   Hoy Sopdet (Sirio) vuelve a aparecer antes del amanecer.
                                   Anuncia la crecida del Nilo y el inicio del Año Nuevo egipcio.
                                 </p>
@@ -1486,31 +1258,24 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                           </div>
                         );
                       return (
-                        <div
-                          className="border-t pt-4"
-                          style={{ borderColor: BORDER_BLUE_FAINT }}
-                        >
+                        <div className="eci-sopdet-sep">
                           <button
-                            className="w-full text-left flex items-start gap-3 p-3 rounded border cursor-pointer"
-                            style={{
-                              background: 'rgba(10,40,20,0.35)',
-                              borderColor: 'rgba(52,180,100,0.30)',
-                            }}
+                            className="eci-sopdet-btn eci-sopdet-btn--visible"
                             onClick={() => setSopdetExpanded(v => !v)}
                           >
-                            <span className="text-lg shrink-0 text-emerald-400">✦</span>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between gap-1">
-                                <p className="text-xs font-serif font-bold uppercase tracking-widest text-emerald-300">
+                            <span className="eci-sopdet-icon--visible">✦</span>
+                            <div className="eci-sopdet-flex">
+                              <div className="eci-sopdet-title-row">
+                                <p className="eci-sopdet-title--visible">
                                   Sopdet (Sirio) — visible
                                 </p>
-                                <span className="text-xs text-parchment/35 shrink-0">
+                                <span className="eci-sopdet-chevron">
                                   {sopdetExpanded ? '▴' : '▾'}
                                 </span>
                               </div>
-                              <p className="text-xs font-serif text-parchment/75 italic leading-snug mt-0.5">
-                                Día <strong className="text-emerald-300">{days}</strong> desde{' '}
-                                <strong className="text-emerald-300">Peret Sopdet</strong> (
+                              <p className="eci-sopdet-desc">
+                                Día <strong style={{ color: '#6ee7b7' }}>{days}</strong> desde{' '}
+                                <strong style={{ color: '#6ee7b7' }}>Peret Sopdet</strong> (
                                 {dateStr}). La diosa custodia la crecida del Nilo.
                               </p>
                               <SopdetExpandedPanel />
@@ -1524,33 +1289,25 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
 
             {/* ═══ RITES VIEW ═══ */}
             {view === 'rites' && !egyptianDate.isEpagomenal && (
-              <div className="flex flex-col gap-5">
+              <div className="eci-rites-view">
                 {/* Hemerology */}
                 <div>
                   <SectionHeader>Pronóstico del Día · Hemerología</SectionHeader>
-                  <div className="flex gap-2 mt-3">
+                  <div className="eci-heme-row">
                     <PrognosisCard title="Mañana" prognosis={hemerology.morning} />
                     <PrognosisCard title="Mediodía" prognosis={hemerology.midday} />
                     <PrognosisCard title="Tarde" prognosis={hemerology.evening} />
                   </div>
                   {hemerology.instruction && (
-                    <div
-                      className="mt-3 flex items-center gap-3 p-3 rounded border"
-                      style={{
-                        background: 'rgba(80,10,10,0.25)',
-                        borderColor: 'rgba(192,57,26,0.35)',
-                      }}
-                    >
-                      <span className="text-lg shrink-0">👁️</span>
-                      <p className="text-xs italic text-red-300 font-serif leading-tight text-left">
-                        {hemerology.instruction}
-                      </p>
+                    <div className="eci-heme-instruction">
+                      <span style={{ fontSize: '1.125rem', flexShrink: 0 }}>👁️</span>
+                      <p className="eci-heme-instruction-text">{hemerology.instruction}</p>
                     </div>
                   )}
 
                   {/* Ojo de Horus / Algol */}
                   <div
-                    className="mt-2 p-3 rounded border transition-all"
+                    className="eci-algol-panel"
                     style={{
                       background: algol.isEclipsed
                         ? 'rgba(80,10,10,0.30)'
@@ -1563,27 +1320,21 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                     {/* Header row — tap to expand */}
                     <button
                       type="button"
-                      className="w-full text-left flex items-center gap-3 cursor-pointer"
+                      className="eci-algol-toggle"
                       onClick={() => setAlgolExpanded(v => !v)}
                     >
                       <span
-                        className={`text-lg shrink-0 ${
-                          algol.isEclipsed ? 'animate-pulse' : ''
-                        }`}
+                        className={`eci-algol-icon${algol.isEclipsed ? ' animate-pulse' : ''}`}
                       >
                         👁️
                       </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-serif font-bold text-red-300 uppercase tracking-wider">
+                      <div className="eci-algol-flex">
+                        <p className="eci-algol-title">
                           Ojo de Horus · Algol {algol.isEclipsed ? '— ¡En Eclipse!' : ''}
                         </p>
-                        <p className="text-xs font-serif text-parchment/55 italic">
-                          {algol.stateText}
-                        </p>
+                        <p className="eci-algol-state">{algol.stateText}</p>
                       </div>
-                      <span className="text-parchment/30 text-sm shrink-0">
-                        {algolExpanded ? '▴' : '▾'}
-                      </span>
+                      <span className="eci-algol-chevron">{algolExpanded ? '▴' : '▾'}</span>
                     </button>
 
                     {/* Expanded panel */}
@@ -1623,12 +1374,9 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                         const magFraction = (estimatedMagnitude - 2.1) / 1.3; // 0 = bright, 1 = dim
 
                         return (
-                          <div
-                            className="mt-2 pt-2 border-t"
-                            style={{ borderColor: 'rgba(192,57,26,0.18)' }}
-                          >
+                          <div className="eci-algol-expanded">
                             {/* Rise / Transit / Set */}
-                            <div className="grid grid-cols-3 gap-1 mb-2.5">
+                            <div className="eci-time-grid">
                               {(
                                 [
                                   { label: 'Salida', value: fmtTime(riseTime) },
@@ -1636,47 +1384,36 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                   { label: 'Ocaso', value: fmtTime(setTime) },
                                 ] as const
                               ).map(({ label, value }) => (
-                                <div key={label} className="text-center">
-                                  <p className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
-                                    {label}
-                                  </p>
-                                  <p className="text-xs font-mono font-bold text-parchment/80">
-                                    {value}
-                                  </p>
+                                <div key={label} className="eci-time-cell">
+                                  <p className="eci-time-label">{label}</p>
+                                  <p className="eci-time-value">{value}</p>
                                 </div>
                               ))}
                             </div>
-                            <div className="flex justify-between items-center mb-2.5">
-                              <span className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
-                                Altitud a medianoche
-                              </span>
+                            <div className="eci-algol-alt-row">
+                              <span className="eci-bar-label">Altitud a medianoche</span>
                               <span
-                                className={`text-xs font-mono font-bold ${
+                                className={
                                   altitudeAtMidnight >= 0
-                                    ? 'text-amber-300/75'
-                                    : 'text-parchment/35'
-                                }`}
+                                    ? 'eci-algol-alt-visible'
+                                    : 'eci-algol-alt-hidden'
+                                }
                               >
                                 {altitudeAtMidnight >= 0 ? '+' : ''}
                                 {altitudeAtMidnight.toFixed(1)}°
                               </span>
                             </div>
                             {/* Cycle progress */}
-                            <div className="mb-2">
-                              <div className="flex justify-between items-center mb-0.5">
-                                <span className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
+                            <div className="eci-elong-row">
+                              <div className="eci-bar-header">
+                                <span className="eci-bar-label">
                                   Fase en ciclo ({periodDays.toFixed(3)}d)
                                 </span>
-                                <span className="text-xs font-mono font-bold text-parchment/80">
-                                  {phaseBarPct}%
-                                </span>
+                                <span className="eci-bar-value">{phaseBarPct}%</span>
                               </div>
-                              <div
-                                className="w-full h-1.5 rounded-full overflow-hidden relative"
-                                style={{ background: 'rgba(255,255,255,0.08)' }}
-                              >
+                              <div className="eci-cycle-track">
                                 <div
-                                  className="h-full rounded-full transition-all"
+                                  className="eci-bar-fill"
                                   style={{
                                     width: `${phaseBarPct}%`,
                                     background: isEclipsing
@@ -1684,45 +1421,30 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                       : 'rgba(212,168,50,0.55)',
                                   }}
                                 />
-                                {/* Minimum marker at 0% and 100% edges */}
-                                <div className="absolute top-0 left-0 w-0.5 h-full bg-red-500/60 rounded" />
-                                <div className="absolute top-0 right-0 w-0.5 h-full bg-red-500/60 rounded" />
+                                <div className="eci-cycle-marker eci-cycle-marker--left" />
+                                <div className="eci-cycle-marker eci-cycle-marker--right" />
                               </div>
-                              <div className="flex justify-between mt-0.5">
-                                <span className="text-xs text-red-400/50 font-serif">
-                                  mínimo
-                                </span>
-                                <span className="text-xs text-red-400/50 font-serif">
-                                  mínimo
-                                </span>
+                              <div className="eci-cycle-minima">
+                                <span className="eci-cycle-min-label">mínimo</span>
+                                <span className="eci-cycle-min-label">mínimo</span>
                               </div>
                             </div>
 
                             {/* Next / last minimum */}
-                            <div className="grid grid-cols-2 gap-2 mb-2">
-                              <div
-                                className="text-center p-1.5 rounded"
-                                style={{ background: 'rgba(255,255,255,0.04)' }}
-                              >
-                                <p className="text-xs uppercase tracking-widest text-parchment/40 font-serif">
-                                  Último mínimo
-                                </p>
-                                <p className="text-xs font-mono font-bold text-parchment/70">
+                            <div className="eci-minima-grid">
+                              <div className="eci-minima-cell">
+                                <p className="eci-minima-cell-label">Último mínimo</p>
+                                <p className="eci-minima-cell-value">
                                   hace {fmtHours(lastMinimumAgoHours)}
                                 </p>
                               </div>
-                              <div
-                                className="text-center p-1.5 rounded"
-                                style={{ background: 'rgba(255,255,255,0.04)' }}
-                              >
-                                <p className="text-xs uppercase tracking-widest text-parchment/40 font-serif">
-                                  Próximo mínimo
-                                </p>
+                              <div className="eci-minima-cell">
+                                <p className="eci-minima-cell-label">Próximo mínimo</p>
                                 <p
-                                  className={`text-xs font-mono font-bold ${
+                                  className={`eci-minima-cell-value${
                                     nextMinimumInHours < 6
-                                      ? 'text-red-400/90'
-                                      : 'text-parchment/70'
+                                      ? ' eci-minima-cell-value--urgent'
+                                      : ''
                                   }`}
                                 >
                                   en {fmtHours(nextMinimumInHours)}
@@ -1731,25 +1453,23 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                             </div>
 
                             {/* Estimated magnitude bar */}
-                            <div className="mb-2.5">
-                              <div className="flex justify-between items-center mb-0.5">
-                                <span className="text-xs uppercase tracking-widest text-parchment/45 font-serif">
-                                  Magnitud estimada
-                                </span>
+                            <div className="eci-elong-row">
+                              <div className="eci-bar-header">
+                                <span className="eci-bar-label">Magnitud estimada</span>
                                 <span
-                                  className={`text-xs font-mono font-bold ${
-                                    isEclipsing ? 'text-red-400/80' : 'text-amber-300/80'
-                                  }`}
+                                  className="eci-bar-value"
+                                  style={{
+                                    color: isEclipsing
+                                      ? 'rgb(248 113 113 / 80%)'
+                                      : 'rgb(252 211 77 / 80%)',
+                                  }}
                                 >
                                   {estimatedMagnitude.toFixed(2)}
                                 </span>
                               </div>
-                              <div
-                                className="w-full h-1 rounded-full overflow-hidden"
-                                style={{ background: 'rgba(255,255,255,0.08)' }}
-                              >
+                              <div className="eci-bar-track">
                                 <div
-                                  className="h-full rounded-full transition-all"
+                                  className="eci-bar-fill"
                                   style={{
                                     width: `${magFraction * 100}%`,
                                     background: isEclipsing
@@ -1758,13 +1478,9 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                   }}
                                 />
                               </div>
-                              <div className="flex justify-between mt-0.5">
-                                <span className="text-xs text-amber-300/40 font-serif">
-                                  2.1 brillante
-                                </span>
-                                <span className="text-xs text-red-400/40 font-serif">
-                                  3.4 opaco
-                                </span>
+                              <div className="eci-mag-label-row">
+                                <span className="eci-mag-label-bright">2.1 brillante</span>
+                                <span className="eci-mag-label-dim">3.4 opaco</span>
                               </div>
                             </div>
 
@@ -1775,16 +1491,12 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                                 e.stopPropagation();
                                 setIsHorusOpen(true);
                               }}
-                              className="w-full flex items-center justify-between px-2.5 py-1.5 rounded border text-left cursor-pointer transition-all hover:border-red-500/40"
-                              style={{
-                                borderColor: 'rgba(192,57,26,0.25)',
-                                background: 'rgba(192,57,26,0.08)',
-                              }}
+                              className="eci-algol-modal-btn"
                             >
-                              <span className="text-xs font-serif text-red-300/80 italic">
+                              <span className="eci-algol-modal-label">
                                 Ver eclipses y días excepcionales
                               </span>
-                              <span className="text-parchment/30 text-sm">›</span>
+                              <span className="eci-algol-modal-arrow">›</span>
                             </button>
                           </div>
                         );
@@ -1794,67 +1506,40 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
 
                 {/* Astronomical alerts */}
                 {hasAstroAlerts && (
-                  <div
-                    className="flex flex-col gap-2 border-t pt-4"
-                    style={{ borderColor: BORDER_BLUE_FAINT }}
-                  >
+                  <div className="eci-astro-sep">
                     <SectionHeader>Influencias Astronómicas</SectionHeader>
-                    <div className="flex flex-col gap-2 mt-2">
+                    <div className="eci-astro-list">
                       {moonPhase >= 0.45 && moonPhase <= 0.55 && (
-                        <div
-                          className="flex items-start gap-3 p-3 rounded border"
-                          style={{
-                            background: 'rgba(212,168,50,0.08)',
-                            borderColor: 'rgba(212,168,50,0.35)',
-                          }}
-                        >
-                          <span className="text-base shrink-0">🌕</span>
-                          <p className="text-xs font-serif font-bold text-parchment/85 leading-snug">
+                        <div className="eci-astro-item eci-astro-item--moon">
+                          <span className="eci-astro-icon">🌕</span>
+                          <p className="eci-astro-text">
                             Ventana de Plenilunio: Día propicio para la entronización del Toro
                             Apis en Menfis.
                           </p>
                         </div>
                       )}
                       {algol.isEclipsed && (
-                        <div
-                          className="flex items-start gap-3 p-3 rounded border"
-                          style={{
-                            background: 'rgba(80,10,10,0.25)',
-                            borderColor: 'rgba(192,57,26,0.35)',
-                          }}
-                        >
-                          <span className="text-base shrink-0 animate-pulse">✨</span>
-                          <p className="text-xs font-serif font-bold text-red-300 leading-snug">
+                        <div className="eci-astro-item eci-astro-item--algol">
+                          <span className="eci-astro-icon animate-pulse">✨</span>
+                          <p className="eci-astro-text eci-astro-text--algol">
                             ¡Algol (El Ojo de Horus) está en eclipse hoy! Las fuerzas del Caos
                             acechan.
                           </p>
                         </div>
                       )}
                       {isNewMoon && (
-                        <div
-                          className="flex items-start gap-3 p-3 rounded border"
-                          style={{
-                            background: 'rgba(20,10,50,0.30)',
-                            borderColor: 'rgba(80,60,160,0.35)',
-                          }}
-                        >
-                          <span className="text-base shrink-0">🌑</span>
-                          <p className="text-xs font-serif text-parchment/80 leading-snug italic">
+                        <div className="eci-astro-item eci-astro-item--newmoon">
+                          <span className="eci-astro-icon">🌑</span>
+                          <p className="eci-astro-text eci-astro-text--newmoon">
                             Noche de Estirar la Cuerda (Pedj-Shes). Seshat guía a los
                             arquitectos alineando los templos con las estrellas imperecederas.
                           </p>
                         </div>
                       )}
                       {isFullMoon && (
-                        <div
-                          className="flex items-start gap-3 p-3 rounded border"
-                          style={{
-                            background: 'rgba(212,168,50,0.05)',
-                            borderColor: 'rgba(212,168,50,0.20)',
-                          }}
-                        >
-                          <span className="text-base shrink-0">🌕</span>
-                          <p className="text-xs font-serif text-parchment/80 leading-snug italic">
+                        <div className="eci-astro-item eci-astro-item--fullmoon">
+                          <span className="eci-astro-icon">🌕</span>
+                          <p className="eci-astro-text eci-astro-text--fullmoon">
                             Plenilunio sagrado. Las fuerzas lunares de Khonsu iluminan el cielo
                             de Kemet.
                           </p>
@@ -1866,61 +1551,34 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
 
                 {/* Festivals */}
                 {(civilFestivals.length > 0 || lunarFestivals.length > 0) && (
-                  <div
-                    className="flex flex-col gap-3 border-t pt-4"
-                    style={{ borderColor: BORDER_BLUE_FAINT }}
-                  >
+                  <div className="eci-festivals-sep">
                     <SectionHeader>Festividades del Día</SectionHeader>
-                    <div className="flex flex-col gap-3 mt-1">
+                    <div className="eci-festivals-list">
                       {civilFestivals.map((f, i) => (
-                        <div
-                          key={`civil-${i}`}
-                          className="p-4 rounded border-2 text-left"
-                          style={{
-                            background: 'rgba(24,64,160,0.10)',
-                            borderColor: 'rgba(24,64,160,0.35)',
-                          }}
-                        >
-                          <div
-                            className="text-xs font-bold uppercase tracking-widest mb-1.5 flex justify-between"
-                            style={{ color: 'rgba(212,168,50,0.70)' }}
-                          >
+                        <div key={`civil-${i}`} className="eci-civil-fest-card">
+                          <div className="eci-fest-card-type">
                             <span>𓊹 Festival Civil 𓊹</span>
-                            <span className="text-parchment/30">Fijo</span>
+                            <span className="eci-fest-card-fixed">Fijo</span>
                           </div>
-                          <div className="text-parchment font-serif font-bold text-base mb-1 flex items-center gap-2">
-                            <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
+                          <div className="eci-fest-card-name">
+                            <FestivalIcon name={f.icon} className="eci-icon--emerald" />
                             <span>{f.name}</span>
                           </div>
-                          <p className="font-serif text-xs text-parchment/75 italic leading-relaxed">
-                            {f.description}
-                          </p>
+                          <p className="eci-fest-card-desc">{f.description}</p>
                           {f.fonte && <FestivalFontePanel fonte={f.fonte} />}
                         </div>
                       ))}
                       {lunarFestivals.map((f, i) => (
-                        <div
-                          key={`lunar-${i}`}
-                          className="p-4 rounded border-2 text-left"
-                          style={{
-                            background: 'rgba(212,168,50,0.06)',
-                            borderColor: 'rgba(212,168,50,0.30)',
-                          }}
-                        >
-                          <div
-                            className="text-xs font-bold uppercase tracking-widest mb-1.5 flex justify-between"
-                            style={{ color: 'rgba(212,168,50,0.70)' }}
-                          >
+                        <div key={`lunar-${i}`} className="eci-lunar-fest-card">
+                          <div className="eci-fest-card-type">
                             <span>𓊹 Festival Lunar 𓊹</span>
-                            <span className="text-parchment/30">Día {lunarDay}</span>
+                            <span className="eci-fest-card-fixed">Día {lunarDay}</span>
                           </div>
-                          <div className="text-parchment font-serif font-bold text-base mb-1 flex items-center gap-2">
-                            <FestivalIcon name={f.icon} className="text-amber-400 shrink-0" />
+                          <div className="eci-fest-card-name">
+                            <FestivalIcon name={f.icon} className="eci-icon--amber" />
                             <span>{f.name}</span>
                           </div>
-                          <p className="font-serif text-xs text-parchment/75 italic leading-relaxed">
-                            {f.description}
-                          </p>
+                          <p className="eci-fest-card-desc">{f.description}</p>
                           {f.fonte && <FestivalFontePanel fonte={f.fonte} />}
                         </div>
                       ))}
@@ -1932,13 +1590,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
           </div>
 
           {/* ── Hall of Maāti button ──────────────────────────────────────── */}
-          <button
-            onClick={() => setShowMaati(true)}
-            className="w-full flex items-center justify-center gap-3 py-3 border-t font-serif text-xs uppercase tracking-[0.25em] font-bold transition-all"
-            style={{ borderColor: BORDER_BLUE_FAINT, color: 'rgba(212,168,50,0.55)' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'rgba(212,168,50,0.85)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(212,168,50,0.55)')}
-          >
+          <button onClick={() => setShowMaati(true)} className="eci-maati-btn">
             <span>𓀗</span>
             <span>Sala de la Doble Maāti · 42 Evaluadores</span>
             <span>𓀗</span>
@@ -1951,7 +1603,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
       {/* ── Hall of Maāti Modal ──────────────────────────────────────────── */}
       {showMaati && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md animate-fadeIn cursor-pointer"
+          className="eci-modal-backdrop animate-fadeIn"
           style={{ background: 'rgba(12,8,4,0.90)' }}
           role="button"
           tabIndex={0}
@@ -1961,46 +1613,25 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
           }}
         >
           <div
-            className="w-full max-w-lg rounded-sm shadow-2xl overflow-hidden relative cursor-default flex flex-col"
-            style={{
-              background: '#080510',
-              border: '4px solid rgba(24,64,160,0.55)',
-              maxHeight: '85vh',
-            }}
+            className="eci-modal-maati"
             role="presentation"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div
-              className="p-5 border-b text-center shrink-0"
-              style={{
-                borderColor: 'rgba(24,64,160,0.30)',
-                background: 'rgba(24,64,160,0.12)',
-              }}
-            >
-              <div className="text-2xl mb-1" style={{ color: 'rgba(212,168,50,0.85)' }}>
-                𓀗 𓇋𓄿𓄿𓏏 𓀗
-              </div>
-              <h2 className="text-xl font-serif font-black text-parchment uppercase tracking-widest">
-                Sala de la Doble Maāti
-              </h2>
-              <p
-                className="text-xs uppercase tracking-[0.3em] font-bold mt-1"
-                style={{ color: 'rgba(212,168,50,0.50)' }}
-              >
+            <div className="eci-modal-header">
+              <div className="eci-modal-glyph">𓀗 𓇋𓄿𓄿𓏏 𓀗</div>
+              <h2 className="eci-modal-title">Sala de la Doble Maāti</h2>
+              <p className="eci-modal-subtitle">
                 42 Evaluadores · Confesión Negativa · Capítulo CXXV
               </p>
-              <p className="text-xs font-serif mt-2 text-parchment/40 italic">
+              <p className="eci-modal-papyrus">
                 Papiro de Nebseni (BM 9,900) · Recensión Tebana
               </p>
             </div>
 
             {/* Preamble */}
-            <div
-              className="px-5 pt-4 pb-2 shrink-0 border-b"
-              style={{ borderColor: 'rgba(24,64,160,0.20)' }}
-            >
-              <p className="font-serif text-xs text-parchment/65 italic leading-relaxed">
+            <div className="eci-modal-preamble">
+              <p className="eci-modal-preamble-text">
                 «Heme aquí; vengo a ti, mi Señor; me he traído a mí mismo para que pueda ver tus
                 bellezas. Te conozco, y conozco tu nombre, y los nombres de los cuarenta y dos
                 dioses que viven contigo en esta Sala de la Doble Maāti.»
@@ -2008,28 +1639,15 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
             </div>
 
             {/* Assessors list */}
-            <div className="overflow-y-auto flex-1 p-4">
-              <div className="flex flex-col gap-1">
+            <div className="eci-modal-body">
+              <div className="maati-list">
                 {HALL_OF_MAATI.map(a => (
-                  <div
-                    key={a.num}
-                    className="flex gap-3 items-start py-2 border-b"
-                    style={{ borderColor: 'rgba(24,64,160,0.12)' }}
-                  >
-                    <div
-                      className="shrink-0 w-6 text-right font-serif text-xs font-bold pt-0.5"
-                      style={{ color: 'rgba(212,168,50,0.55)' }}
-                    >
-                      {a.num}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-serif text-xs font-bold text-parchment/90 leading-snug">
-                        {a.description}
-                      </div>
-                      <div className="text-xs text-parchment/40 mt-0.5 italic">{a.origin}</div>
-                      <div className="text-xs text-parchment/60 mt-1 font-serif italic leading-snug">
-                        {a.sinDenied}
-                      </div>
+                  <div key={a.num} className="maati-assessor-row">
+                    <div className="maati-num">{a.num}</div>
+                    <div className="maati-content">
+                      <div className="maati-desc">{a.description}</div>
+                      <div className="maati-origin">{a.origin}</div>
+                      <div className="maati-sin">{a.sinDenied}</div>
                     </div>
                   </div>
                 ))}
@@ -2037,14 +1655,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
             </div>
 
             {/* Footer */}
-            <button
-              className="w-full p-3 border-t font-serif text-xs uppercase tracking-widest font-bold text-parchment/50 hover:text-parchment/80 transition-all shrink-0"
-              style={{
-                borderColor: 'rgba(24,64,160,0.30)',
-                background: 'rgba(24,64,160,0.08)',
-              }}
-              onClick={() => setShowMaati(false)}
-            >
+            <button className="eci-modal-footer-btn" onClick={() => setShowMaati(false)}>
               Cerrar la Sala
             </button>
           </div>
@@ -2054,7 +1665,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
       {/* ── Next Festivals Modal ──────────────────────────────────────────── */}
       {showFestivals && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md animate-fadeIn cursor-pointer"
+          className="eci-modal-backdrop animate-fadeIn"
           style={{ background: 'rgba(12,8,4,0.85)' }}
           role="button"
           tabIndex={0}
@@ -2065,112 +1676,55 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
           }}
         >
           <div
-            className="w-full max-w-lg rounded-sm shadow-2xl overflow-hidden relative cursor-default"
-            style={{ background: '#0c0804', border: '4px solid rgba(24,64,160,0.55)' }}
+            className="eci-modal-festivals"
             role="presentation"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div
-              className="p-6 border-b text-center"
-              style={{
-                borderColor: 'rgba(24,64,160,0.30)',
-                background: 'rgba(24,64,160,0.10)',
-              }}
-            >
-              <div className="text-3xl mb-2" style={{ color: 'rgba(212,168,50,0.85)' }}>
-                𓊹
-              </div>
-              <h2 className="text-2xl font-serif font-black text-parchment uppercase tracking-widest">
-                Próximos Festivales
-              </h2>
-              <p
-                className="text-xs uppercase tracking-[0.3em] font-bold mt-1"
-                style={{ color: 'rgba(212,168,50,0.55)' }}
-              >
-                Calendario Sagrado de Kemet
-              </p>
+            <div className="eci-modal-header--festivals">
+              <div className="eci-modal-glyph--lg">𓊹</div>
+              <h2 className="eci-modal-title--festivals">Próximos Festivales</h2>
+              <p className="eci-modal-subtitle--festivals">Calendario Sagrado de Kemet</p>
             </div>
 
             {/* List */}
-            <div className="p-6 flex flex-col gap-6 max-h-[60vh] overflow-y-auto">
+            <div className="eci-modal-body--festivals">
               {getNextEgyptianFestivals(
                 egyptianDate.monthIndex,
                 egyptianDate.dayOfMonth,
                 3,
               ).map((f, i) => (
                 <div key={i}>
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex flex-col gap-1">
-                      <h4 className="font-serif text-lg font-bold text-parchment flex items-center gap-2">
-                        <FestivalIcon name={f.icon} className="text-emerald-400 shrink-0" />
+                  <div className="festival-entry-header">
+                    <div className="festival-entry-name-col">
+                      <h4 className="festival-entry-name">
+                        <FestivalIcon name={f.icon} className="eci-icon--emerald" />
                         <span>{f.name}</span>
                       </h4>
-                      <span
-                        className="text-xs font-bold uppercase tracking-widest"
-                        style={{ color: 'rgba(212,168,50,0.55)' }}
-                      >
-                        {f.date}
-                      </span>
+                      <span className="festival-entry-date">{f.date}</span>
                     </div>
-                    <div
-                      className="p-2 rounded text-right"
-                      style={{
-                        background: 'rgba(24,64,160,0.15)',
-                        border: '1px solid rgba(24,64,160,0.35)',
-                      }}
-                    >
-                      <div className="text-base font-black text-emerald-300 leading-none">
-                        {f.daysRemaining}
-                      </div>
-                      <div className="text-[7px] uppercase font-bold tracking-tighter text-parchment/40">
-                        días
-                      </div>
+                    <div className="festival-entry-days">
+                      <div className="festival-days-num">{f.daysRemaining}</div>
+                      <div className="festival-days-label">días</div>
                     </div>
                   </div>
-                  <p
-                    className="font-serif text-sm text-parchment/75 leading-relaxed italic border-l-2 pl-4 py-1"
-                    style={{ borderColor: 'rgba(24,64,160,0.35)' }}
-                  >
-                    {f.description}
-                  </p>
+                  <p className="festival-entry-desc">{f.description}</p>
                 </div>
               ))}
             </div>
 
             {/* Footer */}
             <button
-              className="w-full p-4 border-t font-serif text-xs uppercase tracking-widest font-bold text-parchment/60 hover:text-parchment/90 transition-all"
-              style={{
-                borderColor: 'rgba(24,64,160,0.30)',
-                background: 'rgba(24,64,160,0.08)',
-              }}
+              className="eci-modal-footer-btn--festivals"
               onClick={() => setShowFestivals(false)}
             >
               Cerrar Rollo Sagrado
             </button>
 
-            <div className="absolute top-2 left-2 text-xl" style={{ color: BORDER_BLUE_FAINT }}>
-              𓋹
-            </div>
-            <div
-              className="absolute top-2 right-2 text-xl"
-              style={{ color: BORDER_BLUE_FAINT }}
-            >
-              𓋹
-            </div>
-            <div
-              className="absolute bottom-16 left-2 text-xl"
-              style={{ color: BORDER_BLUE_FAINT }}
-            >
-              𓋹
-            </div>
-            <div
-              className="absolute bottom-16 right-2 text-xl"
-              style={{ color: BORDER_BLUE_FAINT }}
-            >
-              𓋹
-            </div>
+            <div className="festivals-corner festivals-corner--tl">𓋹</div>
+            <div className="festivals-corner festivals-corner--tr">𓋹</div>
+            <div className="festivals-corner festivals-corner--bl">𓋹</div>
+            <div className="festivals-corner festivals-corner--br">𓋹</div>
           </div>
         </div>
       )}

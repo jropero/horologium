@@ -1,0 +1,1491 @@
+/* === BabylonianCalendarInfo.css === */
+
+/* ── CuneiformBorder SVG ──────────────────────────────────────────────────── */
+
+.bci-frieze-svg {
+  width: 100%;
+  height: 3.5rem;
+  display: block;
+}
+
+/* ── Root ─────────────────────────────────────────────────────────────────── */
+
+.babylonian-calendar-info {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-inline: 0.5rem;
+}
+
+/* ── Outer card ───────────────────────────────────────────────────────────── */
+
+.bci-outer-card {
+  background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 4px solid rgb(37 99 235 / 60%);
+  padding: 0;
+  border-radius: 0.125rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: #60a5fa;
+  }
+}
+
+/* ── Inner content ────────────────────────────────────────────────────────── */
+
+.bci-inner {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+
+  @media (width >= 768px) {
+    padding: 2rem;
+  }
+}
+
+/* ── Sky scene ────────────────────────────────────────────────────────────── */
+
+.bci-sky-scene {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(59 130 246 / 30%);
+  border-radius: 0.125rem;
+  aspect-ratio: 16 / 9;
+}
+
+.bci-sky-bg {
+  position: absolute;
+  inset: 0;
+  transition: background 2s ease;
+}
+
+.bci-sky-svg-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.bci-skyline-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.bci-sky-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  text-align: center;
+  padding-inline: 1rem;
+}
+
+/* ── Hero text ────────────────────────────────────────────────────────────── */
+
+.bci-hero-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.25;
+  filter: drop-shadow(0 2px 8px rgb(0 0 0 / 90%));
+}
+
+.bci-hero-dingir-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.bci-dingir {
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+}
+
+.bci-month-name {
+  font-family: Cinzel, serif;
+  color: var(--parchment);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.bci-intercalary {
+  margin-left: 0.5rem;
+  color: rgb(253 186 116); /* orange-300 */
+}
+
+.bci-warhum {
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  font-style: italic;
+  letter-spacing: 0.1em;
+}
+
+.bci-se-year {
+  color: color-mix(in srgb, var(--parchment) 55%, transparent);
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 7%)) drop-shadow(0 2px 2px rgb(0 0 0 / 6%));
+  margin-top: 0.25rem;
+}
+
+.bci-hour-name {
+  color: color-mix(in srgb, var(--parchment) 75%, transparent);
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+.bci-planet-watch {
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  letter-spacing: 0.025em;
+}
+
+/* ── Color utility classes (shared across sub-components) ─────────────────── */
+
+.bci-color-indigo {
+  color: #818cf8;
+}
+
+.bci-color-sky {
+  color: #38bdf8;
+}
+
+.bci-color-amber {
+  color: #fbbf24;
+}
+
+.bci-color-blue {
+  color: #60a5fa;
+}
+
+.bci-color-blue-light {
+  color: #93c5fd;
+}
+
+.bci-color-violet {
+  color: #a78bfa;
+}
+
+.bci-color-slate {
+  color: #94a3b8;
+}
+
+.bci-color-pink {
+  color: #f472b6;
+}
+
+.bci-color-emerald {
+  color: #34d399;
+}
+
+.bci-color-cyan {
+  color: #22d3ee;
+}
+
+.bci-color-white {
+  color: #fff;
+}
+
+/* ── Border/bg/glow theme classes (used by DayStatusCard) ─────────────────── */
+
+.bci-border-indigo {
+  border: 1px solid rgb(99 102 241 / 40%);
+}
+
+.bci-border-sky {
+  border: 1px solid rgb(14 165 233 / 35%);
+}
+
+.bci-border-amber {
+  border: 1px solid rgb(245 158 11 / 50%);
+}
+
+.bci-border-rest {
+  border: 1px solid rgb(37 99 235 / 35%);
+}
+
+.bci-border-default {
+  border: 1px solid rgb(29 78 216 / 30%);
+}
+
+.bci-bg-indigo {
+  background-color: rgb(49 46 129 / 15%);
+}
+
+.bci-bg-sky {
+  background-color: rgb(12 74 110 / 15%);
+}
+
+.bci-bg-amber {
+  background-color: rgb(120 53 15 / 15%);
+}
+
+.bci-bg-rest {
+  background-color: rgb(30 58 138 / 10%);
+}
+
+.bci-bg-default {
+  background-color: rgb(30 58 138 / 10%);
+}
+
+.bci-glow-amber {
+  box-shadow: 0 0 30px rgb(251 191 36 / 8%);
+}
+
+/* ── DayStatusCard ────────────────────────────────────────────────────────── */
+
+.bci-day-plain {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgb(59 130 246 / 60%);
+  text-align: center;
+}
+
+.bci-day-card {
+  border-radius: 0.125rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.bci-sapatu-glow-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background: radial-gradient(circle at center, #fbbf24, transparent, transparent);
+  pointer-events: none;
+}
+
+.bci-day-special-header {
+  border-bottom: 1px solid rgb(37 99 235 / 40%);
+  padding-bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.bci-day-special-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 7%)) drop-shadow(0 2px 2px rgb(0 0 0 / 6%));
+}
+
+.bci-day-special-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bci-day-special-title {
+  font-family: Cinzel, serif;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+
+.bci-day-special-es {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  color: rgb(191 219 254 / 70%);
+}
+
+.bci-day-event {
+  margin-top: 0.25rem;
+  width: 100%;
+}
+
+.bci-day-event-type {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #60a5fa;
+}
+
+.bci-day-event-desc {
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  line-height: 1.625;
+  padding-inline: 0.5rem;
+}
+
+/* ── BabylonianFontePanel ─────────────────────────────────────────────────── */
+
+.bci-fonte-panel {
+  margin-top: 0.5rem;
+  border-top: 1px solid rgb(96 165 250 / 20%);
+}
+
+.bci-fonte-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  text-align: left;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bci-fonte-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(96 165 250 / 70%);
+}
+
+.bci-fonte-chevron {
+  color: rgb(59 130 246 / 60%);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  flex-shrink: 0;
+}
+
+.bci-fonte-body {
+  margin-top: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.bci-fonte-excerpt {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 85%, transparent);
+  font-style: italic;
+  line-height: 1.625;
+  border-left: 2px solid rgb(96 165 250 / 35%);
+  padding-left: 0.75rem;
+  padding-block: 0.25rem;
+}
+
+.bci-fonte-source {
+  font-size: 0.75rem;
+  color: rgb(96 165 250 / 40%);
+  margin-top: 0.375rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.625;
+}
+
+/* ── PanelMoonSvg ─────────────────────────────────────────────────────────── */
+
+.bci-panel-moon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-inline: auto;
+  margin-bottom: 0.25rem;
+  transition: color 0.15s ease, filter 0.15s ease;
+  display: block;
+}
+
+.bci-panel-moon--active {
+  color: #93c5fd;
+  filter: drop-shadow(0 0 6px rgb(147 197 253 / 60%));
+}
+
+.bci-panel-moon--inactive {
+  color: rgb(59 130 246 / 50%);
+}
+
+/* ── DayGrid ──────────────────────────────────────────────────────────────── */
+
+.bci-panels-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.375rem;
+  width: 100%;
+
+  @media (width >= 640px) {
+    gap: 0.5rem;
+  }
+}
+
+.bci-panel {
+  padding: 0.5rem;
+  flex: 1;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  transition: border-color 500ms ease, background-color 500ms ease, box-shadow 500ms ease,
+    transform 500ms ease;
+  position: relative;
+  overflow: hidden;
+
+  @media (width >= 640px) {
+    padding: 0.75rem;
+  }
+}
+
+.bci-panel--active {
+  border-color: rgb(96 165 250 / 50%);
+  background-color: rgb(30 58 138 / 10%);
+  box-shadow: 0 0 15px rgb(96 165 250 / 10%);
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+.bci-panel--inactive {
+  border-color: rgb(30 64 175 / 30%);
+  background-color: color-mix(in srgb, var(--ink) 30%, transparent);
+}
+
+.bci-panel-glow {
+  position: absolute;
+  right: -1rem;
+  top: -1rem;
+  width: 4rem;
+  height: 4rem;
+  background-color: rgb(96 165 250 / 10%);
+  border-radius: 9999px;
+  filter: blur(24px);
+  pointer-events: none;
+}
+
+.bci-panel-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid rgb(29 78 216 / 30%);
+  padding-bottom: 0.5rem;
+}
+
+.bci-panel-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.bci-panel-title--active {
+  color: #93c5fd;
+}
+
+.bci-panel-title--inactive {
+  color: rgb(59 130 246);
+}
+
+.bci-panel-subtitle {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  color: rgb(96 165 250 / 60%);
+  margin-top: 0.125rem;
+}
+
+.bci-day-cells {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem;
+  justify-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.bci-day-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.125rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+  width: 100%;
+  gap: 0;
+  transition: background-color 0.15s ease, outline-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  outline: none;
+}
+
+.bci-day-btn--default {
+  background-color: color-mix(in srgb, var(--ink) 40%, transparent);
+
+  &:active {
+    background-color: rgb(30 58 138 / 30%);
+  }
+}
+
+.bci-day-btn--selected {
+  background-color: rgb(96 165 250 / 20%);
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  box-shadow: 0 0 8px rgb(96 165 250 / 40%);
+}
+
+.bci-day-btn--today {
+  background-color: rgb(96 165 250 / 15%);
+  outline: 1px solid rgb(96 165 250 / 70%);
+  outline-offset: 2px;
+}
+
+.bci-day-btn--sapatu {
+  background-color: rgb(245 158 11 / 20%);
+  outline: 1px solid rgb(251 191 36 / 60%);
+  outline-offset: 2px;
+}
+
+.bci-day-btn--quarter {
+  background-color: rgb(12 74 110 / 30%);
+  outline: 1px solid rgb(56 189 248 / 40%);
+  outline-offset: 2px;
+}
+
+.bci-day-btn--rest {
+  background-color: rgb(49 46 129 / 30%);
+  outline: 1px solid rgb(129 140 248 / 40%);
+  outline-offset: 2px;
+}
+
+.bci-day-btn--festival {
+  background-color: rgb(6 78 59 / 25%);
+  outline: 1px solid rgb(16 185 129 / 40%);
+  outline-offset: 2px;
+}
+
+.bci-day-num {
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #93c5fd;
+}
+
+.bci-day-num--selected {
+  color: #fff;
+}
+
+.bci-day-num--today {
+  color: #bfdbfe;
+}
+
+.bci-day-num--past {
+  color: rgb(96 165 250 / 50%);
+}
+
+/* Info panel (selected day details) */
+
+.bci-info-panel {
+  margin-top: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  transition: border-color 0.15s ease, background-color 0.15s ease, padding 0.15s ease;
+}
+
+.bci-info-panel--open {
+  border-color: rgb(59 130 246 / 40%);
+  background-color: rgb(30 58 138 / 20%);
+  padding: 0.75rem;
+}
+
+.bci-info-panel--closed {
+  border-color: rgb(30 64 175 / 30%);
+  background-color: transparent;
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
+}
+
+.bci-info-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.bci-info-panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bci-info-panel-day {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bci-info-panel-close {
+  color: rgb(59 130 246);
+  font-size: 0.75rem;
+  line-height: 1;
+  padding-inline: 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #93c5fd;
+  }
+}
+
+.bci-info-special-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #93c5fd;
+}
+
+.bci-info-special-es {
+  font-size: 0.75rem;
+  color: rgb(219 234 254 / 90%);
+  margin-top: 0.125rem;
+  line-height: 1.375;
+}
+
+.bci-info-event--with-special {
+  border-top: 1px solid rgb(29 78 216 / 40%);
+  padding-top: 0.5rem;
+}
+
+.bci-info-event-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.bci-info-event-desc {
+  font-size: 0.75rem;
+  color: rgb(219 234 254 / 90%);
+  margin-top: 0.125rem;
+  line-height: 1.375;
+}
+
+.bci-empty-hint {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #93c5fd;
+  text-align: center;
+}
+
+/* Legend */
+
+.bci-legend {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  justify-content: center;
+}
+
+.bci-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bci-legend-swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.125rem;
+  display: inline-block;
+}
+
+.bci-legend-swatch--quarter {
+  background-color: rgb(12 74 110 / 50%);
+  outline: 1px solid rgb(56 189 248 / 50%);
+  outline-offset: 2px;
+}
+
+.bci-legend-swatch--sapatu {
+  background-color: rgb(245 158 11 / 25%);
+  outline: 1px solid rgb(251 191 36 / 70%);
+  outline-offset: 2px;
+}
+
+.bci-legend-swatch--rest {
+  background-color: rgb(49 46 129 / 40%);
+  outline: 1px solid rgb(129 140 248 / 50%);
+  outline-offset: 2px;
+}
+
+.bci-legend-swatch--festival {
+  background-color: rgb(6 78 59 / 35%);
+  outline: 1px solid rgb(16 185 129 / 50%);
+  outline-offset: 2px;
+}
+
+.bci-legend-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.bci-legend-gloss {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(147 197 253 / 60%);
+  font-style: italic;
+}
+
+/* Festivals button */
+
+.bci-festivals-btn {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(96 165 250 / 70%);
+  border: 1px solid rgb(37 99 235 / 30%);
+  border-radius: 0.25rem;
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: rgb(96 165 250 / 50%);
+    color: #93c5fd;
+  }
+}
+
+/* ── LuniSolarBar ─────────────────────────────────────────────────────────── */
+
+.bci-lunar-bar {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.bci-lunar-bar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.bci-lunar-bar-nisannu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bci-lunar-bar-nisannu-label {
+  color: #93c5fd;
+  font-weight: 700;
+}
+
+.bci-warhum-gloss {
+  text-transform: none;
+  letter-spacing: 0;
+  font-style: italic;
+  color: rgb(147 197 253 / 60%);
+}
+
+.bci-lunar-track {
+  position: relative;
+  width: 100%;
+  height: 0.75rem;
+  background-color: rgb(30 58 138 / 30%);
+  border-radius: 9999px;
+  border: 1px solid rgb(29 78 216 / 30%);
+  overflow: hidden;
+}
+
+.bci-lunar-fill {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  border-radius: 9999px;
+  transition: width 0.15s ease, background-color 0.15s ease;
+}
+
+.bci-bar--sky {
+  background-color: rgb(56 189 248 / 60%);
+}
+
+.bci-bar--blue {
+  background-color: rgb(96 165 250 / 60%);
+}
+
+.bci-bar--indigo {
+  background-color: rgb(129 140 248 / 60%);
+}
+
+.bci-lunar-cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0.125rem;
+  background-color: #93c5fd;
+  box-shadow: 0 0 4px rgb(147 197 253 / 80%);
+}
+
+.bci-lunar-labels {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.bci-lunar-equinox-date {
+  color: rgb(59 130 246);
+}
+
+.bci-lunar-center {
+  text-align: center;
+}
+
+.bci-lunar-drift {
+  font-style: italic;
+}
+
+.bci-lunar-nisannu-date {
+  color: #60a5fa;
+  margin-left: 0.25rem;
+}
+
+.bci-lunar-30d {
+  color: rgb(96 165 250 / 60%);
+}
+
+.bci-intercalary-note {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #818cf8;
+  text-align: center;
+  background-color: rgb(49 46 129 / 15%);
+  border: 1px solid rgb(99 102 241 / 30%);
+  border-radius: 0.25rem;
+  padding-inline: 0.5rem;
+  padding-block: 0.25rem;
+}
+
+.bci-next-intercalary {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #60a5fa;
+  text-align: center;
+}
+
+/* ── View toggle ──────────────────────────────────────────────────────────── */
+
+.bci-view-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgb(37 99 235 / 40%);
+  width: 100%;
+  max-width: 20rem;
+}
+
+.bci-toggle-btn {
+  flex: 1;
+  padding-block: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bci-toggle-btn--active {
+  background-color: rgb(59 130 246 / 20%);
+  color: #93c5fd;
+  border-right: 1px solid rgb(37 99 235 / 40%);
+}
+
+.bci-toggle-btn--inactive {
+  color: rgb(59 130 246);
+
+  &:hover {
+    color: #93c5fd;
+    background-color: rgb(30 58 138 / 20%);
+  }
+}
+
+/* ── View panel (month / cycle) ───────────────────────────────────────────── */
+
+.bci-view-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bci-view-header {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #60a5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-top: 1px solid rgb(29 78 216 / 30%);
+  border-bottom: 1px solid rgb(29 78 216 / 30%);
+  padding-block: 0.5rem;
+  background-color: color-mix(in srgb, var(--ink) 20%, transparent);
+  margin-bottom: 0.5rem;
+}
+
+.bci-lunar-sync-section {
+  border-top: 1px solid rgb(29 78 216 / 30%);
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.bci-lunar-sync-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+/* ── MetonicCycle ─────────────────────────────────────────────────────────── */
+
+.bci-metonic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.bci-metonic-header {
+  text-align: center;
+}
+
+.bci-metonic-title {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+}
+
+.bci-metonic-range {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #93c5fd;
+  margin-top: 0.125rem;
+}
+
+.bci-metonic-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.bci-metonic-row {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.bci-metonic-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s ease, outline-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.15s ease;
+  width: 28px;
+  height: 32px;
+}
+
+.bci-metonic-cell--default {
+  background-color: rgb(30 58 138 / 20%);
+  border: 1px solid rgb(30 64 175 / 30%);
+}
+
+.bci-metonic-cell--current {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  background-color: rgb(96 165 250 / 20%);
+  box-shadow: 0 0 8px rgb(96 165 250 / 40%);
+  z-index: 10;
+  transform: scale(1.1);
+}
+
+.bci-metonic-cell--intercalary {
+  background-color: rgb(49 46 129 / 30%);
+  border: 1px solid rgb(99 102 241 / 40%);
+}
+
+.bci-metonic-num {
+  font-size: 0.75rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.bci-metonic-num--default {
+  color: #93c5fd;
+}
+
+.bci-metonic-num--current {
+  color: #fff;
+}
+
+.bci-metonic-num--intercalary {
+  color: #818cf8;
+}
+
+.bci-metonic-addaru {
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #818cf8;
+  margin-top: 0.125rem;
+}
+
+.bci-metonic-dot {
+  position: absolute;
+  top: -0.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-color: #60a5fa;
+  box-shadow: 0 0 4px rgb(96 165 250 / 80%);
+}
+
+.bci-metonic-legend {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: center;
+}
+
+.bci-metonic-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bci-metonic-swatch-current {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: rgb(96 165 250 / 20%);
+  outline: 1px solid #60a5fa;
+  outline-offset: 2px;
+  display: inline-block;
+}
+
+.bci-metonic-swatch-intercalary {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: rgb(49 46 129 / 30%);
+  border: 1px solid rgb(99 102 241 / 40%);
+  display: inline-block;
+}
+
+.bci-metonic-label {
+  color: #60a5fa;
+}
+
+.bci-metonic-note {
+  font-size: 0.75rem;
+  color: #93c5fd;
+  font-style: italic;
+  text-align: center;
+  line-height: 1.625;
+  padding-inline: 0.5rem;
+}
+
+/* ── Daily info + Lore card ───────────────────────────────────────────────── */
+
+.bci-daily-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bci-lore-card {
+  width: 100%;
+  background-color: rgb(30 58 138 / 15%);
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 2px solid rgb(59 130 246 / 25%);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+}
+
+.bci-lore-header {
+  color: #60a5fa;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.bci-lore-deity-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.bci-deity-icon {
+  font-size: 1.875rem;
+}
+
+.bci-deity-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bci-deity-name {
+  font-size: 1.5rem;
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  color: var(--parchment);
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 7%)) drop-shadow(0 2px 2px rgb(0 0 0 / 6%));
+  line-height: 1.25;
+
+  @media (width >= 768px) {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+.bci-deity-gloss {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  color: rgb(191 219 254 / 70%);
+}
+
+.bci-lore-desc {
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--parchment) 90%, transparent);
+  font-style: italic;
+  padding-inline: 1rem;
+  line-height: 1.625;
+}
+
+.bci-lore-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.75rem;
+
+  @media (width >= 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.bci-lore-item {
+  padding: 0.75rem;
+  background-color: rgb(30 64 175 / 20%);
+  border: 1px solid rgb(37 99 235 / 25%);
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.bci-lore-item-dingir {
+  font-size: 1.25rem;
+  margin-top: 0.125rem;
+  color: #93c5fd;
+}
+
+.bci-lore-item-body {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.bci-lore-item-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 0.125rem;
+}
+
+.bci-lore-item-value {
+  font-size: 0.875rem;
+  color: rgb(219 234 254 / 95%);
+  line-height: 1.375;
+}
+
+.bci-regent-note {
+  color: rgb(147 197 253 / 70%);
+  font-style: italic;
+}
+
+.bci-regent-desc {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: rgb(191 219 254 / 75%);
+  line-height: 1.625;
+}
+
+.bci-lore-footnote {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgb(147 197 253 / 60%);
+  text-align: center;
+  line-height: 1.375;
+}
+
+/* ── Planetary ruler / watch / hour row ───────────────────────────────────── */
+
+.bci-info-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+.bci-info-cell {
+  flex: 1;
+  background-color: rgb(30 58 138 / 15%);
+  border: 1px solid rgb(59 130 246 / 25%);
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+}
+
+.bci-info-cell-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #60a5fa;
+  margin-bottom: 0.25rem;
+}
+
+.bci-info-cell-main {
+  color: var(--parchment);
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+.bci-info-cell-sub {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #93c5fd;
+  margin-top: 0.125rem;
+}
+
+/* ── Próximos Festivales modal ─────────────────────────────────────────────── */
+
+.bci-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(6 14 34 / 88%);
+}
+
+.bci-modal {
+  width: 100%;
+  max-width: 32rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  overflow: hidden;
+  position: relative;
+  cursor: default;
+  background: #060e1c;
+  border: 3px solid rgb(96 165 250 / 35%);
+}
+
+.bci-modal-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid rgb(96 165 250 / 20%);
+  text-align: center;
+  background: rgb(96 165 250 / 6%);
+}
+
+.bci-modal-dingir {
+  font-size: 1.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.bci-modal-title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-family: Cinzel, serif;
+  font-weight: 900;
+  color: var(--parchment);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.bci-modal-subtitle {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: rgb(96 165 250 / 60%);
+}
+
+.bci-modal-list {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.bci-festival-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.bci-festival-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bci-festival-name {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: var(--parchment);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bci-festival-day {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(96 165 250 / 60%);
+}
+
+.bci-festival-countdown {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  text-align: right;
+  flex-shrink: 0;
+  background: rgb(96 165 250 / 10%);
+  border: 1px solid rgb(96 165 250 / 25%);
+}
+
+.bci-festival-days-num {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #93c5fd;
+  line-height: 1;
+}
+
+.bci-festival-days-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 40%, transparent);
+}
+
+.bci-festival-desc {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--parchment) 70%, transparent);
+  line-height: 1.625;
+  font-style: italic;
+  border-left: 2px solid rgb(96 165 250 / 30%);
+  padding-left: 0.75rem;
+  padding-block: 0.25rem;
+}
+
+.bci-modal-footer {
+  width: 100%;
+  padding: 1rem;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: rgb(96 165 250 / 60%);
+  background: rgb(96 165 250 / 4%);
+  border: none;
+  border-top: 1px solid rgb(96 165 250 / 20%);
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: #93c5fd;
+  }
+}

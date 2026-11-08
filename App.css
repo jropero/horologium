@@ -1,0 +1,474 @@
+/* App.css — plain CSS for App.tsx (no Tailwind utilities) */
+
+/* Root app container */
+.app {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: 1rem;
+  padding-inline: 1rem;
+  padding-bottom: 6rem;
+
+  @media (width >= 768px) {
+    padding-bottom: 2rem;
+  }
+}
+
+.app ::selection {
+  background-color: var(--gold-leaf);
+  color: var(--ink);
+}
+
+/* ── Mobile burger menu ─────────────────────────────────────────────── */
+
+.mobile-menu {
+  position: fixed;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  @media (width >= 768px) {
+    display: none;
+  }
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+}
+
+.mobile-menu-btn {
+  position: relative;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: color-mix(in srgb, var(--gold-dim) 80%, transparent);
+  background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  transition: all 0.15s ease;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.mobile-menu-btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.travel-dot {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: #fbbf24;
+  box-shadow: 0 0 6px rgb(251 191 36 / 80%);
+}
+
+.mobile-menu-panel {
+  margin-top: 0.5rem;
+  width: 13rem;
+  background-color: color-mix(in srgb, var(--ink) 95%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.menu-item-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.625rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold-dim) 10%, transparent);
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  background: none;
+  color: inherit;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+  }
+
+  &:active {
+    background-color: color-mix(in srgb, var(--gold-leaf) 15%, transparent);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.menu-item-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+}
+
+.menu-item-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Normal Latin heading in mobile menu items */
+.menu-heading {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+}
+
+/* Babylonian Akkadian heading (larger) passed as prop to GlossedTerm */
+.menu-heading-babylonian {
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--gold-dim) 70%, transparent);
+}
+
+/* Gloss text under the Akkadian heading */
+.menu-gloss-babylonian {
+  color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+}
+
+.menu-item-desc {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: color-mix(in srgb, var(--parchment) 90%, transparent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Shared state modifier classes ──────────────────────────────────── */
+
+/* Applied to icons / text spans when the aurora sky is active */
+.is-aurora {
+  color: #6ee7b7;
+}
+
+/* Applied to icons when time-travel is active */
+.is-travel {
+  color: #fbbf24;
+}
+
+/* ── App header ─────────────────────────────────────────────────────── */
+
+.app-header {
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+
+  @media (width >= 768px) {
+    padding-top: 0;
+  }
+
+  @media (width >= 1024px) {
+    max-width: 56rem;
+  }
+}
+
+.app-title {
+  font-family: Cinzel, serif;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: var(--parchment);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 7%)) drop-shadow(0 2px 2px rgb(0 0 0 / 6%));
+
+  @media (width >= 768px) {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+.app-subtitle {
+  color: var(--gold-dim);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+
+  @media (width >= 768px) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+/* ── Time-travel banner ─────────────────────────────────────────────── */
+
+.travel-banner {
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background-color: rgb(67 20 7 / 50%);
+  border: 1px solid rgb(180 83 9 / 40%);
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  position: relative;
+  z-index: 10;
+
+  @media (width >= 1024px) {
+    max-width: 56rem;
+  }
+}
+
+.travel-banner-time {
+  font-family: Cinzel, serif;
+  color: rgb(251 191 36 / 90%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.travel-location-note {
+  margin-left: 0.25rem;
+  opacity: 0.6;
+  font-size: 10px;
+}
+
+.travel-banner-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.travel-btn-change {
+  color: rgb(251 191 36 / 70%);
+  font-family: Cinzel, serif;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #fcd34d;
+  }
+}
+
+.travel-separator {
+  color: rgb(180 83 9 / 50%);
+}
+
+.travel-btn-return {
+  color: #fbbf24;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #fde68a;
+  }
+}
+
+/* ── Desktop control toolbar ────────────────────────────────────────── */
+
+.desktop-toolbar {
+  display: none;
+
+  @media (width >= 1024px) {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    flex-wrap: wrap;
+  }
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.375rem;
+  border-radius: 9999px;
+  font-family: Cinzel, serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: color-mix(in srgb, var(--parchment) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  transition: all 0.15s ease;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
+    background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);
+  }
+}
+
+.toolbar-btn--aurora {
+  color: #6ee7b7;
+  border-color: rgb(4 120 87 / 40%);
+
+  &:hover {
+    background-color: rgb(6 78 59 / 20%);
+    border-color: rgb(4 120 87 / 40%);
+  }
+}
+
+.toolbar-btn--traveling {
+  color: #fbbf24;
+  border-color: rgb(180 83 9 / 40%);
+
+  &:hover {
+    background-color: rgb(67 20 7 / 30%);
+    border-color: rgb(180 83 9 / 40%);
+  }
+}
+
+.toolbar-btn-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: color-mix(in srgb, var(--gold-dim) 60%, transparent);
+}
+
+.toolbar-btn-icon--aurora {
+  color: #4ade80;
+}
+
+.toolbar-btn-icon--travel {
+  color: #fbbf24;
+}
+
+.toolbar-aurora-label--active {
+  color: #6ee7b7;
+}
+
+/* ── Main two-column layout ─────────────────────────────────────────── */
+
+.main-grid {
+  width: 100%;
+
+  @media (width >= 1024px) {
+    max-width: 80rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+.main-col-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (width >= 1024px) {
+    align-items: stretch;
+  }
+}
+
+.clock-wrapper {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 42rem;
+
+  @media (width >= 1024px) {
+    max-width: none;
+  }
+}
+
+.main-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  @media (width >= 1024px) {
+    margin-top: 0;
+  }
+}
+
+/* Mobile-only wrapper — hidden on desktop */
+.mobile-only {
+  width: 100%;
+
+  @media (width >= 1024px) {
+    display: none;
+  }
+}
+
+/* ── Background vignette ────────────────────────────────────────────── */
+
+.bg-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 150px rgb(0 0 0 / 90%);
+  z-index: 0;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────── */
+
+.app-footer {
+  margin-top: auto;
+  position: relative;
+  z-index: 10;
+  color: #a8a29e;
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.1em;
+  padding-bottom: 1rem;
+}
+
+.footer-motto-es {
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-style: italic;
+  letter-spacing: normal;
+  color: #78716c;
+  margin-top: 0.125rem;
+}

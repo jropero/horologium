@@ -1,0 +1,123 @@
+/* Nilometer — plain CSS migration */
+
+/* ── Root wrapper ── */
+.nilometer {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.125rem;
+  background: #08100a;
+  border: 1.5px solid rgb(24 64 160 / 45%);
+}
+
+/* ── Header ── */
+.nilometer__header {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: rgb(212 168 50 / 85%);
+}
+
+.nilometer__header-icon {
+  color: #10b981;
+}
+
+/* ── Flex layout ── */
+.nilometer__layout {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+/* ── SVG wrapper ── */
+.nilometer__svg-wrap {
+  flex-shrink: 0;
+}
+
+.nilometer__svg {
+  filter: drop-shadow(0 25px 25px rgb(0 0 0 / 15%));
+}
+
+/* ── Info panel ── */
+.nilometer__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.625rem;
+}
+
+.nilometer__icon {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  letter-spacing: 0.1em;
+  color: rgb(212 168 50 / 90%);
+}
+
+.nilometer__season {
+  font-family: Cinzel, serif;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(240 220 180 / 90%);
+}
+
+/* ── Level bar ── */
+.nilometer__level-bar {
+  width: 100%;
+}
+
+.nilometer__level-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  font-size: 12px;
+  font-family: Cinzel, serif;
+  color: rgb(207 181 59 / 50%);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nilometer__level-track {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: rgb(6 12 22 / 70%);
+  border: 1px solid rgb(24 64 160 / 30%);
+}
+
+.nilometer__level-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s ease-out;
+}
+
+/* ── Description text ── */
+.nilometer__sublabel {
+  font-size: 12px;
+  font-family: Cinzel, serif;
+  color: rgb(207 181 59 / 72%);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ── Fact text ── */
+.nilometer__fact {
+  margin-top: 2px;
+  font-size: 12px;
+  font-family: Cinzel, serif;
+  color: rgb(240 220 180 / 45%);
+  line-height: 1.4;
+  border-left: 2px solid rgb(24 64 160 / 45%);
+  padding-left: 8px;
+}

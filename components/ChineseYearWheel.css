@@ -1,0 +1,134 @@
+/* ChineseYearWheel.css — plain CSS migration from Tailwind */
+
+.chinese-year-wheel {
+  width: 100%;
+  background: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+
+  .cyw__heading {
+    text-align: center;
+    color: var(--gold-leaf);
+    font-family: Cinzel, serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  .cyw__svg-wrapper {
+    position: relative;
+    margin-inline: auto;
+    max-width: 20rem;
+  }
+
+  .cyw__weather-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .cyw__legend {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .cyw__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .cyw__legend-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+  }
+
+  .cyw__legend-text {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+  }
+
+  .cyw__term-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.75rem;
+  }
+
+  .cyw__season-block {
+    /* no additional styles needed — children handle layout */
+  }
+
+  .cyw__season-block-heading {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.375rem;
+    padding-bottom: 0.125rem;
+    border-bottom: 1px solid;
+  }
+
+  .cyw__term-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .cyw__term-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+    border-radius: 0.25rem;
+    padding-inline: 0.375rem;
+    padding-block: 0.125rem;
+
+    &.cyw__term-row--active {
+      background: rgb(255 255 255 / 10%);
+    }
+  }
+
+  .cyw__term-hanzi {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    flex-shrink: 0;
+    font-family: Cinzel, serif;
+  }
+
+  .cyw__term-translation {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    line-height: 1.25;
+  }
+
+  .cyw__term-translation--active {
+    color: color-mix(in srgb, var(--parchment) 90%, transparent);
+  }
+
+  .cyw__term-translation--next {
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  }
+
+  .cyw__term-translation--inactive {
+    color: color-mix(in srgb, var(--parchment) 35%, transparent);
+  }
+
+  .cyw__term-arrow {
+    margin-left: auto;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    flex-shrink: 0;
+  }
+}

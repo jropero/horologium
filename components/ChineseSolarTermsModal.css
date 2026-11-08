@@ -1,0 +1,159 @@
+/* ChineseSolarTermsModal.css — plain CSS migration from Tailwind */
+
+@keyframes cstm-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.chinese-solar-terms-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 80%);
+  backdrop-filter: blur(4px);
+
+  .cstm__inner {
+    background-color: var(--parchment);
+    color: var(--ink);
+    width: 100%;
+    max-width: 56rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
+    position: relative;
+    border: 1px solid color-mix(in srgb, var(--gold-dim) 40%, transparent);
+  }
+
+  .cstm__close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--ink);
+    font-weight: 700;
+    transition: transform 0.15s ease;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      color: #9f1239;
+      transform: scale(1.1);
+    }
+  }
+
+  .cstm__title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    text-align: center;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .cstm__seasons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
+    @media (width >= 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .cstm__season {
+    padding-top: 1rem;
+    border-top: 4px solid;
+
+    &.cstm__season--spring {
+      border-color: #059669;
+    }
+
+    &.cstm__season--summer {
+      border-color: #e11d48;
+    }
+
+    &.cstm__season--autumn {
+      border-color: #d97706;
+    }
+
+    &.cstm__season--winter {
+      border-color: #0284c7;
+    }
+  }
+
+  .cstm__season-heading {
+    font-family: Cinzel, serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    margin-bottom: 1rem;
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
+  }
+
+  .cstm__terms-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .cstm__term {
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+    transition: all 0.3s ease;
+
+    &.cstm__term--active {
+      background: color-mix(in srgb, var(--gold-dim) 20%, transparent);
+      border-color: var(--gold-leaf);
+      box-shadow: 0 0 15px rgb(207 181 59 / 30%);
+      animation: cstm-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    &.cstm__term--inactive {
+      background: rgb(255 255 255 / 50%);
+      border-color: color-mix(in srgb, var(--ink) 10%, transparent);
+    }
+
+    &.cstm__term--past {
+      opacity: 0.4;
+    }
+  }
+
+  .cstm__term-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .cstm__term-hanzi {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .cstm__term-pinyin {
+    font-size: 10px;
+    color: color-mix(in srgb, var(--ink) 60%, transparent);
+    font-weight: 700;
+  }
+
+  .cstm__term-translation {
+    font-size: 10px;
+    color: color-mix(in srgb, var(--ink) 70%, transparent);
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+}

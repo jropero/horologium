@@ -1,0 +1,26 @@
+.glossed-term {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.glossed-term.align-center {
+  align-items: center;
+  text-align: center;
+}
+
+.glossed-term.align-start {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.glossed-term-gloss {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-family: Cinzel, serif;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  opacity: 0.7;
+}

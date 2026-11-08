@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
+import './App.css';
 import { Menu, X, MapPin, CloudSun, Hourglass, Sparkles } from 'lucide-react';
 import RomanClock from './components/RomanClock';
 import PlanetaryPositions from './components/PlanetaryPositions';
@@ -250,13 +251,11 @@ const AppContent: React.FC = () => {
       <GlossedTerm
         term={term}
         align="start"
-        className="font-serif text-sm uppercase tracking-widest text-gold-dim/70"
-        glossClassName="text-gold-dim/60"
+        className="menu-heading-babylonian"
+        glossClassName="menu-gloss-babylonian"
       />
     ) : (
-      <span className="font-serif text-xs uppercase tracking-widest text-gold-dim/60">
-        {latin}
-      </span>
+      <span className="menu-heading">{latin}</span>
     );
 
   let clockComponent = null;
@@ -314,12 +313,12 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center py-4 px-4 pb-24 md:pb-8 selection:bg-gold-leaf selection:text-ink">
+    <div className="app">
       {/* Mobile menu — burger button with dropdown (location, weather, date) */}
-      <div className="fixed top-2 right-2 z-50 md:hidden flex flex-col items-end">
+      <div className="mobile-menu">
         {isMobileMenuOpen && (
           <div
-            className="fixed inset-0 -z-10"
+            className="mobile-menu-overlay"
             onClick={() => setIsMobileMenuOpen(false)}
             aria-hidden="true"
           />
@@ -329,29 +328,29 @@ const AppContent: React.FC = () => {
           onClick={() => setIsMobileMenuOpen(open => !open)}
           aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={isMobileMenuOpen}
-          className="relative w-9 h-9 flex items-center justify-center rounded-full text-gold-dim/80 bg-ink/90 border border-gold-dim/20 shadow-lg active:scale-95 transition-all"
+          className="mobile-menu-btn"
         >
-          {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          {isTimeTraveling && (
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]" />
+          {isMobileMenuOpen ? (
+            <X className="mobile-menu-btn-icon" />
+          ) : (
+            <Menu className="mobile-menu-btn-icon" />
           )}
+          {isTimeTraveling && <span className="travel-dot" />}
         </button>
 
         {isMobileMenuOpen && (
-          <div className="mt-2 w-52 bg-ink/95 border border-gold-dim/30 rounded-xl shadow-2xl overflow-hidden backdrop-blur-md animate-fadeIn">
+          <div className="mobile-menu-panel animate-fadeIn">
             <button
               onClick={() => {
                 setIsLocationModalOpen(true);
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+              className="menu-item-btn"
             >
-              <MapPin className="w-4 h-4 shrink-0 text-gold-dim/70" />
-              <span className="flex flex-col min-w-0">
+              <MapPin className="menu-item-icon" />
+              <span className="menu-item-content">
                 {menuHeading('Locus', BABYLONIAN_UI_TERMS.place)}
-                <span className="font-serif text-xs text-parchment/90 truncate">
-                  {currentLocationName}
-                </span>
+                <span className="menu-item-desc">{currentLocationName}</span>
               </span>
             </button>
 
@@ -360,16 +359,12 @@ const AppContent: React.FC = () => {
                 setIsCustomWeatherOpen(true);
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+              className="menu-item-btn"
             >
-              <CloudSun className="w-4 h-4 shrink-0 text-gold-dim/70" />
-              <span className="flex flex-col min-w-0">
+              <CloudSun className="menu-item-icon" />
+              <span className="menu-item-content">
                 {menuHeading('Caelum', BABYLONIAN_UI_TERMS.sky)}
-                <span
-                  className={`font-serif text-xs truncate ${
-                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
-                  }`}
-                >
+                <span className={`menu-item-desc${customWeather.aurora ? ' is-aurora' : ''}`}>
                   {customWeatherLabel(customWeather)}
                 </span>
               </span>
@@ -381,20 +376,14 @@ const AppContent: React.FC = () => {
                 setIsMobileMenuOpen(false);
               }}
               aria-pressed={customWeather.aurora}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-left border-b border-gold-dim/10 hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+              className="menu-item-btn"
             >
               <Sparkles
-                className={`w-4 h-4 shrink-0 ${
-                  customWeather.aurora ? 'text-emerald-300' : 'text-gold-dim/70'
-                }`}
+                className={`menu-item-icon${customWeather.aurora ? ' is-aurora' : ''}`}
               />
-              <span className="flex flex-col min-w-0">
+              <span className="menu-item-content">
                 {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
-                <span
-                  className={`font-serif text-xs truncate ${
-                    customWeather.aurora ? 'text-emerald-300' : 'text-parchment/90'
-                  }`}
-                >
+                <span className={`menu-item-desc${customWeather.aurora ? ' is-aurora' : ''}`}>
                   {customWeather.aurora ? 'Activada' : 'Desactivada'}
                 </span>
               </span>
@@ -405,20 +394,12 @@ const AppContent: React.FC = () => {
                 openTravelModal();
                 setIsMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-gold-leaf/10 active:bg-gold-leaf/15 transition-colors"
+              className="menu-item-btn"
             >
-              <Hourglass
-                className={`w-4 h-4 shrink-0 ${
-                  isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/70'
-                }`}
-              />
-              <span className="flex flex-col min-w-0">
+              <Hourglass className={`menu-item-icon${isTimeTraveling ? ' is-travel' : ''}`} />
+              <span className="menu-item-content">
                 {menuHeading('Tempus', BABYLONIAN_UI_TERMS.day)}
-                <span
-                  className={`font-serif text-xs truncate ${
-                    isTimeTraveling ? 'text-amber-400' : 'text-parchment/90'
-                  }`}
-                >
+                <span className={`menu-item-desc${isTimeTraveling ? ' is-travel' : ''}`}>
                   {isTimeTraveling ? 'Viajando' : 'Fecha actual'}
                 </span>
               </span>
@@ -427,18 +408,15 @@ const AppContent: React.FC = () => {
         )}
       </div>
 
-      <header className="text-center relative z-10 w-full max-w-xl lg:max-w-4xl mx-auto border-b border-gold-dim/30 pb-2 pt-2 md:pt-0">
-        <h1 className="font-serif text-2xl md:text-3xl text-parchment font-bold tracking-widest drop-shadow-md">
-          {labels.appTitle}{' '}
-          <span className="text-gold-dim font-normal text-xl md:text-2xl">
-            {labels.appSubtitle}
-          </span>
+      <header className="app-header">
+        <h1 className="app-title">
+          {labels.appTitle} <span className="app-subtitle">{labels.appSubtitle}</span>
         </h1>
       </header>
 
       {isTimeTraveling && (
-        <div className="w-full max-w-xl lg:max-w-4xl mx-auto mt-2 flex items-center justify-between gap-2 bg-amber-950/50 border border-amber-700/40 rounded-lg px-3 py-1.5 text-xs z-10">
-          <span className="font-serif text-amber-400/90 truncate">
+        <div className="travel-banner">
+          <span className="travel-banner-time">
             ⏳{' '}
             {modernTime.toLocaleString(undefined, {
               dateStyle: 'medium',
@@ -446,21 +424,15 @@ const AppContent: React.FC = () => {
               timeZone: locationTimezone,
             })}
             {locationTimezone !== Intl.DateTimeFormat().resolvedOptions().timeZone && (
-              <span className="ml-1 opacity-60 text-[10px]">({currentLocationName})</span>
+              <span className="travel-location-note">({currentLocationName})</span>
             )}
           </span>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={openTravelModal}
-              className="text-amber-400/70 hover:text-amber-300 font-serif underline underline-offset-2 transition-colors"
-            >
+          <div className="travel-banner-controls">
+            <button onClick={openTravelModal} className="travel-btn-change">
               Cambiar
             </button>
-            <span className="text-amber-700/50">·</span>
-            <button
-              onClick={returnToLive}
-              className="text-amber-400 hover:text-amber-200 font-serif font-bold transition-colors"
-            >
+            <span className="travel-separator">·</span>
+            <button onClick={returnToLive} className="travel-btn-return">
               Volver al presente
             </button>
           </div>
@@ -468,58 +440,44 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Desktop control toolbar — compact pill buttons, hidden on mobile */}
-      <div className="hidden lg:flex justify-center gap-2 py-2 w-full max-w-7xl mx-auto flex-wrap">
-        <button
-          onClick={() => setIsLocationModalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm text-parchment/80 border border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10 transition-all"
-        >
-          <MapPin className="w-3.5 h-3.5 text-gold-dim/60" />
+      <div className="desktop-toolbar">
+        <button onClick={() => setIsLocationModalOpen(true)} className="toolbar-btn">
+          <MapPin className="toolbar-btn-icon" />
           {currentLocationName}
         </button>
-        <button
-          onClick={() => setIsCustomWeatherOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm text-parchment/80 border border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10 transition-all"
-        >
-          <CloudSun className="w-3.5 h-3.5 text-gold-dim/60" />
-          <span className={customWeather.aurora ? 'text-emerald-300' : ''}>
+        <button onClick={() => setIsCustomWeatherOpen(true)} className="toolbar-btn">
+          <CloudSun className="toolbar-btn-icon" />
+          <span className={customWeather.aurora ? 'toolbar-aurora-label--active' : ''}>
             {customWeatherLabel(customWeather)}
           </span>
         </button>
         <button
           onClick={toggleAurora}
           aria-pressed={customWeather.aurora}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm border transition-all ${
-            customWeather.aurora
-              ? 'text-emerald-300 border-emerald-700/40 hover:bg-emerald-900/20'
-              : 'text-parchment/80 border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10'
-          }`}
+          className={`toolbar-btn${customWeather.aurora ? ' toolbar-btn--aurora' : ''}`}
         >
           <Sparkles
-            className={`w-3.5 h-3.5 ${
-              customWeather.aurora ? 'text-emerald-400' : 'text-gold-dim/60'
+            className={`toolbar-btn-icon${
+              customWeather.aurora ? ' toolbar-btn-icon--aurora' : ''
             }`}
           />
           Aurora
         </button>
         <button
           onClick={openTravelModal}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-serif text-sm border transition-all ${
-            isTimeTraveling
-              ? 'text-amber-400 border-amber-700/40 hover:bg-amber-950/30'
-              : 'text-parchment/80 border-gold-dim/20 hover:border-gold-dim/50 hover:bg-gold-leaf/10'
-          }`}
+          className={`toolbar-btn${isTimeTraveling ? ' toolbar-btn--traveling' : ''}`}
         >
           <Hourglass
-            className={`w-3.5 h-3.5 ${isTimeTraveling ? 'text-amber-400' : 'text-gold-dim/60'}`}
+            className={`toolbar-btn-icon${isTimeTraveling ? ' toolbar-btn-icon--travel' : ''}`}
           />
           {isTimeTraveling ? 'Viajando' : 'Tempus'}
         </button>
       </div>
 
       {/* Two-column zone — left: clock area, right: supplementary content */}
-      <div className="w-full lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
+      <div className="main-grid">
         {/* LEFT COLUMN — CalendarInfo + Clock + RomanCalendarInfo + SolarTimes */}
-        <div className="flex flex-col items-center lg:items-stretch">
+        <div className="main-col-left">
           {civilization !== 'zhongguo' && civilization === 'hellas' && (
             <HellenicCalendarInfo
               atticDate={romanTimeData?.atticDate}
@@ -551,7 +509,7 @@ const AppContent: React.FC = () => {
           )}
 
           {clockComponent && (
-            <div className="w-full mx-auto max-w-2xl lg:max-w-none">
+            <div className="clock-wrapper">
               <Suspense fallback={null}>{clockComponent}</Suspense>
             </div>
           )}
@@ -572,7 +530,7 @@ const AppContent: React.FC = () => {
         {/* end LEFT COLUMN */}
 
         {/* RIGHT COLUMN — supplementary content */}
-        <div className="flex flex-col gap-4 mt-4 lg:mt-0">
+        <div className="main-col-right">
           {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
           {civilization !== 'zhongguo' && civilization === 'rome' ? (
             <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
@@ -601,7 +559,7 @@ const AppContent: React.FC = () => {
       )}
 
       {civilization !== 'zhongguo' && (
-        <div className="lg:hidden w-full">
+        <div className="mobile-only">
           <Controls
             latitude={latitude}
             longitude={longitude}
@@ -612,7 +570,7 @@ const AppContent: React.FC = () => {
       )}
 
       {civilization !== 'zhongguo' && (
-        <div className="lg:hidden w-full">
+        <div className="mobile-only">
           <LocationSelector
             onUpdateLocation={handleUpdateLocation}
             currentLat={latitude}
@@ -678,14 +636,12 @@ const AppContent: React.FC = () => {
       />
 
       {/* Background vignette effect */}
-      <div className="fixed inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-0"></div>
+      <div className="bg-vignette"></div>
 
-      <footer className="mt-auto relative z-10 text-stone-400 font-serif text-xs tracking-widest pb-4">
+      <footer className="app-footer">
         {labels.footerMotto}
         {labels.footerMottoEs && (
-          <span className="block text-center text-xs italic tracking-normal text-stone-500 mt-0.5">
-            {labels.footerMottoEs}
-          </span>
+          <span className="footer-motto-es">{labels.footerMottoEs}</span>
         )}
       </footer>
 

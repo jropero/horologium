@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './SententiaDiei.css';
 import { getSententiaOfTheDay, SENTENTIAE, Sententia } from '../utils/sententiaeData';
 import { getApophthegmaOfTheDay, APOPHTHEGMATA, Apophthegma } from '../utils/apophthegmataData';
 import {
@@ -81,15 +82,11 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
   if (!quoteText) return null;
 
   return (
-    <div className="w-full max-w-none mx-auto my-6 px-4">
+    <div className="sententia-diei">
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         onClick={handleRandomize}
-        className={`relative border p-8 shadow-2xl group cursor-pointer transition-all duration-300 active:scale-[0.98] overflow-hidden ${
-          civilization === 'aegyptus'
-            ? ''
-            : 'bg-ink/90 border-gold-dim/40 rounded-lg backdrop-blur-md hover:bg-ink/95'
-        }`}
+        className={`sd-card${civilization !== 'aegyptus' ? ' sd-card--default' : ''}`}
         style={
           civilization === 'aegyptus'
             ? {
@@ -101,66 +98,44 @@ const SententiaDiei: React.FC<SententiaDieiProps> = ({ currentDate }) => {
         }
         title="Pulsa para ver otra cita al azar"
       >
-        {civilization !== 'aegyptus' && (
-          <div className="absolute inset-0 woodcut-hatch opacity-5 pointer-events-none"></div>
-        )}
+        {civilization !== 'aegyptus' && <div className="sd-hatch woodcut-hatch"></div>}
 
         {/* Corner ornaments */}
-        <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
-        <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
-        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
-        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-gold-dim/30 group-hover:border-gold-leaf/50 transition-colors"></div>
+        <div className="sd-corner sd-corner--tl"></div>
+        <div className="sd-corner sd-corner--tr"></div>
+        <div className="sd-corner sd-corner--bl"></div>
+        <div className="sd-corner sd-corner--br"></div>
 
         {/* Cabecera / Título */}
-        <div className="flex flex-col items-center justify-center mb-6">
-          <Feather className="text-gold-leaf/80 w-6 h-6 mb-2 group-hover:rotate-12 transition-transform" />
-          <span className="font-serif text-xs md:text-sm uppercase tracking-[0.4em] text-gold-dim group-hover:text-gold-leaf transition-colors">
-            {labels.quoteTitle}
-          </span>
-          <div className="w-16 h-px bg-gold-dim/30 mt-2"></div>
+        <div className="sd-header">
+          <Feather className="sd-feather-icon" />
+          <span className="sd-title">{labels.quoteTitle}</span>
+          <div className="sd-title-rule"></div>
         </div>
 
         {/* Cita (Texto Principal) */}
-        <div className="text-center px-4 mb-4 flex flex-col gap-2">
-          <p className="font-serif italic text-2xl md:text-4xl text-parchment leading-relaxed drop-shadow-glow">
-            &quot;{quoteText}&quot;
-          </p>
-          {quoteTransliteration && (
-            <p className="font-serif text-sm md:text-base text-gold-dim tracking-widest uppercase">
-              {quoteTransliteration}
-            </p>
-          )}
-          {quoteAkkadian && (
-            <p className="font-serif text-sm text-gold-dim/70 tracking-wider italic mt-1">
-              {quoteAkkadian}
-            </p>
-          )}
+        <div className="sd-quote-body">
+          <p className="sd-quote-text">&quot;{quoteText}&quot;</p>
+          {quoteTransliteration && <p className="sd-transliteration">{quoteTransliteration}</p>}
+          {quoteAkkadian && <p className="sd-akkadian">{quoteAkkadian}</p>}
         </div>
 
         {/* Autor */}
-        <div className="text-center mb-6">
-          <span className="font-body text-lg md:text-xl font-bold text-gold-leaf/80 uppercase tracking-[0.2em]">
-            — {quoteAuthor} —
-          </span>
+        <div className="sd-author">
+          <span className="sd-author-text">— {quoteAuthor} —</span>
         </div>
 
-        <div className="w-1/3 h-px bg-gradient-to-r from-transparent via-gold-dim/40 to-transparent mx-auto mb-6"></div>
+        <div className="sd-rule"></div>
 
         {/* Traducción / Fuente */}
-        <div className="text-center group-hover:opacity-100 transition-opacity duration-500">
-          {quoteTranslation && (
-            <p className="font-serif italic text-base md:text-lg text-parchment/90 max-w-lg mx-auto leading-relaxed">
-              {quoteTranslation}
-            </p>
-          )}
-          {quoteSource && (
-            <p className="font-serif italic text-sm text-gold-dim/90 mt-2">— {quoteSource} —</p>
-          )}
+        <div className="sd-translation">
+          {quoteTranslation && <p className="sd-translation-text">{quoteTranslation}</p>}
+          {quoteSource && <p className="sd-source-text">— {quoteSource} —</p>}
         </div>
 
         {/* Icono de refresco sutil */}
-        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-40 transition-opacity">
-          <RefreshCw className="w-5 h-5 text-gold-dim" />
+        <div className="sd-refresh-wrap">
+          <RefreshCw className="sd-refresh-icon" />
         </div>
       </div>
     </div>

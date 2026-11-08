@@ -1,0 +1,48 @@
+/* EgyptianStarMap.css — plain CSS migration from Tailwind */
+
+.egyptian-star-map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+
+  .egyptian-star-map__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    user-select: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .egyptian-star-map__toggle {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 4;
+    pointer-events: auto;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.125rem;
+    font-size: 1rem;
+    line-height: 1;
+    transition: opacity 0.15s ease;
+    opacity: 0.6;
+    background: rgb(12 8 4 / 60%);
+    border: 1px solid rgb(24 64 160 / 55%);
+    color: rgb(212 168 50 / 90%);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+  }
+}

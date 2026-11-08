@@ -10,6 +10,7 @@ import {
   CIVIC_NIGHT_HOURS,
   vigiliaOf,
 } from '../utils/romanHoursData';
+import './PlanetaryPositions.css';
 
 // Planetary hours are a Hellenistic invention (2nd–1st c. BCE; Cassius Dio 37.18–19
 // explains the Chaldean order). This panel is therefore shown only for Rome, Hellas
@@ -593,9 +594,9 @@ const UI: Record<string, { dayLen: string; nightLen: string }> = {
 };
 
 const QUALITY_CLASS = {
-  B: 'text-emerald-300 border-emerald-400/40',
-  C: 'text-parchment/80 border-parchment/30',
-  N: 'text-rose-300 border-rose-400/40',
+  B: 'pp-quality-B',
+  C: 'pp-quality-C',
+  N: 'pp-quality-N',
 } as const;
 
 const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
@@ -684,48 +685,33 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
   };
 
   return (
-    <div className="w-full max-w-none mx-auto mt-6 mb-2 flex flex-col gap-4">
+    <div className="planetary-positions">
       {/* ── Parapegma ────────────────────────────────────────────── */}
       {(civilization === 'rome' || civilization === 'hellas') && (
-        <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="h-px flex-1 bg-gold-dim/20" />
-            <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">
-              {paraTitle}
-            </span>
-            <div className="h-px flex-1 bg-gold-dim/20" />
+        <div className="pp-card">
+          <div className="pp-divider pp-divider--mb3">
+            <div className="pp-divider-line" />
+            <span className="pp-section-title">{paraTitle}</span>
+            <div className="pp-divider-line" />
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="pp-hour-list">
             {paraEvents.map(ev => (
-              <div
-                key={`${ev.main}-${ev.days}`}
-                className="flex items-baseline gap-2 px-1 py-0.5"
-              >
-                <span className="text-gold-dim/80 font-serif text-xs w-20 shrink-0 tabular-nums">
-                  {dayWord(ev.days, civilization)}
-                </span>
+              <div key={`${ev.main}-${ev.days}`} className="pp-para-event">
+                <span className="pp-para-day">{dayWord(ev.days, civilization)}</span>
                 <span
-                  className={`text-base leading-none shrink-0 ${
-                    ev.isSolar ? 'text-amber-400/80' : 'text-gold-dim/60'
+                  className={`pp-para-symbol${
+                    ev.isSolar ? ' pp-para-symbol--solar' : ' pp-para-symbol--star'
                   }`}
                 >
                   {ev.symbol}
                 </span>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-parchment/90 font-serif text-xs leading-snug">
-                    {ev.main}
-                  </span>
-                  {ev.mainSpa && (
-                    <span className="text-parchment/65 text-xs leading-tight italic">
-                      {ev.mainSpa}
-                    </span>
-                  )}
+                <div className="pp-para-content">
+                  <span className="pp-para-main">{ev.main}</span>
+                  {ev.mainSpa && <span className="pp-para-spa">{ev.mainSpa}</span>}
                   {ev.sub && (
-                    <span className="text-gold-dim/80 font-serif text-xs leading-tight mt-0.5">
+                    <span className="pp-para-sub">
                       {ev.sub}
-                      {ev.subSpa && (
-                        <span className="text-gold-dim/65 italic"> · {ev.subSpa}</span>
-                      )}
+                      {ev.subSpa && <span className="pp-para-subspa"> · {ev.subSpa}</span>}
                     </span>
                   )}
                 </div>
@@ -737,40 +723,38 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
 
       {/* ── 七曜 (Zhongguo) ───────────────────────────────────────── */}
       {civilization === 'zhongguo' && (
-        <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
-          <div className="flex items-center justify-center gap-3 mb-1">
-            <div className="h-px flex-1 bg-gold-dim/20" />
-            <span className="flex flex-col items-center leading-tight">
-              <span className="text-gold-dim text-base tracking-[0.3em] font-serif">
-                {hoursTitle}
-              </span>
-              <span className="text-xs italic text-parchment/60">Los siete astros</span>
+        <div className="pp-card">
+          <div className="pp-divider pp-divider--mb1">
+            <div className="pp-divider-line" />
+            <span className="pp-zh-title-stack">
+              <span className="pp-zh-title-main">{hoursTitle}</span>
+              <span className="pp-zh-title-sub">Los siete astros</span>
             </span>
-            <div className="h-px flex-1 bg-gold-dim/20" />
+            <div className="pp-divider-line" />
           </div>
-          <p className="text-center text-xs leading-snug text-parchment/70 mt-1 px-2">
+          <p className="pp-zh-intro">
             七曜由《宿曜经》(759) 传入唐代中国
-            <span className="block italic text-parchment/55">
+            <span className="pp-zh-intro-block">
               Cada hora la rige uno de los siete astros. Este sistema llegó a la China Tang con
               el Xiuyao jing (759 d.C.).
             </span>
           </p>
-          <div className="mt-2 mb-3 text-center">
+          <div className="pp-zh-help-btn-wrap">
             <button
               type="button"
               onClick={() => setShowHelp(v => !v)}
               aria-expanded={showHelp}
-              className="text-xs font-serif text-gold-dim underline underline-offset-2 hover:text-gold-leaf"
+              className="pp-zh-help-btn"
             >
               {showHelp ? 'Cerrar explicación' : '¿Cómo leer este panel?'}
             </button>
           </div>
           {showHelp && (
-            <dl className="mb-3 px-3 py-2 rounded-lg bg-parchment/5 border border-gold-dim/20 flex flex-col gap-2">
+            <dl className="pp-zh-help-dl">
               {ZH_HELP.map(h => (
                 <div key={h.term}>
-                  <dt className="font-serif text-sm text-gold-dim">{h.term}</dt>
-                  <dd className="text-xs text-parchment/80 leading-snug">{h.text}</dd>
+                  <dt className="pp-zh-help-dt">{h.term}</dt>
+                  <dd className="pp-zh-help-dd">{h.text}</dd>
                 </div>
               ))}
             </dl>
@@ -787,50 +771,41 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
               return (
                 <>
                   {/* The day and its ruler */}
-                  <h3 className="mb-1.5 text-xs uppercase tracking-[0.2em] text-parchment/60 font-serif">
-                    El día de hoy
-                  </h3>
-                  <div className="mb-4 px-3 py-2.5 rounded-lg bg-gold-leaf/10 border border-gold-leaf/30 flex items-center gap-3">
-                    <span className="text-2xl leading-none text-gold-leaf">
-                      {SYMBOLS[dayKey]}
-                    </span>
-                    <div className="flex flex-col min-w-0 flex-1">
-                      <span className="font-serif text-lg text-parchment leading-snug">
+                  <h3 className="pp-zh-ruler-heading">El día de hoy</h3>
+                  <div className="pp-zh-ruler-card">
+                    <span className="pp-zh-ruler-symbol">{SYMBOLS[dayKey]}</span>
+                    <div className="pp-zh-ruler-info">
+                      <span className="pp-zh-ruler-yao">
                         {lum.yao}日{' '}
-                        <span className="text-gold-dim text-sm">· {names[dayKey]}</span>
+                        <span className="pp-zh-ruler-yao-dim">· {names[dayKey]}</span>
                       </span>
-                      <span className="text-xs italic text-parchment/70">{dayLabel}</span>
-                      <span className="mt-1 text-xs text-parchment/60 leading-snug">
-                        胡名 <span className="text-parchment/85">{lum.hu}</span> · 波斯名{' '}
-                        <span className="text-parchment/85">{lum.bosi}</span> · 天竺名{' '}
-                        <span className="text-parchment/85">{lum.tianzhu}</span>
+                      <span className="pp-zh-ruler-label">{dayLabel}</span>
+                      <span className="pp-zh-ruler-names">
+                        胡名 <span className="pp-zh-ruler-name-val">{lum.hu}</span> · 波斯名{' '}
+                        <span className="pp-zh-ruler-name-val">{lum.bosi}</span> · 天竺名{' '}
+                        <span className="pp-zh-ruler-name-val">{lum.tianzhu}</span>
                       </span>
-                      <span className="text-xs italic text-parchment/50 leading-tight">
+                      <span className="pp-zh-ruler-names-note">
                         nombre sogdiano · persa · indio del día (宿曜经)
                       </span>
                     </div>
                   </div>
 
                   {/* Hour lengths */}
-                  <h3 className="mb-1.5 text-xs uppercase tracking-[0.2em] text-parchment/60 font-serif">
-                    Las horas
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2 mb-2 text-center">
-                    <div className="px-2 py-1.5 rounded-lg border border-gold-dim/20">
-                      <span className="block font-serif text-sm text-parchment">
-                        <span className="text-amber-400">☀</span> {ui.dayLen} {dayHourMin} min
+                  <h3 className="pp-zh-ruler-heading">Las horas</h3>
+                  <div className="pp-zh-lengths">
+                    <div className="pp-zh-length-cell">
+                      <span className="pp-zh-length-label">
+                        <span className="pp-icon--day">☀</span> {ui.dayLen} {dayHourMin} min
                       </span>
-                      <span className="block text-xs italic text-parchment/60">
-                        duración de una hora de día
-                      </span>
+                      <span className="pp-zh-length-note">duración de una hora de día</span>
                     </div>
-                    <div className="px-2 py-1.5 rounded-lg border border-gold-dim/20">
-                      <span className="block font-serif text-sm text-parchment">
-                        <span className="text-sky-400">☽</span> {ui.nightLen} {nightHourMin} min
+                    <div className="pp-zh-length-cell">
+                      <span className="pp-zh-length-label">
+                        <span className="pp-icon--night">☽</span> {ui.nightLen} {nightHourMin}{' '}
+                        min
                       </span>
-                      <span className="block text-xs italic text-parchment/60">
-                        duración de una hora de noche
-                      </span>
+                      <span className="pp-zh-length-note">duración de una hora de noche</span>
                     </div>
                   </div>
                 </>
@@ -838,7 +813,7 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
             })()}
 
           {/* Current hour and the next three */}
-          <div className="flex flex-col gap-1">
+          <div className="pp-hour-list">
             {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
             {visibleSlots.map((h, i) => {
               if (!h) return null;
@@ -849,44 +824,31 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
               return (
                 <div
                   key={`${h.start.getTime()}-${i}`}
-                  className={`flex flex-col px-2 py-2 rounded-lg ${
-                    isCurrent
-                      ? 'bg-gold-leaf/10 border border-gold-leaf/30'
-                      : 'border border-gold-dim/10'
-                  }`}
+                  className={`pp-zh-hour-row${isCurrent ? ' pp-zh-hour-row--current' : ''}`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="pp-zh-hour-inner">
                     <span
-                      className={`text-xl leading-none w-6 text-center ${
-                        isCurrent ? 'text-gold-leaf' : 'text-parchment/75'
-                      }`}
+                      className={`pp-zh-hour-sym${isCurrent ? ' pp-zh-hour-sym--current' : ''}`}
                     >
                       {SYMBOLS[h.rulerKey]}
                     </span>
-                    <div className="flex flex-col flex-1 min-w-0">
+                    <div className="pp-zh-hour-info">
                       <span
-                        className={`font-serif text-sm leading-snug ${
-                          isCurrent ? 'text-parchment' : 'text-parchment/85'
+                        className={`pp-zh-hour-planet-name${
+                          isCurrent ? ' pp-zh-hour-planet-name--current' : ''
                         }`}
                       >
-                        {lum.yao}{' '}
-                        <span className="text-gold-dim/80">· {names[h.rulerKey]}</span>
+                        {lum.yao} <span className="pp-zh-hour-dim">· {names[h.rulerKey]}</span>
                       </span>
-                      <span className="text-xs italic text-parchment/60 leading-tight">
-                        {lum.es}
-                      </span>
+                      <span className="pp-zh-hour-es">{lum.es}</span>
                     </div>
-                    <div className="flex flex-col items-end shrink-0">
-                      {isCurrent && (
-                        <span className="mb-0.5 px-1.5 rounded-full bg-gold-leaf/20 text-xs text-gold-leaf leading-tight">
-                          ahora
-                        </span>
-                      )}
-                      <span className="font-serif text-xs tabular-nums text-gold-dim">
+                    <div className="pp-zh-hour-meta">
+                      {isCurrent && <span className="pp-zh-ahora">ahora</span>}
+                      <span className="pp-zh-hour-time">
                         {fmt(h.start)}–{fmt(h.end)}
                       </span>
-                      <span className="text-xs text-parchment/60 leading-tight">
-                        <span className={h.isDay ? 'text-amber-400' : 'text-sky-400'}>
+                      <span className="pp-zh-hour-num">
+                        <span className={h.isDay ? 'pp-icon--day' : 'pp-icon--night'}>
                           {h.isDay ? '☀' : '☽'}
                         </span>{' '}
                         hora {h.num} {h.isDay ? 'del día' : 'de la noche'}
@@ -894,9 +856,9 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
                     </div>
                   </div>
                   {isCurrent && (
-                    <div className="ml-9 mt-1.5 h-1 rounded-full bg-gold-dim/15 overflow-hidden">
+                    <div className="pp-zh-progress pp-progress-track">
                       <div
-                        className="h-full bg-gold-leaf/70 rounded-full"
+                        className="pp-progress-fill"
                         style={{ width: `${progress * 100}%` }}
                       />
                     </div>
@@ -910,27 +872,25 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
 
       {/* ── Horae Planetarum ─────────────────────────────────────── */}
       {civilization !== 'zhongguo' && (
-        <div className="bg-ink/90 border border-gold-dim/25 rounded-xl p-3 shadow-lg">
-          <div className="flex items-center justify-center gap-3 mb-1">
-            <div className="h-px flex-1 bg-gold-dim/20" />
-            <span className="text-gold-dim text-xs uppercase tracking-[0.3em] font-serif">
-              {hoursTitle}
-            </span>
-            <div className="h-px flex-1 bg-gold-dim/20" />
+        <div className="pp-card">
+          <div className="pp-divider pp-divider--mb1">
+            <div className="pp-divider-line" />
+            <span className="pp-section-title">{hoursTitle}</span>
+            <div className="pp-divider-line" />
           </div>
 
           {today.length > 0 && (
-            <div className="flex justify-center gap-4 mb-3 text-xs font-serif tabular-nums text-gold-dim/80">
+            <div className="pp-horae-lengths">
               <span>
-                <span className="text-amber-400">☀</span> {ui.dayLen} {dayHourMin}′
+                <span className="pp-icon--day">☀</span> {ui.dayLen} {dayHourMin}′
               </span>
               <span>
-                <span className="text-sky-400">☽</span> {ui.nightLen} {nightHourMin}′
+                <span className="pp-icon--night">☽</span> {ui.nightLen} {nightHourMin}′
               </span>
             </div>
           )}
 
-          <div className="flex flex-col gap-1">
+          <div className="pp-hour-list">
             {/* eslint-disable-next-line sonarjs/cognitive-complexity */}
             {visibleSlots.map((h, i) => {
               if (!h) return null;
@@ -954,93 +914,72 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
               return (
                 <div
                   key={`${h.start.getTime()}-${i}`}
-                  className={`flex flex-col px-2 py-2 rounded-lg ${
-                    isCurrent
-                      ? 'bg-gold-leaf/10 border border-gold-leaf/30'
-                      : 'border border-transparent'
-                  }`}
+                  className={`pp-horae-row${isCurrent ? ' pp-horae-row--current' : ''}`}
                 >
-                  <div className="flex items-start gap-2">
+                  <div className="pp-horae-inner">
                     <span
-                      className={`text-xs w-4 text-center mt-0.5 ${
-                        h.isDay ? 'text-amber-400' : 'text-sky-400'
+                      className={`pp-horae-time-icon${
+                        h.isDay ? ' pp-icon--day' : ' pp-icon--night'
                       }`}
                     >
                       {h.isDay ? '☀' : '☽'}
                     </span>
                     <span
-                      className={`font-serif text-xs w-7 text-right tabular-nums mt-0.5 ${
-                        isCurrent ? 'text-gold-leaf' : 'text-gold-dim/80'
+                      className={`pp-horae-numeral${
+                        isCurrent ? ' pp-horae-numeral--current' : ''
                       }`}
                     >
                       {toRomanNumeral(h.num)}
                     </span>
                     <span
-                      className={`text-base leading-none w-5 text-center mt-0.5 ${
-                        isCurrent ? 'text-gold-leaf' : 'text-parchment/80'
+                      className={`pp-horae-planet-sym${
+                        isCurrent ? ' pp-horae-planet-sym--current' : ''
                       }`}
                     >
                       {sym}
                     </span>
-                    <div className="flex flex-col flex-1 min-w-0 gap-0.5">
+                    <div className="pp-horae-planet-info">
                       <span
-                        className={`font-serif text-xs leading-snug ${
-                          isCurrent ? 'text-parchment' : 'text-parchment/80'
+                        className={`pp-horae-planet-name${
+                          isCurrent ? ' pp-horae-planet-name--current' : ''
                         }`}
                       >
                         {planet}
-                        {starName && <span className="text-gold-dim/70"> · {starName}</span>}
+                        {starName && <span className="pp-horae-star-name"> · {starName}</span>}
                       </span>
                       {isCurrent && chrono && (
                         <>
-                          <span className="font-serif text-xs italic leading-snug text-gold-dim">
-                            {chrono.latin}
-                          </span>
-                          <span className="text-xs leading-snug text-parchment/90">
-                            {chrono.spa}
-                          </span>
-                          <span className="font-serif text-xs italic leading-snug text-gold-dim/80 mt-1">
+                          <span className="pp-horae-chrono-latin">{chrono.latin}</span>
+                          <span className="pp-horae-chrono-spa">{chrono.spa}</span>
+                          <span className="pp-horae-chrono-omens-latin">
                             {chrono.omens.latin}
                           </span>
-                          <span className="text-xs leading-snug text-parchment/75">
-                            {chrono.omens.spa}
-                          </span>
-                          <span className="text-xs leading-tight text-parchment/50 italic">
-                            Chronographus a. 354
-                          </span>
+                          <span className="pp-horae-chrono-omens-spa">{chrono.omens.spa}</span>
+                          <span className="pp-horae-cite">Chronographus a. 354</span>
                         </>
                       )}
                       {isCurrent && valens && (
                         <>
-                          <span className="font-serif text-xs italic leading-snug text-gold-dim">
-                            {valens.classical}
-                          </span>
-                          <span className="text-xs leading-snug text-parchment/90">
-                            {valens.spa}
-                          </span>
-                          <span className="text-xs leading-tight text-parchment/50 italic">
-                            {valens.cite}
-                          </span>
+                          <span className="pp-horae-chrono-latin">{valens.classical}</span>
+                          <span className="pp-horae-chrono-spa">{valens.spa}</span>
+                          <span className="pp-horae-cite">{valens.cite}</span>
                         </>
                       )}
                       {isCurrent && civic && (
-                        <span className="mt-1 pt-1 border-t border-gold-dim/15 flex flex-col gap-0.5">
-                          <span className="font-serif text-xs italic leading-snug text-gold-dim">
+                        <span className="pp-horae-civic">
+                          <span className="pp-horae-civic-latin">
                             {civic.latin}
                             {vigilia && (
-                              <span className="not-italic text-gold-dim/70">
-                                {' '}
-                                · {vigilia.lat}
-                              </span>
+                              <span className="pp-horae-civic-latin-dim"> · {vigilia.lat}</span>
                             )}
                           </span>
-                          <span className="text-xs leading-snug text-parchment/80">
+                          <span className="pp-horae-civic-spa">
                             {civic.spa}
                             {vigilia && (
-                              <span className="text-parchment/60"> · {vigilia.spa}</span>
+                              <span className="pp-horae-civic-spa-dim"> · {vigilia.spa}</span>
                             )}
                           </span>
-                          <span className="text-xs leading-tight text-parchment/50 italic">
+                          <span className="pp-horae-cite">
                             {civic.source}
                             {vigilia ? ' · Veg. 3.8' : ''}
                           </span>
@@ -1052,31 +991,27 @@ const PlanetaryPositions: React.FC<Props> = ({ currentDate, lat, lng }) => {
                         title={`${QUALITY_LABEL[chrono.quality].lat} · ${
                           QUALITY_LABEL[chrono.quality].spa
                         }`}
-                        className={`font-serif text-xs w-5 h-5 shrink-0 mt-0.5 flex items-center justify-center rounded border ${
-                          QUALITY_CLASS[chrono.quality]
-                        }`}
+                        className={`pp-quality-badge ${QUALITY_CLASS[chrono.quality]}`}
                       >
                         {chrono.quality}
                       </span>
                     )}
                     <span
-                      className={`font-serif text-xs tabular-nums shrink-0 mt-0.5 ${
-                        isCurrent ? 'text-gold-dim' : 'text-gold-dim/70'
-                      }`}
+                      className={`pp-horae-time${isCurrent ? ' pp-horae-time--current' : ''}`}
                     >
                       {timeStr}
                     </span>
                   </div>
                   {isCurrent && chrono && (
-                    <span className="ml-[4.75rem] mt-1 text-xs font-serif text-parchment/60">
+                    <span className="pp-horae-quality-label">
                       Hora {QUALITY_LABEL[chrono.quality].lat} ·{' '}
-                      <span className="italic">hora {QUALITY_LABEL[chrono.quality].spa}</span>
+                      <span>hora {QUALITY_LABEL[chrono.quality].spa}</span>
                     </span>
                   )}
                   {isCurrent && (
-                    <div className="ml-[4.75rem] mt-1.5 h-1 rounded-full bg-gold-dim/15 overflow-hidden">
+                    <div className="pp-horae-progress pp-progress-track">
                       <div
-                        className="h-full bg-gold-leaf/70 rounded-full"
+                        className="pp-progress-fill"
                         style={{ width: `${progress * 100}%` }}
                       />
                     </div>

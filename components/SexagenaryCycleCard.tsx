@@ -1,38 +1,43 @@
 import React from 'react';
 import { STEMS, BRANCHES } from '../utils/chineseLunisolarUtils';
+import './SexagenaryCycleCard.css';
 
-const ELEMENT_CHIP: Record<
-  string,
-  { bg: string; border: string; text: string; label: string }
-> = {
+interface ElementChip {
+  bgColor: string;
+  borderColor: string;
+  color: string;
+  label: string;
+}
+
+const ELEMENT_CHIP: Record<string, ElementChip> = {
   木: {
-    bg: 'bg-emerald-500/15',
-    border: 'border-emerald-500/30',
-    text: 'text-emerald-300',
+    bgColor: 'rgb(16 185 129 / 15%)',
+    borderColor: 'rgb(16 185 129 / 30%)',
+    color: '#6ee7b7',
     label: 'Madera',
   },
   火: {
-    bg: 'bg-red-500/15',
-    border: 'border-red-500/30',
-    text: 'text-red-300',
+    bgColor: 'rgb(239 68 68 / 15%)',
+    borderColor: 'rgb(239 68 68 / 30%)',
+    color: '#fca5a5',
     label: 'Fuego',
   },
   土: {
-    bg: 'bg-amber-500/15',
-    border: 'border-amber-500/30',
-    text: 'text-amber-300',
+    bgColor: 'rgb(245 158 11 / 15%)',
+    borderColor: 'rgb(245 158 11 / 30%)',
+    color: '#fcd34d',
     label: 'Tierra',
   },
   金: {
-    bg: 'bg-yellow-500/15',
-    border: 'border-yellow-500/30',
-    text: 'text-yellow-300',
+    bgColor: 'rgb(234 179 8 / 15%)',
+    borderColor: 'rgb(234 179 8 / 30%)',
+    color: '#fde047',
     label: 'Metal',
   },
   水: {
-    bg: 'bg-cyan-500/15',
-    border: 'border-cyan-500/30',
-    text: 'text-cyan-300',
+    bgColor: 'rgb(6 182 212 / 15%)',
+    borderColor: 'rgb(6 182 212 / 30%)',
+    color: '#67e8f9',
     label: 'Agua',
   },
 };
@@ -55,27 +60,21 @@ const SexagenaryCycleCard: React.FC<SexagenaryCycleCardProps> = ({
   dayBranchIndex,
 }) => {
   return (
-    <div className="w-full bg-ink/90 border border-gold-leaf/30 rounded-lg shadow-xl overflow-hidden">
+    <div className="sexagenary-cycle-card">
       {/* Header */}
-      <div className="text-center pt-4 pb-2 px-4 border-b border-gold-leaf/20">
-        <div className="text-gold-leaf font-serif text-sm uppercase tracking-[0.3em]">
-          天干地支
-        </div>
-        <div className="text-parchment/60 text-[11px] uppercase tracking-widest mt-0.5">
-          CICLO SEXAGENARIO
-        </div>
+      <div className="scc__header">
+        <div className="scc__header-title">天干地支</div>
+        <div className="scc__header-subtitle">CICLO SEXAGENARIO</div>
       </div>
 
-      <div className="p-4 space-y-5">
+      <div className="scc__content">
         {/* Heavenly Stems */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs uppercase tracking-widest text-parchment font-bold">
-              天干
-            </span>
-            <span className="text-parchment/50 text-[10px]">TRONCOS CELESTIALES</span>
+          <div className="scc__section-heading-row">
+            <span className="scc__section-hanzi">天干</span>
+            <span className="scc__section-sub">TRONCOS CELESTIALES</span>
           </div>
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="scc__chip-grid">
             {STEMS.map((s, i) => {
               const isActive =
                 i === yearStemIndex || i === monthStemIndex || i === dayStemIndex;
@@ -83,36 +82,22 @@ const SexagenaryCycleCard: React.FC<SexagenaryCycleCardProps> = ({
               return (
                 <div
                   key={s.hanzi}
-                  className={`
-                    flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-md border transition-all duration-300 min-w-[48px]
-                    ${
-                      isActive
-                        ? `${chip.bg} ${chip.border} scale-110 shadow-[0_0_10px_rgba(255,255,255,0.12)]`
-                        : 'bg-black/40 border-gold-dim/25 text-parchment/70'
-                    }
-                  `}
+                  className={`scc__stem-chip ${
+                    isActive ? 'scc__stem-chip--active' : 'scc__stem-chip--inactive'
+                  }`}
+                  style={
+                    isActive
+                      ? ({
+                          '--chip-bg': chip.bgColor,
+                          '--chip-border': chip.borderColor,
+                          '--chip-text': chip.color,
+                        } as React.CSSProperties)
+                      : undefined
+                  }
                 >
-                  <span
-                    className={`text-lg font-bold ${
-                      isActive ? chip.text : 'text-parchment/90'
-                    }`}
-                  >
-                    {s.hanzi}
-                  </span>
-                  <span
-                    className={`text-[9px] leading-tight ${
-                      isActive ? chip.text : 'text-parchment/60'
-                    }`}
-                  >
-                    {s.pinyin}
-                  </span>
-                  <span
-                    className={`text-[8px] leading-tight ${
-                      isActive ? chip.text : 'text-parchment/50'
-                    }`}
-                  >
-                    {s.elementEs}
-                  </span>
+                  <span className="scc__chip-hanzi">{s.hanzi}</span>
+                  <span className="scc__chip-pinyin">{s.pinyin}</span>
+                  <span className="scc__chip-element">{s.elementEs}</span>
                 </div>
               );
             })}
@@ -121,13 +106,11 @@ const SexagenaryCycleCard: React.FC<SexagenaryCycleCardProps> = ({
 
         {/* Earthly Branches */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs uppercase tracking-widest text-parchment font-bold">
-              地支
-            </span>
-            <span className="text-parchment/50 text-[10px]">RAMAS TERRESTRES</span>
+          <div className="scc__section-heading-row">
+            <span className="scc__section-hanzi">地支</span>
+            <span className="scc__section-sub">RAMAS TERRESTRES</span>
           </div>
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="scc__chip-grid">
             {BRANCHES.map((b, i) => {
               const isActive =
                 i === yearBranchIndex || i === monthBranchIndex || i === dayBranchIndex;
@@ -135,30 +118,24 @@ const SexagenaryCycleCard: React.FC<SexagenaryCycleCardProps> = ({
               return (
                 <div
                   key={b.hanzi}
-                  className={`
-                    flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-md border transition-all duration-300 min-w-[56px]
-                    ${
-                      isActive
-                        ? `${chip.bg} ${chip.border} scale-105 shadow-[0_0_8px_rgba(255,255,255,0.12)]`
-                        : 'bg-black/40 border-gold-dim/25 text-parchment/70'
-                    }
-                  `}
+                  className={`scc__branch-chip ${
+                    isActive ? 'scc__branch-chip--active' : 'scc__branch-chip--inactive'
+                  }`}
+                  style={
+                    isActive
+                      ? ({
+                          '--chip-bg': chip.bgColor,
+                          '--chip-border': chip.borderColor,
+                          '--chip-text': chip.color,
+                        } as React.CSSProperties)
+                      : undefined
+                  }
                 >
-                  <div className="flex items-center gap-1">
-                    <span
-                      className={`text-sm font-bold ${
-                        isActive ? chip.text : 'text-parchment/90'
-                      }`}
-                    >
-                      {b.hanzi}
-                    </span>
-                    <span className="text-base">{b.animal}</span>
+                  <div className="scc__branch-inner">
+                    <span className="scc__branch-hanzi">{b.hanzi}</span>
+                    <span className="scc__branch-animal">{b.animal}</span>
                   </div>
-                  <span
-                    className={`text-[9px] leading-tight ${
-                      isActive ? chip.text : 'text-parchment/60'
-                    }`}
-                  >
+                  <span className="scc__branch-pinyin">
                     {b.pinyin} {b.animalEs}
                   </span>
                 </div>
@@ -168,51 +145,57 @@ const SexagenaryCycleCard: React.FC<SexagenaryCycleCardProps> = ({
         </div>
 
         {/* Current cycle summary */}
-        <div className="flex items-center justify-center gap-2 mt-2 pt-3 border-t border-gold-dim/20 text-xs flex-wrap">
-          <span className="text-parchment/60">Año</span>
-          <span className="text-parchment font-bold">
+        <div className="scc__summary">
+          <span className="scc__summary-label">Año</span>
+          <span className="scc__summary-value">
             {STEMS[yearStemIndex].hanzi}
             {BRANCHES[yearBranchIndex].hanzi}
           </span>
-          <span className="text-parchment/30">·</span>
-          <span className="text-parchment/60">Mes</span>
-          <span className="text-parchment font-bold">
+          <span className="scc__summary-dot">·</span>
+          <span className="scc__summary-label">Mes</span>
+          <span className="scc__summary-value">
             {STEMS[monthStemIndex].hanzi}
             {BRANCHES[monthBranchIndex].hanzi}
           </span>
-          <span className="text-parchment/30">·</span>
-          <span className="text-parchment/60">Día</span>
-          <span className="text-parchment font-bold">
+          <span className="scc__summary-dot">·</span>
+          <span className="scc__summary-label">Día</span>
+          <span className="scc__summary-value">
             {STEMS[dayStemIndex].hanzi}
             {BRANCHES[dayBranchIndex].hanzi}
           </span>
         </div>
 
         {/* 五行 Element legend */}
-        <div className="pt-2">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs uppercase tracking-widest text-parchment font-bold">
-              五行
-            </span>
-            <span className="text-parchment/50 text-[10px]">CINCO ELEMENTOS</span>
+        <div>
+          <div className="scc__section-heading-row">
+            <span className="scc__section-hanzi">五行</span>
+            <span className="scc__section-sub">CINCO ELEMENTOS</span>
           </div>
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="scc__legend-grid">
             {Object.entries(ELEMENT_CHIP).map(([el, c]) => (
               <div
                 key={el}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full border ${c.bg} ${c.border}`}
+                className="scc__legend-item"
+                style={{
+                  backgroundColor: c.bgColor,
+                  borderColor: c.borderColor,
+                }}
               >
-                <div className={`w-2.5 h-2.5 rounded-full ${c.text.replace('text-', 'bg-')}`} />
-                <span className={`text-xs font-bold ${c.text}`}>{el}</span>
-                <span className={`text-[11px] ${c.text}`}>{c.label}</span>
+                <div className="scc__legend-dot" style={{ backgroundColor: c.color }} />
+                <span className="scc__legend-hanzi" style={{ color: c.color }}>
+                  {el}
+                </span>
+                <span className="scc__legend-label" style={{ color: c.color }}>
+                  {c.label}
+                </span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Cycle explanation */}
-        <div className="text-center pt-2">
-          <p className="text-parchment/60 text-[11px] italic leading-relaxed">
+        <div className="scc__explanation">
+          <p className="scc__explanation-text">
             10 troncos × 12 ramas = 60 combinaciones · Ciclo de 60 años, meses, días y horas
             (Shíchen)
           </p>

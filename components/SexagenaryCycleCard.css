@@ -1,0 +1,267 @@
+/* SexagenaryCycleCard.css — plain CSS migration from Tailwind */
+
+.sexagenary-cycle-card {
+  width: 100%;
+  background: color-mix(in srgb, var(--ink) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-leaf) 30%, transparent);
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+  overflow: hidden;
+
+  .scc__header {
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+    padding-inline: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--gold-leaf) 20%, transparent);
+  }
+
+  .scc__header-title {
+    color: var(--gold-leaf);
+    font-family: Cinzel, serif;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+  }
+
+  .scc__header-subtitle {
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.125rem;
+  }
+
+  .scc__content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .scc__section-heading-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .scc__section-hanzi {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--parchment);
+    font-weight: 700;
+  }
+
+  .scc__section-sub {
+    color: color-mix(in srgb, var(--parchment) 50%, transparent);
+    font-size: 10px;
+  }
+
+  .scc__chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  /* Stems chip */
+  .scc__stem-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    padding-inline: 0.75rem;
+    padding-block: 0.375rem;
+    border-radius: 0.375rem;
+    border: 1px solid;
+    transition: all 0.3s ease;
+    min-width: 48px;
+
+    &.scc__stem-chip--inactive {
+      background: rgb(0 0 0 / 40%);
+      border-color: color-mix(in srgb, var(--gold-dim) 25%, transparent);
+      color: color-mix(in srgb, var(--parchment) 70%, transparent);
+
+      .scc__chip-hanzi {
+        color: color-mix(in srgb, var(--parchment) 90%, transparent);
+      }
+
+      .scc__chip-pinyin {
+        color: color-mix(in srgb, var(--parchment) 60%, transparent);
+      }
+
+      .scc__chip-element {
+        color: color-mix(in srgb, var(--parchment) 50%, transparent);
+      }
+    }
+
+    &.scc__stem-chip--active {
+      background: var(--chip-bg, transparent);
+      border-color: var(--chip-border, transparent);
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgb(255 255 255 / 12%);
+
+      .scc__chip-hanzi,
+      .scc__chip-pinyin,
+      .scc__chip-element {
+        color: var(--chip-text, var(--parchment));
+      }
+    }
+  }
+
+  .scc__chip-hanzi {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+  }
+
+  .scc__chip-pinyin {
+    font-size: 9px;
+    line-height: 1.25;
+  }
+
+  .scc__chip-element {
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  /* Branches chip */
+  .scc__branch-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+    padding-inline: 0.75rem;
+    padding-block: 0.375rem;
+    border-radius: 0.375rem;
+    border: 1px solid;
+    transition: all 0.3s ease;
+    min-width: 56px;
+
+    &.scc__branch-chip--inactive {
+      background: rgb(0 0 0 / 40%);
+      border-color: color-mix(in srgb, var(--gold-dim) 25%, transparent);
+      color: color-mix(in srgb, var(--parchment) 70%, transparent);
+
+      .scc__branch-hanzi {
+        color: color-mix(in srgb, var(--parchment) 90%, transparent);
+      }
+
+      .scc__branch-pinyin {
+        color: color-mix(in srgb, var(--parchment) 60%, transparent);
+      }
+    }
+
+    &.scc__branch-chip--active {
+      background: var(--chip-bg, transparent);
+      border-color: var(--chip-border, transparent);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgb(255 255 255 / 12%);
+
+      .scc__branch-hanzi,
+      .scc__branch-pinyin {
+        color: var(--chip-text, var(--parchment));
+      }
+    }
+  }
+
+  .scc__branch-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .scc__branch-hanzi {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+  }
+
+  .scc__branch-animal {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .scc__branch-pinyin {
+    font-size: 9px;
+    line-height: 1.25;
+  }
+
+  /* Summary row */
+  .scc__summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .scc__summary-label {
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  }
+
+  .scc__summary-value {
+    color: var(--parchment);
+    font-weight: 700;
+  }
+
+  .scc__summary-dot {
+    color: color-mix(in srgb, var(--parchment) 30%, transparent);
+  }
+
+  /* Element legend */
+  .scc__legend-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .scc__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding-inline: 0.75rem;
+    padding-block: 0.25rem;
+    border-radius: 9999px;
+    border: 1px solid;
+  }
+
+  .scc__legend-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+  }
+
+  .scc__legend-hanzi {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+  }
+
+  .scc__legend-label {
+    font-size: 11px;
+  }
+
+  /* Explanation */
+  .scc__explanation {
+    text-align: center;
+    padding-top: 0.5rem;
+  }
+
+  .scc__explanation-text {
+    color: color-mix(in srgb, var(--parchment) 60%, transparent);
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.625;
+  }
+}

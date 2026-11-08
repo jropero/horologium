@@ -10,6 +10,17 @@ import {
   SKY_PRESETS,
   compassName,
 } from '../utils/customWeather';
+import './CustomWeatherModal.css';
+
+function presetBtnMod(active: boolean, isAurora: boolean): string {
+  if (active)
+    return isAurora
+      ? 'custom-weather-modal__preset-btn--active-aurora'
+      : 'custom-weather-modal__preset-btn--active';
+  return isAurora
+    ? 'custom-weather-modal__preset-btn--inactive-aurora'
+    : 'custom-weather-modal__preset-btn--inactive';
+}
 
 interface CustomWeatherModalProps {
   isOpen: boolean;
@@ -33,13 +44,13 @@ const Slider: React.FC<{
   onChange: (value: number) => void;
 }> = ({ label, icon, value, min, max, step = 1, suffix, onChange }) => (
   // eslint-disable-next-line jsx-a11y/label-has-associated-control
-  <label className="block">
-    <span className="flex items-center justify-between text-xs uppercase tracking-widest text-gold-dim/80 mb-1">
-      <span className="flex items-center gap-1.5">
+  <label className="custom-weather-slider">
+    <span className="custom-weather-slider__header">
+      <span className="custom-weather-slider__label-group">
         {icon}
         {label}
       </span>
-      <span className="font-bold text-parchment normal-case tracking-normal">
+      <span className="custom-weather-slider__value">
         {value}
         {suffix}
       </span>
@@ -51,7 +62,7 @@ const Slider: React.FC<{
       step={step}
       value={value}
       onChange={e => onChange(Number(e.target.value))}
-      className="w-full h-1.5 rounded-full accent-gold-leaf cursor-pointer"
+      className="custom-weather-slider__input"
     />
   </label>
 );
@@ -136,7 +147,7 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
     <div
       role="button"
       tabIndex={0}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-3 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      className="custom-weather-modal animate-fadeIn"
       onClick={onClose}
       onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') onClose();
@@ -144,65 +155,51 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
     >
       <div
         role="presentation"
-        className="bg-ink border-2 border-gold-dim/40 rounded-xl shadow-2xl w-full max-w-sm max-h-[88vh] flex flex-col overflow-hidden"
+        className="custom-weather-modal__panel"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-gold-dim/30 bg-ink/95">
-          <div className="min-w-0">
+        <div className="custom-weather-modal__header">
+          <div className="custom-weather-modal__header-text">
             {isBabylon ? (
               <GlossedTerm
                 term={BAB.sky}
                 align="start"
-                className="font-serif text-sm uppercase tracking-[0.25em] text-gold-leaf font-bold"
-                glossClassName="text-gold-dim/70"
+                className="custom-weather-modal__babylon-sky-heading"
+                glossClassName="custom-weather-modal__babylon-sky-gloss"
               />
             ) : (
-              <h3 className="font-serif text-sm uppercase tracking-[0.3em] text-gold-leaf font-bold">
-                Caelum
-              </h3>
+              <h3>Caelum</h3>
             )}
-            <p className="text-xs text-stone-400 mt-0.5">Cielo personalizado</p>
+            <p className="custom-weather-modal__subtitle">Cielo personalizado</p>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Cerrar"
-            className="text-parchment/70 hover:text-roman-red transition-colors p-1 rounded-full shrink-0"
-          >
-            <X className="w-5 h-5" />
+          <button onClick={onClose} aria-label="Cerrar" className="custom-weather-modal__close">
+            <X className="custom-weather-modal__close-icon" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="overflow-y-auto custom-scrollbar px-4 py-3 space-y-4">
+        <div className="custom-weather-modal__body custom-scrollbar">
           {/* Sky presets */}
           <div>
-            <span className="block font-serif text-xs uppercase tracking-[0.25em] text-gold-dim/70 mb-2">
+            <span className="custom-weather-modal__presets-label">
               {isBabylon ? <GlossedTerm term={BAB.sky} align="start" /> : 'Caelum'}
             </span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="custom-weather-modal__presets-grid">
               {SKY_PRESETS.map(preset => {
                 const active = activePresetId === preset.id;
                 const isAurora = !!preset.aurora;
+                const btnMod = presetBtnMod(active, isAurora);
+                const btnClass = `custom-weather-modal__preset-btn ${btnMod}`;
+
                 return (
                   <button
                     key={preset.id}
                     onClick={() => pickPreset(preset.id)}
-                    className={`w-full text-left px-2.5 py-2 rounded-lg font-serif text-xs uppercase tracking-widest transition-all border flex items-center justify-between gap-1
-                                            ${
-                                              active
-                                                ? // eslint-disable-next-line sonarjs/no-nested-conditional
-                                                  isAurora
-                                                  ? 'bg-emerald-400/20 border-emerald-300 text-emerald-200 font-bold'
-                                                  : 'bg-gold-leaf text-ink border-gold-leaf font-bold'
-                                                : // eslint-disable-next-line sonarjs/no-nested-conditional
-                                                isAurora
-                                                ? 'text-emerald-300/90 border-emerald-500/30 hover:bg-emerald-400/10 hover:border-emerald-400/60'
-                                                : 'text-parchment/80 border-gold-dim/20 hover:bg-gold-leaf/10 hover:border-gold-dim/50'
-                                            }`}
+                    className={btnClass}
                   >
-                    <span className="truncate">{preset.label}</span>
-                    {active && <Check className="w-3.5 h-3.5 shrink-0" />}
+                    <span>{preset.label}</span>
+                    {active && <Check className="custom-weather-modal__check-icon" />}
                   </button>
                 );
               })}
@@ -210,14 +207,12 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
           </div>
 
           {/* Custom values */}
-          <div className="space-y-3 pt-1 border-t border-gold-dim/15">
-            <span className="block font-serif text-xs uppercase tracking-[0.25em] text-gold-dim/70">
-              Valores
-            </span>
+          <div className="custom-weather-modal__values">
+            <span className="custom-weather-modal__values-label">Valores</span>
 
             <Slider
               label="Temperatura"
-              icon={<Thermometer className="w-3.5 h-3.5" />}
+              icon={<Thermometer />}
               value={draft.temperature}
               min={-40}
               max={50}
@@ -227,7 +222,7 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
 
             <Slider
               label="Viento"
-              icon={<Wind className="w-3.5 h-3.5" />}
+              icon={<Wind />}
               value={draft.windSpeed}
               min={0}
               max={150}
@@ -237,7 +232,7 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
 
             <Slider
               label="Dirección"
-              icon={<Compass className="w-3.5 h-3.5" />}
+              icon={<Compass />}
               value={draft.windDirection}
               min={0}
               max={359}
@@ -245,35 +240,27 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
               onChange={v => setDraft(d => ({ ...d, windDirection: v }))}
             />
 
-            <label className="block">
-              <span className="block text-xs uppercase tracking-widest text-gold-dim/80 mb-1">
-                Etiqueta
-              </span>
+            <label className="custom-weather-modal__text-label">
+              <span className="custom-weather-modal__text-label-text">Etiqueta</span>
               <input
                 type="text"
                 value={draft.label}
                 maxLength={28}
                 placeholder="Nombre del cielo (opcional)"
                 onChange={e => setDraft(d => ({ ...d, label: e.target.value }))}
-                className="w-full bg-ink/70 border border-gold-dim/25 rounded-lg px-3 py-2 font-serif text-xs text-parchment placeholder:text-stone-500 focus:outline-none focus:border-gold-leaf/60"
+                className="custom-weather-modal__text-input"
               />
             </label>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center gap-2 px-4 py-3 border-t border-gold-dim/30 bg-ink/95">
-          <button
-            onClick={reset}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg font-serif text-xs uppercase tracking-widest text-parchment/70 border border-gold-dim/25 hover:bg-gold-leaf/10 hover:border-gold-dim/50 transition-colors"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
+        <div className="custom-weather-modal__footer">
+          <button onClick={reset} className="custom-weather-modal__reset-btn">
+            <RotateCcw className="custom-weather-modal__reset-icon" />
             Tiempo real
           </button>
-          <button
-            onClick={apply}
-            className="flex-1 px-3 py-2 rounded-lg font-serif text-xs uppercase tracking-widest bg-gold-leaf text-ink border border-gold-leaf font-bold hover:bg-gold-dim transition-colors"
-          >
+          <button onClick={apply} className="custom-weather-modal__apply-btn">
             Aplicar
           </button>
         </div>
