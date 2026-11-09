@@ -6,11 +6,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm run dev      # Start dev server at http://localhost:3000
-npm run build    # TypeScript compile + Vite build → dist/
+npm run build    # Vite+ (Rolldown) build → dist/
 npm run preview  # Preview the production build locally
+npm run lint     # Oxlint (vp lint)
+npm run format   # Oxfmt (vp fmt)
 ```
 
-Unit tests live in `tests/solar.test.ts` (Vitest, `npx vitest run`). There are no lint scripts. `scripts/buildRomanRoads.ts` regenerates the bundled Roman roads (see "Roman roads layer"). Verification scripts in the root (`verify_moon.ts`, `verify_descriptions.ts`, `verify_translation.ts`) can be run with `npx tsx <file>` for ad-hoc checks.
+Unit tests live in `tests/solar.test.ts` (Vitest 5, `npm run test` or `vp test run`). `scripts/buildRomanRoads.ts` regenerates the bundled Roman roads (see "Roman roads layer"). Verification scripts in the root (`verify_moon.ts`, `verify_descriptions.ts`, `verify_translation.ts`) can be run with `npx tsx <file>` for ad-hoc checks.
+
+### Toolchain
+
+Vite+ 1.5.0 replaces ESLint + Prettier + Babel. All tooling is configured in `vite.config.ts` (`lint`, `fmt`, `staged` blocks). Pre-commit hook runs `vp staged`. SonarJS rules load via `lint/sonarjs.js` (Oxlint JS plugin).
 
 ### Android (Capacitor)
 
