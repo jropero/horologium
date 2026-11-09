@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { calculateRomanTime } from '../utils/romanTimeUtils';
 import { ROMAN_YEAR_DATA } from '../utils/romanYearData';
 

@@ -408,17 +408,17 @@ function RomanClock({
                       key={i}
                       d={`M ${star.x} ${star.y - star.size} 
                                   Q ${star.x + star.size / 4} ${star.y - star.size / 4} ${
-                        star.x + star.size
-                      } ${star.y} 
+                                    star.x + star.size
+                                  } ${star.y} 
                                   Q ${star.x + star.size / 4} ${star.y + star.size / 4} ${
-                        star.x
-                      } ${star.y + star.size} 
+                                    star.x
+                                  } ${star.y + star.size} 
                                   Q ${star.x - star.size / 4} ${star.y + star.size / 4} ${
-                        star.x - star.size
-                      } ${star.y} 
+                                    star.x - star.size
+                                  } ${star.y} 
                                   Q ${star.x - star.size / 4} ${star.y - star.size / 4} ${
-                        star.x
-                      } ${star.y - star.size} Z`}
+                                    star.x
+                                  } ${star.y - star.size} Z`}
                       fill="#e3d6b3"
                       fillOpacity={star.opacity}
                       transform={`rotate(${star.rotation} ${star.x} ${star.y})`}

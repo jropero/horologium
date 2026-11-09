@@ -269,7 +269,7 @@ const roads = features.map(f => {
 
   // Dating: Lower/Upper_Date (+ error margins) when given, else the start of the
   // Cons_per_e period. 9999 = unknown in this export (the docs say 0).
-  const cons = p.Cons_per_e ? DATE_FIX[p.Cons_per_e] ?? p.Cons_per_e : null;
+  const cons = p.Cons_per_e ? (DATE_FIX[p.Cons_per_e] ?? p.Cons_per_e) : null;
   // eslint-disable-next-line sonarjs/super-linear-regex
   const consMatch = cons?.match(/^(.*?)\s*(?:\(([^)]*)\))?\s*$/);
   const consYears = consMatch?.[2] ? parseYears(consMatch[2]) : null;

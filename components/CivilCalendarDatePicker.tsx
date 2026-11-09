@@ -215,9 +215,9 @@ const CivilCalendarDatePicker: React.FC<CivilCalendarDatePickerProps> = ({
                     const dayMod = isSelected
                       ? 'ccp-day--selected'
                       : // eslint-disable-next-line sonarjs/no-nested-conditional
-                      isToday
-                      ? 'ccp-day--today'
-                      : 'ccp-day--default';
+                        isToday
+                        ? 'ccp-day--today'
+                        : 'ccp-day--default';
                     return (
                       <button
                         key={d.day}

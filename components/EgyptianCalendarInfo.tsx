@@ -683,8 +683,9 @@ const PrognosisCard: React.FC<{ title: string; prognosis: Prognosis }> = ({
     nefer: { variant: 'nefer', icon: '☀️', text: 'Nefer', sub: 'Favorable' },
     aha: { variant: 'aha', icon: '🦂', text: 'Aha', sub: 'Adverso' },
     neutral: { variant: 'neutral', icon: '—', text: '—', sub: '—' },
+    none: { variant: 'neutral', icon: '—', text: '—', sub: '—' },
   } as const;
-  const { variant, icon, text, sub } = PROGNOSIS_DATA[prognosis] ?? PROGNOSIS_DATA.neutral;
+  const { variant, icon, text, sub } = PROGNOSIS_DATA[prognosis];
 
   return (
     <div className={`prognosis-card prognosis-card--${variant}`}>
@@ -921,15 +922,15 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                     weatherCond === 'snow'
                       ? 'rgba(55,65,80,0.88)'
                       : isNight
-                      ? 'rgba(40,20,5,0.92)'
-                      : 'rgba(100,55,15,0.82)'
+                        ? 'rgba(40,20,5,0.92)'
+                        : 'rgba(100,55,15,0.82)'
                   }
                   stroke={
                     weatherCond === 'snow'
                       ? 'rgba(140,165,190,0.45)'
                       : isNight
-                      ? 'rgba(80,40,10,0.4)'
-                      : 'rgba(160,90,20,0.35)'
+                        ? 'rgba(80,40,10,0.4)'
+                        : 'rgba(160,90,20,0.35)'
                   }
                   strokeWidth="0.5"
                   opacity={el.opacity}

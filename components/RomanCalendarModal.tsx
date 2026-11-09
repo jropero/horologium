@@ -66,7 +66,9 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
       ref={dialogRef}
       className="roman-calendar-modal animate-fadeIn"
       onClose={onClose}
-      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
+      onClick={e => {
+        if (e.target === dialogRef.current) onClose();
+      }}
     >
       <div className="rcm-panel">
         {/* Header del Modal */}

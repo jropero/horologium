@@ -81,7 +81,9 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
       ref={dialogRef}
       className="egyptian-calendar-modal animate-fadeIn"
       onClose={onClose}
-      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
+      onClick={e => {
+        if (e.target === dialogRef.current) onClose();
+      }}
     >
       <div className="egyptian-calendar-modal__panel">
         {/* Header */}
@@ -117,10 +119,10 @@ const EgyptianCalendarModal: React.FC<EgyptianCalendarModalProps> = ({
               isToday
                 ? 'egyptian-calendar-modal__day-card--today'
                 : isEpag
-                ? 'egyptian-calendar-modal__day-card--epagomenal'
-                : hasFestival
-                ? 'egyptian-calendar-modal__day-card--festival'
-                : '',
+                  ? 'egyptian-calendar-modal__day-card--epagomenal'
+                  : hasFestival
+                    ? 'egyptian-calendar-modal__day-card--festival'
+                    : '',
             ]
               .filter(Boolean)
               .join(' ');

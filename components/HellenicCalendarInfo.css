@@ -191,7 +191,9 @@
 
 .hel-day-btn--selected {
   background-color: rgb(56 189 248 / 20%);
-  box-shadow: 0 0 0 2px #38bdf8, 0 0 8px rgb(56 189 248 / 40%);
+  box-shadow:
+    0 0 0 2px #38bdf8,
+    0 0 8px rgb(56 189 248 / 40%);
 }
 
 .hel-day-btn--today {

@@ -39,7 +39,9 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 10%),
+    0 2px 4px -2px rgb(0 0 0 / 10%);
 }
 
 .horus-eclipse-modal__header-left {
@@ -62,7 +64,9 @@
   color: color-mix(in srgb, var(--parchment) 80%, transparent);
   padding: 0.5rem;
   border-radius: 9999px;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
   cursor: pointer;
   background: none;
   border: none;

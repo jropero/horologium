@@ -124,12 +124,16 @@
 
     &.rdg-cell--selected {
       background-color: color-mix(in srgb, var(--gold-leaf) 20%, transparent);
-      box-shadow: 0 0 0 2px var(--gold-leaf), 0 0 8px rgb(212 175 55 / 40%);
+      box-shadow:
+        0 0 0 2px var(--gold-leaf),
+        0 0 8px rgb(212 175 55 / 40%);
     }
 
     &.rdg-cell--today {
       background-color: color-mix(in srgb, var(--gold-leaf) 25%, transparent);
-      box-shadow: 0 0 0 2px var(--gold-leaf), 0 0 12px rgb(212 175 55 / 50%);
+      box-shadow:
+        0 0 0 2px var(--gold-leaf),
+        0 0 12px rgb(212 175 55 / 50%);
     }
 
     &.rdg-cell--no-entry {
@@ -441,7 +445,9 @@
     border: 1px solid var(--gold-dim);
     padding: 1.25rem;
     border-radius: 0.5rem;
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+    box-shadow:
+      0 20px 25px -5px rgb(0 0 0 / 10%),
+      0 8px 10px -6px rgb(0 0 0 / 10%);
     position: relative;
     overflow: hidden;
     text-align: center;

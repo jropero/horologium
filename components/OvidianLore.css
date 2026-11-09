@@ -17,7 +17,9 @@
     backdrop-filter: blur(4px);
     border: 1px solid color-mix(in srgb, var(--gold-dim) 30%, transparent);
     border-radius: 0.75rem;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 10%),
+      0 4px 6px -4px rgb(0 0 0 / 10%);
     position: relative;
     overflow: hidden;
   }
@@ -97,8 +99,12 @@
     border: 1px solid color-mix(in srgb, var(--gold-leaf) 40%, transparent);
     padding: 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
-    transition: background-color 0.15s ease, border-color 0.15s ease;
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 10%),
+      0 4px 6px -4px rgb(0 0 0 / 10%);
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease;
     text-align: left;
     margin-top: 0.5rem;
     position: relative;

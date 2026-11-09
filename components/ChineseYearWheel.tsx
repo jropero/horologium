@@ -476,8 +476,8 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
                           color: isActive
                             ? season.accent
                             : isNext
-                            ? season.accent + 'bb'
-                            : '#4b5563',
+                              ? season.accent + 'bb'
+                              : '#4b5563',
                         }}
                       >
                         {term.hanzi}
@@ -487,8 +487,8 @@ const ChineseYearWheel: React.FC<Props> = ({ currentTermIndex, weather }) => {
                           isActive
                             ? 'cyw__term-translation--active'
                             : isNext
-                            ? 'cyw__term-translation--next'
-                            : 'cyw__term-translation--inactive'
+                              ? 'cyw__term-translation--next'
+                              : 'cyw__term-translation--inactive'
                         }`}
                       >
                         {term.translation}
