@@ -5,7 +5,7 @@
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vite+](https://img.shields.io/badge/Vite%2B-1.5-646CFF?logo=vite&logoColor=white)](https://vite.plus/)
 [![CSS](https://img.shields.io/badge/CSS-Plain_CSS-1572B6?logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-009688?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
@@ -71,7 +71,7 @@
 
 - **Cor**: React 19, TypeScript 5.8.
 - **Stilus**: CSS simplex per singulos modulos separatus, cum systemate proprietatum (`--ink`, `--gold-leaf`, `--shadow-xl`, aliis) in `index.css` definitarum.
-- **Instrumentum Aedificandi**: Vite 6 cum sustentatione PWA.
+- **Instrumentum Aedificandi**: Vite+ 1.5 (Rolldown, Oxlint, Oxfmt) cum sustentatione PWA.
 - **Mobile**: Capacitor 8 ad involucra nativa in Android.
 - **Geometria**: SVG viva ad horologium et scaenam proceduralem; Canvas 2D ad tabulam stellarum Aegyptiam et tabulam Imperii Romani.
 - **Calculus**: Algorithmi astronomici summae accurationis pro phasibus lunaribus et cyclis stellaribus ([astronomy-engine](https://github.com/cosinekitty/astronomy)).
@@ -91,7 +91,7 @@
 2. **Necessaria**:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Explicare in Loco**:

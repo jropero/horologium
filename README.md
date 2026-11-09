@@ -5,7 +5,7 @@
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vite+](https://img.shields.io/badge/Vite%2B-1.5-646CFF?logo=vite&logoColor=white)](https://vite.plus/)
 [![CSS](https://img.shields.io/badge/CSS-Plain_CSS-1572B6?logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![Capacitor](https://img.shields.io/badge/Capacitor-8-119EFF?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-009688?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
@@ -73,7 +73,7 @@
 
 - **Core**: React 19, TypeScript 5.8.
 - **Styling**: CSS plano con archivos por componente y un sistema de propiedades personalizadas (`--ink`, `--gold-leaf`, `--shadow-xl`, etc.) definidas en `index.css`.
-- **Build Tool**: Vite 6 con soporte PWA.
+- **Build Tool**: Vite+ 1.5 (Rolldown, Oxlint, Oxfmt) con soporte PWA.
 - **Mobile**: Capacitor 8 para empaquetado nativo en Android.
 - **Geometría**: SVG dinámicos para el reloj y el skyline procedimental; Canvas 2D para el mapa estelar egipcio y el mapa del Imperio Romano.
 - **Cálculo**: Algoritmos astronómicos de precisión para fases lunares y ciclos estelares ([astronomy-engine](https://github.com/cosinekitty/astronomy)).
@@ -93,7 +93,7 @@
 2. **Dependencias**:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Desarrollo Local**:
