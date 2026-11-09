@@ -90,9 +90,12 @@
    cd horologium
    ```
 
-2. **Dependencias**:
+2. **Dependencias** (requiere [pnpm](https://pnpm.io/)):
 
    ```bash
+   # Instalar pnpm si no está disponible (Node ≥ 16.9)
+   corepack enable && corepack prepare pnpm@latest --activate
+
    pnpm install
    ```
 
