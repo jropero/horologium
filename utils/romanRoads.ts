@@ -78,7 +78,7 @@ const decode = (json: { strings: string[]; roads: RawRoad[] }): RomanRoad[] => {
         lngMax = -Infinity,
         latMin = Infinity,
         latMax = -Infinity;
-      for (let i = 0; i < coords.length; ) {
+      for (let i = 0; i < coords.length;) {
         const n = coords[i++];
         const part = new Float32Array(n * 2);
         let x = 0,

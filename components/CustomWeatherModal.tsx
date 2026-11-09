@@ -114,9 +114,10 @@ const CustomWeatherModal: React.FC<CustomWeatherModalProps> = ({
     draft.mode === 'live'
       ? 'live'
       : // eslint-disable-next-line sonarjs/no-nested-conditional
-      draft.aurora
-      ? 'aurora'
-      : SKY_PRESETS.find(p => !p.aurora && p.id !== 'live' && p.code === draft.code)?.id ?? '';
+        draft.aurora
+        ? 'aurora'
+        : (SKY_PRESETS.find(p => !p.aurora && p.id !== 'live' && p.code === draft.code)?.id ??
+          '');
 
   const pickPreset = (presetId: string) => {
     const preset = SKY_PRESETS.find(p => p.id === presetId);

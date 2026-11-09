@@ -1,29 +1,21 @@
 {
   "name": "horologium-romanam",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=26"
-  },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:cap": "BUILD_TARGET=capacitor vite build",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "build": "vp build",
+    "build:cap": "BUILD_TARGET=capacitor vp build",
+    "preview": "vp preview",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "vp lint",
     "lint:css": "stylelint index.css",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "vp fmt",
+    "format:check": "vp fmt --check",
     "prepare": "husky",
-    "test": "vitest run",
-    "test:watch": "vitest"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,mts,js,mjs}": "eslint",
-    "*.css": "stylelint",
-    "*.{ts,tsx,mts,js,mjs,css,json,md}": "prettier --write"
+    "test": "vp test run",
+    "test:watch": "vp test"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.0",
@@ -37,52 +29,31 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "typescript-eslint>typescript": ">=4.8.4"
-      }
-    }
-  },
-  "overrides": {
-    "eslint-plugin-jsx-a11y": {
-      "eslint": "$eslint"
-    },
-    "eslint-plugin-react": {
-      "eslint": "$eslint"
-    }
-  },
   "devDependencies": {
-    "@babel/core": "^8.1.0",
-    "@babel/eslint-parser": "^8.0.7",
-    "@babel/preset-react": "^8.0.1",
-    "@babel/preset-typescript": "^8.0.7",
     "@capacitor/cli": "^8.3.0",
-    "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
-    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/coverage-v8": "catalog:",
     "autoprefixer": "^10.4.27",
-    "eslint": "^10.14.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-sonarjs": "^4.2.2",
+    "eslint-plugin-sonarjs": "4.2.2",
     "husky": "^9.1.7",
-    "lint-staged": "^17.6.0",
     "postcss": "^8.5.9",
     "stylelint": "^18.0.0",
     "stylelint-config-standard": "^41.0.0",
-    "ts-api-utils": "^2.5.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.72.1",
-    "vite": "^8.3.5",
+    "vite": "catalog:",
     "vite-plugin-pwa": "^2.0.0",
-    "vitest": "^5.1.0",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:",
     "workbox-window": "^7.4.0"
+  },
+  "lint-staged": {
+    "*.css": "stylelint"
+  },
+  "engines": {
+    "node": ">=26"
   },
   "allowScripts": {
     "sharp@0.32.6": true,

@@ -279,7 +279,9 @@
     background-color: rgb(8 47 73 / 40%);
     border: 1px solid rgb(56 189 248 / 40%);
     border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 10%),
+      0 4px 6px -4px rgb(0 0 0 / 10%);
   }
 
   .greek-days-list__festival-header {

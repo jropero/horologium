@@ -71,7 +71,9 @@ const LocationModal: React.FC<LocationModalProps> = ({
       ref={dialogRef}
       className="location-modal animate-fadeIn"
       onClose={onClose}
-      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
+      onClick={e => {
+        if (e.target === dialogRef.current) onClose();
+      }}
     >
       <div className="location-modal__panel">
         <button onClick={onClose} className="location-modal__close" aria-label="Cerrar">

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { getAtticDate, getAtticDateForDisplay } from '../utils/atticCalendarUtils';
 import { calculateHellenicTime } from '../utils/hellenicTimeUtils';
 

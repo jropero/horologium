@@ -126,13 +126,14 @@
 ## Summary
 
 **Finding counts**:
-| Category | Count |
-|---|---|
-| WRONG_DEITY | 2 (Days 17, 19) |
-| WRONG_RITUAL | 2 (Days 14, 17) |
-| INVENTED_AITION | 1 (Day 15) |
-| MISSING_FESTIVAL | 2 (Days 9, 14) |
-| MINOR | 4 (Days 15 location, 16–17 Argei, 1 Matronalia, 24 status) |
-| **Total** | **11** |
+
+| Category         | Count                                                      |
+| ---------------- | ---------------------------------------------------------- |
+| WRONG_DEITY      | 2 (Days 17, 19)                                            |
+| WRONG_RITUAL     | 2 (Days 14, 17)                                            |
+| INVENTED_AITION  | 1 (Day 15)                                                 |
+| MISSING_FESTIVAL | 2 (Days 9, 14)                                             |
+| MINOR            | 4 (Days 15 location, 16–17 Argei, 1 Matronalia, 24 status) |
+| **Total**        | **11**                                                     |
 
 **Overall assessment**: The March data is structurally sound — the major festivals (Matronalia, Equirria, Anna Perenna, Liberalia, Quinquatrus, Tubilustrium, Q.R.C.F., Luna) are all present and placed on the correct days. However, the data has two systematic blind spots that affect multiple entries. First, the month's Martian character is consistently under-represented: the Quinquatrus is misattributed primarily to Minerva when both sources agree Mars is the primary deity; the Liberalia's secondary deity is listed as Mars (via the Agonalia) rather than Libera; and the second Salian procession on March 9 — one of only three calendar-marked Salian days — is entirely absent. Second, the festivalDesc for Day 17 (Liberalia) describes a secondary domestic ceremony (toga virilis) while omitting the festival's entire public religious content (old women selling liba, cult of Liber/Libera). The Anna Perenna entry's inclusion of Caesar's assassination is the most serious single inaccuracy: it introduces an historical coincidence as if it were part of the festival's significance, which neither source supports. The Mamuralia is a legitimate additional note for Day 14, warranted by the coverage both sources give it despite Fowler's caution about its late attestation. No entries are placed on wrong days, and no deities are completely fabricated; the errors are primarily about emphasis, completeness, and one case of invented historical framing.

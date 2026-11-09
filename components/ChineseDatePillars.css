@@ -5,7 +5,9 @@
   background: color-mix(in srgb, var(--ink) 90%, transparent);
   border: 1px solid color-mix(in srgb, var(--gold-leaf) 30%, transparent);
   border-radius: 0.5rem;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 8px 10px -6px rgb(0 0 0 / 10%);
   overflow: hidden;
 
   .cdp__header {

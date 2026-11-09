@@ -232,7 +232,9 @@
   justify-content: center;
   border-radius: 9999px;
   color: color-mix(in srgb, var(--parchment) 70%, transparent);
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 
   &:hover {
     color: var(--gold-leaf);

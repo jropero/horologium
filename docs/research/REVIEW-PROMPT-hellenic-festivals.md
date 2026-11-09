@@ -25,21 +25,21 @@ The PDF has ~14 pages of front matter before printed page 1.
 
 Chapter locations in the book (printed page → PDF page):
 
-| Month            | Printed p. | PDF p. |
+| Month | Printed p. | PDF p. |
 | ---------------- | ---------- | ------ | ------------------------ |
-| Hecatombaion     | 29         | 43     |
-| Metageitnion     | 51         | 65     |
-| Boedromion       | 53         | 67     |
-| Pyanepsion       | 73         | 87     | ← already reviewed       |
-| Maimakterion     | 95         | 109    |
-| Poseideon        | 97         | 111    |
-| Gamelion         | 104        | 118    |
-| Anthesterion     | 107        | 121    |
-| Elaphebolion     | 125        | 139    |
-| Munichion        | 137        | 151    |
-| Thargelion       | 146        | 160    |
-| Skiraphorion     | 156        | 170    | ← Skira already reviewed |
-| Other / Unplaced | 171        | 185    |
+| Hecatombaion | 29 | 43 |
+| Metageitnion | 51 | 65 |
+| Boedromion | 53 | 67 |
+| Pyanepsion | 73 | 87 | ← already reviewed |
+| Maimakterion | 95 | 109 |
+| Poseideon | 97 | 111 |
+| Gamelion | 104 | 118 |
+| Anthesterion | 107 | 121 |
+| Elaphebolion | 125 | 139 |
+| Munichion | 137 | 151 |
+| Thargelion | 146 | 160 |
+| Skiraphorion | 156 | 170 | ← Skira already reviewed |
+| Other / Unplaced | 171 | 185 |
 
 ## How to proceed
 

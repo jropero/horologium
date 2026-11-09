@@ -203,16 +203,17 @@ Scullard's March chapter (pp. 84–96) covers eleven distinct festival days and 
 Other notable observances: the Matronalia (1 March, women's festival at Juno Lucina's temple); the festival of Anna Perenna (15 March, popular outdoor celebration at the first milestone on the Flaminian Way); the Liberalia (17 March, Liber Pater / Libera, with the toga virilis ceremony for boys coming of age); and the Argei procession (16–17 March, deferred to the 14 May throwing of puppets into the Tiber). The month closes with the dies natalis of the temple of Luna on the Aventine (31 March).
 
 **Festivals by day**:
-| Day | Festival | Fasti | Deity |
-|-----|----------|-------|-------|
-| 1 | Feriae Marti; Salii begin; Matronalia | NP | Mars; Juno Lucina |
-| 7 | Vediovis | F | Vediovis |
-| 9 | Arma ancilia moventur (2nd Salian procession) | C | Mars |
-| 14 | Equirria; Mamuralia/Sacrum Mamurio | NP | Mars; Mamurius |
-| 15 | Feriae Iovi; Feriae Annae Perennae | NP | Jupiter; Anna Perenna |
-| 16–17 | Itur ad Argeos | Dies religiosus | Argei |
-| 17 | Liberalia; Agonalia; Toga virilis | NP | Liber/Libera; Mars; Lares |
-| 19 | Quinquatrus | NP | Mars; Minerva |
-| 23 | Tubilustrium | NP | Mars; Minerva; Nerio |
-| 24 | Q.R.C.F. | F | — |
-| 31 | Luna in Aventino (dies natalis) | C | Luna |
+
+| Day   | Festival                                      | Fasti           | Deity                     |
+| ----- | --------------------------------------------- | --------------- | ------------------------- |
+| 1     | Feriae Marti; Salii begin; Matronalia         | NP              | Mars; Juno Lucina         |
+| 7     | Vediovis                                      | F               | Vediovis                  |
+| 9     | Arma ancilia moventur (2nd Salian procession) | C               | Mars                      |
+| 14    | Equirria; Mamuralia/Sacrum Mamurio            | NP              | Mars; Mamurius            |
+| 15    | Feriae Iovi; Feriae Annae Perennae            | NP              | Jupiter; Anna Perenna     |
+| 16–17 | Itur ad Argeos                                | Dies religiosus | Argei                     |
+| 17    | Liberalia; Agonalia; Toga virilis             | NP              | Liber/Libera; Mars; Lares |
+| 19    | Quinquatrus                                   | NP              | Mars; Minerva             |
+| 23    | Tubilustrium                                  | NP              | Mars; Minerva; Nerio      |
+| 24    | Q.R.C.F.                                      | F               | —                         |
+| 31    | Luna in Aventino (dies natalis)               | C               | Luna                      |

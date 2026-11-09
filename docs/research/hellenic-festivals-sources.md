@@ -52,9 +52,9 @@ Parke (p. 87, PDF p. 87):
 > Demeter. The final day of the festival is the _Kalligeneia_, 'beautiful birth',
 > when the women would feast and celebrate."
 
-*(Source in the Allison paper is Stehle, Eva, "Thesmophoria and Eleusinian
+_(Source in the Allison paper is Stehle, Eva, "Thesmophoria and Eleusinian
 Mysteries: The Fascination of Women's Secret Ritual," in Parca & Tzanetou eds.,
-*Finding Persephone* (Indiana UP, 2007), pp. 167–68.)*
+*Finding Persephone* (Indiana UP, 2007), pp. 167–68.)_
 
 Parke directly (pp. 87–88, PDF pp. 87–88):
 

@@ -473,8 +473,8 @@ export const calculateBabylonianTime = (now: Date, lat: number, lng: number): Ro
     hourLengthMinutes,
     sunrise: isDay
       ? currentEvent.time
-      : [...points].reverse().find(p => p.type === 'sunrise' && p.time < currentEvent.time)
-          ?.time ?? new Date(currentEvent.time.getTime() - 12 * 3600 * 1000),
+      : ([...points].reverse().find(p => p.type === 'sunrise' && p.time < currentEvent.time)
+          ?.time ?? new Date(currentEvent.time.getTime() - 12 * 3600 * 1000)),
     sunset: isDay ? nextEvent.time : currentEvent.time,
     nextSunrise: nextSunriseDisplay,
     romanDateString,

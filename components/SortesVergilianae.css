@@ -472,8 +472,12 @@
     border: 1px solid color-mix(in srgb, var(--gold-dim) 50%, transparent);
     border-radius: 0.5rem;
     background-color: rgb(255 255 255 / 5%);
-    transition: background-color 0.5s ease, border-color 0.5s ease;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+    transition:
+      background-color 0.5s ease,
+      border-color 0.5s ease;
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 10%),
+      0 4px 6px -4px rgb(0 0 0 / 10%);
     cursor: pointer;
 
     &:hover {

@@ -246,9 +246,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
     const dayMod = isSelected(day)
       ? 'dtp-day--selected'
       : // eslint-disable-next-line sonarjs/no-nested-conditional
-      isToday(day)
-      ? 'dtp-day--today'
-      : 'dtp-day--default';
+        isToday(day)
+        ? 'dtp-day--today'
+        : 'dtp-day--default';
     return (
       <button key={i} onClick={() => pickDay(day)} className={`dtp-day ${dayMod}`}>
         {day}

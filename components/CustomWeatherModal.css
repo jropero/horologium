@@ -138,7 +138,10 @@
   line-height: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
   border: 1px solid;
   display: flex;
   align-items: center;
@@ -321,7 +324,10 @@
   border: 1px solid color-mix(in srgb, var(--gold-dim) 25%, transparent);
   background: none;
   cursor: pointer;
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 
   &:hover {
     background-color: color-mix(in srgb, var(--gold-leaf) 10%, transparent);

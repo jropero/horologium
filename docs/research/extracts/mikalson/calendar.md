@@ -255,37 +255,39 @@ _Printed pp. 165–181. Note: Skira (day 12) skipped per task instructions._
 Calendar II (p. 188) = master grid of all attested festival days (F) and Ekklesia meeting days (E) across all months. Key observations from this grid:
 
 **Festival days with NO attested Ekklesia meeting (from Mikalson p. 186–187):**
-| Festival | Month | Day(s) |
-|---|---|---|
-| Synoikia | Hekatombaion | 15–16 |
-| Panathenaia | Hekatombaion | 28 |
-| Genesia | Boedromion | 5 |
-| Demokratia | Boedromion | 12 |
-| Eleusinian Mysteries | Boedromion | 15–17, 19–22 |
-| Stenia | Pyanopsion | 9 |
-| Thesmophoria in Halimus | Pyanopsion | 10 |
-| Nesteia (Thesmophoria) | Pyanopsion | 12 |
-| Kalligeneia (Thesmophoria) | Pyanopsion | 13 |
-| Chalkeia | Pyanopsion | 30 |
-| Haloa | Posideon | 26 |
-| Anthesteria | Anthesterion | 11–13 |
-| Diasia | Anthesterion | 23 |
-| City Dionysia (core days) | Elaphebolion | 10–11 |
-| Bendideia | Thargelion | 19 |
-| Plynteria | Thargelion | 25 |
-| Skira | Skirophorion | 12 |
-| Dipolieia | Skirophorion | 14 |
+
+| Festival                   | Month        | Day(s)       |
+| -------------------------- | ------------ | ------------ |
+| Synoikia                   | Hekatombaion | 15–16        |
+| Panathenaia                | Hekatombaion | 28           |
+| Genesia                    | Boedromion   | 5            |
+| Demokratia                 | Boedromion   | 12           |
+| Eleusinian Mysteries       | Boedromion   | 15–17, 19–22 |
+| Stenia                     | Pyanopsion   | 9            |
+| Thesmophoria in Halimus    | Pyanopsion   | 10           |
+| Nesteia (Thesmophoria)     | Pyanopsion   | 12           |
+| Kalligeneia (Thesmophoria) | Pyanopsion   | 13           |
+| Chalkeia                   | Pyanopsion   | 30           |
+| Haloa                      | Posideon     | 26           |
+| Anthesteria                | Anthesterion | 11–13        |
+| Diasia                     | Anthesterion | 23           |
+| City Dionysia (core days)  | Elaphebolion | 10–11        |
+| Bendideia                  | Thargelion   | 19           |
+| Plynteria                  | Thargelion   | 25           |
+| Skira                      | Skirophorion | 12           |
+| Dipolieia                  | Skirophorion | 14           |
 
 **Festival days WITH an attested Ekklesia meeting (unusual exceptions; Mikalson p. 187):**
-| Festival | Month | Day |
-|---|---|---|
-| Kronia | Hekatombaion | 12 |
-| Anodos (Thesmophoria day 1) | Pyanopsion | 11 |
-| Theogamia | Gamelion | 27 |
-| Proagon + sacrifice to Asklepios | Elaphebolion | 8 |
-| City Dionysia (dramatic days) | Elaphebolion | 12–14 |
-| Mounichia | Mounichion | 16 |
-| Olympieia | Mounichion | 19 |
+
+| Festival                         | Month        | Day   |
+| -------------------------------- | ------------ | ----- |
+| Kronia                           | Hekatombaion | 12    |
+| Anodos (Thesmophoria day 1)      | Pyanopsion   | 11    |
+| Theogamia                        | Gamelion     | 27    |
+| Proagon + sacrifice to Asklepios | Elaphebolion | 8     |
+| City Dionysia (dramatic days)    | Elaphebolion | 12–14 |
+| Mounichia                        | Mounichion   | 16    |
+| Olympieia                        | Mounichion   | 19    |
 
 ---
 

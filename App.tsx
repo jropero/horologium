@@ -107,7 +107,9 @@ const AppContent: React.FC = () => {
       Math.abs(longitude - (loc.lng || 0)) < 0.001,
   );
   const currentLocationName = currentLocation ? currentLocation.name : 'GPS / Personalizada';
-  const locationTimezone = getTimezoneForLocation(latitude, longitude);
+  const locationTimezone =
+    getTimezoneForLocation(latitude, longitude) ??
+    Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   // Calculate today's sun times for display
   const [todaysSunTimes, setTodaysSunTimes] = useState<{ sunrise: Date; sunset: Date } | null>(
@@ -325,7 +327,9 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="app">
-      <a href="#main-content" className="skip-link">Saltar al contenido</a>
+      <a href="#main-content" className="skip-link">
+        Saltar al contenido
+      </a>
       {/* Mobile menu — burger button with dropdown (location, weather, date) */}
       <div className="mobile-menu">
         {isMobileMenuOpen && (
@@ -427,230 +431,231 @@ const AppContent: React.FC = () => {
       </header>
 
       <main id="main-content" tabIndex={-1}>
-      {isTimeTraveling && (
-        <div className="travel-banner">
-          <span className="travel-banner-time">
-            ⏳{' '}
-            {modernTime.toLocaleString(undefined, {
-              dateStyle: 'medium',
-              timeStyle: 'short',
-              timeZone: locationTimezone,
-            })}
-            {locationTimezone !== Intl.DateTimeFormat().resolvedOptions().timeZone && (
-              <span className="travel-location-note">({currentLocationName})</span>
-            )}
-          </span>
-          <div className="travel-banner-controls">
-            <button onClick={openTravelModal} className="travel-btn-change">
-              Cambiar
-            </button>
-            <span className="travel-separator">·</span>
-            <button onClick={returnToLive} className="travel-btn-return">
-              Volver al presente
-            </button>
+        {isTimeTraveling && (
+          <div className="travel-banner">
+            <span className="travel-banner-time">
+              ⏳{' '}
+              {modernTime.toLocaleString(undefined, {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+                timeZone: locationTimezone,
+              })}
+              {locationTimezone !== Intl.DateTimeFormat().resolvedOptions().timeZone && (
+                <span className="travel-location-note">({currentLocationName})</span>
+              )}
+            </span>
+            <div className="travel-banner-controls">
+              <button onClick={openTravelModal} className="travel-btn-change">
+                Cambiar
+              </button>
+              <span className="travel-separator">·</span>
+              <button onClick={returnToLive} className="travel-btn-return">
+                Volver al presente
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Desktop control toolbar — compact pill buttons, hidden on mobile */}
-      <div className="desktop-toolbar">
-        <button onClick={() => setIsLocationModalOpen(true)} className="toolbar-btn">
-          <MapPin className="toolbar-btn-icon" />
-          {currentLocationName}
-        </button>
-        <button onClick={() => setIsCustomWeatherOpen(true)} className="toolbar-btn">
-          <CloudSun className="toolbar-btn-icon" />
-          <span className={customWeather.aurora ? 'toolbar-aurora-label--active' : ''}>
-            {customWeatherLabel(customWeather)}
-          </span>
-        </button>
-        <button
-          onClick={toggleAurora}
-          aria-pressed={customWeather.aurora}
-          className={`toolbar-btn${customWeather.aurora ? ' toolbar-btn--aurora' : ''}`}
-        >
-          <Sparkles
-            className={`toolbar-btn-icon${
-              customWeather.aurora ? ' toolbar-btn-icon--aurora' : ''
-            }`}
-          />
-          Aurora
-        </button>
-        <button
-          onClick={openTravelModal}
-          className={`toolbar-btn${isTimeTraveling ? ' toolbar-btn--traveling' : ''}`}
-        >
-          <Hourglass
-            className={`toolbar-btn-icon${isTimeTraveling ? ' toolbar-btn-icon--travel' : ''}`}
-          />
-          {isTimeTraveling ? 'Viajando' : 'Tempus'}
-        </button>
-      </div>
-
-      {/* Two-column zone — left: clock area, right: supplementary content */}
-      <div className="main-grid">
-        {/* LEFT COLUMN — CalendarInfo + Clock + RomanCalendarInfo + SolarTimes */}
-        <div className="main-col-left">
-          {civilization !== 'zhongguo' && civilization === 'hellas' && (
-            <HellenicCalendarInfo
-              atticDate={romanTimeData?.atticDate}
-              weather={effectiveWeather}
-              currentLat={latitude}
-              currentLng={longitude}
-              currentDate={modernTime}
+        {/* Desktop control toolbar — compact pill buttons, hidden on mobile */}
+        <div className="desktop-toolbar">
+          <button onClick={() => setIsLocationModalOpen(true)} className="toolbar-btn">
+            <MapPin className="toolbar-btn-icon" />
+            {currentLocationName}
+          </button>
+          <button onClick={() => setIsCustomWeatherOpen(true)} className="toolbar-btn">
+            <CloudSun className="toolbar-btn-icon" />
+            <span className={customWeather.aurora ? 'toolbar-aurora-label--active' : ''}>
+              {customWeatherLabel(customWeather)}
+            </span>
+          </button>
+          <button
+            onClick={toggleAurora}
+            aria-pressed={customWeather.aurora}
+            className={`toolbar-btn${customWeather.aurora ? ' toolbar-btn--aurora' : ''}`}
+          >
+            <Sparkles
+              className={`toolbar-btn-icon${
+                customWeather.aurora ? ' toolbar-btn-icon--aurora' : ''
+              }`}
             />
-          )}
-          {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
-            <Suspense fallback={null}>
-              <EgyptianCalendarInfo
-                currentDate={modernTime}
-                lat={latitude}
-                lng={longitude}
-                weather={effectiveWeather}
-              />
-            </Suspense>
-          )}
-          {civilization !== 'zhongguo' && civilization === 'babylonia' && (
-            <Suspense fallback={null}>
-              <BabylonianCalendarInfo
-                currentDate={modernTime}
+            Aurora
+          </button>
+          <button
+            onClick={openTravelModal}
+            className={`toolbar-btn${isTimeTraveling ? ' toolbar-btn--traveling' : ''}`}
+          >
+            <Hourglass
+              className={`toolbar-btn-icon${isTimeTraveling ? ' toolbar-btn-icon--travel' : ''}`}
+            />
+            {isTimeTraveling ? 'Viajando' : 'Tempus'}
+          </button>
+        </div>
+
+        {/* Two-column zone — left: clock area, right: supplementary content */}
+        <div className="main-grid">
+          {/* LEFT COLUMN — CalendarInfo + Clock + RomanCalendarInfo + SolarTimes */}
+          <div className="main-col-left">
+            {civilization !== 'zhongguo' && civilization === 'hellas' && (
+              <HellenicCalendarInfo
+                atticDate={romanTimeData?.atticDate}
                 weather={effectiveWeather}
                 currentLat={latitude}
                 currentLng={longitude}
-              />
-            </Suspense>
-          )}
-
-          {clockComponent && (
-            <div className="clock-wrapper">
-              <Suspense fallback={null}>{clockComponent}</Suspense>
-            </div>
-          )}
-
-          {civilization !== 'zhongguo' &&
-            civilization !== 'babylonia' &&
-            todaysSunTimes &&
-            romanTimeData && (
-              <SolarTimes
-                sunrise={todaysSunTimes.sunrise}
-                sunset={todaysSunTimes.sunset}
-                currentHourLength={romanTimeData.hourLengthMinutes}
-                timezone={locationTimezone}
+                currentDate={modernTime}
               />
             )}
-          {hourPanel}
+            {civilization !== 'zhongguo' && civilization === 'aegyptus' && (
+              <Suspense fallback={null}>
+                <EgyptianCalendarInfo
+                  currentDate={modernTime}
+                  lat={latitude}
+                  lng={longitude}
+                  weather={effectiveWeather}
+                />
+              </Suspense>
+            )}
+            {civilization !== 'zhongguo' && civilization === 'babylonia' && (
+              <Suspense fallback={null}>
+                <BabylonianCalendarInfo
+                  currentDate={modernTime}
+                  weather={effectiveWeather}
+                  currentLat={latitude}
+                  currentLng={longitude}
+                />
+              </Suspense>
+            )}
+
+            {clockComponent && (
+              <div className="clock-wrapper">
+                <Suspense fallback={null}>{clockComponent}</Suspense>
+              </div>
+            )}
+
+            {civilization !== 'zhongguo' &&
+              civilization !== 'babylonia' &&
+              todaysSunTimes &&
+              romanTimeData && (
+                <SolarTimes
+                  sunrise={todaysSunTimes.sunrise}
+                  sunset={todaysSunTimes.sunset}
+                  currentHourLength={romanTimeData.hourLengthMinutes}
+                  timezone={locationTimezone}
+                />
+              )}
+            {hourPanel}
+          </div>
+          {/* end LEFT COLUMN */}
+
+          {/* RIGHT COLUMN — supplementary content */}
+          <div className="main-col-right">
+            {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
+            {civilization !== 'zhongguo' && civilization === 'rome' ? (
+              <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
+            ) : null}
+            {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+              <SortesVergilianae />
+            )}
+            {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+              <OvidianLore modernTime={modernTime} />
+            )}
+          </div>
+          {/* end RIGHT COLUMN */}
         </div>
-        {/* end LEFT COLUMN */}
+        {/* end two-column grid */}
 
-        {/* RIGHT COLUMN — supplementary content */}
-        <div className="main-col-right">
-          {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
-          {civilization !== 'zhongguo' && civilization === 'rome' ? (
-            <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
-          ) : null}
-          {civilization !== 'zhongguo' && civilization !== 'babylonia' && <SortesVergilianae />}
-          {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
-            <OvidianLore modernTime={modernTime} />
-          )}
-        </div>
-        {/* end RIGHT COLUMN */}
-      </div>
-      {/* end two-column grid */}
-
-      {/* FULL-WIDTH items below both columns */}
-      {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
-        <ProvinciaInfo
-          latitude={latitude}
-          longitude={longitude}
-          onLocationChange={handleUpdateLocation}
-          travelDate={isTimeTraveling ? modernTime : undefined}
-        />
-      )}
-
-      {civilization === 'rome' && (
-        <EclipseForecast currentDate={modernTime} latitude={latitude} longitude={longitude} />
-      )}
-
-      {civilization !== 'zhongguo' && (
-        <div className="mobile-only">
-          <Controls
+        {/* FULL-WIDTH items below both columns */}
+        {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
+          <ProvinciaInfo
             latitude={latitude}
             longitude={longitude}
-            onUpdateLocation={handleUpdateLocation}
-            onRefreshTime={() => setModernTime(new Date())}
+            onLocationChange={handleUpdateLocation}
+            travelDate={isTimeTraveling ? modernTime : undefined}
           />
-        </div>
-      )}
+        )}
 
-      {civilization !== 'zhongguo' && (
-        <div className="mobile-only">
-          <LocationSelector
-            onUpdateLocation={handleUpdateLocation}
-            currentLat={latitude}
-            currentLng={longitude}
-          />
-        </div>
-      )}
+        {civilization === 'rome' && (
+          <EclipseForecast currentDate={modernTime} latitude={latitude} longitude={longitude} />
+        )}
 
-      <InfoSection />
-
-      <LocationModal
-        isOpen={isLocationModalOpen}
-        onClose={() => setIsLocationModalOpen(false)}
-        onUpdateLocation={handleUpdateLocation}
-        currentLat={latitude}
-        currentLng={longitude}
-      />
-
-      <Suspense fallback={null}>
-        {travelModalOpen &&
-          (civilization === 'hellas' ||
-          civilization === 'aegyptus' ||
-          civilization === 'babylonia' ? (
-            <CivilCalendarDatePicker
-              civilization={civilization}
-              initialDate={modernTime}
-              lat={latitude}
-              lng={longitude}
-              onConfirm={applyTravelDate}
-              onClose={() => setTravelModalOpen(false)}
-              onReturnToLive={
-                isTimeTraveling
-                  ? () => {
-                      returnToLive();
-                      setTravelModalOpen(false);
-                    }
-                  : undefined
-              }
+        {civilization !== 'zhongguo' && (
+          <div className="mobile-only">
+            <Controls
+              latitude={latitude}
+              longitude={longitude}
+              onUpdateLocation={handleUpdateLocation}
+              onRefreshTime={() => setModernTime(new Date())}
             />
-          ) : (
-            <DateTimePicker
-              initialDate={modernTime}
-              onConfirm={applyTravelDate}
-              onClose={() => setTravelModalOpen(false)}
-              onReturnToLive={
-                isTimeTraveling
-                  ? () => {
-                      returnToLive();
-                      setTravelModalOpen(false);
-                    }
-                  : undefined
-              }
+          </div>
+        )}
+
+        {civilization !== 'zhongguo' && (
+          <div className="mobile-only">
+            <LocationSelector
+              onUpdateLocation={handleUpdateLocation}
+              currentLat={latitude}
+              currentLng={longitude}
             />
-          ))}
-      </Suspense>
+          </div>
+        )}
 
-      <CustomWeatherModal
-        isOpen={isCustomWeatherOpen}
-        onClose={() => setIsCustomWeatherOpen(false)}
-        config={customWeather}
-        onApply={setCustomWeather}
-        liveWeather={weather}
-      />
+        <InfoSection />
 
-      {/* Background vignette effect */}
-      <div className="bg-vignette"></div>
+        <LocationModal
+          isOpen={isLocationModalOpen}
+          onClose={() => setIsLocationModalOpen(false)}
+          onUpdateLocation={handleUpdateLocation}
+          currentLat={latitude}
+          currentLng={longitude}
+        />
 
+        <Suspense fallback={null}>
+          {travelModalOpen &&
+            (civilization === 'hellas' ||
+            civilization === 'aegyptus' ||
+            civilization === 'babylonia' ? (
+              <CivilCalendarDatePicker
+                civilization={civilization}
+                initialDate={modernTime}
+                lat={latitude}
+                lng={longitude}
+                onConfirm={applyTravelDate}
+                onClose={() => setTravelModalOpen(false)}
+                onReturnToLive={
+                  isTimeTraveling
+                    ? () => {
+                        returnToLive();
+                        setTravelModalOpen(false);
+                      }
+                    : undefined
+                }
+              />
+            ) : (
+              <DateTimePicker
+                initialDate={modernTime}
+                onConfirm={applyTravelDate}
+                onClose={() => setTravelModalOpen(false)}
+                onReturnToLive={
+                  isTimeTraveling
+                    ? () => {
+                        returnToLive();
+                        setTravelModalOpen(false);
+                      }
+                    : undefined
+                }
+              />
+            ))}
+        </Suspense>
+
+        <CustomWeatherModal
+          isOpen={isCustomWeatherOpen}
+          onClose={() => setIsCustomWeatherOpen(false)}
+          config={customWeather}
+          onApply={setCustomWeather}
+          liveWeather={weather}
+        />
+
+        {/* Background vignette effect */}
+        <div className="bg-vignette"></div>
       </main>
 
       <footer className="app-footer">

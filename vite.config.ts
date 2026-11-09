@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, lazyPlugins } from 'vite-plus';
 import react from '@vitejs/plugin-react';
 
 import { VitePWA } from 'vite-plugin-pwa';
@@ -7,13 +7,59 @@ export default defineConfig(() => {
   const isCapacitor = process.env.BUILD_TARGET === 'capacitor';
 
   return {
+    staged: {
+      '*.{ts,tsx,js,mjs,mts}': ['vp lint --fix', 'vp fmt'],
+      '*.{json,md,html}': 'vp fmt',
+      '*.css': 'stylelint --fix',
+    },
+    fmt: {
+      ignorePatterns: ['.claude/**'],
+      singleQuote: true,
+      trailingComma: 'all',
+      printWidth: 96,
+      tabWidth: 2,
+      semi: true,
+      arrowParens: 'avoid',
+      bracketSpacing: true,
+      bracketSameLine: false,
+      endOfLine: 'lf',
+    },
+    lint: {
+      plugins: ['react', 'jsx-a11y', 'typescript'],
+      jsPlugins: [
+        { name: 'vite-plus', specifier: 'vite-plus/oxlint-plugin' },
+        { name: 'sonarjs', specifier: './lint/sonarjs.js' },
+      ],
+      ignorePatterns: ['.claude/**', 'dist/**', 'android/**', 'public/**', 'docs/**'],
+      env: { browser: true, es2022: true, node: true },
+      options: { typeAware: true, typeCheck: true },
+      rules: {
+        'vite-plus/prefer-vite-plus-imports': 'error',
+        // React 17+ JSX transform — no need to import React in every file
+        'react/react-in-jsx-scope': 'off',
+        // Promote from warn to error (matches original ESLint config)
+        'react-hooks/exhaustive-deps': 'error',
+        // SonarJS quality gates (via JS plugin)
+        'sonarjs/cognitive-complexity': ['error', 6],
+        'sonarjs/no-nested-conditional': 'error',
+        'sonarjs/no-duplicate-string': ['error', { threshold: 10 }],
+        'sonarjs/no-identical-functions': 'error',
+        'sonarjs/no-collapsible-if': 'error',
+        'sonarjs/todo-tag': 'error',
+        'sonarjs/no-globals-shadowing': 'error',
+        'sonarjs/concise-regex': 'error',
+        'sonarjs/slow-regex': 'error',
+        'sonarjs/code-eval': 'error',
+        'sonarjs/pseudo-random': 'off',
+      },
+    },
     base: isCapacitor ? './' : '/r/',
     server: {
       port: 3000,
       host: '0.0.0.0',
       allowedHosts: true as const,
     },
-    plugins: [
+    plugins: lazyPlugins(() => [
       react(),
       VitePWA({
         registerType: 'autoUpdate',
@@ -75,7 +121,7 @@ export default defineConfig(() => {
           ],
         },
       }),
-    ],
+    ]),
     resolve: {
       alias: {
         '@': import.meta.dirname,

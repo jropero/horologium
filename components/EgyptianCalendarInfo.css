@@ -104,7 +104,10 @@
   padding: 0.625rem;
   border-radius: 0.25rem;
   border: 1px solid;
-  transition: border-color 300ms ease, background-color 300ms ease, box-shadow 300ms ease,
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease,
     scale 300ms ease;
 }
 
@@ -172,7 +175,10 @@
   width: 0.875rem;
   height: 0.875rem;
   border-radius: 0.125rem;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
   cursor: pointer;
   border: none;
@@ -230,7 +236,10 @@
   margin-top: 0.5rem;
   border-radius: 0.25rem;
   border: 1px solid;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
 }
 
@@ -369,7 +378,10 @@
   border-radius: 0.25rem;
   background: none;
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
 
   &:hover {
@@ -873,7 +885,10 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 700;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
   background: none;
   border: none;
@@ -1096,7 +1111,10 @@
 .eci-bar-fill {
   height: 100%;
   border-radius: 9999px;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
 }
 
@@ -1175,7 +1193,10 @@
   padding: 0.75rem;
   border-radius: 0.25rem;
   border: 1px solid;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
 }
 
@@ -1359,7 +1380,10 @@
   border: 1px solid rgb(192 57 26 / 25%);
   text-align: left;
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
   background: rgb(192 57 26 / 8%);
 
@@ -1777,7 +1801,10 @@
   border-right: none;
   border-bottom: none;
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
   flex-shrink: 0;
 
@@ -1802,7 +1829,10 @@
   border-right: none;
   border-bottom: none;
   cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease,
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
     box-shadow 150ms ease;
 
   &:hover {

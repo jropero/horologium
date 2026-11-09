@@ -927,8 +927,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
                     {
                       title: 'Ἡμέρα',
                       main: hasFestival
-                        ? festival!.festivalName ?? festival!.deity
-                        : dailyDeity?.deity ?? '—',
+                        ? (festival!.festivalName ?? festival!.deity)
+                        : (dailyDeity?.deity ?? '—'),
                       sub: hasFestival ? 'Ἑορτή' : 'Θεὸς Ἡμέρας',
                     },
                     {

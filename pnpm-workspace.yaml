@@ -1,2 +1,18 @@
 allowBuilds:
   sharp: true
+peerDependencyRules:
+  allowedVersions:
+    typescript-eslint>typescript: '>=4.8.4'
+    vite: '*'
+    vitest: '*'
+  allowAny:
+    - vite
+    - vitest
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.5.0
+  vitest: 5.1.0
+  vite-plus: 1.5.0
+  '@vitest/coverage-v8': 5.1.0
+overrides:
+  vite@*: 'catalog:'
+  vitest@*: 'catalog:'
