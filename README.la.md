@@ -88,9 +88,12 @@
    cd horologium
    ```
 
-2. **Necessaria**:
+2. **Necessaria** ([pnpm](https://pnpm.io/) opus est):
 
    ```bash
+   # pnpm instituere si deest (Node ≥ 16.9)
+   corepack enable && corepack prepare pnpm@latest --activate
+
    pnpm install
    ```
 
