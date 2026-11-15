@@ -31,8 +31,10 @@ const REGIONS: {
 }[] = [
   // Iberian Peninsula
   { id: 'iberia', minLng: -10, maxLng: 5, minLat: 35.5, maxLat: 44.5 },
+  // Gaul (Arverni, Aedui, Belgae, etc.)
+  { id: 'gallia', minLng: -5, maxLng: 8, minLat: 43, maxLat: 51.5 },
   // Germania and surrounding tribal belt (Suebi, Cherusci, Marcomanni, etc.)
-  { id: 'germania', minLng: 6, maxLng: 32, minLat: 46, maxLat: 60 },
+  { id: 'germania', minLng: 8, maxLng: 32, minLat: 46, maxLat: 60 },
 ];
 
 const SIMPLIFY_DEG = 0.001; // ≈ 110 m, matches the roads layer
