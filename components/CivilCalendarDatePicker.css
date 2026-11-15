@@ -195,6 +195,7 @@
   border: 1px solid var(--civ-soft);
   background-color: rgb(0 0 0 / 20%);
   overflow: hidden;
+  flex-shrink: 0;
 
   &.ccp-month--intercalary {
     box-shadow: 0 0 0 1px color-mix(in srgb, #f59e0b 30%, transparent);
