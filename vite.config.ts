@@ -9,7 +9,7 @@ export default defineConfig(() => {
   return {
     staged: {
       '*.{ts,tsx,js,mjs,mts}': ['vp lint --fix', 'vp fmt'],
-      '*.{json,md,html}': 'vp fmt',
+      '!public/assets/**,*.{json,md,html}': 'vp fmt',
       '*.css': 'stylelint --fix',
     },
     fmt: {

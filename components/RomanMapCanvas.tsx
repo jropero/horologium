@@ -13,6 +13,7 @@ import {
   paintCreature,
 } from '../utils/romanMapCreatures';
 import { loadRomanRoads, roadExistence, RomanRoad } from '../utils/romanRoads';
+import { loadRomanTribes, Tribe } from '../utils/romanTribes';
 import { KM_PER_ROMAN_MILE } from '../utils/romanProvinces';
 import { toRoman } from '../utils/romanTimeUtils';
 import { ROMAN_ROAD_LABELS as RL } from '../utils/civLabels';
@@ -70,6 +71,9 @@ const FORTIFICATION = 'rgba(196,120,24,0.95)';
 const PROVINCE_LABEL = 'rgba(122,84,24,0.8)';
 const MARKER = '#d62828';
 const ROAD = '#7a2618';
+const TRIBE = 'rgba(70,130,80,0.75)';
+const TRIBE_LABEL = 'rgba(50,110,60,0.85)';
+const TRIBE_LABEL_ZOOM = 2;
 
 const ROAD_TILE_DEG = 5; // roads are grouped into tiles so only those near the strip are stroked
 /** Douglas–Peucker tolerance in degrees per level of detail; 0 = as bundled (0.001°). */
@@ -79,6 +83,7 @@ const ROAD_LABEL_ZOOM = 2.5; // road names from this zoom on
 const MAX_ROAD_LABELS = 40; // per frame
 const ROAD_LABEL_SPACING = 360; // px of road between repeats of one name
 const ROADS_KEY = 'romanMapRoads'; // localStorage: the layer toggle
+const TRIBES_KEY = 'romanMapTribes';
 
 /** Coarsest level of detail whose tolerance stays under half a pixel at s px/°. */
 const roadLod = (s: number) => {
@@ -705,6 +710,7 @@ const placeAlong = (
 };
 
 const savedRoadsOn = () => localStorage.getItem(ROADS_KEY) !== '0';
+const savedTribesOn = () => localStorage.getItem(TRIBES_KEY) !== '0';
 
 /** Visible city count grows geometrically from MIN_CITIES at zoom 1 to all at MAX_ZOOM. */
 const visibleCityCount = (zoom: number, total: number) =>
@@ -924,6 +930,12 @@ function RomanMapCanvas({
   const [roadStatus, setRoadStatus] = useState<Status>('loading');
   const [roadAttempt, setRoadAttempt] = useState(0);
 
+  const tribesRef = useRef<Tribe[] | null>(null);
+  const [tribesOn, setTribesOn] = useState(savedTribesOn);
+  const tribesOnRef = useRef(tribesOn);
+  // eslint-disable-next-line react-hooks/refs
+  tribesOnRef.current = tribesOn;
+
   const scale = () => (baseHRef.current / LAT_SPAN) * zoomRef.current; // px per degree
   const canvasSize = () => ({
     w: Math.round(LNG_SPAN * scale()),
@@ -1006,14 +1018,40 @@ function RomanMapCanvas({
       ctx.lineWidth = 0.9 / s;
       for (const p of scene.provinces) ctx.stroke(p);
 
-      // 6b. Roads: only the tiles that reach the canvas strip, at the coarsest level
-      // of detail that stays sub-pixel. Main roads are wider, hypothetical ones dotted,
-      // conjectured ones lighter; when time-travelling, undated roads are faded.
-      const roadScene = roadsOnRef.current ? roadSceneRef.current : null;
+      // 6b. Tribal boundaries (AWMC Barrington Atlas linework, pre-Roman peoples).
       const viewLng0 = ox / s + LNG_MIN,
         viewLng1 = (ox + cw) / s + LNG_MIN;
       const viewLatTop = LAT_MAX - panY / s,
         viewLatBottom = LAT_MAX - (panY + h) / s;
+      const tribes = tribesOnRef.current ? tribesRef.current : null;
+      if (tribes) {
+        ctx.strokeStyle = TRIBE;
+        ctx.lineWidth = 0.6 / s;
+        ctx.setLineDash([2.5 / s, 2.5 / s]);
+        ctx.globalAlpha = 0.8;
+        ctx.beginPath();
+        for (const t of tribes) {
+          if (
+            t.lngMax < viewLng0 ||
+            t.lngMin > viewLng1 ||
+            t.latMax < viewLatBottom ||
+            t.latMin > viewLatTop
+          )
+            continue;
+          for (const p of t.parts) {
+            ctx.moveTo(p[0], p[1]);
+            for (let k = 2; k < p.length; k += 2) ctx.lineTo(p[k], p[k + 1]);
+          }
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+      }
+
+      // 6c. Roads: only the tiles that reach the canvas strip, at the coarsest level
+      // of detail that stays sub-pixel. Main roads are wider, hypothetical ones dotted,
+      // conjectured ones lighter; when time-travelling, undated roads are faded.
+      const roadScene = roadsOnRef.current ? roadSceneRef.current : null;
       if (roadScene) {
         setRoadYear(roadScene, yearRef.current);
         const level = roadLod(s);
@@ -1088,6 +1126,23 @@ function RomanMapCanvas({
       if (z < REGIO_ZOOM && scene.italia) {
         ctx.font = `${fontPx}px Cinzel, serif`;
         ctx.fillText('ITALIA', xOf(scene.italia.lng), yOf(scene.italia.lat));
+      }
+
+      // 7b. Tribe names: small italic labels at their centroid, from zoom 2.
+      if (tribes && z >= TRIBE_LABEL_ZOOM) {
+        const tribeFontPx = Math.round(Math.min(18, 11 + (z - TRIBE_LABEL_ZOOM) * 2));
+        ctx.font = `italic ${tribeFontPx}px ".SF NS", system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = TRIBE_LABEL;
+        for (const t of tribes) {
+          if (!t.name) continue;
+          const x = xOf(t.lngMid);
+          if (x < ox - 200 || x > ox + cw + 200) continue;
+          const y = yOf(t.latMid);
+          if (y < -20 || y > h + 20) continue;
+          ctx.fillText(t.name, x, y);
+        }
       }
 
       // 8. Cities: filled circles for towns, hollow squares for legionary fortresses.
@@ -1578,6 +1633,28 @@ function RomanMapCanvas({
     };
   }, [roadsOn, roadAttempt, scheduleDraw]);
 
+  // Tribes layer: load once when toggled on; cached across toggles.
+  useEffect(() => {
+    localStorage.setItem(TRIBES_KEY, tribesOn ? '1' : '0');
+    if (!tribesOn) {
+      scheduleDraw();
+      return;
+    }
+    let cancelled = false;
+    loadRomanTribes()
+      .then(data => {
+        if (cancelled) return;
+        tribesRef.current = data;
+        scheduleDraw();
+      })
+      .catch(() => {
+        /* silent — the layer just won't appear */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [tribesOn, scheduleDraw]);
+
   // A new app date can hide the selected road, and it replaces the card's own year.
   useEffect(() => {
     if (selectedRef.current?.kind === 'road') setSelected(null);
@@ -1880,6 +1957,7 @@ function RomanMapCanvas({
         <span className="rmc-attribution">
           Imperium Romanum, 117 d. C. · Datos: Digital Atlas of the Roman Empire (DARE), vía
           klokantech/roman-empire
+          {tribesOn ? ' · Tribus: AWMC Geodata (Barrington Atlas), ODbL' : ''}
         </span>
         <div className="rmc-controls">
           <button
@@ -1899,6 +1977,25 @@ function RomanMapCanvas({
               />
             </svg>
             {RL.toggle}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTribesOn(v => !v)}
+            aria-pressed={tribesOn}
+            title={tribesOn ? 'Ocultar tribus' : 'Mostrar tribus'}
+            className={`rmc-road-toggle${tribesOn ? ' rmc-road-toggle--active' : ''}`}
+          >
+            <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
+              <path
+                d="M1 5 L5 2 L10 7 L15 2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Tribus
           </button>
           {(
             [
