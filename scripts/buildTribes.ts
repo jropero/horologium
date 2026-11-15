@@ -33,8 +33,18 @@ const REGIONS: {
   { id: 'iberia', minLng: -10, maxLng: 5, minLat: 35.5, maxLat: 44.5 },
   // Gaul (Arverni, Aedui, Belgae, etc.)
   { id: 'gallia', minLng: -5, maxLng: 8, minLat: 43, maxLat: 51.5 },
-  // Germania and surrounding tribal belt (Suebi, Cherusci, Marcomanni, etc.)
+  // Britain
+  { id: 'britannia', minLng: -8, maxLng: 2, minLat: 50, maxLat: 62 },
+  // Germania and surrounding tribal belt
   { id: 'germania', minLng: 8, maxLng: 32, minLat: 46, maxLat: 60 },
+  // Balkans, Illyricum, Thrace, Dacia
+  { id: 'balkania', minLng: 12, maxLng: 32, minLat: 36, maxLat: 48 },
+  // North Africa
+  { id: 'africa', minLng: -10, maxLng: 36, minLat: 20, maxLat: 36 },
+  // Greece, Aegean, Asia Minor
+  { id: 'oriens', minLng: 20, maxLng: 70, minLat: 30, maxLat: 50 },
+  // Everything else in the ancient world not caught above
+  { id: 'ancient', minLng: -30, maxLng: 70, minLat: 20, maxLat: 72 },
 ];
 
 const SIMPLIFY_DEG = 0.001; // ≈ 110 m, matches the roads layer
