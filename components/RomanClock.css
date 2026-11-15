@@ -641,7 +641,7 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--gold-dim);
-  width: 10rem;
+  white-space: nowrap;
   text-align: right;
 }
 

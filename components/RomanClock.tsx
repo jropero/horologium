@@ -120,7 +120,12 @@ function RomanClock({
   // Civil and nautical twilight windows, shown whenever sun is below horizon within nautical band
   const twilightInfo = useMemo(() => {
     if (romanTime.isDay || sunAltitude <= -12 || sunAltitude > 0) return null;
-    const isMorning = modernTime < romanTime.sunrise;
+    // romanTime.sunrise is the sunrise that opened the current planetary day (yesterday's when
+    // it's night-time), so we cannot use it to detect morning twilight. Instead we compare
+    // proximity to sunset vs nextSunrise: whichever is closer tells us which twilight we're in.
+    const isMorning =
+      romanTime.nextSunrise.getTime() - modernTime.getTime() <
+      modernTime.getTime() - romanTime.sunset.getTime();
     const fmt = (d: Date | null) =>
       d
         ? d.toLocaleTimeString(undefined, {
@@ -134,7 +139,7 @@ function RomanClock({
     return {
       civil: {
         start: fmt(isMorning ? twilightTimes.civilMorning : romanTime.sunset),
-        end: fmt(isMorning ? romanTime.sunrise : twilightTimes.civilEvening),
+        end: fmt(isMorning ? romanTime.nextSunrise : twilightTimes.civilEvening),
       },
       nautical: {
         start: fmt(isMorning ? twilightTimes.nauticalMorning : twilightTimes.civilEvening),
@@ -851,7 +856,11 @@ function RomanClock({
               <div className="roman-clock__grid-3">
                 <div className="roman-clock__time-col">
                   <span className="roman-clock__time-icon">☀︎</span>
-                  <div className="roman-clock__time-heading">Ortus Solis</div>
+                  <div className="roman-clock__time-heading">
+                    Ortus
+                    <br />
+                    Solis
+                  </div>
                   <div className="roman-clock__time-val">
                     {romanTime.sunrise.toLocaleTimeString(undefined, {
                       hour: '2-digit',
@@ -863,14 +872,22 @@ function RomanClock({
                 </div>
                 <div className="roman-clock__time-col roman-clock__time-col--mid">
                   <span className="roman-clock__time-icon">⧗</span>
-                  <div className="roman-clock__time-heading">Longitudo Horae</div>
+                  <div className="roman-clock__time-heading">
+                    Longitudo
+                    <br />
+                    Horae
+                  </div>
                   <div className="roman-clock__time-val">
                     {Math.round(romanTime.hourLengthMinutes)} minuta
                   </div>
                 </div>
                 <div className="roman-clock__time-col">
                   <span className="roman-clock__time-icon">☾</span>
-                  <div className="roman-clock__time-heading">Occasus Solis</div>
+                  <div className="roman-clock__time-heading">
+                    Occasus
+                    <br />
+                    Solis
+                  </div>
                   <div className="roman-clock__time-val">
                     {romanTime.sunset.toLocaleTimeString(undefined, {
                       hour: '2-digit',
