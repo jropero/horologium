@@ -8,7 +8,6 @@ import BabylonianSkyDiary from './components/BabylonianSkyDiary';
 import BottomNav from './components/BottomNav';
 import Controls from './components/Controls';
 import InfoSection from './components/InfoSection';
-import SolarTimes from './components/SolarTimes';
 import { RomanTimeData, WeatherData } from './types';
 import { calculateRomanTime } from './utils/romanTimeUtils';
 import { calculateHellenicTime } from './utils/hellenicTimeUtils';
@@ -493,7 +492,7 @@ const AppContent: React.FC = () => {
 
         {/* Two-column zone — left: clock area, right: supplementary content */}
         <div className="main-grid">
-          {/* LEFT COLUMN — CalendarInfo + Clock + RomanCalendarInfo + SolarTimes */}
+          {/* LEFT COLUMN — CalendarInfo + Clock */}
           <div className="main-col-left">
             {civilization !== 'zhongguo' && civilization === 'hellas' && (
               <HellenicCalendarInfo
@@ -531,17 +530,18 @@ const AppContent: React.FC = () => {
               </div>
             )}
 
-            {civilization !== 'zhongguo' &&
-              civilization !== 'babylonia' &&
-              todaysSunTimes &&
-              romanTimeData && (
-                <SolarTimes
-                  sunrise={todaysSunTimes.sunrise}
-                  sunset={todaysSunTimes.sunset}
-                  currentHourLength={romanTimeData.hourLengthMinutes}
-                  timezone={locationTimezone}
-                />
-              )}
+            {civilization === 'rome' && (
+              <RomanCalendarInfo
+                currentDate={modernTime}
+                lat={latitude}
+                lng={longitude}
+                sunrise={todaysSunTimes?.sunrise}
+                sunset={todaysSunTimes?.sunset}
+                hourLengthMinutes={romanTimeData?.hourLengthMinutes}
+                locationTimezone={locationTimezone}
+              />
+            )}
+
             {hourPanel}
           </div>
           {/* end LEFT COLUMN */}
@@ -549,9 +549,6 @@ const AppContent: React.FC = () => {
           {/* RIGHT COLUMN — supplementary content */}
           <div className="main-col-right">
             {civilization !== 'zhongguo' && <SententiaDiei currentDate={modernTime} />}
-            {civilization !== 'zhongguo' && civilization === 'rome' ? (
-              <RomanCalendarInfo currentDate={modernTime} lat={latitude} lng={longitude} />
-            ) : null}
             {civilization !== 'zhongguo' && civilization !== 'babylonia' && (
               <SortesVergilianae />
             )}

@@ -105,6 +105,8 @@ interface SpecialDay {
 }
 
 // Day 7: sebūtu, "seventh day (of the month)" (from the ordinal sebû).
+// Day 15: šapattu — "nūh libbi ilī" (rest of the hearts of the gods); standard hemerological
+// definition. CAD Š₁ s.v. šapattu; Labat, Calendrier babylonien (1965), Iqqur īpuš series.
 // Day 21: ūmu lemnu (UD.ḪUL.GÁL), "evil day", the hemerologies' label for it
 // (Livingstone, Hemerologies of Assyrian and Babylonian Scholars, CUSAS 25, 2013).
 const SPECIAL_DAYS: Record<number, SpecialDay> = {
@@ -473,23 +475,14 @@ const DayGrid: React.FC<{
         {(
           [
             { cls: 'bci-legend-swatch--quarter', label: 'Cuartos lunares' },
-            {
-              cls: 'bci-legend-swatch--sapatu',
-              label: 'Šapattu',
-              gloss: SPECIAL_DAYS[15].es,
-            },
-            {
-              cls: 'bci-legend-swatch--rest',
-              label: 'Ūm nūḥi',
-              gloss: SPECIAL_DAYS[28].es,
-            },
+            { cls: 'bci-legend-swatch--sapatu', label: 'Šapattu' },
+            { cls: 'bci-legend-swatch--rest', label: 'Ūm nūḥi' },
             { cls: 'bci-legend-swatch--festival', label: 'Festival' },
-          ] as Array<{ cls: string; label: string; gloss?: string }>
-        ).map(({ cls, label, gloss }) => (
+          ] as Array<{ cls: string; label: string }>
+        ).map(({ cls, label }) => (
           <div key={label} className="bci-legend-item">
             <span className={`bci-legend-swatch ${cls}`} />
             <span className="bci-legend-label">{label}</span>
-            {gloss && <span className="bci-legend-gloss">· {gloss}</span>}
           </div>
         ))}
       </div>

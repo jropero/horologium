@@ -1,5 +1,79 @@
 /* ─── RomanCalendarInfo & RomanDayGrid ──────────────────────────────────────── */
 
+/* ── Solar 3-col widget ───────────────────────────────────────────────────── */
+
+.rci-solar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+}
+
+.rci-solar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding-inline: 0.25rem;
+}
+
+.rci-solar-col--mid {
+  border-left: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--gold-dim) 20%, transparent);
+}
+
+.rci-solar-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-bottom: 0.125rem;
+}
+
+.rci-solar-icon--sun {
+  color: var(--gold-leaf);
+  filter: drop-shadow(0 0 6px var(--gold-leaf));
+}
+
+.rci-solar-icon--moon {
+  color: var(--roman-red);
+  filter: drop-shadow(0 0 6px var(--roman-red));
+}
+
+.rci-solar-label {
+  font-family: Cinzel, serif;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold-dim);
+  line-height: 1.3;
+}
+
+.rci-solar-value {
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--parchment);
+  line-height: 1;
+  margin-top: 0.125rem;
+}
+
+.rci-solar-mid-value {
+  font-family: Cinzel, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold-leaf);
+  line-height: 1;
+  margin-top: 0.125rem;
+}
+
+.rci-solar-unit {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--parchment) 60%, transparent);
+  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
 /* ── Day Grid ─────────────────────────────────────────────────────────────── */
 
 .roman-day-grid {

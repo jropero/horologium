@@ -233,10 +233,22 @@ interface RomanCalendarInfoProps {
   /** Observer location for the Attic comparison date (defaults to Athens). */
   lat?: number;
   lng?: number;
+  sunrise?: Date;
+  sunset?: Date;
+  hourLengthMinutes?: number;
+  locationTimezone?: string;
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendarInfoProps) {
+function RomanCalendarInfo({
+  currentDate = new Date(),
+  lat,
+  lng,
+  sunrise,
+  sunset,
+  hourLengthMinutes,
+  locationTimezone,
+}: RomanCalendarInfoProps) {
   const { civilization, labels } = useCivilization();
   const [info, setInfo] = useState<RomanDayInfo | null>(null);
   const [showFestivals, setShowFestivals] = useState(false);
@@ -357,6 +369,56 @@ function RomanCalendarInfo({ currentDate = new Date(), lat, lng }: RomanCalendar
                 </button>
               )}
             </div>
+
+            {/* SOLAR: Ortus / Longitudo / Occasus */}
+            {sunrise && sunset && hourLengthMinutes !== undefined && (
+              <div className="rci-solar-grid">
+                <div className="rci-solar-col">
+                  <span className="rci-solar-icon rci-solar-icon--sun">☀️</span>
+                  <span className="rci-solar-label">
+                    Ortus
+                    <br />
+                    Solis
+                  </span>
+                  <span className="rci-solar-value">
+                    {sunrise.toLocaleTimeString(undefined, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                      timeZone: locationTimezone,
+                    })}
+                  </span>
+                </div>
+                <div className="rci-solar-col rci-solar-col--mid">
+                  <span className="rci-solar-icon">⧗</span>
+                  <span className="rci-solar-label">
+                    Longitudo
+                    <br />
+                    Horae
+                  </span>
+                  <span className="rci-solar-mid-value">
+                    {Math.round(hourLengthMinutes)}
+                    <span className="rci-solar-unit"> minuta</span>
+                  </span>
+                </div>
+                <div className="rci-solar-col">
+                  <span className="rci-solar-icon rci-solar-icon--moon">☾</span>
+                  <span className="rci-solar-label">
+                    Occasus
+                    <br />
+                    Solis
+                  </span>
+                  <span className="rci-solar-value">
+                    {sunset.toLocaleTimeString(undefined, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: false,
+                      timeZone: locationTimezone,
+                    })}
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* MAIN: Deus Diei */}
             <div className="rci-god-box">
