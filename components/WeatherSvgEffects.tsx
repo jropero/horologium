@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { WeatherCondition } from '../types';
 import { WeatherParticles } from '../utils/weatherParticles';
-import AuroraSvg from './AuroraSvg';
+import Aurora from './Aurora';
 import './WeatherSvgEffects.css';
 
 /** Crossfade between the aurora placeholder and the real weather effects. */
@@ -54,6 +54,8 @@ interface Props {
    * Turning it off crossfades the aurora out and the real effects in.
    */
   offline?: boolean;
+  /** Which aurora renderers to use (WebGL shader, SVG curtains). Defaults to WebGL only. */
+  auroraLayers?: { gl: boolean; svg: boolean };
 }
 
 const WeatherSvgEffects: React.FC<Props> = ({
@@ -65,6 +67,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
   rainIntensity = 0.5,
   windGusts = 0,
   offline = false,
+  auroraLayers,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   // Keep the aurora mounted for the fade-out after `offline` turns false. Derived during
@@ -85,7 +88,14 @@ const WeatherSvgEffects: React.FC<Props> = ({
 
   const fade = { animationDuration: `${AURORA_FADE_MS}ms` };
   const aurora = (offline || auroraLeaving) && (
-    <AuroraSvg className={offline ? 'aurora-fade-in' : 'aurora-fade-out'} style={fade} />
+    <Aurora
+      gl={auroraLayers?.gl ?? true}
+      svg={auroraLayers?.svg ?? false}
+      leaving={!offline}
+      fadeMs={AURORA_FADE_MS}
+      className={offline ? 'aurora-fade-in' : 'aurora-fade-out'}
+      style={fade}
+    />
   );
 
   const showEffects = !offline && condition !== 'clear';

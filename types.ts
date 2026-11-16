@@ -86,5 +86,7 @@ export interface WeatherData {
    * as a custom sky from the mobile menu.
    */
   aurora?: boolean;
+  /** Which aurora renderers draw the aurora (WebGL shader, SVG curtains); from the menu. */
+  auroraLayers?: { gl: boolean; svg: boolean };
 }
 // --- END OF FILE horologium-main/types.ts ---

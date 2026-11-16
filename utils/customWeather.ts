@@ -18,6 +18,14 @@ export interface CustomWeatherConfig {
   code: number;
   /** Force the aurora borealis sky (replaces the weather effects). */
   aurora: boolean;
+  /**
+   * Which aurora renderers draw it: the WebGL shader (`utils/auroraGl.ts`) and/or
+   * the SVG curtains (`components/AuroraSvg.tsx`). Also used for the offline
+   * aurora. At least one is always true; the menu keeps the last choice when the
+   * aurora is switched off.
+   */
+  auroraGl: boolean;
+  auroraSvg: boolean;
   /** Temperature in °C. */
   temperature: number;
   /** Wind speed in km/h. */
@@ -32,6 +40,8 @@ export const DEFAULT_CUSTOM_WEATHER: CustomWeatherConfig = {
   mode: 'live',
   code: 0,
   aurora: false,
+  auroraGl: true,
+  auroraSvg: false,
   temperature: 15,
   windSpeed: 5,
   windDirection: 0,
@@ -90,10 +100,17 @@ export const loadCustomWeather = (): CustomWeatherConfig => {
     const parsed = JSON.parse(raw);
     const num = (value: unknown, fallback: number) =>
       typeof value === 'number' && isFinite(value) ? value : fallback;
+    const bool = (value: unknown, fallback: boolean) =>
+      typeof value === 'boolean' ? value : fallback;
+    let auroraGl = bool(parsed?.auroraGl, DEFAULT_CUSTOM_WEATHER.auroraGl);
+    const auroraSvg = bool(parsed?.auroraSvg, DEFAULT_CUSTOM_WEATHER.auroraSvg);
+    if (!auroraGl && !auroraSvg) auroraGl = true;
     return {
       mode: parsed?.mode === 'custom' ? 'custom' : 'live',
       code: num(parsed?.code, DEFAULT_CUSTOM_WEATHER.code),
       aurora: !!parsed?.aurora,
+      auroraGl,
+      auroraSvg,
       temperature: num(parsed?.temperature, DEFAULT_CUSTOM_WEATHER.temperature),
       windSpeed: num(parsed?.windSpeed, DEFAULT_CUSTOM_WEATHER.windSpeed),
       windDirection: num(parsed?.windDirection, DEFAULT_CUSTOM_WEATHER.windDirection),
@@ -111,6 +128,29 @@ export const saveCustomWeather = (config: CustomWeatherConfig): void => {
   } catch {
     // Private browsing / storage full: the sky just won't be remembered.
   }
+};
+
+export type AuroraLayer = 'auroraGl' | 'auroraSvg';
+
+/**
+ * Menu toggle for one aurora renderer. A layer counts as on only while the
+ * aurora sky is shown. Turning the first layer on switches the sky to the
+ * aurora; turning the last one off goes back to the live weather and keeps the
+ * previous layer choice (for the offline aurora and the next time it is on).
+ */
+export const toggleAuroraLayer = (
+  config: CustomWeatherConfig,
+  layer: AuroraLayer,
+): CustomWeatherConfig => {
+  const on = {
+    auroraGl: config.aurora && config.auroraGl,
+    auroraSvg: config.aurora && config.auroraSvg,
+  };
+  on[layer] = !on[layer];
+  if (!on.auroraGl && !on.auroraSvg)
+    return { ...config, mode: 'live', aurora: false, label: '' };
+  if (config.aurora) return { ...config, ...on };
+  return { ...config, ...on, mode: 'custom', aurora: true, code: 0, label: '' };
 };
 
 /** The name shown in the mobile menu for the current sky. */
@@ -134,9 +174,12 @@ export const applyCustomWeather = (
   base: WeatherData | null,
   config: CustomWeatherConfig | null,
 ): WeatherData | null => {
+  const auroraLayers = config
+    ? { gl: config.auroraGl, svg: config.auroraSvg }
+    : { gl: true, svg: false };
   if (!config || config.mode === 'live') {
     if (!base) return null;
-    return { ...base, aurora: !!base.aurora };
+    return { ...base, aurora: !!base.aurora, auroraLayers };
   }
 
   const source = base?.current;
@@ -176,5 +219,6 @@ export const applyCustomWeather = (
     ...(base ?? { current, historical: [] }),
     current,
     aurora: config.aurora,
+    auroraLayers,
   };
 };
