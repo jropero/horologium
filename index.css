@@ -104,6 +104,10 @@
   --hatch-color: #000;
   --festival-text: #fbbf24; /* amber-400 */
   --roman-red: #ff5252; /* Lighter red for dark background contrast */
+
+  /* Time-travel indicator: amber in every civilization (not a festival colour). */
+  --travel-accent: #fbbf24;
+  --font-body: 'IM Fell English', georgia, serif;
   --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 25%);
   --shadow-card: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
   --blur-modal: blur(12px);
@@ -118,6 +122,11 @@
 
 main {
   width: 100%;
+}
+
+/* <main tabindex="-1"> only receives focus from the skip link; no ring around the whole page. */
+main:focus {
+  outline: none;
 }
 
 /* === SKIP LINK === */
@@ -504,6 +513,43 @@ main {
     }
   }
 
+  /* Aurora meteor: a short streak along its local +x axis, then a long quiet gap.
+     --dist (px), --dur (s); delay set inline. */
+  .anim-aurora-meteor {
+    opacity: 0;
+    animation: auroraMeteor var(--dur, 20s) cubic-bezier(0.3, 0, 0.7, 1) infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes auroraMeteor {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+
+    0.8% {
+      opacity: 1;
+    }
+
+    4% {
+      transform: translateX(var(--dist, 100px));
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateX(var(--dist, 100px));
+      opacity: 0;
+    }
+  }
+
+  /* WebGL aurora canvas, inserted behind the weather SVG by components/Aurora.tsx,
+     which also sets its box, z-index and fade transition. */
+  .aurora-canvas {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   /* Crossfade with real weather; duration set inline from AURORA_FADE_MS. */
   .aurora-fade-in {
     animation: auroraFadeIn 1.5s ease-out both;
@@ -674,20 +720,44 @@ main {
     opacity: 1;
   }
 
+  /* Weather stays visible but frozen: each cloud/drop/flake/dragon stops at the
+     point its (negative, random) animation-delay put it, so rain still reads as rain.
+     Removing the animation instead would leave the particles at their start
+     position above the visible area. */
   .anim-cloud-fast,
-  .anim-cloud-slow {
-    animation: none;
+  .anim-cloud-slow,
+  .anim-cloud-bg,
+  .anim-fall,
+  .anim-float,
+  .anim-dragon {
+    animation-play-state: paused;
   }
 
-  .anim-lightning,
-  .anim-fall {
+  /* A flash frozen mid-frame could stick at full brightness: hide it. */
+  .anim-lightning {
     animation: none;
     opacity: 0;
   }
 
-  .anim-cloud-bg {
+  /* Decorative loops (pulses, spinners, bounces). :root prefix raises specificity
+     above component-scoped rules that nest these classes. */
+  :root .animate-pulse,
+  :root .animate-ping,
+  :root .animate-spin,
+  :root .anim-glow-pulse,
+  :root .weather-storm-clouds,
+  :root .roman-clock__sun,
+  :root .roman-clock__ovid-widget,
+  :root .rci-sac-multi-secondary,
+  :root .rci-sac-single-secondary,
+  :root .hel-anim-bounce,
+  :root .hel-anim-pulse,
+  :root .greek-days-list__festival-apaphrades,
+  :root .greek-days-list__festival-extra-icon--pulse,
+  :root .interrogatio-divina__typing,
+  :root .cstm__term--active,
+  :root .cyc__term--active {
     animation: none;
-    opacity: 0;
   }
 
   .anim-wind,
@@ -703,6 +773,7 @@ main {
   }
 
   .anim-aurora-drift,
+  .anim-aurora-meteor,
   .aurora-fade-in,
   .aurora-fade-out {
     animation: none;
@@ -749,19 +820,31 @@ main {
   font-display: swap;
 }
 
+/* 700 is served by the 800 file: covering 700–900 here stops the browser from
+   synthesising bold or picking a lighter face for those weights. */
 @font-face {
   font-family: Cinzel;
   src: url('/assets/fonts/cinzel-v26-latin-800.woff2') format('woff2');
-  font-weight: 700;
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* IM Fell English ships only one weight (regular + italic). Declaring the faces for the
+   whole 100–900 range makes bold text use the real glyphs instead of a smeared faux bold. */
+@font-face {
+  font-family: 'IM Fell English';
+  src: url('/assets/fonts/im-fell-english-v14-latin-regular.woff2') format('woff2');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: Cinzel;
-  src: url('/assets/fonts/cinzel-v26-latin-800.woff2') format('woff2');
-  font-weight: 800 900;
-  font-style: normal;
+  font-family: 'IM Fell English';
+  src: url('/assets/fonts/im-fell-english-v14-latin-italic.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
   font-display: swap;
 }
 
