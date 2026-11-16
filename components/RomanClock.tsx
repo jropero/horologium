@@ -506,6 +506,7 @@ function RomanClock({
                     rainIntensity={rainIntensity}
                     windGusts={windGusts}
                     offline={isOffline}
+                    auroraLayers={weather?.auroraLayers}
                   />
                 </g>
 

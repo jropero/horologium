@@ -890,6 +890,7 @@ const EgyptianCalendarInfo: React.FC<EgyptianCalendarInfoProps> = ({
                 rainIntensity={rainIntensity}
                 windGusts={weather?.current.windGusts ?? 0}
                 offline={!!(weather?.isOffline || weather?.aurora)}
+                auroraLayers={weather?.auroraLayers}
               />
               {weatherCond === 'storm' && (
                 <rect

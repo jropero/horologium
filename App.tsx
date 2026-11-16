@@ -33,11 +33,13 @@ import { CivilizationProvider, useCivilization } from './contexts/CivilizationCo
 import GlossedTerm from './components/GlossedTerm';
 import { BABYLONIAN_UI_TERMS, GlossedTerm as Term } from './utils/civLabels';
 import {
+  AuroraLayer,
   CustomWeatherConfig,
   applyCustomWeather,
   customWeatherLabel,
   loadCustomWeather,
   saveCustomWeather,
+  toggleAuroraLayer,
 } from './utils/customWeather';
 
 // Non-Roman civilizations are split into their own chunks, loaded on first switch
@@ -57,6 +59,13 @@ async function yieldToMain(): Promise<void> {
     return await (window as any).scheduler.yield();
   }
   return new Promise(resolve => setTimeout(resolve, 0));
+}
+
+function calculateCivTime(civilization: string, date: Date, lat: number, lng: number) {
+  if (civilization === 'hellas') return calculateHellenicTime(date, lat, lng);
+  if (civilization === 'aegyptus') return calculateEgyptianTime(date, lat, lng);
+  if (civilization === 'babylonia') return calculateBabylonianTime(date, lat, lng);
+  return calculateRomanTime(date, lat, lng);
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -141,22 +150,15 @@ const AppContent: React.FC = () => {
 
   // Recalculate time when location, minute, or civilization changes
   useEffect(() => {
+    // A newer run (modernTime changed while this one was yielding) supersedes this one.
+    let cancelled = false;
     const updateTime = async () => {
-      let data;
-      if (civilization === 'hellas') {
-        data = calculateHellenicTime(modernTime, latitude, longitude);
-      } else if (civilization === 'aegyptus') {
-        data = calculateEgyptianTime(modernTime, latitude, longitude);
-      } else if (civilization === 'babylonia') {
-        data = calculateBabylonianTime(modernTime, latitude, longitude);
-      } else {
-        data = calculateRomanTime(modernTime, latitude, longitude);
-      }
-      setRomanTimeData(data);
+      setRomanTimeData(calculateCivTime(civilization, modernTime, latitude, longitude));
 
       // When time-travelling, yield between computation blocks so the browser can
       // render the date-picker UI update before the next heavy calculation runs.
       if (isTimeTraveling) await yieldToMain();
+      if (cancelled) return;
 
       const sunTimes = getSunTimes(modernTime, latitude, longitude);
       setTodaysSunTimes(sunTimes);
@@ -169,6 +171,9 @@ const AppContent: React.FC = () => {
     };
 
     void updateTime();
+    return () => {
+      cancelled = true;
+    };
   }, [modernTime, latitude, longitude, loading, civilization, isTimeTraveling]);
 
   // Weather Data — when time-traveling, load the weather recorded on that day/time.
@@ -218,14 +223,16 @@ const AppContent: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weather, weatherError, weatherSlow, customWeather]);
 
-  /** Turns the aurora on (custom sky) or back to the live weather. */
-  const toggleAurora = () => {
-    setCustomWeather(c =>
-      c.aurora
-        ? { ...c, mode: 'live', aurora: false, label: '' }
-        : { ...c, mode: 'custom', aurora: true, code: 0, label: '' },
-    );
+  /** Switches one aurora renderer (WebGL shader / SVG curtains) on or off. */
+  const toggleAurora = (layer: AuroraLayer) => {
+    setCustomWeather(c => toggleAuroraLayer(c, layer));
   };
+  const auroraGlOn = customWeather.aurora && customWeather.auroraGl;
+  const auroraSvgOn = customWeather.aurora && customWeather.auroraSvg;
+  const AURORA_TOGGLES: { layer: AuroraLayer; on: boolean; name: string; short: string }[] = [
+    { layer: 'auroraGl', on: auroraGlOn, name: 'Shader WebGL', short: 'Aurora WebGL' },
+    { layer: 'auroraSvg', on: auroraSvgOn, name: 'Vectorial SVG', short: 'Aurora SVG' },
+  ];
 
   const handleUpdateLocation = (lat: number, lng: number) => {
     setLoading(true);
@@ -385,24 +392,25 @@ const AppContent: React.FC = () => {
               </span>
             </button>
 
-            <button
-              onClick={() => {
-                toggleAurora();
-                setIsMobileMenuOpen(false);
-              }}
-              aria-pressed={customWeather.aurora}
-              className="menu-item-btn"
-            >
-              <Sparkles
-                className={`menu-item-icon${customWeather.aurora ? ' is-aurora' : ''}`}
-              />
-              <span className="menu-item-content">
-                {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
-                <span className={`menu-item-desc${customWeather.aurora ? ' is-aurora' : ''}`}>
-                  {customWeather.aurora ? 'Activada' : 'Desactivada'}
+            {AURORA_TOGGLES.map(t => (
+              <button
+                key={t.layer}
+                onClick={() => {
+                  toggleAurora(t.layer);
+                  setIsMobileMenuOpen(false);
+                }}
+                aria-pressed={t.on}
+                className="menu-item-btn"
+              >
+                <Sparkles className={`menu-item-icon${t.on ? ' is-aurora' : ''}`} />
+                <span className="menu-item-content">
+                  {menuHeading('Aurora', BABYLONIAN_UI_TERMS.sky)}
+                  <span className={`menu-item-desc${t.on ? ' is-aurora' : ''}`}>
+                    {t.name} · {t.on ? 'Activada' : 'Desactivada'}
+                  </span>
                 </span>
-              </span>
-            </button>
+              </button>
+            ))}
 
             <button
               onClick={() => {
@@ -467,18 +475,19 @@ const AppContent: React.FC = () => {
               {customWeatherLabel(customWeather)}
             </span>
           </button>
-          <button
-            onClick={toggleAurora}
-            aria-pressed={customWeather.aurora}
-            className={`toolbar-btn${customWeather.aurora ? ' toolbar-btn--aurora' : ''}`}
-          >
-            <Sparkles
-              className={`toolbar-btn-icon${
-                customWeather.aurora ? ' toolbar-btn-icon--aurora' : ''
-              }`}
-            />
-            Aurora
-          </button>
+          {AURORA_TOGGLES.map(t => (
+            <button
+              key={t.layer}
+              onClick={() => toggleAurora(t.layer)}
+              aria-pressed={t.on}
+              className={`toolbar-btn${t.on ? ' toolbar-btn--aurora' : ''}`}
+            >
+              <Sparkles
+                className={`toolbar-btn-icon${t.on ? ' toolbar-btn-icon--aurora' : ''}`}
+              />
+              {t.short}
+            </button>
+          ))}
           <button
             onClick={openTravelModal}
             className={`toolbar-btn${isTimeTraveling ? ' toolbar-btn--traveling' : ''}`}
