@@ -241,7 +241,9 @@ const WeatherModal: React.FC<WeatherModalProps> = ({
     },
   } as const;
 
-  if (!weather) {
+  // Keep the (same) <dialog> node mounted so showModal()/close() have a target,
+  // but render no content while it is closed or has no data.
+  if (!isOpen || !weather) {
     return <dialog {...dialogProps} />;
   }
 

@@ -33,8 +33,10 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
     }
   }, [isOpen]);
 
-  // Generar solo los próximos 7 días (una semana)
+  // Generar solo los próximos 7 días (una semana). Skipped while closed: the dialog
+  // stays mounted, and startDate changes on every clock tick.
   const nextDays = useMemo(() => {
+    if (!isOpen) return [];
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(startDate);
       d.setDate(d.getDate() + i);
@@ -54,22 +56,28 @@ const RomanCalendarModal: React.FC<RomanCalendarModalProps> = ({
         info,
       };
     });
-  }, [startDate]);
+  }, [startDate, isOpen]);
 
   const ovidMonthInfo = useMemo(() => {
     const currentMonth = startDate.getMonth() + 1;
     return OVID_MONTH_ETYMOLOGIES.find(m => m.month === currentMonth);
   }, [startDate]);
 
+  const dialogProps = {
+    ref: dialogRef,
+    className: 'roman-calendar-modal animate-fadeIn',
+    onClose,
+    onClick: (e: React.MouseEvent<HTMLDialogElement>) => {
+      if (e.target === dialogRef.current) onClose();
+    },
+  } as const;
+
+  // Keep the (same) <dialog> node mounted so showModal()/close() have a target,
+  // but render no content while it is closed.
+  if (!isOpen) return <dialog {...dialogProps} />;
+
   return (
-    <dialog
-      ref={dialogRef}
-      className="roman-calendar-modal animate-fadeIn"
-      onClose={onClose}
-      onClick={e => {
-        if (e.target === dialogRef.current) onClose();
-      }}
-    >
+    <dialog {...dialogProps}>
       <div className="rcm-panel">
         {/* Header del Modal */}
         <div className="rcm-header">
