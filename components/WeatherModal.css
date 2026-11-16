@@ -392,7 +392,7 @@
 
 .weather-modal__wind-latin {
   color: var(--roman-red);
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-style: italic;
   font-size: 0.75rem;
   line-height: 1rem;
@@ -652,7 +652,7 @@
 
 .chronos-item__latin {
   color: var(--roman-red);
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-style: italic;
   font-size: 0.75rem;
   line-height: 1rem;

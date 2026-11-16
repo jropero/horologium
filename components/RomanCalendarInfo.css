@@ -42,7 +42,7 @@
 
 .rci-solar-label {
   font-family: Cinzel, serif;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--gold-dim);
@@ -50,7 +50,7 @@
 }
 
 .rci-solar-value {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--parchment);
@@ -71,7 +71,7 @@
   font-size: 0.75rem;
   font-weight: 400;
   color: color-mix(in srgb, var(--parchment) 60%, transparent);
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
 }
 
 /* ── Day Grid ─────────────────────────────────────────────────────────────── */
@@ -411,7 +411,7 @@
 
   .rdg-info-festival-desc {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 80%, transparent);
     margin-top: 0.25rem;
     line-height: 1.375;
@@ -420,7 +420,7 @@
   .rdg-info-statusfull {
     font-size: 0.75rem;
     line-height: 1rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 70%, transparent);
   }
 
@@ -439,7 +439,7 @@
 
   .rdg-info-deity-desc {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 60%, transparent);
     margin-top: 0.125rem;
     line-height: 1.375;
@@ -448,7 +448,7 @@
   .rdg-info-empty {
     font-size: 0.75rem;
     line-height: 1rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--gold-dim) 50%, transparent);
     text-align: center;
   }
@@ -666,7 +666,7 @@
   }
 
   .rci-god-desc {
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-size: 0.875rem;
     color: color-mix(in srgb, var(--parchment) 80%, transparent);
     font-style: italic;
@@ -752,7 +752,7 @@
   .rci-fontes-preview {
     font-size: 0.75rem;
     line-height: 1rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 50%, transparent);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -818,7 +818,7 @@
 
   .rci-fonte-latin {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-style: italic;
     color: color-mix(in srgb, var(--parchment) 85%, transparent);
     line-height: var(--lh-prose);
@@ -833,7 +833,7 @@
 
   .rci-fonte-es {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 55%, transparent);
     line-height: var(--lh-prose);
     font-style: italic;
@@ -878,7 +878,7 @@
 
   .rci-mos-text {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     line-height: var(--lh-prose);
     text-align: left;
@@ -933,7 +933,7 @@
 
   .rci-annales-text {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     line-height: var(--lh-prose);
     text-align: left;
@@ -993,7 +993,7 @@
 
   .rci-preces-text {
     font-size: 12px;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     line-height: var(--lh-prose);
     text-align: center;
@@ -1057,7 +1057,7 @@
 
   .rci-monument-text {
     font-size: 0.75rem;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: #a8a29e;
     line-height: var(--lh-prose);
     text-align: left;
@@ -1194,7 +1194,7 @@
   .rci-sac-multi-quote {
     font-style: italic;
     font-size: 12px;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     border-left: 2px solid color-mix(in srgb, var(--roman-red) 50%, transparent);
     padding-left: 1rem;
@@ -1383,7 +1383,7 @@
 
   .rci-sac-single-text {
     font-size: 12px;
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     line-height: var(--lh-prose);
     text-align: left;
@@ -1443,7 +1443,7 @@
 
   .rci-ephem-latin {
     color: var(--gold-leaf);
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-style: italic;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -1595,7 +1595,7 @@
 
     .rci-festival-item-desc {
       color: color-mix(in srgb, var(--parchment) 80%, transparent);
-      font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-family: var(--font-body);
       font-size: 0.875rem;
       line-height: var(--lh-prose);
       font-style: italic;
@@ -1712,7 +1712,7 @@
   }
 
   .rci-status-modal-text {
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     color: color-mix(in srgb, var(--parchment) 90%, transparent);
     font-style: italic;
     line-height: var(--lh-prose);

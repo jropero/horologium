@@ -230,7 +230,7 @@
 }
 
 .ccp-month-translation {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   line-height: 1rem;
   color: color-mix(in srgb, var(--parchment) 70%, transparent);

@@ -299,7 +299,7 @@
 
 .day-info-fest-desc {
   font-size: 0.75rem;
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   color: color-mix(in srgb, var(--parchment) 80%, transparent);
   line-height: 1.375;
 }
@@ -552,7 +552,7 @@
 }
 
 .eci-season-label {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-style: italic;
   color: color-mix(in srgb, var(--parchment) 70%, transparent);
   margin-top: 0.25rem;
@@ -734,7 +734,7 @@
 }
 
 .eci-fest-desc-sm {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: color-mix(in srgb, var(--parchment) 70%, transparent);
   font-style: italic;
@@ -796,7 +796,7 @@
 }
 
 .eci-deity-quote {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   color: color-mix(in srgb, var(--parchment) 85%, transparent);
   font-style: italic;
@@ -843,7 +843,7 @@
 }
 
 .eci-epa-deity-line {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: #6ee7b7;
@@ -851,7 +851,7 @@
 }
 
 .eci-epa-desc {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   color: color-mix(in srgb, var(--parchment) 85%, transparent);
   font-style: italic;
@@ -1539,7 +1539,7 @@
 }
 
 .eci-fest-card-desc {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: color-mix(in srgb, var(--parchment) 75%, transparent);
   font-style: italic;
@@ -1703,7 +1703,7 @@
 }
 
 .eci-modal-preamble-text {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: color-mix(in srgb, var(--parchment) 65%, transparent);
   font-style: italic;
@@ -1895,7 +1895,7 @@
 }
 
 .festival-entry-desc {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   color: color-mix(in srgb, var(--parchment) 75%, transparent);
   line-height: var(--lh-prose);

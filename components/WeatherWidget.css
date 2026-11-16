@@ -163,7 +163,7 @@
 
   & .ww-greek-latin {
     color: var(--roman-red);
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-style: italic;
     font-size: 12px;
     font-weight: 700;
@@ -269,7 +269,7 @@
 
   & .ww-greek-wind-latin {
     color: var(--roman-red);
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-style: italic;
     font-size: 12px;
     font-weight: 700;
@@ -293,7 +293,7 @@
 
   & .ww-egypt-wind-latin {
     color: color-mix(in srgb, #059669 60%, transparent);
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-style: italic;
     font-size: 12px;
     font-weight: 700;

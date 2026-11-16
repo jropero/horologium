@@ -75,8 +75,8 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 9999px;
-  background-color: var(--festival-text);
-  box-shadow: 0 0 6px rgb(251 191 36 / 80%);
+  background-color: var(--travel-accent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--travel-accent) 80%, transparent);
 }
 
 .mobile-menu-panel {
@@ -177,7 +177,7 @@
 
 /* Applied to icons when time-travel is active */
 .is-travel {
-  color: var(--festival-text);
+  color: var(--travel-accent);
 }
 
 /* ── App header ─────────────────────────────────────────────────────── */
@@ -257,7 +257,7 @@
 
 .travel-banner-time {
   font-family: Cinzel, serif;
-  color: rgb(251 191 36 / 90%);
+  color: color-mix(in srgb, var(--travel-accent) 90%, transparent);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -277,7 +277,7 @@
 }
 
 .travel-btn-change {
-  color: rgb(251 191 36 / 70%);
+  color: color-mix(in srgb, var(--travel-accent) 70%, transparent);
   font-family: Cinzel, serif;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -299,7 +299,7 @@
 }
 
 .travel-btn-return {
-  color: #fbbf24;
+  color: var(--travel-accent);
   font-family: Cinzel, serif;
   font-weight: 700;
   transition:
@@ -365,7 +365,7 @@
 }
 
 .toolbar-btn--traveling {
-  color: var(--festival-text);
+  color: var(--travel-accent);
   border-color: rgb(180 83 9 / 40%);
 
   &:hover {
@@ -385,7 +385,7 @@
 }
 
 .toolbar-btn-icon--travel {
-  color: var(--festival-text);
+  color: var(--travel-accent);
 }
 
 .toolbar-aurora-label--active {
