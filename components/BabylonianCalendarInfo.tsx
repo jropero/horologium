@@ -983,6 +983,7 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
                 rainIntensity={rainIntensity}
                 windGusts={weather?.current.windGusts ?? 0}
                 offline={!!(weather?.isOffline || weather?.aurora)}
+                auroraLayers={weather?.auroraLayers}
               />
               {condition === 'storm' && (
                 <rect

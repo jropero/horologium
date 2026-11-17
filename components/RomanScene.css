@@ -1,0 +1,366 @@
+/* Roman hero scene (components/RomanScene.tsx). The root <g> sets --haze, --rim
+   and --stone; every colour below is derived from them and from --ink, so the
+   whole landscape follows the light. */
+
+.roman-scene path,
+.roman-scene rect,
+.roman-scene stop {
+  transition:
+    fill 2s ease,
+    stroke 2s ease,
+    stop-color 2s ease;
+}
+
+/* ── Depth: the farther a layer, the more it takes the colour of the air ── */
+.rs-ridge-far {
+  fill: color-mix(in srgb, var(--ink) 24%, var(--haze));
+}
+
+.rs-ridge-near {
+  fill: color-mix(in srgb, var(--ink) 42%, var(--haze));
+}
+
+.rs-aqueduct {
+  fill: color-mix(in srgb, var(--ink) 58%, var(--haze));
+  stroke: var(--rim);
+  stroke-width: 0.25;
+  stroke-opacity: 0.4;
+}
+
+.rs-body {
+  fill: color-mix(in srgb, var(--ink) 86%, var(--haze));
+  stroke: var(--rim);
+  stroke-width: 0.35;
+  stroke-opacity: 0.6;
+  stroke-linejoin: round;
+}
+
+.rs-relief {
+  fill: var(--rim);
+  opacity: 0.22;
+}
+
+.rs-detail {
+  fill: none;
+  stroke: var(--rim);
+  stroke-width: 0.22;
+  opacity: 0.5;
+}
+
+.rs-opening {
+  fill: var(--haze);
+  opacity: 0.32;
+}
+
+.rs-window {
+  fill: var(--rim);
+  opacity: 0.14;
+}
+
+.rs-foreground {
+  fill: color-mix(in srgb, var(--ink) 78%, #000);
+  stroke: var(--rim);
+  stroke-width: 0.3;
+  stroke-opacity: 0.28;
+  stroke-linejoin: round;
+}
+
+/* ── Ground ─────────────────────────────────────────────────────────────── */
+.rs-ground-stop {
+  stop-color: color-mix(in srgb, var(--ink) 90%, #000);
+}
+
+.rs-ground-stop--top {
+  stop-color: color-mix(in srgb, var(--ink) 76%, var(--haze));
+}
+
+.roman-scene--snow .rs-ground-stop {
+  stop-color: #c5cdd8;
+}
+
+.roman-scene--snow .rs-ground-stop--top {
+  stop-color: #f3f6f9;
+}
+
+.rs-ground-rim {
+  fill: none;
+  stroke: var(--rim);
+  stroke-width: 0.7;
+  stroke-opacity: 0.75;
+}
+
+.rs-tufts {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 80%, var(--haze));
+  stroke-width: 0.4;
+  stroke-linecap: round;
+}
+
+/* ── Night lights ───────────────────────────────────────────────────────── */
+.roman-scene--lit .rs-opening {
+  animation: rsFlicker 3.4s ease-in-out infinite;
+  fill: #f0a44a;
+  opacity: 0.7;
+}
+
+.roman-scene--lit .rs-window--lit {
+  animation: rsFlicker 4.6s ease-in-out infinite;
+  fill: #ffcf7a;
+  opacity: 0.9;
+}
+
+.rs-torch {
+  animation: rsFlicker 1.9s ease-in-out infinite;
+}
+
+@keyframes rsFlicker {
+  0%,
+  100% {
+    opacity: 0.86;
+  }
+
+  22% {
+    opacity: 0.62;
+  }
+
+  41% {
+    opacity: 0.92;
+  }
+
+  63% {
+    opacity: 0.7;
+  }
+
+  82% {
+    opacity: 0.84;
+  }
+}
+
+/* ── Plinth ─────────────────────────────────────────────────────────────── */
+.rs-stone-stop {
+  stop-color: var(--stone);
+}
+
+.rs-stone-stop--light {
+  stop-color: color-mix(in srgb, var(--stone) 72%, #fff);
+}
+
+.rs-stone-side {
+  fill: color-mix(in srgb, var(--stone) 55%, #000);
+}
+
+.rs-stone-top {
+  stroke: color-mix(in srgb, var(--stone) 70%, #fff);
+  stroke-width: 0.3;
+}
+
+.rs-stone-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--stone) 50%, #000);
+  stroke-width: 0.25;
+  opacity: 0.6;
+}
+
+.rs-hour-lines {
+  fill: none;
+  stroke: color-mix(in srgb, var(--stone) 40%, #000);
+  stroke-width: 0.25;
+  opacity: 0.7;
+}
+
+.rs-gnomon-shadow {
+  fill: #000;
+  opacity: 0.34;
+}
+
+/* ── Sky ────────────────────────────────────────────────────────────────── */
+.rs-stars {
+  transition: opacity 2000ms ease-in-out;
+}
+
+.rs-constellation {
+  fill: none;
+  stroke: #dbe7ff;
+  stroke-width: 0.25;
+  opacity: 0.3;
+}
+
+.rs-twinkle {
+  animation: rsTwinkle 4s ease-in-out infinite;
+}
+
+@keyframes rsTwinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.rs-arc path {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.rs-arc--day {
+  --arc: #e3c35a;
+}
+
+.rs-arc--night {
+  --arc: #b4c2ea;
+}
+
+.rs-arc__line {
+  stroke: var(--arc);
+  stroke-width: 0.45;
+  opacity: 0.35;
+}
+
+.rs-arc__ticks {
+  stroke: var(--arc);
+  stroke-width: 0.5;
+  opacity: 0.6;
+}
+
+.rs-arc__travelled {
+  stroke: var(--arc);
+  stroke-width: 0.8;
+  opacity: 0.55;
+}
+
+.rs-arc__hour {
+  stroke: var(--arc);
+  stroke-width: 1.7;
+  opacity: 0.95;
+}
+
+.rs-sun__rays {
+  animation: spin 90s linear infinite;
+}
+
+.rs-sun__halo {
+  animation: rsBreath 7s ease-in-out infinite;
+}
+
+@keyframes rsBreath {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.rs-birds {
+  animation: rsBirds 52s linear infinite;
+}
+
+.rs-birds path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 80%, var(--haze));
+  stroke-width: 0.45;
+  stroke-linecap: round;
+}
+
+@keyframes rsBirds {
+  from {
+    transform: translate(-40px, 8px);
+  }
+
+  to {
+    transform: translate(340px, -18px);
+  }
+}
+
+/* ── Weather (components/RomanWeather.tsx) ──────────────────────────────── */
+.rw-cloud-stop {
+  stop-color: var(--cloud-shade);
+}
+
+.rw-cloud-stop--light {
+  stop-color: var(--cloud-light);
+}
+
+/* One 300-unit tile per loop: the second copy takes the place of the first. */
+.rw-drift {
+  animation: rwDrift 160s linear infinite;
+}
+
+@keyframes rwDrift {
+  from {
+    transform: translateX(-300px);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.rw-bolt {
+  animation: lightningFlash 7s infinite;
+  opacity: 0;
+}
+
+.rw-fog {
+  animation: rwFog 50s ease-in-out infinite alternate;
+}
+
+@keyframes rwFog {
+  from {
+    transform: translateX(calc(var(--shift, 40px) * -1));
+  }
+
+  to {
+    transform: translateX(var(--shift, 40px));
+  }
+}
+
+.rw-splash {
+  animation: rwSplash 1s ease-out infinite;
+  fill: none;
+  stroke: #dbe6f3;
+  stroke-width: 0.35;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes rwSplash {
+  from {
+    opacity: 0.75;
+    transform: scale(0.15);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-drift,
+  .rw-fog,
+  .rw-splash {
+    animation: none;
+  }
+
+  .rw-bolt,
+  .rw-splash {
+    animation: none;
+    opacity: 0;
+  }
+
+  .roman-scene--lit .rs-opening,
+  .roman-scene--lit .rs-window--lit,
+  .rs-torch,
+  .rs-twinkle,
+  .rs-sun__rays,
+  .rs-sun__halo,
+  .rs-birds {
+    animation: none;
+  }
+}

@@ -10,8 +10,13 @@ import React, { useId } from 'react';
  * perpendicular to the curve, so the rays follow the folds. Far curtains are
  * higher, dimmer and slower; near ones are brighter, faster and sway more.
  * Hue: red and blue curtains keep their colour; the green ones cycle
- * green → teal → violet → rose and back over HUE_CYCLE_S. No SVG filters, so
- * the cost is just repainting a few gradient-filled paths.
+ * green → teal → violet → rose and back over HUE_CYCLE_S.
+ *
+ * On top of that: surges (a band of brighter colour runs along the rays of each
+ * curtain every few seconds), pulsating patches below the arcs, a breathing
+ * airglow over the horizon, and an occasional meteor. One small Gaussian blur
+ * over the curtain group softens their outlines and ray stripes; everything
+ * else is gradient-filled paths.
  */
 
 interface Wave {
@@ -41,6 +46,11 @@ interface Curtain {
   /** Colour of the ribbon top for hue-cycling curtains (e.g. a red fringe). */
   fringe?: string;
   hueBegin?: number;
+  /**
+   * Auroral surge: a band of the curtain's own bright colour (no white core) that runs along the rays and lower edge.
+   * `dur` = full cycle (the band is visible for SURGE_ACTIVE of it), `dir` = 1 left→right.
+   */
+  surge?: { dur: number; begin: number; dir: 1 | -1 };
 }
 
 const HUE_CYCLE_S = 240;
@@ -88,6 +98,7 @@ const CURTAINS: Curtain[] = [
     swayX: 4,
     swaySkew: 1,
     colors: { top: '#4338ca', main: '#6366f1', bright: '#93c5fd' },
+    surge: { dur: 17, begin: -9, dir: -1 },
   },
   {
     // mid teal-green, left
@@ -109,6 +120,7 @@ const CURTAINS: Curtain[] = [
     colors: null,
     fringe: '#0e7490',
     hueBegin: -40,
+    surge: { dur: 13, begin: -4, dir: 1 },
   },
   {
     // mid green, right
@@ -129,6 +141,7 @@ const CURTAINS: Curtain[] = [
     swaySkew: 2,
     colors: null,
     fringe: '#047857',
+    surge: { dur: 11, begin: -1, dir: -1 },
   },
   {
     // near bright green with a pink top fringe
@@ -149,7 +162,36 @@ const CURTAINS: Curtain[] = [
     swaySkew: 2.6,
     colors: null,
     fringe: '#f472b6',
+    surge: { dur: 9, begin: -6, dir: 1 },
   },
+];
+
+/** Blur of the curtain group in viewBox units; hides the hard outlines and ray stripes. */
+const CURTAIN_BLUR = 1.2;
+
+/** Share of each surge cycle in which the band is crossing; the rest is quiet. */
+const SURGE_ACTIVE = 0.55;
+/** Width of the surge band in viewBox units. */
+const SURGE_W = 110;
+
+/**
+ * Pulsating aurora: diffuse patches below the arcs that blink on and off
+ * irregularly (seconds-scale), as seen after a substorm breakup.
+ */
+const PATCHES = [
+  { cx: 48, cy: 142, rx: 22, ry: 7, dur: 6.3, begin: -1.2 },
+  { cx: 112, cy: 152, rx: 16, ry: 5, dur: 4.7, begin: -3.1 },
+  { cx: 176, cy: 138, rx: 26, ry: 8, dur: 7.9, begin: -0.4 },
+  { cx: 238, cy: 150, rx: 18, ry: 6, dur: 5.4, begin: -2.6 },
+  { cx: 282, cy: 136, rx: 14, ry: 5, dur: 8.6, begin: -5.3 },
+];
+const PATCH_VALUES = '0;0;0.85;0.25;0.7;0;0;0';
+const PATCH_TIMES = '0;0.38;0.44;0.5;0.56;0.66;0.9;1';
+
+/** Meteors: start point, angle (deg, 0 = rightwards), travel, cycle and delay (s). */
+const METEORS = [
+  { x: 40, y: 18, angle: 24, dist: 120, dur: 19, delay: 6 },
+  { x: 270, y: 30, angle: 152, dist: 95, dur: 27, delay: 15 },
 ];
 
 /** Multiplies every motion duration (morph, sway, ray drift); 2 = half speed. */
@@ -254,6 +296,64 @@ const AuroraSvg: React.FC<{ className?: string; style?: React.CSSProperties }> =
           <Stop offset="0%" color="#10b981" opacity={0.16} cycle={HUE_MAIN} />
           <Stop offset="100%" color="#10b981" opacity={0} cycle={HUE_MAIN} />
         </radialGradient>
+        {/* Light the curtains throw onto the lower sky, behind the skyline. */}
+        <radialGradient id={id('airglow')}>
+          <Stop offset="0%" color="#34d399" opacity={0.34} cycle={HUE_MAIN} />
+          <Stop offset="55%" color="#10b981" opacity={0.12} cycle={HUE_MAIN} />
+          <Stop offset="100%" color="#10b981" opacity={0} cycle={HUE_MAIN} />
+        </radialGradient>
+        <radialGradient id={id('patch')}>
+          <Stop offset="0%" color="#6ee7b7" opacity={0.5} cycle={HUE_BRIGHT} />
+          <Stop offset="100%" color="#10b981" opacity={0} cycle={HUE_MAIN} />
+        </radialGradient>
+        {/* Meteor tail: userSpaceOnUse in the meteor's own (moving, rotated) frame. */}
+        <linearGradient
+          id={id('meteor')}
+          gradientUnits="userSpaceOnUse"
+          x1="0"
+          y1="0"
+          x2="-30"
+          y2="0"
+        >
+          <stop offset="0%" stopColor="#ffffff" stopOpacity={0.95} />
+          <stop offset="30%" stopColor="#d1fae5" stopOpacity={0.5} />
+          <stop offset="100%" stopColor="#a7f3d0" stopOpacity={0} />
+        </linearGradient>
+        {CURTAINS.map((c, i) => {
+          if (!c.surge) return null;
+          const bright = c.colors?.bright ?? '#a7f3d0';
+          const brightCycle = c.colors ? undefined : HUE_BRIGHT;
+          const from = c.surge.dir === 1 ? c.x0 - SURGE_W : c.x1;
+          const to = c.surge.dir === 1 ? c.x1 : c.x0 - SURGE_W;
+          return (
+            <linearGradient
+              key={`surge-${i}`}
+              id={id('surge', i)}
+              gradientUnits="userSpaceOnUse"
+              x1="0"
+              y1="0"
+              x2={SURGE_W}
+              y2="0"
+            >
+              <Stop offset="0%" color={bright} opacity={0} cycle={brightCycle} />
+              <Stop offset="35%" color={bright} opacity={0.35} cycle={brightCycle} />
+              <Stop offset="50%" color={bright} opacity={0.7} cycle={brightCycle} />
+              <Stop offset="65%" color={bright} opacity={0.35} cycle={brightCycle} />
+              <Stop offset="100%" color={bright} opacity={0} cycle={brightCycle} />
+              <animateTransform
+                attributeName="gradientTransform"
+                type="translate"
+                values={`${from} 0;${to} 0;${to} 0`}
+                keyTimes={`0;${SURGE_ACTIVE};1`}
+                calcMode="spline"
+                keySplines="0.45 0 0.55 1;0 0 1 1"
+                dur={`${c.surge.dur * MOTION_SLOWDOWN}s`}
+                begin={`${c.surge.begin * MOTION_SLOWDOWN}s`}
+                repeatCount="indefinite"
+              />
+            </linearGradient>
+          );
+        })}
         {CURTAINS.map((c, i) => {
           const main = c.colors?.main ?? '#10b981';
           const bright = c.colors?.bright ?? '#6ee7b7';
@@ -275,16 +375,16 @@ const AuroraSvg: React.FC<{ className?: string; style?: React.CSSProperties }> =
                   begin={c.hueBegin}
                 />
                 <Stop
-                  offset="90%"
+                  offset="86%"
                   color={bright}
-                  opacity={0.92}
+                  opacity={0.78}
                   cycle={brightCycle}
                   begin={c.hueBegin}
                 />
                 <Stop
                   offset="100%"
                   color={bright}
-                  opacity={0.3}
+                  opacity={0.15}
                   cycle={brightCycle}
                   begin={c.hueBegin}
                 />
@@ -322,66 +422,156 @@ const AuroraSvg: React.FC<{ className?: string; style?: React.CSSProperties }> =
             </React.Fragment>
           );
         })}
+        {/* Softens the curtain outlines and ray stripes. One pass over all curtains. */}
+        <filter id={id('soft')} x="-5%" y="-10%" width="110%" height="120%">
+          <feGaussianBlur stdDeviation={CURTAIN_BLUR} />
+        </filter>
       </defs>
 
       {/* Ambient glow from above: fades out before any viewBox edge, so nothing clips. */}
       <ellipse cx="150" cy="40" rx="190" ry="95" fill={`url(#${id('glow')})`} />
 
-      {CURTAINS.map((c, i) => {
-        const g = GEOMETRY[i];
-        const morphDur = `${c.morphS * MOTION_SLOWDOWN}s`;
-        const bodyShape = (
-          <path d={g.body.slice(0, g.body.indexOf(';'))}>
-            <animate
-              attributeName="d"
-              values={g.body}
-              dur={morphDur}
-              repeatCount="indefinite"
-            />
-          </path>
-        );
-        return (
-          <g key={i} opacity={c.opacity}>
-            <g
-              className="anim-aurora-drift"
-              style={
-                {
-                  '--dur': `${c.swayS * MOTION_SLOWDOWN}s`,
-                  '--ax': `${c.swayX}px`,
-                  '--sk': `${c.swaySkew}deg`,
-                  animationDelay: `${-i * 3.7 * MOTION_SLOWDOWN}s`,
-                } as React.CSSProperties
-              }
-            >
-              {/* The ray stroke is offset perpendicular to the curve, so on slopes its dashes
-                  poke below the lower edge; clip them to the (identically morphing) body. */}
-              <clipPath id={id('clip', i)}>{bodyShape}</clipPath>
-              {React.cloneElement(bodyShape, { fill: `url(#${id('body', i)})` })}
-              <path
-                d={g.rays.slice(0, g.rays.indexOf(';'))}
-                fill="none"
-                stroke={`url(#${id('ray', i)})`}
-                strokeWidth={c.rayLen}
-                strokeDasharray={c.rayDash}
-                clipPath={`url(#${id('clip', i)})`}
+      {/* Horizon airglow, breathing slowly; stays inside the viewBox. */}
+      <ellipse cx="150" cy="176" rx="150" ry="52" fill={`url(#${id('airglow')})`}>
+        <animate
+          attributeName="opacity"
+          values="0.65;1;0.75;0.95;0.65"
+          keyTimes="0;0.3;0.5;0.75;1"
+          dur="26s"
+          repeatCount="indefinite"
+        />
+      </ellipse>
+
+      {/* Pulsating patches below the arcs. */}
+      {PATCHES.map(p => (
+        <ellipse
+          key={`${p.cx}-${p.cy}`}
+          cx={p.cx}
+          cy={p.cy}
+          rx={p.rx}
+          ry={p.ry}
+          fill={`url(#${id('patch')})`}
+          opacity={0}
+        >
+          <animate
+            attributeName="opacity"
+            values={PATCH_VALUES}
+            keyTimes={PATCH_TIMES}
+            dur={`${p.dur}s`}
+            begin={`${p.begin}s`}
+            repeatCount="indefinite"
+          />
+        </ellipse>
+      ))}
+
+      <g filter={`url(#${id('soft')})`}>
+        {CURTAINS.map((c, i) => {
+          const g = GEOMETRY[i];
+          const morphDur = `${c.morphS * MOTION_SLOWDOWN}s`;
+          const dashDur = `${c.morphS * 2 * MOTION_SLOWDOWN}s`;
+          const clip = `url(#${id('clip', i)})`;
+          const bodyShape = (
+            <path d={g.body.slice(0, g.body.indexOf(';'))}>
+              <animate
+                attributeName="d"
+                values={g.body}
+                dur={morphDur}
+                repeatCount="indefinite"
+              />
+            </path>
+          );
+          return (
+            <g key={i} opacity={c.opacity}>
+              <g
+                className="anim-aurora-drift"
+                style={
+                  {
+                    '--dur': `${c.swayS * MOTION_SLOWDOWN}s`,
+                    '--ax': `${c.swayX}px`,
+                    '--sk': `${c.swaySkew}deg`,
+                    animationDelay: `${-i * 3.7 * MOTION_SLOWDOWN}s`,
+                  } as React.CSSProperties
+                }
               >
-                <animate
-                  attributeName="d"
-                  values={g.rays}
-                  dur={morphDur}
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="stroke-dashoffset"
-                  values="0;-60"
-                  dur={`${c.morphS * 2 * MOTION_SLOWDOWN}s`}
-                  repeatCount="indefinite"
-                />
-              </path>
+                {/* The ray stroke is offset perpendicular to the curve, so on slopes its dashes
+                  poke below the lower edge; clip them to the (identically morphing) body. */}
+                <clipPath id={id('clip', i)}>{bodyShape}</clipPath>
+                {React.cloneElement(bodyShape, { fill: `url(#${id('body', i)})` })}
+                <path
+                  d={g.rays.slice(0, g.rays.indexOf(';'))}
+                  fill="none"
+                  stroke={`url(#${id('ray', i)})`}
+                  strokeWidth={c.rayLen}
+                  strokeDasharray={c.rayDash}
+                  clipPath={clip}
+                >
+                  <animate
+                    attributeName="d"
+                    values={g.rays}
+                    dur={morphDur}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="stroke-dashoffset"
+                    values="0;-60"
+                    dur={dashDur}
+                    repeatCount="indefinite"
+                  />
+                </path>
+                {c.surge && (
+                  <>
+                    {/* Surge: the same rays (same dashes, same drift), lit only where the band is. */}
+                    <path
+                      d={g.rays.slice(0, g.rays.indexOf(';'))}
+                      fill="none"
+                      stroke={`url(#${id('surge', i)})`}
+                      strokeWidth={c.rayLen}
+                      strokeDasharray={c.rayDash}
+                      strokeOpacity={0.5}
+                      clipPath={clip}
+                    >
+                      <animate
+                        attributeName="d"
+                        values={g.rays}
+                        dur={morphDur}
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="stroke-dashoffset"
+                        values="0;-60"
+                        dur={dashDur}
+                        repeatCount="indefinite"
+                      />
+                    </path>
+                  </>
+                )}
+              </g>
             </g>
+          );
+        })}
+      </g>
+
+      {/* Occasional meteors crossing the aurora. */}
+      {METEORS.map(m => (
+        <g key={`${m.x}-${m.y}`} transform={`translate(${m.x} ${m.y}) rotate(${m.angle})`}>
+          <g
+            className="anim-aurora-meteor"
+            style={
+              {
+                '--dist': `${m.dist}px`,
+                '--dur': `${m.dur}s`,
+                animationDelay: `${m.delay}s`,
+              } as React.CSSProperties
+            }
+          >
+            <path
+              d="M 0 -0.7 L -30 -0.15 L -30 0.15 L 0 0.7 Z"
+              fill={`url(#${id('meteor')})`}
+            />
+            <circle r="0.9" fill="#ffffff" />
           </g>
-        );
-      })}
+        </g>
+      ))}
     </g>
   );
 };
