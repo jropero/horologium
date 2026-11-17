@@ -175,7 +175,7 @@
   }
 
   .sd-author-text {
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 700;

@@ -1131,7 +1131,7 @@ function RomanMapCanvas({
       // 7b. Tribe names: small italic labels at their centroid, from zoom 2.
       if (tribes && z >= TRIBE_LABEL_ZOOM) {
         const tribeFontPx = Math.round(Math.min(18, 11 + (z - TRIBE_LABEL_ZOOM) * 2));
-        ctx.font = `italic ${tribeFontPx}px ".SF NS", system-ui, sans-serif`;
+        ctx.font = `italic ${tribeFontPx}px "IM Fell English", Georgia, serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = TRIBE_LABEL;
@@ -1240,7 +1240,7 @@ function RomanMapCanvas({
       // skipped where the road bends too sharply or leaves the strip.
       if (roadScene && z >= ROAD_LABEL_ZOOM) {
         const fontPx = Math.round(clamp(9 + z, 12, 15)); // never under 12 px
-        const font = `italic ${fontPx}px ".SF NS", ui-sans-serif, system-ui, -apple-system, sans-serif`;
+        const font = `italic ${fontPx}px "IM Fell English", Georgia, serif`;
         ctx.font = font;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
