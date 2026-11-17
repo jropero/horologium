@@ -11,12 +11,14 @@ import {
   BabylonianFonte,
   getNextBabylonianFestivals,
 } from '../utils/babylonianLoreData';
-import { generateBabylonianSkyline } from '../utils/babylonianSkylineGenerator';
+import { Body } from 'astronomy-engine';
 import { BabylonianDate } from '../types/babylonia';
 import { WeatherData } from '../types';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
-import { getMoonPosition } from '../utils/solar';
+import SceneWeather from './SceneWeather';
+import BabylonianScene, { babylonianSkyGradient } from './BabylonianScene';
+import { getMoonPosition, getPlanetPosition, getSunAltitude } from '../utils/solar';
 import './BabylonianCalendarInfo.css';
 
 interface BabylonianCalendarInfoProps {
@@ -207,77 +209,6 @@ const DayStatusCard: React.FC<{
         </div>
       )}
     </div>
-  );
-};
-
-// ─── Sky moon renderer (Sin, the moon god) ───────────────────────────────────
-
-const renderSinMoon = (phase: number) => {
-  const r = 14;
-  const normalizedPhase = ((phase % 1) + 1) % 1;
-  const glowFactor = 1 - Math.abs(normalizedPhase - 0.5) * 2;
-  const isWaxing = normalizedPhase <= 0.5;
-  const sweep1 = isWaxing ? 1 : 0;
-  const rx = Math.max(0.1, r * Math.abs(Math.cos(normalizedPhase * Math.PI * 2)));
-  const sweep2 =
-    // eslint-disable-next-line sonarjs/no-nested-conditional
-    normalizedPhase > 0.25 && normalizedPhase <= 0.5 ? 1 : normalizedPhase > 0.75 ? 1 : 0;
-  const d = `M 0 -${r} A ${r} ${r} 0 0 ${sweep1} 0 ${r} A ${rx} ${r} 0 0 ${sweep2} 0 -${r} Z`;
-  const maskId = `bab-moon-mask-${normalizedPhase.toFixed(3)}`;
-  return (
-    <g transform="rotate(-15)">
-      <defs>
-        <clipPath id={maskId}>
-          <path d={d} />
-        </clipPath>
-        <radialGradient id="bab-moon-light" cx="35%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="60%" stopColor="#c8d8f4" />
-          <stop offset="100%" stopColor="#93c5fd" />
-        </radialGradient>
-        <radialGradient id="bab-moon-dark" cx="35%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#1e293b" />
-          <stop offset="100%" stopColor="#0a1020" />
-        </radialGradient>
-        <radialGradient id="bab-atmo-grad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#bfdbfe" stopOpacity={glowFactor * 0.7} />
-          <stop offset="55%" stopColor="#93c5fd" stopOpacity={glowFactor * 0.3} />
-          <stop offset="100%" stopColor="#bfdbfe" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="bab-corona" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#bfdbfe" stopOpacity="0" />
-          <stop offset="39%" stopColor="#bfdbfe" stopOpacity={glowFactor * 0.55} />
-          <stop offset="58%" stopColor="#93c5fd" stopOpacity={glowFactor * 0.22} />
-          <stop offset="100%" stopColor="#93c5fd" stopOpacity="0" />
-        </radialGradient>
-        <filter id="bab-atmo-blur" x="-150%" y="-150%" width="400%" height="400%">
-          <feGaussianBlur stdDeviation="7" />
-        </filter>
-      </defs>
-      {glowFactor > 0.1 && (
-        <circle
-          cx="0"
-          cy="0"
-          r={r + 28}
-          fill="url(#bab-atmo-grad)"
-          filter="url(#bab-atmo-blur)"
-        />
-      )}
-      <circle cx="0" cy="0" r={r + 22} fill="url(#bab-corona)" />
-      <circle cx="0" cy="0" r={r} fill="url(#bab-moon-dark)" />
-      <g clipPath={`url(#${maskId})`}>
-        <circle cx="0" cy="0" r={r} fill="url(#bab-moon-light)" />
-      </g>
-      <circle
-        cx="0"
-        cy="0"
-        r={r}
-        fill="none"
-        stroke="#93c5fd"
-        strokeWidth="0.5"
-        opacity="0.5"
-      />
-    </g>
   );
 };
 
@@ -827,6 +758,38 @@ const CuneiformBorder: React.FC<{ id: string }> = ({ id }) => (
   </svg>
 );
 
+// ─── Hero sky: Sin and Šamaš at their real positions ─────────────────────────
+
+/**
+ * Maps a body into the 300×200 hero frame (the scene faces south): 0° altitude
+ * hugs the wall tops, 90° nears the top; azimuth 180° is the centre.
+ */
+const toFrame = (pos: { altitude: number; azimuth: number }) => ({
+  x: Math.max(16, Math.min(284, 150 + ((pos.azimuth - 180) / 90) * 120)),
+  y: Math.max(40, Math.min(175, 145 - (pos.altitude / 90) * 105)),
+});
+
+const heroSky = (date: Date, lat: number, lng: number, moonPhase: number) => {
+  // Sin (moon god) — real sky position. Shown by day and night whenever the
+  // Moon is above the horizon (a daytime Moon is a normal occurrence).
+  // ?mockmoon=<phase> (0–1) pins the moon at center-sky for visual testing.
+  const mockMoonPhase = new URLSearchParams(window.location.search).get('mockmoon');
+  const sinPos = getMoonPosition(date, lat, lng);
+  let moon: { x: number; y: number; phase: number } | null = null;
+  if (mockMoonPhase !== null) moon = { x: 65, y: 115, phase: parseFloat(mockMoonPhase) };
+  else if (sinPos.altitude >= 0) moon = { ...toFrame(sinPos), phase: moonPhase };
+  // Šamaš (the Sun), mapped the same way.
+  const sunPos = getPlanetPosition(Body.Sun, date, lat, lng);
+  const sunAltitude = getSunAltitude(date, lat, lng);
+  return {
+    moon,
+    sun: sunPos.altitude >= 0 ? toFrame(sunPos) : null,
+    sunAltitude,
+    // Stars fade in across civil twilight: 0 at the horizon, 1 at -6°.
+    starOpacity: sunAltitude > 0 ? 0 : Math.min(1, -sunAltitude / 6),
+  };
+};
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 type ViewMode = 'month' | 'cycle';
@@ -850,27 +813,9 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
     setMeta(getBabylonianCalendarMeta(date, currentLat, currentLng));
   }, [currentDate, currentLat, currentLng]);
 
-  const skylineElements = useMemo(
-    () =>
-      generateBabylonianSkyline(Math.floor((currentDate ?? new Date()).getTime() / 86400000)),
-    [currentDate],
-  );
-
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 63] ?? 0.45;
   const weatherParticles = useMemo(
-    () => ({
-      ...generateWeatherParticles(rainIntensity),
-      stars: Array.from({ length: 60 }).map(() => ({
-        // eslint-disable-next-line react-hooks/purity
-        x: Math.random() * 300,
-        // eslint-disable-next-line react-hooks/purity
-        y: 20 + Math.random() * 170,
-        // eslint-disable-next-line react-hooks/purity
-        r: Math.random() * 1.2 + 0.3,
-        // eslint-disable-next-line react-hooks/purity
-        opacity: Math.random() * 0.7 + 0.3,
-      })),
-    }),
+    () => generateWeatherParticles(rainIntensity),
     [rainIntensity],
   );
 
@@ -878,68 +823,17 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
 
   const lore = getBabylonianLore(babData.monthName);
 
-  // Sin (moon god) — real sky position. Shown by day and night whenever the
-  // Moon is above the horizon (a daytime Moon is a normal occurrence).
-  // ?mockmoon=<phase> (0–1) pins the moon at center-sky for visual testing.
-  const mockMoonPhase = new URLSearchParams(window.location.search).get('mockmoon');
-  const sinPos = getMoonPosition(currentDate ?? new Date(), currentLat, currentLng);
-  const sinVisible = mockMoonPhase !== null || sinPos.altitude >= 0;
-  // Mapped into the same 300×200 frame as the ziggurat skyline, so the Moon
-  // sits on the real horizon: 0° altitude hugs the rooftops, 90° nears the top.
-  const sinX =
-    mockMoonPhase !== null
-      ? 65
-      : Math.max(16, Math.min(284, 150 + ((sinPos.azimuth - 180) / 90) * 120));
-  const sinY =
-    mockMoonPhase !== null
-      ? 115
-      : Math.max(40, Math.min(175, 145 - (sinPos.altitude / 90) * 105));
-  const sinPhase = mockMoonPhase !== null ? parseFloat(mockMoonPhase) : babData.moonPhase;
+  const now = currentDate ?? new Date();
+  const sky = heroSky(now, currentLat, currentLng, babData.moonPhase);
   const condition = weather?.current.condition ?? 'clear';
-
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  const skyGradient = (() => {
-    const p = babData.dayProgress;
-    if (!babData.isDay) {
-      if (
-        condition === 'cloudy' ||
-        condition === 'partly-cloudy' ||
-        condition === 'fog' ||
-        condition === 'rain' ||
-        condition === 'storm'
-      ) {
-        return 'linear-gradient(to bottom, #0a0d14 0%, #111827 60%, #1c1008 100%)';
-      }
-      return 'linear-gradient(to bottom, #050208 0%, #0a0510 40%, #1a0a05 80%, #2a1005 100%)';
-    }
-    if (p < 0.08)
-      return 'linear-gradient(to bottom, #0f0a02 0%, #4a1a05 30%, #b45309 70%, #fbbf24 100%)';
-    if (p < 0.2)
-      return 'linear-gradient(to bottom, #1a0a05 0%, #7c3b1a 40%, #d97706 80%, #fde68a 100%)';
-    if (condition === 'fog') {
-      return babData.isDay
-        ? 'linear-gradient(to bottom, #9ca3af 0%, #d1d5db 50%, #e5e7eb 100%)'
-        : 'linear-gradient(to bottom, #1f2937 0%, #374151 100%)';
-    }
-    if (condition === 'snow') {
-      return babData.isDay
-        ? 'linear-gradient(to bottom, #6b7280 0%, #9ca3af 40%, #e5e7eb 100%)'
-        : 'linear-gradient(to bottom, #111827 0%, #1f2937 60%, #374151 100%)';
-    }
-    if (p < 0.75) {
-      if (condition === 'partly-cloudy') {
-        return 'linear-gradient(to bottom, #6a87a8 0%, #a8b8d0 30%, #c4a55a 70%, #fde68a 100%)';
-      }
-      if (condition === 'cloudy') {
-        return 'linear-gradient(to bottom, #374151 0%, #6b7280 30%, #c4a55a 70%, #fde68a 100%)';
-      }
-      if (condition === 'rain' || condition === 'storm') {
-        return 'linear-gradient(to bottom, #1e293b 0%, #334155 40%, #1c2333 80%, #111827 100%)';
-      }
-      return 'linear-gradient(to bottom, #1e3a6e 0%, #b45309 30%, #d97706 70%, #fde68a 100%)';
-    }
-    return 'linear-gradient(to bottom, #1a0a05 0%, #7c3b1a 40%, #d97706 80%, #fbbf24 100%)';
-  })();
+  const aurora = !!(weather?.isOffline || weather?.aurora);
+  const windGusts = weather?.current.windGusts ?? 0;
+  const lightInput = {
+    isDay: babData.isDay,
+    sunAltitude: sky.sunAltitude,
+    weatherCond: condition,
+    aurora,
+  };
 
   return (
     <div className="babylonian-calendar-info">
@@ -949,90 +843,71 @@ const BabylonianCalendarInfo: React.FC<BabylonianCalendarInfoProps> = ({
         <div className="bci-inner">
           {/* Sky scene */}
           <div className="bci-sky-scene">
-            <div className="bci-sky-bg" style={{ background: skyGradient }} />
+            <div
+              className="bci-sky-bg"
+              style={{ background: babylonianSkyGradient(lightInput) }}
+            />
+            {/* Aurora sky: an opacity layer so it crossfades with the real sky. */}
+            <div
+              className="bci-sky-aurora"
+              style={{
+                background: babData.isDay
+                  ? 'linear-gradient(to bottom, #12302f 0%, #1d4a44 55%, #173b37 100%)'
+                  : 'linear-gradient(to bottom, #030807 0%, #07110f 65%, #0a1a17 100%)',
+                opacity: aurora ? 1 : 0,
+              }}
+            />
 
-            {/* Stars + weather + Moon */}
+            {/* Sky, weather and landscape (BabylonianScene, scene kit). */}
             <svg
-              className="bci-sky-svg-layer"
+              className="bci-scene-svg"
               viewBox="0 0 300 200"
               preserveAspectRatio="xMidYMax meet"
+              aria-hidden="true"
             >
-              {!babData.isDay && (
-                <g>
-                  {weatherParticles.stars.map((s, i) => (
-                    <circle
-                      key={`star-${i}`}
-                      cx={s.x}
-                      cy={s.y}
-                      r={s.r}
-                      fill="#fff"
-                      opacity={s.opacity}
+              <BabylonianScene
+                seed={Math.floor(now.getTime() / 86400000)}
+                isDay={babData.isDay}
+                progress={babData.dayProgress}
+                sunAltitude={sky.sunAltitude}
+                starOpacity={sky.starOpacity}
+                weatherCond={condition}
+                aurora={aurora}
+                sun={sky.sun}
+                moon={sky.moon}
+              >
+                <WeatherSvgEffects
+                  condition={condition}
+                  weatherParticles={weatherParticles}
+                  fogGradientId="fog-ground-bab"
+                  rainIntensity={rainIntensity}
+                  windGusts={windGusts}
+                  offline={aurora}
+                  auroraLayers={weather?.auroraLayers}
+                  effects={
+                    <SceneWeather
+                      condition={condition}
+                      weatherParticles={weatherParticles}
+                      rainIntensity={rainIntensity}
+                      windGusts={windGusts}
                     />
-                  ))}
-                </g>
-              )}
-              {sinVisible && (
-                <g transform={`translate(${sinX}, ${sinY})`}>{renderSinMoon(sinPhase)}</g>
-              )}
-              <WeatherSvgEffects
-                condition={condition}
-                weatherParticles={weatherParticles}
-                fogGradientId="fog-ground-bab"
-                cloudOpacity={0.7}
-                stormOpacity={0.65}
-                rainIntensity={rainIntensity}
-                windGusts={weather?.current.windGusts ?? 0}
-                offline={!!(weather?.isOffline || weather?.aurora)}
-                auroraLayers={weather?.auroraLayers}
-              />
-              {condition === 'storm' && (
-                <rect
-                  x="0"
-                  y="0"
-                  width="300"
-                  height="200"
-                  fill="#ffffff"
-                  opacity="0"
-                  className="anim-lightning"
+                  }
                 />
-              )}
+                {condition === 'storm' && (
+                  <rect
+                    x="-40"
+                    y="0"
+                    width="380"
+                    height="200"
+                    fill="#ffffff"
+                    opacity="0"
+                    className="anim-lightning"
+                  />
+                )}
+              </BabylonianScene>
             </svg>
+            <div className="bci-sky-scrim" data-day={babData.isDay || undefined} />
 
-            {/* Ziggurat skyline — bottom-anchored, original proportions */}
-            <svg
-              className="bci-skyline-svg"
-              viewBox="0 0 300 200"
-              preserveAspectRatio="xMidYMax meet"
-              style={condition === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
-            >
-              {skylineElements.map(el => (
-                <path
-                  key={el.id}
-                  d={el.path}
-                  fill="rgba(120,53,15,0.85)"
-                  stroke="rgba(180,83,9,0.4)"
-                  strokeWidth="0.5"
-                  opacity={el.opacity}
-                />
-              ))}
-              {condition === 'snow' && (
-                <>
-                  {/* White ground strip */}
-                  <path d="M 0 182 L 300 182 L 300 200 L 0 200 Z" fill="#dde1e7" />
-                  <path
-                    d="M 0 182 Q 50 178 100 182 T 200 182 T 300 182 V 200 H 0 Z"
-                    fill="#dde1e7"
-                    stroke="#f0f4f8"
-                    strokeWidth="1"
-                  />
-                  <path
-                    d="M 0 182 Q 50 178 100 182 T 200 180 T 300 182 V 178 Q 250 176 200 178 T 100 179 T 0 178 Z"
-                    fill="#f0f4f8"
-                    opacity="0.9"
-                  />
-                </>
-              )}
-            </svg>
             <div className="bci-sky-overlay">
               {/* 𒀭 + month name — prominent, inline */}
               <div className="bci-hero-heading">

@@ -272,7 +272,7 @@ Heavy static datasets live in `utils/`:
 
 ### Procedural skyline
 
-Three generators (`utils/greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (acrópolis, obelisks, ziggurats). `RomanClock` uses the first for Hellas; `EgyptianCalendarInfo` uses the second (over the `EgyptianStarMap` canvas); `BabylonianCalendarInfo` uses the third inline. `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
+Two generators (`utils/greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (acrópolis, obelisks). `RomanClock` uses the first for Hellas; `EgyptianCalendarInfo` uses the second (over the `EgyptianStarMap` canvas). Rome and Babylonia use full scenes built on the hero scene kit instead (see below). `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
 
 ### Hero scene kit (procedural landscapes)
 
@@ -291,6 +291,15 @@ Shared toolkit for the procedural hero scenes. Rome uses it (`RomanScene`); Hell
 
 - **Landscape**: `utils/romanLandscape.ts` `generateRomanLandscape(seed)` (seed = calendar day): two mountain ridges, an aqueduct whose arches are real holes, the monuments of the two hills (each hill gets a different big one: Colosseum, Pantheon or temple; plus arch, column, obelisk, insula, villa, cypresses, stone pines) and foreground trees. x 104–196 stays free for the instrument. Tests: `tests/romanLandscape.test.ts`.
 - **Light**: `sceneLight()` in `RomanScene.tsx` picks the palette from the time of day, twilight, weather and the aurora. At night or under the aurora the scene is lit: openings, lit windows and torches glow and flicker.
+
+### Babylonian hero scene (Babylonia only)
+
+`BabylonianCalendarInfo` draws its 16:9 hero in one SVG (`.bci-scene-svg`, `xMidYMax meet`) with `components/BabylonianScene.tsx`, built on the scene kit; weather is `SceneWeather` via `WeatherSvgEffects`' `effects` prop.
+
+- **View**: Neo-Babylonian Babylon (6th c. BCE) from the north looking south, so west (the Euphrates) is on the right. This matches the Sin mapping (azimuth 180° = centre). Šamaš and Sin are drawn at their real positions (`heroSky()` in `BabylonianCalendarInfo.tsx`).
+- **Landscape**: `utils/babylonianLandscape.ts` `generateBabylonianLandscape(seed)` (seed = calendar day). Fixed anchors: Etemenanki (stage dimensions from the Esagila tablet AO 6555, ed. George, _Babylonian Topographical Texts_, 1992), Esagila, the inner (Imgur-Enlil) and outer (Nēmetti-Enlil) walls with the main and front Ishtar Gates (glazed lapis, ochre bulls and mušḫuššu; Koldewey 1913), the Euphrates through gaps in both walls with the bridge, and the Processional Way. Houses, courtyard palms, lit windows and wall torches vary by seed. No Hanging Gardens (no archaeological evidence at Babylon). Approximate reconstructions (wall and gate heights, merlons, Esagila façade, number of animal rows, Etemenanki's buttressing) are marked as such in the code.
+- **Hero text**: nothing in front of the far layer may rise into x 70–230 above y 145 (`OVERLAY_BOX`, tested in `tests/babylonianLandscape.test.ts`). The hero carries no glosses.
+- **Light**: `babylonianLight()` adds `--earth` (brick), `--glaze` (lapis glazed brick) and `--ochre` (the glazed animals) to the kit variables; `babylonianSkyGradient()` drives the HTML sky. Lapis/indigo dominates; amber is used for firelight, the twilight horizon, golden hour, sunlit brick and the ochre animals. Classes use the `bs-` prefix in `BabylonianScene.css`.
 
 ### Aurora borealis
 
@@ -416,7 +425,7 @@ CSS variables are overridden in `[data-civ="babylonia"]` block in `index.css`:
 - `--parchment`: `#e8edf8` (cool linen for readable text)
 - `--roman-red`: `#818cf8` (indigo-400, secondary accent)
 
-Babylonian components use `blue-*` / `indigo-*` colour tones, **not** amber/orange (those belong to Egypt). Minimum font size: 12px throughout.
+Babylonian components use `blue-*` / `indigo-*` as the base accent family. Amber/orange is allowed where it fits (firelight, golden-hour light, mud brick, the glazed animals of the Ishtar Gate). Minimum font size: 12px throughout.
 
 ### Akkadian text and Spanish glosses
 
