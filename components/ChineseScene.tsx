@@ -14,6 +14,14 @@ import { Moon, Stars } from './SceneSky';
 import { SceneRainSplashes } from './SceneWeather';
 import { Birds, MonumentShape, SceneDefs, SceneRoot, sceneFlags, sceneUid } from './SceneParts';
 import ChineseInstrument, { SunPos } from './ChineseInstrument';
+import {
+  DetailStroke,
+  SeasonBase,
+  detailVisible,
+  isPoolFrozen,
+  seasonPaper,
+  termDetail,
+} from '../utils/chineseSeasons';
 import './ChineseScene.css';
 
 /**
@@ -56,6 +64,10 @@ interface Props {
   sunPos: SunPos | null;
   /** 0–1 through the day from the start of 子 (23:00), for the clepsydra arrow. */
   dayFrac: number;
+  /** Current solar term (1 = 立春 … 24 = 大寒), from getChineseCalendarData. */
+  termId: number;
+  /** Continuous seasonal base (foliage, leaf colour, paper warmth). */
+  season: SeasonBase;
   children?: React.ReactNode;
 }
 
@@ -66,7 +78,10 @@ interface ChineseLight extends SceneLight {
   water: string;
 }
 
-type LightInput = Pick<Props, 'isDay' | 'sunAltitude' | 'weatherCond' | 'aurora'>;
+type LightInput = Pick<Props, 'isDay' | 'sunAltitude' | 'weatherCond' | 'aurora'> & {
+  /** Season: −1 coldest … +1 warmest; tints the paper a little. */
+  warmth?: number;
+};
 type Palette = Omit<ChineseLight, 'golden' | 'lit'>;
 type DaySky = 'wet' | 'grey' | 'fog' | 'golden' | 'clear';
 
@@ -166,19 +181,53 @@ const nightPalette = (sunAltitude: number): Palette => {
   };
 };
 
+/** The season warms or cools the paper, the air and the water (a quarter as much at night). */
+const seasonal = (pal: Palette, warmth: number): Palette => ({
+  ...pal,
+  paper: seasonPaper(pal.paper, warmth),
+  haze: seasonPaper(pal.haze, warmth * 0.7),
+  water: seasonPaper(pal.water, warmth * 0.6),
+});
+
 export const chineseLight = (p: LightInput): ChineseLight => {
   if (p.aurora) return { ...AURORA, golden: false, lit: true };
-  if (!p.isDay) return { ...nightPalette(p.sunAltitude), golden: false, lit: true };
-  return { ...DAY[daySky(p)], golden: isGolden(p), lit: false };
+  const w = p.warmth ?? 0;
+  if (!p.isDay)
+    return { ...seasonal(nightPalette(p.sunAltitude), w * 0.25), golden: false, lit: true };
+  return { ...seasonal(DAY[daySky(p)], w), golden: isGolden(p), lit: false };
 };
 
-const DAY_GRADIENT: Record<DaySky, string> = {
-  clear: 'linear-gradient(to bottom, #cdcfc6 0%, #e0dccb 45%, #efe7d3 100%)',
-  golden: 'linear-gradient(to bottom, #b9b2a8 0%, #dcc3a6 45%, #eda57c 82%, #f3c296 100%)',
-  grey: 'linear-gradient(to bottom, #a8a9a4 0%, #cecdc5 55%, #e0ddd4 100%)',
-  fog: 'linear-gradient(to bottom, #cfcec8 0%, #e2e0da 60%, #ebeae4 100%)',
-  wet: 'linear-gradient(to bottom, #575b59 0%, #7d817e 55%, #a2a59f 100%)',
+const DAY_STOPS: Record<DaySky, [string, number][]> = {
+  clear: [
+    ['#cdcfc6', 0],
+    ['#e0dccb', 45],
+    ['#efe7d3', 100],
+  ],
+  golden: [
+    ['#b9b2a8', 0],
+    ['#dcc3a6', 45],
+    ['#eda57c', 82],
+    ['#f3c296', 100],
+  ],
+  grey: [
+    ['#a8a9a4', 0],
+    ['#cecdc5', 55],
+    ['#e0ddd4', 100],
+  ],
+  fog: [
+    ['#cfcec8', 0],
+    ['#e2e0da', 60],
+    ['#ebeae4', 100],
+  ],
+  wet: [
+    ['#575b59', 0],
+    ['#7d817e', 55],
+    ['#a2a59f', 100],
+  ],
 };
+
+const gradient = (stops: [string, number][], warmth: number) =>
+  `linear-gradient(to bottom, ${stops.map(([c, o]) => `${seasonPaper(c, warmth)} ${o}%`).join(', ')})`;
 
 const nightGradient = (p: LightInput) => {
   if (p.weatherCond === 'fog') return 'linear-gradient(to bottom, #141a2c 0%, #2a3248 100%)';
@@ -190,12 +239,20 @@ const nightGradient = (p: LightInput) => {
   const c2 = lerpColor('#0b1230', '#4a3f7a', Math.max(warmth * 0.9, dim * 0.4));
   const c3 = lerpColor('#141c40', '#b8584a', warmth);
   const c4 = lerpColor('#1c2448', '#eea070', warmth);
-  return `linear-gradient(to bottom, ${c1} 0%, ${c2} 40%, ${c3} 74%, ${c4} 100%)`;
+  return gradient(
+    [
+      [c1, 0],
+      [c2, 40],
+      [c3, 74],
+      [c4, 100],
+    ],
+    (p.warmth ?? 0) * 0.15,
+  );
 };
 
 /** Sky behind the scene (an HTML layer, so it can transition): paper by day, indigo by night. */
 export const chineseSkyGradient = (p: LightInput): string =>
-  p.isDay ? DAY_GRADIENT[daySky(p)] : nightGradient(p);
+  p.isDay ? gradient(DAY_STOPS[daySky(p)], p.warmth ?? 0) : nightGradient(p);
 
 const THICK: WeatherCondition[] = ['rain', 'storm', 'snow', 'fog'];
 const VEIL = { filter: 'blur(2.5px)', opacity: 0.45 };
@@ -292,6 +349,57 @@ const SkyBodies: React.FC<{
   </>
 );
 
+const Strokes: React.FC<{ strokes: DetailStroke[] | null }> = ({ strokes }) =>
+  strokes && (
+    <g className="cs-sd">
+      {strokes.map((st, i) => (
+        <path key={i} d={st.d} className={st.cls} />
+      ))}
+    </g>
+  );
+
+/** Willow: bare twigs, plus the same strands in leaf colour at the season's foliage. */
+const WillowShape: React.FC<{
+  w: { trunk: string; strands: string };
+  near: boolean;
+  foliage: number;
+}> = ({ w, near, foliage }) => (
+  <g>
+    <path
+      d={w.trunk}
+      className={near ? 'cs-willow-trunk cs-willow-trunk--near' : 'cs-willow-trunk'}
+    />
+    <path d={w.strands} className={near ? 'cs-willow cs-willow--near' : 'cs-willow'} />
+    {foliage > 0.01 && (
+      <path
+        d={w.strands}
+        className={near ? 'cs-willow-leaf cs-willow-leaf--near' : 'cs-willow-leaf'}
+        style={{ opacity: foliage }}
+      />
+    )}
+  </g>
+);
+
+/** Today's pentad detail, split by layer; null where it doesn't suit the hour or the weather. */
+const useSeasonDetail = (
+  termId: number,
+  crown: { x: number; y: number },
+  isDay: boolean,
+  weather: WeatherCondition,
+  aurora: boolean,
+) => {
+  const detail = termDetail(termId);
+  const strokes = useMemo(() => detail?.draw({ willowCrown: crown }) ?? null, [detail, crown]);
+  const show = !!detail && !!strokes && detailVisible(detail, isDay, weather, aurora);
+  const on = (layer: string) => (show && detail.layer === layer ? strokes : null);
+  return {
+    sky: on('sky'),
+    pool: on('pool'),
+    ground: on('ground'),
+    replacesBirds: show && !!detail.replacesBirds,
+  };
+};
+
 const ChineseScene: React.FC<Props> = props => {
   const {
     seed,
@@ -303,19 +411,25 @@ const ChineseScene: React.FC<Props> = props => {
     moon,
     sunPos,
     dayFrac,
+    termId,
+    season,
     children,
   } = props;
   const uid = sceneUid(useId(), 'cs');
   const land = useMemo(() => generateChineseLandscape(seed), [seed]);
-  const light = chineseLight(props);
+  const light = chineseLight({ ...props, warmth: season.warmth });
+  const frozen = isPoolFrozen(termId);
+  const sd = useSeasonDetail(termId, land.willows[0].crown, isDay, weatherCond, aurora);
   const { snow, fogStyle, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
   const veiled = THICK.includes(weatherCond);
-  const glint = glintBody(isDay, light.golden, sun, moon);
+  const glint = frozen ? null : glintBody(isDay, light.golden, sun, moon);
   const vars = {
     '--paper': light.paper,
     '--wash': light.wash,
     '--lacquer': light.lacquer,
     '--water': light.water,
+    '--leaf': season.leaf,
+    '--grass': lerpColor('#8c7c58', season.leaf, season.foliage),
   } as React.CSSProperties;
   const mono = (m: Parameters<typeof MonumentShape>[0]['m']) => (
     <MonumentShape key={m.id + m.body.length} m={m} lit={light.lit} uid={uid} />
@@ -323,7 +437,7 @@ const ChineseScene: React.FC<Props> = props => {
 
   return (
     <SceneRoot light={light} weatherCond={weatherCond}>
-      <g className="cs-scene" style={vars}>
+      <g className={frozen ? 'cs-scene cs-scene--frozen' : 'cs-scene'} style={vars}>
         <SceneDefs uid={uid} />
         <defs>
           {(
@@ -406,8 +520,11 @@ const ChineseScene: React.FC<Props> = props => {
 
         {children}
 
+        {/* Sky details of the solar term (geese, hawks, rainbow), behind the mountains. */}
+        <Strokes strokes={sd.sky} />
+
         {/* Wild geese (the pagoda's name), in fair weather by day. */}
-        {birds && (
+        {birds && !sd.replacesBirds && (
           <g className="cs-geese">
             <Birds y={64} />
           </g>
@@ -457,10 +574,7 @@ const ChineseScene: React.FC<Props> = props => {
           <g className="cs-city cs-city--near">{land.wardsFront.map(mono)}</g>
           <g className="cs-willow-far">
             {land.willows.slice(2).map((w, i) => (
-              <g key={i}>
-                <path d={w.trunk} className="cs-willow-trunk" />
-                <path d={w.strands} className="cs-willow" />
-              </g>
+              <WillowShape key={i} w={w} near={false} foliage={season.foliage} />
             ))}
           </g>
 
@@ -472,6 +586,13 @@ const ChineseScene: React.FC<Props> = props => {
               transform={`matrix(1 0 0 -1 0 ${POOL_SHORE_Y * 2 - 18})`}
               className="cs-reflection"
             />
+            {frozen && (
+              <path
+                d="M -36 169.4 h 30 M 4 171.2 h 40 M 50 169.8 h 30 M -24 174.6 h 52 M 36 176.4 h 44"
+                className="cs-ice-sheen"
+              />
+            )}
+            <Strokes strokes={sd.pool} />
             {glint && glint.x < 92 && (
               <path
                 d={glitter(glint.x)}
@@ -512,16 +633,15 @@ const ChineseScene: React.FC<Props> = props => {
             dayFrac={dayFrac}
           />
           {land.willows.slice(0, 2).map((w, i) => (
-            <g key={i}>
-              <path d={w.trunk} className="cs-willow-trunk cs-willow-trunk--near" />
-              <path d={w.strands} className="cs-willow cs-willow--near" />
-            </g>
+            <WillowShape key={i} w={w} near foliage={season.foliage} />
           ))}
           <path d={land.rocks} className="cs-rock" />
           <path d={land.rockDetail} className="cs-rock-detail" />
           <path d={land.pine.trunk} className="cs-pine-trunk" />
           <path d={land.pine.needles} className="cs-pine" />
           <path d={land.pine.needleDetail} className="cs-pine-detail" />
+          {/* Ground details of the solar term (blossom, deer, wheat, chrysanthemums…). */}
+          <Strokes strokes={sd.ground} />
         </g>
       </g>
     </SceneRoot>

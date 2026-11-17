@@ -6,8 +6,11 @@ import {
   getMoonPosition,
   getPlanetPosition,
   getSunAltitude,
+  getSolarLongitudeDeg,
   getSunTimes,
 } from '../utils/solar';
+import { getChineseCalendarData } from '../utils/chineseCalendarUtils';
+import { seasonBase } from '../utils/chineseSeasons';
 import { getCurrentShichen } from '../utils/chineseTimeUtils';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import ChineseScene, { chineseSkyGradient } from './ChineseScene';
@@ -66,6 +69,15 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
     };
   }, [modernTime, lat, lng]);
 
+  // Same solar term as the term card below (and time travel); the base follows the sun.
+  const { termId, season } = useMemo(
+    () => ({
+      termId: getChineseCalendarData(modernTime).term.id,
+      season: seasonBase(getSolarLongitudeDeg(modernTime)),
+    }),
+    [modernTime],
+  );
+
   // Same shíchén as the rest of the page (device clock, as in ChineseAnimalClock).
   const { current, progressPercent } = getCurrentShichen(modernTime);
   const dayFrac = (current.id - 1 + progressPercent) / 12;
@@ -85,6 +97,7 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
     sunAltitude: sky.sunAltitude,
     weatherCond: condition,
     aurora,
+    warmth: season.warmth,
   };
   const night = !sky.isDay || undefined;
   const mark = arrowMarks(dayFrac);
@@ -122,6 +135,8 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
           moon={sky.moon}
           sunPos={sky.sunPos}
           dayFrac={dayFrac}
+          termId={termId}
+          season={season}
         >
           <WeatherSvgEffects
             condition={condition}

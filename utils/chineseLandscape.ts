@@ -245,6 +245,8 @@ export const GATE_S = 0.9;
 export interface Willow {
   trunk: string;
   strands: string;
+  /** Top of the trunk, where the boughs fork (a nest sits here in 小寒). */
+  crown: { x: number; y: number };
 }
 
 /** Foreground pine: trunk and branches, needle masses, needle strokes. */
@@ -390,7 +392,7 @@ const willow = (rand: Rand, bx: number, by: number, h: number): Willow => {
       strands += `M${fmt(px)} ${fmt(py)}Q${fmt(px + sway * 0.4)} ${fmt(py + l * 0.5)} ${fmt(px + sway)} ${fmt(Math.min(py + l, by + 1))}`;
     }
   }
-  return { trunk, strands };
+  return { trunk, strands, crown: { x: tx, y: ty } };
 };
 
 /** Needle mass: two or three overlapping domed lobes with toothed undersides. */
