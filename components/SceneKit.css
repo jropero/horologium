@@ -1,33 +1,40 @@
-/* Roman hero scene (components/RomanScene.tsx). The root <g> sets --haze, --rim
-   and --stone; every colour below is derived from them and from --ink, so the
-   whole landscape follows the light. */
+/* Shared styles of the procedural hero scenes (scene kit: utils/sceneKit.ts,
+   components/Scene*.tsx). The scene root (SceneRoot) sets --haze, --rim,
+   --stone, --cloud-light and --cloud-shade from the civilization's light model;
+   every colour below is derived from them and from --ink, so the whole
+   landscape follows the light. Prefixes: sk- = scene kit, sw- = scene weather.
+   Civilization-specific classes belong in the civilization's own CSS file. */
 
-.roman-scene path,
-.roman-scene rect,
-.roman-scene stop {
+.scene path,
+.scene rect,
+.scene stop {
   transition:
     fill 2s ease,
     stroke 2s ease,
     stop-color 2s ease;
 }
 
+.sk-transition {
+  transition: all 1s ease;
+}
+
 /* ── Depth: the farther a layer, the more it takes the colour of the air ── */
-.rs-ridge-far {
+.sk-ridge-far {
   fill: color-mix(in srgb, var(--ink) 24%, var(--haze));
 }
 
-.rs-ridge-near {
+.sk-ridge-near {
   fill: color-mix(in srgb, var(--ink) 42%, var(--haze));
 }
 
-.rs-aqueduct {
+.sk-aqueduct {
   fill: color-mix(in srgb, var(--ink) 58%, var(--haze));
   stroke: var(--rim);
   stroke-width: 0.25;
   stroke-opacity: 0.4;
 }
 
-.rs-body {
+.sk-body {
   fill: color-mix(in srgb, var(--ink) 86%, var(--haze));
   stroke: var(--rim);
   stroke-width: 0.35;
@@ -35,29 +42,29 @@
   stroke-linejoin: round;
 }
 
-.rs-relief {
+.sk-relief {
   fill: var(--rim);
   opacity: 0.22;
 }
 
-.rs-detail {
+.sk-detail {
   fill: none;
   stroke: var(--rim);
   stroke-width: 0.22;
   opacity: 0.5;
 }
 
-.rs-opening {
+.sk-opening {
   fill: var(--haze);
   opacity: 0.32;
 }
 
-.rs-window {
+.sk-window {
   fill: var(--rim);
   opacity: 0.14;
 }
 
-.rs-foreground {
+.sk-foreground {
   fill: color-mix(in srgb, var(--ink) 78%, #000);
   stroke: var(--rim);
   stroke-width: 0.3;
@@ -66,30 +73,30 @@
 }
 
 /* ── Ground ─────────────────────────────────────────────────────────────── */
-.rs-ground-stop {
+.sk-ground-stop {
   stop-color: color-mix(in srgb, var(--ink) 90%, #000);
 }
 
-.rs-ground-stop--top {
+.sk-ground-stop--top {
   stop-color: color-mix(in srgb, var(--ink) 76%, var(--haze));
 }
 
-.roman-scene--snow .rs-ground-stop {
+.scene--snow .sk-ground-stop {
   stop-color: #c5cdd8;
 }
 
-.roman-scene--snow .rs-ground-stop--top {
+.scene--snow .sk-ground-stop--top {
   stop-color: #f3f6f9;
 }
 
-.rs-ground-rim {
+.sk-ground-rim {
   fill: none;
   stroke: var(--rim);
   stroke-width: 0.7;
   stroke-opacity: 0.75;
 }
 
-.rs-tufts {
+.sk-tufts {
   fill: none;
   stroke: color-mix(in srgb, var(--ink) 80%, var(--haze));
   stroke-width: 0.4;
@@ -97,23 +104,23 @@
 }
 
 /* ── Night lights ───────────────────────────────────────────────────────── */
-.roman-scene--lit .rs-opening {
-  animation: rsFlicker 3.4s ease-in-out infinite;
+.scene--lit .sk-opening {
+  animation: skFlicker 3.4s ease-in-out infinite;
   fill: #f0a44a;
   opacity: 0.7;
 }
 
-.roman-scene--lit .rs-window--lit {
-  animation: rsFlicker 4.6s ease-in-out infinite;
+.scene--lit .sk-window--lit {
+  animation: skFlicker 4.6s ease-in-out infinite;
   fill: #ffcf7a;
   opacity: 0.9;
 }
 
-.rs-torch {
-  animation: rsFlicker 1.9s ease-in-out infinite;
+.sk-torch {
+  animation: skFlicker 1.9s ease-in-out infinite;
 }
 
-@keyframes rsFlicker {
+@keyframes skFlicker {
   0%,
   100% {
     opacity: 0.86;
@@ -137,59 +144,59 @@
 }
 
 /* ── Plinth ─────────────────────────────────────────────────────────────── */
-.rs-stone-stop {
+.sk-stone-stop {
   stop-color: var(--stone);
 }
 
-.rs-stone-stop--light {
+.sk-stone-stop--light {
   stop-color: color-mix(in srgb, var(--stone) 72%, #fff);
 }
 
-.rs-stone-side {
+.sk-stone-side {
   fill: color-mix(in srgb, var(--stone) 55%, #000);
 }
 
-.rs-stone-top {
+.sk-stone-top {
   stroke: color-mix(in srgb, var(--stone) 70%, #fff);
   stroke-width: 0.3;
 }
 
-.rs-stone-ring {
+.sk-stone-ring {
   fill: none;
   stroke: color-mix(in srgb, var(--stone) 50%, #000);
   stroke-width: 0.25;
   opacity: 0.6;
 }
 
-.rs-hour-lines {
+.sk-hour-lines {
   fill: none;
   stroke: color-mix(in srgb, var(--stone) 40%, #000);
   stroke-width: 0.25;
   opacity: 0.7;
 }
 
-.rs-gnomon-shadow {
+.sk-gnomon-shadow {
   fill: #000;
   opacity: 0.34;
 }
 
 /* ── Sky ────────────────────────────────────────────────────────────────── */
-.rs-stars {
+.sk-stars {
   transition: opacity 2000ms ease-in-out;
 }
 
-.rs-constellation {
+.sk-constellation {
   fill: none;
   stroke: #dbe7ff;
   stroke-width: 0.25;
   opacity: 0.3;
 }
 
-.rs-twinkle {
-  animation: rsTwinkle 4s ease-in-out infinite;
+.sk-twinkle {
+  animation: skTwinkle 4s ease-in-out infinite;
 }
 
-@keyframes rsTwinkle {
+@keyframes skTwinkle {
   0%,
   100% {
     opacity: 1;
@@ -200,52 +207,52 @@
   }
 }
 
-.rs-arc path {
+.sk-arc path {
   fill: none;
   stroke-linecap: round;
 }
 
-.rs-arc--day {
+.sk-arc--day {
   --arc: #e3c35a;
 }
 
-.rs-arc--night {
+.sk-arc--night {
   --arc: #b4c2ea;
 }
 
-.rs-arc__line {
+.sk-arc__line {
   stroke: var(--arc);
   stroke-width: 0.45;
   opacity: 0.35;
 }
 
-.rs-arc__ticks {
+.sk-arc__ticks {
   stroke: var(--arc);
   stroke-width: 0.5;
   opacity: 0.6;
 }
 
-.rs-arc__travelled {
+.sk-arc__travelled {
   stroke: var(--arc);
   stroke-width: 0.8;
   opacity: 0.55;
 }
 
-.rs-arc__hour {
+.sk-arc__hour {
   stroke: var(--arc);
   stroke-width: 1.7;
   opacity: 0.95;
 }
 
-.rs-sun__rays {
+.sk-sun__rays {
   animation: spin 90s linear infinite;
 }
 
-.rs-sun__halo {
-  animation: rsBreath 7s ease-in-out infinite;
+.sk-sun__halo {
+  animation: skBreath 7s ease-in-out infinite;
 }
 
-@keyframes rsBreath {
+@keyframes skBreath {
   0%,
   100% {
     opacity: 0.85;
@@ -256,18 +263,18 @@
   }
 }
 
-.rs-birds {
-  animation: rsBirds 52s linear infinite;
+.sk-birds {
+  animation: skBirds 52s linear infinite;
 }
 
-.rs-birds path {
+.sk-birds path {
   fill: none;
   stroke: color-mix(in srgb, var(--ink) 80%, var(--haze));
   stroke-width: 0.45;
   stroke-linecap: round;
 }
 
-@keyframes rsBirds {
+@keyframes skBirds {
   from {
     transform: translate(-40px, 8px);
   }
@@ -277,21 +284,21 @@
   }
 }
 
-/* ── Weather (components/RomanWeather.tsx) ──────────────────────────────── */
-.rw-cloud-stop {
+/* ── Weather (components/SceneWeather.tsx) ──────────────────────────────── */
+.sw-cloud-stop {
   stop-color: var(--cloud-shade);
 }
 
-.rw-cloud-stop--light {
+.sw-cloud-stop--light {
   stop-color: var(--cloud-light);
 }
 
 /* One 300-unit tile per loop: the second copy takes the place of the first. */
-.rw-drift {
-  animation: rwDrift 160s linear infinite;
+.sw-drift {
+  animation: swDrift 160s linear infinite;
 }
 
-@keyframes rwDrift {
+@keyframes swDrift {
   from {
     transform: translateX(-300px);
   }
@@ -301,16 +308,16 @@
   }
 }
 
-.rw-bolt {
+.sw-bolt {
   animation: lightningFlash 7s infinite;
   opacity: 0;
 }
 
-.rw-fog {
-  animation: rwFog 50s ease-in-out infinite alternate;
+.sw-fog {
+  animation: swFog 50s ease-in-out infinite alternate;
 }
 
-@keyframes rwFog {
+@keyframes swFog {
   from {
     transform: translateX(calc(var(--shift, 40px) * -1));
   }
@@ -320,8 +327,8 @@
   }
 }
 
-.rw-splash {
-  animation: rwSplash 1s ease-out infinite;
+.sw-splash {
+  animation: swSplash 1s ease-out infinite;
   fill: none;
   stroke: #dbe6f3;
   stroke-width: 0.35;
@@ -329,7 +336,7 @@
   transform-origin: center;
 }
 
-@keyframes rwSplash {
+@keyframes swSplash {
   from {
     opacity: 0.75;
     transform: scale(0.15);
@@ -342,25 +349,25 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rw-drift,
-  .rw-fog,
-  .rw-splash {
+  .sw-drift,
+  .sw-fog,
+  .sw-splash {
     animation: none;
   }
 
-  .rw-bolt,
-  .rw-splash {
+  .sw-bolt,
+  .sw-splash {
     animation: none;
     opacity: 0;
   }
 
-  .roman-scene--lit .rs-opening,
-  .roman-scene--lit .rs-window--lit,
-  .rs-torch,
-  .rs-twinkle,
-  .rs-sun__rays,
-  .rs-sun__halo,
-  .rs-birds {
+  .scene--lit .sk-opening,
+  .scene--lit .sk-window--lit,
+  .sk-torch,
+  .sk-twinkle,
+  .sk-sun__rays,
+  .sk-sun__halo,
+  .sk-birds {
     animation: none;
   }
 }

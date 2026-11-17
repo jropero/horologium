@@ -3,19 +3,20 @@ import { WeatherCondition } from '../types';
 import { lerpColor } from '../utils/color';
 import {
   GROUND_TOP,
-  Monument,
   SCENE_X0,
   SCENE_X1,
   generateRomanLandscape,
 } from '../utils/romanLandscape';
-import RomanSceneSky from './RomanSceneSky';
-import RomanSceneInstrument from './RomanSceneInstrument';
-import { RomanRainSplashes } from './RomanWeather';
-import './RomanScene.css';
+import { SceneLight } from '../utils/sceneKit';
+import SceneSky from './SceneSky';
+import SceneInstrument from './SceneInstrument';
+import { SceneRainSplashes } from './SceneWeather';
+import { Birds, MonumentShape, SceneDefs, SceneRoot, sceneFlags, sceneUid } from './SceneParts';
 
 /**
- * Everything inside the 300×200 SVG of the Roman hero (Rome only; Hellas keeps
- * the older drawing in RomanClock).
+ * Everything inside the 300×200 SVG of the Roman hero (Rome only). Built from
+ * the shared scene kit (utils/sceneKit.ts, components/Scene*.tsx,
+ * SceneKit.css); only the palette (`sceneLight`) and the composition are Roman.
  *
  * Layers, back to front: stars → hour arc → sun / moon → weather (`children`)
  * → mountains → aqueduct → monuments → ground → plinth with gnomon or
@@ -25,7 +26,7 @@ import './RomanScene.css';
  * root: `--haze` (the air: far layers take its colour, near ones stay close to
  * `--ink`), `--rim` (edge light and engraved detail) and `--stone` (the
  * plinth). They follow the time of day, the weather and the aurora. At night
- * (`roman-scene--lit`) windows, doors and arcades glow from inside.
+ * (`scene--lit`) windows, doors and arcades glow from inside.
  */
 
 interface Props {
@@ -42,19 +43,6 @@ interface Props {
   aurora: boolean;
   /** The weather layer, drawn between the sky bodies and the landscape. */
   children?: React.ReactNode;
-}
-
-interface SceneLight {
-  haze: string;
-  rim: string;
-  stone: string;
-  /** Sunlit top and shaded base of the clouds (`RomanWeather`). */
-  cloudLight: string;
-  cloudShade: string;
-  /** Sun near the horizon. */
-  golden: boolean;
-  /** Lamps and torches are burning. */
-  lit: boolean;
 }
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
@@ -125,103 +113,19 @@ const sceneLight = (p: Props): SceneLight => {
   };
 };
 
-const MonumentShape: React.FC<{ m: Monument; lit: boolean; uid: string }> = ({
-  m,
-  lit,
-  uid,
-}) => (
-  <g>
-    <path d={m.body} className="rs-body" />
-    {m.relief && <path d={m.relief} className="rs-relief" />}
-    {m.detail && <path d={m.detail} className="rs-detail" />}
-    {m.openings && <path d={m.openings} className="rs-opening" />}
-    {m.windows.map((w, i) => (
-      <rect
-        key={i}
-        x={w.x}
-        y={w.y}
-        width={w.w}
-        height={w.h}
-        className={w.lit ? 'rs-window rs-window--lit' : 'rs-window'}
-        style={{ animationDelay: `${-w.delay}s` }}
-      />
-    ))}
-    {lit &&
-      m.torches.map((t, i) => (
-        <g key={i} className="rs-torch" style={{ animationDelay: `${-t.delay}s` }}>
-          <circle cx={t.x} cy={t.y} r="5" fill={`url(#${uid}-torch)`} />
-          <circle cx={t.x} cy={t.y} r="0.6" fill="#ffe2a0" />
-        </g>
-      ))}
-  </g>
-);
-
-const BIRDS: [number, number, number][] = [
-  [0, 0, 1],
-  [7, 3.5, 0.8],
-  [13, -2, 0.9],
-  [21, 2, 0.7],
-  [-6, 5, 0.75],
-];
-
-const THICK_WEATHER: WeatherCondition[] = ['rain', 'storm', 'snow', 'fog'];
-const FAIR_WEATHER: WeatherCondition[] = ['clear', 'partly-cloudy'];
-const WET_WEATHER: WeatherCondition[] = ['rain', 'storm'];
-
-/** What the weather and the hour switch on or off in the scene. */
-const sceneFlags = ({ isDay, aurora, weatherCond }: Props, lit: boolean) => {
-  const snow = weatherCond === 'snow';
-  return {
-    snow,
-    fogStyle: weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined,
-    /** Thick weather in front of the sun: blur and dim it. */
-    veiled: isDay && THICK_WEATHER.includes(weatherCond),
-    birds: isDay && !aurora && FAIR_WEATHER.includes(weatherCond),
-    splashes: !aurora && WET_WEATHER.includes(weatherCond),
-    className: ['roman-scene', lit && 'roman-scene--lit', snow && 'roman-scene--snow']
-      .filter(Boolean)
-      .join(' '),
-  };
-};
-
 const RomanScene: React.FC<Props> = props => {
-  const { seed, isDay, progress, moonPhase, starOpacity, aurora, children } = props;
-  const uid = `rs${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const { seed, isDay, progress, moonPhase, starOpacity, weatherCond, aurora, children } =
+    props;
+  const uid = sceneUid(useId(), 'rs');
   const land = useMemo(() => generateRomanLandscape(seed), [seed]);
   const light = sceneLight(props);
-
-  const { snow, fogStyle, veiled, birds, splashes, className } = sceneFlags(props, light.lit);
+  const { snow, fogStyle, veiled, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
 
   return (
-    <g
-      className={className}
-      style={
-        {
-          '--haze': light.haze,
-          '--rim': light.rim,
-          '--stone': light.stone,
-          '--cloud-light': light.cloudLight,
-          '--cloud-shade': light.cloudShade,
-        } as React.CSSProperties
-      }
-    >
-      <defs>
-        <linearGradient id={`${uid}-ground`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" className="rs-ground-stop rs-ground-stop--top" />
-          <stop offset="100%" className="rs-ground-stop" />
-        </linearGradient>
-        <radialGradient id={`${uid}-torch`}>
-          <stop offset="0%" stopColor="#ffb347" stopOpacity="0.75" />
-          <stop offset="40%" stopColor="#ff8c2b" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#ff8c2b" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id={`${uid}-aurora-glow`}>
-          <stop offset="0%" stopColor="#5eead4" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#5eead4" stopOpacity="0" />
-        </radialGradient>
-      </defs>
+    <SceneRoot light={light} weatherCond={weatherCond}>
+      <SceneDefs uid={uid} />
 
-      <RomanSceneSky
+      <SceneSky
         uid={uid}
         isDay={isDay}
         progress={progress}
@@ -233,23 +137,13 @@ const RomanScene: React.FC<Props> = props => {
 
       {children}
 
-      {birds && (
-        <g className="rs-birds">
-          {BIRDS.map(([x, y, s], i) => (
-            <path
-              key={i}
-              d="M-2.2 0Q-1.1 -1.4 0 0Q1.1 -1.4 2.2 0"
-              transform={`translate(${x} ${60 + y}) scale(${s})`}
-            />
-          ))}
-        </g>
-      )}
+      {birds && <Birds />}
 
       <g style={fogStyle}>
-        <path d={land.ridgeFar} className="rs-ridge-far" />
-        <path d={land.ridgeNear} className="rs-ridge-near" />
-        <path d={land.aqueduct} className="rs-aqueduct" />
-        <path d={land.aqueductDetail} className="rs-detail" />
+        <path d={land.ridgeFar} className="sk-ridge-far" />
+        <path d={land.ridgeNear} className="sk-ridge-near" />
+        <path d={land.aqueduct} className="sk-aqueduct" />
+        <path d={land.aqueductDetail} className="sk-detail" />
         {land.monuments.map(m => (
           <MonumentShape key={m.id} m={m} lit={light.lit} uid={uid} />
         ))}
@@ -260,8 +154,8 @@ const RomanScene: React.FC<Props> = props => {
         {aurora && (
           <ellipse cx="150" cy="182" rx="190" ry="9" fill={`url(#${uid}-aurora-glow)`} />
         )}
-        <path d={GROUND_TOP} className="rs-ground-rim" />
-        <path d={land.tufts} className="rs-tufts" />
+        <path d={GROUND_TOP} className="sk-ground-rim" />
+        <path d={land.tufts} className="sk-tufts" />
         {snow && (
           <path
             d={`M ${SCENE_X0} 180 L 0 180 Q 50 173 100 180 T 200 178 T 300 180 L ${SCENE_X1} 180 V 175 L 300 175 Q 250 172 200 175 T 100 177 T 0 175 L ${SCENE_X0} 175 Z`}
@@ -269,13 +163,13 @@ const RomanScene: React.FC<Props> = props => {
             opacity="0.9"
           />
         )}
-        {splashes && <RomanRainSplashes />}
-        <RomanSceneInstrument uid={uid} isDay={isDay} progress={progress} />
+        {splashes && <SceneRainSplashes />}
+        <SceneInstrument uid={uid} isDay={isDay} progress={progress} />
         {land.foreground.map(m => (
-          <path key={m.id} d={m.body} className="rs-foreground" />
+          <path key={m.id} d={m.body} className="sk-foreground" />
         ))}
       </g>
-    </g>
+    </SceneRoot>
   );
 };
 

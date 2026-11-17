@@ -7,7 +7,7 @@ import WeatherModal from './WeatherModal';
 import { generateGreekSkyline } from '../utils/greekSkylineGenerator';
 import { lerpColor } from '../utils/color';
 import RomanScene from './RomanScene';
-import RomanWeather from './RomanWeather';
+import SceneWeather from './SceneWeather';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
@@ -320,7 +320,7 @@ function RomanClock({
         auroraLayers={weather?.auroraLayers}
         effects={
           civilization === 'rome' ? (
-            <RomanWeather
+            <SceneWeather
               condition={weatherCond}
               weatherParticles={weatherParticles}
               rainIntensity={rainIntensity}

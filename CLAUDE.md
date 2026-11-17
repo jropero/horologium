@@ -274,15 +274,23 @@ Heavy static datasets live in `utils/`:
 
 Three generators (`utils/greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (acrópolis, obelisks, ziggurats). `RomanClock` uses the first for Hellas; `EgyptianCalendarInfo` uses the second (over the `EgyptianStarMap` canvas); `BabylonianCalendarInfo` uses the third inline. `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
 
+### Hero scene kit (procedural landscapes)
+
+Shared toolkit for the procedural hero scenes. Rome uses it (`RomanScene`); Hellas and Babylonia are being built on it. Civilization-specific code is only the landscape geometry, the palette (`SceneLight`) and the composition.
+
+- **`utils/sceneKit.ts`** (geometry only): `SCENE_X0`/`SCENE_X1`/`SCENE_W` (−40…340: the 16:9 heroes show x −30…330 of the 3:2 viewBox, so every full-width layer must cover this span), `seededRandom`, the `Pen` path builder (local units, u right / v up, `flip` mirrors so monuments face the centre; only M/L/C/Z; `gap()` cuts real holes), `buildShape()` + `ShapeDraw`/`ShapeKit` (body, relief, detail, openings, windows, torches), `ridge()`, `tufts()`, the `SceneLight` type and `sceneLightStyle()`.
+- **`components/SceneParts.tsx`**: `SceneRoot` (sets the light CSS variables and `scene--lit` / `scene--snow`), `SceneDefs` (ground, torch, aurora-glow gradients), `MonumentShape`, `Birds`, `sceneFlags()` (fog style, veiled sun, birds, splashes), `sceneUid()`.
+- **`components/SceneSky.tsx`**: fixed seeded stars with a Milky Way band and the Big Dipper, the hour arc (13 ticks, current hour highlighted), sun and moon; also exported separately (`Stars`, `HourArc`, `Sun`, `Moon`).
+- **`components/SceneInstrument.tsx`**: marble plinth with a bronze gnomon (day) or glass clepsydra (night). The vessel coordinates are the ones the water clip paths are built on.
+- **`components/SceneWeather.tsx`**: passed to `WeatherSvgEffects` through its `effects` prop (replaces the default clouds / rain / snow / fog / wind; the aurora and its crossfade stay in `WeatherSvgEffects`). Clouds are three depths of 300-wide tiles drawn three times and shifted by one tile per loop. The lightning bolt shares the `lightningFlash` 7 s keyframes with the white flash. `SceneRainSplashes` is drawn by the scene on top of its ground.
+- **`components/SceneKit.css`**: every colour derives from `--haze`, `--rim`, `--stone`, `--cloud-light`, `--cloud-shade` (set by `SceneRoot`; CSS variables inherit, so an HTML ancestor can set them for several SVGs) and `--ink`. Prefixes: `sk-` scene kit, `sw-` scene weather. Civ-specific classes go in the civ's own CSS.
+
 ### Roman hero scene (Rome only)
 
-`RomanClock` is shared by Rome and Hellas, but for Rome everything inside the 300×200 hero SVG is drawn by `components/RomanScene.tsx`; Hellas keeps the older inline drawing. Don't merge the two.
+`RomanClock` is shared by Rome and Hellas, but for Rome everything inside the 300×200 hero SVG is drawn by `components/RomanScene.tsx`. Don't merge the Rome and Hellas branches.
 
-- **Landscape**: `utils/romanLandscape.ts` `generateRomanLandscape(seed)` (seed = calendar day) returns geometry only: two mountain ridges, an aqueduct whose arches are real holes, the monuments of the two hills (each hill gets a different big one: Colosseum, Pantheon or temple; plus arch, column, obelisk, insula, villa, cypresses, stone pines) and foreground trees. Monuments are built with the `Pen` path builder in local units (u right, v up) so they can be mirrored to face the centre. x 104–196 stays free for the instrument. Tests: `tests/romanLandscape.test.ts`.
-- **Light**: `sceneLight()` in `RomanScene.tsx` sets CSS variables on the scene root (`--haze`, `--rim`, `--stone`, `--cloud-light`, `--cloud-shade`) from the time of day, twilight, weather and the aurora. `RomanScene.css` derives every colour from them with `color-mix` (far layers take the haze colour, near ones stay close to `--ink`). At night or under the aurora the root gets `roman-scene--lit`: openings, lit windows and torches glow and flicker.
-- **Sky** (`RomanSceneSky.tsx`): fixed seeded stars with a Milky Way band and the Septentriones, the hour arc (13 ticks, current hour highlighted, travelled part brighter), the sun, and the moon (phase, earthshine, halo).
-- **Instrument** (`RomanSceneInstrument.tsx`): marble plinth with a bronze gnomon and its shadow by day, a glass clepsydra on a tripod by night. The vessel coordinates are the ones the water clip paths are built on.
-- **Weather** (`RomanWeather.tsx`): passed to `WeatherSvgEffects` through its `effects` prop, which replaces the default clouds / rain / snow / fog / wind for that hero while the aurora and its crossfade stay in `WeatherSvgEffects`. Clouds are three depths of 300-wide tiles drawn twice and shifted by one tile per loop. The lightning bolt uses the same `lightningFlash` 7 s keyframes as the white flash over the hero, so they strike together. Rain splashes are drawn by `RomanScene` on top of the ground.
+- **Landscape**: `utils/romanLandscape.ts` `generateRomanLandscape(seed)` (seed = calendar day): two mountain ridges, an aqueduct whose arches are real holes, the monuments of the two hills (each hill gets a different big one: Colosseum, Pantheon or temple; plus arch, column, obelisk, insula, villa, cypresses, stone pines) and foreground trees. x 104–196 stays free for the instrument. Tests: `tests/romanLandscape.test.ts`.
+- **Light**: `sceneLight()` in `RomanScene.tsx` picks the palette from the time of day, twilight, weather and the aurora. At night or under the aurora the scene is lit: openings, lit windows and torches glow and flicker.
 
 ### Aurora borealis
 

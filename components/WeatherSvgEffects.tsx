@@ -58,7 +58,7 @@ interface Props {
   auroraLayers?: { gl: boolean; svg: boolean };
   /**
    * Replaces the default effects (clouds, rain, snow, fog, wind streaks) with a
-   * hero's own, e.g. `RomanWeather`. The aurora and its crossfade stay here.
+   * hero's own, e.g. `SceneWeather`. The aurora and its crossfade stay here.
    */
   effects?: React.ReactNode;
 }
