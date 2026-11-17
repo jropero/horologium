@@ -68,19 +68,43 @@
   transition: background 2s ease;
 }
 
-.bci-sky-svg-layer {
+.bci-sky-aurora {
   position: absolute;
-  bottom: 0;
-  left: 0;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 1.5s ease;
+}
+
+/* One SVG for sky, weather and landscape (BabylonianScene). Positioned, so the
+   aurora canvas inserted before it paints underneath. */
+.bci-scene-svg {
+  position: absolute;
+  inset: 0;
   width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
-.bci-skyline-svg {
+/* Soft lapis shade behind the hero text, stronger by day. */
+.bci-sky-scrim {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 46% 42% at 50% 47%,
+    rgb(4 9 22 / 26%) 0%,
+    rgb(4 9 22 / 10%) 60%,
+    transparent 100%
+  );
+}
+
+.bci-sky-scrim[data-day] {
+  background: radial-gradient(
+    ellipse 48% 44% at 50% 47%,
+    rgb(7 16 40 / 42%) 0%,
+    rgb(7 16 40 / 16%) 60%,
+    transparent 100%
+  );
 }
 
 .bci-sky-overlay {
