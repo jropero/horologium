@@ -66,15 +66,21 @@ const LocationModal: React.FC<LocationModalProps> = ({
     );
   };
 
+  const dialogProps = {
+    ref: dialogRef,
+    className: 'location-modal animate-fadeIn',
+    onClose,
+    onClick: (e: React.MouseEvent<HTMLDialogElement>) => {
+      if (e.target === dialogRef.current) onClose();
+    },
+  } as const;
+
+  // Keep the (same) <dialog> node mounted so showModal()/close() have a target,
+  // but render no content while it is closed.
+  if (!isOpen) return <dialog {...dialogProps} />;
+
   return (
-    <dialog
-      ref={dialogRef}
-      className="location-modal animate-fadeIn"
-      onClose={onClose}
-      onClick={e => {
-        if (e.target === dialogRef.current) onClose();
-      }}
-    >
+    <dialog {...dialogProps}>
       <div className="location-modal__panel">
         <button onClick={onClose} className="location-modal__close" aria-label="Cerrar">
           <X />

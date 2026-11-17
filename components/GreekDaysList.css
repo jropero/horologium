@@ -176,7 +176,7 @@
 
   .greek-days-list__day-subtitle {
     color: var(--gold-dim);
-    font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     font-size: 0.75rem;
     font-style: italic;
 
