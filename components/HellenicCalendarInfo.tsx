@@ -14,11 +14,19 @@ import GreekDaysList from './GreekDaysList';
 import { useCivilization } from '../contexts/CivilizationContext';
 import { transliterateGreek } from '../utils/greekTransliteration';
 import { translateGreekUI } from '../utils/greekTranslations';
-import { generateGreekSkyline } from '../utils/greekSkylineGenerator';
-import { getSunTimes, getMoonPosition, getMoonPhase } from '../utils/solar';
+import { Body } from 'astronomy-engine';
+import {
+  getSunTimes,
+  getMoonPosition,
+  getMoonPhase,
+  getPlanetPosition,
+  getSunAltitude,
+} from '../utils/solar';
 import { WeatherData } from '../types';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
+import SceneWeather from './SceneWeather';
+import HellenicScene from './HellenicScene';
 
 // ─── Greek meander frieze ─────────────────────────────────────────────────────
 
@@ -403,55 +411,6 @@ const DECADE_LABELS: Record<number, { title: string; subtitle: string }> = {
   3: { title: 'Φθίνων', subtitle: 'Menguante' },
 };
 
-// ─── Sky moon renderer (Selene) ───────────────────────────────────────────────
-
-const renderSeleneMoon = (phase: number) => {
-  const r = 14;
-  const normalizedPhase = ((phase % 1) + 1) % 1;
-  const isWaxing = normalizedPhase <= 0.5;
-  const sweep1 = isWaxing ? 1 : 0;
-  const rx = Math.max(0.1, r * Math.abs(Math.cos(normalizedPhase * Math.PI * 2)));
-  const sweep2 =
-    (normalizedPhase > 0.25 && normalizedPhase <= 0.5) || normalizedPhase > 0.75 ? 1 : 0;
-  const d = `M 0 -${r} A ${r} ${r} 0 0 ${sweep1} 0 ${r} A ${rx} ${r} 0 0 ${sweep2} 0 -${r} Z`;
-  const maskId = `hel-moon-mask-${normalizedPhase.toFixed(3)}`;
-  return (
-    <g transform="rotate(-15)">
-      <defs>
-        <clipPath id={maskId}>
-          <path d={d} />
-        </clipPath>
-        <radialGradient id="hel-moon-light" cx="35%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="60%" stopColor="#e0ecff" />
-          <stop offset="100%" stopColor="#bdd4f4" />
-        </radialGradient>
-        <radialGradient id="hel-moon-dark" cx="35%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#0d1a2e" />
-          <stop offset="100%" stopColor="#060d18" />
-        </radialGradient>
-        <filter id="hel-moon-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
-      <circle cx="0" cy="0" r={r + 4} fill="rgba(200,225,255,0.06)" />
-      <circle cx="0" cy="0" r={r} fill="url(#hel-moon-dark)" />
-      <g clipPath={`url(#${maskId})`} filter="url(#hel-moon-glow)">
-        <circle cx="0" cy="0" r={r} fill="url(#hel-moon-light)" />
-      </g>
-      <circle
-        cx="0"
-        cy="0"
-        r={r}
-        fill="none"
-        stroke="rgba(200,225,255,0.4)"
-        strokeWidth="0.5"
-      />
-    </g>
-  );
-};
-
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
@@ -484,56 +443,40 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     setGreekInfo({ festival, dailyDeity, atticDate: targetAtticDate });
   }, [propAtticDate, currentLat, currentLng]);
 
-  const { isDay, dayProgress, moonPhase, moonSvgX, moonSvgY, moonVisible } = useMemo(() => {
-    const date = currentDate ?? new Date();
-    const sun = getSunTimes(date, currentLat, currentLng);
-    const now = date.getTime();
-    const rise = sun.sunrise.getTime();
-    const set = sun.sunset.getTime();
-    const day = now >= rise && now <= set;
-    const phase = getMoonPhase(date);
+  const { isDay, dayProgress, moonPhase, sunAltitude, sunPos, moonPos, sceneSeed } =
+    useMemo(() => {
+      const date = currentDate ?? new Date();
+      const sun = getSunTimes(date, currentLat, currentLng);
+      const now = date.getTime();
+      const rise = sun.sunrise.getTime();
+      const set = sun.sunset.getTime();
+      const day = now >= rise && now <= set;
 
-    let svgX = 150,
-      svgY = 80,
-      visible = false;
-    if (!day) {
-      const pos = getMoonPosition(date, currentLat, currentLng);
-      if (pos.altitude >= 0) {
-        svgX = Math.max(14, Math.min(286, 150 + ((pos.azimuth - 180) / 90) * 120));
-        // Map horizon→y=165 (near skyline), zenith→y=15 (near top of sky)
-        svgY = Math.max(14, Math.min(165, 165 - (pos.altitude / 90) * 150));
-        visible = true;
-      }
-    }
+      // Sun and moon by their real altitude / azimuth: azimuth 90…270° → x 30…270
+      // (clamped to 14…286), horizon → y 165 (near the skyline), zenith → y 15.
+      const toSvg = (pos: { altitude: number; azimuth: number }) =>
+        pos.altitude >= 0
+          ? {
+              x: Math.max(14, Math.min(286, 150 + ((pos.azimuth - 180) / 90) * 120)),
+              y: Math.max(14, Math.min(165, 165 - (pos.altitude / 90) * 150)),
+            }
+          : null;
 
-    return {
-      isDay: day,
-      dayProgress: day ? (now - rise) / (set - rise) : 0,
-      moonPhase: phase,
-      moonSvgX: svgX,
-      moonSvgY: svgY,
-      moonVisible: visible,
-    };
-  }, [currentDate, currentLat, currentLng]);
-
-  const skylineElements = useMemo(
-    () => generateGreekSkyline(Math.floor((currentDate ?? new Date()).getTime() / 86400000)),
-    [currentDate],
-  );
+      return {
+        isDay: day,
+        dayProgress: day ? (now - rise) / (set - rise) : 0,
+        moonPhase: getMoonPhase(date),
+        sunAltitude: getSunAltitude(date, currentLat, currentLng),
+        sunPos: day ? toSvg(getPlanetPosition(Body.Sun, date, currentLat, currentLng)) : null,
+        moonPos: day ? null : toSvg(getMoonPosition(date, currentLat, currentLng)),
+        // Same city as the clock hero on that day (YYYYMMDD).
+        sceneSeed: date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate(),
+      };
+    }, [currentDate, currentLat, currentLng]);
 
   const rainIntensity = RAIN_INTENSITY[weather?.current.code ?? 0] ?? 0;
   const weatherParticles = useMemo(
-    () => ({
-      ...generateWeatherParticles(rainIntensity),
-      /* eslint-disable react-hooks/purity */
-      stars: Array.from({ length: 60 }).map(() => ({
-        x: Math.random() * 300,
-        y: Math.random() * 100,
-        r: Math.random() * 1.2 + 0.3,
-        opacity: Math.random() * 0.7 + 0.3,
-      })),
-      /* eslint-enable react-hooks/purity */
-    }),
+    () => generateWeatherParticles(rainIntensity),
     [rainIntensity],
   );
 
@@ -562,6 +505,10 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
   }
 
   const condition = weather?.current.condition ?? 'clear';
+  const offline = !!(weather?.isOffline || weather?.aurora);
+  const windGusts = weather?.current.windGusts ?? 0;
+  // Stars fade in across civil twilight: 0 at the horizon, 1 at −6°.
+  const starOpacity = sunAltitude > 0 ? 0 : Math.max(0, Math.min(1, -sunAltitude / 6));
 
   // Minoan/Aegean palette — keyed to the dusty kyanite blue of Knossian frescoes
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -602,16 +549,6 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     return 'linear-gradient(to bottom, #0a1828 0%, #183050 30%, #2a5878 60%, #4888a8 100%)';
   })();
 
-  let skylineFill = 'rgba(215,228,240,0.95)';
-  if (!isDay) skylineFill = 'rgba(18,45,95,0.92)';
-  else if (condition === 'snow') skylineFill = 'rgba(55,80,110,0.88)';
-  else if (condition === 'fog') skylineFill = 'rgba(130,155,175,0.75)';
-
-  let skylineStroke = 'rgba(80,128,162,0.38)';
-  if (!isDay) skylineStroke = 'rgba(70,130,200,0.55)';
-  else if (condition === 'snow') skylineStroke = 'rgba(140,180,210,0.50)';
-  else if (condition === 'fog') skylineStroke = 'rgba(120,148,168,0.38)';
-
   const decadeLabel = DECADE_LABELS[atticDate.decade] ?? DECADE_LABELS[1];
   const nextFests = getNextAtticFestivals(atticDate.monthIndex, atticDate.dayOfMonth, 5);
 
@@ -624,98 +561,64 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
         <div className="hel-sky-scene">
           <div className="hel-sky-bg" style={{ background: skyGradient }} />
 
-          {/* Stars + weather overlay */}
+          {/* Athens from the Pnyx: sky bodies, weather and landscape in one SVG (the
+              scene's light variables must reach all of them). */}
           <svg
-            className="hel-weather-svg"
+            className="hel-scene-svg"
             viewBox="0 0 300 200"
-            preserveAspectRatio="xMidYMid slice"
+            preserveAspectRatio="xMidYMid meet"
           >
-            {!isDay && (
-              <g>
-                {weatherParticles.stars.map((s, i) => (
-                  <circle
-                    key={`star-${i}`}
-                    cx={s.x}
-                    cy={s.y}
-                    r={s.r}
-                    fill="#fff"
-                    opacity={s.opacity}
+            <HellenicScene
+              seed={sceneSeed}
+              layout="wide"
+              isDay={isDay}
+              progress={dayProgress}
+              sunAltitude={sunAltitude}
+              moonPhase={moonPhase}
+              starOpacity={starOpacity}
+              weatherCond={condition}
+              aurora={offline}
+              bodies={{ sun: sunPos, moon: moonPos }}
+              figures={
+                // Hoplite on watch on the plain, in the scene's foreground colour.
+                <Hoplite
+                  fill="var(--hs-figure)"
+                  stroke="var(--rim)"
+                  transform="translate(126 189.5) scale(0.33)"
+                />
+              }
+            >
+              <g className="hel-weather-effects">
+                <WeatherSvgEffects
+                  condition={condition}
+                  weatherParticles={weatherParticles}
+                  fogGradientId="fog-ground-hel"
+                  rainIntensity={rainIntensity}
+                  windGusts={windGusts}
+                  offline={offline}
+                  auroraLayers={weather?.auroraLayers}
+                  effects={
+                    <SceneWeather
+                      condition={condition}
+                      weatherParticles={weatherParticles}
+                      rainIntensity={rainIntensity}
+                      windGusts={windGusts}
+                    />
+                  }
+                />
+                {condition === 'storm' && (
+                  <rect
+                    x="-40"
+                    y="0"
+                    width="380"
+                    height="200"
+                    fill="#ffffff"
+                    opacity="0"
+                    className="anim-lightning"
                   />
-                ))}
+                )}
               </g>
-            )}
-            {moonVisible && (
-              <g transform={`translate(${moonSvgX}, ${moonSvgY})`}>
-                {renderSeleneMoon(moonPhase)}
-              </g>
-            )}
-            <WeatherSvgEffects
-              condition={condition}
-              weatherParticles={weatherParticles}
-              fogGradientId="fog-ground-hel"
-              cloudOpacity={0.7}
-              stormOpacity={0.65}
-              rainIntensity={rainIntensity}
-              windGusts={weather?.current.windGusts ?? 0}
-              offline={!!(weather?.isOffline || weather?.aurora)}
-              auroraLayers={weather?.auroraLayers}
-            />
-            {condition === 'storm' && (
-              <rect
-                x="0"
-                y="0"
-                width="300"
-                height="200"
-                fill="#ffffff"
-                opacity="0"
-                className="anim-lightning"
-              />
-            )}
-          </svg>
-
-          {/* Greek skyline */}
-          <svg
-            className="hel-skyline-svg"
-            viewBox="0 0 300 200"
-            preserveAspectRatio="xMidYMax meet"
-            style={condition === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined}
-          >
-            {skylineElements.map(el => (
-              <path
-                key={el.id}
-                d={el.path}
-                fill={skylineFill}
-                stroke={skylineStroke}
-                strokeWidth="0.5"
-                opacity={el.opacity}
-              />
-            ))}
-            {/* Hoplite on watch in the gap between the two building zones;
-                same day/night/weather palette as the buildings, drawn before
-                the ground so his feet sink into the hill line */}
-            <Hoplite
-              fill={skylineFill}
-              stroke={skylineStroke}
-              transform="translate(126 189.5) scale(0.33)"
-            />
-            {/* Snow floor */}
-            <path
-              d="M 0 180 L 300 180 L 300 200 L 0 200 Z"
-              fill={condition === 'snow' ? '#dde1e7' : 'var(--ink)'}
-            />
-            <path
-              d="M 0 180 Q 50 160 100 180 T 200 180 T 300 180 V 200 H 0 Z"
-              fill={condition === 'snow' ? '#dde1e7' : 'var(--ink)'}
-              stroke={condition === 'snow' ? '#f0f4f8' : 'var(--gold-dim)'}
-              strokeWidth="1"
-            />
-            {condition === 'snow' && (
-              <path
-                d="M 0 180 Q 50 173 100 180 T 200 178 T 300 180 V 175 Q 250 172 200 175 T 100 177 T 0 175 Z"
-                fill="#f0f4f8"
-                opacity="0.9"
-              />
-            )}
+            </HellenicScene>
           </svg>
 
           {/* Dark scrim for text contrast — radial so sky edges remain visible */}

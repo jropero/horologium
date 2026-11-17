@@ -469,19 +469,14 @@
   transition: all 2000ms ease;
 }
 
-.hel-weather-svg {
+/* Sky, weather and landscape (HellenicScene). Positioned, so the WebGL aurora
+   canvas (components/Aurora.tsx) is inserted behind it. */
+.hel-scene-svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-}
-
-.hel-skyline-svg {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
 }
 
 .hel-dark-scrim {
