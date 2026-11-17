@@ -65,7 +65,12 @@ const Aurora: React.FC<Props> = ({ gl, svg: svgLayer, leaving, fadeMs, className
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const t0 = performance.now();
     const view = { horizon: GROUND_Y / 200 };
-    const draw = (now: number) => renderer.render(40 + (now - t0) / 1000, view.horizon);
+    // Random start time on top of the renderer's random seed, so every mount (and
+    // reload) starts at a different point of the motion. Kept under ~2 minutes:
+    // larger times lose precision on mediump GPUs.
+    const startSeconds = 40 + Math.random() * 80;
+    const draw = (now: number) =>
+      renderer.render(startSeconds + (now - t0) / 1000, view.horizon);
 
     // Match the SVG's box and find where its ground line falls inside it.
     const layout = () => {

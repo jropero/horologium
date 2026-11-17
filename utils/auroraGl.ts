@@ -36,6 +36,8 @@ uniform vec2 uRes;
 uniform float uTime;
 /* Where the horizon sits, as a fraction of the height measured from the top. */
 uniform float uHorizon;
+/* Per-mount random offset: x,y shift the footprint noise, z the colour drift phase. */
+uniform vec3 uSeed;
 
 const int STEPS = 28;
 /* Half-width of a sheet, in units of the footprint noise value. */
@@ -107,7 +109,7 @@ void main() {
     vec3 rd = normalize(vec3(x * 1.15, el * 1.05 + 0.035, 1.0));
     float t = uTime;
     /* Slow drift of the whole palette between a violet and a red top. */
-    float warm = 0.5 + 0.5 * sin(t * 0.021);
+    float warm = 0.5 + 0.5 * sin(t * 0.021 + uSeed.z);
     vec3 green = vec3(0.10, 1.00, 0.42);
     vec3 teal = vec3(0.08, 0.72, 0.86);
     vec3 top = mix(vec3(0.52, 0.20, 0.98), vec3(0.98, 0.14, 0.34), warm);
@@ -120,7 +122,7 @@ void main() {
       float a = (float(i) + jitter) / float(STEPS);
       float h = 0.75 + a * 1.35;
       float dist = h / rd.y;
-      vec2 p = rd.xz * dist + vec2(3.7, 1.9);
+      vec2 p = rd.xz * dist + vec2(3.7, 1.9) + uSeed.xy;
       float d = curtain(p, t);
 
       /* Emission along the height of a sheet: sharp lower border, long tail. */
@@ -179,8 +181,28 @@ const compile = (gl: WebGLRenderingContext, type: number, source: string) => {
   return shader;
 };
 
-/** Returns `null` when WebGL is unavailable or the shader does not compile. */
-export const createAuroraRenderer = (canvas: HTMLCanvasElement): AuroraRenderer | null => {
+/**
+ * Sky layout offset for a seed in [0, 1). The ranges stay small (tens of
+ * units) so that mediump GPUs, which lose precision on large noise inputs,
+ * don't turn the curtains blocky.
+ */
+const seedOffset = (seed: number): [number, number, number] => {
+  // Three decorrelated values from one seed (fractional parts of multiples).
+  const a = seed;
+  const b = (seed * 7.31 + 0.137) % 1;
+  const c = (seed * 13.73 + 0.519) % 1;
+  return [a * 40, b * 20, c * Math.PI * 2];
+};
+
+/**
+ * Returns `null` when WebGL is unavailable or the shader does not compile.
+ * `seed` (0–1) picks the sky layout and colour phase; it defaults to a random
+ * one, so every mount starts with a different aurora.
+ */
+export const createAuroraRenderer = (
+  canvas: HTMLCanvasElement,
+  seed: number = Math.random(),
+): AuroraRenderer | null => {
   const gl = canvas.getContext('webgl', {
     alpha: true,
     premultipliedAlpha: true,
@@ -212,6 +234,8 @@ export const createAuroraRenderer = (canvas: HTMLCanvasElement): AuroraRenderer 
   const uRes = gl.getUniformLocation(program, 'uRes');
   const uTime = gl.getUniformLocation(program, 'uTime');
   const uHorizon = gl.getUniformLocation(program, 'uHorizon');
+  // The seed never changes for this renderer: set it once.
+  gl.uniform3f(gl.getUniformLocation(program, 'uSeed'), ...seedOffset(seed));
 
   return {
     resize: (cssWidth, cssHeight) => {
