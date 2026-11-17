@@ -658,6 +658,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               rainIntensity={rainIntensity}
               windGusts={weather?.current.windGusts ?? 0}
               offline={!!(weather?.isOffline || weather?.aurora)}
+              auroraLayers={weather?.auroraLayers}
             />
             {condition === 'storm' && (
               <rect

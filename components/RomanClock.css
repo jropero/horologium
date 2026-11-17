@@ -251,6 +251,8 @@
 
 /* SVG element */
 .roman-clock__svg {
+  /* Positioned so the WebGL aurora canvas (components/Aurora.tsx) stacks behind it. */
+  position: relative;
   width: 100%;
   height: 100%;
 }
@@ -385,7 +387,7 @@
 }
 
 .roman-clock__hellas-translation {
-  font-family: '.SF NS', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 700;

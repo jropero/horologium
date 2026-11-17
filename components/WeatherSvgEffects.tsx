@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { WeatherCondition } from '../types';
 import { WeatherParticles } from '../utils/weatherParticles';
-import AuroraSvg from './AuroraSvg';
+import Aurora from './Aurora';
 import './WeatherSvgEffects.css';
 
 /** Crossfade between the aurora placeholder and the real weather effects. */
@@ -18,7 +18,7 @@ interface WindStreak {
   strokeWidth: number;
 }
 
-function generateWindStreaks(gusts: number): WindStreak[] {
+export function generateWindStreaks(gusts: number): WindStreak[] {
   if (gusts < 28) return [];
   const t = Math.min(1, (gusts - 28) / 61);
   const count = Math.round(6 + t * 16);
@@ -54,6 +54,13 @@ interface Props {
    * Turning it off crossfades the aurora out and the real effects in.
    */
   offline?: boolean;
+  /** Which aurora renderers to use (WebGL shader, SVG curtains). Defaults to WebGL only. */
+  auroraLayers?: { gl: boolean; svg: boolean };
+  /**
+   * Replaces the default effects (clouds, rain, snow, fog, wind streaks) with a
+   * hero's own, e.g. `RomanWeather`. The aurora and its crossfade stay here.
+   */
+  effects?: React.ReactNode;
 }
 
 const WeatherSvgEffects: React.FC<Props> = ({
@@ -65,6 +72,8 @@ const WeatherSvgEffects: React.FC<Props> = ({
   rainIntensity = 0.5,
   windGusts = 0,
   offline = false,
+  auroraLayers,
+  effects,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   // Keep the aurora mounted for the fade-out after `offline` turns false. Derived during
@@ -85,10 +94,19 @@ const WeatherSvgEffects: React.FC<Props> = ({
 
   const fade = { animationDuration: `${AURORA_FADE_MS}ms` };
   const aurora = (offline || auroraLeaving) && (
-    <AuroraSvg className={offline ? 'aurora-fade-in' : 'aurora-fade-out'} style={fade} />
+    <Aurora
+      gl={auroraLayers?.gl ?? true}
+      svg={auroraLayers?.svg ?? false}
+      leaving={!offline}
+      fadeMs={AURORA_FADE_MS}
+      className={offline ? 'aurora-fade-in' : 'aurora-fade-out'}
+      style={fade}
+    />
   );
 
-  const showEffects = !offline && condition !== 'clear';
+  const custom = effects !== undefined;
+  // Custom effects are mounted for a clear sky too: they may draw wind streaks.
+  const showEffects = !offline && (custom || condition !== 'clear');
   const cloudFill1 = '#94a3b8';
   const cloudFill2 = '#cbd5e1';
   const farBgCloudOpacity = condition === 'cloudy' ? 0.22 : 0.15;
@@ -104,49 +122,53 @@ const WeatherSvgEffects: React.FC<Props> = ({
           className={auroraLeaving ? 'aurora-fade-in' : undefined}
           style={auroraLeaving ? fade : undefined}
         >
-          {(condition === 'partly-cloudy' ||
-            condition === 'cloudy' ||
-            condition === 'rain' ||
-            condition === 'storm') && (
-            <>
-              {/* Far background cloud layers — only when windy */}
-              {windStreaks.length > 0 && (
-                <g opacity={condition === 'partly-cloudy' ? 0.1 : farBgCloudOpacity}>
+          {effects}
+          {!custom &&
+            (condition === 'partly-cloudy' ||
+              condition === 'cloudy' ||
+              condition === 'rain' ||
+              condition === 'storm') && (
+              <>
+                {/* Far background cloud layers — only when windy */}
+                {windStreaks.length > 0 && (
+                  <g opacity={condition === 'partly-cloudy' ? 0.1 : farBgCloudOpacity}>
+                    <path
+                      d="M -200 35 Q 0 15 100 40 T 300 25 T 500 38 L 500 -20 L -200 -20 Z"
+                      fill="#8fa3b8"
+                      className="anim-cloud-bg"
+                    />
+                    <path
+                      d="M -200 58 Q 40 38 130 62 T 330 48 T 500 58 L 500 -20 L -200 -20 Z"
+                      fill="#a3b5c5"
+                      opacity={0.7}
+                      className="anim-cloud-bg"
+                    />
+                  </g>
+                )}
+                {/* Mid cloud band — always shown */}
+                <g
+                  opacity={
+                    condition === 'partly-cloudy'
+                      ? cloudOpacity * 0.25
+                      : midBandConditionOpacity
+                  }
+                >
                   <path
-                    d="M -200 35 Q 0 15 100 40 T 300 25 T 500 38 L 500 -20 L -200 -20 Z"
-                    fill="#8fa3b8"
-                    className="anim-cloud-bg"
+                    d="M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z"
+                    fill={cloudFill1}
+                    className="anim-cloud-fast"
                   />
                   <path
-                    d="M -200 58 Q 40 38 130 62 T 330 48 T 500 58 L 500 -20 L -200 -20 Z"
-                    fill="#a3b5c5"
-                    opacity={0.7}
-                    className="anim-cloud-bg"
+                    d="M -200 70 Q 80 50 150 70 T 350 90 T 500 70 L 500 -20 L -200 -20 Z"
+                    fill={cloudFill2}
+                    opacity="0.6"
+                    className="anim-cloud-slow"
                   />
                 </g>
-              )}
-              {/* Mid cloud band — always shown */}
-              <g
-                opacity={
-                  condition === 'partly-cloudy' ? cloudOpacity * 0.25 : midBandConditionOpacity
-                }
-              >
-                <path
-                  d="M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z"
-                  fill={cloudFill1}
-                  className="anim-cloud-fast"
-                />
-                <path
-                  d="M -200 70 Q 80 50 150 70 T 350 90 T 500 70 L 500 -20 L -200 -20 Z"
-                  fill={cloudFill2}
-                  opacity="0.6"
-                  className="anim-cloud-slow"
-                />
-              </g>
-            </>
-          )}
+              </>
+            )}
 
-          {condition === 'snow' && (
+          {!custom && condition === 'snow' && (
             <g opacity="0.6">
               <path
                 d="M -200 30 Q 60 5 140 35 T 350 20 T 500 30 L 500 -20 L -200 -20 Z"
@@ -162,7 +184,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
             </g>
           )}
 
-          {condition === 'fog' && (
+          {!custom && condition === 'fog' && (
             <g>
               <ellipse
                 cx="70"
@@ -194,7 +216,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
             </g>
           )}
 
-          {(condition === 'storm' || condition === 'rain') && (
+          {!custom && (condition === 'storm' || condition === 'rain') && (
             <g className="weather-storm-clouds" opacity={stormOpacity}>
               <path
                 d="M -200 50 Q 30 20 80 40 T 180 30 T 280 50 T 500 30 L 500 -20 L -200 -20 Z"
@@ -210,7 +232,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
             </g>
           )}
 
-          {(condition === 'rain' || condition === 'storm') && (
+          {!custom && (condition === 'rain' || condition === 'storm') && (
             <>
               <g>
                 {weatherParticles.rain.map((drop, i) => (
@@ -281,7 +303,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
             </>
           )}
 
-          {condition === 'snow' && (
+          {!custom && condition === 'snow' && (
             <g>
               {weatherParticles.snow.map((flake, i) => (
                 <circle
@@ -307,7 +329,7 @@ const WeatherSvgEffects: React.FC<Props> = ({
       )}
 
       {/* Wind streaks — rendered last (on top of all effects), only when not offline */}
-      {!offline && windStreaks.length > 0 && (
+      {!offline && !custom && windStreaks.length > 0 && (
         <g>
           {windStreaks.map((streak, i) => (
             <line
