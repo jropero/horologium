@@ -272,11 +272,11 @@ Heavy static datasets live in `utils/`:
 
 ### Procedural skyline
 
-Two generators (`utils/greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (acrópolis, obelisks). `RomanClock` uses the first for Hellas; `EgyptianCalendarInfo` uses the second (over the `EgyptianStarMap` canvas). Rome and Babylonia use full scenes built on the hero scene kit instead (see below). `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
+`utils/egyptianSkylineGenerator.ts` produces the Egyptian skyline SVG paths with a seeded PRNG (obelisks, pylons), drawn by `EgyptianCalendarInfo` over the `EgyptianStarMap` canvas. Rome, Hellas and Babylonia use full scenes built on the hero scene kit instead (see below). `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
 
 ### Hero scene kit (procedural landscapes)
 
-Shared toolkit for the procedural hero scenes. Rome uses it (`RomanScene`); Hellas and Babylonia are being built on it. Civilization-specific code is only the landscape geometry, the palette (`SceneLight`) and the composition.
+Shared toolkit for the procedural hero scenes of Rome (`RomanScene`), Hellas (`HellenicScene`) and Babylonia (`BabylonianScene`). Civilization-specific code is only the landscape geometry, the palette (`SceneLight` plus any extra CSS variables) and the composition. Ground fills should reach y ≥ 206: on some phone sizes the heroes show slightly below y 200.
 
 - **`utils/sceneKit.ts`** (geometry only): `SCENE_X0`/`SCENE_X1`/`SCENE_W` (−40…340: the 16:9 heroes show x −30…330 of the 3:2 viewBox, so every full-width layer must cover this span), `seededRandom`, the `Pen` path builder (local units, u right / v up, `flip` mirrors so monuments face the centre; only M/L/C/Z; `gap()` cuts real holes), `buildShape()` + `ShapeDraw`/`ShapeKit` (body, relief, detail, openings, windows, torches), `ridge()`, `tufts()`, the `SceneLight` type and `sceneLightStyle()`.
 - **`components/SceneParts.tsx`**: `SceneRoot` (sets the light CSS variables and `scene--lit` / `scene--snow`), `SceneDefs` (ground, torch, aurora-glow gradients), `MonumentShape`, `Birds`, `sceneFlags()` (fog style, veiled sun, birds, splashes), `sceneUid()`.
@@ -291,6 +291,15 @@ Shared toolkit for the procedural hero scenes. Rome uses it (`RomanScene`); Hell
 
 - **Landscape**: `utils/romanLandscape.ts` `generateRomanLandscape(seed)` (seed = calendar day): two mountain ridges, an aqueduct whose arches are real holes, the monuments of the two hills (each hill gets a different big one: Colosseum, Pantheon or temple; plus arch, column, obelisk, insula, villa, cypresses, stone pines) and foreground trees. x 104–196 stays free for the instrument. Tests: `tests/romanLandscape.test.ts`.
 - **Light**: `sceneLight()` in `RomanScene.tsx` picks the palette from the time of day, twilight, weather and the aurora. At night or under the aurora the scene is lit: openings, lit windows and torches glow and flicker.
+
+### Hellenic hero scene (Hellas)
+
+`components/HellenicScene.tsx` draws both Hellenic heroes on the scene kit: the clock (`RomanClock`, Hellas branch, with `instrument` and `SceneWeather` via `effects`) and the info bar (`HellenicCalendarInfo`, `layout="wide"`, no instrument; sun and moon at their real altitude/azimuth via `bodies`, the hoplite via `figures`; one SVG `.hel-scene-svg` with `meet`, so the light variables reach every layer).
+
+- **Landscape**: `utils/hellenicLandscape.ts` `generateHellenicLandscape(seed, layout)` draws Athens from the Pnyx, c. 406 BCE (Erechtheion finished, Long Walls still standing). Fixed: the Acropolis rock with the Kimonian wall, Nike bastion and temple, Propylaia and Pinakotheke, Athena Promachos, the sacred olive, the Erechtheion with the Karyatid porch and the Parthenon; on the south slope the 5th-century earth theatre and the Odeion of Perikles; Lykabettos; the Hephaisteion; the Tholos. Seeded: Hymettos, houses, trees, the Agora stoa (Zeus Eleutherios or Poikile), the foreground olive or pine. Later buildings (Lykourgan stone theatre, Stoa of Attalos) are deliberately absent. In the clock layout x 104–196 stays free.
+- **Sources**: cited per shape (Hurwit 1999, Travlos 1971, Camp 2001, Pausanias, Herodotus 8.55, Plutarch _Per._ 13.5, Xenophon _Hell._ 2.2.23); anything uncertain is marked "approximate". The Travlos (Odeion, theatre) and Camp (Panathenaic Way) citations still need page references.
+- **Light**: `hellenicSceneLight()` adds `--marble`, `--marble-shade`, `--rock`, `--leaf`, `--earth` and `--tile` to the kit variables (`HellenicScene.css`, prefix `hs-`). Marble is warm white by day and moonlit blue at night; lamps and the Erechtheion glow are lit at night and under the aurora.
+- **Tests**: `tests/hellenicLandscape.test.ts`.
 
 ### Babylonian hero scene (Babylonia only)
 
