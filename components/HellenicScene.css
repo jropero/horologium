@@ -1,0 +1,233 @@
+/* Greek hero scene (components/HellenicScene.tsx). Builds on SceneKit.css:
+   besides the kit's --haze / --rim / --stone, the scene root sets --marble,
+   --marble-shade, --rock, --leaf, --earth and --tile. Far layers mix in more
+   --haze; marble stays warm white by day and turns moonlit blue at night. */
+
+.hs-scene {
+  --hs-figure: color-mix(in srgb, var(--leaf) 30%, var(--ink));
+}
+
+/* ── Horizon ────────────────────────────────────────────────────────────── */
+.hs-hymettos {
+  fill: color-mix(in srgb, var(--rock) 30%, var(--haze));
+}
+
+.hs-lykabettos {
+  fill: color-mix(in srgb, var(--rock) 44%, var(--haze));
+  stroke: var(--rim);
+  stroke-width: 0.25;
+  stroke-opacity: 0.35;
+}
+
+.hs-lykabettos-shade {
+  fill: color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+.hs-lykabettos-scrub {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--leaf) 70%, var(--ink)) 55%, var(--haze));
+}
+
+.hs-road {
+  fill: color-mix(in srgb, var(--earth) 55%, var(--marble));
+  opacity: 0.45;
+}
+
+.hs-town {
+  fill: color-mix(in srgb, var(--marble-shade) 48%, var(--haze));
+}
+
+.hs-scene .hs-town-window {
+  fill: transparent;
+  opacity: 0;
+}
+
+.scene--lit .hs-scene .hs-town-window {
+  fill: #ffcf7a;
+  opacity: 0.75;
+}
+
+/* ── Acropolis rock ─────────────────────────────────────────────────────── */
+.hs-rock-stop--top {
+  stop-color: color-mix(in srgb, var(--rock) 82%, var(--haze));
+}
+
+.hs-rock-stop {
+  stop-color: color-mix(in srgb, var(--rock) 62%, var(--ink));
+}
+
+.hs-rock {
+  stroke: var(--rim);
+  stroke-width: 0.3;
+  stroke-opacity: 0.45;
+  stroke-linejoin: round;
+}
+
+.hs-rock-lit {
+  fill: color-mix(in srgb, var(--rock) 55%, var(--rim));
+  opacity: 0.4;
+}
+
+.hs-wall {
+  fill: color-mix(in srgb, var(--marble-shade) 55%, var(--rock));
+}
+
+.hs-rock-detail {
+  fill: none;
+  stroke: color-mix(in srgb, var(--rock) 45%, #000);
+  stroke-width: 0.22;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.hs-scrub {
+  fill: color-mix(in srgb, var(--leaf) 75%, var(--ink));
+  opacity: 0.85;
+}
+
+/* ── Buildings (MonumentShape inside .hs-m) ────────────────────────────── */
+.hs-scene .hs-m .sk-body {
+  fill: color-mix(in srgb, var(--marble-shade) 90%, var(--haze));
+  stroke: var(--rim);
+  stroke-width: 0.25;
+  stroke-opacity: 0.5;
+}
+
+.hs-scene .hs-m .sk-relief {
+  fill: color-mix(in srgb, var(--marble) 94%, var(--haze));
+  opacity: 1;
+}
+
+.hs-scene .hs-depth-mid .sk-body {
+  fill: color-mix(in srgb, var(--marble-shade) 80%, var(--haze));
+}
+
+.hs-scene .hs-depth-mid .sk-relief {
+  fill: color-mix(in srgb, var(--marble) 86%, var(--haze));
+}
+
+.hs-scene .hs-m .sk-detail {
+  stroke: color-mix(in srgb, var(--marble-shade) 55%, #000);
+  stroke-width: 0.18;
+  opacity: 0.55;
+}
+
+.hs-scene .hs-m .sk-opening,
+.hs-scene .hs-m .sk-window {
+  fill: color-mix(in srgb, var(--marble-shade) 35%, var(--ink));
+  opacity: 0.75;
+}
+
+.scene--lit .hs-scene .hs-m .sk-opening {
+  fill: #f0a44a;
+  opacity: 0.75;
+}
+
+.scene--lit .hs-scene .hs-m .sk-window--lit {
+  fill: #ffcf7a;
+  opacity: 0.9;
+}
+
+/* Houses: plastered walls, terracotta roofs. */
+.hs-scene .hs-m--house .sk-body {
+  fill: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--marble-shade) 60%, var(--earth)) 88%,
+    var(--haze)
+  );
+}
+
+.hs-scene .hs-m--house .sk-relief {
+  fill: color-mix(in srgb, var(--tile) 88%, var(--haze));
+}
+
+/* Odeion: tiled roof. */
+.hs-scene .hs-m--odeion .sk-relief {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--tile) 70%, var(--marble)) 86%, var(--haze));
+}
+
+/* Theatre: a hollow in the limestone, benches catching the light. */
+.hs-scene .hs-m--theatre .sk-body {
+  fill: color-mix(in srgb, var(--rock) 80%, var(--haze));
+  stroke-opacity: 0.2;
+}
+
+.hs-scene .hs-m--theatre .sk-relief {
+  fill: color-mix(in srgb, var(--earth) 80%, var(--haze));
+}
+
+/* Athena Promachos: bronze with gilded spear tip and crest. */
+.hs-scene .hs-m--promachos .sk-body {
+  fill: color-mix(in srgb, var(--marble-shade) 30%, #4a361e);
+  stroke-opacity: 0.35;
+}
+
+.hs-scene .hs-m--promachos .sk-relief {
+  fill: color-mix(in srgb, var(--rim) 40%, #e9c25c);
+}
+
+/* Trees */
+.hs-scene .hs-m--olive .sk-body,
+.hs-scene .hs-m--pine .sk-body {
+  fill: color-mix(in srgb, var(--leaf) 88%, var(--haze));
+  stroke-opacity: 0.25;
+}
+
+.hs-scene .hs-m--cypress .sk-body {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--leaf) 62%, var(--ink)) 90%, var(--haze));
+  stroke-opacity: 0.25;
+}
+
+.hs-scene .hs-m--olive .sk-relief {
+  fill: color-mix(in srgb, var(--leaf) 55%, var(--rim));
+  opacity: 0.55;
+}
+
+.hs-scene .hs-m--pine .sk-relief,
+.hs-scene .hs-m--cypress .sk-relief {
+  fill: color-mix(in srgb, var(--leaf) 65%, var(--rim));
+  opacity: 0.35;
+}
+
+/* ── Ground and foreground ──────────────────────────────────────────────── */
+.hs-scene .sk-ground-stop {
+  stop-color: color-mix(in srgb, var(--earth) 40%, #000);
+}
+
+.hs-scene .sk-ground-stop--top {
+  stop-color: color-mix(in srgb, var(--earth) 88%, var(--haze));
+}
+
+.scene--snow .hs-scene .sk-ground-stop {
+  stop-color: #c5cdd8;
+}
+
+.scene--snow .hs-scene .sk-ground-stop--top {
+  stop-color: #f3f6f9;
+}
+
+.hs-scene .sk-ground-rim {
+  stroke-width: 0.5;
+  stroke-opacity: 0.6;
+}
+
+.hs-shrubs {
+  fill: color-mix(in srgb, var(--leaf) 60%, var(--earth));
+  opacity: 0.8;
+}
+
+.hs-scene .sk-tufts {
+  stroke: color-mix(in srgb, var(--leaf) 70%, var(--ink));
+}
+
+.hs-foreground {
+  fill: color-mix(in srgb, var(--leaf) 34%, color-mix(in srgb, var(--ink) 80%, #000));
+  stroke: var(--rim);
+  stroke-width: 0.3;
+  stroke-opacity: 0.28;
+  stroke-linejoin: round;
+}
+
+.hs-foreground-lit {
+  fill: color-mix(in srgb, var(--leaf) 50%, var(--ink));
+  opacity: 0.6;
+}
