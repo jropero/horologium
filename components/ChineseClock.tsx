@@ -7,6 +7,7 @@ import ChineseAnimalClock from './ChineseAnimalClock';
 import ChineseYearWheel from './ChineseYearWheel';
 import ChineseDatePillars from './ChineseDatePillars';
 import ChineseWeatherOracle from './ChineseWeatherOracle';
+import ChineseHero from './ChineseHero';
 import './ChineseClock.css';
 
 const TERM_SEASONS = [
@@ -19,9 +20,17 @@ const TERM_SEASONS = [
 interface ChineseClockProps {
   modernTime: Date;
   weather?: WeatherData | null;
+  /** Observer's location for the hero's sun, moon and twilight (defaults: Xi'an). */
+  currentLat?: number;
+  currentLng?: number;
 }
 
-const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime, weather }) => {
+const ChineseClock: React.FC<ChineseClockProps> = ({
+  modernTime,
+  weather,
+  currentLat = 34.26,
+  currentLng = 108.94,
+}) => {
   const { term, pentad, daysUntilChange } = getChineseCalendarData(modernTime);
   const lunar = getChineseLunisolarDate(modernTime);
   const termSeasonIdx = Math.floor((term.id - 1) / 6);
@@ -32,6 +41,14 @@ const ChineseClock: React.FC<ChineseClockProps> = ({ modernTime, weather }) => {
 
   return (
     <div className="chinese-clock">
+      {/* 0. Hero: Tang Chang'an in ink wash (ChineseHero) */}
+      <ChineseHero
+        modernTime={modernTime}
+        weather={weather}
+        lat={currentLat}
+        lng={currentLng}
+      />
+
       {/* 1. Término solar */}
       <div className="chinese-clock__term-card">
         <div className="chinese-clock__term-label">节气 TÉRMINO SOLAR</div>
