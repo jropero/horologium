@@ -292,7 +292,14 @@ const AppContent: React.FC = () => {
         />
       );
     } else if (civilization === 'zhongguo') {
-      clockComponent = <ChineseClock modernTime={modernTime} weather={effectiveWeather} />;
+      clockComponent = (
+        <ChineseClock
+          modernTime={modernTime}
+          weather={effectiveWeather}
+          currentLat={latitude}
+          currentLng={longitude}
+        />
+      );
     } else if (civilization === 'babylonia') {
       clockComponent = (
         <BabylonianClock
