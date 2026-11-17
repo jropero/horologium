@@ -150,7 +150,8 @@ const RomanScene: React.FC<Props> = props => {
       </g>
 
       <g style={fogStyle}>
-        <path d={`${GROUND_TOP} V 200 H ${SCENE_X0} Z`} fill={`url(#${uid}-ground)`} />
+        {/* Down to 206: on some phone sizes the hero shows slightly below y 200. */}
+        <path d={`${GROUND_TOP} V 206 H ${SCENE_X0} Z`} fill={`url(#${uid}-ground)`} />
         {aurora && (
           <ellipse cx="150" cy="182" rx="190" ry="9" fill={`url(#${uid}-aurora-glow)`} />
         )}
