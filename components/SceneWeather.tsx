@@ -1,17 +1,20 @@
 import React, { useId } from 'react';
 import { WeatherCondition } from '../types';
 import { WeatherParticles } from '../utils/weatherParticles';
-import { SCENE_W, SCENE_X0, seededRandom } from '../utils/romanLandscape';
+import { SCENE_W, SCENE_X0, seededRandom } from '../utils/sceneKit';
 import { generateWindStreaks } from './WeatherSvgEffects';
+import './SceneKit.css';
 
 /**
- * Weather of the Roman hero (Rome only; the other heroes use the default
- * effects of `WeatherSvgEffects`, which renders this through its `effects`
- * prop and keeps handling the aurora crossfade).
+ * Weather of the procedural hero scenes (scene kit). A hero passes it to
+ * `WeatherSvgEffects` through its `effects` prop; `WeatherSvgEffects` keeps
+ * handling the aurora crossfade. Heroes without a scene use the default
+ * effects of `WeatherSvgEffects`.
  *
- * It is drawn inside `RomanScene`, between the sky bodies and the landscape,
- * and takes its cloud colours from the scene's light (`--cloud-light`,
- * `--cloud-shade`), so clouds turn pink at sunset and dark blue at night.
+ * It is drawn between the sky bodies and the landscape, and takes its cloud
+ * colours from the scene's light (`--cloud-light`, `--cloud-shade`, inherited
+ * from `SceneRoot` or any ancestor that sets them), so clouds turn pink at
+ * sunset and dark blue at night.
  *
  * Clouds: three depths of cumulus (far, mid, near). Each depth is a 300-wide
  * tile drawn twice and shifted by exactly one tile per loop, so the drift is
@@ -114,7 +117,7 @@ const cloudDepths = (condition: WeatherCondition): string[] => {
   return [];
 };
 
-const RomanWeather: React.FC<Props> = ({
+const SceneWeather: React.FC<Props> = ({
   condition,
   weatherParticles,
   rainIntensity,
@@ -129,15 +132,15 @@ const RomanWeather: React.FC<Props> = ({
   const windSpeed = 1 + Math.min(windGusts, 90) / 40;
 
   return (
-    <g className={`roman-weather${heavy ? ' roman-weather--heavy' : ''}`}>
+    <g className={`scene-weather${heavy ? ' scene-weather--heavy' : ''}`}>
       <defs>
         <linearGradient id={`${uid}-cloud`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" className="rw-cloud-stop rw-cloud-stop--light" />
-          <stop offset="100%" className="rw-cloud-stop" />
+          <stop offset="0%" className="sw-cloud-stop sw-cloud-stop--light" />
+          <stop offset="100%" className="sw-cloud-stop" />
         </linearGradient>
         <linearGradient id={`${uid}-veil`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" className="rw-cloud-stop" stopOpacity="0.85" />
-          <stop offset="100%" className="rw-cloud-stop" stopOpacity="0" />
+          <stop offset="0%" className="sw-cloud-stop" stopOpacity="0.85" />
+          <stop offset="100%" className="sw-cloud-stop" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={`${uid}-mist`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#cbd5e1" stopOpacity="0" />
@@ -164,7 +167,7 @@ const RomanWeather: React.FC<Props> = ({
 
       {LAYERS.filter(l => depths.includes(l.key)).map(l => (
         <g key={l.key} opacity={l.opacity}>
-          <g className="rw-drift" style={{ animationDuration: `${r1(l.dur / windSpeed)}s` }}>
+          <g className="sw-drift" style={{ animationDuration: `${r1(l.dur / windSpeed)}s` }}>
             {/* Three copies: the drift runs −300 → 0, and the view spans −30…330. */}
             {[-300, 0, 300].map(shift => (
               <g key={shift} transform={`translate(${shift} 0)`}>
@@ -179,7 +182,7 @@ const RomanWeather: React.FC<Props> = ({
 
       {/* Lightning: on the same clock as the white flash over the hero. */}
       {condition === 'storm' && (
-        <g className="rw-bolt" fill="none" strokeLinejoin="round" strokeLinecap="round">
+        <g className="sw-bolt" fill="none" strokeLinejoin="round" strokeLinecap="round">
           <path d={BOLT} stroke="#bcd4ff" strokeWidth="3.6" opacity="0.35" />
           <path d={BOLT} stroke="#ffffff" strokeWidth="1" />
         </g>
@@ -301,7 +304,7 @@ const RomanWeather: React.FC<Props> = ({
               ry={b.ry}
               fill={`url(#${uid}-fog)`}
               opacity={b.o}
-              className="rw-fog"
+              className="sw-fog"
               style={
                 {
                   '--shift': `${b.dir * 40}px`,
@@ -343,8 +346,8 @@ const RomanWeather: React.FC<Props> = ({
  * Splashes where the rain hits the ground. Drawn by `RomanScene` on top of the
  * ground (the weather layer itself sits behind the landscape).
  */
-export const RomanRainSplashes: React.FC = () => (
-  <g className="rw-splashes">
+export const SceneRainSplashes: React.FC = () => (
+  <g className="sw-splashes">
     {SPLASHES.map((s, i) => (
       <ellipse
         key={i}
@@ -352,11 +355,11 @@ export const RomanRainSplashes: React.FC = () => (
         cy={s.y}
         rx="2.6"
         ry="0.7"
-        className="rw-splash"
+        className="sw-splash"
         style={{ animationDuration: `${s.dur}s`, animationDelay: `${s.delay}s` }}
       />
     ))}
   </g>
 );
 
-export default RomanWeather;
+export default SceneWeather;

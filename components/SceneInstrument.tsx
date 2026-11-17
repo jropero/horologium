@@ -1,4 +1,5 @@
 import React from 'react';
+import './SceneKit.css';
 
 /**
  * The timepiece at the centre of the Roman hero, standing on a marble plinth:
@@ -32,14 +33,14 @@ const Plinth: React.FC<{ uid: string }> = ({ uid }) => (
   <g>
     <defs>
       <radialGradient id={`${uid}-plinth-top`} cx="50%" cy="40%" r="60%">
-        <stop offset="0%" className="rs-stone-stop rs-stone-stop--light" />
-        <stop offset="100%" className="rs-stone-stop" />
+        <stop offset="0%" className="sk-stone-stop sk-stone-stop--light" />
+        <stop offset="100%" className="sk-stone-stop" />
       </radialGradient>
     </defs>
     {/* Drum, then the top face. */}
     <path
       d="M 118 181 L 118 185.5 A 32 5.5 0 0 0 182 185.5 L 182 181 Z"
-      className="rs-stone-side"
+      className="sk-stone-side"
     />
     <ellipse
       cx="150"
@@ -47,9 +48,9 @@ const Plinth: React.FC<{ uid: string }> = ({ uid }) => (
       rx="32"
       ry="5.5"
       fill={`url(#${uid}-plinth-top)`}
-      className="rs-stone-top"
+      className="sk-stone-top"
     />
-    <ellipse cx="150" cy="181" rx="29" ry="4.9" className="rs-stone-ring" />
+    <ellipse cx="150" cy="181" rx="29" ry="4.9" className="sk-stone-ring" />
   </g>
 );
 
@@ -68,10 +69,10 @@ const Gnomon: React.FC<{ uid: string; progress: number }> = ({ uid, progress }) 
           <stop offset="100%" stopColor={BRONZE_DARK} />
         </radialGradient>
       </defs>
-      <path d={HOUR_LINES} className="rs-hour-lines" />
+      <path d={HOUR_LINES} className="sk-hour-lines" />
       <path
         d={`M 148.6 181.6 L 151.4 181.6 L ${tipX + 0.5} ${tipY} L ${tipX - 0.5} ${tipY} Z`}
-        className="rs-gnomon-shadow roman-clock__svg-transition"
+        className="sk-gnomon-shadow sk-transition"
       />
       {/* Base block, then the blade: one face lit, the other in shade. */}
       <path d="M 145.4 181.6 L 154.6 181.6 L 153.6 179.6 L 146.4 179.6 Z" fill={BRONZE_DARK} />
@@ -99,7 +100,7 @@ const Clepsydra: React.FC<{ uid: string; progress: number }> = ({ uid, progress 
   const lowerLevel = 180 - 20 * progress;
   const running = progress < 0.99;
   return (
-    <g className="roman-clock__svg-transition">
+    <g className="sk-transition">
       <defs>
         <clipPath id={`${uid}-upper`}>
           <path d="M 136 135 L 146 155 L 154 155 L 164 135 Z" />
@@ -274,7 +275,7 @@ const Clepsydra: React.FC<{ uid: string; progress: number }> = ({ uid, progress 
       <path
         d={`M 134.8 ${lowerLevel} l -2.6 -1.1 l 0 2.2 Z`}
         fill={BRONZE_LIGHT}
-        className="roman-clock__svg-transition"
+        className="sk-transition"
       />
       <ellipse
         cx="150"
@@ -289,7 +290,7 @@ const Clepsydra: React.FC<{ uid: string; progress: number }> = ({ uid, progress 
   );
 };
 
-const RomanSceneInstrument: React.FC<Props> = ({ uid, isDay, progress }) => (
+const SceneInstrument: React.FC<Props> = ({ uid, isDay, progress }) => (
   <g>
     <Plinth uid={uid} />
     {isDay ? (
@@ -300,4 +301,4 @@ const RomanSceneInstrument: React.FC<Props> = ({ uid, isDay, progress }) => (
   </g>
 );
 
-export default RomanSceneInstrument;
+export default SceneInstrument;
