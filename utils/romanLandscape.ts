@@ -8,8 +8,24 @@
  *
  * Everything is derived from a seed (the calendar day), so the city changes
  * from day to day but is stable within one. Drawing and lighting live in
- * `components/RomanScene.tsx`; this module only produces geometry.
+ * `components/RomanScene.tsx`; this module only produces geometry. The path
+ * builder and shared helpers are in `utils/sceneKit.ts`.
  */
+
+import {
+  Monument as SceneMonument,
+  Pen,
+  Rand,
+  SCENE_X0,
+  SCENE_X1,
+  ShapeDraw,
+  buildShape,
+  ridge,
+  seededRandom,
+  tufts as grassTufts,
+} from './sceneKit';
+
+export { SCENE_W, SCENE_X0, SCENE_X1, seededRandom } from './sceneKit';
 
 export type MonumentKind =
   | 'temple'
@@ -23,37 +39,7 @@ export type MonumentKind =
   | 'cypress'
   | 'pine';
 
-/** A window; `lit` ones glow at night. */
-export interface LandscapeWindow {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  lit: boolean;
-  /** Flicker phase in seconds. */
-  delay: number;
-}
-
-export interface LandscapeTorch {
-  x: number;
-  y: number;
-  delay: number;
-}
-
-export interface Monument {
-  id: string;
-  kind: MonumentKind;
-  /** Silhouette. */
-  body: string;
-  /** Raised parts that catch the light (columns, gilded tips); filled. */
-  relief: string;
-  /** Engraved lines (cornices, steps, spiral bands); stroked. */
-  detail: string;
-  /** Doors and arcades: dim by day, lit from inside at night. */
-  openings: string;
-  windows: LandscapeWindow[];
-  torches: LandscapeTorch[];
-}
+export type Monument = SceneMonument<MonumentKind>;
 
 export interface RomanLandscape {
   ridgeFar: string;
@@ -70,8 +56,8 @@ export interface RomanLandscape {
 /** Ground line at the centre of the scene. */
 export const GROUND_Y = 180;
 
-/** Top edge of the ground: a hill on each side, flat in the middle. */
-export const GROUND_TOP = 'M 0 180 Q 50 160 100 180 L 200 180 Q 250 160 300 180';
+/** Top edge of the ground: a hill on each side, flat in the middle and beyond the edges. */
+export const GROUND_TOP = `M ${SCENE_X0} 180 L 0 180 Q 50 160 100 180 L 200 180 Q 250 160 300 180 L ${SCENE_X1} 180`;
 
 /** Height of the ground at x (matches GROUND_TOP). */
 export const groundY = (x: number): number => {
@@ -80,139 +66,6 @@ export const groundY = (x: number): number => {
   const t = Math.max(0, z) / 100;
   return GROUND_Y - 40 * t + 40 * t * t;
 };
-
-/** Seeded pseudo-random generator (Lehmer), values in [0, 1). */
-export const seededRandom = (seed: number) => {
-  let s = seed % 2147483647;
-  if (s <= 0) s += 2147483646;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-};
-
-const n = (v: number) => (Math.round(v * 100) / 100).toString();
-
-/** Bézier handle length for a quarter circle of radius 1. */
-const K = 0.5523;
-
-/**
- * Path builder in monument-local units: u runs right from the left edge, v runs
- * up from the base. `flip` mirrors the monument inside its own width. Only
- * M/L/C/Z are emitted, so mirroring needs no arc-flag fixes.
- */
-class Pen {
-  private out: string[] = [];
-
-  constructor(
-    private x0: number,
-    private base: number,
-    private s: number,
-    private width: number,
-    private flip: boolean,
-  ) {}
-
-  x(u: number) {
-    return this.x0 + (this.flip ? this.width - u : u) * this.s;
-  }
-
-  y(v: number) {
-    return this.base - v * this.s;
-  }
-
-  M(u: number, v: number) {
-    this.out.push(`M${n(this.x(u))} ${n(this.y(v))}`);
-    return this;
-  }
-
-  L(u: number, v: number) {
-    this.out.push(`L${n(this.x(u))} ${n(this.y(v))}`);
-    return this;
-  }
-
-  C(u1: number, v1: number, u2: number, v2: number, u: number, v: number) {
-    this.out.push(
-      `C${n(this.x(u1))} ${n(this.y(v1))} ${n(this.x(u2))} ${n(this.y(v2))} ${n(this.x(u))} ${n(this.y(v))}`,
-    );
-    return this;
-  }
-
-  Z() {
-    this.out.push('Z');
-    return this;
-  }
-
-  rect(u: number, v: number, w: number, h: number) {
-    return this.M(u, v)
-      .L(u + w, v)
-      .L(u + w, v + h)
-      .L(u, v + h)
-      .Z();
-  }
-
-  /** Closed polygon from a flat list u0, v0, u1, v1, … */
-  poly(pts: number[]) {
-    this.M(pts[0], pts[1]);
-    for (let i = 2; i < pts.length; i += 2) this.L(pts[i], pts[i + 1]);
-    return this.Z();
-  }
-
-  line(u1: number, v1: number, u2: number, v2: number) {
-    return this.M(u1, v1).L(u2, v2);
-  }
-
-  /** Round-topped opening: bottom-left corner (u, v), width w, total height h. */
-  arch(u: number, v: number, w: number, h: number) {
-    const r = w / 2;
-    const t = v + Math.max(0, h - r);
-    return this.M(u, v)
-      .L(u, t)
-      .C(u, t + r * K, u + r - r * K, t + r, u + r, t + r)
-      .C(u + r + r * K, t + r, u + w, t + r * K, u + w, t)
-      .L(u + w, v)
-      .Z();
-  }
-
-  /** Half ellipse standing on the line v, centred on cu. */
-  dome(cu: number, v: number, rx: number, ry: number) {
-    return this.M(cu - rx, v)
-      .C(cu - rx, v + ry * K, cu - rx * K, v + ry, cu, v + ry)
-      .C(cu + rx * K, v + ry, cu + rx, v + ry * K, cu + rx, v)
-      .Z();
-  }
-
-  /**
-   * Part of an outline that runs along the base from right to left: steps up
-   * into a round-topped gap between uR and uL and comes back down. `straight`
-   * is the height of the vertical jambs.
-   */
-  gap(uR: number, uL: number, straight: number) {
-    const r = (uR - uL) / 2;
-    const mid = (uR + uL) / 2;
-    return this.L(uR, 0)
-      .L(uR, straight)
-      .C(uR, straight + r * K, mid + r * K, straight + r, mid, straight + r)
-      .C(mid - r * K, straight + r, uL, straight + r * K, uL, straight)
-      .L(uL, 0);
-  }
-
-  toString() {
-    return this.out.join(' ');
-  }
-}
-
-interface Kit {
-  body: Pen;
-  relief: Pen;
-  detail: Pen;
-  open: Pen;
-  windows: LandscapeWindow[];
-  torches: LandscapeTorch[];
-  window: (u: number, v: number, w: number, h: number, lit: boolean) => void;
-  torch: (u: number, v: number) => void;
-}
-
-type Rand = () => number;
 
 /** Local width and height of each monument at scale 1. */
 export const MONUMENT_SIZE: Record<MonumentKind, { w: number; h: number }> = {
@@ -228,7 +81,7 @@ export const MONUMENT_SIZE: Record<MonumentKind, { w: number; h: number }> = {
   pine: { w: 14, h: 22 },
 };
 
-const DRAW: Record<MonumentKind, (k: Kit, rand: Rand) => void> = {
+const DRAW: Record<MonumentKind, ShapeDraw> = {
   // Hexastyle temple on a podium, door glowing between the middle columns.
   temple: k => {
     k.body.rect(0, 0, 24, 2.2);
@@ -394,54 +247,7 @@ const buildMonument = (
   s: number,
   flip: boolean,
   rand: Rand,
-): Monument => {
-  const width = MONUMENT_SIZE[kind].w;
-  const pen = () => new Pen(x0, base, s, width, flip);
-  const body = pen();
-  const windows: LandscapeWindow[] = [];
-  const torches: LandscapeTorch[] = [];
-  const kit: Kit = {
-    body,
-    relief: pen(),
-    detail: pen(),
-    open: pen(),
-    windows,
-    torches,
-    window: (u, v, w, h, lit) =>
-      windows.push({
-        x: Math.min(body.x(u), body.x(u + w)),
-        y: body.y(v + h),
-        w: w * s,
-        h: h * s,
-        lit,
-        delay: rand() * 6,
-      }),
-    torch: (u, v) => torches.push({ x: body.x(u), y: body.y(v), delay: rand() * 4 }),
-  };
-  DRAW[kind](kit, rand);
-  return {
-    id: `${kind}-${n(x0)}`,
-    kind,
-    body: kit.body.toString(),
-    relief: kit.relief.toString(),
-    detail: kit.detail.toString(),
-    openings: kit.open.toString(),
-    windows,
-    torches,
-  };
-};
-
-/** Smooth ridge line from sample points, closed down to `floor`. */
-const ridge = (sample: (x: number) => number, floor: number): string => {
-  const STEP = 10;
-  let d = `M -5 ${floor} L -5 ${n(sample(-5))}`;
-  for (let x = 0; x <= 310; x += STEP) {
-    // Quadratic through the midpoints: the samples act as control points.
-    const midX = x + STEP / 2;
-    d += ` Q ${x} ${n(sample(x))} ${midX} ${n((sample(x) + sample(x + STEP)) / 2)}`;
-  }
-  return `${d} L 315 ${floor} Z`;
-};
+): Monument => buildShape(kind, DRAW[kind], MONUMENT_SIZE[kind].w, x0, base, s, flip, rand);
 
 /** One element of a hill, placed by its outer edge z (0 = the scene's side edge). */
 interface Placement {
@@ -524,17 +330,18 @@ export const generateRomanLandscape = (seed: number): RomanLandscape => {
     184,
   );
 
-  // Aqueduct: deck at y 164–167.4, 46 arches open down to the ground.
+  // Aqueduct: deck at y 164–167.4, arches open down to the ground.
   const PITCH = 6.5;
   const OPENING = 4.9;
   const aq = new Pen(0, GROUND_Y, 1, 300, false);
-  aq.M(-2, 16).L(302, 16).L(302, 0);
-  for (let i = Math.floor(300 / PITCH); i >= 0; i--) {
+  aq.M(SCENE_X0, 16).L(SCENE_X1, 16).L(SCENE_X1, 0);
+  const firstArch = Math.ceil(SCENE_X0 / PITCH);
+  for (let i = Math.floor((SCENE_X1 - PITCH) / PITCH); i >= firstArch; i--) {
     const uL = i * PITCH + 0.8;
     aq.gap(uL + OPENING, uL, 10.15);
   }
-  aq.L(-2, 0).Z();
-  const aqueductDetail = 'M 0 165.2 L 300 165.2';
+  aq.L(SCENE_X0, 0).Z();
+  const aqueductDetail = `M ${SCENE_X0} 165.2 L ${SCENE_X1} 165.2`;
 
   // The two hills each get a different big monument.
   const bigs: BigMonument[] = ['colosseum', 'pantheon', 'temple'];
@@ -568,16 +375,6 @@ export const generateRomanLandscape = (seed: number): RomanLandscape => {
     fg('cypress', -1, 2.3, pineLeft),
   ];
 
-  // Grass along the crest, away from the instrument.
-  let tufts = '';
-  for (let i = 0; i < 46; i++) {
-    const x = rand() * 300;
-    if (x > 118 && x < 182) continue;
-    const y = groundY(x) + 0.3;
-    const h = 1.2 + rand() * 1.4;
-    tufts += `M${n(x)} ${n(y)}l${n(-0.7)} ${n(-h * 0.8)}M${n(x)} ${n(y)}l${n(0.4)} ${n(-h)}M${n(x)} ${n(y)}l${n(1.2)} ${n(-h * 0.7)}`;
-  }
-
   return {
     ridgeFar,
     ridgeNear,
@@ -586,6 +383,7 @@ export const generateRomanLandscape = (seed: number): RomanLandscape => {
     // Trees after buildings: they stand in front of the walls.
     monuments: [...buildings, ...trees],
     foreground,
-    tufts,
+    // Grass along the crest, away from the instrument.
+    tufts: grassTufts(rand, 56, groundY, 118, 182),
   };
 };

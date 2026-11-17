@@ -272,7 +272,47 @@ Heavy static datasets live in `utils/`:
 
 ### Procedural skyline
 
-Four generators (`utils/skylineGenerator.ts`, `greekSkylineGenerator.ts`, `egyptianSkylineGenerator.ts`, `babylonianSkylineGenerator.ts`) produce SVG paths using a seeded PRNG, rendering civilization-appropriate architecture (temples, acrópolis, obelisks, ziggurats). `RomanClock` uses the first two (switching on civilization); `EgyptianCalendarInfo` uses the third (over the `EgyptianStarMap` canvas); `BabylonianCalendarInfo` uses the fourth inline. `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
+`utils/egyptianSkylineGenerator.ts` produces the Egyptian skyline SVG paths with a seeded PRNG (obelisks, pylons), drawn by `EgyptianCalendarInfo` over the `EgyptianStarMap` canvas. Rome, Hellas and Babylonia use full scenes built on the hero scene kit instead (see below). `ChineseClock` has its own built-in SVG rendering and does not use a separate skyline generator.
+
+### Hero scene kit (procedural landscapes)
+
+Shared toolkit for the procedural hero scenes of Rome (`RomanScene`), Hellas (`HellenicScene`) and Babylonia (`BabylonianScene`). Civilization-specific code is only the landscape geometry, the palette (`SceneLight` plus any extra CSS variables) and the composition. Ground fills should reach y ≥ 206: on some phone sizes the heroes show slightly below y 200.
+
+- **`utils/sceneKit.ts`** (geometry only): `SCENE_X0`/`SCENE_X1`/`SCENE_W` (−40…340: the 16:9 heroes show x −30…330 of the 3:2 viewBox, so every full-width layer must cover this span), `seededRandom`, the `Pen` path builder (local units, u right / v up, `flip` mirrors so monuments face the centre; only M/L/C/Z; `gap()` cuts real holes), `buildShape()` + `ShapeDraw`/`ShapeKit` (body, relief, detail, openings, windows, torches), `ridge()`, `tufts()`, the `SceneLight` type and `sceneLightStyle()`.
+- **`components/SceneParts.tsx`**: `SceneRoot` (sets the light CSS variables and `scene--lit` / `scene--snow`), `SceneDefs` (ground, torch, aurora-glow gradients), `MonumentShape`, `Birds`, `sceneFlags()` (fog style, veiled sun, birds, splashes), `sceneUid()`.
+- **`components/SceneSky.tsx`**: fixed seeded stars with a Milky Way band and the Big Dipper, the hour arc (13 ticks, current hour highlighted), sun and moon; also exported separately (`Stars`, `HourArc`, `Sun`, `Moon`).
+- **`components/SceneInstrument.tsx`**: marble plinth with a bronze gnomon (day) or glass clepsydra (night). The vessel coordinates are the ones the water clip paths are built on.
+- **`components/SceneWeather.tsx`**: passed to `WeatherSvgEffects` through its `effects` prop (replaces the default clouds / rain / snow / fog / wind; the aurora and its crossfade stay in `WeatherSvgEffects`). Clouds are three depths of 300-wide tiles drawn three times and shifted by one tile per loop. The lightning bolt shares the `lightningFlash` 7 s keyframes with the white flash. `SceneRainSplashes` is drawn by the scene on top of its ground.
+- **`components/SceneKit.css`**: every colour derives from `--haze`, `--rim`, `--stone`, `--cloud-light`, `--cloud-shade` (set by `SceneRoot`; CSS variables inherit, so an HTML ancestor can set them for several SVGs) and `--ink`. Prefixes: `sk-` scene kit, `sw-` scene weather. Civ-specific classes go in the civ's own CSS.
+
+### Roman hero scene (Rome only)
+
+`RomanClock` is shared by Rome and Hellas, but for Rome everything inside the 300×200 hero SVG is drawn by `components/RomanScene.tsx`. Don't merge the Rome and Hellas branches.
+
+- **Landscape**: `utils/romanLandscape.ts` `generateRomanLandscape(seed)` (seed = calendar day): two mountain ridges, an aqueduct whose arches are real holes, the monuments of the two hills (each hill gets a different big one: Colosseum, Pantheon or temple; plus arch, column, obelisk, insula, villa, cypresses, stone pines) and foreground trees. x 104–196 stays free for the instrument. Tests: `tests/romanLandscape.test.ts`.
+- **Light**: `sceneLight()` in `RomanScene.tsx` picks the palette from the time of day, twilight, weather and the aurora. At night or under the aurora the scene is lit: openings, lit windows and torches glow and flicker.
+
+### Hellenic hero scene (Hellas)
+
+`components/HellenicScene.tsx` draws both Hellenic heroes on the scene kit: the clock (`RomanClock`, Hellas branch, with `instrument` and `SceneWeather` via `effects`) and the info bar (`HellenicCalendarInfo`, `layout="wide"`, no instrument; sun and moon at their real altitude/azimuth via `bodies`, the hoplite via `figures`; one SVG `.hel-scene-svg` with `meet`, so the light variables reach every layer).
+
+- **Landscape**: `utils/hellenicLandscape.ts` `generateHellenicLandscape(seed, layout)` draws Athens from the Pnyx, c. 406 BCE (Erechtheion finished, Long Walls still standing). Fixed: the Acropolis rock with the Kimonian wall, Nike bastion and temple, Propylaia and Pinakotheke, Athena Promachos, the sacred olive, the Erechtheion with the Karyatid porch and the Parthenon; on the south slope the 5th-century earth theatre and the Odeion of Perikles; Lykabettos; the Hephaisteion; the Tholos. Seeded: Hymettos, houses, trees, the Agora stoa (Zeus Eleutherios or Poikile), the foreground olive or pine. Later buildings (Lykourgan stone theatre, Stoa of Attalos) are deliberately absent. In the clock layout x 104–196 stays free.
+- **Sources**: cited per shape (Hurwit 1999, Travlos 1971, Camp 2001, Pausanias, Herodotus 8.55, Plutarch _Per._ 13.5, Xenophon _Hell._ 2.2.23); anything uncertain is marked "approximate". The Travlos (Odeion, theatre) and Camp (Panathenaic Way) citations still need page references.
+- **Light**: `hellenicSceneLight()` adds `--marble`, `--marble-shade`, `--rock`, `--leaf`, `--earth` and `--tile` to the kit variables (`HellenicScene.css`, prefix `hs-`). Marble is warm white by day and moonlit blue at night; lamps and the Erechtheion glow are lit at night and under the aurora.
+- **Tests**: `tests/hellenicLandscape.test.ts`.
+
+### Babylonian hero scene (Babylonia only)
+
+`BabylonianCalendarInfo` draws its 16:9 hero in one SVG (`.bci-scene-svg`, `xMidYMax meet`) with `components/BabylonianScene.tsx`, built on the scene kit; weather is `SceneWeather` via `WeatherSvgEffects`' `effects` prop.
+
+- **View**: Neo-Babylonian Babylon (6th c. BCE) from the north looking south, so west (the Euphrates) is on the right. This matches the Sin mapping (azimuth 180° = centre). Šamaš and Sin are drawn at their real positions (`heroSky()` in `BabylonianCalendarInfo.tsx`).
+- **Landscape**: `utils/babylonianLandscape.ts` `generateBabylonianLandscape(seed)` (seed = calendar day). Fixed anchors: Etemenanki (stage dimensions from the Esagila tablet AO 6555, ed. George, _Babylonian Topographical Texts_, 1992), Esagila, the inner (Imgur-Enlil) and outer (Nēmetti-Enlil) walls with the main and front Ishtar Gates (glazed lapis, ochre bulls and mušḫuššu; Koldewey 1913), the Euphrates through gaps in both walls with the bridge, and the Processional Way. Houses, courtyard palms, lit windows and wall torches vary by seed. No Hanging Gardens (no archaeological evidence at Babylon). Approximate reconstructions (wall and gate heights, merlons, Esagila façade, number of animal rows, Etemenanki's buttressing) are marked as such in the code.
+- **Hero text**: nothing in front of the far layer may rise into x 70–230 above y 145 (`OVERLAY_BOX`, tested in `tests/babylonianLandscape.test.ts`). The hero carries no glosses.
+- **Light**: `babylonianLight()` adds `--earth` (brick), `--glaze` (lapis glazed brick) and `--ochre` (the glazed animals) to the kit variables; `babylonianSkyGradient()` drives the HTML sky. Lapis/indigo dominates; amber is used for firelight, the twilight horizon, golden hour, sunlit brick and the ochre animals. Classes use the `bs-` prefix in `BabylonianScene.css`.
+
+### Aurora borealis
+
+Shown when there is no weather data (offline, failed or slow fetch) or when the user turns it on. Two renderers, switched on separately from the menu (`auroraGl`, `auroraSvg` in `CustomWeatherConfig`; `toggleAuroraLayer()` in `utils/customWeather.ts`): the WebGL shader (`utils/auroraGl.ts`, mounted by `components/Aurora.tsx` as a canvas inserted right before the weather SVG, which therefore must be positioned) and the SVG curtains (`components/AuroraSvg.tsx`, also the fallback when WebGL is unavailable).
 
 ### Theming
 
@@ -394,7 +434,7 @@ CSS variables are overridden in `[data-civ="babylonia"]` block in `index.css`:
 - `--parchment`: `#e8edf8` (cool linen for readable text)
 - `--roman-red`: `#818cf8` (indigo-400, secondary accent)
 
-Babylonian components use `blue-*` / `indigo-*` colour tones, **not** amber/orange (those belong to Egypt). Minimum font size: 12px throughout.
+Babylonian components use `blue-*` / `indigo-*` as the base accent family. Amber/orange is allowed where it fits (firelight, golden-hour light, mud brick, the glazed animals of the Ishtar Gate). Minimum font size: 12px throughout.
 
 ### Akkadian text and Spanish glosses
 

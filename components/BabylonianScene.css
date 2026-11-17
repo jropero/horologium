@@ -1,0 +1,184 @@
+/* Babylonian hero scene (components/BabylonianScene.tsx). Builds on the shared
+   scene kit (SceneKit.css): --haze, --rim, --cloud-light, --cloud-shade come
+   from SceneRoot; --earth (brick in the current light), --glaze (lapis glazed
+   brick) and --ochre (the glazed animals) from .bs-scene. Prefix: bs-. */
+
+/* ── Depth: far layers take the air's colour, near ones keep the brick ──── */
+.bs-plain {
+  fill: color-mix(in srgb, var(--earth) 32%, var(--haze));
+}
+
+.bs-far-grove {
+  fill: color-mix(in srgb, var(--ink) 40%, var(--haze));
+}
+
+.bs-far .sk-body {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--earth) 78%, var(--ink)) 70%, var(--haze));
+  stroke-opacity: 0.35;
+}
+
+.bs-far .sk-relief {
+  fill: color-mix(in srgb, var(--ink) 60%, var(--earth));
+  opacity: 0.22;
+}
+
+.bs-far .sk-detail {
+  opacity: 0.35;
+}
+
+.bs-mid .sk-body {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--earth) 72%, var(--ink)) 70%, var(--haze));
+  stroke-opacity: 0.45;
+}
+
+/* Houses inside the city: lighter than the wall in front of them. */
+.bs-houses .sk-body {
+  fill: color-mix(in srgb, var(--earth) 74%, var(--haze));
+  stroke-opacity: 0.5;
+}
+
+.scene--lit .bs-houses .sk-body {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--earth) 60%, var(--ink)) 70%, var(--haze));
+}
+
+/* The plain in front of the walls takes the brick colour of the light. */
+.bs-scene .sk-ground-stop {
+  stop-color: color-mix(in srgb, var(--earth) 22%, var(--ink));
+}
+
+.bs-scene .sk-ground-stop--top {
+  stop-color: color-mix(in srgb, var(--earth) 55%, var(--ink));
+}
+
+.scene--snow .bs-scene .sk-ground-stop {
+  stop-color: #c5cdd8;
+}
+
+.scene--snow .bs-scene .sk-ground-stop--top {
+  stop-color: #f3f6f9;
+}
+
+.bs-near .sk-body {
+  fill: color-mix(in srgb, var(--earth) 70%, var(--ink));
+}
+
+/* ── Glazed brick of the Ishtar Gate: lapis ground, ochre animals ──────── */
+.bs-glazed .sk-body {
+  fill: color-mix(in srgb, var(--glaze) 84%, var(--ink));
+  stroke-opacity: 0.7;
+}
+
+.bs-mid .bs-glazed .sk-body {
+  fill: color-mix(in srgb, color-mix(in srgb, var(--glaze) 82%, var(--ink)) 80%, var(--haze));
+}
+
+.bs-glazed .sk-relief {
+  fill: var(--ochre);
+  opacity: 0.9;
+}
+
+.bs-mid .bs-glazed .sk-relief {
+  opacity: 0.65;
+}
+
+.scene--lit .bs-glazed .sk-relief {
+  opacity: 0.55;
+}
+
+/* ── Processional Way ──────────────────────────────────────────────────── */
+.bs-way {
+  fill: color-mix(in srgb, var(--earth) 50%, var(--rim));
+  opacity: 0.6;
+}
+
+.bs-way-detail {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 70%, var(--earth));
+  stroke-width: 0.3;
+  opacity: 0.4;
+}
+
+.bs-way-walls {
+  fill: color-mix(in srgb, var(--glaze) 78%, var(--ink));
+  stroke: var(--rim);
+  stroke-width: 0.3;
+  stroke-opacity: 0.45;
+}
+
+/* ── Euphrates ─────────────────────────────────────────────────────────── */
+.bs-water-stop {
+  stop-color: color-mix(in srgb, var(--ink) 58%, var(--haze));
+}
+
+.bs-water-stop--far {
+  stop-color: color-mix(in srgb, var(--haze) 80%, #fff);
+}
+
+.bs-reflection {
+  fill: color-mix(in srgb, var(--earth) 30%, var(--haze));
+  opacity: 0.32;
+}
+
+.bs-shimmer {
+  fill: none;
+  stroke: var(--rim);
+  stroke-width: 0.35;
+  stroke-linecap: round;
+  opacity: 0.5;
+  animation: bsShimmer 5s ease-in-out infinite alternate;
+}
+
+.bs-glitter {
+  fill: none;
+  stroke: #dbe7ff;
+  stroke-width: 0.55;
+  stroke-linecap: round;
+  opacity: 0.6;
+  animation: bsShimmer 3.2s ease-in-out infinite alternate;
+}
+
+.bs-glitter--sun {
+  stroke: #ffd9a0;
+}
+
+@keyframes bsShimmer {
+  from {
+    opacity: 0.25;
+  }
+
+  to {
+    opacity: 0.65;
+  }
+}
+
+.bs-banks {
+  fill: none;
+  stroke: var(--rim);
+  stroke-width: 0.4;
+  stroke-opacity: 0.45;
+}
+
+.bs-bridge {
+  fill: color-mix(in srgb, var(--earth) 45%, var(--haze));
+  stroke: var(--rim);
+  stroke-width: 0.15;
+  stroke-opacity: 0.4;
+}
+
+.bs-reeds {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 72%, var(--earth));
+  stroke-width: 0.45;
+  stroke-linecap: round;
+}
+
+.bs-palm {
+  fill: color-mix(in srgb, var(--ink) 82%, #000);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-shimmer,
+  .bs-glitter {
+    animation: none;
+  }
+}

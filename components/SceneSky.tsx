@@ -1,8 +1,9 @@
 import React from 'react';
-import { seededRandom } from '../utils/romanLandscape';
+import { SCENE_W, SCENE_X0, seededRandom } from '../utils/sceneKit';
+import './SceneKit.css';
 
 /**
- * Sky of the Roman hero: stars with the Milky Way and the Septentriones, the
+ * Sky of the hero scenes: stars with the Milky Way and the Big Dipper, the
  * path of the sun or moon with its twelve hours, and the body itself.
  * Coordinates are the 300×200 viewBox; the path is a half circle of radius 120
  * around (150, 180).
@@ -24,7 +25,7 @@ const angleAt = (progress: number) => Math.PI - progress * Math.PI;
 const rand = seededRandom(354);
 const STAR_COLORS = ['#ffffff', '#dbe7ff', '#ffe9c4', '#ffffff'];
 const FIELD = Array.from({ length: 120 }, () => ({
-  x: f(rand() * 300),
+  x: f(SCENE_X0 + rand() * SCENE_W),
   y: f(rand() * 168),
   r: f(0.18 + rand() * rand() * 0.5),
   o: f(0.35 + rand() * 0.6),
@@ -34,14 +35,14 @@ const FIELD = Array.from({ length: 120 }, () => ({
 const BAND = Array.from({ length: 70 }, () => {
   const t = rand();
   return {
-    x: f(-20 + 340 * t),
+    x: f(SCENE_X0 + SCENE_W * t),
     y: f(128 - 104 * t + (rand() - rand()) * 15),
     r: f(0.12 + rand() * 0.22),
     o: f(0.3 + rand() * 0.45),
   };
 });
 const SPARKS = Array.from({ length: 9 }, () => ({
-  x: f(12 + rand() * 276),
+  x: f(SCENE_X0 + 15 + rand() * (SCENE_W - 30)),
   y: f(8 + rand() * 120),
   s: f(1.3 + rand() * 1.2),
   dur: f(2.6 + rand() * 3),
@@ -52,8 +53,8 @@ const sparkle = (s: number) => {
   return `M0 ${-s}Q${q} ${-q} ${s} 0Q${q} ${q} 0 ${s}Q${-q} ${q} ${-s} 0Q${-q} ${-q} 0 ${-s}Z`;
 };
 
-/** Septentriones, "the seven plough oxen": the Big Dipper. */
-const SEPTENTRIONES: [number, number][] = [
+/** The Big Dipper: Latin Septentriones ("seven plough oxen"), Greek Ἄρκτος / Ἅμαξα (Il. 18.487), Babylonian MUL.MAR.GÍD.DA "the Wagon" (MUL.APIN). */
+const BIG_DIPPER: [number, number][] = [
   [41, 34],
   [49, 30],
   [57, 33],
@@ -62,7 +63,7 @@ const SEPTENTRIONES: [number, number][] = [
   [80, 40],
   [82, 32],
 ];
-const SEPTENTRIONES_LINES = 'M41 34L49 30L57 33L66 35L69 42L80 40L82 32L66 35';
+const BIG_DIPPER_LINES = 'M41 34L49 30L57 33L66 35L69 42L80 40L82 32L66 35';
 
 // ── Path of the sun / moon: thin arc with a tick per hour ─────────────────
 const ARC = `M ${CX - R} ${CY} A ${R} ${R} 0 0 1 ${CX + R} ${CY}`;
@@ -90,8 +91,8 @@ interface Props {
   veiled: boolean;
 }
 
-const Stars: React.FC<{ uid: string; opacity: number }> = ({ uid, opacity }) => (
-  <g className="rs-stars" style={{ opacity }}>
+export const Stars: React.FC<{ uid: string; opacity: number }> = ({ uid, opacity }) => (
+  <g className="sk-stars" style={{ opacity }}>
     <defs>
       <radialGradient id={`${uid}-milky`}>
         <stop offset="0%" stopColor="#dfe8ff" stopOpacity={0.16} />
@@ -113,8 +114,8 @@ const Stars: React.FC<{ uid: string; opacity: number }> = ({ uid, opacity }) => 
     {FIELD.map((s, i) => (
       <circle key={`f${i}`} cx={s.x} cy={s.y} r={s.r} fill={s.c} opacity={s.o} />
     ))}
-    <path d={SEPTENTRIONES_LINES} className="rs-constellation" />
-    {SEPTENTRIONES.map(([x, y]) => (
+    <path d={BIG_DIPPER_LINES} className="sk-constellation" />
+    {BIG_DIPPER.map(([x, y]) => (
       <circle key={`${x}-${y}`} cx={x} cy={y} r="0.7" fill="#ffffff" />
     ))}
     {SPARKS.map((s, i) => (
@@ -123,36 +124,39 @@ const Stars: React.FC<{ uid: string; opacity: number }> = ({ uid, opacity }) => 
         d={sparkle(s.s)}
         transform={`translate(${s.x} ${s.y})`}
         fill="#fff8e1"
-        className="rs-twinkle"
+        className="sk-twinkle"
         style={{ animationDuration: `${s.dur}s`, animationDelay: `${s.delay}s` }}
       />
     ))}
   </g>
 );
 
-const HourArc: React.FC<{ isDay: boolean; progress: number }> = ({ isDay, progress }) => {
+export const HourArc: React.FC<{ isDay: boolean; progress: number }> = ({
+  isDay,
+  progress,
+}) => {
   const hour = Math.min(11, Math.floor(progress * 12));
   const from = onPath(angleAt(hour / 12));
   const to = onPath(angleAt((hour + 1) / 12));
   const now = onPath(angleAt(progress));
   return (
-    <g className={`rs-arc ${isDay ? 'rs-arc--day' : 'rs-arc--night'}`}>
-      <path d={ARC} className="rs-arc__line" />
-      <path d={TICKS} className="rs-arc__ticks" />
+    <g className={`sk-arc ${isDay ? 'sk-arc--day' : 'sk-arc--night'}`}>
+      <path d={ARC} className="sk-arc__line" />
+      <path d={TICKS} className="sk-arc__ticks" />
       {/* The part already travelled, then the current hour. */}
       <path
         d={`M ${CX - R} ${CY} A ${R} ${R} 0 0 1 ${now.x} ${now.y}`}
-        className="rs-arc__travelled"
+        className="sk-arc__travelled"
       />
       <path
         d={`M ${from.x} ${from.y} A ${R} ${R} 0 0 1 ${to.x} ${to.y}`}
-        className="rs-arc__hour"
+        className="sk-arc__hour"
       />
     </g>
   );
 };
 
-const Sun: React.FC<{ uid: string; golden: boolean }> = ({ uid, golden }) => {
+export const Sun: React.FC<{ uid: string; golden: boolean }> = ({ uid, golden }) => {
   const core = golden ? '#fff0d2' : '#fffdf0';
   const mid = golden ? '#ffab5e' : '#f8d766';
   const edge = golden ? '#e0642c' : '#d6a01f';
@@ -170,8 +174,8 @@ const Sun: React.FC<{ uid: string; golden: boolean }> = ({ uid, golden }) => {
           <stop offset="100%" stopColor={edge} />
         </radialGradient>
       </defs>
-      <circle r="34" fill={`url(#${uid}-sun-halo)`} className="rs-sun__halo" />
-      <g className="rs-sun__rays" fill={mid}>
+      <circle r="34" fill={`url(#${uid}-sun-halo)`} className="sk-sun__halo" />
+      <g className="sk-sun__rays" fill={mid}>
         {RAYS_LONG.map(a => (
           <path key={a} d="M-1.15 -12.6L0 -21.5L1.15 -12.6Z" transform={`rotate(${a})`} />
         ))}
@@ -191,7 +195,7 @@ const Sun: React.FC<{ uid: string; golden: boolean }> = ({ uid, golden }) => {
 };
 
 /** Moon of radius 14 with the lit part cut by the phase (0 = new, 0.5 = full). */
-const Moon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) => {
+export const Moon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) => {
   const r = 14;
   const p = ((phase % 1) + 1) % 1;
   const waxing = p <= 0.5;
@@ -251,7 +255,7 @@ const Moon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) => {
   );
 };
 
-const RomanSceneSky: React.FC<Props> = ({
+const SceneSky: React.FC<Props> = ({
   uid,
   isDay,
   progress,
@@ -275,4 +279,4 @@ const RomanSceneSky: React.FC<Props> = ({
   );
 };
 
-export default RomanSceneSky;
+export default SceneSky;
