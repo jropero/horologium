@@ -71,6 +71,8 @@ interface Props {
   pentad: number;
   /** Continuous seasonal base (foliage, leaf colour, paper warmth). */
   season: SeasonBase;
+  /** Size factor of the pentad creatures (see creatureScaleFor); 1 on wide heroes. */
+  creatureScale?: number;
   children?: React.ReactNode;
 }
 
@@ -418,15 +420,17 @@ const ChineseScene: React.FC<Props> = props => {
     termId,
     pentad,
     season,
+    creatureScale = 1,
     children,
   } = props;
   const uid = sceneUid(useId(), 'cs');
   const land = useMemo(() => generateChineseLandscape(seed), [seed]);
   const light = chineseLight({ ...props, warmth: season.warmth });
   const frozen = isPoolFrozen(termId);
+  // Rebuilt only when the landscape or the (0.05-step) creature scale changes.
   const detailCtx = useMemo(
-    () => ({ willowCrown: land.willows[0].crown, pinePerch: land.pine.perch }),
-    [land],
+    () => ({ willowCrown: land.willows[0].crown, pinePerch: land.pine.perch, creatureScale }),
+    [land, creatureScale],
   );
   const sd = useSeasonDetail(termId, pentad, detailCtx, isDay, weatherCond, aurora);
   const { snow, fogStyle, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
