@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .vitest/
 .claude/
+
+# playwright-cli snapshots, console logs and screenshots
+.playwright-cli/
