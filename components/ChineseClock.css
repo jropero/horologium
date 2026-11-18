@@ -10,6 +10,46 @@
   max-width: none;
   margin-inline: auto;
 
+  .chinese-clock__caption {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    margin: 0;
+    padding-block: 0.9rem 1.1rem;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 0.055em;
+    text-align: center;
+    color: color-mix(in srgb, var(--parchment) 62%, transparent);
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      min-width: 1.5rem;
+    }
+
+    &::before {
+      background: linear-gradient(
+        to right,
+        transparent,
+        color-mix(in srgb, var(--gold-leaf) 22%, var(--parchment) 10%)
+      );
+    }
+
+    &::after {
+      background: linear-gradient(
+        to left,
+        transparent,
+        color-mix(in srgb, var(--gold-leaf) 22%, var(--parchment) 10%)
+      );
+    }
+  }
+
   .chinese-clock__term-card {
     width: 100%;
     background: color-mix(in srgb, var(--ink) 90%, transparent);

@@ -101,7 +101,11 @@ function RomanClock({
           })
         : null;
 
+    // "Crepusculum" = evening twilight; "Diluculum" = morning twilight (Pliny, NH II.188)
+    const prefix = isMorning ? 'Diluculum' : 'Crepusculum';
     return {
+      isMorning,
+      prefix,
       civil: {
         start: fmt(isMorning ? twilightTimes.civilMorning : romanTime.sunset),
         end: fmt(isMorning ? romanTime.nextSunrise : twilightTimes.civilEvening),
@@ -499,8 +503,8 @@ function RomanClock({
               {twilightInfo && (
                 <div className="roman-clock__twilight">
                   {[
-                    { label: 'Crepusculum civile', ...twilightInfo.civil },
-                    { label: 'Crepusculum nauticum', ...twilightInfo.nautical },
+                    { label: `${twilightInfo.prefix} civile`, ...twilightInfo.civil },
+                    { label: `${twilightInfo.prefix} nauticum`, ...twilightInfo.nautical },
                   ].map(({ label, start, end }) => (
                     <div key={label} className="roman-clock__twilight-row">
                       <div className="roman-clock__twilight-label">{label}</div>
