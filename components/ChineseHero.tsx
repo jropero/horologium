@@ -70,13 +70,14 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
   }, [modernTime, lat, lng]);
 
   // Same solar term as the term card below (and time travel); the base follows the sun.
-  const { termId, season } = useMemo(
-    () => ({
-      termId: getChineseCalendarData(modernTime).term.id,
+  const { termId, pentad, season } = useMemo(() => {
+    const cal = getChineseCalendarData(modernTime);
+    return {
+      termId: cal.term.id,
+      pentad: cal.pentad,
       season: seasonBase(getSolarLongitudeDeg(modernTime)),
-    }),
-    [modernTime],
-  );
+    };
+  }, [modernTime]);
 
   // Same shíchén as the rest of the page (device clock, as in ChineseAnimalClock).
   const { current, progressPercent } = getCurrentShichen(modernTime);
@@ -136,6 +137,7 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
           sunPos={sky.sunPos}
           dayFrac={dayFrac}
           termId={termId}
+          pentad={pentad}
           season={season}
         >
           <WeatherSvgEffects

@@ -18,9 +18,10 @@ import {
   DetailStroke,
   SeasonBase,
   detailVisible,
+  DetailContext,
   isPoolFrozen,
+  pentadDetail,
   seasonPaper,
-  termDetail,
 } from '../utils/chineseSeasons';
 import './ChineseScene.css';
 
@@ -66,6 +67,8 @@ interface Props {
   dayFrac: number;
   /** Current solar term (1 = 立春 … 24 = 大寒), from getChineseCalendarData. */
   termId: number;
+  /** Current pentad within the term (1–3), from getChineseCalendarData. */
+  pentad: number;
   /** Continuous seasonal base (foliage, leaf colour, paper warmth). */
   season: SeasonBase;
   children?: React.ReactNode;
@@ -383,13 +386,14 @@ const WillowShape: React.FC<{
 /** Today's pentad detail, split by layer; null where it doesn't suit the hour or the weather. */
 const useSeasonDetail = (
   termId: number,
-  crown: { x: number; y: number },
+  pentad: number,
+  ctx: DetailContext,
   isDay: boolean,
   weather: WeatherCondition,
   aurora: boolean,
 ) => {
-  const detail = termDetail(termId);
-  const strokes = useMemo(() => detail?.draw({ willowCrown: crown }) ?? null, [detail, crown]);
+  const detail = pentadDetail(termId, pentad);
+  const strokes = useMemo(() => detail?.draw(ctx) ?? null, [detail, ctx]);
   const show = !!detail && !!strokes && detailVisible(detail, isDay, weather, aurora);
   const on = (layer: string) => (show && detail.layer === layer ? strokes : null);
   return {
@@ -412,6 +416,7 @@ const ChineseScene: React.FC<Props> = props => {
     sunPos,
     dayFrac,
     termId,
+    pentad,
     season,
     children,
   } = props;
@@ -419,7 +424,11 @@ const ChineseScene: React.FC<Props> = props => {
   const land = useMemo(() => generateChineseLandscape(seed), [seed]);
   const light = chineseLight({ ...props, warmth: season.warmth });
   const frozen = isPoolFrozen(termId);
-  const sd = useSeasonDetail(termId, land.willows[0].crown, isDay, weatherCond, aurora);
+  const detailCtx = useMemo(
+    () => ({ willowCrown: land.willows[0].crown, pinePerch: land.pine.perch }),
+    [land],
+  );
+  const sd = useSeasonDetail(termId, pentad, detailCtx, isDay, weatherCond, aurora);
   const { snow, fogStyle, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
   const veiled = THICK.includes(weatherCond);
   const glint = frozen ? null : glintBody(isDay, light.golden, sun, moon);

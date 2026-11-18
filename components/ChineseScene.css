@@ -664,6 +664,10 @@
   animation: csFirefly 2.6s ease-in-out infinite;
 }
 
+.cs-sd .cs-sd-firefly--a {
+  animation-delay: 0s;
+}
+
 .cs-sd .cs-sd-firefly--b {
   animation-delay: -0.9s;
 }
@@ -760,6 +764,172 @@
   fill: color-mix(in srgb, var(--rim) 70%, var(--paper));
 }
 
+/* Details of the 72 pentads (added with PENTAD_DETAILS). */
+.cs-sd .cs-sd-blade--sprout {
+  stroke: color-mix(in srgb, #7fa046 80%, var(--paper));
+  stroke-width: 0.45;
+}
+
+.cs-sd .cs-sd-earth {
+  stroke: color-mix(in srgb, var(--wash) 70%, #6b4a28);
+  stroke-width: 0.45;
+}
+
+.cs-sd .cs-sd-earth--fill {
+  fill: color-mix(in srgb, var(--wash) 55%, #7a5a36);
+}
+
+.cs-sd .cs-sd-hole {
+  fill: color-mix(in srgb, var(--wash) 92%, #000);
+}
+
+.cs-sd .cs-sd-hole--sealed {
+  fill: color-mix(in srgb, var(--wash) 50%, #8a6a40);
+}
+
+.cs-sd .cs-sd-fish {
+  fill: color-mix(in srgb, var(--wash) 70%, var(--water));
+}
+
+.cs-sd .cs-sd-oriole {
+  fill: #d9b02e;
+  stroke: color-mix(in srgb, var(--wash) 80%, #000);
+  stroke-width: 0.25;
+}
+
+.cs-sd .cs-sd-ghost {
+  fill: color-mix(in srgb, var(--wash) 30%, var(--paper));
+  opacity: 0.35;
+}
+
+.cs-sd .cs-sd-cloud {
+  fill: color-mix(in srgb, var(--cloud-shade) 55%, var(--paper));
+  opacity: 0.75;
+}
+
+.cs-sd .cs-sd-cloud--dark {
+  fill: color-mix(in srgb, var(--wash) 55%, var(--cloud-shade));
+  opacity: 0.8;
+}
+
+.cs-sd .cs-sd-cloud--heavy {
+  fill: color-mix(in srgb, var(--cloud-shade) 70%, var(--wash));
+  opacity: 0.85;
+}
+
+.cs-sd .cs-sd-rainshaft {
+  stroke: color-mix(in srgb, var(--wash) 45%, var(--paper));
+  stroke-width: 0.4;
+  opacity: 0.55;
+}
+
+.cs-sd .cs-sd-bolt {
+  stroke: #fff8d8;
+  stroke-width: 0.6;
+}
+
+.cs-sd .cs-sd-bolt-glow {
+  stroke: #f3e7a0;
+  stroke-width: 2.4;
+  opacity: 0.35;
+}
+
+.cs-sd .cs-sd-trunk {
+  stroke: color-mix(in srgb, var(--wash) 85%, var(--paper));
+  stroke-width: 0.7;
+}
+
+.cs-sd .cs-sd-crown {
+  fill: color-mix(in srgb, #7d8f58 55%, var(--paper));
+  opacity: 0.9;
+}
+
+.cs-sd .cs-sd-crown--mulberry {
+  fill: color-mix(in srgb, #4f6e38 75%, var(--paper));
+}
+
+.cs-sd .cs-sd-lilac {
+  stroke: #b994c8;
+  stroke-width: 1.5;
+}
+
+.cs-sd .cs-sd-worm {
+  stroke: #b0685a;
+  stroke-width: 0.5;
+}
+
+.cs-sd .cs-sd-straw {
+  stroke: color-mix(in srgb, #b49c62 80%, var(--paper));
+  stroke-width: 0.35;
+}
+
+.cs-sd .cs-sd-mantis {
+  stroke: #6c9440;
+  stroke-width: 0.45;
+}
+
+.cs-sd .cs-sd-wind {
+  stroke: color-mix(in srgb, #7f95a8 70%, var(--paper));
+  stroke-width: 0.55;
+  opacity: 0.8;
+}
+
+.cs-sd .cs-sd-wind--warm {
+  stroke: color-mix(in srgb, #c49058 70%, var(--paper));
+}
+
+.cs-sd .cs-sd-haze {
+  stroke: color-mix(in srgb, var(--rim) 55%, var(--paper));
+  stroke-width: 0.4;
+  opacity: 0.7;
+}
+
+.cs-sd .cs-sd-red-leaf {
+  stroke: #b8503a;
+  stroke-width: 1.4;
+}
+
+.cs-sd .cs-sd-grain {
+  stroke: #c7a252;
+  stroke-width: 0.7;
+}
+
+.cs-sd .cs-sd-shell {
+  fill: color-mix(in srgb, var(--rim) 70%, var(--paper));
+  stroke: color-mix(in srgb, var(--wash) 60%, var(--paper));
+  stroke-width: 0.3;
+}
+
+.cs-sd .cs-sd-frost {
+  stroke: #f6f8fa;
+  stroke-width: 0.8;
+  opacity: 0.85;
+}
+
+.cs-sd .cs-sd-wash {
+  stroke: color-mix(in srgb, var(--rim) 50%, var(--paper));
+  stroke-width: 2.6;
+  opacity: 0.35;
+}
+
+.cs-sd .cs-sd-tiger {
+  fill: color-mix(in srgb, #c27a34 80%, var(--paper));
+}
+
+.cs-sd .cs-sd-stripe {
+  stroke: color-mix(in srgb, var(--wash) 85%, #000);
+  stroke-width: 0.35;
+}
+
+.cs-sd .cs-sd-wattle {
+  stroke: #c83a2a;
+  stroke-width: 1.1;
+}
+
+.cs-sd .cs-sd-speed {
+  opacity: 0.5;
+}
+
 /* At night colours sink into the indigo ink. */
 .scene--lit .cs-sd .cs-sd-blossom,
 .scene--lit .cs-sd .cs-sd-bud,
@@ -767,7 +937,14 @@
 .scene--lit .cs-sd .cs-sd-flower,
 .scene--lit .cs-sd .cs-sd-wheat,
 .scene--lit .cs-sd .cs-sd-chrysanthemum,
-.scene--lit .cs-sd .cs-sd-blade {
+.scene--lit .cs-sd .cs-sd-blade,
+.scene--lit .cs-sd .cs-sd-oriole,
+.scene--lit .cs-sd .cs-sd-lilac,
+.scene--lit .cs-sd .cs-sd-worm,
+.scene--lit .cs-sd .cs-sd-mantis,
+.scene--lit .cs-sd .cs-sd-red-leaf,
+.scene--lit .cs-sd .cs-sd-tiger,
+.scene--lit .cs-sd .cs-sd-wattle {
   opacity: 0.45;
 }
 
