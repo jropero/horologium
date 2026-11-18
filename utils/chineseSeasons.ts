@@ -92,15 +92,20 @@ const wing = (x: number, y: number, s: number) =>
  * overhead towards the top of the picture (apex up, larger); geese flying
  * south recede towards the Qinling (apex down, smaller).
  */
-const skein = (ax: number, ay: number, north: boolean, arms = 3) => {
+const skein = (ax: number, ay: number, north: boolean, arms = 3): DetailStroke[] => {
   const s = north ? 1.7 : 1.25;
   const dir = north ? 1 : -1;
-  let d = wing(ax, ay, s);
+  const bird = (x: number, y: number, size: number): DetailStroke => ({
+    cls: 'cs-sd-bird',
+    d: wing(x, y, size),
+    anchor: { x, y },
+  });
+  const birds = [bird(ax, ay, s)];
   for (let i = 1; i <= arms; i++) {
-    d += wing(ax - i * 3.4 * s * 0.7, ay + dir * i * 2.1, s * 0.92);
-    d += wing(ax + i * 3.4 * s * 0.7, ay + dir * i * 2.1, s * 0.92);
+    birds.push(bird(ax - i * 3.4 * s * 0.7, ay + dir * i * 2.1, s * 0.92));
+    birds.push(bird(ax + i * 3.4 * s * 0.7, ay + dir * i * 2.1, s * 0.92));
   }
-  return d;
+  return birds;
 };
 
 // Local silhouettes (u right, v up, origin at the feet / centre).
@@ -375,6 +380,9 @@ const floes = (rand: Rand, n: number) => {
   return d;
 };
 
+/** Anchor point of a creature stroke. */
+const at = (x: number, y: number) => ({ x, y });
+
 /** Fallback when no landscape is passed (tests that only give the willow crown). */
 const PINE_PERCH = { x: 322, y: 160 };
 
@@ -387,6 +395,12 @@ export interface DetailStroke {
   /** CSS class (`cs-sd-*`). */
   cls: string;
   d: string;
+  /**
+   * Set on the strokes of a creature (bird, beast, insect, fish, worm, clam):
+   * its feet / perch / water line. The stroke is scaled about this point by
+   * `DetailContext.creatureScale`; strokes without an anchor never change size.
+   */
+  anchor?: { x: number; y: number };
 }
 
 export interface DetailContext {
@@ -394,6 +408,11 @@ export interface DetailContext {
   willowCrown: { x: number; y: number };
   /** Scene-facing edge of the pine trunk (the cold cicada). */
   pinePerch?: { x: number; y: number };
+  /**
+   * Size factor for the creatures (1 = drawn size). ChineseHero raises it on
+   * narrow heroes so the animals keep their on-screen size on phones.
+   */
+  creatureScale?: number;
 }
 
 export interface PentadDetail {
@@ -433,7 +452,7 @@ const WET: WeatherCondition[] = ['storm', 'rain'];
 
 const r = (termId: number) => seededRandom(termId * 97 + 13);
 
-export const PENTAD_DETAILS: PentadDetail[] = [
+const RAW_DETAILS: PentadDetail[] = [
   {
     // 立春 · 東風解凍 (1st pentad): the east wind thaws the ice.
     termId: 1,
@@ -487,10 +506,11 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: [],
     draw: () => [
       { cls: 'cs-sd-earth', d: mounds(LEFT_SPOTS) },
-      {
+      ...LEFT_SPOTS.map(([x, y]) => ({
         cls: SILHOUETTE,
-        d: LEFT_SPOTS.map(([x, y]) => beetle(x + 0.2, y - 1.4, 1.2)).join(''),
-      },
+        d: beetle(x + 0.2, y - 1.4, 1.2),
+        anchor: at(x + 0.2, y - 0.9),
+      })),
     ],
   },
   {
@@ -508,9 +528,11 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: [],
     draw: () => [
       { cls: 'cs-sd-ice', d: floes(r(103), 5) },
+      { cls: 'cs-sd-fish', d: poly(place(FISH, 28, 173.4, 1.1, -8)), anchor: at(28, 173.4) },
       {
         cls: 'cs-sd-fish',
-        d: poly(place(FISH, 28, 173.4, 1.1, -8)) + poly(place(FISH, 56, 171.2, 0.95, 6, true)),
+        d: poly(place(FISH, 56, 171.2, 0.95, 6, true)),
+        anchor: at(56, 171.2),
       },
     ],
   },
@@ -528,11 +550,12 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: () => [
-      { cls: SILHOUETTE, d: poly(place(OTTER, 78, 182.2, 1.05)) },
-      {
+      { cls: SILHOUETTE, d: poly(place(OTTER, 78, 182.2, 1.05)), anchor: at(78, 182.2) },
+      ...[91, 94.6, 98.2].map(x => ({
         cls: 'cs-sd-fish',
-        d: [91, 94.6, 98.2].map(x => poly(place(FISH, x, 182, 0.5, 90))).join(''),
-      },
+        d: poly(place(FISH, x, 182, 0.5, 90)),
+        anchor: at(x, 182),
+      })),
     ],
   },
   {
@@ -550,7 +573,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm', 'fog'],
     replacesBirds: true,
-    draw: () => [{ cls: 'cs-sd-bird', d: skein(48, 74, true) }],
+    draw: () => skein(48, 74, true),
   },
   {
     // 雨水 · 草木萌動: grass and trees begin to bud.
@@ -610,8 +633,16 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm'],
     draw: ({ willowCrown: c }) => [
-      { cls: 'cs-sd-oriole', d: poly(place(PERCHED, c.x - 5.6, c.y + 3.2, 1.05)) },
-      { cls: 'cs-sd-twig', d: line([c.x - 5.2, c.y + 0.4, c.x - 4.2, c.y + 0.2]) },
+      {
+        cls: 'cs-sd-oriole',
+        d: poly(place(PERCHED, c.x - 5.6, c.y + 3.2, 1.05)),
+        anchor: at(c.x - 5.6, c.y + 3.2),
+      },
+      {
+        cls: 'cs-sd-twig',
+        d: line([c.x - 5.2, c.y + 0.4, c.x - 4.2, c.y + 0.2]),
+        anchor: at(c.x - 5.6, c.y + 3.2),
+      },
     ],
   },
   {
@@ -629,8 +660,8 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: AIRBORNE,
     replacesBirds: true,
     draw: () => [
-      { cls: 'cs-sd-ghost', d: poly(place(RAPTOR, 44, 70, 1.5, -6)) },
-      { cls: SILHOUETTE, d: poly(place(DOVE, 40, 72, 1.25, 8)) },
+      { cls: 'cs-sd-ghost', d: poly(place(RAPTOR, 44, 70, 1.5, -6)), anchor: at(44, 70) },
+      { cls: SILHOUETTE, d: poly(place(DOVE, 40, 72, 1.25, 8)), anchor: at(40, 72) },
     ],
   },
   {
@@ -649,13 +680,17 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: AIRBORNE,
     replacesBirds: true,
     draw: () => [
-      {
+      ...(
+        [
+          [34, 150, 0.9, -18],
+          [52, 144, 0.75, 12],
+          [70, 153, 0.65, -6],
+        ] as const
+      ).map(([x, y, sz, rot]) => ({
         cls: SILHOUETTE,
-        d:
-          poly(place(SWALLOW, 34, 150, 0.9, -18)) +
-          poly(place(SWALLOW, 52, 144, 0.75, 12)) +
-          poly(place(SWALLOW, 70, 153, 0.65, -6)),
-      },
+        d: poly(place(SWALLOW, x, y, sz, rot)),
+        anchor: at(x, y),
+      })),
     ],
   },
   {
@@ -765,7 +800,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm'],
     draw: () => [
-      { cls: SILHOUETTE, d: plump(84.6, 190.2, 0.95, 0.5) },
+      { cls: SILHOUETTE, d: plump(84.6, 190.2, 0.95, 0.5), anchor: at(84.6, 190.2) },
       { cls: 'cs-sd-hole', d: ellipse(95.4, 190.6, 1.4, 0.6) },
     ],
   },
@@ -847,6 +882,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
           plump(318.8, 193.4, 0.95) +
           poly([320.4, 191.2, 318.6, 186.4, 322.6, 190.6]) +
           poly([321.4, 191, 324.2, 186.8, 323.4, 191.2]),
+        anchor: at(318.8, 193.4),
       },
     ],
   },
@@ -868,14 +904,22 @@ export const PENTAD_DETAILS: PentadDetail[] = [
       return [
         { cls: 'cs-sd-stem cs-sd-trunk', d: line([287, g, 287.4, g - 7]) },
         { cls: 'cs-sd-crown cs-sd-crown--mulberry', d: ellipse(287.4, g - 10, 5.4, 3.4) },
-        { cls: SILHOUETTE, d: poly(place(PERCHED, 279.8, g - 11.4, 0.85)) },
+        // The hoopoe stands on top of the crown and scales about its feet; the
+        // mulberry keeps its size. (Kept right of the crown's centre so that, scaled
+        // up on phones, its crest stays clear of the Mingde gate.)
+        {
+          cls: SILHOUETTE,
+          d: poly(place(PERCHED, 288.4, g - 13.2, 0.85)),
+          anchor: at(288.4, g - 13.2),
+        },
         {
           cls: 'cs-sd-twig',
           d:
-            line([279.6, g - 14.6, 279, g - 16.4]) +
-            line([280.2, g - 14.8, 280.4, g - 16.8]) +
-            line([280.8, g - 14.6, 281.6, g - 16.2]) +
-            line([278.8, g - 13.4, 276.8, g - 13.2]),
+            line([288.2, g - 16.4, 287.6, g - 18.2]) +
+            line([288.8, g - 16.6, 289, g - 18.6]) +
+            line([289.4, g - 16.4, 290.2, g - 18]) +
+            line([287.4, g - 15.2, 285.4, g - 15]),
+          anchor: at(288.4, g - 13.2),
         },
       ];
     },
@@ -895,7 +939,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: [],
     draw: () => [
       { cls: 'cs-sd-earth', d: mounds([[92, 190.6]]) },
-      { cls: SILHOUETTE, d: cricket(87.4, 190.2, 1.5) },
+      { cls: SILHOUETTE, d: cricket(87.4, 190.2, 1.5), anchor: at(87.4, 190.2) },
     ],
   },
   {
@@ -912,7 +956,17 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: ['snow'],
     draw: () => [
-      { cls: 'cs-sd-worm', d: worm(78, 190, 6) + worm(86, 193.4, 5) + worm(93, 189.4, 5.4) },
+      ...(
+        [
+          [78, 190, 6],
+          [86, 193.4, 5],
+          [93, 189.4, 5.4],
+        ] as const
+      ).map(([x, y, len]) => ({
+        cls: 'cs-sd-worm',
+        d: worm(x, y, len),
+        anchor: at(x + len / 2, y),
+      })),
     ],
   },
   {
@@ -1051,7 +1105,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
       const g = groundY(287) + 1.4;
       return [
         { cls: 'cs-sd-stem', d: line([287, g, 286.4, g - 9]) },
-        { cls: 'cs-sd-mantis', d: mantis(286.6, g - 4.2, 1.5) },
+        { cls: 'cs-sd-mantis', d: mantis(286.6, g - 4.2, 1.5), anchor: at(286.6, g - 4.2) },
       ];
     },
   },
@@ -1070,8 +1124,8 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm'],
     draw: () => [
-      { cls: SILHOUETTE, d: poly(place(PERCHED, 320.6, 193.4, 0.9)) },
-      { cls: 'cs-sd-twig', d: line([321.9, 193.4, 321.8, 192.5]) },
+      { cls: SILHOUETTE, d: poly(place(PERCHED, 320.6, 193.4, 0.9)), anchor: at(320.6, 193.4) },
+      { cls: 'cs-sd-twig', d: line([321.9, 193.4, 321.8, 192.5]), anchor: at(320.6, 193.4) },
     ],
   },
   {
@@ -1087,7 +1141,13 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     layer: 'ground',
     time: 'day',
     hideIn: ['storm'],
-    draw: () => [{ cls: SILHOUETTE, d: poly(place(PERCHED, -21, 183.4, 1.05, 0, true)) }],
+    draw: () => [
+      {
+        cls: SILHOUETTE,
+        d: poly(place(PERCHED, -21, 183.4, 1.05, 0, true)),
+        anchor: at(-21, 183.4),
+      },
+    ],
   },
   {
     // 夏至 · 鹿角解 (1st): the deer shed their antlers.
@@ -1104,16 +1164,17 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: () => {
-      const ox = 262;
-      const oy = groundY(266) + 1.2;
+      // Right of the Mingde gate, so the antlers stay clear of it when scaled up.
+      const ox = 277;
+      const oy = groundY(281) + 1.2;
       const s = 0.95;
       const antler =
         line(place([1.6, 7.3, 1.2, 9, 0.6, 9.8], ox, oy, s)) +
         line(place([1.2, 9, 1.9, 9.8], ox, oy, s));
       const shed = line(place([10.2, 0.2, 11.6, 0.6, 12.4, 1.2], ox, oy, s));
       return [
-        { cls: SILHOUETTE, d: deer(ox, oy, s) },
-        { cls: 'cs-sd-twig', d: antler + shed },
+        { cls: SILHOUETTE, d: deer(ox, oy, s), anchor: at(ox, oy) },
+        { cls: 'cs-sd-twig', d: antler + shed, anchor: at(ox, oy) },
       ];
     },
   },
@@ -1130,7 +1191,9 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     layer: 'ground',
     time: 'any',
     hideIn: [],
-    draw: ({ willowCrown: c }) => [{ cls: SILHOUETTE, d: cicada(c.x + 1.2, c.y + 9, 2) }],
+    draw: ({ willowCrown: c }) => [
+      { cls: SILHOUETTE, d: cicada(c.x + 1.2, c.y + 9, 2), anchor: at(c.x + 1.2, c.y + 9) },
+    ],
   },
   {
     // 夏至 · 半夏生: the 半夏 (Pinellia ternata) sprouts, at the middle of summer.
@@ -1202,7 +1265,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     layer: 'ground',
     time: 'any',
     hideIn: [],
-    draw: () => [{ cls: SILHOUETTE, d: cricket(-14, 193.6, 1.5) }],
+    draw: () => [{ cls: SILHOUETTE, d: cricket(-14, 193.6, 1.5), anchor: at(-14, 193.6) }],
   },
   {
     // 小暑 · 鷹乃學習 (3rd): the young hawks learn to fly.
@@ -1220,10 +1283,8 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: AIRBORNE,
     replacesBirds: true,
     draw: () => [
-      {
-        cls: SILHOUETTE,
-        d: poly(place(RAPTOR, 30, 58, 1.1, -8)) + poly(place(RAPTOR, 46, 66, 0.75, 14)),
-      },
+      { cls: SILHOUETTE, d: poly(place(RAPTOR, 30, 58, 1.1, -8)), anchor: at(30, 58) },
+      { cls: SILHOUETTE, d: poly(place(RAPTOR, 46, 66, 0.75, 14)), anchor: at(46, 66) },
     ],
   },
   {
@@ -1343,7 +1404,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: ({ pinePerch: p = PINE_PERCH }) => [
-      { cls: SILHOUETTE, d: cicada(p.x - 0.6, p.y, 2.1) },
+      { cls: SILHOUETTE, d: cicada(p.x - 0.6, p.y, 2.1), anchor: at(p.x - 0.6, p.y) },
     ],
   },
   {
@@ -1363,8 +1424,9 @@ export const PENTAD_DETAILS: PentadDetail[] = [
       {
         cls: SILHOUETTE,
         d: poly(place(PERCHED, 318.6, 193.4, 1.25)) + ellipse(326.4, 191.4, 1.2, 0.5),
+        anchor: at(318.6, 193.4),
       },
-      { cls: 'cs-sd-twig', d: line([318.2, 197, 317.2, 196.6]) },
+      { cls: 'cs-sd-twig', d: line([318.2, 197, 317.2, 196.6]), anchor: at(318.6, 193.4) },
     ],
   },
   {
@@ -1440,7 +1502,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm', 'fog'],
     replacesBirds: true,
-    draw: () => [{ cls: 'cs-sd-bird', d: skein(56, 92, false) }],
+    draw: () => skein(56, 92, false),
   },
   {
     // 白露 · 玄鳥歸: the swallows go back (south).
@@ -1457,13 +1519,17 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: AIRBORNE,
     replacesBirds: true,
     draw: () => [
-      {
+      ...(
+        [
+          [40, 104, 0.6, 160],
+          [54, 98, 0.5, 172],
+          [66, 108, 0.45, 188],
+        ] as const
+      ).map(([x, y, sz, rot]) => ({
         cls: SILHOUETTE,
-        d:
-          poly(place(SWALLOW, 40, 104, 0.6, 160)) +
-          poly(place(SWALLOW, 54, 98, 0.5, 172)) +
-          poly(place(SWALLOW, 66, 108, 0.45, 188)),
-      },
+        d: poly(place(SWALLOW, x, y, sz, rot)),
+        anchor: at(x, y),
+      })),
     ],
   },
   {
@@ -1480,10 +1546,11 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm'],
     draw: () => [
+      { cls: SILHOUETTE, d: poly(place(PERCHED, 84, 190.4, 0.7)), anchor: at(84, 190.4) },
       {
         cls: SILHOUETTE,
-        d:
-          poly(place(PERCHED, 84, 190.4, 0.7)) + poly(place(PERCHED, 94, 191.6, 0.65, 0, true)),
+        d: poly(place(PERCHED, 94, 191.6, 0.65, 0, true)),
+        anchor: at(94, 191.6),
       },
       {
         cls: 'cs-sd-grain',
@@ -1566,10 +1633,13 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: () => [
-      {
-        cls: SILHOUETTE,
-        d: goose(18, 172.6, 1.05) + goose(31, 174.6, 1.1) + goose(50, 171.4, 0.95),
-      },
+      ...(
+        [
+          [18, 172.6, 1.05],
+          [31, 174.6, 1.1],
+          [50, 171.4, 0.95],
+        ] as const
+      ).map(([x, y, sz]) => ({ cls: SILHOUETTE, d: goose(x, y, sz), anchor: at(x, y) })),
     ],
   },
   {
@@ -1587,11 +1657,14 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: ['storm'],
     replacesBirds: true,
     draw: () => [
-      { cls: SILHOUETTE, d: poly(place(SWALLOW, 76, 160, 0.95, 140)) },
-      {
-        cls: 'cs-sd-shell',
-        d: shell(84.6, 182.6, 2.8) + shell(91, 183.4, 2.4) + shell(97.2, 182.8, 2.6),
-      },
+      { cls: SILHOUETTE, d: poly(place(SWALLOW, 76, 160, 0.95, 140)), anchor: at(76, 160) },
+      ...(
+        [
+          [84.6, 182.6, 2.8],
+          [91, 183.4, 2.4],
+          [97.2, 182.8, 2.6],
+        ] as const
+      ).map(([x, y, w]) => ({ cls: 'cs-sd-shell', d: shell(x, y, w), anchor: at(x, y) })),
     ],
   },
   {
@@ -1642,8 +1715,9 @@ export const PENTAD_DETAILS: PentadDetail[] = [
             beast(258, g, 0.9) +
             ellipse(272, g - 0.6, 1.4, 0.6) +
             ellipse(275.6, g - 0.6, 1.2, 0.55),
+          anchor: at(258, g),
         },
-        { cls: 'cs-sd-twig', d: beastTail(258, g, 0.9) },
+        { cls: 'cs-sd-twig', d: beastTail(258, g, 0.9), anchor: at(258, g) },
       ];
     },
   },
@@ -1752,8 +1826,9 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: () => [
-      { cls: SILHOUETTE, d: poly(place(PHEASANT, 76, 182.6, 1.1)) },
-      { cls: 'cs-sd-shell', d: shell(90, 182.8, 3) + shell(96.6, 183.4, 2.6) },
+      { cls: SILHOUETTE, d: poly(place(PHEASANT, 76, 182.6, 1.1)), anchor: at(76, 182.6) },
+      { cls: 'cs-sd-shell', d: shell(90, 182.8, 3), anchor: at(90, 182.8) },
+      { cls: 'cs-sd-shell', d: shell(96.6, 183.4, 2.6), anchor: at(96.6, 183.4) },
     ],
   },
   {
@@ -1826,7 +1901,11 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: ({ willowCrown: c }) => [
-      { cls: SILHOUETTE, d: plump(c.x - 6.4, c.y + 4.2, 0.85, 0.4) },
+      {
+        cls: SILHOUETTE,
+        d: plump(c.x - 6.4, c.y + 4.2, 0.85, 0.4),
+        anchor: at(c.x - 6.4, c.y + 4.2),
+      },
     ],
   },
   {
@@ -1846,14 +1925,17 @@ export const PENTAD_DETAILS: PentadDetail[] = [
       const g1 = groundY(258) + 1.2;
       const g2 = groundY(280) + 1.2;
       return [
-        { cls: 'cs-sd-tiger', d: beast(253, g1, 1.2) + beast(291, g2, 1.15, true) },
+        { cls: 'cs-sd-tiger', d: beast(253, g1, 1.2), anchor: at(253, g1) },
         {
           cls: 'cs-sd-stripe',
-          d:
-            stripes(253, g1, 1.2) +
-            stripes(291, g2, 1.15, true) +
-            beastTail(253, g1, 1.2) +
-            beastTail(291, g2, 1.15, true),
+          d: stripes(253, g1, 1.2) + beastTail(253, g1, 1.2),
+          anchor: at(253, g1),
+        },
+        { cls: 'cs-sd-tiger', d: beast(291, g2, 1.15, true), anchor: at(291, g2) },
+        {
+          cls: 'cs-sd-stripe',
+          d: stripes(291, g2, 1.15, true) + beastTail(291, g2, 1.15, true),
+          anchor: at(291, g2),
         },
       ];
     },
@@ -1894,7 +1976,8 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: [],
     draw: () => [
       { cls: 'cs-sd-earth cs-sd-earth--fill', d: ellipse(89, 191.4, 6.4, 1.6) },
-      { cls: 'cs-sd-worm', d: knot(86, 191.4) + knot(91.6, 191.2) },
+      { cls: 'cs-sd-worm', d: knot(86, 191.4), anchor: at(86, 191.4) },
+      { cls: 'cs-sd-worm', d: knot(91.6, 191.2), anchor: at(91.6, 191.2) },
     ],
   },
   {
@@ -1911,13 +1994,15 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'any',
     hideIn: [],
     draw: () => {
-      const ox = 264;
-      const oy = groundY(268) + 1.2;
+      // Right of the Mingde gate, so the antlers stay clear of it when scaled up.
+      const ox = 277;
+      const oy = groundY(281) + 1.2;
       const s = 1;
       return [
-        { cls: SILHOUETTE, d: deer(ox, oy, s) },
+        { cls: SILHOUETTE, d: deer(ox, oy, s), anchor: at(ox, oy) },
         {
           cls: 'cs-sd-twig',
+          anchor: at(ox, oy),
           d:
             line(place([8.6, 4.4, 9.8, 3.4, 10.2, 2.2], ox, oy, s)) +
             line(place([1.2, 7.4, 2.4, 9.2, 3.8, 9.8], ox, oy, s)) +
@@ -1961,7 +2046,7 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     time: 'day',
     hideIn: ['storm', 'fog'],
     replacesBirds: true,
-    draw: () => [{ cls: 'cs-sd-bird', d: skein(46, 52, true, 2) }],
+    draw: () => skein(46, 52, true, 2),
   },
   {
     // 小寒 · 鵲始巢 (2nd): the magpies begin to build their nests.
@@ -1983,9 +2068,18 @@ export const PENTAD_DETAILS: PentadDetail[] = [
         line([c.x - 2.4, c.y + 0.6, c.x + 2.2, c.y + 1.8]) +
         line([c.x - 2, c.y + 1.8, c.x + 2.4, c.y + 0.6]);
       return [
-        { cls: 'cs-sd-nest', d: nest },
-        { cls: SILHOUETTE, d: poly(place(PERCHED, c.x + 3.6, c.y + 2.4, 0.85)) },
-        { cls: 'cs-sd-magpie-white', d: ellipse(c.x + 5.4, c.y + 0.6, 0.9, 0.5) },
+        // Nest and magpie scale together about the fork, so the bird stays on its nest.
+        { cls: 'cs-sd-nest', d: nest, anchor: at(c.x, c.y + 2.3) },
+        {
+          cls: SILHOUETTE,
+          d: poly(place(PERCHED, c.x + 3.6, c.y + 2.4, 0.85)),
+          anchor: at(c.x, c.y + 2.3),
+        },
+        {
+          cls: 'cs-sd-magpie-white',
+          d: ellipse(c.x + 5.4, c.y + 0.6, 0.9, 0.5),
+          anchor: at(c.x, c.y + 2.3),
+        },
       ];
     },
   },
@@ -2005,8 +2099,8 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     draw: () => {
       const g = groundY(278) + 1.2;
       return [
-        { cls: SILHOUETTE, d: poly(place(PHEASANT, 274, g, 1.15)) },
-        { cls: 'cs-sd-wattle', d: dots([273.6, g - 5.6]) },
+        { cls: SILHOUETTE, d: poly(place(PHEASANT, 274, g, 1.15)), anchor: at(274, g) },
+        { cls: 'cs-sd-wattle', d: dots([273.6, g - 5.6]), anchor: at(274, g) },
       ];
     },
   },
@@ -2026,12 +2120,14 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     draw: () => {
       const g = groundY(284) + 1.2;
       return [
-        { cls: 'cs-sd-sheaf', d: ellipse(285, g - 0.8, 4.4, 1.3) },
+        // The straw nest scales with the hen sitting on it.
+        { cls: 'cs-sd-sheaf', d: ellipse(285, g - 0.8, 4.4, 1.3), anchor: at(285, g) },
         {
           cls: SILHOUETTE,
           d:
             plump(282.4, g - 1.2, 1.05, 0.8) +
             poly([286.4, g - 4.2, 286.8, g - 5.4, 287.4, g - 4.2]),
+          anchor: at(285, g),
         },
       ];
     },
@@ -2051,13 +2147,14 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     hideIn: AIRBORNE,
     replacesBirds: true,
     draw: () => [
-      { cls: SILHOUETTE, d: poly(place(FALCON, 54, 74, 1.4, 150)) },
+      { cls: SILHOUETTE, d: poly(place(FALCON, 54, 74, 1.4, 150)), anchor: at(54, 74) },
       {
         cls: 'cs-sd-twig cs-sd-speed',
         d:
           line([47, 63, 51.6, 70]) +
           line([50.4, 61.4, 54.4, 68.4]) +
           line([44.4, 65.6, 49, 72]),
+        anchor: at(54, 74),
       },
     ],
   },
@@ -2087,6 +2184,57 @@ export const PENTAD_DETAILS: PentadDetail[] = [
     ],
   },
 ];
+
+/** Scales a path about (ax, ay): every coordinate pair (all paths here are absolute M/L/Q/C/Z). */
+export const grow = (d: string, ax: number, ay: number, k: number) => {
+  if (k === 1) return d;
+  let i = 0;
+  return d.replace(/-?\d+(?:\.\d+)?/g, m => {
+    const v = Number(m);
+    const out = i % 2 === 0 ? ax + (v - ax) * k : ay + (v - ay) * k;
+    i++;
+    return fmt(out);
+  });
+};
+
+/** Grows the anchored (creature) strokes by `k`; landscape-wide strokes are returned as they are. */
+const scaleCreatures = (strokes: DetailStroke[], k: number) =>
+  k === 1
+    ? strokes
+    : strokes.map(st =>
+        st.anchor ? { ...st, d: grow(st.d, st.anchor.x, st.anchor.y, k) } : st,
+      );
+
+/** Largest creature scale ChineseHero uses (narrow phones). */
+export const MAX_CREATURE_SCALE = 1.7;
+
+/**
+ * Hero width (px) at and above which creatures keep their drawn size; just
+ * under the desktop layout's hero (569–571 px measured), so desktop is unchanged.
+ */
+const FULL_SIZE_WIDTH = 560;
+/** Hero width (px) at and below which the maximum scale applies. */
+const MAX_SCALE_WIDTH = 360;
+
+/**
+ * Creature scale for a hero `width` px wide: 1 from 560 px up (so the desktop
+ * layout, and anything ≥ 640 px, is unchanged), 1.7 at 360 px and below,
+ * linear in 1 / width in between, rounded up to 0.05 so the strokes rebuild
+ * only when the step changes. A 390 px hero gets 1.55, which keeps each
+ * creature at least as many screen pixels as in the desktop hero
+ * (1.55 × 390 = 605 ≥ 571). A 390 px phone has a 316 px hero: 1.7.
+ */
+export const creatureScaleFor = (width: number) => {
+  if (!(width > 0)) return 1;
+  const t = (FULL_SIZE_WIDTH / width - 1) / (FULL_SIZE_WIDTH / MAX_SCALE_WIDTH - 1);
+  const raw = 1 + (MAX_CREATURE_SCALE - 1) * Math.min(1, Math.max(0, t));
+  return Math.min(MAX_CREATURE_SCALE, Math.ceil(raw * 20 - 1e-6) / 20);
+};
+
+export const PENTAD_DETAILS: PentadDetail[] = RAW_DETAILS.map(d => ({
+  ...d,
+  draw: (ctx: DetailContext) => scaleCreatures(d.draw(ctx), ctx.creatureScale ?? 1),
+}));
 
 /** The 24 original one-per-term details (the pentad each term scene showed before the 72). */
 export const TERM_DETAILS: PentadDetail[] = PENTAD_DETAILS.filter(d => d.termScene);

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Body } from 'astronomy-engine';
 import { WeatherData } from '../types';
 import {
@@ -10,7 +10,7 @@ import {
   getSunTimes,
 } from '../utils/solar';
 import { getChineseCalendarData } from '../utils/chineseCalendarUtils';
-import { seasonBase } from '../utils/chineseSeasons';
+import { creatureScaleFor, seasonBase } from '../utils/chineseSeasons';
 import { getCurrentShichen } from '../utils/chineseTimeUtils';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import ChineseScene, { chineseSkyGradient } from './ChineseScene';
@@ -49,7 +49,28 @@ const toPercent = (x: number, y: number) => ({
   top: `${((y / 200) * 100).toFixed(2)}%`,
 });
 
+/**
+ * Creature scale from the hero's rendered width (ResizeObserver): 1 at ≥ 640 px,
+ * up to 1.7 on narrow phones, in 0.05 steps so the details rebuild only when
+ * the step changes.
+ */
+const useCreatureScale = (ref: React.RefObject<HTMLDivElement | null>) => {
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const update = () => setScale(creatureScaleFor(el.getBoundingClientRect().width));
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  return scale;
+};
+
 const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const creatureScale = useCreatureScale(heroRef);
   const sky = useMemo(() => {
     const { sunrise, sunset } = getSunTimes(modernTime, lat, lng);
     const t = modernTime.getTime();
@@ -105,7 +126,7 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
   const labelPos = toPercent(ARROW_X + 3.6, mark.marks[mark.current]);
 
   return (
-    <div className="chinese-hero">
+    <div className="chinese-hero" ref={heroRef}>
       <div
         className="chinese-hero__sky"
         style={{ background: chineseSkyGradient(lightInput) }}
@@ -138,6 +159,7 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
           dayFrac={dayFrac}
           termId={termId}
           pentad={pentad}
+          creatureScale={creatureScale}
           season={season}
         >
           <WeatherSvgEffects

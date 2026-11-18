@@ -4,9 +4,11 @@ import { chineseCalendarData } from '../utils/chineseCalendarData';
 import { getChineseCalendarData } from '../utils/chineseCalendarUtils';
 import { CLEAR_X0, CLEAR_X1, generateChineseLandscape } from '../utils/chineseLandscape';
 import {
+  MAX_CREATURE_SCALE,
   PENTAD_DETAILS,
   POOL_FROZEN_TERMS,
   TERM_DETAILS,
+  creatureScaleFor,
   detailBox,
   detailVisible,
   isPoolFrozen,
@@ -262,5 +264,101 @@ describe('72 pentads', () => {
       PENTAD_DETAILS.flatMap(d => d.draw(ctx).flatMap(st => st.cls.split(' '))),
     );
     for (const c of classes) expect(css, c).toMatch(new RegExp(`\\.${c}(?![\\w-])`));
+  });
+});
+
+describe('creature scale', () => {
+  const nums = (d: string) => (d.match(/-?\d+(\.\d+)?/g) ?? []).map(Number);
+  const ctxFor = (seed: number, creatureScale: number) => {
+    const land = generateChineseLandscape(seed);
+    return { willowCrown: land.willows[0].crown, pinePerch: land.pine.perch, creatureScale };
+  };
+
+  it('maps the hero width to a scale: 1 on desktop and from 640 px, 1.7 at 360 px and below', () => {
+    expect(creatureScaleFor(640)).toBe(1);
+    expect(creatureScaleFor(1200)).toBe(1);
+    // The desktop layout's hero (571 px measured at a 1280 px viewport) is unchanged.
+    expect(creatureScaleFor(571)).toBe(1);
+    expect(creatureScaleFor(360)).toBe(MAX_CREATURE_SCALE);
+    expect(creatureScaleFor(316)).toBe(MAX_CREATURE_SCALE);
+    expect(creatureScaleFor(0)).toBe(1);
+    // A creature in a 390 px hero is at least as many pixels as in the desktop hero.
+    expect(creatureScaleFor(390) * 390).toBeGreaterThanOrEqual(571);
+    let prev = Infinity;
+    for (let w = 300; w <= 700; w += 5) {
+      const k = creatureScaleFor(w);
+      expect(Math.round(k * 20) / 20).toBeCloseTo(k, 10);
+      expect(k).toBeLessThanOrEqual(prev);
+      prev = k;
+    }
+  });
+
+  it('keeps every detail out of the forbidden zones at scale 1 and at the maximum', () => {
+    for (const k of [1, MAX_CREATURE_SCALE]) {
+      for (const seed of SEEDS) {
+        const land = generateChineseLandscape(seed);
+        const pagoda = boxOf(land.pagoda.body);
+        const gate = boxOf(land.gate.body);
+        for (const d of PENTAD_DETAILS) {
+          const b = detailBox(d.draw(ctxFor(seed, k)));
+          const id = `${d.term} ${d.pentad} ×${k}`;
+          expect(b.x1 < CLEAR_X0 || b.x0 > CLEAR_X1, `${id}: x ${b.x0}..${b.x1}`).toBe(true);
+          expect(overlap(b, pagoda), `${id} overlaps the pagoda`).toBe(false);
+          expect(overlap(b, gate), `${id} overlaps the gate`).toBe(false);
+          expect(overlap(b, SEAL_BOX), `${id} overlaps the seal`).toBe(false);
+          // Inside the visible span (x −28…328 at 16:9) and the picture.
+          expect(b.x0, id).toBeGreaterThanOrEqual(-46);
+          expect(b.x1, id).toBeLessThanOrEqual(340);
+          expect(b.y0, id).toBeGreaterThanOrEqual(0);
+          expect(b.y1, id).toBeLessThanOrEqual(206);
+        }
+      }
+    }
+  });
+
+  it('leaves landscape-wide strokes identical and scales creatures about a fixed anchor', () => {
+    const k = MAX_CREATURE_SCALE;
+    for (const seed of SEEDS) {
+      for (const d of PENTAD_DETAILS) {
+        const small = d.draw(ctxFor(seed, 1));
+        const big = d.draw(ctxFor(seed, k));
+        expect(big).toHaveLength(small.length);
+        small.forEach((st, i) => {
+          const id = `${d.pentad} stroke ${i}`;
+          expect(big[i].anchor, id).toEqual(st.anchor);
+          if (!st.anchor) {
+            expect(big[i].d, id).toBe(st.d);
+            return;
+          }
+          const a = nums(st.d);
+          const b = nums(big[i].d);
+          expect(b, id).toHaveLength(a.length);
+          a.forEach((v, j) => {
+            const c = j % 2 === 0 ? st.anchor!.x : st.anchor!.y;
+            expect(Math.abs(b[j] - (c + (v - c) * k)), id).toBeLessThan(0.02);
+          });
+        });
+      }
+    }
+  });
+
+  it('scales the animals and insects, including the smallest ones', () => {
+    const creatures = PENTAD_DETAILS.filter(d =>
+      d.draw(ctxFor(1, 1)).some(st => st.anchor),
+    ).map(d => d.pentad);
+    for (const name of [
+      '田鼠化为鴽',
+      '蝼蝈鸣',
+      '蜩始鸣',
+      '寒蝉鸣',
+      '玄鸟至',
+      '虎始交',
+      '鹊始巢',
+    ])
+      expect(creatures, name).toContain(name);
+    expect(creatures.length).toBeGreaterThanOrEqual(36);
+    // Landscape-only details never scale.
+    for (const name of ['东风解冻', '虹始见', '白露降', '地始冻', '闭塞而成冬', '草木黄落'])
+      expect(creatures, name).not.toContain(name);
   });
 });
