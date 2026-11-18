@@ -38,6 +38,8 @@ interface Props {
   /** Degrees; drives the twilight colours. */
   sunAltitude: number;
   moonPhase: number;
+  /** Bright-limb tilt (`getMoonLimbTilt`): the moon's lit side faces the real direction. */
+  moonTilt?: number;
   starOpacity: number;
   weatherCond: WeatherCondition;
   aurora: boolean;
@@ -114,8 +116,17 @@ const sceneLight = (p: Props): SceneLight => {
 };
 
 const RomanScene: React.FC<Props> = props => {
-  const { seed, isDay, progress, moonPhase, starOpacity, weatherCond, aurora, children } =
-    props;
+  const {
+    seed,
+    isDay,
+    progress,
+    moonPhase,
+    moonTilt,
+    starOpacity,
+    weatherCond,
+    aurora,
+    children,
+  } = props;
   const uid = sceneUid(useId(), 'rs');
   const land = useMemo(() => generateRomanLandscape(seed), [seed]);
   const light = sceneLight(props);
@@ -130,6 +141,7 @@ const RomanScene: React.FC<Props> = props => {
         isDay={isDay}
         progress={progress}
         moonPhase={moonPhase}
+        moonTilt={moonTilt}
         starOpacity={starOpacity}
         golden={light.golden}
         veiled={veiled}

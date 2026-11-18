@@ -13,7 +13,7 @@ import {
   VectorFromSphere,
   AstroTime,
 } from 'astronomy-engine';
-import { getMoonPhase } from './solar';
+import { getMoonLimbTilt, getMoonPhase } from './solar';
 import {
   getAlgolPhase,
   ALGOL_RA_H,
@@ -60,7 +60,8 @@ export interface SkyMilkyWayPoint extends SkyPoint {
 
 export interface SkySnapshot {
   sun: SkyPoint;
-  moon: SkyPoint & { phase: number };
+  /** `tilt`: bright-limb direction, degrees counterclockwise from up (`getMoonLimbTilt`). */
+  moon: SkyPoint & { phase: number; tilt: number };
   sopdet: SkyPoint;
   algol: SkyPoint & { eclipsed: boolean };
   planets: SkyPlanet[];
@@ -183,7 +184,11 @@ export const computeSky = (date: Date, lat: number, lng: number): SkySnapshot =>
 
   return {
     sun: bodyHorizon(Body.Sun, date, observer),
-    moon: { ...bodyHorizon(Body.Moon, date, observer), phase: getMoonPhase(date) },
+    moon: {
+      ...bodyHorizon(Body.Moon, date, observer),
+      phase: getMoonPhase(date),
+      tilt: getMoonLimbTilt(date, lat, lng).tiltDeg,
+    },
     sopdet: bodyHorizon(Body.Star1, date, observer),
     algol: {
       ...bodyHorizon(Body.Star2, date, observer),

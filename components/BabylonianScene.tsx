@@ -10,7 +10,7 @@ import {
   generateBabylonianLandscape,
   riverEdges,
 } from '../utils/babylonianLandscape';
-import { SceneLight, fmt } from '../utils/sceneKit';
+import { SceneLight, fmt, moonRotation } from '../utils/sceneKit';
 import { Stars, Sun } from './SceneSky';
 import { SceneRainSplashes } from './SceneWeather';
 import { Birds, MonumentShape, SceneDefs, SceneRoot, sceneFlags, sceneUid } from './SceneParts';
@@ -53,7 +53,8 @@ interface Props {
   /** Šamaš in the 300×200 frame, or null when below the horizon. */
   sun: SkyBody | null;
   /** Sin in the 300×200 frame, or null when below the horizon. */
-  moon: (SkyBody & { phase: number }) | null;
+  /** `tilt`: bright-limb direction from `getMoonLimbTilt` (absent: old fixed −15°). */
+  moon: (SkyBody & { phase: number; tilt?: number }) | null;
   /** The weather layer, drawn between the sky bodies and the landscape. */
   children?: React.ReactNode;
 }
@@ -203,7 +204,11 @@ const THICK: WeatherCondition[] = ['rain', 'storm', 'snow', 'fog'];
 const VEIL = { filter: 'blur(2.5px)', opacity: 0.45 };
 
 /** Sin, the moon god: lapis-tinted disc with an atmospheric halo, lit part cut by the phase. */
-const SinMoon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) => {
+const SinMoon: React.FC<{ uid: string; phase: number; tilt?: number }> = ({
+  uid,
+  phase,
+  tilt,
+}) => {
   const r = 14;
   const p = ((phase % 1) + 1) % 1;
   const glow = 1 - Math.abs(p - 0.5) * 2;
@@ -212,7 +217,7 @@ const SinMoon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) => {
   const bulge = (p > 0.25 && p <= 0.5) || p > 0.75 ? 1 : 0;
   const d = `M 0 -${r} A ${r} ${r} 0 0 ${waxing ? 1 : 0} 0 ${r} A ${fmt(rx)} ${r} 0 0 ${bulge} 0 -${r} Z`;
   return (
-    <g transform="rotate(-15)">
+    <g transform={`rotate(${moonRotation(p, tilt)})`}>
       <defs>
         <clipPath id={`${uid}-sin-clip`}>
           <path d={d} />
@@ -317,7 +322,7 @@ const BabylonianScene: React.FC<Props> = props => {
             transform={`translate(${fmt(moon.x)}, ${fmt(moon.y)})`}
             style={veiled ? VEIL : undefined}
           >
-            <SinMoon uid={uid} phase={moon.phase} />
+            <SinMoon uid={uid} phase={moon.phase} tilt={moon.tilt} />
           </g>
         )}
 

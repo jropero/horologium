@@ -454,9 +454,9 @@ const EgyptianStarMap: React.FC<EgyptianStarMapProps> = ({ date, lat, lng, horiz
       my = yFor(sky.moon.alt);
     if (sky.moon.alt > 0 && onScreen(mx, my)) {
       const r = 7;
-      const dxSun = (wrap360(sky.sun.az - sky.moon.az + 180) - 180) * PX_PER_DEG;
-      const dySun = -(sky.sun.alt - sky.moon.alt) * pxPerAlt;
-      const angle = Math.atan2(dySun, dxSun);
+      // Real bright-limb direction (getMoonLimbTilt, camera.js method), counterclockwise
+      // from up; canvas angles run clockwise from +x, and the lit half is drawn toward +x.
+      const angle = -Math.PI / 2 - (sky.moon.tilt * Math.PI) / 180;
       const c = Math.cos(sky.moon.phase * 2 * Math.PI); // 1 = new, -1 = full
       ctx.save();
       ctx.translate(mx, my);

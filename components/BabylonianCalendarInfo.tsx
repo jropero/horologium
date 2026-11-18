@@ -18,7 +18,12 @@ import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherPartic
 import WeatherSvgEffects from './WeatherSvgEffects';
 import SceneWeather from './SceneWeather';
 import BabylonianScene, { babylonianSkyGradient } from './BabylonianScene';
-import { getMoonPosition, getPlanetPosition, getSunAltitude } from '../utils/solar';
+import {
+  getMoonLimbTilt,
+  getMoonPosition,
+  getPlanetPosition,
+  getSunAltitude,
+} from '../utils/solar';
 import './BabylonianCalendarInfo.css';
 
 interface BabylonianCalendarInfoProps {
@@ -775,9 +780,15 @@ const heroSky = (date: Date, lat: number, lng: number, moonPhase: number) => {
   // ?mockmoon=<phase> (0–1) pins the moon at center-sky for visual testing.
   const mockMoonPhase = new URLSearchParams(window.location.search).get('mockmoon');
   const sinPos = getMoonPosition(date, lat, lng);
-  let moon: { x: number; y: number; phase: number } | null = null;
+  let moon: { x: number; y: number; phase: number; tilt?: number } | null = null;
   if (mockMoonPhase !== null) moon = { x: 65, y: 115, phase: parseFloat(mockMoonPhase) };
-  else if (sinPos.altitude >= 0) moon = { ...toFrame(sinPos), phase: moonPhase };
+  else if (sinPos.altitude >= 0)
+    // Lit side turned where the observer sees it (camera.js method): a low crescent lies like a boat.
+    moon = {
+      ...toFrame(sinPos),
+      phase: moonPhase,
+      tilt: getMoonLimbTilt(date, lat, lng).tiltDeg,
+    };
   // Šamaš (the Sun), mapped the same way.
   const sunPos = getPlanetPosition(Body.Sun, date, lat, lng);
   const sunAltitude = getSunAltitude(date, lat, lng);

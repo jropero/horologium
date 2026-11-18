@@ -1,5 +1,5 @@
 import React from 'react';
-import { SCENE_W, SCENE_X0, seededRandom } from '../utils/sceneKit';
+import { SCENE_W, SCENE_X0, moonRotation, seededRandom } from '../utils/sceneKit';
 import './SceneKit.css';
 
 /**
@@ -84,6 +84,8 @@ interface Props {
   isDay: boolean;
   progress: number;
   moonPhase: number;
+  /** Bright-limb tilt from `getMoonLimbTilt`; the lit side then faces the real direction. */
+  moonTilt?: number;
   starOpacity: number;
   /** Sun near the horizon: warmer disc and glow. */
   golden: boolean;
@@ -194,8 +196,16 @@ export const Sun: React.FC<{ uid: string; golden: boolean }> = ({ uid, golden })
   );
 };
 
-/** Moon of radius 14 with the lit part cut by the phase (0 = new, 0.5 = full). */
-export const Moon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) => {
+/**
+ * Moon of radius 14 with the lit part cut by the phase (0 = new, 0.5 = full).
+ * `tilt` (from `getMoonLimbTilt`) turns the lit side to where the observer sees
+ * it; without it the old fixed −15° is kept.
+ */
+export const Moon: React.FC<{ uid: string; phase: number; tilt?: number }> = ({
+  uid,
+  phase,
+  tilt,
+}) => {
   const r = 14;
   const p = ((phase % 1) + 1) % 1;
   const waxing = p <= 0.5;
@@ -229,7 +239,7 @@ export const Moon: React.FC<{ uid: string; phase: number }> = ({ uid, phase }) =
         </filter>
       </defs>
       <circle r="32" fill={`url(#${uid}-moon-halo)`} opacity={0.25 + 0.75 * illuminated} />
-      <g transform="rotate(-15)">
+      <g transform={`rotate(${moonRotation(p, tilt)})`}>
         {/* Night side, faintly visible by earthshine. */}
         <circle r={r} fill={`url(#${uid}-moon-dark)`} />
         <g clipPath={`url(#${uid}-moon-clip)`}>
@@ -260,6 +270,7 @@ const SceneSky: React.FC<Props> = ({
   isDay,
   progress,
   moonPhase,
+  moonTilt,
   starOpacity,
   golden,
   veiled,
@@ -273,7 +284,11 @@ const SceneSky: React.FC<Props> = ({
         transform={`translate(${body.x}, ${body.y})`}
         style={veiled ? { filter: 'blur(2.5px)', opacity: 0.45 } : undefined}
       >
-        {isDay ? <Sun uid={uid} golden={golden} /> : <Moon uid={uid} phase={moonPhase} />}
+        {isDay ? (
+          <Sun uid={uid} golden={golden} />
+        ) : (
+          <Moon uid={uid} phase={moonPhase} tilt={moonTilt} />
+        )}
       </g>
     </>
   );

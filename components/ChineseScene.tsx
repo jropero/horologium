@@ -9,7 +9,7 @@ import {
   SCENE_X1,
   generateChineseLandscape,
 } from '../utils/chineseLandscape';
-import { SceneLight, fmt } from '../utils/sceneKit';
+import { SceneLight, fmt, moonRotation } from '../utils/sceneKit';
 import { Moon, Stars } from './SceneSky';
 import { SceneRainSplashes } from './SceneWeather';
 import { Birds, MonumentShape, SceneDefs, SceneRoot, sceneFlags, sceneUid } from './SceneParts';
@@ -60,7 +60,8 @@ interface Props {
   /** Sun in the frame, or null when below the horizon. */
   sun: SkyBody | null;
   /** Moon in the frame, or null when below the horizon. */
-  moon: (SkyBody & { phase: number }) | null;
+  /** `tilt`: bright-limb direction from `getMoonLimbTilt` (absent: old fixed −15°). */
+  moon: (SkyBody & { phase: number; tilt?: number }) | null;
   /** Real sun position for the gnomon's shadow. */
   sunPos: SunPos | null;
   /** 0–1 through the day from the start of 子 (23:00), for the clepsydra arrow. */
@@ -289,7 +290,7 @@ const InkSun: React.FC<{ uid: string; altitude: number }> = ({ uid, altitude }) 
  * The moon by day: only its lit part, a pale wash on the paper (the kit's moon
  * draws the night side as a dark disc, which reads as a hole by day).
  */
-const DayMoon: React.FC<{ phase: number }> = ({ phase }) => {
+const DayMoon: React.FC<{ phase: number; tilt?: number }> = ({ phase, tilt }) => {
   const r = 14;
   const p = ((phase % 1) + 1) % 1;
   const waxing = p <= 0.5;
@@ -297,7 +298,7 @@ const DayMoon: React.FC<{ phase: number }> = ({ phase }) => {
   const bulge = (p > 0.25 && p <= 0.5) || p > 0.75 ? 1 : 0;
   const d = `M 0 ${-r} A ${r} ${r} 0 0 ${waxing ? 1 : 0} 0 ${r} A ${fmt(rx)} ${r} 0 0 ${bulge} 0 ${-r} Z`;
   return (
-    <g transform="rotate(-15)">
+    <g transform={`rotate(${moonRotation(p, tilt)})`}>
       <circle r={r} className="cs-daymoon-ghost" />
       <path d={d} className="cs-daymoon" />
     </g>
@@ -331,7 +332,7 @@ const SkyBodies: React.FC<{
   isDay: boolean;
   sunAltitude: number;
   sun: SkyBody | null;
-  moon: (SkyBody & { phase: number }) | null;
+  moon: (SkyBody & { phase: number; tilt?: number }) | null;
   veiled: boolean;
 }> = ({ uid, isDay, sunAltitude, sun, moon, veiled }) => (
   <>
@@ -348,7 +349,11 @@ const SkyBodies: React.FC<{
         transform={`translate(${fmt(moon.x)}, ${fmt(moon.y)}) scale(0.72)`}
         style={veiled ? VEIL : undefined}
       >
-        {isDay ? <DayMoon phase={moon.phase} /> : <Moon uid={uid} phase={moon.phase} />}
+        {isDay ? (
+          <DayMoon phase={moon.phase} tilt={moon.tilt} />
+        ) : (
+          <Moon uid={uid} phase={moon.phase} tilt={moon.tilt} />
+        )}
       </g>
     )}
   </>
