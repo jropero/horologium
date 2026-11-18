@@ -254,6 +254,8 @@ export interface Pine {
   trunk: string;
   needles: string;
   needleDetail: string;
+  /** Left (scene-facing) edge of the trunk at a third of its height (a cicada clings here). */
+  perch: { x: number; y: number };
 }
 
 export interface ChineseLandscape {
@@ -494,7 +496,8 @@ const pineTree = (rand: Rand): Pine => {
     needles += needleMass(cx, cy, w, h, rand);
     needleDetail += needleStrokes(cx, cy, w, h, rand);
   }
-  return { trunk, needles, needleDetail };
+  const p = spine(0.3);
+  return { trunk, needles, needleDetail, perch: { x: p.x - width(0.3) / 2, y: p.y } };
 };
 
 const earthStrokes = (rand: Rand) => {
