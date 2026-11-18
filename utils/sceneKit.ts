@@ -35,6 +35,24 @@ export const fmt = (v: number) => (Math.round(v * 100) / 100).toString();
 /** Bézier handle length for a quarter circle of radius 1. */
 export const K = 0.5523;
 
+/** Old fixed rotation of the hero moons, used when no real tilt is known. */
+const LEGACY_MOON_ROTATION = -15;
+
+/**
+ * SVG rotation (degrees, clockwise) for a moon drawn the scenes' way: lit part
+ * on the right while waxing (phase ≤ 0.5), on the left while waning. With
+ * `tiltDeg` from `getMoonLimbTilt` (bright limb, counterclockwise from up) the
+ * lit side ends up where the observer really sees it. The heroes put the zenith
+ * at the top and east on the left (facing south), the same frame as the tilt.
+ */
+export const moonRotation = (phase: number, tiltDeg?: number): number => {
+  if (tiltDeg === undefined || !Number.isFinite(tiltDeg)) return LEGACY_MOON_ROTATION;
+  const p = ((phase % 1) + 1) % 1;
+  // Where the drawing puts the lit side before rotation, counterclockwise from up.
+  const drawnLit = p <= 0.5 ? -90 : 90;
+  return Math.round((drawnLit - tiltDeg) * 10) / 10;
+};
+
 /**
  * Path builder in shape-local units: u runs right from the left edge, v runs up
  * from the base. `flip` mirrors the shape inside its own width (so asymmetric

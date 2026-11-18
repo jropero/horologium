@@ -14,7 +14,7 @@ import { translateGreekUI } from '../utils/greekTranslations';
 import { OVID_ASTRONOMICAL_EVENTS } from '../utils/ovidFastiData';
 import { RAIN_INTENSITY, generateWeatherParticles } from '../utils/weatherParticles';
 import WeatherSvgEffects from './WeatherSvgEffects';
-import { getSunAltitude, getTwilightTimes } from '../utils/solar';
+import { getMoonLimbTilt, getSunAltitude, getTwilightTimes } from '../utils/solar';
 import './RomanClock.css';
 
 interface RomanClockProps {
@@ -69,6 +69,12 @@ function RomanClock({
   // Sun altitude in degrees: positive = above horizon, 0 = horizon, -6 = civil twilight end
   const sunAltitude = useMemo(
     () => getSunAltitude(modernTime, currentLat, currentLng),
+    [modernTime, currentLat, currentLng],
+  );
+
+  // Where the moon's lit side faces for this observer (camera.js method).
+  const moonTilt = useMemo(
+    () => getMoonLimbTilt(modernTime, currentLat, currentLng).tiltDeg,
     [modernTime, currentLat, currentLng],
   );
 
@@ -322,6 +328,7 @@ function RomanClock({
                     progress={progressPercent}
                     sunAltitude={sunAltitude}
                     moonPhase={romanTime.moonPhase}
+                    moonTilt={moonTilt}
                     starOpacity={starOpacity}
                     weatherCond={weatherCond}
                     aurora={isOffline}
@@ -335,6 +342,7 @@ function RomanClock({
                     progress={progressPercent}
                     sunAltitude={sunAltitude}
                     moonPhase={romanTime.moonPhase}
+                    moonTilt={moonTilt}
                     starOpacity={starOpacity}
                     weatherCond={weatherCond}
                     aurora={isOffline}

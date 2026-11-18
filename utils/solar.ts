@@ -9,6 +9,10 @@ import {
   Observer,
   Equator,
   Horizon,
+  Illumination,
+  Pivot,
+  RotateVector,
+  Rotation_EQD_HOR,
 } from 'astronomy-engine';
 
 // JDE (Julian Day Ephemeris) ↔ JS Date; TT ≈ UTC within ~70 s — negligible for calendar use
@@ -155,6 +159,53 @@ export const getMoonPosition = (
     return { altitude: -90, azimuth: 180 };
   }
 };
+
+export interface MoonLimb {
+  /**
+   * Direction of the Moon's sunlit side as seen by the observer, in degrees
+   * counterclockwise from "up" (the zenith side of the Moon): 0 = lit side on
+   * top, −90 = on the right, +90 = on the left, ±180 = at the bottom.
+   */
+  tiltDeg: number;
+  /** Illuminated fraction of the disc, 0–1. */
+  litFraction: number;
+}
+
+const _moonLimbCache = new Map<string, MoonLimb>();
+const _MOON_LIMB_CACHE_MAX = 64;
+
+/**
+ * Tilt of the Moon's bright limb for an observer, by the method of Astronomy
+ * Engine's demo `demo/nodejs/camera.js` (D. Cross, 2021): rotate equatorial
+ * coordinates of date into a "camera" frame aimed at the Moon (horizon frame,
+ * pivoted by the Moon's azimuth about the zenith and by its altitude about the
+ * horizontal axis: +x toward the Moon, +y left, +z up), then read the Sun's
+ * direction in that frame. Topocentric positions, no aberration (as the demo).
+ * Memoised per minute and location.
+ */
+export const getMoonLimbTilt = (date: Date, lat: number, lng: number): MoonLimb =>
+  boundedMemo(
+    _moonLimbCache,
+    `${Math.floor(date.getTime() / 60000)}|${coordsKey(lat, lng)}`,
+    _MOON_LIMB_CACHE_MAX,
+    () => {
+      const observer = new Observer(lat, lng, 0);
+      const moon = Equator(Body.Moon, date, observer, true, false);
+      const sun = Equator(Body.Sun, date, observer, true, false);
+      const hor = Horizon(date, observer, moon.ra, moon.dec);
+      // Pivot angles run counterclockwise and azimuth clockwise, so adding the
+      // azimuth undoes it; the same holds for the altitude about the west axis.
+      let rot = Rotation_EQD_HOR(date, observer);
+      rot = Pivot(rot, 2, hor.azimuth);
+      rot = Pivot(rot, 1, hor.altitude);
+      const s = RotateVector(rot, sun.vec);
+      const phaseAngle = Illumination(Body.Moon, date).phase_angle;
+      return {
+        tiltDeg: (Math.atan2(s.y, s.z) * 180) / Math.PI,
+        litFraction: (1 + Math.cos((phaseAngle * Math.PI) / 180)) / 2,
+      };
+    },
+  );
 
 export const getPlanetPosition = (
   body: Body,

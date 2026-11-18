@@ -179,6 +179,8 @@ interface Props extends HellenicLightInput {
   seed: number;
   layout?: HellenicLayout;
   moonPhase: number;
+  /** Bright-limb tilt (`getMoonLimbTilt`): the moon's lit side faces the real direction. */
+  moonTilt?: number;
   starOpacity: number;
   /** Draw the gnomon (day) / klepsydra (night) at the centre (clock hero). */
   instrument?: boolean;
@@ -215,6 +217,7 @@ const HellenicScene: React.FC<Props> = props => {
     isDay,
     progress,
     moonPhase,
+    moonTilt,
     starOpacity,
     weatherCond,
     aurora,
@@ -254,7 +257,7 @@ const HellenicScene: React.FC<Props> = props => {
             )}
             {bodies.moon && !isDay && (
               <g transform={`translate(${bodies.moon.x}, ${bodies.moon.y})`}>
-                <Moon uid={uid} phase={moonPhase} />
+                <Moon uid={uid} phase={moonPhase} tilt={moonTilt} />
               </g>
             )}
           </>
@@ -264,6 +267,7 @@ const HellenicScene: React.FC<Props> = props => {
             isDay={isDay}
             progress={progress}
             moonPhase={moonPhase}
+            moonTilt={moonTilt}
             starOpacity={starOpacity}
             golden={light.golden}
             veiled={veiled}

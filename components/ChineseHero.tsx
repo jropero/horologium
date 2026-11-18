@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Body } from 'astronomy-engine';
 import { WeatherData } from '../types';
 import {
+  getMoonLimbTilt,
   getMoonPhase,
   getMoonPosition,
   getPlanetPosition,
@@ -84,7 +85,12 @@ const ChineseHero: React.FC<Props> = ({ modernTime, weather, lat, lng }) => {
       sun: sunPos.altitude >= -1 ? toFrame(sunPos) : null,
       moon:
         moonPos.altitude >= -1
-          ? { ...toFrame(moonPos), phase: getMoonPhase(modernTime) }
+          ? {
+              ...toFrame(moonPos),
+              phase: getMoonPhase(modernTime),
+              // Lit side turned where the observer sees it (camera.js method).
+              tilt: getMoonLimbTilt(modernTime, lat, lng).tiltDeg,
+            }
           : null,
       starOpacity: sunAltitude > 0 ? 0 : Math.min(1, -sunAltitude / 6),
     };

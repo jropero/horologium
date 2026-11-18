@@ -17,6 +17,7 @@ import { translateGreekUI } from '../utils/greekTranslations';
 import { Body } from 'astronomy-engine';
 import {
   getSunTimes,
+  getMoonLimbTilt,
   getMoonPosition,
   getMoonPhase,
   getPlanetPosition,
@@ -443,7 +444,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
     setGreekInfo({ festival, dailyDeity, atticDate: targetAtticDate });
   }, [propAtticDate, currentLat, currentLng]);
 
-  const { isDay, dayProgress, moonPhase, sunAltitude, sunPos, moonPos, sceneSeed } =
+  const { isDay, dayProgress, moonPhase, moonTilt, sunAltitude, sunPos, moonPos, sceneSeed } =
     useMemo(() => {
       const date = currentDate ?? new Date();
       const sun = getSunTimes(date, currentLat, currentLng);
@@ -466,6 +467,8 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
         isDay: day,
         dayProgress: day ? (now - rise) / (set - rise) : 0,
         moonPhase: getMoonPhase(date),
+        // Where the lit side faces for this observer (camera.js method).
+        moonTilt: getMoonLimbTilt(date, currentLat, currentLng).tiltDeg,
         sunAltitude: getSunAltitude(date, currentLat, currentLng),
         sunPos: day ? toSvg(getPlanetPosition(Body.Sun, date, currentLat, currentLng)) : null,
         moonPos: day ? null : toSvg(getMoonPosition(date, currentLat, currentLng)),
@@ -575,6 +578,7 @@ const HellenicCalendarInfo: React.FC<HellenicCalendarInfoProps> = ({
               progress={dayProgress}
               sunAltitude={sunAltitude}
               moonPhase={moonPhase}
+              moonTilt={moonTilt}
               starOpacity={starOpacity}
               weatherCond={condition}
               aurora={offline}
