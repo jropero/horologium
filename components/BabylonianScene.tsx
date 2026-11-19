@@ -92,8 +92,8 @@ const OVERCAST: Palette = {
   haze: '#a3b0c4',
   rim: '#d7dee8',
   stone: '#b9b9b4',
-  cloudLight: '#eef1f5',
-  cloudShade: '#8f9cad',
+  cloudLight: '#cbd5e1',
+  cloudShade: '#94a3b8',
   earth: '#a8957f',
   glaze: '#34548f',
   ochre: '#cdb072',
@@ -116,8 +116,8 @@ const DAY: Record<DaySky, Palette> = {
     haze: '#5d6b82',
     rim: '#9fb0c4',
     stone: '#8e949c',
-    cloudLight: '#8793a3',
-    cloudShade: '#3b4656',
+    cloudLight: '#cbd5e1',
+    cloudShade: '#94a3b8',
     earth: '#6f6458',
     glaze: '#26406f',
     ochre: '#a8935e',
@@ -200,7 +200,7 @@ const nightGradient = (p: LightInput) => {
 export const babylonianSkyGradient = (p: LightInput): string =>
   p.isDay ? DAY_GRADIENT[daySky(p)] : nightGradient(p);
 
-const THICK: WeatherCondition[] = ['rain', 'storm', 'snow', 'fog'];
+const THICK: WeatherCondition[] = ['cloudy', 'rain', 'storm', 'snow', 'fog'];
 const VEIL = { filter: 'blur(2.5px)', opacity: 0.45 };
 
 /** Sin, the moon god: lapis-tinted disc with an atmospheric halo, lit part cut by the phase. */

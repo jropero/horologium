@@ -299,6 +299,8 @@ export interface SceneLight {
   /** Sunlit top and shaded base of the clouds. */
   cloudLight: string;
   cloudShade: string;
+  /** Wind streaks; defaults to a light cream that only shows on dark or blue skies. */
+  wind?: string;
   /** Sun near the horizon: warmer sun. */
   golden: boolean;
   /** Lamps and torches are burning (night or aurora). */
@@ -312,4 +314,5 @@ export const sceneLightStyle = (light: SceneLight) =>
     '--stone': light.stone,
     '--cloud-light': light.cloudLight,
     '--cloud-shade': light.cloudShade,
+    ...(light.wind ? { '--wind': light.wind } : {}),
   }) as Record<string, string>;

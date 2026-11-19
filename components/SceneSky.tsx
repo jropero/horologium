@@ -89,8 +89,8 @@ interface Props {
   starOpacity: number;
   /** Sun near the horizon: warmer disc and glow. */
   golden: boolean;
-  /** Thick weather in front of the sun or moon: blur and dim it. */
-  veiled: boolean;
+  /** Weather in front of the sun or moon (`sceneFlags().veil`). */
+  veil?: React.CSSProperties;
 }
 
 export const Stars: React.FC<{ uid: string; opacity: number }> = ({ uid, opacity }) => (
@@ -273,17 +273,14 @@ const SceneSky: React.FC<Props> = ({
   moonTilt,
   starOpacity,
   golden,
-  veiled,
+  veil,
 }) => {
   const body = onPath(angleAt(progress));
   return (
     <>
       <Stars uid={uid} opacity={starOpacity} />
       <HourArc isDay={isDay} progress={progress} />
-      <g
-        transform={`translate(${body.x}, ${body.y})`}
-        style={veiled ? { filter: 'blur(2.5px)', opacity: 0.45 } : undefined}
-      >
+      <g transform={`translate(${body.x}, ${body.y})`} style={veil}>
         {isDay ? (
           <Sun uid={uid} golden={golden} />
         ) : (

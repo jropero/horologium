@@ -285,27 +285,30 @@
 }
 
 /* ── Weather (components/SceneWeather.tsx) ──────────────────────────────── */
-.sw-cloud-stop {
-  stop-color: var(--cloud-shade);
+
+/*
+ * Cloud bands: colours from the scene light, so they follow the hour. Storm
+ * bands are the cloud shade pushed toward night slate.
+ */
+.sw-band--shade {
+  fill: var(--cloud-shade);
 }
 
-.sw-cloud-stop--light {
-  stop-color: var(--cloud-light);
+.sw-band--light {
+  fill: var(--cloud-light);
 }
 
-/* One 300-unit tile per loop: the second copy takes the place of the first. */
-.sw-drift {
-  animation: swDrift 160s linear infinite;
+.sw-band--storm {
+  fill: color-mix(in srgb, var(--cloud-shade) 45%, #1e293b);
 }
 
-@keyframes swDrift {
-  from {
-    transform: translateX(-300px);
-  }
+.sw-band--storm-deep {
+  fill: color-mix(in srgb, var(--cloud-shade) 25%, #0f172a);
+}
 
-  to {
-    transform: translateX(0);
-  }
+/* Wind streaks: light cream unless the scene light sets --wind for a pale sky. */
+.sw-wind {
+  stroke: var(--wind, #e6dcc0);
 }
 
 .sw-bolt {
@@ -349,7 +352,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sw-drift,
   .sw-fog,
   .sw-splash {
     animation: none;

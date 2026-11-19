@@ -104,9 +104,19 @@ export const Birds: React.FC<{ y?: number }> = ({ y = 60 }) => (
   </g>
 );
 
-const THICK_WEATHER: WeatherCondition[] = ['rain', 'storm', 'snow', 'fog'];
+const THICK_WEATHER: WeatherCondition[] = ['cloudy', 'rain', 'storm', 'snow', 'fog'];
 const FAIR_WEATHER: WeatherCondition[] = ['clear', 'partly-cloudy'];
 const WET_WEATHER: WeatherCondition[] = ['rain', 'storm'];
+
+const THICK_VEIL = { filter: 'blur(2.5px)', opacity: 0.45 };
+/** Partly cloudy: thin cloud drifts over the sun, a soft blur only. */
+const LIGHT_VEIL = { filter: 'blur(1.2px)', opacity: 0.8 };
+
+const veilFor = (isDay: boolean, weatherCond: WeatherCondition) => {
+  if (!isDay) return undefined;
+  if (THICK_WEATHER.includes(weatherCond)) return THICK_VEIL;
+  return weatherCond === 'partly-cloudy' ? LIGHT_VEIL : undefined;
+};
 
 /** What the weather and the hour switch on or off in a scene. */
 export const sceneFlags = (isDay: boolean, aurora: boolean, weatherCond: WeatherCondition) => ({
@@ -115,6 +125,8 @@ export const sceneFlags = (isDay: boolean, aurora: boolean, weatherCond: Weather
   fogStyle: weatherCond === 'fog' ? { filter: 'blur(1.8px)', opacity: 0.5 } : undefined,
   /** Thick weather in front of the sun: blur and dim it. */
   veiled: isDay && THICK_WEATHER.includes(weatherCond),
+  /** Style for the sun / moon group: thick weather blurs and dims it, partly cloudy softens it. */
+  veil: veilFor(isDay, weatherCond),
   birds: isDay && !aurora && FAIR_WEATHER.includes(weatherCond),
   splashes: !aurora && WET_WEATHER.includes(weatherCond),
 });

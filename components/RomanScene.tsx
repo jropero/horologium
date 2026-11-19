@@ -49,6 +49,10 @@ interface Props {
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
+/** Partly cloudy: the sky is pale grey-blue (RomanClock), cream streaks would vanish. */
+const paleSkyWind = (cond: Props['weatherCond']) =>
+  cond === 'partly-cloudy' ? '#475569' : undefined;
+
 const sceneLight = (p: Props): SceneLight => {
   const golden = p.isDay && (p.progress < 0.15 || p.progress > 0.85);
   if (p.aurora)
@@ -79,8 +83,8 @@ const sceneLight = (p: Props): SceneLight => {
       haze: '#5f6f82',
       rim: '#9aa8b8',
       stone: '#8e949c',
-      cloudLight: '#8793a3',
-      cloudShade: '#3b4656',
+      cloudLight: '#cbd5e1',
+      cloudShade: '#94a3b8',
       golden,
       lit: false,
     };
@@ -89,8 +93,9 @@ const sceneLight = (p: Props): SceneLight => {
       haze: '#aab6c4',
       rim: '#d5dbe3',
       stone: '#b9b9b4',
-      cloudLight: '#eef1f5',
-      cloudShade: '#8f9cad',
+      cloudLight: '#cbd5e1',
+      cloudShade: '#94a3b8',
+      wind: '#475569',
       golden,
       lit: false,
     };
@@ -110,6 +115,7 @@ const sceneLight = (p: Props): SceneLight => {
     stone: '#d6cdb6',
     cloudLight: '#ffffff',
     cloudShade: '#a9b9cd',
+    wind: paleSkyWind(p.weatherCond),
     golden,
     lit: false,
   };
@@ -130,7 +136,7 @@ const RomanScene: React.FC<Props> = props => {
   const uid = sceneUid(useId(), 'rs');
   const land = useMemo(() => generateRomanLandscape(seed), [seed]);
   const light = sceneLight(props);
-  const { snow, fogStyle, veiled, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
+  const { snow, fogStyle, veil, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
 
   return (
     <SceneRoot light={light} weatherCond={weatherCond}>
@@ -144,7 +150,7 @@ const RomanScene: React.FC<Props> = props => {
         moonTilt={moonTilt}
         starOpacity={starOpacity}
         golden={light.golden}
-        veiled={veiled}
+        veil={veil}
       />
 
       {children}

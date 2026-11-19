@@ -16,9 +16,8 @@ import './SceneKit.css';
  * from `SceneRoot` or any ancestor that sets them), so clouds turn pink at
  * sunset and dark blue at night.
  *
- * Clouds: three depths of cumulus (far, mid, near). Each depth is a 300-wide
- * tile drawn twice and shifted by exactly one tile per loop, so the drift is
- * seamless. Rain and snow reuse the shared particles in two depths.
+ * Clouds: bands closed at the top of the sky (see `Band`). Rain and snow
+ * reuse the shared particles in two depths.
  */
 
 interface Props {
@@ -26,7 +25,7 @@ interface Props {
   weatherParticles: WeatherParticles;
   /** 0–1 */
   rainIntensity: number;
-  /** km/h; speeds up the clouds and adds wind streaks from 28. */
+  /** km/h; adds far cloud bands and wind streaks from 28. */
   windGusts: number;
 }
 
@@ -34,63 +33,6 @@ const r1 = (v: number) => Math.round(v * 10) / 10;
 /** Maps x from 0…range onto the full visible span (the shared particles cover 0…300). */
 const spread = (x: number, range: number) => r1(SCENE_X0 + (x / range) * SCENE_W);
 const rand = seededRandom(1177);
-
-const circle = (cx: number, cy: number, r: number) =>
-  `M${r1(cx - r)} ${r1(cy)}a${r1(r)} ${r1(r)} 0 1 0 ${r1(2 * r)} 0a${r1(r)} ${r1(r)} 0 1 0 ${r1(-2 * r)} 0Z`;
-
-/** Cumulus: a flat pill for the base and a row of lobes, biggest in the middle. */
-const cloud = (x: number, baseY: number, w: number, h: number): string => {
-  const cap = h * 0.2;
-  const run = r1(w - 2 * cap);
-  let d =
-    `M${r1(x + cap)} ${r1(baseY)}h${run}a${r1(cap)} ${r1(cap)} 0 0 0 0 ${r1(-2 * cap)}` +
-    `h${-run}a${r1(cap)} ${r1(cap)} 0 0 0 0 ${r1(2 * cap)}Z`;
-  const lobes = 4 + Math.floor(rand() * 3);
-  for (let i = 0; i < lobes; i++) {
-    const t = (i + 0.5) / lobes;
-    const r = h * (0.28 + 0.3 * Math.sin(Math.PI * t)) * (0.8 + rand() * 0.4);
-    d += circle(x + w * (0.12 + 0.76 * t), baseY - h * 0.25 - r * 0.55, r);
-  }
-  return d;
-};
-
-interface CloudLayer {
-  key: string;
-  clouds: string[];
-  /** Seconds for one tile at no wind. */
-  dur: number;
-  opacity: number;
-}
-
-const tile = (count: number, pitch: number, place: (i: number) => string) =>
-  Array.from({ length: count }, (_, i) => place(i * pitch));
-
-const LAYERS: CloudLayer[] = [
-  {
-    key: 'far',
-    clouds: tile(6, 50, x =>
-      cloud(x + rand() * 20, 54 + rand() * 26, 28 + rand() * 16, 8 + rand() * 4),
-    ),
-    dur: 260,
-    opacity: 0.6,
-  },
-  {
-    key: 'mid',
-    clouds: tile(4, 75, x =>
-      cloud(x + rand() * 25, 38 + rand() * 30, 50 + rand() * 25, 14 + rand() * 6),
-    ),
-    dur: 160,
-    opacity: 0.85,
-  },
-  {
-    key: 'near',
-    clouds: tile(3, 100, x =>
-      cloud(x + rand() * 30, 24 + rand() * 18, 80 + rand() * 30, 20 + rand() * 8),
-    ),
-    dur: 100,
-    opacity: 0.95,
-  },
-];
 
 const SPLASHES = Array.from({ length: 18 }, () => ({
   x: r1(SCENE_X0 + rand() * SCENE_W),
@@ -108,14 +50,102 @@ const FOG_BANKS = [
 
 const BOLT = 'M212 44L204 70L213 72L200 101L209 103L196 137L203 138L191 170';
 
-/** Which cloud depths each sky shows. */
-const cloudDepths = (condition: WeatherCondition): string[] => {
-  if (condition === 'partly-cloudy') return ['far', 'mid'];
-  if (condition === 'snow') return ['far', 'mid'];
-  if (condition === 'cloudy' || condition === 'rain' || condition === 'storm')
-    return ['far', 'mid', 'near'];
-  return [];
+/**
+ * Cloud bands closed at the top of the sky (the original SVG weather): the
+ * sky reads as covered, not as clouds floating in it. Each band is drawn in a
+ * scene light colour, so it follows the hour (pink at dawn and dusk, dark
+ * blue at night). `anim-cloud-*` (index.css) sway them back and forth.
+ */
+interface Band {
+  d: string;
+  /** Fill class in SceneKit.css. */
+  tone: 'shade' | 'light' | 'storm' | 'storm-deep';
+  anim: 'fast' | 'slow' | 'bg';
+  opacity?: number;
+}
+
+const BG_BANDS: Band[] = [
+  {
+    d: 'M -200 35 Q 0 15 100 40 T 300 25 T 500 38 L 500 -20 L -200 -20 Z',
+    tone: 'shade',
+    anim: 'bg',
+  },
+  {
+    d: 'M -200 58 Q 40 38 130 62 T 330 48 T 500 58 L 500 -20 L -200 -20 Z',
+    tone: 'light',
+    anim: 'bg',
+    opacity: 0.7,
+  },
+];
+
+const MID_BANDS: Band[] = [
+  {
+    d: 'M -200 40 Q 50 10 120 50 T 250 30 T 500 60 L 500 -20 L -200 -20 Z',
+    tone: 'shade',
+    anim: 'fast',
+  },
+  {
+    d: 'M -200 70 Q 80 50 150 70 T 350 90 T 500 70 L 500 -20 L -200 -20 Z',
+    tone: 'light',
+    anim: 'slow',
+    opacity: 0.6,
+  },
+];
+
+const STORM_BANDS: Band[] = [
+  {
+    d: 'M -200 50 Q 30 20 80 40 T 180 30 T 280 50 T 500 30 L 500 -20 L -200 -20 Z',
+    tone: 'storm',
+    anim: 'slow',
+  },
+  {
+    d: 'M -200 80 Q 70 50 160 80 T 350 60 T 500 80 L 500 -20 L -200 -20 Z',
+    tone: 'storm-deep',
+    anim: 'fast',
+    opacity: 0.8,
+  },
+];
+
+const SNOW_BANDS: Band[] = [
+  {
+    d: 'M -200 30 Q 60 5 140 35 T 350 20 T 500 30 L 500 -20 L -200 -20 Z',
+    tone: 'shade',
+    anim: 'slow',
+  },
+  {
+    d: 'M -200 60 Q 80 35 170 55 T 350 50 T 500 60 L 500 -20 L -200 -20 Z',
+    tone: 'light',
+    anim: 'fast',
+    opacity: 0.7,
+  },
+];
+
+/** Opacity of the far (windy) bands; 0.15 otherwise. */
+const BG_OPACITY: Partial<Record<WeatherCondition, number>> = {
+  'partly-cloudy': 0.1,
+  cloudy: 0.22,
 };
+
+/** Opacity of the mid bands per sky (the original values). */
+const MID_OPACITY: Partial<Record<WeatherCondition, number>> = {
+  'partly-cloudy': 0.16,
+  cloudy: 0.39,
+  rain: 0.23,
+  storm: 0.23,
+};
+
+const BandGroup: React.FC<{ bands: Band[]; opacity: number }> = ({ bands, opacity }) => (
+  <g opacity={opacity}>
+    {bands.map(b => (
+      <path
+        key={b.d}
+        d={b.d}
+        className={`sw-band sw-band--${b.tone} anim-cloud-${b.anim}`}
+        opacity={b.opacity}
+      />
+    ))}
+  </g>
+);
 
 const SceneWeather: React.FC<Props> = ({
   condition,
@@ -125,23 +155,14 @@ const SceneWeather: React.FC<Props> = ({
 }) => {
   const uid = `rw${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const windStreaks = React.useMemo(() => generateWindStreaks(windGusts), [windGusts]);
-  const depths = cloudDepths(condition);
+  const mid = MID_OPACITY[condition];
+  const cloudy = condition === 'cloudy' || condition === 'rain' || condition === 'storm';
   const wet = condition === 'rain' || condition === 'storm';
   const heavy = wet || condition === 'snow';
-  const overcast = heavy || condition === 'cloudy';
-  const windSpeed = 1 + Math.min(windGusts, 90) / 40;
 
   return (
     <g className={`scene-weather${heavy ? ' scene-weather--heavy' : ''}`}>
       <defs>
-        <linearGradient id={`${uid}-cloud`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" className="sw-cloud-stop sw-cloud-stop--light" />
-          <stop offset="100%" className="sw-cloud-stop" />
-        </linearGradient>
-        <linearGradient id={`${uid}-veil`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" className="sw-cloud-stop" stopOpacity="0.85" />
-          <stop offset="100%" className="sw-cloud-stop" stopOpacity="0" />
-        </linearGradient>
         <linearGradient id={`${uid}-mist`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#cbd5e1" stopOpacity="0" />
           <stop offset="100%" stopColor="#cbd5e1" stopOpacity="0.6" />
@@ -153,32 +174,13 @@ const SceneWeather: React.FC<Props> = ({
         </radialGradient>
       </defs>
 
-      {/* Overcast: the upper sky closes in. */}
-      {overcast && (
-        <rect
-          x={SCENE_X0}
-          y="0"
-          width={SCENE_W}
-          height={wet ? 130 : 100}
-          fill={`url(#${uid}-veil)`}
-          opacity={condition === 'storm' ? 0.95 : 0.7}
-        />
+      {/* Far bands, only when windy (as in the original weather). */}
+      {windStreaks.length > 0 && (condition === 'partly-cloudy' || cloudy) && (
+        <BandGroup bands={BG_BANDS} opacity={BG_OPACITY[condition] ?? 0.15} />
       )}
-
-      {LAYERS.filter(l => depths.includes(l.key)).map(l => (
-        <g key={l.key} opacity={l.opacity}>
-          <g className="sw-drift" style={{ animationDuration: `${r1(l.dur / windSpeed)}s` }}>
-            {/* Three copies: the drift runs −300 → 0, and the view spans −30…330. */}
-            {[-300, 0, 300].map(shift => (
-              <g key={shift} transform={`translate(${shift} 0)`}>
-                {l.clouds.map((d, i) => (
-                  <path key={i} d={d} fill={`url(#${uid}-cloud)`} />
-                ))}
-              </g>
-            ))}
-          </g>
-        </g>
-      ))}
+      {mid !== undefined && <BandGroup bands={MID_BANDS} opacity={mid} />}
+      {condition === 'storm' && <BandGroup bands={STORM_BANDS} opacity={0.6} />}
+      {condition === 'snow' && <BandGroup bands={SNOW_BANDS} opacity={0.6} />}
 
       {/* Lightning: on the same clock as the white flash over the hero. */}
       {condition === 'storm' && (
@@ -323,10 +325,9 @@ const SceneWeather: React.FC<Props> = ({
           y1={streak.y}
           x2={streak.startX + streak.length}
           y2={streak.y}
-          stroke="#e6dcc0"
+          className="sw-wind anim-wind"
           strokeWidth={streak.strokeWidth}
           strokeLinecap="round"
-          className="anim-wind"
           style={
             {
               '--wd': `${streak.dur}s`,
