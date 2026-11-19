@@ -101,8 +101,8 @@ export const hellenicSceneLight = (p: HellenicLightInput): HellenicLight => {
       haze: '#66778c',
       rim: '#aab6c4',
       stone: '#8e949c',
-      cloudLight: '#8793a3',
-      cloudShade: '#3b4656',
+      cloudLight: '#cbd5e1',
+      cloudShade: '#94a3b8',
       marble: '#c2c4c6',
       marbleShade: '#7e8590',
       rock: '#7f7d78',
@@ -117,8 +117,8 @@ export const hellenicSceneLight = (p: HellenicLightInput): HellenicLight => {
       haze: '#b2bfcb',
       rim: '#e6eaee',
       stone: '#c4c3be',
-      cloudLight: '#eef1f5',
-      cloudShade: '#8f9cad',
+      cloudLight: '#cbd5e1',
+      cloudShade: '#94a3b8',
       marble: '#e8e5de',
       marbleShade: '#a8aaab',
       rock: '#a8a294',
@@ -229,8 +229,7 @@ const HellenicScene: React.FC<Props> = props => {
   const uid = sceneUid(useId(), 'hs');
   const land = useMemo(() => generateHellenicLandscape(seed, layout), [seed, layout]);
   const light = hellenicSceneLight(props);
-  const { snow, fogStyle, veiled, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
-  const veil = veiled ? { filter: 'blur(2.5px)', opacity: 0.45 } : undefined;
+  const { snow, fogStyle, veil, birds, splashes } = sceneFlags(isDay, aurora, weatherCond);
 
   return (
     <SceneRoot light={light} weatherCond={weatherCond}>
@@ -270,7 +269,7 @@ const HellenicScene: React.FC<Props> = props => {
             moonTilt={moonTilt}
             starOpacity={starOpacity}
             golden={light.golden}
-            veiled={veiled}
+            veil={veil}
           />
         )}
 

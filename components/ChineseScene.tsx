@@ -260,7 +260,7 @@ const nightGradient = (p: LightInput) => {
 export const chineseSkyGradient = (p: LightInput): string =>
   p.isDay ? gradient(DAY_STOPS[daySky(p)], p.warmth ?? 0) : nightGradient(p);
 
-const THICK: WeatherCondition[] = ['rain', 'storm', 'snow', 'fog'];
+const THICK: WeatherCondition[] = ['cloudy', 'rain', 'storm', 'snow', 'fog'];
 const VEIL = { filter: 'blur(2.5px)', opacity: 0.45 };
 
 /**
