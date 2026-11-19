@@ -6,6 +6,7 @@ import RomanCalendarModal from './RomanCalendarModal';
 import WeatherModal from './WeatherModal';
 import { lerpColor } from '../utils/color';
 import RomanScene from './RomanScene';
+import RomanClassicScene from './RomanClassicScene';
 import HellenicScene from './HellenicScene';
 import SceneWeather from './SceneWeather';
 import { useCivilization } from '../contexts/CivilizationContext';
@@ -44,6 +45,9 @@ function RomanClock({
   const { civilization, labels } = useCivilization();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
+  const [classicHero, setClassicHero] = useState(
+    () => localStorage.getItem('romanClassicHero') === '1',
+  );
 
   const modernDate = modernTime.getDate();
   const modernMonth = modernTime.getMonth();
@@ -276,6 +280,58 @@ function RomanClock({
     );
   }
 
+  let heroScene: React.ReactNode;
+  if (civilization === 'rome' && classicHero) {
+    heroScene = (
+      <RomanClassicScene
+        seed={skylineSeed}
+        isDay={romanTime.isDay}
+        progressPercent={progressPercent}
+        moonPhase={romanTime.moonPhase}
+        starOpacity={starOpacity}
+        weatherCond={weatherCond}
+        weatherParticles={weatherParticles}
+        rainIntensity={rainIntensity}
+        windGusts={windGusts}
+        isOffline={isOffline}
+        auroraLayers={weather?.auroraLayers}
+      />
+    );
+  } else if (civilization === 'rome') {
+    heroScene = (
+      <RomanScene
+        seed={skylineSeed}
+        isDay={romanTime.isDay}
+        progress={progressPercent}
+        sunAltitude={sunAltitude}
+        moonPhase={romanTime.moonPhase}
+        moonTilt={moonTilt}
+        starOpacity={starOpacity}
+        weatherCond={weatherCond}
+        aurora={isOffline}
+      >
+        {weatherLayer}
+      </RomanScene>
+    );
+  } else {
+    heroScene = (
+      <HellenicScene
+        seed={skylineSeed}
+        isDay={romanTime.isDay}
+        progress={progressPercent}
+        sunAltitude={sunAltitude}
+        moonPhase={romanTime.moonPhase}
+        moonTilt={moonTilt}
+        starOpacity={starOpacity}
+        weatherCond={weatherCond}
+        aurora={isOffline}
+        instrument
+      >
+        {weatherLayer}
+      </HellenicScene>
+    );
+  }
+
   return (
     <>
       <div className="roman-clock">
@@ -319,38 +375,45 @@ function RomanClock({
               />
             )}
 
+            {civilization === 'rome' && (
+              <button
+                className="roman-clock__scene-toggle"
+                onClick={() => {
+                  const next = !classicHero;
+                  setClassicHero(next);
+                  localStorage.setItem('romanClassicHero', next ? '1' : '0');
+                }}
+                title={classicHero ? 'Vista panorámica' : 'Vista clásica'}
+              >
+                {classicHero ? (
+                  <svg
+                    viewBox="0 0 14 10"
+                    width="14"
+                    height="10"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M0 10 L4 3 L7 6 L10 1 L14 10Z" />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 14 10"
+                    width="14"
+                    height="10"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <rect x="0" y="5" width="3" height="5" />
+                    <rect x="4" y="2" width="3" height="8" />
+                    <rect x="8" y="4" width="3" height="6" />
+                    <rect x="12" y="7" width="2" height="3" />
+                  </svg>
+                )}
+              </button>
+            )}
             <div className="roman-clock__svg-container">
               <svg viewBox="0 0 300 200" className="roman-clock__svg">
-                {civilization === 'rome' ? (
-                  <RomanScene
-                    seed={skylineSeed}
-                    isDay={romanTime.isDay}
-                    progress={progressPercent}
-                    sunAltitude={sunAltitude}
-                    moonPhase={romanTime.moonPhase}
-                    moonTilt={moonTilt}
-                    starOpacity={starOpacity}
-                    weatherCond={weatherCond}
-                    aurora={isOffline}
-                  >
-                    {weatherLayer}
-                  </RomanScene>
-                ) : (
-                  <HellenicScene
-                    seed={skylineSeed}
-                    isDay={romanTime.isDay}
-                    progress={progressPercent}
-                    sunAltitude={sunAltitude}
-                    moonPhase={romanTime.moonPhase}
-                    moonTilt={moonTilt}
-                    starOpacity={starOpacity}
-                    weatherCond={weatherCond}
-                    aurora={isOffline}
-                    instrument
-                  >
-                    {weatherLayer}
-                  </HellenicScene>
-                )}
+                {heroScene}
               </svg>
             </div>
           </div>
