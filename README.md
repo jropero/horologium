@@ -123,6 +123,14 @@ El proyecto cuenta con un sistema de compilación dual para resolver los conflic
   npx cap run android
   ```
 
+### 🚢 Despliegue (GitHub Actions)
+
+`.github/workflows/deploy.yml` compila la versión web (base `/r/`, no la de Capacitor) y la despliega por SSH en cada push a `main` y bajo demanda (`gh workflow run deploy.yml`). No se ejecuta en pull requests (el repositorio es público y el job usa secretos).
+
+- **Pasos:** `pnpm install --frozen-lockfile`, `pnpm test` (solo Vitest), `pnpm run build`, comprobación de que `dist/index.html` existe y referencia `/r/assets/`, y `rsync -az --delete --delay-updates` de `dist/` a `DEPLOY_PATH`. Si falla un test, la compilación o la comprobación, el sitio publicado no se toca.
+- **Seguridad:** `--delete` deja la carpeta del servidor idéntica a `dist/`, así que el workflow rechaza un `DEPLOY_PATH` que no termine en `/r`. La clave del host se fija con `SSH_HOST_FP`. La app no tiene secretos en tiempo de compilación.
+- **Configuración única:** secretos `SSH_HOST`, `SSH_PORT`, `SSH_USER`, `SSH_KEY` y variables `SSH_HOST_FP` (huella ED25519 SHA256) y `DEPLOY_PATH` (p. ej. `/ruta/public_html/r`).
+
 ## 🏛️ Filosofía del Proyecto
 
 > "Relinque temporis angustias, ad maiora natus es."
